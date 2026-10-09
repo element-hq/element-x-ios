@@ -608,11 +608,10 @@ final class HomeScreenViewModelTests {
         
         notificationManager = NotificationManagerMock()
         
-        let otherUserSessions = otherAccountUserIDs.map { UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: $0)))) }
-        let userSessions: [UserSessionProtocol] = [userSession] + otherUserSessions
+        let sessionDetails = [UserSessionDetails(userSession: userSession)] + otherAccountUserIDs.map { UserSessionDetails(userID: $0) }
         
         viewModel = HomeScreenViewModel(userSession: userSession,
-                                        availableSessionsPublisher: CurrentValueSubject<[UserSessionProtocol], Never>(userSessions).asCurrentValuePublisher(),
+                                        availableSessionsPublisher: .init(sessionDetails),
                                         selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
                                         analyticsService: AnalyticsServiceMock(.init()),
                                         bugReportService: BugReportServiceMock(.init()),

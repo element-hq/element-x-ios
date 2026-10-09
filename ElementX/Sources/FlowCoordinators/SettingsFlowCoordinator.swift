@@ -24,7 +24,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     private let flowParameters: CommonFlowParameters
     
     private var userSettings: UserSettings {
-        flowParameters.activeUserSession.userSettings
+        flowParameters.userSession.userSettings
     }
     
     // periphery:ignore - retaining purpose
@@ -76,7 +76,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: - Private
     
     private func presentSettingsScreen(animated: Bool) {
-        let settingsScreenCoordinator = SettingsScreenCoordinator(parameters: .init(userSession: flowParameters.activeUserSession,
+        let settingsScreenCoordinator = SettingsScreenCoordinator(parameters: .init(userSession: flowParameters.userSession,
                                                                                     isBugReportServiceEnabled: flowParameters.bugReportService.isEnabled,
                                                                                     isInSecondaryWindow: isInSecondaryWindow,
                                                                                     userIndicatorController: flowParameters.userIndicatorController))
@@ -111,7 +111,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                     bugReportFlowCoordinator = BugReportFlowCoordinator(parameters: .init(presentationMode: .push(navigationStackCoordinator),
                                                                                           userIndicatorController: flowParameters.userIndicatorController,
                                                                                           bugReportService: flowParameters.bugReportService,
-                                                                                          userSession: flowParameters.activeUserSession))
+                                                                                          userSession: flowParameters.userSession))
                     bugReportFlowCoordinator?.start()
                     
                 case .logout:
@@ -156,7 +156,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func startEncryptionSettingsFlow() {
-        let coordinator = EncryptionSettingsFlowCoordinator(parameters: .init(userSession: flowParameters.activeUserSession,
+        let coordinator = EncryptionSettingsFlowCoordinator(parameters: .init(userSession: flowParameters.userSession,
                                                                               appHooks: flowParameters.appHooks,
                                                                               userIndicatorController: flowParameters.userIndicatorController,
                                                                               navigationStackCoordinator: navigationStackCoordinator))
@@ -192,7 +192,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentUserDetailsEditScreen() {
         let coordinator = UserDetailsEditScreenCoordinator(parameters: .init(orientationManager: flowParameters.windowManager,
-                                                                             userSession: flowParameters.activeUserSession,
+                                                                             userSession: flowParameters.userSession,
                                                                              mediaUploadingPreprocessor: MediaUploadingPreprocessor(userSettings: userSettings),
                                                                              navigationStackCoordinator: navigationStackCoordinator,
                                                                              userIndicatorController: flowParameters.userIndicatorController))
@@ -268,14 +268,14 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentBlockedUsersScreen() {
         let coordinator = BlockedUsersScreenCoordinator(parameters: .init(hideProfiles: userSettings.app.hideIgnoredUserProfiles,
-                                                                          userSession: flowParameters.activeUserSession,
+                                                                          userSession: flowParameters.userSession,
                                                                           userIndicatorController: flowParameters.userIndicatorController))
         navigationStackCoordinator.push(coordinator)
     }
     
     private func presentNotificationSettings() {
         let notificationParameters = NotificationSettingsScreenCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
-                                                                                     userSession: flowParameters.activeUserSession,
+                                                                                     userSession: flowParameters.userSession,
                                                                                      userNotificationCenter: UNUserNotificationCenter.current(),
                                                                                      userIndicatorController: flowParameters.userIndicatorController,
                                                                                      isModallyPresented: false)
@@ -284,7 +284,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentModerationAndSafetySettings() {
-        let parameters = ModerationAndSafetySettingsScreenCoordinatorParameters(userSession: flowParameters.activeUserSession,
+        let parameters = ModerationAndSafetySettingsScreenCoordinatorParameters(userSession: flowParameters.userSession,
                                                                                 userIndicatorController: flowParameters.userIndicatorController)
         let coordinator = ModerationAndSafetySettingsScreenCoordinator(parameters: parameters)
         coordinator.actionsPublisher
@@ -317,7 +317,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     private func presentDeveloperOptions() {
         let coordinator = DeveloperOptionsScreenCoordinator(appSettings: userSettings.app,
                                                             appHooks: flowParameters.appHooks,
-                                                            clientProxy: flowParameters.activeUserSession.clientProxy)
+                                                            clientProxy: flowParameters.userSession.clientProxy)
         
         coordinator.actions
             .sink { [weak self] action in
@@ -334,7 +334,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentDeactivateAccount() {
-        let parameters = DeactivateAccountScreenCoordinatorParameters(clientProxy: flowParameters.activeUserSession.clientProxy,
+        let parameters = DeactivateAccountScreenCoordinatorParameters(clientProxy: flowParameters.userSession.clientProxy,
                                                                       userIndicatorController: flowParameters.userIndicatorController)
         let coordinator = DeactivateAccountScreenCoordinator(parameters: parameters)
         

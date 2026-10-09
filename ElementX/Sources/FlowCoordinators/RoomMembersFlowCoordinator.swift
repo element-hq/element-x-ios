@@ -207,7 +207,7 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentRoomMembersList() {
-        let coordinator = RoomMembersListScreenCoordinator(parameters: .init(userSession: flowParameters.activeUserSession,
+        let coordinator = RoomMembersListScreenCoordinator(parameters: .init(userSession: flowParameters.userSession,
                                                                              roomProxy: roomProxy,
                                                                              userIndicatorController: flowParameters.userIndicatorController,
                                                                              analytics: flowParameters.analytics))
@@ -230,7 +230,7 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
     private func presentRoomMemberDetails(userID: String, animated: Bool) {
         let params = RoomMemberDetailsScreenCoordinatorParameters(userID: userID,
                                                                   roomProxy: roomProxy,
-                                                                  userSession: flowParameters.activeUserSession,
+                                                                  userSession: flowParameters.userSession,
                                                                   appHooks: flowParameters.appHooks,
                                                                   analytics: flowParameters.analytics,
                                                                   userIndicatorController: flowParameters.userIndicatorController)
@@ -258,10 +258,10 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentInviteUsersScreen() {
         let stackCoordinator = NavigationStackCoordinator()
-        let inviteParameters = InviteUsersScreenCoordinatorParameters(userSession: flowParameters.activeUserSession,
+        let inviteParameters = InviteUsersScreenCoordinatorParameters(userSession: flowParameters.userSession,
                                                                       roomType: .existingRoom(roomProxy: roomProxy),
                                                                       isSkippable: false,
-                                                                      userDiscoveryService: UserDiscoveryService(clientProxy: flowParameters.activeUserSession.clientProxy),
+                                                                      userDiscoveryService: UserDiscoveryService(clientProxy: flowParameters.userSession.clientProxy),
                                                                       userIndicatorController: flowParameters.userIndicatorController)
         
         let coordinator = InviteUsersScreenCoordinator(parameters: inviteParameters)
@@ -287,7 +287,7 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
     private func replaceRoomMemberDetailsWithUserProfile(userID: String) {
         let parameters = UserProfileScreenCoordinatorParameters(userID: userID,
                                                                 isPresentedModally: false,
-                                                                userSession: flowParameters.activeUserSession,
+                                                                userSession: flowParameters.userSession,
                                                                 appHooks: flowParameters.appHooks,
                                                                 analytics: flowParameters.analytics,
                                                                 userIndicatorController: flowParameters.userIndicatorController)

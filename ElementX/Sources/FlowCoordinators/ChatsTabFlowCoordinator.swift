@@ -26,7 +26,7 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
     private let flowParameters: CommonFlowParameters
     
     private var userSession: UserSessionProtocol {
-        flowParameters.activeUserSession
+        flowParameters.userSession
     }
     
     private let stateMachine: ChatsTabFlowCoordinatorStateMachine

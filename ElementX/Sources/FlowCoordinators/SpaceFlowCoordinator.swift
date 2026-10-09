@@ -351,7 +351,7 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         let parameters = SpaceScreenCoordinatorParameters(spaceRoomListProxy: spaceRoomListProxy,
                                                           spaceServiceProxy: spaceServiceProxy,
                                                           selectedSpaceRoomPublisher: selectedSpaceRoomSubject.asCurrentValuePublisher(),
-                                                          userSession: flowParameters.activeUserSession,
+                                                          userSession: flowParameters.userSession,
                                                           userIndicatorController: flowParameters.userIndicatorController)
         let coordinator = SpaceScreenCoordinator(parameters: parameters)
         spaceScreenCoordinator = coordinator
@@ -398,7 +398,7 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         guard case let .joinSpace(spaceServiceRoom) = entryPoint else { fatalError("Attempting to join a space with the wrong entry point.") }
         
         let parameters = JoinRoomScreenCoordinatorParameters(source: .space(spaceServiceRoom),
-                                                             userSession: flowParameters.activeUserSession,
+                                                             userSession: flowParameters.userSession,
                                                              userIndicatorController: flowParameters.userIndicatorController)
         let coordinator = JoinRoomScreenCoordinator(parameters: parameters)
         coordinator.actionsPublisher
@@ -448,8 +448,8 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         
         let stackCoordinator = NavigationStackCoordinator()
         let parameters = SpaceAddRoomsScreenCoordinatorParameters(spaceRoomListProxy: spaceRoomListProxy,
-                                                                  userSession: flowParameters.activeUserSession,
-                                                                  roomSummaryProvider: flowParameters.activeUserSession.clientProxy.alternateRoomSummaryProvider,
+                                                                  userSession: flowParameters.userSession,
+                                                                  roomSummaryProvider: flowParameters.userSession.clientProxy.alternateRoomSummaryProvider,
                                                                   userIndicatorController: flowParameters.userIndicatorController)
         let coordinator = SpaceAddRoomsScreenCoordinator(parameters: parameters)
         coordinator.actions
@@ -471,7 +471,7 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
     private func presentTransferOwnershipScreen(roomProxy: JoinedRoomProxyProtocol) {
         let parameters = RoomChangeRolesScreenCoordinatorParameters(mode: .owner,
                                                                     roomProxy: roomProxy,
-                                                                    mediaProvider: flowParameters.activeUserSession.mediaProvider,
+                                                                    mediaProvider: flowParameters.userSession.mediaProvider,
                                                                     userIndicatorController: flowParameters.userIndicatorController,
                                                                     analytics: flowParameters.analytics)
         let stackCoordinator = NavigationStackCoordinator()
@@ -595,7 +595,7 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
     
     private func startRolesAndPermissionsFlow(roomProxy: JoinedRoomProxyProtocol) {
         let flowCoordinator = RoomRolesAndPermissionsFlowCoordinator(parameters: .init(roomProxy: roomProxy,
-                                                                                       mediaProvider: flowParameters.activeUserSession.mediaProvider,
+                                                                                       mediaProvider: flowParameters.userSession.mediaProvider,
                                                                                        navigationStackCoordinator: navigationStackCoordinator,
                                                                                        userIndicatorController: flowParameters.userIndicatorController,
                                                                                        analytics: flowParameters.analytics))
@@ -615,7 +615,7 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
     private func startCreateChildFlow(space: SpaceServiceRoom) {
         let stackCoordinator = NavigationStackCoordinator()
         let flowCoordinator = StartChatFlowCoordinator(entryPoint: .createRoomInSpace(space),
-                                                       userDiscoveryService: UserDiscoveryService(clientProxy: flowParameters.activeUserSession.clientProxy),
+                                                       userDiscoveryService: UserDiscoveryService(clientProxy: flowParameters.userSession.clientProxy),
                                                        navigationStackCoordinator: stackCoordinator,
                                                        flowParameters: flowParameters)
         

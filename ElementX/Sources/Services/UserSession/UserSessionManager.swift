@@ -12,7 +12,7 @@ import OrderedCollections
 /// Owns the live session of every account signed in on this device, most recently active first.
 ///
 /// Only the `AppCoordinator` calls the lifecycle methods, so the active account always changes
-/// through its state machine. Flows only receive its `sessionsPublisher`.
+/// through its state machine. Flows only receive the `UserSessionDetails` of its sessions.
 final class UserSessionManager: UserSessionManagerProtocol {
     private let userSessionStore: UserSessionStoreProtocol
     private let appSettings: AppSettings

@@ -210,11 +210,11 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentSpaceSettings(animated: Bool) {
         let coordinator = RoomDetailsScreenCoordinator(parameters: .init(roomProxy: roomProxy,
-                                                                         userSession: flowParameters.activeUserSession,
+                                                                         userSession: flowParameters.userSession,
                                                                          appHooks: flowParameters.appHooks,
                                                                          analyticsService: flowParameters.analytics,
                                                                          userIndicatorController: flowParameters.userIndicatorController,
-                                                                         notificationSettings: flowParameters.activeUserSession.clientProxy.notificationSettings,
+                                                                         notificationSettings: flowParameters.userSession.clientProxy.notificationSettings,
                                                                          attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder())))
         
         var leftRoom = false
@@ -250,8 +250,8 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
     private func presentEditDetailsScreen() {
         let stackCoordinator = NavigationStackCoordinator()
         let parameters = RoomDetailsEditScreenCoordinatorParameters(roomProxy: roomProxy,
-                                                                    userSession: flowParameters.activeUserSession,
-                                                                    mediaUploadingPreprocessor: MediaUploadingPreprocessor(userSettings: flowParameters.activeUserSession.userSettings),
+                                                                    userSession: flowParameters.userSession,
+                                                                    mediaUploadingPreprocessor: MediaUploadingPreprocessor(userSettings: flowParameters.userSession.userSettings),
                                                                     navigationStackCoordinator: stackCoordinator,
                                                                     userIndicatorController: flowParameters.userIndicatorController,
                                                                     orientationManager: flowParameters.appMediator.windowManager)
@@ -275,7 +275,7 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentSecurityAndPrivacyScreen() {
         let coordinator = SecurityAndPrivacyScreenCoordinator(parameters: .init(roomProxy: roomProxy,
-                                                                                userSession: flowParameters.activeUserSession,
+                                                                                userSession: flowParameters.userSession,
                                                                                 userIndicatorController: flowParameters.userIndicatorController,
                                                                                 appHooks: flowParameters.appHooks))
         
@@ -300,7 +300,7 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
     private func presentEditAddressScreen() {
         let stackCoordinator = NavigationStackCoordinator()
         let coordinator = EditRoomAddressScreenCoordinator(parameters: .init(roomProxy: roomProxy,
-                                                                             clientProxy: flowParameters.activeUserSession.clientProxy,
+                                                                             clientProxy: flowParameters.userSession.clientProxy,
                                                                              userIndicatorController: flowParameters.userIndicatorController))
         
         coordinator.actionsPublisher.sink { [weak self] action in
@@ -320,7 +320,7 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
     private func presentManageAuthorizedSpacesScreen(selection: AuthorizedSpacesSelection) {
         let navigationStack = NavigationStackCoordinator()
         let coordinator = ManageAuthorizedSpacesScreenCoordinator(parameters: .init(authorizedSpacesSelection: selection,
-                                                                                    mediaProvider: flowParameters.activeUserSession.mediaProvider))
+                                                                                    mediaProvider: flowParameters.userSession.mediaProvider))
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
             switch action {
@@ -339,7 +339,7 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
     private func presentTransferOwnershipScreen() {
         let parameters = RoomChangeRolesScreenCoordinatorParameters(mode: .owner,
                                                                     roomProxy: roomProxy,
-                                                                    mediaProvider: flowParameters.activeUserSession.mediaProvider,
+                                                                    mediaProvider: flowParameters.userSession.mediaProvider,
                                                                     userIndicatorController: flowParameters.userIndicatorController,
                                                                     analytics: flowParameters.analytics)
         let stackCoordinator = NavigationStackCoordinator()
@@ -362,7 +362,7 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
     
     private func startRolesAndPermissionsFlow() {
         let parameters = RoomRolesAndPermissionsFlowCoordinatorParameters(roomProxy: roomProxy,
-                                                                          mediaProvider: flowParameters.activeUserSession.mediaProvider,
+                                                                          mediaProvider: flowParameters.userSession.mediaProvider,
                                                                           navigationStackCoordinator: navigationStackCoordinator,
                                                                           userIndicatorController: flowParameters.userIndicatorController,
                                                                           analytics: flowParameters.analytics)

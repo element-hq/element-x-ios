@@ -24,11 +24,10 @@ extension FlowCoordinatorProtocol {
 ///
 /// Please do **not** pass this type directly to screen coordinators/view models.
 struct CommonFlowParameters {
-    /// The account this flow tree belongs to: the active session when the tree was built. It never changes,
-    /// so use the `availableSessionsPublisher` for anything involving the other accounts.
-    let activeUserSession: UserSessionProtocol
-    /// Every signed in account's live session, most recently active first, so the first one is the `activeUserSession`.
-    let availableSessionsPublisher: CurrentValuePublisher<[UserSessionProtocol], Never>
+    /// The session of the account this flow tree belongs to. It never changes, even when another account becomes active.
+    let userSession: UserSessionProtocol
+    /// Every signed in account, most recently active first, so the first one is `userSession`'s.
+    let availableSessionsPublisher: CurrentValuePublisher<[UserSessionDetails], Never>
     let bugReportService: BugReportServiceProtocol
     let elementCallService: ElementCallServiceProtocol
     let timelineControllerFactory: TimelineControllerFactoryProtocol

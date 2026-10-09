@@ -31,7 +31,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private let presenceService: PresenceService
     
     private var userSession: UserSessionProtocol {
-        flowParameters.activeUserSession
+        flowParameters.userSession
     }
     
     private let onboardingFlowCoordinator: OnboardingFlowCoordinator
@@ -81,27 +81,27 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         self.navigationRootCoordinator = navigationRootCoordinator
         self.appLockService = appLockService
         self.flowParameters = flowParameters
-        presenceService = PresenceService(clientProxy: flowParameters.activeUserSession.clientProxy,
-                                          userSettings: flowParameters.activeUserSession.userSettings)
+        presenceService = PresenceService(clientProxy: flowParameters.userSession.clientProxy,
+                                          userSettings: flowParameters.userSession.userSettings)
         
         navigationTabCoordinator = NavigationTabCoordinator()
         navigationRootCoordinator.setRootCoordinator(navigationTabCoordinator)
         
-        let chatsSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator(hideBrandChrome: flowParameters.activeUserSession.userSettings.app.hideBrandChrome))
+        let chatsSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator(hideBrandChrome: flowParameters.userSession.userSettings.app.hideBrandChrome))
         chatsTabFlowCoordinator = ChatsTabFlowCoordinator(navigationSplitCoordinator: chatsSplitCoordinator,
                                                           flowParameters: flowParameters)
         chatsTabDetails = .init(tag: HomeTab.chats, title: L10n.screenHomeTabChats, icon: \.chat, selectedIcon: \.chatSolid)
         chatsTabDetails.navigationSplitCoordinator = chatsSplitCoordinator
         
-        let spacesSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator(hideBrandChrome: flowParameters.activeUserSession.userSettings.app.hideBrandChrome))
+        let spacesSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator(hideBrandChrome: flowParameters.userSession.userSettings.app.hideBrandChrome))
         spacesTabFlowCoordinator = SpacesTabFlowCoordinator(navigationSplitCoordinator: spacesSplitCoordinator,
                                                             flowParameters: flowParameters)
         spacesTabDetails = .init(tag: HomeTab.spaces, title: L10n.screenHomeTabSpaces, icon: \.space, selectedIcon: \.spaceSolid)
         spacesTabDetails.navigationSplitCoordinator = spacesSplitCoordinator
         
-        if flowParameters.activeUserSession.userSettings.app.globalSearchEnabled, #available(iOS 26.0, *) {
-            let searchCoordinator = SearchScreenCoordinator(parameters: .init(roomSummaryProvider: flowParameters.activeUserSession.clientProxy.alternateRoomSummaryProvider,
-                                                                              userSession: flowParameters.activeUserSession,
+        if flowParameters.userSession.userSettings.app.globalSearchEnabled, #available(iOS 26.0, *) {
+            let searchCoordinator = SearchScreenCoordinator(parameters: .init(roomSummaryProvider: flowParameters.userSession.clientProxy.alternateRoomSummaryProvider,
+                                                                              userSession: flowParameters.userSession,
                                                                               userIndicatorController: flowParameters.userIndicatorController))
             let searchStackCoordinator = NavigationStackCoordinator()
             searchStackCoordinator.setRootCoordinator(searchCoordinator)

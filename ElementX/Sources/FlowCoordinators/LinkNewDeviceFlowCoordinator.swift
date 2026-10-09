@@ -48,7 +48,7 @@ class LinkNewDeviceFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentLinkNewDeviceScreen() {
-        let coordinator = LinkNewDeviceScreenCoordinator(parameters: .init(clientProxy: flowParameters.activeUserSession.clientProxy,
+        let coordinator = LinkNewDeviceScreenCoordinator(parameters: .init(clientProxy: flowParameters.userSession.clientProxy,
                                                                            appLockService: appLockService,
                                                                            orientationManager: flowParameters.appMediator.windowManager))
         coordinator.actionsPublisher
@@ -59,7 +59,7 @@ class LinkNewDeviceFlowCoordinator: FlowCoordinatorProtocol {
                 case .linkMobileDevice(let progressPublisher):
                     presentQRCodeScreen(mode: .linkMobile(progressPublisher))
                 case .linkDesktopComputer:
-                    presentQRCodeScreen(mode: .linkDesktop(flowParameters.activeUserSession.clientProxy.linkNewDeviceService()))
+                    presentQRCodeScreen(mode: .linkDesktop(flowParameters.userSession.clientProxy.linkNewDeviceService()))
                 case .verifyWithAppLockPIN(let continuation):
                     presentAppLockScreen(continuation: continuation)
                 case .dismiss:

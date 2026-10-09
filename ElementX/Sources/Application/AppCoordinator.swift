@@ -786,8 +786,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             analyticsService.signpost.startTransaction(.cachedRoomList)
         }
         
-        let flowParameters = CommonFlowParameters(activeUserSession: userSession,
-                                                  availableSessionsPublisher: userSessionManager.sessionsPublisher,
+        let flowParameters = CommonFlowParameters(userSession: userSession,
+                                                  availableSessionsPublisher: userSessionManager.sessionsPublisher.map { $0.map(UserSessionDetails.init) },
                                                   bugReportService: bugReportService,
                                                   elementCallService: elementCallService,
                                                   timelineControllerFactory: TimelineControllerFactory(userSettings: userSession.userSettings),

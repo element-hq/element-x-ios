@@ -65,11 +65,11 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
          navigationStackCoordinator: NavigationStackCoordinator,
          flowParameters: CommonFlowParameters) {
         self.isNewLogin = isNewLogin
-        userSession = flowParameters.activeUserSession
+        userSession = flowParameters.userSession
         self.appLockService = appLockService
         analyticsService = flowParameters.analytics
         appMediator = flowParameters.appMediator
-        userSettings = flowParameters.activeUserSession.userSettings
+        userSettings = flowParameters.userSession.userSettings
         appHooks = flowParameters.appHooks
         notificationManager = flowParameters.notificationManager
         userIndicatorController = flowParameters.userIndicatorController

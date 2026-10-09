@@ -15,7 +15,7 @@ typealias HomeScreenViewModelType = StateStoreViewModel<HomeScreenViewState, Hom
 
 class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol {
     private let userSession: UserSessionProtocol
-    private let availableSessionsPublisher: CurrentValuePublisher<[UserSessionProtocol], Never>
+    private let availableSessionsPublisher: CurrentValuePublisher<[UserSessionDetails], Never>
     private let spaceFilterSubject: CurrentValueSubject<SpaceServiceFilter?, Never>
     private let analyticsService: AnalyticsServiceProtocol
     private let bugReportService: BugReportServiceProtocol
@@ -32,7 +32,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     // swiftlint:disable:next function_body_length
     init(userSession: UserSessionProtocol,
-         availableSessionsPublisher: CurrentValuePublisher<[UserSessionProtocol], Never>,
+         availableSessionsPublisher: CurrentValuePublisher<[UserSessionDetails], Never>,
          selectedRoomPublisher: CurrentValuePublisher<String?, Never>,
          analyticsService: AnalyticsServiceProtocol,
          bugReportService: BugReportServiceProtocol,

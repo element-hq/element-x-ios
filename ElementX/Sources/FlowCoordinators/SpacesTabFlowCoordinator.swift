@@ -64,7 +64,7 @@ class SpacesTabFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     init(navigationSplitCoordinator: NavigationSplitCoordinator, flowParameters: CommonFlowParameters) {
-        userSession = flowParameters.activeUserSession
+        userSession = flowParameters.userSession
         self.navigationSplitCoordinator = navigationSplitCoordinator
         self.flowParameters = flowParameters
         
@@ -202,7 +202,7 @@ class SpacesTabFlowCoordinator: FlowCoordinatorProtocol {
     private func startCreateSpaceFlow() {
         let coordinator = NavigationStackCoordinator()
         let flowCoordinator = StartChatFlowCoordinator(entryPoint: .createSpace,
-                                                       userDiscoveryService: UserDiscoveryService(clientProxy: flowParameters.activeUserSession.clientProxy),
+                                                       userDiscoveryService: UserDiscoveryService(clientProxy: flowParameters.userSession.clientProxy),
                                                        navigationStackCoordinator: coordinator,
                                                        flowParameters: flowParameters)
         

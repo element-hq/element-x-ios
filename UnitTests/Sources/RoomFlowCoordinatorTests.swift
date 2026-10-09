@@ -523,8 +523,8 @@ final class RoomFlowCoordinatorTests {
         }
         
         let userSession = UserSessionMock(.init(clientProxy: clientProxy, userSettings: userSettings))
-        let flowParameters = CommonFlowParameters(activeUserSession: userSession,
-                                                  availableSessionsPublisher: CurrentValueSubject<[UserSessionProtocol], Never>([userSession]).asCurrentValuePublisher(),
+        let flowParameters = CommonFlowParameters(userSession: userSession,
+                                                  availableSessionsPublisher: .init([.init(userSession: userSession)]),
                                                   bugReportService: BugReportServiceMock(.init()),
                                                   elementCallService: ElementCallServiceMock(.init()),
                                                   timelineControllerFactory: timelineControllerFactory,
