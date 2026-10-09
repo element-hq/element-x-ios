@@ -467,10 +467,28 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             MXLog.info("Migrating to version 25.07.4, log files have been moved.")
         }
         
+        if oldVersion < Version(26, 10, 2) {
+            MXLog.info("Migrating to version 26.10.2, moving notification sounds.")
+            let soundsDirectory = URL.libraryDirectory.appending(component: "Sounds", directoryHint: .isDirectory)
+            
+            // Sounds are now referenced directly, the duplicate file can go.
+            try? FileManager.default.removeItem(at: soundsDirectory.appending(component: "currentAlert.caf"))
+            
+            let oldCustomTonesLocation = soundsDirectory.appending(component: "AvailableSounds", directoryHint: .isDirectory)
+            if FileManager.default.fileExists(atPath: oldCustomTonesLocation.path(percentEncoded: false)) {
+                do {
+                    try FileManager.default.moveItem(at: oldCustomTonesLocation, to: URL.customTonesDirectory)
+                } catch {
+                    MXLog.error("Failed moving custom notification sounds: \(error)")
+                }
+            }
+        }
+        
         // Store the old version to run additional migrations on the user session once it has been set up.
         userSessionMigrationsOldVersion = oldVersion
     }
     
+    // swiftlint:disable:next cyclomatic_complexity
     private func performUserSessionMigrations(_ userSession: UserSessionProtocol) async {
         guard let oldVersion = userSessionMigrationsOldVersion else { return }
         
@@ -520,6 +538,16 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             userSession.userSettings.account.migrateAppSettingsValue(\.showAllRoomListActivityKey)
             userSession.userSettings.account.migrateAppSettingsValue(\.selectedNotificationToneKey)
             userSession.userSettings.account.migrateAppSettingsValue(\.sharePresenceKey)
+            
+            // Make sure system notification sounds are available in the new directory.
+            if let selectedNotificationTone = userSession.userSettings.account.selectedNotificationTone {
+                do {
+                    MXLog.info("Copying the selected system notification sound.")
+                    try NotificationToneManager.copySystemToneIfNeeded(selectedNotificationTone)
+                } catch {
+                    MXLog.error("Failed migrating the selected notification sound: \(error)")
+                }
+            }
         }
         
         userSessionMigrationsOldVersion = nil

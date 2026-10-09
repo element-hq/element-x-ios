@@ -9,12 +9,12 @@ import UserNotifications
 
 nonisolated extension AccountSettings {
     /// The sound name to use in outgoing notifications.
-    /// Falls back to the default Element X tone if no custom tone has been selected.
+    /// Falls back to the default Element X tone if no tone has been selected.
     var notificationSoundName: UNNotificationSoundName {
-        if selectedNotificationTone == nil {
-            return UNNotificationSoundName("message.caf")
+        if let selectedNotificationTone {
+            UNNotificationSoundName(NotificationToneManager.soundName(for: selectedNotificationTone))
         } else {
-            return UNNotificationSoundName(NotificationToneManager.selectedToneFilename)
+            UNNotificationSoundName("message.caf")
         }
     }
     
