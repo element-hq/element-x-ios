@@ -16,6 +16,8 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
     private let appSettings: AppSettings
     
     private var userSessions: [String: UserSessionProtocol] = [:]
+    /// Every account's unread count, summed for the app badge.
+    private var badgeCounts: [String: Int] = [:]
     
     private var cancellables = Set<AnyCancellable>()
     private var notificationsEnabled = false
@@ -115,6 +117,7 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
     
     func removeUserSession(userID: String) {
         userSessions[userID] = nil
+        badgeCounts[userID] = nil
     }
     
     func registrationFailed(with error: Error) {
@@ -146,7 +149,7 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
         notificationCenter.removeDeliveredNotifications(withIdentifiers: notificationsIdentifiers)
     }
     
-    func removeDeliveredNotificationsForFullyReadRooms(_ rooms: [RoomSummary]) async {
+    func removeDeliveredNotificationsForFullyReadRooms(_ rooms: [RoomSummary], for userID: String) async {
         let roomsToLastMessageDates = rooms
             .filter { $0.hasUnreadMessages == false }
             .reduce(into: [:]) { partialResult, roomSummary in
@@ -156,7 +159,9 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
         let notificationsIdentifiers = await notificationCenter
             .deliveredNotifications()
             .filter { notification in
-                guard let roomID = notification.request.content.roomID,
+                // A room can be shared by several accounts, only clear this account's notifications.
+                guard (notification.request.content.receiverID ?? userID) == userID,
+                      let roomID = notification.request.content.roomID,
                       let lastMessageDate = roomsToLastMessageDates[roomID] else {
                     return false
                 }
@@ -171,15 +176,18 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
         notificationCenter.removeDeliveredNotifications(withIdentifiers: notificationsIdentifiers)
     }
     
-    func updateAppBadgeCount(_ badgeCount: Int) async {
-        guard !userSessions.isEmpty else { return }
+    func updateAppBadgeCount(_ badgeCount: Int, for userID: String) async {
+        guard userSessions[userID] != nil else { return }
         
-        appSettings.lastKnownBadgeCount = badgeCount
+        badgeCounts[userID] = badgeCount
+        let totalBadgeCount = badgeCounts.values.reduce(0, +)
         
-        MXLog.debug("Updating app badge count to \(badgeCount)")
+        appSettings.lastKnownBadgeCount = totalBadgeCount
+        
+        MXLog.debug("Updating app badge count to \(totalBadgeCount)")
         
         do {
-            try await notificationCenter.setBadgeCount(badgeCount)
+            try await notificationCenter.setBadgeCount(totalBadgeCount)
         } catch {
             MXLog.error("Failed updating the app badge count with error: \(error)")
         }
