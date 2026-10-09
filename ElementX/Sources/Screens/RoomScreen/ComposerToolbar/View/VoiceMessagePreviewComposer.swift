@@ -73,7 +73,8 @@ struct VoiceMessagePreviewComposer: View {
                 .progressMask(progress: playerState.progress)
         case .data(let array):
             WaveformLiveCanvas(samples: array,
-                               configuration: configuration)
+                               configuration: configuration,
+                               shouldDrawSilencePadding: true)
                 .progressMask(progress: playerState.progress)
         }
     }
