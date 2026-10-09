@@ -686,21 +686,13 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private func restoreOtherSessions(migratingFrom oldVersion: Version?) async {
         guard appSettings.multiAccountEnabled else { return }
         
-        for userID in userSessionManager.userIDs where userSessionManager.session(for: userID) == nil {
-            // Clearing the cache or signing out cancels this and restores from scratch.
-            guard !Task.isCancelled,
-                  case .success(let userSession) = await userSessionManager.restoreUserSession(userID: userID) else { continue }
+        await userSessionManager.restoreOtherSessions { [weak self] userSession in
+            guard let self else { return }
             
             await performUserSessionMigrations(userSession, from: oldVersion)
             guard !Task.isCancelled else { return }
             
-            userSessionManager.add(userSession)
             configureServices(for: userSession)
-            
-            // A background launch pauses the sessions when its task completes, nothing would pause this one.
-            if appMediator.appState == .active {
-                await userSession.clientProxy.resumeServices()
-            }
         }
     }
     
@@ -951,6 +943,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     
     /// Wires the services that work for every signed in account, not only the active one.
     private func configureServices(for userSession: UserSessionProtocol) {
+        // Wiring an account again (e.g. after clearing the cache) must replace its observers, not add to them.
+        userSessionObservers[userSession.clientProxy.userID] = nil
         configureNotificationManager(for: userSession)
         observeUserSessionChanges(userSession)
         observeUnreadNotifications(userSession)
@@ -1181,9 +1175,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             return
         }
         
-        for userSession in userSessionManager.sessionsPublisher.value {
-            await userSession.clientProxy.pauseServices()
-        }
+        await userSessionManager.pauseServices()
         clientProxyObserver = nil
     }
     
@@ -1192,9 +1184,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         analyticsService.signpost.startTransaction(.upToDateRoomList)
         
-        for session in userSessionManager.sessionsPublisher.value {
-            await session.clientProxy.resumeServices()
-        }
+        await userSessionManager.resumeServices()
         
         guard clientProxyObserver == nil else {
             return
@@ -1386,9 +1376,7 @@ private extension AppCoordinator {
         
         // Configure the background-refresh sync to carry set_presence=offline so it doesn't mark the
         // user online or idle. Note: If already online/idle then setting offline shouldn't override that.
-        for session in userSessionManager.sessionsPublisher.value {
-            _ = await session.clientProxy.configurePresence(.offline, sendImmediately: false)
-        }
+        await userSessionManager.configurePresence(.offline, sendImmediately: false)
         
         await resumeClientServices()
         
@@ -1466,21 +1454,20 @@ private extension AppCoordinator {
         
         await waitForSessionRestore()
         
-        let clientProxies = userSessionManager.sessionsPublisher.value.map(\.clientProxy)
-        guard !clientProxies.isEmpty else {
+        guard userSession != nil else {
             task.setTaskCompleted(success: false)
             return
         }
         
         task.expirationHandler = { @Sendable [weak self] in
             MXLog.info("Search backfill task is about to expire.")
-            Task { @MainActor in self?.userSessionManager.sessionsPublisher.value.forEach { $0.clientProxy.stopSearchBackfill() } }
+            Task { @MainActor in self?.userSessionManager.stopSearchBackfill() }
         }
         
-        clientProxies.forEach { $0.startSearchBackfill(strategy: .background) }
+        userSessionManager.startSearchBackfill(strategy: .background)
         
         // TaskHandle can't be awaited, so poll until every sweep finishes or is stopped on expiry.
-        while clientProxies.contains(where: \.isSearchBackfillRunning) {
+        while userSessionManager.isSearchBackfillRunning {
             try? await Task.sleep(for: .seconds(1))
         }
         

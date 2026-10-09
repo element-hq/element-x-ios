@@ -445,6 +445,10 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: false)
     var multiAccountEnabled: Bool
     
+    /// Lets the add account flow start once `multiAccountEnabled` shows its entry points. Not a user preference, so testers
+    /// can't add a second account while signing out of one isn't safe yet. Only set it to `true` locally, for development.
+    let addAccountFlowEnabled = false
+    
     init(store: UserDefaultsProtocol) {
         self.store = store
     }

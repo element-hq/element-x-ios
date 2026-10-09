@@ -120,6 +120,71 @@ struct UserSessionManagerTests {
         #expect(manager.activeSession == nil)
     }
     
+    @Test
+    func resumingAndPausingReachEverySession() async {
+        let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org"])
+        let aliceClientProxy = ClientProxyMock(.init(userID: "@alice:matrix.org"))
+        let bobClientProxy = ClientProxyMock(.init(userID: "@bob:matrix.org"))
+        manager.add(UserSessionMock(.init(clientProxy: aliceClientProxy)))
+        manager.add(UserSessionMock(.init(clientProxy: bobClientProxy)))
+        
+        await manager.resumeServices()
+        #expect(aliceClientProxy.resumeServicesCallsCount == 1)
+        #expect(bobClientProxy.resumeServicesCallsCount == 1)
+        
+        await manager.pauseServices()
+        #expect(aliceClientProxy.pauseServicesCallsCount == 1)
+        #expect(bobClientProxy.pauseServicesCallsCount == 1)
+    }
+    
+    @Test
+    func restoringTheOtherSessionsResumesThemWhileServicesRun() async {
+        let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org"])
+        manager.add(makeUserSession(userID: "@alice:matrix.org"))
+        let bobClientProxy = ClientProxyMock(.init(userID: "@bob:matrix.org"))
+        userSessionStore.restoreUserSessionUserIDReturnValue = .success(UserSessionMock(.init(clientProxy: bobClientProxy)))
+        await manager.resumeServices()
+        
+        await confirmation("Bob is prepared before being added") { prepared in
+            await manager.restoreOtherSessions { userSession in
+                #expect(userSession.clientProxy.userID == "@bob:matrix.org")
+                #expect(manager.session(for: "@bob:matrix.org") == nil)
+                prepared()
+            }
+        }
+        
+        #expect(userSessionStore.restoreUserSessionUserIDReceivedInvocations == ["@bob:matrix.org"])
+        #expect(manager.sessionsPublisher.value.map(\.clientProxy.userID) == ["@alice:matrix.org", "@bob:matrix.org"])
+        #expect(bobClientProxy.resumeServicesCalled)
+    }
+    
+    @Test
+    func restoringTheOtherSessionsDoesntResumeThemWhilePaused() async {
+        let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org"])
+        manager.add(makeUserSession(userID: "@alice:matrix.org"))
+        let bobClientProxy = ClientProxyMock(.init(userID: "@bob:matrix.org"))
+        userSessionStore.restoreUserSessionUserIDReturnValue = .success(UserSessionMock(.init(clientProxy: bobClientProxy)))
+        
+        // E.g. a background launch, which pauses the sessions when its task completes.
+        await manager.restoreOtherSessions { _ in }
+        
+        #expect(manager.sessionsPublisher.value.map(\.clientProxy.userID) == ["@alice:matrix.org", "@bob:matrix.org"])
+        #expect(!bobClientProxy.resumeServicesCalled)
+    }
+    
+    @Test
+    func restoringTheOtherSessionsWithASingleAccountDoesNothing() async {
+        let manager = makeManager(userIDs: ["@alice:matrix.org"])
+        manager.add(makeUserSession(userID: "@alice:matrix.org"))
+        await manager.resumeServices()
+        
+        await confirmation("There's no other account to prepare", expectedCount: 0) { prepared in
+            await manager.restoreOtherSessions { _ in prepared() }
+        }
+        
+        #expect(!userSessionStore.restoreUserSessionUserIDCalled)
+    }
+    
     // MARK: - Helpers
     
     private func makeManager(userIDs: [String]) -> UserSessionManager {
