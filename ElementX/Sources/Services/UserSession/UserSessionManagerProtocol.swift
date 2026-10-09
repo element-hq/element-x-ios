@@ -12,6 +12,8 @@ import MatrixRustSDK
 enum UserSessionManagerError: Error {
     /// There are no signed in accounts to restore.
     case noAccounts
+    /// The account couldn't be restored, so it has been removed.
+    case failedRestoringSession
     /// None of the signed in accounts could be restored, so they have all been removed.
     case failedRestoringSessions
 }
@@ -35,6 +37,13 @@ protocol UserSessionManagerProtocol: AnyObject {
     ///
     /// The session isn't registered: `add` it once it's ready to be used, e.g. after any migrations.
     func restoreActiveSession() async -> Result<UserSessionProtocol, UserSessionManagerError>
+    /// Restores an account's session, removing the account when that fails (the store deletes its data).
+    ///
+    /// The session isn't registered: `add` it once it's ready to be used, e.g. after any migrations.
+    func restoreUserSession(userID: String) async -> Result<UserSessionProtocol, UserSessionManagerError>
+    /// Restores every account that isn't live yet, one after the other. Each session is `prepare`d before it's added,
+    /// and resumed when the services are running.
+    func restoreOtherSessions(prepare: @MainActor (UserSessionProtocol) async -> Void) async
     /// Creates the session of an account that has just signed in, and stores its credentials.
     ///
     /// The session isn't registered: `add` it once it's ready to be used.
@@ -46,4 +55,17 @@ protocol UserSessionManagerProtocol: AnyObject {
     func remove(userID: String)
     /// Deletes every account's credentials and data.
     func reset()
+    
+    // MARK: - Services
+    
+    /// Whether any live session is still running a search backfill.
+    var isSearchBackfillRunning: Bool { get }
+    
+    /// Resumes every live session's services, and those of the sessions restored while they're running.
+    func resumeServices() async
+    /// Pauses every live session's services.
+    func pauseServices() async
+    func configurePresence(_ presence: ClientProxyPresence, sendImmediately: Bool) async
+    func startSearchBackfill(strategy: SearchBackfillStrategy)
+    func stopSearchBackfill()
 }

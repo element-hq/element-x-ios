@@ -19,6 +19,8 @@ final class UserSessionManager: UserSessionManagerProtocol {
     private let appSettings: AppSettings
     
     private let sessionsSubject = CurrentValueSubject<[UserSessionProtocol], Never>([])
+    /// Whether the services are running, so that the sessions restored meanwhile are resumed too.
+    private var areServicesRunning = false
     
     /// Every signed in account, most recently selected first, with its session once it's live.
     /// Assigning `nil` removes an account rather than clearing its session.
@@ -72,16 +74,45 @@ final class UserSessionManager: UserSessionManagerProtocol {
         }
         
         while let userID = accounts.keys.first {
-            switch await userSessionStore.restoreUserSession(userID: userID) {
-            case .success(let userSession):
+            if case .success(let userSession) = await restoreUserSession(userID: userID) {
                 return .success(userSession)
-            case .failure(let error):
-                MXLog.error("Failed restoring \(userID), falling back to the next account: \(error)")
-                accounts.removeValue(forKey: userID)
             }
         }
         
         return .failure(.failedRestoringSessions)
+    }
+    
+    func restoreUserSession(userID: String) async -> Result<UserSessionProtocol, UserSessionManagerError> {
+        // Remote settings are app wide, so only the active account's are ever applied.
+        if userID == accounts.keys.first {
+            userSessionStore.applyRemoteSettings(forUserID: userID)
+        }
+        
+        switch await userSessionStore.restoreUserSession(userID: userID) {
+        case .success(let userSession):
+            return .success(userSession)
+        case .failure(let error):
+            MXLog.error("Failed restoring \(userID): \(error)")
+            accounts.removeValue(forKey: userID)
+            return .failure(.failedRestoringSession)
+        }
+    }
+    
+    func restoreOtherSessions(prepare: @MainActor (UserSessionProtocol) async -> Void) async {
+        for userID in accounts.keys where session(for: userID) == nil {
+            // Clearing the cache or signing out cancels this and restores from scratch.
+            guard !Task.isCancelled,
+                  case .success(let userSession) = await restoreUserSession(userID: userID) else { continue }
+            
+            await prepare(userSession)
+            guard !Task.isCancelled else { return }
+            
+            add(userSession)
+            
+            if areServicesRunning {
+                await userSession.clientProxy.resumeServices()
+            }
+        }
     }
     
     func userSession(for client: ClientProtocol, sessionDirectories: SessionDirectories, passphrase: Data) async -> Result<UserSessionProtocol, UserSessionStoreError> {
@@ -112,5 +143,39 @@ final class UserSessionManager: UserSessionManagerProtocol {
     func reset() {
         userSessionStore.reset()
         accounts.removeAll()
+    }
+    
+    // MARK: - Services
+    
+    var isSearchBackfillRunning: Bool {
+        sessionsSubject.value.contains { $0.clientProxy.isSearchBackfillRunning }
+    }
+    
+    func resumeServices() async {
+        areServicesRunning = true
+        for userSession in sessionsSubject.value {
+            await userSession.clientProxy.resumeServices()
+        }
+    }
+    
+    func pauseServices() async {
+        areServicesRunning = false
+        for userSession in sessionsSubject.value {
+            await userSession.clientProxy.pauseServices()
+        }
+    }
+    
+    func configurePresence(_ presence: ClientProxyPresence, sendImmediately: Bool) async {
+        for userSession in sessionsSubject.value {
+            _ = await userSession.clientProxy.configurePresence(presence, sendImmediately: sendImmediately)
+        }
+    }
+    
+    func startSearchBackfill(strategy: SearchBackfillStrategy) {
+        sessionsSubject.value.forEach { $0.clientProxy.startSearchBackfill(strategy: strategy) }
+    }
+    
+    func stopSearchBackfill() {
+        sessionsSubject.value.forEach { $0.clientProxy.stopSearchBackfill() }
     }
 }
