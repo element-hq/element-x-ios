@@ -39,10 +39,10 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
         self.notificationToneManager = notificationToneManager
         
         let bindings = NotificationSettingsScreenViewStateBindings(enableNotifications: userSettings.app.enableNotifications,
-                                                                   showAllRoomListActivity: userSettings.app.showAllRoomListActivity)
+                                                                   showAllRoomListActivity: userSettings.account.showAllRoomListActivity)
         super.init(initialViewState: NotificationSettingsScreenViewState(bindings: bindings,
                                                                          isModallyPresented: isModallyPresented,
-                                                                         selectedAlertTone: userSettings.app.selectedNotificationTone ?? NotificationToneManager.defaultElementXMessageTone,
+                                                                         selectedAlertTone: userSettings.account.selectedNotificationTone ?? NotificationToneManager.defaultElementXMessageTone,
                                                                          availableCustomTones: notificationToneManager.customTones(),
                                                                          // macos lacks default sounds and its sandbox Sounds directory is immutable
                                                                          customToneSelectionEnabled: !ProcessInfo.processInfo.isiOSAppOnMac))
@@ -52,7 +52,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
             .weakAssign(to: \.state.bindings.enableNotifications, on: self)
             .store(in: &cancellables)
         
-        userSettings.app.selectedNotificationTonePublisher
+        userSettings.account.selectedNotificationTonePublisher
             .map { $0 ?? NotificationToneManager.defaultElementXMessageTone }
             .weakAssign(to: \.state.selectedAlertTone, on: self)
             .store(in: &cancellables)
@@ -104,7 +104,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
             }
             Task { await enableInvitations(state.bindings.invitationsEnabled) }
         case .showAllRoomListActivityChanged:
-            userSettings.app.showAllRoomListActivity = state.bindings.showAllRoomListActivity
+            userSettings.account.showAllRoomListActivity = state.bindings.showAllRoomListActivity
         case .close:
             actionsSubject.send(.close)
         case .fixConfigurationMismatchTapped:
@@ -302,7 +302,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
                 try notificationToneManager.deleteCustomTone(tone)
                 
                 if tone == state.selectedAlertTone {
-                    userSettings.app.selectedNotificationTone = nil
+                    userSettings.account.selectedNotificationTone = nil
                 }
             } catch {
                 MXLog.error("Error deleting alert tone \(tone.label): \(error)")

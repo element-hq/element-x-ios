@@ -7,7 +7,7 @@
 
 import UserNotifications
 
-nonisolated extension AppSettings {
+nonisolated extension AccountSettings {
     /// The sound name to use in outgoing notifications.
     /// Falls back to the default Element X tone if no custom tone has been selected.
     var notificationSoundName: UNNotificationSoundName {
@@ -21,5 +21,11 @@ nonisolated extension AppSettings {
     /// A `UNNotificationSound` built from `notificationSoundName`, ready to attach to a notification content object.
     var notificationSound: UNNotificationSound {
         UNNotificationSound(named: notificationSoundName)
+    }
+}
+
+nonisolated extension AppSettings {
+    var defaultNotificationSound: UNNotificationSound {
+        UNNotificationSound(named: UNNotificationSoundName("message.caf"))
     }
 }

@@ -11,6 +11,7 @@ import MatrixRustSDK
 
 // sourcery: AutoMockable
 nonisolated protocol NSEUserSessionProtocol {
+    var userSettings: UserSettings { get }
     var inviteAvatarsVisibility: InviteAvatars { get async }
     var mediaPreviewVisibility: MediaPreviews { get async }
     var threadsEnabled: Bool { get }

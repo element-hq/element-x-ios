@@ -128,7 +128,7 @@ class TimelineController: TimelineControllerProtocol {
     }
     
     func sendReadReceipt(for itemID: TimelineItemIdentifier) async {
-        let receiptType: MatrixRustSDK.ReceiptType = userSettings.app.sharePresence ? .read : .readPrivate
+        let receiptType: MatrixRustSDK.ReceiptType = userSettings.account.sharePresence ? .read : .readPrivate
         
         guard let eventID = itemID.eventID else {
             return
