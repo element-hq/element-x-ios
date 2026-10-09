@@ -64,6 +64,11 @@ extension ClientProxyMock {
         alternateRoomSummaryProvider = RoomSummaryProviderMock(.init())
         staticRoomSummaryProvider = RoomSummaryProviderMock(.init())
         
+        let searchService = SearchServiceProxyMock()
+        searchService.resultsPublisher = .init([])
+        searchService.paginationStatePublisher = .init(.idle(endReached: true))
+        self.searchService = searchService
+        
         roomDirectorySearchProxyReturnValue = configuration.roomDirectorySearchProxy
         
         actionsPublisher = PassthroughSubject<ClientProxyAction, Never>().eraseToAnyPublisher()
