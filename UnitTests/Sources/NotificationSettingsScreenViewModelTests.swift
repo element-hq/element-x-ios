@@ -412,7 +412,7 @@ struct NotificationSettingsScreenViewModelTests {
         let tone = NotificationTone.createBundledSound(label: "Test", filename: "test.caf")
         toneManager.setSelectedToneClosure = { [userSettings] selectedTone in
             userSettings.account.selectedNotificationTone = selectedTone
-            return NotificationToneManager.libraryLocation
+            return URL.customTonesDirectory
         }
         
         // When the user selects that tone
@@ -491,7 +491,7 @@ struct NotificationSettingsScreenViewModelTests {
     func importingCustomToneRefreshesAvailableList() async throws {
         // Given a tone file ready to import
         let importedTone = NotificationTone.createCustomUserSound(filename: "imported.caf")
-        let location = NotificationToneManager.libraryLocation.appending(component: importedTone.filename)
+        let location = URL.customTonesDirectory.appending(component: importedTone.filename)
         toneManager.addNewToneToLibraryFromReturnValue = location
         toneManager.customTonesReturnValue = [importedTone]
         
