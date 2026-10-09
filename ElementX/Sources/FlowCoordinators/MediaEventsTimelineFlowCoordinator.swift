@@ -84,7 +84,6 @@ class MediaEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
                                                                         userSession: userSession,
                                                                         mediaPlayerProvider: MediaPlayerProvider(),
                                                                         appMediator: flowParameters.appMediator,
-                                                                        userSettings: flowParameters.userSettings,
                                                                         analytics: flowParameters.analytics,
                                                                         emojiProvider: flowParameters.emojiProvider,
                                                                         linkMetadataProvider: flowParameters.linkMetadataProvider,

@@ -30,11 +30,10 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
     }
     
     init(source: JoinRoomScreenSource,
-         userSettings: UserSettings,
          userSession: UserSessionProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.source = source
-        self.userSettings = userSettings
+        userSettings = userSession.userSettings
         clientProxy = userSession.clientProxy
         self.userIndicatorController = userIndicatorController
         
@@ -49,7 +48,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         
         context.$viewState.map(\.mode)
             .removeDuplicates()
-            .sink { mode in
+            .sink { [userSettings = self.userSettings] mode in
                 switch mode {
                 case .invited:
                     userSettings.app.seenInvites.insert(roomID)

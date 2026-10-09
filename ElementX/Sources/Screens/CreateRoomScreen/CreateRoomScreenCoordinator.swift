@@ -15,7 +15,6 @@ struct CreateRoomScreenCoordinatorParameters {
     let shouldShowCancelButton: Bool
     let userSession: UserSessionProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
-    let userSettings: UserSettings
     let analytics: AnalyticsServiceProtocol
     let appHooks: AppHooks
 }
@@ -42,7 +41,6 @@ final class CreateRoomScreenCoordinator: CoordinatorProtocol {
                                               userSession: parameters.userSession,
                                               analytics: parameters.analytics,
                                               userIndicatorController: parameters.userIndicatorController,
-                                              userSettings: parameters.userSettings,
                                               appHooks: parameters.appHooks)
     }
     

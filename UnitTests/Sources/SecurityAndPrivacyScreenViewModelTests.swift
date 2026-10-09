@@ -468,12 +468,13 @@ final class SecurityAndPrivacyScreenViewModelTests {
         roomProxy.updateJoinRuleReturnValue = .success(())
         roomProxy.updateRoomDirectoryVisibilityReturnValue = .success(())
         
+        let clientProxy = ClientProxyMock(.init(userIDServerName: "matrix.org",
+                                                spaceServiceConfiguration: .init(topLevelSpaces: topLevelSpaces,
+                                                                                 joinedParentSpaces: joinedParentSpaces)))
+        
         viewModel = SecurityAndPrivacyScreenViewModel(roomProxy: roomProxy,
-                                                      clientProxy: ClientProxyMock(.init(userIDServerName: "matrix.org",
-                                                                                         spaceServiceConfiguration: .init(topLevelSpaces: topLevelSpaces,
-                                                                                                                          joinedParentSpaces: joinedParentSpaces))),
+                                                      userSession: UserSessionMock(.init(clientProxy: clientProxy, userSettings: userSettings)),
                                                       userIndicatorController: UserIndicatorControllerMock(),
-                                                      userSettings: userSettings,
                                                       appHooks: AppHooks())
     }
 }

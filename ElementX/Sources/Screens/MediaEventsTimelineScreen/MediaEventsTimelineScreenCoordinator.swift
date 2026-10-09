@@ -16,7 +16,6 @@ struct MediaEventsTimelineScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
     let mediaPlayerProvider: MediaPlayerProviderProtocol
     let appMediator: AppMediatorProtocol
-    let userSettings: UserSettings
     let analytics: AnalyticsServiceProtocol
     let emojiProvider: EmojiProviderProtocol
     let linkMetadataProvider: LinkMetadataProviderProtocol

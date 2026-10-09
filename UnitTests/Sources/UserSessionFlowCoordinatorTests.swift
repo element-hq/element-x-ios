@@ -48,16 +48,15 @@ struct UserSessionFlowCoordinatorTests {
         appMediator.networkMonitor = networkMonitor
         
         userIndicatorController = UserIndicatorControllerMock()
-        let userSettings = UserSettings.mock()
+        let userSession = UserSessionMock(.init(clientProxy: clientProxy))
         
-        let flowParameters = CommonFlowParameters(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
+        let flowParameters = CommonFlowParameters(userSession: userSession,
                                                   bugReportService: BugReportServiceMock(.init()),
                                                   elementCallService: ElementCallServiceMock(.init()),
                                                   timelineControllerFactory: TimelineControllerFactoryMock(.init()),
-                                                  emojiProvider: EmojiProvider(userSettings: userSettings),
+                                                  emojiProvider: EmojiProvider(userSettings: userSession.userSettings),
                                                   linkMetadataProvider: LinkMetadataProvider(),
                                                   appMediator: appMediator,
-                                                  userSettings: userSettings,
                                                   appHooks: AppHooks(),
                                                   analytics: AnalyticsServiceMock(.init()),
                                                   userIndicatorController: userIndicatorController,

@@ -237,8 +237,7 @@ final class JoinRoomScreenViewModelTests {
         }
         
         viewModel = JoinRoomScreenViewModel(source: .generic(roomID: "1", via: []),
-                                            userSettings: userSettings,
-                                            userSession: UserSessionMock(.init(clientProxy: clientProxy)),
+                                            userSession: UserSessionMock(.init(clientProxy: clientProxy, userSettings: userSettings)),
                                             userIndicatorController: UserIndicatorControllerMock())
     }
 }

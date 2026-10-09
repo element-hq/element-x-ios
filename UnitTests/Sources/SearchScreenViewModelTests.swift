@@ -57,10 +57,8 @@ struct SearchScreenViewModelTests {
         userSettings = UserSettings.mock()
         
         viewModel = SearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
-                                          clientProxy: clientProxy,
-                                          mediaProvider: MediaProviderMock(.init()),
-                                          userIndicatorController: userIndicatorController,
-                                          userSettings: userSettings)
+                                          userSession: UserSessionMock(.init(clientProxy: clientProxy, userSettings: userSettings)),
+                                          userIndicatorController: userIndicatorController)
     }
     
     @Test

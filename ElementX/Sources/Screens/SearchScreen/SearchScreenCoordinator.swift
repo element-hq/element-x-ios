@@ -10,10 +10,8 @@ import SwiftUI
 
 struct SearchScreenCoordinatorParameters {
     let roomSummaryProvider: RoomSummaryProviderProtocol
-    let clientProxy: ClientProxyProtocol
-    let mediaProvider: MediaProviderProtocol
+    let userSession: UserSessionProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
-    let userSettings: UserSettings
 }
 
 enum SearchScreenCoordinatorAction {
@@ -33,10 +31,8 @@ final class SearchScreenCoordinator: CoordinatorProtocol {
     
     init(parameters: SearchScreenCoordinatorParameters) {
         viewModel = SearchScreenViewModel(roomSummaryProvider: parameters.roomSummaryProvider,
-                                          clientProxy: parameters.clientProxy,
-                                          mediaProvider: parameters.mediaProvider,
-                                          userIndicatorController: parameters.userIndicatorController,
-                                          userSettings: parameters.userSettings)
+                                          userSession: parameters.userSession,
+                                          userIndicatorController: parameters.userIndicatorController)
     }
     
     func start() {

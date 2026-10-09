@@ -799,7 +799,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                   emojiProvider: EmojiProvider(userSettings: userSession.userSettings),
                                                   linkMetadataProvider: LinkMetadataProvider(),
                                                   appMediator: appMediator,
-                                                  userSettings: userSession.userSettings, // TODO: @pixlwave Remove this in favour of the userSession.
                                                   appHooks: appHooks,
                                                   analytics: analyticsService,
                                                   userIndicatorController: userIndicatorController,

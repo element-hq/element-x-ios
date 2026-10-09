@@ -69,7 +69,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         self.appLockService = appLockService
         analyticsService = flowParameters.analytics
         appMediator = flowParameters.appMediator
-        userSettings = flowParameters.userSettings
+        userSettings = flowParameters.userSession.userSettings
         appHooks = flowParameters.appHooks
         notificationManager = flowParameters.notificationManager
         userIndicatorController = flowParameters.userIndicatorController
@@ -281,8 +281,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         
         let parameters = SessionVerificationScreenCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationController,
                                                                         flow: .deviceInitiator,
-                                                                        userSettings: userSettings,
-                                                                        mediaProvider: userSession.mediaProvider)
+                                                                        userSession: userSession)
         
         let coordinator = SessionVerificationScreenCoordinator(parameters: parameters)
         

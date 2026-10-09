@@ -24,14 +24,13 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
     }
     
     init(roomProxy: JoinedRoomProxyProtocol,
-         clientProxy: ClientProxyProtocol,
+         userSession: UserSessionProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
-         userSettings: UserSettings,
          appHooks: AppHooks) {
         self.roomProxy = roomProxy
-        self.clientProxy = clientProxy
+        clientProxy = userSession.clientProxy
         self.userIndicatorController = userIndicatorController
-        self.userSettings = userSettings
+        userSettings = userSession.userSettings
         
         let viewState = SecurityAndPrivacyScreenViewState(accessType: roomProxy.infoPublisher.value.joinRule.toSecurityAndPrivacyRoomAccessType,
                                                           isEncryptionEnabled: roomProxy.infoPublisher.value.isEncrypted,

@@ -21,8 +21,7 @@ struct SessionVerificationViewModelTests {
         sessionVerificationController = SessionVerificationControllerProxyMock.configureMock()
         viewModel = SessionVerificationScreenViewModel(sessionVerificationControllerProxy: sessionVerificationController,
                                                        flow: .deviceInitiator,
-                                                       userSettings: .mock(),
-                                                       mediaProvider: MediaProviderMock(.init()))
+                                                       userSession: UserSessionMock(.init()))
         context = viewModel.context
     }
     

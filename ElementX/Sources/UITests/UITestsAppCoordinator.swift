@@ -597,8 +597,7 @@ class MockScreen: Identifiable {
                                                                                                           requestDelay: .seconds(5))
             let parameters = SessionVerificationScreenCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationControllerProxy,
                                                                             flow: .deviceInitiator,
-                                                                            userSettings: .mock(),
-                                                                            mediaProvider: MediaProviderMock(.init()))
+                                                                            userSession: UserSessionMock(.init()))
             return SessionVerificationScreenCoordinator(parameters: parameters)
         case .userSessionScreen, .userSessionScreenReply, .userSessionSpacesFlow:
             let userID = "@mock:client.com"
@@ -647,7 +646,6 @@ class MockScreen: Identifiable {
                                                                                                   emojiProvider: EmojiProvider(userSettings: userSession.userSettings),
                                                                                                   linkMetadataProvider: LinkMetadataProvider(),
                                                                                                   appMediator: appMediator,
-                                                                                                  userSettings: userSession.userSettings,
                                                                                                   appHooks: AppHooks(),
                                                                                                   analytics: analytics,
                                                                                                   userIndicatorController: UserIndicatorControllerMock(),
@@ -700,7 +698,6 @@ class MockScreen: Identifiable {
                                                                                                 emojiProvider: EmojiProvider(userSettings: userSession.userSettings),
                                                                                                 linkMetadataProvider: LinkMetadataProvider(),
                                                                                                 appMediator: AppMediatorMock(.init()),
-                                                                                                userSettings: userSession.userSettings,
                                                                                                 appHooks: AppHooks(),
                                                                                                 analytics: analytics,
                                                                                                 userIndicatorController: UserIndicatorControllerMock(),
@@ -801,7 +798,6 @@ class MockScreen: Identifiable {
                                                                                                     emojiProvider: EmojiProvider(userSettings: userSession.userSettings),
                                                                                                     linkMetadataProvider: LinkMetadataProvider(),
                                                                                                     appMediator: AppMediatorMock(.init()),
-                                                                                                    userSettings: userSession.userSettings,
                                                                                                     appHooks: AppHooks(),
                                                                                                     analytics: analytics,
                                                                                                     userIndicatorController: UserIndicatorControllerMock(),
@@ -858,7 +854,6 @@ class MockScreen: Identifiable {
                                                                                                emojiProvider: EmojiProvider(userSettings: userSession.userSettings),
                                                                                                linkMetadataProvider: LinkMetadataProvider(),
                                                                                                appMediator: AppMediatorMock(.init()),
-                                                                                               userSettings: userSession.userSettings,
                                                                                                appHooks: AppHooks(),
                                                                                                analytics: analytics,
                                                                                                userIndicatorController: UserIndicatorControllerMock(),

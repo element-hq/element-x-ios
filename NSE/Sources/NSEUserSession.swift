@@ -17,7 +17,7 @@ nonisolated protocol NSEUserSessionProtocol {
 }
 
 final nonisolated class NSEUserSession: NSEUserSessionProtocol {
-    private let userSettings: CommonSettingsProtocol
+    let userSettings: UserSettings
     private let baseClient: ClientProtocol
     private let notificationClient: NotificationClient
     private let userID: String
@@ -49,17 +49,17 @@ final nonisolated class NSEUserSession: NSEUserSessionProtocol {
     }
     
     var threadsEnabled: Bool {
-        userSettings.threadsEnabled
+        userSettings.app.threadsEnabled
     }
     
     init(credentials: KeychainCredentials,
          roomID: String,
          clientSessionDelegate: ClientSessionDelegate,
          clientFactory: ClientFactoryProtocol = ClientFactory(),
-         userSettings: CommonSettingsProtocol,
+         appSettings: AppSettings,
          appHooks: AppHooks) async throws {
         userID = credentials.userID
-        self.userSettings = userSettings
+        userSettings = appSettings.userSettings(for: credentials.userID)
         
         baseClient = try await clientFactory.makeNSEClient(credentials: credentials,
                                                            roomID: roomID,
@@ -75,7 +75,7 @@ final nonisolated class NSEUserSession: NSEUserSessionProtocol {
         delegateHandle = try baseClient.setDelegate(delegate: ClientDelegateWrapper())
         
         // Inject the content scanner so the SDK gates the media it downloads whilst building the notification.
-        if let contentScannerURL = userSettings.contentScannerURL.publisher.value {
+        if let contentScannerURL = userSettings.app.contentScannerURL.publisher.value {
             let contentScanner = ContentScanner(scannerUrl: contentScannerURL.absoluteString)
             await baseClient.setContentScanner(contentScanner: contentScanner)
         }

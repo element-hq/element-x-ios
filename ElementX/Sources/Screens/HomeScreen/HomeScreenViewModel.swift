@@ -32,7 +32,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     // swiftlint:disable:next function_body_length
     init(userSession: UserSessionProtocol,
          selectedRoomPublisher: CurrentValuePublisher<String?, Never>,
-         userSettings: UserSettings,
          analyticsService: AnalyticsServiceProtocol,
          bugReportService: BugReportServiceProtocol,
          notificationManager: NotificationManagerProtocol,
@@ -40,7 +39,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         self.userSession = userSession
         self.analyticsService = analyticsService
         self.bugReportService = bugReportService
-        self.userSettings = userSettings
+        userSettings = userSession.userSettings
         self.notificationManager = notificationManager
         self.userIndicatorController = userIndicatorController
         
@@ -49,7 +48,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         roomSummaryProvider = userSession.clientProxy.roomSummaryProvider
         
         super.init(initialViewState: .init(userProfile: userSession.clientProxy.userProfilePublisher.value,
-                                           bindings: .init(filtersState: .init(userSettings: userSettings))),
+                                           bindings: .init(filtersState: .init(userSettings: userSession.userSettings))),
                    mediaProvider: userSession.mediaProvider)
         
         if userSettings.app.globalSearchEnabled, #available(iOS 26.0, *) {

@@ -84,7 +84,7 @@ final class CreateRoomScreenViewModelTests {
                                             userID: "@a:b.com",
                                             spaceServiceConfiguration: .init(spaceRoomLists: ["1": .init()])))
         clientProxy.roomForIdentifierClosure = { roomID in .joined(JoinedRoomProxyMock(.init(id: roomID))) }
-        userSession = UserSessionMock(.init(clientProxy: clientProxy))
+        userSession = UserSessionMock(.init(clientProxy: clientProxy, userSettings: userSettings))
         userSettings.app.knockingEnabled = true
         let viewModel = CreateRoomScreenViewModel(isSpace: true,
                                                   spaceSelectionMode: .none,
@@ -92,7 +92,6 @@ final class CreateRoomScreenViewModelTests {
                                                   userSession: userSession,
                                                   analytics: AnalyticsServiceMock(.init()),
                                                   userIndicatorController: UserIndicatorControllerMock(),
-                                                  userSettings: userSettings,
                                                   appHooks: AppHooks())
         self.viewModel = viewModel
         
@@ -335,7 +334,7 @@ final class CreateRoomScreenViewModelTests {
                                             userID: "@a:b.com"))
         clientProxy.spaceService = spaceService
         clientProxy.roomForIdentifierClosure = { roomID in .joined(JoinedRoomProxyMock(.init(id: roomID))) }
-        userSession = UserSessionMock(.init(clientProxy: clientProxy))
+        userSession = UserSessionMock(.init(clientProxy: clientProxy, userSettings: userSettings))
         userSettings.app.knockingEnabled = true
         let viewModel = CreateRoomScreenViewModel(isSpace: isSpace,
                                                   spaceSelectionMode: spacesSelectionMode,
@@ -343,7 +342,6 @@ final class CreateRoomScreenViewModelTests {
                                                   userSession: userSession,
                                                   analytics: AnalyticsServiceMock(.init()),
                                                   userIndicatorController: UserIndicatorControllerMock(),
-                                                  userSettings: userSettings,
                                                   appHooks: AppHooks())
         self.viewModel = viewModel
     }
