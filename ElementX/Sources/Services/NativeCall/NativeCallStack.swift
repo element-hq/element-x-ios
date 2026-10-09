@@ -56,20 +56,15 @@ final class NativeCallStack {
     
     func start() async {
         Self.installRTCLogBridge()
-        await stack.start()
     }
     
-    /// Releases the stack along with the to-device subscription it holds open for key delivery.
+    /// Hangs up any call in progress.
     func stop() {
         MXLog.info("\(Self.logPrefix) Stopping the native call stack, in a call: \(controller.isInCall)")
         
-        // Best effort: the leave this starts may not finish before the core stops, but the
-        // alternative is walking away from the call without telling the room at all.
         if controller.isInCall {
             controller.hangUp()
         }
-        
-        stack.stop()
     }
     
     /// Starts, or returns to, the call in the room.
