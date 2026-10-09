@@ -235,9 +235,6 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: true)
     var enableNotifications: Bool
     
-    @UserPreference(defaultValue: true)
-    var enableInAppNotifications: Bool
-    
     @UserPreference(defaultValue: false)
     var hideQuietNotificationAlerts: Bool
     
