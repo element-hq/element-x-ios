@@ -22,9 +22,9 @@
 
 // swiftlint:disable all
 
-import UIKit
+import SwiftUI
 
-extension UIImage {
+nonisolated extension UIImage {
     public func blurHash(numberOfComponents components: (Int, Int)) -> String? {
         let pixelWidth = Int(round(size.width * scale))
         let pixelHeight = Int(round(size.height * scale))
@@ -116,14 +116,14 @@ extension UIImage {
     }
 }
 
-private func encodeDC(_ value: (Float, Float, Float)) -> Int {
+private nonisolated func encodeDC(_ value: (Float, Float, Float)) -> Int {
     let roundedR = linearTosRGB(value.0)
     let roundedG = linearTosRGB(value.1)
     let roundedB = linearTosRGB(value.2)
     return (roundedR << 16) + (roundedG << 8) + roundedB
 }
 
-private func encodeAC(_ value: (Float, Float, Float), maximumValue: Float) -> Int {
+private nonisolated func encodeAC(_ value: (Float, Float, Float), maximumValue: Float) -> Int {
     let quantR = Int(max(0, min(18, floor(signPow(value.0 / maximumValue, 0.5) * 9 + 9.5))))
     let quantG = Int(max(0, min(18, floor(signPow(value.1 / maximumValue, 0.5) * 9 + 9.5))))
     let quantB = Int(max(0, min(18, floor(signPow(value.2 / maximumValue, 0.5) * 9 + 9.5))))
@@ -131,11 +131,11 @@ private func encodeAC(_ value: (Float, Float, Float), maximumValue: Float) -> In
     return quantR * 19 * 19 + quantG * 19 + quantB
 }
 
-private func signPow(_ value: Float, _ exp: Float) -> Float {
+private nonisolated func signPow(_ value: Float, _ exp: Float) -> Float {
     copysign(pow(abs(value), exp), value)
 }
 
-private func linearTosRGB(_ value: Float) -> Int {
+private nonisolated func linearTosRGB(_ value: Float) -> Int {
     let v = max(0, min(1, value))
     if v <= 0.0031308 {
         return Int(v * 12.92 * 255 + 0.5)
@@ -144,7 +144,7 @@ private func linearTosRGB(_ value: Float) -> Int {
     }
 }
 
-private func sRGBToLinear<Type: BinaryInteger>(_ value: Type) -> Float {
+private nonisolated func sRGBToLinear<Type: BinaryInteger>(_ value: Type) -> Float {
     let v = Float(Int64(value)) / 255
     if v <= 0.04045 {
         return v / 12.92
@@ -153,9 +153,9 @@ private func sRGBToLinear<Type: BinaryInteger>(_ value: Type) -> Float {
     }
 }
 
-private let encodeCharacters: [String] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz#$%*+,-.:;=?@[]^_{|}~".map { String($0) }
+private nonisolated let encodeCharacters: [String] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz#$%*+,-.:;=?@[]^_{|}~".map { String($0) }
 
-extension BinaryInteger {
+nonisolated extension BinaryInteger {
     func encode83(length: Int) -> String {
         var result = ""
         for i in 1...length {
@@ -166,7 +166,7 @@ extension BinaryInteger {
     }
 }
 
-private func pow(_ base: Int, _ exponent: Int) -> Int {
+private nonisolated func pow(_ base: Int, _ exponent: Int) -> Int {
     (0..<exponent).reduce(1) { value, _ in value * base }
 }
 

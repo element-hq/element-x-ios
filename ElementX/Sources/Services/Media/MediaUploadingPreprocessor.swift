@@ -8,10 +8,10 @@
 
 import AVFoundation
 import MatrixRustSDK
-import UIKit
+import SwiftUI
 import UniformTypeIdentifiers
 
-indirect enum MediaUploadingPreprocessorError: Error {
+indirect nonisolated enum MediaUploadingPreprocessorError: Error {
     case maxUploadSizeUnknown
     case maxUploadSizeExceeded(limit: UInt)
     
@@ -69,12 +69,21 @@ enum MediaInfo {
     }
 }
 
-private struct ImageProcessingInfo {
+private nonisolated struct ImageProcessingInfo: Sendable {
     let url: URL
     let height: Double
     let width: Double
     let mimeType: String
     let blurhash: String?
+}
+
+private nonisolated struct PreparedImage: Sendable {
+    let url: URL
+    let size: CGSize
+    let mimeType: String
+    let fileSize: UInt
+    let thumbnail: ImageProcessingInfo
+    let thumbnailFileSize: UInt
 }
 
 private struct VideoProcessingInfo {
@@ -88,7 +97,10 @@ private struct VideoProcessingInfo {
 struct MediaUploadingPreprocessor {
     let userSettings: UserSettings
     
-    enum Constants {
+    // Keep synchronous image preparation serial across preprocessors.
+    private static let processingQueue = DispatchQueue(label: "io.element.media-preparation", qos: .userInitiated)
+    
+    nonisolated enum Constants {
         static let maximumThumbnailSize = CGSize(width: 800, height: 600)
         static let optimizedMaxPixelSize = 2048.0
         static let jpegCompressionQuality = 0.78
@@ -130,13 +142,17 @@ struct MediaUploadingPreprocessor {
     /// - Parameter url: the file URL
     /// - Returns: a specific type of `MediaInfo` depending on the file type and its associated details
     func processMedia(at url: URL, maxUploadSize: UInt) async -> Result<MediaInfo, MediaUploadingPreprocessorError> {
-        // Start by copying the file to a unique temporary location in order to avoid conflicts if processing it multiple times
-        // All the other operations will be made relative to it
-        let uniqueFolder = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
-        var newURL = uniqueFolder.appendingPathComponent(url.lastPathComponent)
+        let optimizeMediaUploads = userSettings.app.optimizeMediaUploads
+        let newURL: URL
         do {
-            try FileManager.default.createDirectory(at: uniqueFolder, withIntermediateDirectories: true)
-            try FileManager.default.copyItem(at: url, to: newURL)
+            newURL = try await Task.dispatch(on: Self.processingQueue) {
+                // Keep each result alive independently for later upload or avatar saving.
+                let uniqueFolder = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+                let newURL = uniqueFolder.appendingPathComponent(url.lastPathComponent)
+                try FileManager.default.createDirectory(at: uniqueFolder, withIntermediateDirectories: true)
+                try FileManager.default.copyItem(at: url, to: newURL)
+                return newURL
+            }
         } catch {
             return .failure(.failedProcessingMedia(error))
         }
@@ -144,17 +160,34 @@ struct MediaUploadingPreprocessor {
         // Process unknown types as plain files
         guard let type = UTType(filenameExtension: newURL.pathExtension),
               let mimeType = type.preferredMIMEType else {
-            return processFile(at: newURL, mimeType: "application/octet-stream", maxUploadSize: maxUploadSize)
+            return await processFile(at: newURL, mimeType: "application/octet-stream", maxUploadSize: maxUploadSize)
         }
         
         if type.conforms(to: .image) {
-            return processImage(at: &newURL, type: type, mimeType: mimeType, maxUploadSize: maxUploadSize)
+            let result = await Task.dispatch(on: Self.processingQueue) {
+                Self.processImage(at: newURL, type: type, mimeType: mimeType, maxUploadSize: maxUploadSize, optimizeMediaUploads: optimizeMediaUploads)
+            }
+            return result.map { result in
+                let thumbnailInfo = ThumbnailInfo(height: UInt64(result.thumbnail.height),
+                                                  width: UInt64(result.thumbnail.width),
+                                                  mimetype: result.thumbnail.mimeType,
+                                                  size: UInt64(result.thumbnailFileSize))
+                let imageInfo = ImageInfo(height: UInt64(result.size.height),
+                                          width: UInt64(result.size.width),
+                                          mimetype: result.mimeType,
+                                          size: UInt64(result.fileSize),
+                                          thumbnailInfo: thumbnailInfo,
+                                          thumbnailSource: nil,
+                                          blurhash: result.thumbnail.blurhash,
+                                          isAnimated: nil)
+                return .image(imageURL: result.url, thumbnailURL: result.thumbnail.url, imageInfo: imageInfo)
+            }
         } else if type.conforms(to: .movie) || type.conforms(to: .video) {
             return await processVideo(at: newURL, maxUploadSize: maxUploadSize)
         } else if type.conforms(to: .audio) {
             return await processAudio(at: newURL, mimeType: mimeType, maxUploadSize: maxUploadSize)
         } else {
-            return processFile(at: newURL, mimeType: mimeType, maxUploadSize: maxUploadSize)
+            return await processFile(at: newURL, mimeType: mimeType, maxUploadSize: maxUploadSize)
         }
     }
     
@@ -165,13 +198,14 @@ struct MediaUploadingPreprocessor {
     ///   - url: The image URL
     ///   - type: its UTType
     ///   - mimeType: the mimeType extracted from the UTType
-    /// - Returns: Returns a `MediaInfo.image` containing the URLs for the modified image and its thumbnail plus the corresponding `ImageInfo`
-    private func processImage(at url: inout URL, type: UTType, mimeType: String, maxUploadSize: UInt) -> Result<MediaInfo, MediaUploadingPreprocessorError> {
+    /// - Returns: The prepared file and thumbnail metadata, ready to wrap in SDK types on the main actor.
+    private nonisolated static func processImage(at url: URL, type: UTType, mimeType: String, maxUploadSize: UInt, optimizeMediaUploads: Bool) -> Result<PreparedImage, MediaUploadingPreprocessorError> {
+        var url = url
         do {
             try stripLocationFromImage(at: url, type: type)
             
             var mimeType = mimeType
-            if userSettings.app.optimizeMediaUploads, !type.conforms(to: .gif) {
+            if optimizeMediaUploads, !type.conforms(to: .gif) {
                 let outputType = type.conforms(to: .png) ? UTType.png : .jpeg
                 mimeType = outputType.preferredMIMEType ?? "application/octet-stream"
                 try resizeImage(at: url, maxPixelSize: Constants.optimizedMaxPixelSize, destination: url, type: outputType)
@@ -200,23 +234,12 @@ struct MediaUploadingPreprocessor {
             
             guard fileSize < maxUploadSize, thumbnailFileSize < maxUploadSize else { return .failure(.maxUploadSizeExceeded(limit: maxUploadSize)) }
             
-            let thumbnailInfo = ThumbnailInfo(height: UInt64(thumbnailResult.height),
-                                              width: UInt64(thumbnailResult.width),
-                                              mimetype: thumbnailResult.mimeType,
-                                              size: UInt64(thumbnailFileSize))
-            
-            let imageInfo = ImageInfo(height: UInt64(imageSize.height),
-                                      width: UInt64(imageSize.width),
-                                      mimetype: mimeType,
-                                      size: UInt64(fileSize),
-                                      thumbnailInfo: thumbnailInfo,
-                                      thumbnailSource: nil,
-                                      blurhash: thumbnailResult.blurhash,
-                                      isAnimated: nil)
-            
-            let mediaInfo = MediaInfo.image(imageURL: url, thumbnailURL: thumbnailResult.url, imageInfo: imageInfo)
-            
-            return .success(mediaInfo)
+            return .success(PreparedImage(url: url,
+                                          size: imageSize,
+                                          mimeType: mimeType,
+                                          fileSize: fileSize,
+                                          thumbnail: thumbnailResult,
+                                          thumbnailFileSize: thumbnailFileSize))
         } catch {
             return .failure(.failedProcessingImage(error))
         }
@@ -285,8 +308,10 @@ struct MediaUploadingPreprocessor {
     ///   - type: its UTType
     ///   - mimeType: the mimeType extracted from the UTType
     /// - Returns: Returns a `MediaInfo.file` containing the file URL plus the corresponding `FileInfo`
-    private func processFile(at url: URL, mimeType: String?, maxUploadSize: UInt) -> Result<MediaInfo, MediaUploadingPreprocessorError> {
-        let fileSize = (try? FileManager.default.sizeForItem(at: url)) ?? 0
+    private func processFile(at url: URL, mimeType: String?, maxUploadSize: UInt) async -> Result<MediaInfo, MediaUploadingPreprocessorError> {
+        let fileSize = await Task.dispatch(on: Self.processingQueue) {
+            (try? FileManager.default.sizeForItem(at: url)) ?? 0
+        }
         
         guard fileSize < maxUploadSize else { return .failure(.maxUploadSizeExceeded(limit: maxUploadSize)) }
         
@@ -301,7 +326,7 @@ struct MediaUploadingPreprocessor {
     ///   - url: the URL for the original image
     ///   - type: its UTType
     /// - Returns: the URL for the modified image and its size as an `ImageProcessingResult`
-    private func stripLocationFromImage(at url: URL, type: UTType) throws(MediaUploadingPreprocessorError) {
+    private nonisolated static func stripLocationFromImage(at url: URL, type: UTType) throws(MediaUploadingPreprocessorError) {
         guard let originalData = NSData(contentsOf: url),
               let imageSource = CGImageSourceCreateWithData(originalData, nil) else {
             throw .failedStrippingLocationData
@@ -339,7 +364,7 @@ struct MediaUploadingPreprocessor {
     /// Generates a thumbnail for an image
     /// - Parameter url: the original image URL
     /// - Returns: the URL for the resulting thumbnail and its sizing info as an `ImageProcessingResult`
-    private func generateThumbnailForImage(at url: URL) throws(MediaUploadingPreprocessorError) -> ImageProcessingInfo {
+    private nonisolated static func generateThumbnailForImage(at url: URL) throws(MediaUploadingPreprocessorError) -> ImageProcessingInfo {
         let thumbnailFileName = "thumbnail-\((url.lastPathComponent as NSString).deletingPathExtension).jpeg"
         let thumbnailURL = url.deletingLastPathComponent().appendingPathComponent(thumbnailFileName)
         let thumbnailMaxPixelSize = max(Constants.maximumThumbnailSize.height, Constants.maximumThumbnailSize.width)
@@ -359,7 +384,7 @@ struct MediaUploadingPreprocessor {
         return .init(url: thumbnailURL, height: thumbnail.size.height, width: thumbnail.size.width, mimeType: "image/jpeg", blurhash: blurhash)
     }
     
-    private func resizeImage(at url: URL, maxPixelSize: CGFloat, destination: URL, type: UTType) throws(MediaUploadingPreprocessorError) {
+    private nonisolated static func resizeImage(at url: URL, maxPixelSize: CGFloat, destination: URL, type: UTType) throws(MediaUploadingPreprocessorError) {
         guard let imageSource = CGImageSourceCreateWithURL(url as NSURL, nil) else {
             throw .failedResizingImage
         }
@@ -372,7 +397,7 @@ struct MediaUploadingPreprocessor {
     ///   - imageSource: the original image `CGImageSource`
     ///   - maxPixelSize: maximum resulting size for the largest dimension of the image.
     /// - Returns: the resized image
-    private func resizeImage(withSource imageSource: CGImageSource, maxPixelSize: CGFloat, destination destinationURL: URL, type: UTType) throws(MediaUploadingPreprocessorError) {
+    private nonisolated static func resizeImage(withSource imageSource: CGImageSource, maxPixelSize: CGFloat, destination destinationURL: URL, type: UTType) throws(MediaUploadingPreprocessorError) {
         let options: [NSString: Any] = [
             // The maximum width and height in pixels of a thumbnail.
             kCGImageSourceThumbnailMaxPixelSize: maxPixelSize,
@@ -495,7 +520,7 @@ struct MediaUploadingPreprocessor {
 // MARK: - Extensions
 
 private extension CGImageSource {
-    var size: CGSize? {
+    nonisolated var size: CGSize? {
         guard let properties = CGImageSourceCopyPropertiesAtIndex(self, 0, nil) as? [NSString: Any],
               var width = properties[kCGImagePropertyPixelWidth] as? Int,
               var height = properties[kCGImagePropertyPixelHeight] as? Int else {
