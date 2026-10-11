@@ -49,7 +49,8 @@ class IdentityConfirmationScreenViewModel: IdentityConfirmationScreenViewModelTy
         case .reset:
             actionsSubject.send(.reset(hasConfirmationOptions: state.availableActions?.isEmpty == false))
         case .logout:
-            confirmLogout()
+            // There's nothing to lose before the identity is confirmed, so there's no need to ask for confirmation.
+            actionsSubject.send(.logout)
         }
     }
     
@@ -86,19 +87,6 @@ class IdentityConfirmationScreenViewModel: IdentityConfirmationScreenViewModelTy
         }
         
         state.availableActions = availableActions
-    }
-    
-    private func confirmLogout() {
-        // We need to show the confirmation within this flow as letting the UserSession flow do it results in the
-        // onboarding flow's modal being dismissed (by SwiftUI, not us). However we don't need any of the additional
-        // checks made in the UserSession flow as the user's account isn't verified so there's no much they can do unless
-        // they complete verification.
-        state.bindings.alertInfo = .init(id: .logout,
-                                         title: L10n.screenSignoutConfirmationDialogTitle,
-                                         message: L10n.screenSignoutConfirmationDialogContent,
-                                         primaryButton: .init(title: L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) { [weak self] in
-                                             self?.actionsSubject.send(.logoutConfirmed)
-                                         })
     }
     
     private static let loadingIndicatorIdentifier = "\(IdentityConfirmationScreenViewModel.self)-Loading"

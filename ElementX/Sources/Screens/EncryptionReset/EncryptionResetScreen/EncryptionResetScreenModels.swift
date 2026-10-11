@@ -14,7 +14,7 @@ enum EncryptionResetScreenViewModelAction {
     case requestOAuthAuthorisation(url: URL)
     case resetFinished
     case cancel
-    case logoutConfirmed
+    case logout
 }
 
 /// How the reset is presented, depending on what else the user could do to confirm their identity.

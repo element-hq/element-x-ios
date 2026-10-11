@@ -41,21 +41,20 @@ struct EncryptionResetScreenViewModelTests {
     }
     
     @Test
-    func signOutShowsConfirmation() async throws {
+    func signOutSignsOutWithoutConfirmation() async throws {
         let viewModel = makeViewModel(variant: .noOptionsWithEncryptedChats)
         
-        viewModel.context.send(viewAction: .signOut)
-        let alertInfo = try #require(viewModel.context.alertInfo)
-        
         let deferred = deferFulfillment(viewModel.actionsPublisher) {
-            if case .logoutConfirmed = $0 {
+            if case .logout = $0 {
                 true
             } else {
                 false
             }
         }
-        alertInfo.primaryButton.action?()
+        viewModel.context.send(viewAction: .signOut)
         try await deferred.fulfill()
+        
+        #expect(viewModel.context.alertInfo == nil)
     }
     
     @Test

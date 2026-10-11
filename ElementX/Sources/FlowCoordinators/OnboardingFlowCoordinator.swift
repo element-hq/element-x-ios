@@ -265,7 +265,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.nextSkippingIdentityConfirmed)
             case .reset(let hasConfirmationOptions):
                 startEncryptionResetFlow(hasConfirmationOptions: hasConfirmationOptions)
-            case .logoutConfirmed:
+            case .logout:
                 actionsSubject.send(.logoutConfirmed)
             }
         }
@@ -333,7 +333,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
             switch action {
-            case .logoutConfirmed:
+            case .logout:
                 navigationStackCoordinator.setSheetCoordinator(nil)
                 actionsSubject.send(.logoutConfirmed)
             case .resetComplete:
