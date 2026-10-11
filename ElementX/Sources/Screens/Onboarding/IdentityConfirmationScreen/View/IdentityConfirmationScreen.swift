@@ -40,7 +40,6 @@ struct IdentityConfirmationScreen: View {
         .backgroundStyle(.compound.bgCanvasDefault)
         .navigationBarBackButtonHidden(true)
         .interactiveDismissDisabled()
-        .alert(item: $context.alertInfo)
     }
     
     // MARK: - Private

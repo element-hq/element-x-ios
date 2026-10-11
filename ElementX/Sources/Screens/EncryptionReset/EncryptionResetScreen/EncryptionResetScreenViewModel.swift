@@ -50,12 +50,8 @@ class EncryptionResetScreenViewModel: EncryptionResetScreenViewModelType, Encryp
         case .cancel:
             actionsSubject.send(.cancel)
         case .signOut:
-            state.bindings.alertInfo = .init(id: UUID(),
-                                             title: L10n.screenSignoutConfirmationDialogTitle,
-                                             message: L10n.screenSignoutConfirmationDialogContent,
-                                             primaryButton: .init(title: L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) { [weak self] in
-                                                 self?.actionsSubject.send(.logoutConfirmed)
-                                             })
+            // Resetting is the only option here so there's nothing to lose by signing out.
+            actionsSubject.send(.logout)
         }
     }
     

@@ -19,17 +19,11 @@ struct IdentityConfirmationScreenViewModelTests {
     }
     
     @Test
-    mutating func logoutShowsConfirmation() async throws {
+    mutating func logoutSignsOutWithoutConfirmation() async throws {
         setupViewModel()
         
-        #expect(context.alertInfo == nil)
-        
+        let deferred = deferFulfillment(viewModel.actionsPublisher) { $0 == .logout }
         context.send(viewAction: .logout)
-        
-        let alertInfo = try #require(context.alertInfo)
-        
-        let deferred = deferFulfillment(viewModel.actionsPublisher) { $0 == .logoutConfirmed }
-        alertInfo.primaryButton.action?()
         try await deferred.fulfill()
     }
     

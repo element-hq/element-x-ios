@@ -14,7 +14,7 @@ enum EncryptionResetScreenCoordinatorAction {
     case requestPassword(passwordPublisher: PassthroughSubject<String, Never>)
     case resetFinished
     case cancel
-    case logoutConfirmed
+    case logout
 }
 
 struct EncryptionResetScreenCoordinatorParameters {
@@ -53,8 +53,8 @@ final class EncryptionResetScreenCoordinator: CoordinatorProtocol {
                 self.actionsSubject.send(.resetFinished)
             case .cancel:
                 self.actionsSubject.send(.cancel)
-            case .logoutConfirmed:
-                self.actionsSubject.send(.logoutConfirmed)
+            case .logout:
+                self.actionsSubject.send(.logout)
             }
         }
         .store(in: &cancellables)

@@ -14,7 +14,7 @@ enum IdentityConfirmationScreenViewModelAction: Equatable {
     /// Only possible in debug builds.
     case skip
     case reset(hasConfirmationOptions: Bool)
-    case logoutConfirmed
+    case logout
 }
 
 struct IdentityConfirmationScreenViewState: BindableState {
@@ -27,16 +27,6 @@ struct IdentityConfirmationScreenViewState: BindableState {
     /// Until then only a loading indicator is shown, so the screen doesn't flash for sessions that turn out to be verified.
     var isUnverified: Bool
     let learnMoreURL: URL
-    
-    var bindings = IdentityConfirmationScreenBindings()
-}
-
-struct IdentityConfirmationScreenBindings {
-    var alertInfo: AlertInfo<IdentityConfirmationScreenAlertType>?
-}
-
-enum IdentityConfirmationScreenAlertType {
-    case logout
 }
 
 enum IdentityConfirmationScreenViewAction {
