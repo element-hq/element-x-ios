@@ -94,6 +94,10 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     // periphery:ignore - retaining purpose
     private var bugReportFlowCoordinator: BugReportFlowCoordinator?
     
+    var actionsPublisher: AnyPublisher<Never, Never> {
+        Empty().eraseToAnyPublisher()
+    }
+    
     weak var delegate: AuthenticationFlowCoordinatorDelegate?
     
     init(authenticationService: AuthenticationServiceProtocol,

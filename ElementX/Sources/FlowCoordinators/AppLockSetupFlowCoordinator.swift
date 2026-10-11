@@ -72,7 +72,7 @@ class AppLockSetupFlowCoordinator: FlowCoordinatorProtocol {
     private var cancellables: Set<AnyCancellable> = []
     
     private let actionsSubject: PassthroughSubject<AppLockSetupFlowCoordinatorAction, Never> = .init()
-    var actions: AnyPublisher<AppLockSetupFlowCoordinatorAction, Never> {
+    var actionsPublisher: AnyPublisher<AppLockSetupFlowCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     

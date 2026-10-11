@@ -31,10 +31,13 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     // periphery:ignore - retaining purpose
     private var linkNewDeviceFlowCoordinator: LinkNewDeviceFlowCoordinator?
     
+    private var supplementaryFlowCoordinator: (any SettingsSupplementaryFlowCoordinatorProtocol)?
+    private var supplementaryFlowCancellable: AnyCancellable?
+    
     private var cancellables = Set<AnyCancellable>()
     
     private let actionsSubject: PassthroughSubject<SettingsFlowCoordinatorAction, Never> = .init()
-    var actions: AnyPublisher<SettingsFlowCoordinatorAction, Never> {
+    var actionsPublisher: AnyPublisher<SettingsFlowCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
@@ -57,8 +60,10 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
         
         switch appRoute {
         case .settings:
+            supplementaryFlowCoordinator?.clearRoute(animated: animated)
             presentSettingsScreen(animated: animated)
         case .chatBackupSettings:
+            supplementaryFlowCoordinator?.clearRoute(animated: animated)
             startEncryptionSettingsFlow()
         default:
             break
@@ -66,7 +71,9 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     func clearRoute(animated: Bool) {
-        fatalError("Unavailable")
+        supplementaryFlowCoordinator?.clearRoute(animated: animated)
+        navigationStackCoordinator.setSheetCoordinator(nil, animated: animated)
+        navigationStackCoordinator.popToRoot(animated: animated)
     }
     
     // MARK: - Private
@@ -74,6 +81,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     private func presentSettingsScreen(animated: Bool) {
         let settingsScreenCoordinator = SettingsScreenCoordinator(parameters: .init(userSession: flowParameters.userSession,
                                                                                     userSettings: flowParameters.userSettings,
+                                                                                    appHooks: flowParameters.appHooks,
                                                                                     isBugReportServiceEnabled: flowParameters.bugReportService.isEnabled,
                                                                                     isInSecondaryWindow: isInSecondaryWindow,
                                                                                     userIndicatorController: flowParameters.userIndicatorController))
@@ -113,6 +121,8 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                     presentBlockedUsersScreen()
                 case .notifications:
                     presentNotificationSettings()
+                case .supplementaryFlow(let flowID):
+                    startSupplementaryFlow(flowID: flowID)
                 case .advancedSettings:
                     presentAdvancedSettings()
                 case .labs:
@@ -126,6 +136,23 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
             .store(in: &cancellables)
         
         navigationStackCoordinator.setRootCoordinator(settingsScreenCoordinator, animated: animated)
+    }
+    
+    private func startSupplementaryFlow(flowID: String) {
+        guard supplementaryFlowCoordinator == nil,
+              let coordinator = flowParameters.appHooks.settingsScreenHook.makeSupplementaryFlowCoordinator(flowID: flowID,
+                                                                                                            navigationStackCoordinator: navigationStackCoordinator) else {
+            return
+        }
+        supplementaryFlowCoordinator = coordinator
+        supplementaryFlowCancellable = coordinator.actionsPublisher.sink { [weak self] action in
+            switch action {
+            case .finished:
+                self?.supplementaryFlowCoordinator = nil
+                self?.supplementaryFlowCancellable = nil
+            }
+        }
+        coordinator.start()
     }
     
     private func presentLabs() {
@@ -233,7 +260,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
         let coordinator = AppLockSetupFlowCoordinator(presentingFlow: .settings,
                                                       appLockService: appLockService,
                                                       navigationStackCoordinator: navigationStackCoordinator)
-        coordinator.actions.sink { [weak self] action in
+        coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
             switch action {
             case .complete:

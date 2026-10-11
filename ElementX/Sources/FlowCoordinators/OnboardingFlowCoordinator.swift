@@ -54,7 +54,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     private var encryptionResetFlowCoordinator: EncryptionResetFlowCoordinator?
     
     private let actionsSubject: PassthroughSubject<OnboardingFlowCoordinatorAction, Never> = .init()
-    var actions: AnyPublisher<OnboardingFlowCoordinatorAction, Never> {
+    var actionsPublisher: AnyPublisher<OnboardingFlowCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
@@ -367,7 +367,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         let coordinator = AppLockSetupFlowCoordinator(presentingFlow: .onboarding,
                                                       appLockService: appLockService,
                                                       navigationStackCoordinator: navigationStackCoordinator)
-        coordinator.actions.sink { [weak self] action in
+        coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
             switch action {
             case .complete:

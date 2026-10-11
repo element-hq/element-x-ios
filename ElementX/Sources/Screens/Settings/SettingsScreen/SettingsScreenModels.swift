@@ -21,6 +21,7 @@ enum SettingsScreenViewModelAction {
     case blockedUsers
     case secureBackup
     case notifications
+    case supplementaryFlow(flowID: String)
     case advancedSettings
     case labs
     case developerOptions
@@ -34,6 +35,7 @@ enum SettingsScreenSecuritySectionMode {
 }
 
 struct SettingsScreenViewState: BindableState {
+    let appHooks: AppHooks
     var deviceID: String?
     var userProfile: UserProfile
     var showUserStatusInput = false
@@ -94,6 +96,7 @@ enum SettingsScreenViewAction {
     case notifications
     case enableDeveloperOptions
     case developerOptions
+    case supplementaryFlow(flowID: String)
     case advancedSettings
     case labs
     case logout

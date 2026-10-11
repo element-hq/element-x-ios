@@ -73,10 +73,10 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
     private let stateMachine: StateMachine<State, Event>
     private var cancellables = Set<AnyCancellable>()
     
-    private var childFlowCoordinator: FlowCoordinatorProtocol?
+    private var childFlowCoordinator: (any FlowCoordinatorProtocol)?
     
     private let actionsSubject: PassthroughSubject<SpaceSettingsFlowCoordinatorAction, Never> = .init()
-    var actions: AnyPublisher<SpaceSettingsFlowCoordinatorAction, Never> {
+    var actionsPublisher: AnyPublisher<SpaceSettingsFlowCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
@@ -385,7 +385,7 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
                                                          roomProxy: roomProxy,
                                                          navigationStackCoordinator: navigationStackCoordinator,
                                                          flowParameters: flowParameters)
-        flowCoordinator.actions.sink { [weak self] action in
+        flowCoordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
             switch action {
             case .finished:

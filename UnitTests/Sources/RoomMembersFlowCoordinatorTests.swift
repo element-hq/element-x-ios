@@ -26,7 +26,7 @@ struct RoomMembersFlowCoordinatorTests {
         #expect(navigationStackCoordinator.stackCoordinators.last is RoomMemberDetailsScreenCoordinator)
         
         membersFlowStateExpectation = deferFulfillment(stateMachineFactory.membersFlowStatePublisher) { $0 == .roomMembersList }
-        let membersFlowActionExpectation = deferFulfillment(membersFlowCoordinator.actions) { action in
+        let membersFlowActionExpectation = deferFulfillment(membersFlowCoordinator.actionsPublisher) { action in
             switch action {
             case .finished:
                 true

@@ -15285,20 +15285,20 @@ nonisolated class WindowManagerMock: WindowManagerProtocol, @unchecked Sendable 
         return registerCoordinatorFlowCoordinatorForWindowTypeCallsCount > 0
     }
     private let registerCoordinatorFlowCoordinatorForWindowTypeReceivedArgumentsLock = NSLock()
-    private nonisolated(unsafe) var registerCoordinatorFlowCoordinatorForWindowTypeUnderlyingReceivedArguments: (coordinator: CoordinatorProtocol, flowCoordinator: FlowCoordinatorProtocol?, type: SecondaryWindowType)?
-    var registerCoordinatorFlowCoordinatorForWindowTypeReceivedArguments: (coordinator: CoordinatorProtocol, flowCoordinator: FlowCoordinatorProtocol?, type: SecondaryWindowType)? {
+    private nonisolated(unsafe) var registerCoordinatorFlowCoordinatorForWindowTypeUnderlyingReceivedArguments: (coordinator: CoordinatorProtocol, flowCoordinator: any FlowCoordinatorProtocol?, type: SecondaryWindowType)?
+    var registerCoordinatorFlowCoordinatorForWindowTypeReceivedArguments: (coordinator: CoordinatorProtocol, flowCoordinator: any FlowCoordinatorProtocol?, type: SecondaryWindowType)? {
         get { registerCoordinatorFlowCoordinatorForWindowTypeReceivedArgumentsLock.withLock { registerCoordinatorFlowCoordinatorForWindowTypeUnderlyingReceivedArguments } }
         set { registerCoordinatorFlowCoordinatorForWindowTypeReceivedArgumentsLock.withLock { registerCoordinatorFlowCoordinatorForWindowTypeUnderlyingReceivedArguments = newValue } }
     }
     private let registerCoordinatorFlowCoordinatorForWindowTypeReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var registerCoordinatorFlowCoordinatorForWindowTypeUnderlyingReceivedInvocations: [(coordinator: CoordinatorProtocol, flowCoordinator: FlowCoordinatorProtocol?, type: SecondaryWindowType)] = []
-    var registerCoordinatorFlowCoordinatorForWindowTypeReceivedInvocations: [(coordinator: CoordinatorProtocol, flowCoordinator: FlowCoordinatorProtocol?, type: SecondaryWindowType)] {
+    private nonisolated(unsafe) var registerCoordinatorFlowCoordinatorForWindowTypeUnderlyingReceivedInvocations: [(coordinator: CoordinatorProtocol, flowCoordinator: any FlowCoordinatorProtocol?, type: SecondaryWindowType)] = []
+    var registerCoordinatorFlowCoordinatorForWindowTypeReceivedInvocations: [(coordinator: CoordinatorProtocol, flowCoordinator: any FlowCoordinatorProtocol?, type: SecondaryWindowType)] {
         get { registerCoordinatorFlowCoordinatorForWindowTypeReceivedInvocationsLock.withLock { registerCoordinatorFlowCoordinatorForWindowTypeUnderlyingReceivedInvocations } }
         set { registerCoordinatorFlowCoordinatorForWindowTypeReceivedInvocationsLock.withLock { registerCoordinatorFlowCoordinatorForWindowTypeUnderlyingReceivedInvocations = newValue } }
     }
-    nonisolated(unsafe) var registerCoordinatorFlowCoordinatorForWindowTypeClosure: ((CoordinatorProtocol, FlowCoordinatorProtocol?, SecondaryWindowType) -> Void)?
+    nonisolated(unsafe) var registerCoordinatorFlowCoordinatorForWindowTypeClosure: ((CoordinatorProtocol, any FlowCoordinatorProtocol?, SecondaryWindowType) -> Void)?
 
-    func registerCoordinator(_ coordinator: CoordinatorProtocol, flowCoordinator: FlowCoordinatorProtocol?, forWindowType type: SecondaryWindowType) {
+    func registerCoordinator(_ coordinator: CoordinatorProtocol, flowCoordinator: any FlowCoordinatorProtocol?, forWindowType type: SecondaryWindowType) {
         registerCoordinatorFlowCoordinatorForWindowTypeCallsCountLock.withLock { registerCoordinatorFlowCoordinatorForWindowTypeUnderlyingCallsCount += 1 }
         registerCoordinatorFlowCoordinatorForWindowTypeReceivedArguments = (coordinator: coordinator, flowCoordinator: flowCoordinator, type: type)
         registerCoordinatorFlowCoordinatorForWindowTypeReceivedInvocationsLock.withLock { registerCoordinatorFlowCoordinatorForWindowTypeUnderlyingReceivedInvocations.append((coordinator: coordinator, flowCoordinator: flowCoordinator, type: type)) }

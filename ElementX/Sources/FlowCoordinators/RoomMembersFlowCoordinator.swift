@@ -65,11 +65,11 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
     private var cancellables = Set<AnyCancellable>()
     
     private let actionsSubject: PassthroughSubject<RoomMembersFlowCoordinatorAction, Never> = .init()
-    var actions: AnyPublisher<RoomMembersFlowCoordinatorAction, Never> {
+    var actionsPublisher: AnyPublisher<RoomMembersFlowCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    private var childFlowCoordinator: FlowCoordinatorProtocol?
+    private var childFlowCoordinator: (any FlowCoordinatorProtocol)?
     
     init(entryPoint: RoomMembersFlowCoordinatorEntryPoint,
          roomProxy: JoinedRoomProxyProtocol,
@@ -321,7 +321,7 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
                                               isChildFlow: true,
                                               navigationStackCoordinator: navigationStackCoordinator,
                                               flowParameters: flowParameters)
-        coordinator.actions
+        coordinator.actionsPublisher
             .sink { [weak self] action in
                 guard let self else { return }
                 

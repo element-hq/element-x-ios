@@ -525,7 +525,7 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
                                               isChildFlow: true,
                                               navigationStackCoordinator: navigationStackCoordinator,
                                               flowParameters: flowParameters)
-        coordinator.actions
+        coordinator.actionsPublisher
             .sink { [weak self] action in
                 guard let self else { return }
                 
@@ -553,7 +553,7 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
                                                          navigationStackCoordinator: navigationStackCoordinator,
                                                          flowParameters: flowParameters)
         
-        flowCoordinator.actions.sink { [weak self] actions in
+        flowCoordinator.actionsPublisher.sink { [weak self] actions in
             guard let self else { return }
             switch actions {
             case .finished:
@@ -574,7 +574,7 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
                                                            navigationStackCoordinator: navigationStackCoordinator,
                                                            flowParameters: flowParameters)
         
-        flowCoordinator.actions.sink { [weak self] actions in
+        flowCoordinator.actionsPublisher.sink { [weak self] actions in
             guard let self else { return }
             switch actions {
             case .finished(let leftRoom):

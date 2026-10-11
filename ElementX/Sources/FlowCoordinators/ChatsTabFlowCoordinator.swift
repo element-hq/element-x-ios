@@ -528,7 +528,7 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
                                               navigationStackCoordinator: navigationStackCoordinator,
                                               flowParameters: flowParameters)
         
-        coordinator.actions.sink { [weak self] action in
+        coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
             
             switch action {

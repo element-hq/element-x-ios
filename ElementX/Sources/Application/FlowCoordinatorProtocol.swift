@@ -6,9 +6,13 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import Foundation
+import Combine
 
 protocol FlowCoordinatorProtocol {
+    associatedtype Action
+    
+    var actionsPublisher: AnyPublisher<Action, Never> { get }
+    
     func start(animated: Bool)
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool)
     func clearRoute(animated: Bool)

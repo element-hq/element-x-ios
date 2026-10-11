@@ -64,7 +64,7 @@ protocol WindowManagerProtocol: AnyObject, OrientationManagerProtocol {
     /// Register a coordinator and it's respective flow (if any) within the WindowManager which in turn
     /// invokes the Application's `OpenWindowAction`
     func registerCoordinator(_ coordinator: CoordinatorProtocol,
-                             flowCoordinator: FlowCoordinatorProtocol?,
+                             flowCoordinator: (any FlowCoordinatorProtocol)?,
                              forWindowType type: SecondaryWindowType)
     
     /// Closes any window previously opened by registering a coordinator

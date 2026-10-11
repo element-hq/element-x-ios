@@ -376,7 +376,7 @@ final class RoomFlowCoordinatorTests {
         
         try await processExpectingNewRootCoordinator(route: .room(roomID: "1", via: []))
         
-        let fulfillment = deferFulfillment(roomFlowCoordinator.actions) { action in
+        let fulfillment = deferFulfillment(roomFlowCoordinator.actionsPublisher) { action in
             action == .finished
         }
         
@@ -479,7 +479,7 @@ final class RoomFlowCoordinatorTests {
         var fulfillments = [DeferredFulfillment<RoomFlowCoordinatorAction>]()
         
         for expectedAction in expectedActions {
-            fulfillments.append(deferFulfillment(roomFlowCoordinator.actions) { action in
+            fulfillments.append(deferFulfillment(roomFlowCoordinator.actionsPublisher) { action in
                 action == expectedAction
             })
         }

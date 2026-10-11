@@ -38,7 +38,7 @@ class WindowManager: SecureWindowManagerProtocol {
     /// A duration that allows window switching to wait a couple of frames to avoid a transition through black.
     private let windowHideDelay = Duration.milliseconds(33)
     
-    private var coordinators: [SecondaryWindowType: (coordinator: CoordinatorProtocol, flowCoordinator: FlowCoordinatorProtocol?)] = [:]
+    private var coordinators: [SecondaryWindowType: (coordinator: CoordinatorProtocol, flowCoordinator: (any FlowCoordinatorProtocol)?)] = [:]
     
     init(appDelegate: AppDelegate) {
         self.appDelegate = appDelegate
@@ -167,7 +167,7 @@ class WindowManager: SecureWindowManagerProtocol {
         })
     }
     
-    func registerCoordinator(_ coordinator: CoordinatorProtocol, flowCoordinator: FlowCoordinatorProtocol?, forWindowType type: SecondaryWindowType) {
+    func registerCoordinator(_ coordinator: CoordinatorProtocol, flowCoordinator: (any FlowCoordinatorProtocol)?, forWindowType type: SecondaryWindowType) {
         if secondaryWindowsEnabled == false {
             MXLog.error("Cannot register coordinator, secondary windows are disabled.")
             return
