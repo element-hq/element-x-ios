@@ -94,12 +94,12 @@ class SpaceAddRoomsScreenViewModel: SpaceAddRoomsScreenViewModelType, SpaceAddRo
             return
         }
         
-        let existingRooms = spaceRoomListProxy.spaceRoomsPublisher.value
+        let existingRoomIDs = Set(spaceRoomListProxy.spaceRoomsPublisher.value.map(\.id))
         
         let rooms = roomSummaryProvider.roomListPublisher.value
             .lazy
             .filter { [addedRoomIDs] summary in
-                !summary.isDirect && !existingRooms.contains { $0.id == summary.id } && !addedRoomIDs.contains(summary.id)
+                !summary.isDirect && !existingRoomIDs.contains(summary.id) && !addedRoomIDs.contains(summary.id)
             }
             .map(SpaceAddRoomsScreenRoom.init)
         

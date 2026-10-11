@@ -103,4 +103,41 @@ struct SpaceAddRoomsScreenViewModelTests {
         #expect(!context.viewState.roomsSection.rooms.contains { successfulIDs.contains($0.id) },
                 "The added rooms should no longer be listed for selection.")
     }
+    
+    @Test
+    func searchUsesCurrentSpaceMembershipAndPreservesOrder() async throws {
+        let firstRoom = RoomSummary.mock(id: "first", name: "First room")
+        let secondRoom = RoomSummary.mock(id: "second", name: "Second room")
+        let existingRoom = RoomSummary.mock(id: "existing", name: "Existing room")
+        let directRoomCandidate = [RoomSummary].mockInvites.first(where: \.isDirect)
+        let directRoom = try #require(directRoomCandidate)
+        let summaries = [secondRoom, existingRoom, directRoom, firstRoom, secondRoom]
+        let summariesSubject = CurrentValueSubject<[RoomSummary], Never>([])
+        let summaryProvider = RoomSummaryProviderMock(.init(state: .loaded([])))
+        summaryProvider.roomListPublisher = summariesSubject.asCurrentValuePublisher()
+        let spaceRoomsSubject = CurrentValueSubject<[SpaceServiceRoom], Never>([.mock(id: "existing", isSpace: false), .mock(id: "existing", isSpace: false)])
+        spaceRoomListProxy.spaceRoomsPublisher = spaceRoomsSubject.asCurrentValuePublisher()
+        let clientProxy = ClientProxyMock(.init())
+        clientProxy.recentlyVisitedRoomsFilterReturnValue = []
+        let viewModel = SpaceAddRoomsScreenViewModel(spaceRoomListProxy: spaceRoomListProxy,
+                                                     userSession: UserSessionMock(.init(clientProxy: clientProxy)),
+                                                     roomSummaryProvider: summaryProvider,
+                                                     userIndicatorController: UserIndicatorControllerMock())
+        let context = viewModel.context
+        context.searchQuery = "room"
+        var deferred = deferFulfillment(context.observe(\.viewState.roomsSection)) {
+            $0.type == .searchResults && $0.rooms.map(\.id) == ["second", "first", "second"]
+        }
+        summariesSubject.send(summaries)
+        try await deferred.fulfill()
+        #expect(context.viewState.roomsSection.rooms.map(\.id) == ["second", "first", "second"])
+        
+        spaceRoomsSubject.send([.mock(id: "first", isSpace: false)])
+        deferred = deferFulfillment(context.observe(\.viewState.roomsSection)) {
+            $0.rooms.map(\.id) == ["second", "existing", "second"]
+        }
+        summariesSubject.send(summaries)
+        try await deferred.fulfill()
+        #expect(context.viewState.roomsSection.rooms.map(\.id) == ["second", "existing", "second"])
+    }
 }
