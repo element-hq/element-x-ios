@@ -15,7 +15,7 @@
 			<key>one</key>
 			<string>%1$d cifră introdusă</string>
 			<key>other</key>
-			<string>%1$d cifre introduse</string>
+			<string>%1$d de cifre introduse</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -33,7 +33,7 @@
 			<key>one</key>
 			<string>Galerie, încă %1$d fișier media</string>
 			<key>other</key>
-			<string>Galerie, încă %1$d fișiere media</string>
+			<string>Galerie, încă %1$d de fișiere media</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -47,11 +47,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>few</key>
-			<string>%1$d la suta din totalul voturilor</string>
+			<string>%1$d % din totalul voturilor</string>
 			<key>one</key>
-			<string>%1$d la suta din totalul voturilor</string>
+			<string>%1$d % din totalul voturilor</string>
 			<key>other</key>
-			<string>%1$d la suta din totalul voturilor</string>
+			<string>%1$d % din totalul voturilor</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -65,11 +65,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>few</key>
-			<string>Citit de %1$@ și incă %2$d</string>
+			<string>Citit de %1$@ și încă %2$d</string>
 			<key>one</key>
-			<string>Citit de %1$@ și incă %2$d</string>
+			<string>Citit de %1$@ și încă %2$d</string>
 			<key>other</key>
-			<string>Citit de %1$@ și incă %2$d</string>
+			<string>Citit de %1$@ și încă %2$d</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -82,10 +82,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>Redirecționați %1$d mesaje</string>
 			<key>one</key>
-			<string>Forward %1$d message</string>
+			<string>Redirecționați %1$d mesaj</string>
 			<key>other</key>
-			<string>Forward %1$d messages</string>
+			<string>Redirecționați %1$d de mesaje</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -103,7 +105,7 @@
 			<key>one</key>
 			<string>%1$d atașament…</string>
 			<key>other</key>
-			<string>%1$d atașamente…</string>
+			<string>%1$d de atașamente…</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -121,7 +123,7 @@
 			<key>one</key>
 			<string>%1$d element media…</string>
 			<key>other</key>
-			<string>%1$d elemente media…</string>
+			<string>%1$d de elemente media…</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -153,11 +155,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>few</key>
-			<string>%1$d Membri</string>
+			<string>%1$d membri</string>
 			<key>one</key>
-			<string>%1$d Membru</string>
+			<string>%1$d membru</string>
 			<key>other</key>
-			<string>%1$d Membri</string>
+			<string>%1$d de membri</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -175,7 +177,7 @@
 			<key>one</key>
 			<string>%d vot</string>
 			<key>other</key>
-			<string>%d voturi</string>
+			<string>%d de voturi</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -193,7 +195,7 @@
 			<key>one</key>
 			<string>%1$d răspuns</string>
 			<key>other</key>
-			<string>%1$d răspunsuri</string>
+			<string>%1$d de răspunsuri</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -211,7 +213,7 @@
 			<key>one</key>
 			<string>%1$d Camera</string>
 			<key>other</key>
-			<string>%1$d Camere</string>
+			<string>%1$d de Camere</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -247,7 +249,7 @@
 			<key>one</key>
 			<string>%1$d Spațiu</string>
 			<key>other</key>
-			<string>%1$d Spații</string>
+			<string>%1$d de Spații</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -260,10 +262,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>%1$@: %2$d mesaje</string>
 			<key>one</key>
 			<string>%1$@: %2$d mesaj</string>
 			<key>other</key>
-			<string>%1$@: %2$d mesaje</string>
+			<string>%1$@: %2$d de mesaje</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -276,10 +280,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>%d notificări</string>
 			<key>one</key>
 			<string>%d notificare</string>
 			<key>other</key>
-			<string>%d notificări</string>
+			<string>%d de notificări</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -297,7 +303,7 @@
 			<key>one</key>
 			<string>Aveți %d mesaj nou.</string>
 			<key>other</key>
-			<string>Aveți %d mesaje noi.</string>
+			<string>Aveți %d de mesaje noi.</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -315,7 +321,7 @@
 			<key>one</key>
 			<string>%1$d atașament partajat</string>
 			<key>other</key>
-			<string>%1$d atașamente partajate</string>
+			<string>%1$d de atașamente partajate</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -328,10 +334,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>%d invitații</string>
 			<key>one</key>
 			<string>%d invitație</string>
 			<key>other</key>
-			<string>%d invitații</string>
+			<string>%d de invitații</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -344,10 +352,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>%d mesaje noi</string>
 			<key>one</key>
 			<string>%d mesaj nou</string>
 			<key>other</key>
-			<string>%d mesaje noi</string>
+			<string>%d de mesaje noi</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -360,10 +370,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>%d mesaje notificate necitite</string>
 			<key>one</key>
 			<string>%d mesaj notificat necitit</string>
 			<key>other</key>
-			<string>%d mesaje notificate necitite</string>
+			<string>%d de mesaje notificate necitite</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -376,10 +388,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>%d camere</string>
 			<key>one</key>
 			<string>%d cameră</string>
 			<key>other</key>
-			<string>%d camere</string>
+			<string>%d de camere</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -397,7 +411,7 @@
 			<key>one</key>
 			<string>%1$d mesaj șters</string>
 			<key>other</key>
-			<string>%1$d mesaje șterse</string>
+			<string>%1$d de mesaje șterse</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -415,7 +429,7 @@
 			<key>one</key>
 			<string>La fiecare %1$d metru</string>
 			<key>other</key>
-			<string>La fiecare %1$d metri</string>
+			<string>La fiecare %1$d de metri</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -433,7 +447,7 @@
 			<key>one</key>
 			<string>Aveți %1$d încercare de deblocare</string>
 			<key>other</key>
-			<string>Aveți %1$d încercări de deblocare</string>
+			<string>Aveți %1$d de încercări de deblocare</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -447,11 +461,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>few</key>
-			<string>PIN greșit. Mai aveți %1$d sanse</string>
+			<string>PIN greșit. Mai aveți %1$d șanse</string>
 			<key>one</key>
-			<string>PIN greșit. Mai aveți %1$d sansa</string>
+			<string>PIN greșit. Mai aveți %1$d șansă</string>
 			<key>other</key>
-			<string>PIN greșit. Mai aveți %1$d sanse</string>
+			<string>PIN greșit. Mai aveți %1$d de șanse</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -469,7 +483,7 @@
 			<key>one</key>
 			<string>Minim %1$d caracter. Nu folosiți parola contului dvs.</string>
 			<key>other</key>
-			<string>Minim %1$d caractere. Nu folosiți parola contului dvs.</string>
+			<string>Minim %1$d de caractere. Nu folosiți parola contului dvs.</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -487,7 +501,7 @@
 			<key>one</key>
 			<string>%1$d grad</string>
 			<key>other</key>
-			<string>%1$d grade</string>
+			<string>%1$d de grade</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -505,7 +519,7 @@
 			<key>one</key>
 			<string>Părăsiți %1$d cameră și spațiul</string>
 			<key>other</key>
-			<string>Părăsiți %1$d camere și spațiul</string>
+			<string>Părăsiți %1$d de camere și spațiul</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -523,7 +537,7 @@
 			<key>one</key>
 			<string>%1$d persoană</string>
 			<key>other</key>
-			<string>%1$d persoane</string>
+			<string>%1$d de persoane</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -541,7 +555,7 @@
 			<key>one</key>
 			<string>%1$d Mesaj fixat</string>
 			<key>other</key>
-			<string>%1$d Mesaje fixate</string>
+			<string>%1$d de Mesaje fixate</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -577,7 +591,7 @@
 			<key>one</key>
 			<string>%1$d persoană</string>
 			<key>other</key>
-			<string>%1$d persoane</string>
+			<string>%1$d de persoane</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -608,10 +622,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>%1$d mesaje redirecționate</string>
 			<key>one</key>
-			<string>%1$d message forwarded</string>
+			<string>%1$d mesaj redirecționat</string>
 			<key>other</key>
-			<string>%1$d messages forwarded</string>
+			<string>%1$d de mesaje redirecționate</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -629,7 +645,7 @@
 			<key>one</key>
 			<string>%1$@ +%2$d utilizator doresc să se alăture acestei camere</string>
 			<key>other</key>
-			<string>%1$@ +%2$d utilizatori doresc să se alăture acestei camere</string>
+			<string>%1$@ +%2$d de utilizatori doresc să se alăture acestei camere</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -642,10 +658,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>%1$d mesaje selectate</string>
 			<key>one</key>
-			<string>%1$d message selected</string>
+			<string>%1$d mesaj selectat</string>
 			<key>other</key>
-			<string>%1$d messages selected</string>
+			<string>%1$d de mesaje selectate</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -663,7 +681,7 @@
 			<key>one</key>
 			<string>%1$d membru a reacționat cu %2$@</string>
 			<key>other</key>
-			<string>%1$d membri au reacționat cu %2$@</string>
+			<string>%1$d de membri au reacționat cu %2$@</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -677,11 +695,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>few</key>
-			<string>Dumneavoastră si %1$d membri ați reacționat cu %2$@</string>
+			<string>Dvs. și %1$d membri ați reacționat cu %2$@</string>
 			<key>one</key>
-			<string>Dumneavoastră si %1$d membru ați reacționat cu %2$@</string>
+			<string>Dvs. și %1$d membru ați reacționat cu %2$@</string>
 			<key>other</key>
-			<string>Dumneavoastră si %1$d membri ați reacționat cu %2$@</string>
+			<string>Dvs. și %1$d de membri ați reacționat cu %2$@</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -697,9 +715,9 @@
 			<key>few</key>
 			<string>%1$d schimbări ale camerei</string>
 			<key>one</key>
-			<string>%1$d schimbare a camerii</string>
+			<string>%1$d schimbare a camerei</string>
 			<key>other</key>
-			<string>%1$d schimbări ale camerei</string>
+			<string>%1$d de schimbări ale camerei</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -785,11 +803,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>few</key>
-			<string>Ai blocat%1$d utilizatori. Nu veți primi notificări pentru acești utilizatori.</string>
+			<string>Ați blocat %1$d utilizatori. Nu veți primi notificări pentru acești utilizatori.</string>
 			<key>one</key>
-			<string>Ai blocat%1$d utilizator. Nu veți primi notificări pentru acest utilizator.</string>
+			<string>Ați blocat %1$d utilizator. Nu veți primi notificări pentru acest utilizator.</string>
 			<key>other</key>
-			<string>Ai blocat%1$d utilizatori. Nu veți primi notificări pentru acești utilizatori.</string>
+			<string>Ați blocat %1$d de utilizatori. Nu veți primi notificări pentru acești utilizatori.</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -807,7 +825,7 @@
 			<key>one</key>
 			<string>S-a găsit %1$d furnizor push: %2$@</string>
 			<key>other</key>
-			<string>S-au găsit %1$d furnizori push: %2$@</string>
+			<string>S-au găsit %1$d de furnizori push: %2$@</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -825,7 +843,7 @@
 			<key>one</key>
 			<string>%1$d distribuitor găsit: %2$@.</string>
 			<key>other</key>
-			<string>%1$d distribuitori găsiți: %2$@.</string>
+			<string>%1$d de distribuitori găsiți: %2$@.</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

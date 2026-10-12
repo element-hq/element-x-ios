@@ -75,9 +75,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Forward %1$d message</string>
+			<string>%1$d üzenet továbbítása</string>
 			<key>other</key>
-			<string>Forward %1$d messages</string>
+			<string>%1$d üzenet továbbítása</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -553,9 +553,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d message forwarded</string>
+			<string>%1$d üzenet továbbítva</string>
 			<key>other</key>
-			<string>%1$d messages forwarded</string>
+			<string>%1$d üzenet továbbítva</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

@@ -310,6 +310,7 @@
 "common_name" = "Nome";
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Não há resultados";
+"common_no_results_for" = "There are no results for “%1$@”. Try a new search term.";
 "common_no_room_name" = "Não há um nome para a sala";
 "common_no_space_name" = "Sem nome de espaço";
 "common_not_encrypted" = "Sem criptografia";
@@ -348,6 +349,7 @@
 "common_replying_to" = "Respondendo a %1$@";
 "common_report_a_problem" = "Relatar um problema";
 "common_report_submitted" = "Relatório enviado";
+"common_results_for" = "Results for “%1$@”";
 "common_rich_text_editor" = "Editor de rich text";
 "common_role" = "Cargo";
 "common_room" = "Sala";
@@ -1074,6 +1076,9 @@
 "screen_moderation_and_safety_invites_heading" = "Invites";
 "screen_moderation_and_safety_other_users_heading" = "Other users";
 "screen_moderation_and_safety_share_presence_heading" = "Your appearance";
+"screen_multi_account_announcement_action" = "Add account";
+"screen_multi_account_announcement_description" = "Go to %1$@ to sign into another account. Then you can easily switch between them.";
+"screen_multi_account_announcement_title" = "You can now add multiple accounts";
 "screen_notification_optin_subtitle" = "Você pode alterar suas configurações mais tarde.";
 "screen_notification_optin_title" = "Permita as notificações e nunca perca uma mensagem";
 "screen_notification_settings_additional_settings_section_title" = "Configurações adicionais";
@@ -1164,6 +1169,14 @@
 "screen_polls_history_filter_ongoing" = "Em andamento";
 "screen_polls_history_filter_past" = "Anteriores";
 "screen_polls_history_title" = "Enquetes";
+"screen_ptt_settings_battery_optimization" = "Ignore battery optimisation";
+"screen_ptt_settings_battery_optimization_description" = "Stay active in background";
+"screen_ptt_settings_covert_mode" = "Covert mode";
+"screen_ptt_settings_covert_mode_description" = "Mute all channels";
+"screen_ptt_settings_lock_screen" = "Show on lock screen";
+"screen_ptt_settings_lock_screen_description" = "Access from the lock screen";
+"screen_ptt_settings_system_overlay" = "Enable system overlay";
+"screen_ptt_settings_system_overlay_description" = "Access a floating action button";
 "screen_push_history_title" = "Histórico de push";
 "screen_qr_code_login_connecting_subtitle" = "Estabelecendo uma conexão segura";
 "screen_qr_code_login_connection_note_secure_state_description" = "Não foi possível estabelecer uma conexão segura com o novo dispositivo. Seus dispositivos existentes ainda estão seguros e você não precisa se preocupar com eles.";
@@ -1430,6 +1443,7 @@
 "screen_room_roles_and_permissions_room_details" = "Detalhes da sala";
 "screen_room_roles_and_permissions_space_details" = "Detalhes do espaço";
 "screen_room_roles_and_permissions_title" = "Cargos e permissões";
+"screen_room_select_error_cannot_load_rooms" = "The room list associated with this account cannot be loaded.";
 "screen_room_single_knock_request_accept_button_title" = "Aceitar";
 "screen_room_single_knock_request_title" = "%1$@ quer entrar nesta sala";
 "screen_room_single_knock_request_view_button_title" = "Visualizar";

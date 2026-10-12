@@ -310,6 +310,7 @@
 "common_name" = "Имя";
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Ничего не найдено";
+"common_no_results_for" = "There are no results for “%1$@”. Try a new search term.";
 "common_no_room_name" = "Название комнаты отсутствует";
 "common_no_space_name" = "Нет имени пространства";
 "common_not_encrypted" = "Не зашифровано";
@@ -348,6 +349,7 @@
 "common_replying_to" = "Отвечает %1$@";
 "common_report_a_problem" = "Сообщить о проблеме";
 "common_report_submitted" = "Отчет отправлен";
+"common_results_for" = "Results for “%1$@”";
 "common_rich_text_editor" = "Форматирование";
 "common_role" = "Роль";
 "common_room" = "Комната";
@@ -1074,6 +1076,9 @@
 "screen_moderation_and_safety_invites_heading" = "Приглашения";
 "screen_moderation_and_safety_other_users_heading" = "Другие пользователи";
 "screen_moderation_and_safety_share_presence_heading" = "Ваш внешний вид";
+"screen_multi_account_announcement_action" = "Add account";
+"screen_multi_account_announcement_description" = "Go to %1$@ to sign into another account. Then you can easily switch between them.";
+"screen_multi_account_announcement_title" = "You can now add multiple accounts";
 "screen_notification_optin_subtitle" = "Вы можете изменить настройки позже.";
 "screen_notification_optin_title" = "Разрешите отправку уведомлений";
 "screen_notification_settings_additional_settings_section_title" = "Дополнительные параметры";
@@ -1164,6 +1169,14 @@
 "screen_polls_history_filter_ongoing" = "Текущие";
 "screen_polls_history_filter_past" = "Прошлые";
 "screen_polls_history_title" = "Опросы";
+"screen_ptt_settings_battery_optimization" = "Ignore battery optimisation";
+"screen_ptt_settings_battery_optimization_description" = "Stay active in background";
+"screen_ptt_settings_covert_mode" = "Covert mode";
+"screen_ptt_settings_covert_mode_description" = "Mute all channels";
+"screen_ptt_settings_lock_screen" = "Show on lock screen";
+"screen_ptt_settings_lock_screen_description" = "Access from the lock screen";
+"screen_ptt_settings_system_overlay" = "Enable system overlay";
+"screen_ptt_settings_system_overlay_description" = "Access a floating action button";
 "screen_push_history_title" = "История уведомлений";
 "screen_qr_code_login_connecting_subtitle" = "Установление безопасного соединения";
 "screen_qr_code_login_connection_note_secure_state_description" = "Не удалось установить безопасное соединение с новым устройством. Не беспокойтесь, существующие устройства в безопасности.";
@@ -1430,6 +1443,7 @@
 "screen_room_roles_and_permissions_room_details" = "Информация о комнате";
 "screen_room_roles_and_permissions_space_details" = "Информация о пространстве";
 "screen_room_roles_and_permissions_title" = "Роли и разрешения";
+"screen_room_select_error_cannot_load_rooms" = "The room list associated with this account cannot be loaded.";
 "screen_room_single_knock_request_accept_button_title" = "Разрешить";
 "screen_room_single_knock_request_title" = "%1$@ хочет присоединиться к этой комнате";
 "screen_room_single_knock_request_view_button_title" = "Просмотреть";
