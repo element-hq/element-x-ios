@@ -45,7 +45,7 @@ struct EncryptionResetScreenViewModelTests {
         let viewModel = makeViewModel(mode: .noOptionsWithEncryptedRooms)
         
         let deferred = deferFulfillment(viewModel.actionsPublisher) {
-            if case .logout = $0 {
+            if case .logoutWithoutConfirmation = $0 {
                 true
             } else {
                 false

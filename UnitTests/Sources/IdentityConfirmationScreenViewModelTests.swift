@@ -22,7 +22,7 @@ struct IdentityConfirmationScreenViewModelTests {
     mutating func logoutSignsOutWithoutConfirmation() async throws {
         setupViewModel()
         
-        let deferred = deferFulfillment(viewModel.actionsPublisher) { $0 == .logout }
+        let deferred = deferFulfillment(viewModel.actionsPublisher) { $0 == .logoutWithoutConfirmation }
         context.send(viewAction: .logout)
         try await deferred.fulfill()
     }

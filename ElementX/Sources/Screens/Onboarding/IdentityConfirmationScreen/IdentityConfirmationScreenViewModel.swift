@@ -50,7 +50,7 @@ class IdentityConfirmationScreenViewModel: IdentityConfirmationScreenViewModelTy
             actionsSubject.send(.reset(hasConfirmationOptions: state.availableActions?.isEmpty == false))
         case .logout:
             // There's nothing to lose before the identity is confirmed, so there's no need to ask for confirmation.
-            actionsSubject.send(.logout)
+            actionsSubject.send(.logoutWithoutConfirmation)
         }
     }
     

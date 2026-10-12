@@ -16,7 +16,7 @@ enum EncryptionResetFlowCoordinatorAction: Equatable {
     /// The flow was cancelled.
     case cancel
     /// The user chose to sign out instead of resetting.
-    case logout
+    case logoutWithoutConfirmation
 }
 
 struct EncryptionResetFlowCoordinatorParameters {
@@ -136,8 +136,8 @@ class EncryptionResetFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.confirmPassword, userInfo: passwordPublisher)
             case .cancel:
                 actionsSubject.send(.cancel)
-            case .logout:
-                actionsSubject.send(.logout)
+            case .logoutWithoutConfirmation:
+                actionsSubject.send(.logoutWithoutConfirmation)
             case .resetFinished:
                 actionsSubject.send(.resetComplete)
             }

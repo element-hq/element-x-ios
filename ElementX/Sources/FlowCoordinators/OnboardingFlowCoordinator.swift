@@ -13,7 +13,7 @@ import SwiftState
 enum OnboardingFlowCoordinatorAction {
     case requestPresentation(animated: Bool)
     case dismiss
-    case logoutConfirmed
+    case logoutWithoutConfirmation
 }
 
 class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
@@ -265,8 +265,8 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.nextSkippingIdentityConfirmed)
             case .reset(let hasConfirmationOptions):
                 startEncryptionResetFlow(hasConfirmationOptions: hasConfirmationOptions)
-            case .logout:
-                actionsSubject.send(.logoutConfirmed)
+            case .logoutWithoutConfirmation:
+                actionsSubject.send(.logoutWithoutConfirmation)
             }
         }
         .store(in: &cancellables)
@@ -333,9 +333,9 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
             switch action {
-            case .logout:
+            case .logoutWithoutConfirmation:
                 navigationStackCoordinator.setSheetCoordinator(nil)
-                actionsSubject.send(.logoutConfirmed)
+                actionsSubject.send(.logoutWithoutConfirmation)
             case .resetComplete:
                 // Moving to next state is handled by the global session verification listener
                 navigationStackCoordinator.setSheetCoordinator(nil)

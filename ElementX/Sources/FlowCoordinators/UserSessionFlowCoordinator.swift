@@ -308,7 +308,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     navigationTabCoordinator.setFullScreenCoverCoordinator(onboardingStackCoordinator, animated: animated)
                 case .dismiss:
                     navigationTabCoordinator.setFullScreenCoverCoordinator(nil)
-                case .logoutConfirmed:
+                case .logoutWithoutConfirmation:
                     actionsSubject.send(.logout)
                 }
             }
