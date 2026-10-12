@@ -310,6 +310,7 @@
 "common_name" = "Nama";
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Tidak ada hasil";
+"common_no_results_for" = "There are no results for “%1$@”. Try a new search term.";
 "common_no_room_name" = "Tidak ada nama ruangan";
 "common_no_space_name" = "Tidak ada nama ruang";
 "common_not_encrypted" = "Tidak terenkripsi";
@@ -348,6 +349,7 @@
 "common_replying_to" = "Membalas %1$@";
 "common_report_a_problem" = "Laporkan masalah";
 "common_report_submitted" = "Laporan terkirim";
+"common_results_for" = "Results for “%1$@”";
 "common_rich_text_editor" = "Penyunting teks kaya";
 "common_role" = "Peran";
 "common_room" = "Ruangan";
@@ -1074,6 +1076,9 @@
 "screen_moderation_and_safety_invites_heading" = "Invites";
 "screen_moderation_and_safety_other_users_heading" = "Other users";
 "screen_moderation_and_safety_share_presence_heading" = "Your appearance";
+"screen_multi_account_announcement_action" = "Add account";
+"screen_multi_account_announcement_description" = "Go to %1$@ to sign into another account. Then you can easily switch between them.";
+"screen_multi_account_announcement_title" = "You can now add multiple accounts";
 "screen_notification_optin_subtitle" = "Anda dapat mengubah pengaturan Anda nanti.";
 "screen_notification_optin_title" = "Izinkan pemberitahuan dan jangan pernah melewatkan pesan";
 "screen_notification_settings_additional_settings_section_title" = "Pengaturan tambahan";
@@ -1164,6 +1169,14 @@
 "screen_polls_history_filter_ongoing" = "Sedang berlangsung";
 "screen_polls_history_filter_past" = "Masa lalu";
 "screen_polls_history_title" = "Jajak pendapat";
+"screen_ptt_settings_battery_optimization" = "Ignore battery optimisation";
+"screen_ptt_settings_battery_optimization_description" = "Stay active in background";
+"screen_ptt_settings_covert_mode" = "Covert mode";
+"screen_ptt_settings_covert_mode_description" = "Mute all channels";
+"screen_ptt_settings_lock_screen" = "Show on lock screen";
+"screen_ptt_settings_lock_screen_description" = "Access from the lock screen";
+"screen_ptt_settings_system_overlay" = "Enable system overlay";
+"screen_ptt_settings_system_overlay_description" = "Access a floating action button";
 "screen_push_history_title" = "Riwayat dorongan";
 "screen_qr_code_login_connecting_subtitle" = "Membuat koneksi aman";
 "screen_qr_code_login_connection_note_secure_state_description" = "Koneksi aman tidak dapat dibuat ke perangkat baru. Perangkat Anda yang ada masih aman dan Anda tidak perlu khawatir tentang mereka.";
@@ -1430,6 +1443,7 @@
 "screen_room_roles_and_permissions_room_details" = "Detail ruangan";
 "screen_room_roles_and_permissions_space_details" = "Detail ruang";
 "screen_room_roles_and_permissions_title" = "Peran dan perizinan";
+"screen_room_select_error_cannot_load_rooms" = "The room list associated with this account cannot be loaded.";
 "screen_room_single_knock_request_accept_button_title" = "Terima";
 "screen_room_single_knock_request_title" = "%1$@ ingin bergabung ke ruangan ini";
 "screen_room_single_knock_request_view_button_title" = "Lihat";
@@ -1593,7 +1607,7 @@
 "screen_signed_out_reason_3" = "Administrator homeserver Anda telah membatalkan akses Anda";
 "screen_signed_out_subtitle" = "Anda mungkin dikeluarkan karena alasan berikut. Silakan masuk lagi untuk melanjutkan menggunakan %@.";
 "screen_signed_out_subtitle_v2" = "This device was removed for one of the reasons listed below. Please sign in again to connect this device to your account.";
-"screen_signed_out_title" = "Anda telah keluar";
+"screen_signed_out_title" = "Perangkat dihapus";
 "screen_signout_confirmation_dialog_content" = "Apakah Anda yakin ingin non aktifkan device dari akun?";
 "screen_signout_confirmation_dialog_submit" = "Hapus device dari akun";
 "screen_signout_confirmation_dialog_title" = "Hapus device dari akun";

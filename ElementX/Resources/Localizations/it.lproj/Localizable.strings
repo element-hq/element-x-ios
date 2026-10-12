@@ -310,6 +310,7 @@
 "common_name" = "Nome";
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Nessun risultato";
+"common_no_results_for" = "There are no results for “%1$@”. Try a new search term.";
 "common_no_room_name" = "Nessun nome della stanza";
 "common_no_space_name" = "Spazio senza nome";
 "common_not_encrypted" = "Non cifrato";
@@ -348,6 +349,7 @@
 "common_replying_to" = "Risposta a %1$@";
 "common_report_a_problem" = "Segnala un problema";
 "common_report_submitted" = "Segnalazione inviata";
+"common_results_for" = "Results for “%1$@”";
 "common_rich_text_editor" = "Editor di testo avanzato";
 "common_role" = "Ruolo";
 "common_room" = "Stanza";
@@ -1074,6 +1076,9 @@
 "screen_moderation_and_safety_invites_heading" = "Invites";
 "screen_moderation_and_safety_other_users_heading" = "Other users";
 "screen_moderation_and_safety_share_presence_heading" = "Your appearance";
+"screen_multi_account_announcement_action" = "Add account";
+"screen_multi_account_announcement_description" = "Go to %1$@ to sign into another account. Then you can easily switch between them.";
+"screen_multi_account_announcement_title" = "You can now add multiple accounts";
 "screen_notification_optin_subtitle" = "Potrai modificare le tue impostazioni in seguito.";
 "screen_notification_optin_title" = "Consenti le notifiche e non perdere mai un messaggio";
 "screen_notification_settings_additional_settings_section_title" = "Impostazioni aggiuntive";
@@ -1164,6 +1169,14 @@
 "screen_polls_history_filter_ongoing" = "In corso";
 "screen_polls_history_filter_past" = "Passato";
 "screen_polls_history_title" = "Sondaggi";
+"screen_ptt_settings_battery_optimization" = "Ignore battery optimisation";
+"screen_ptt_settings_battery_optimization_description" = "Stay active in background";
+"screen_ptt_settings_covert_mode" = "Covert mode";
+"screen_ptt_settings_covert_mode_description" = "Mute all channels";
+"screen_ptt_settings_lock_screen" = "Show on lock screen";
+"screen_ptt_settings_lock_screen_description" = "Access from the lock screen";
+"screen_ptt_settings_system_overlay" = "Enable system overlay";
+"screen_ptt_settings_system_overlay_description" = "Access a floating action button";
 "screen_push_history_title" = "Cronologia push";
 "screen_qr_code_login_connecting_subtitle" = "Stabilendo la connessione";
 "screen_qr_code_login_connection_note_secure_state_description" = "Non è stato possibile stabilire una connessione sicura con il nuovo dispositivo. I tuoi dispositivi esistenti sono ancora al sicuro e non devi preoccuparti di loro.";
@@ -1430,6 +1443,7 @@
 "screen_room_roles_and_permissions_room_details" = "Dettagli della stanza";
 "screen_room_roles_and_permissions_space_details" = "Dettagli dello spazio";
 "screen_room_roles_and_permissions_title" = "Ruoli e autorizzazioni";
+"screen_room_select_error_cannot_load_rooms" = "The room list associated with this account cannot be loaded.";
 "screen_room_single_knock_request_accept_button_title" = "Accetta";
 "screen_room_single_knock_request_title" = "%1$@ vuole entrare in questa stanza";
 "screen_room_single_knock_request_view_button_title" = "Visualizza";

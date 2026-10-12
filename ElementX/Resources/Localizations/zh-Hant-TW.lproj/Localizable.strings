@@ -310,6 +310,7 @@
 "common_name" = "名稱";
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "查無結果";
+"common_no_results_for" = "There are no results for “%1$@”. Try a new search term.";
 "common_no_room_name" = "無聊天室名稱";
 "common_no_space_name" = "沒有空間名稱";
 "common_not_encrypted" = "未加密";
@@ -348,6 +349,7 @@
 "common_replying_to" = "正在回覆%1$@";
 "common_report_a_problem" = "回報問題";
 "common_report_submitted" = "已遞交報告";
+"common_results_for" = "Results for “%1$@”";
 "common_rich_text_editor" = "格式化文字編輯器";
 "common_role" = "角色";
 "common_room" = "聊天室";
@@ -1074,6 +1076,9 @@
 "screen_moderation_and_safety_invites_heading" = "Invites";
 "screen_moderation_and_safety_other_users_heading" = "Other users";
 "screen_moderation_and_safety_share_presence_heading" = "Your appearance";
+"screen_multi_account_announcement_action" = "Add account";
+"screen_multi_account_announcement_description" = "Go to %1$@ to sign into another account. Then you can easily switch between them.";
+"screen_multi_account_announcement_title" = "You can now add multiple accounts";
 "screen_notification_optin_subtitle" = "您稍後仍可變更設定。";
 "screen_notification_optin_title" = "允許通知，永遠不會錯誤任何訊息";
 "screen_notification_settings_additional_settings_section_title" = "其他設定";
@@ -1164,6 +1169,14 @@
 "screen_polls_history_filter_ongoing" = "進行中";
 "screen_polls_history_filter_past" = "已結束";
 "screen_polls_history_title" = "所有投票";
+"screen_ptt_settings_battery_optimization" = "Ignore battery optimisation";
+"screen_ptt_settings_battery_optimization_description" = "Stay active in background";
+"screen_ptt_settings_covert_mode" = "Covert mode";
+"screen_ptt_settings_covert_mode_description" = "Mute all channels";
+"screen_ptt_settings_lock_screen" = "Show on lock screen";
+"screen_ptt_settings_lock_screen_description" = "Access from the lock screen";
+"screen_ptt_settings_system_overlay" = "Enable system overlay";
+"screen_ptt_settings_system_overlay_description" = "Access a floating action button";
 "screen_push_history_title" = "推播通知歷史紀錄";
 "screen_qr_code_login_connecting_subtitle" = "建立安全連線";
 "screen_qr_code_login_connection_note_secure_state_description" = "無法與新裝置建立安全連線。您現有的裝置仍然安全，您不必擔心它們。";
@@ -1430,6 +1443,7 @@
 "screen_room_roles_and_permissions_room_details" = "聊天室資訊";
 "screen_room_roles_and_permissions_space_details" = "空間詳細資訊";
 "screen_room_roles_and_permissions_title" = "角色與權限";
+"screen_room_select_error_cannot_load_rooms" = "The room list associated with this account cannot be loaded.";
 "screen_room_single_knock_request_accept_button_title" = "接受";
 "screen_room_single_knock_request_title" = "%1$@ 想要加入此聊天室";
 "screen_room_single_knock_request_view_button_title" = "檢視";

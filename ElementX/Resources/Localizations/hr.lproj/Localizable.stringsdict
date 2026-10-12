@@ -82,10 +82,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string></string>
 			<key>one</key>
-			<string>Forward %1$d message</string>
+			<string>Proslijedi poruku %1$d</string>
 			<key>other</key>
-			<string>Forward %1$d messages</string>
+			<string>Prosljeđivanje poruka %1$d</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -620,10 +622,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string></string>
 			<key>one</key>
-			<string>%1$d message forwarded</string>
+			<string>%1$d poruka proslijeđena</string>
 			<key>other</key>
-			<string>%1$d messages forwarded</string>
+			<string>Proslijeđene poruke %1$d</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

@@ -310,6 +310,7 @@
 "common_name" = "名称";
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "没有结果";
+"common_no_results_for" = "未找到与“%1$@”相关的搜索结果。尝试其它搜索条件。";
 "common_no_room_name" = "无房间名称";
 "common_no_space_name" = "未命名空间";
 "common_not_encrypted" = "未加密";
@@ -348,6 +349,7 @@
 "common_replying_to" = "正在回复 %1$@";
 "common_report_a_problem" = "报告问题";
 "common_report_submitted" = "报告已提交";
+"common_results_for" = "与“%1$@”相关的搜索结果";
 "common_rich_text_editor" = "富文本编辑器";
 "common_role" = "角色";
 "common_room" = "房间";
@@ -863,10 +865,10 @@
 "screen_edit_profile_updating_details" = "正在更新个人资料…";
 "screen_edit_room_address_room_address_section_footer" = "你需要一个地址才能使其在公共目录中可见。";
 "screen_edit_room_address_title" = "编辑地址";
-"screen_encryption_reset_action_continue_reset" = "继续重置";
+"screen_encryption_reset_action_continue_reset" = "继续";
 "screen_encryption_reset_bullet_1" = "你的账户信息、联系人、偏好和聊天列表将被保留";
 "screen_encryption_reset_bullet_2" = "你将丢失所有仅存储在服务器上的消息历史";
-"screen_encryption_reset_bullet_3" = "你将需要再次验证所有现有设备与联系人";
+"screen_encryption_reset_bullet_3" = "其他用户将会看到你已重置数字身份。";
 "screen_encryption_reset_footer" = "仅当你无法访问其它已登录的设备并且丢失了恢复密钥时才重置数字身份。";
 "screen_encryption_reset_title" = "无法确认？你需要重置数字身份。";
 "screen_home_tab_chats" = "聊天";
@@ -1074,6 +1076,9 @@
 "screen_moderation_and_safety_invites_heading" = "邀请";
 "screen_moderation_and_safety_other_users_heading" = "其他用户";
 "screen_moderation_and_safety_share_presence_heading" = "你的形象";
+"screen_multi_account_announcement_action" = "添加账户";
+"screen_multi_account_announcement_description" = "转到 %1$@ 以登录另一账户。之后你可以轻松地在它们之间切换。";
+"screen_multi_account_announcement_title" = "你现在可以添加多个账户";
 "screen_notification_optin_subtitle" = "你可以稍后更改设置。";
 "screen_notification_optin_title" = "允许通知，绝不错过任何消息";
 "screen_notification_settings_additional_settings_section_title" = "更多设置";
@@ -1164,6 +1169,14 @@
 "screen_polls_history_filter_ongoing" = "正在进行";
 "screen_polls_history_filter_past" = "历史";
 "screen_polls_history_title" = "投票";
+"screen_ptt_settings_battery_optimization" = "忽略电池优化";
+"screen_ptt_settings_battery_optimization_description" = "保持后台活跃";
+"screen_ptt_settings_covert_mode" = "隐蔽模式";
+"screen_ptt_settings_covert_mode_description" = "静默所有频道";
+"screen_ptt_settings_lock_screen" = "在锁屏上显示";
+"screen_ptt_settings_lock_screen_description" = "从锁屏访问";
+"screen_ptt_settings_system_overlay" = "启用系统叠加层";
+"screen_ptt_settings_system_overlay_description" = "访问浮动操作按钮";
 "screen_push_history_title" = "推送历史";
 "screen_qr_code_login_connecting_subtitle" = "建立安全连接";
 "screen_qr_code_login_connection_note_secure_state_description" = "无法与新设备建立安全连接。你的现有设备仍然安全，无需担心。";
@@ -1313,7 +1326,7 @@
 "screen_room_confirm_removal_reason_supporting_text" = "（可选）";
 "screen_room_confirm_removal_title" = "移除消息？";
 "screen_room_details_add_topic_title" = "添加主题";
-"screen_room_details_audio_push_to_talk" = "按下发言";
+"screen_room_details_audio_push_to_talk" = "对讲";
 "screen_room_details_audio_title" = "房间音频";
 "screen_room_details_audio_video_calls" = "视频通话";
 "screen_room_details_badge_encrypted" = "已加密";
@@ -1341,7 +1354,7 @@
 "screen_room_details_profile_row_title" = "个人资料";
 "screen_room_details_requests_to_join_title" = "申请加入";
 "screen_room_details_roles_and_permissions" = "角色与权限";
-"screen_room_details_room_audio_ptt" = "按下发言";
+"screen_room_details_room_audio_ptt" = "对讲";
 "screen_room_details_room_audio_title" = "房间音频";
 "screen_room_details_room_audio_video_calls" = "视频通话";
 "screen_room_details_room_name_label" = "名称";
@@ -1430,6 +1443,7 @@
 "screen_room_roles_and_permissions_room_details" = "房间详细信息";
 "screen_room_roles_and_permissions_space_details" = "空间详细信息";
 "screen_room_roles_and_permissions_title" = "角色与权限";
+"screen_room_select_error_cannot_load_rooms" = "无法加载与此账户关联的房间列表。";
 "screen_room_single_knock_request_accept_button_title" = "接受";
 "screen_room_single_knock_request_title" = "%1$@ 想加入此房间";
 "screen_room_single_knock_request_view_button_title" = "查看";
