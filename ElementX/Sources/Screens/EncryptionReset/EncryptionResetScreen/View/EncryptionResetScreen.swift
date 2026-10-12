@@ -26,8 +26,8 @@ struct EncryptionResetScreen: View {
         .alert(item: $context.alertInfo)
     }
     
-    private var variant: EncryptionResetScreenVariant {
-        context.viewState.variant
+    private var mode: EncryptionResetScreenMode {
+        context.viewState.mode
     }
     
     /// The main content of the screen that is shown inside the scroll view.
@@ -35,7 +35,7 @@ struct EncryptionResetScreen: View {
         VStack(spacing: 24) {
             header
             
-            switch variant {
+            switch mode {
             case .hasConfirmationOptions:
                 checkmarkList(showsDevicesItem: true)
                 footer
@@ -52,12 +52,12 @@ struct EncryptionResetScreen: View {
             BigIcon(icon: \.userProfile)
                 .padding(.bottom, 8)
             
-            Text(variant.isResetTheOnlyOption ? UntranslatedL10n.screenEncryptionResetNoOptionsTitle : L10n.screenEncryptionResetTitle)
+            Text(mode.isResetTheOnlyOption ? UntranslatedL10n.screenEncryptionResetNoOptionsTitle : L10n.screenEncryptionResetTitle)
                 .font(.compound.headingMDBold)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textPrimary)
             
-            Text(variant.isResetTheOnlyOption ? UntranslatedL10n.screenEncryptionResetNoOptionsSubtitle : UntranslatedL10n.screenEncryptionResetSubtitle)
+            Text(mode.isResetTheOnlyOption ? UntranslatedL10n.screenEncryptionResetNoOptionsSubtitle : UntranslatedL10n.screenEncryptionResetSubtitle)
                 .font(.compound.bodyMD)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textSecondary)
@@ -98,13 +98,13 @@ struct EncryptionResetScreen: View {
     
     private var actionButtons: some View {
         VStack(spacing: 16) {
-            Button(L10n.screenEncryptionResetActionContinueReset, role: variant.isResetTheOnlyOption ? nil : .destructive) {
+            Button(L10n.screenEncryptionResetActionContinueReset, role: mode.isResetTheOnlyOption ? nil : .destructive) {
                 context.send(viewAction: .reset)
             }
             .buttonStyle(.compound(.primary))
             .accessibilityIdentifier(A11yIdentifiers.encryptionResetScreen.continueReset)
             
-            if variant.isResetTheOnlyOption {
+            if mode.isResetTheOnlyOption {
                 Button(UntranslatedL10n.screenIdentityConfirmationSignOut) {
                     context.send(viewAction: .signOut)
                 }
@@ -123,7 +123,7 @@ struct EncryptionResetScreen: View {
     
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
-        if !variant.isResetTheOnlyOption {
+        if !mode.isResetTheOnlyOption {
             ToolbarItem(placement: .cancellationAction) {
                 Button(L10n.actionCancel) {
                     context.send(viewAction: .cancel)
@@ -136,9 +136,9 @@ struct EncryptionResetScreen: View {
 // MARK: - Previews
 
 struct EncryptionResetScreen_Previews: PreviewProvider, TestablePreview {
-    static let hasOptionsViewModel = makeViewModel(variant: .hasConfirmationOptions)
-    static let encryptedChatsViewModel = makeViewModel(variant: .noOptionsWithEncryptedChats)
-    static let noChatsViewModel = makeViewModel(variant: .noOptionsWithoutEncryptedChats)
+    static let hasOptionsViewModel = makeViewModel(mode: .hasConfirmationOptions)
+    static let encryptedChatsViewModel = makeViewModel(mode: .noOptionsWithEncryptedChats)
+    static let noChatsViewModel = makeViewModel(mode: .noOptionsWithoutEncryptedChats)
     
     static var previews: some View {
         ElementNavigationStack {
@@ -157,9 +157,9 @@ struct EncryptionResetScreen_Previews: PreviewProvider, TestablePreview {
         .previewDisplayName("No options, no chats")
     }
     
-    static func makeViewModel(variant: EncryptionResetScreenVariant) -> EncryptionResetScreenViewModel {
+    static func makeViewModel(mode: EncryptionResetScreenMode) -> EncryptionResetScreenViewModel {
         EncryptionResetScreenViewModel(clientProxy: ClientProxyMock(.init()),
-                                       variant: variant,
+                                       mode: mode,
                                        userIndicatorController: UserIndicatorControllerMock())
     }
 }

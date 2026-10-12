@@ -26,7 +26,7 @@ struct EncryptionResetFlowCoordinatorParameters {
     let userIndicatorController: UserIndicatorControllerProtocol
     let navigationStackCoordinator: NavigationStackCoordinator
     let windowManger: WindowManagerProtocol
-    var variant: EncryptionResetScreenVariant = .hasConfirmationOptions
+    var mode: EncryptionResetScreenMode = .hasConfirmationOptions
 }
 
 class EncryptionResetFlowCoordinator: FlowCoordinatorProtocol {
@@ -38,7 +38,7 @@ class EncryptionResetFlowCoordinator: FlowCoordinatorProtocol {
     
     private let navigationStackCoordinator: NavigationStackCoordinator
     private let windowManager: WindowManagerProtocol
-    private let variant: EncryptionResetScreenVariant
+    private let mode: EncryptionResetScreenMode
     
     enum State: StateType {
         /// The state machine hasn't started.
@@ -75,7 +75,7 @@ class EncryptionResetFlowCoordinator: FlowCoordinatorProtocol {
         userIndicatorController = parameters.userIndicatorController
         navigationStackCoordinator = parameters.navigationStackCoordinator
         windowManager = parameters.windowManger
-        variant = parameters.variant
+        mode = parameters.mode
         
         stateMachine = .init(state: .initial)
         configureStateMachine()
@@ -123,7 +123,7 @@ class EncryptionResetFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentEncryptionResetScreen() {
         let coordinator = EncryptionResetScreenCoordinator(parameters: .init(clientProxy: userSession.clientProxy,
-                                                                             variant: variant,
+                                                                             mode: mode,
                                                                              userIndicatorController: userIndicatorController))
         
         coordinator.actionsPublisher.sink { [weak self] action in

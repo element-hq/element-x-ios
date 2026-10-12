@@ -19,7 +19,7 @@ enum EncryptionResetScreenCoordinatorAction {
 
 struct EncryptionResetScreenCoordinatorParameters {
     let clientProxy: ClientProxyProtocol
-    let variant: EncryptionResetScreenVariant
+    let mode: EncryptionResetScreenMode
     let userIndicatorController: UserIndicatorControllerProtocol
 }
 
@@ -35,7 +35,7 @@ final class EncryptionResetScreenCoordinator: CoordinatorProtocol {
     
     init(parameters: EncryptionResetScreenCoordinatorParameters) {
         viewModel = EncryptionResetScreenViewModel(clientProxy: parameters.clientProxy,
-                                                   variant: parameters.variant,
+                                                   mode: parameters.mode,
                                                    userIndicatorController: parameters.userIndicatorController)
     }
     

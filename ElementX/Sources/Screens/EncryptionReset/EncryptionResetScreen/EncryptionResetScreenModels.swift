@@ -18,7 +18,7 @@ enum EncryptionResetScreenViewModelAction {
 }
 
 /// How the reset is presented, depending on what else the user could do to confirm their identity.
-enum EncryptionResetScreenVariant {
+enum EncryptionResetScreenMode {
     /// The user has another verified device or a recovery key, so resetting is a last resort.
     case hasConfirmationOptions
     /// The user can only reset, and has encrypted chats whose history will be lost.
@@ -42,7 +42,7 @@ enum EncryptionResetScreenVariant {
 }
 
 struct EncryptionResetScreenViewState: BindableState {
-    let variant: EncryptionResetScreenVariant
+    let mode: EncryptionResetScreenMode
     var bindings: EncryptionResetScreenViewStateBindings
 }
 

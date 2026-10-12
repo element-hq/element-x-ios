@@ -13,18 +13,18 @@ import Testing
 struct EncryptionResetScreenViewModelTests {
     @Test
     func resetWithConfirmationOptionsAsksForConfirmation() {
-        let viewModel = makeViewModel(variant: .hasConfirmationOptions)
+        let viewModel = makeViewModel(mode: .hasConfirmationOptions)
         
         viewModel.context.send(viewAction: .reset)
         
         #expect(viewModel.context.alertInfo != nil)
     }
     
-    @Test(arguments: [EncryptionResetScreenVariant.noOptionsWithEncryptedChats, .noOptionsWithoutEncryptedChats])
-    func resetWithoutOptionsSkipsConfirmation(variant: EncryptionResetScreenVariant) async throws {
+    @Test(arguments: [EncryptionResetScreenMode.noOptionsWithEncryptedChats, .noOptionsWithoutEncryptedChats])
+    func resetWithoutOptionsSkipsConfirmation(mode: EncryptionResetScreenMode) async throws {
         let clientProxy = ClientProxyMock(.init())
         clientProxy.resetIdentityReturnValue = .success(nil)
-        let viewModel = makeViewModel(variant: variant, clientProxy: clientProxy)
+        let viewModel = makeViewModel(mode: mode, clientProxy: clientProxy)
         
         let deferred = deferFulfillment(viewModel.actionsPublisher) {
             if case .resetFinished = $0 {
@@ -42,7 +42,7 @@ struct EncryptionResetScreenViewModelTests {
     
     @Test
     func signOutSignsOutWithoutConfirmation() async throws {
-        let viewModel = makeViewModel(variant: .noOptionsWithEncryptedChats)
+        let viewModel = makeViewModel(mode: .noOptionsWithEncryptedChats)
         
         let deferred = deferFulfillment(viewModel.actionsPublisher) {
             if case .logout = $0 {
@@ -58,22 +58,22 @@ struct EncryptionResetScreenViewModelTests {
     }
     
     @Test
-    func variantWithConfirmationOptionsIgnoresEncryptedChats() {
+    func modeWithConfirmationOptionsIgnoresEncryptedChats() {
         var checkedForChats = false
-        let variant = EncryptionResetScreenVariant(hasConfirmationOptions: true, hasEncryptedChats: {
+        let mode = EncryptionResetScreenMode(hasConfirmationOptions: true, hasEncryptedChats: {
             checkedForChats = true
             return false
         }())
         
-        #expect(variant == .hasConfirmationOptions)
-        #expect(!variant.isResetTheOnlyOption)
+        #expect(mode == .hasConfirmationOptions)
+        #expect(!mode.isResetTheOnlyOption)
         #expect(!checkedForChats)
     }
     
     @Test
-    func variantWithoutOptions() {
-        let withChats = EncryptionResetScreenVariant(hasConfirmationOptions: false, hasEncryptedChats: true)
-        let withoutChats = EncryptionResetScreenVariant(hasConfirmationOptions: false, hasEncryptedChats: false)
+    func modeWithoutOptions() {
+        let withChats = EncryptionResetScreenMode(hasConfirmationOptions: false, hasEncryptedChats: true)
+        let withoutChats = EncryptionResetScreenMode(hasConfirmationOptions: false, hasEncryptedChats: false)
         
         #expect(withChats == .noOptionsWithEncryptedChats)
         #expect(withChats.isResetTheOnlyOption)
@@ -83,7 +83,7 @@ struct EncryptionResetScreenViewModelTests {
     
     @Test
     func cancelIsForwarded() async throws {
-        let viewModel = makeViewModel(variant: .hasConfirmationOptions)
+        let viewModel = makeViewModel(mode: .hasConfirmationOptions)
         
         let deferred = deferFulfillment(viewModel.actionsPublisher) {
             if case .cancel = $0 {
@@ -98,9 +98,9 @@ struct EncryptionResetScreenViewModelTests {
     
     // MARK: - Helpers
     
-    private func makeViewModel(variant: EncryptionResetScreenVariant, clientProxy: ClientProxyMock = ClientProxyMock(.init())) -> EncryptionResetScreenViewModel {
+    private func makeViewModel(mode: EncryptionResetScreenMode, clientProxy: ClientProxyMock = ClientProxyMock(.init())) -> EncryptionResetScreenViewModel {
         EncryptionResetScreenViewModel(clientProxy: clientProxy,
-                                       variant: variant,
+                                       mode: mode,
                                        userIndicatorController: UserIndicatorControllerMock())
     }
 }
