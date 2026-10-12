@@ -20,7 +20,7 @@ struct EncryptionResetScreenViewModelTests {
         #expect(viewModel.context.alertInfo != nil)
     }
     
-    @Test(arguments: [EncryptionResetScreenMode.noOptionsWithEncryptedChats, .noOptionsWithoutEncryptedChats])
+    @Test(arguments: [EncryptionResetScreenMode.noOptionsWithEncryptedRooms, .noOptionsWithoutEncryptedRooms])
     func resetWithoutOptionsSkipsConfirmation(mode: EncryptionResetScreenMode) async throws {
         let clientProxy = ClientProxyMock(.init())
         clientProxy.resetIdentityReturnValue = .success(nil)
@@ -42,7 +42,7 @@ struct EncryptionResetScreenViewModelTests {
     
     @Test
     func signOutSignsOutWithoutConfirmation() async throws {
-        let viewModel = makeViewModel(mode: .noOptionsWithEncryptedChats)
+        let viewModel = makeViewModel(mode: .noOptionsWithEncryptedRooms)
         
         let deferred = deferFulfillment(viewModel.actionsPublisher) {
             if case .logout = $0 {
@@ -58,27 +58,27 @@ struct EncryptionResetScreenViewModelTests {
     }
     
     @Test
-    func modeWithConfirmationOptionsIgnoresEncryptedChats() {
-        var checkedForChats = false
-        let mode = EncryptionResetScreenMode(hasConfirmationOptions: true, hasEncryptedChats: {
-            checkedForChats = true
+    func modeWithConfirmationOptionsIgnoresEncryptedRooms() {
+        var checkedForRooms = false
+        let mode = EncryptionResetScreenMode(hasConfirmationOptions: true, hasEncryptedRooms: {
+            checkedForRooms = true
             return false
         }())
         
         #expect(mode == .hasConfirmationOptions)
         #expect(!mode.isResetTheOnlyOption)
-        #expect(!checkedForChats)
+        #expect(!checkedForRooms)
     }
     
     @Test
     func modeWithoutOptions() {
-        let withChats = EncryptionResetScreenMode(hasConfirmationOptions: false, hasEncryptedChats: true)
-        let withoutChats = EncryptionResetScreenMode(hasConfirmationOptions: false, hasEncryptedChats: false)
+        let withEncryptedRooms = EncryptionResetScreenMode(hasConfirmationOptions: false, hasEncryptedRooms: true)
+        let withoutEncryptedRooms = EncryptionResetScreenMode(hasConfirmationOptions: false, hasEncryptedRooms: false)
         
-        #expect(withChats == .noOptionsWithEncryptedChats)
-        #expect(withChats.isResetTheOnlyOption)
-        #expect(withoutChats == .noOptionsWithoutEncryptedChats)
-        #expect(withoutChats.isResetTheOnlyOption)
+        #expect(withEncryptedRooms == .noOptionsWithEncryptedRooms)
+        #expect(withEncryptedRooms.isResetTheOnlyOption)
+        #expect(withoutEncryptedRooms == .noOptionsWithoutEncryptedRooms)
+        #expect(withoutEncryptedRooms.isResetTheOnlyOption)
     }
     
     @Test

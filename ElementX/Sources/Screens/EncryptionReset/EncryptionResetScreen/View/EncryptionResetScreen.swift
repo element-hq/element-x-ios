@@ -39,10 +39,10 @@ struct EncryptionResetScreen: View {
             case .hasConfirmationOptions:
                 checkmarkList(showsDevicesItem: true)
                 footer
-            case .noOptionsWithEncryptedChats:
+            case .noOptionsWithEncryptedRooms:
                 checkmarkList(showsDevicesItem: false)
-            case .noOptionsWithoutEncryptedChats:
-                noChatsMessage
+            case .noOptionsWithoutEncryptedRooms:
+                noRoomsMessage
             }
         }
     }
@@ -73,7 +73,7 @@ struct EncryptionResetScreen: View {
             .background(Color.compound.bgCriticalSubtle, in: RoundedRectangle(cornerRadius: 12))
     }
     
-    private var noChatsMessage: some View {
+    private var noRoomsMessage: some View {
         VisualListItem(title: UntranslatedL10n.screenEncryptionResetNoChatsMessage, position: .single) {
             CompoundIcon(\.check)
                 .foregroundColor(.compound.iconAccentPrimary)
@@ -137,8 +137,8 @@ struct EncryptionResetScreen: View {
 
 struct EncryptionResetScreen_Previews: PreviewProvider, TestablePreview {
     static let hasOptionsViewModel = makeViewModel(mode: .hasConfirmationOptions)
-    static let encryptedChatsViewModel = makeViewModel(mode: .noOptionsWithEncryptedChats)
-    static let noChatsViewModel = makeViewModel(mode: .noOptionsWithoutEncryptedChats)
+    static let encryptedRoomsViewModel = makeViewModel(mode: .noOptionsWithEncryptedRooms)
+    static let noRoomsViewModel = makeViewModel(mode: .noOptionsWithoutEncryptedRooms)
     
     static var previews: some View {
         ElementNavigationStack {
@@ -147,12 +147,12 @@ struct EncryptionResetScreen_Previews: PreviewProvider, TestablePreview {
         .previewDisplayName("Has confirmation options")
         
         ElementNavigationStack {
-            EncryptionResetScreen(context: encryptedChatsViewModel.context)
+            EncryptionResetScreen(context: encryptedRoomsViewModel.context)
         }
         .previewDisplayName("No options, encrypted chats")
         
         ElementNavigationStack {
-            EncryptionResetScreen(context: noChatsViewModel.context)
+            EncryptionResetScreen(context: noRoomsViewModel.context)
         }
         .previewDisplayName("No options, no chats")
     }
