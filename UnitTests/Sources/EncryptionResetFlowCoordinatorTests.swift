@@ -10,10 +10,10 @@ import Testing
 
 @MainActor
 struct EncryptionResetFlowCoordinatorTests {
-    @Test(arguments: [EncryptionResetScreenVariant.hasConfirmationOptions, .noOptionsWithEncryptedChats, .noOptionsWithoutEncryptedChats])
-    func startPresentsTheResetScreen(variant: EncryptionResetScreenVariant) {
+    @Test(arguments: [EncryptionResetScreenMode.hasConfirmationOptions, .noOptionsWithEncryptedChats, .noOptionsWithoutEncryptedChats])
+    func startPresentsTheResetScreen(mode: EncryptionResetScreenMode) {
         let navigationStackCoordinator = NavigationStackCoordinator()
-        let coordinator = makeCoordinator(variant: variant, navigationStackCoordinator: navigationStackCoordinator)
+        let coordinator = makeCoordinator(mode: mode, navigationStackCoordinator: navigationStackCoordinator)
         
         coordinator.start(animated: false)
         
@@ -21,7 +21,7 @@ struct EncryptionResetFlowCoordinatorTests {
     }
     
     @Test
-    func defaultVariantHasConfirmationOptions() {
+    func defaultModeHasConfirmationOptions() {
         let parameters = EncryptionResetFlowCoordinatorParameters(userSession: UserSessionMock(.init(clientProxy: ClientProxyMock(.init()))),
                                                                   appMediator: AppMediatorMock(.init()),
                                                                   appHooks: AppHooks(),
@@ -29,12 +29,12 @@ struct EncryptionResetFlowCoordinatorTests {
                                                                   navigationStackCoordinator: NavigationStackCoordinator(),
                                                                   windowManger: WindowManagerMock())
         
-        #expect(parameters.variant == .hasConfirmationOptions)
+        #expect(parameters.mode == .hasConfirmationOptions)
     }
     
     // MARK: - Helpers
     
-    private func makeCoordinator(variant: EncryptionResetScreenVariant,
+    private func makeCoordinator(mode: EncryptionResetScreenMode,
                                  navigationStackCoordinator: NavigationStackCoordinator) -> EncryptionResetFlowCoordinator {
         EncryptionResetFlowCoordinator(parameters: .init(userSession: UserSessionMock(.init(clientProxy: ClientProxyMock(.init()))),
                                                          appMediator: AppMediatorMock(.init()),
@@ -42,6 +42,6 @@ struct EncryptionResetFlowCoordinatorTests {
                                                          userIndicatorController: UserIndicatorControllerMock(),
                                                          navigationStackCoordinator: navigationStackCoordinator,
                                                          windowManger: WindowManagerMock(),
-                                                         variant: variant))
+                                                         mode: mode))
     }
 }

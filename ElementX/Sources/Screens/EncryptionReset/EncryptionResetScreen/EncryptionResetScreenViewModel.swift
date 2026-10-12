@@ -25,19 +25,19 @@ class EncryptionResetScreenViewModel: EncryptionResetScreenViewModelType, Encryp
     private var passwordCancellable: AnyCancellable?
     
     init(clientProxy: ClientProxyProtocol,
-         variant: EncryptionResetScreenVariant = .hasConfirmationOptions,
+         mode: EncryptionResetScreenMode = .hasConfirmationOptions,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.clientProxy = clientProxy
         self.userIndicatorController = userIndicatorController
         
-        super.init(initialViewState: EncryptionResetScreenViewState(variant: variant, bindings: .init()))
+        super.init(initialViewState: EncryptionResetScreenViewState(mode: mode, bindings: .init()))
     }
     
     // MARK: - Public
     
     override func process(viewAction: EncryptionResetScreenViewAction) {
         switch viewAction {
-        case .reset where state.variant.isResetTheOnlyOption:
+        case .reset where state.mode.isResetTheOnlyOption:
             Task { await startResetFlow() }
         case .reset:
             state.bindings.alertInfo = .init(id: UUID(),
