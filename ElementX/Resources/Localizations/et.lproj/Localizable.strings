@@ -310,6 +310,7 @@
 "common_name" = "Nimi";
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Otsingul pole tulemusi";
+"common_no_results_for" = "There are no results for “%1$@”. Try a new search term.";
 "common_no_room_name" = "Jututoal puudub nimi";
 "common_no_space_name" = "Kogukonnal pole nime";
 "common_not_encrypted" = "Krüptimata";
@@ -348,6 +349,7 @@
 "common_replying_to" = "Vastates kasutajale %1$@";
 "common_report_a_problem" = "Teata veast";
 "common_report_submitted" = "Veateade on saadetud";
+"common_results_for" = "Results for “%1$@”";
 "common_rich_text_editor" = "Vormindatud teksti toimeti";
 "common_role" = "Roll";
 "common_room" = "Jututuba";
@@ -1074,6 +1076,9 @@
 "screen_moderation_and_safety_invites_heading" = "Invites";
 "screen_moderation_and_safety_other_users_heading" = "Other users";
 "screen_moderation_and_safety_share_presence_heading" = "Your appearance";
+"screen_multi_account_announcement_action" = "Add account";
+"screen_multi_account_announcement_description" = "Go to %1$@ to sign into another account. Then you can easily switch between them.";
+"screen_multi_account_announcement_title" = "You can now add multiple accounts";
 "screen_notification_optin_subtitle" = "Sa võid seadistusi hiljem alati muuta.";
 "screen_notification_optin_title" = "Luba teavitused ja kunagi ei jää sul sõnumid märkamata";
 "screen_notification_settings_additional_settings_section_title" = "Täiendavad seadistused";
@@ -1164,6 +1169,14 @@
 "screen_polls_history_filter_ongoing" = "Käimasolev küsitlus";
 "screen_polls_history_filter_past" = "Varasem küsitlus";
 "screen_polls_history_title" = "Küsitlused";
+"screen_ptt_settings_battery_optimization" = "Ignore battery optimisation";
+"screen_ptt_settings_battery_optimization_description" = "Stay active in background";
+"screen_ptt_settings_covert_mode" = "Covert mode";
+"screen_ptt_settings_covert_mode_description" = "Mute all channels";
+"screen_ptt_settings_lock_screen" = "Show on lock screen";
+"screen_ptt_settings_lock_screen_description" = "Access from the lock screen";
+"screen_ptt_settings_system_overlay" = "Enable system overlay";
+"screen_ptt_settings_system_overlay_description" = "Access a floating action button";
 "screen_push_history_title" = "Tõuketeadete ajalugu";
 "screen_qr_code_login_connecting_subtitle" = "Loome turvalist ühendust";
 "screen_qr_code_login_connection_note_secure_state_description" = "Turvalise ühenduse loomine uue seadmega ei õnnestunud. Sinu olemasolevad seadmed on jätkuvalt turvatud ja sa ei pea nende pärast muretsema.";
@@ -1430,6 +1443,7 @@
 "screen_room_roles_and_permissions_room_details" = "Jututoa üksikasjad";
 "screen_room_roles_and_permissions_space_details" = "Kogukonna üksikasjad";
 "screen_room_roles_and_permissions_title" = "Rollid ja õigused";
+"screen_room_select_error_cannot_load_rooms" = "The room list associated with this account cannot be loaded.";
 "screen_room_single_knock_request_accept_button_title" = "Nõustu";
 "screen_room_single_knock_request_title" = "%1$@ soovib selle jututoaga liituda";
 "screen_room_single_knock_request_view_button_title" = "Vaata";

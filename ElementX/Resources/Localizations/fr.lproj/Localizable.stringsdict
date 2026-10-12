@@ -75,9 +75,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Forward %1$d message</string>
+			<string>Transférer %1$d message</string>
 			<key>other</key>
-			<string>Forward %1$d messages</string>
+			<string>Transférer %1$d messages</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -555,9 +555,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d message forwarded</string>
+			<string>%1$d message transféré</string>
 			<key>other</key>
-			<string>%1$d messages forwarded</string>
+			<string>%1$d messages transférés</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -587,9 +587,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d message selected</string>
+			<string>%1$d message sélectionné</string>
 			<key>other</key>
-			<string>%1$d messages selected</string>
+			<string>%1$d messages sélectionnés</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

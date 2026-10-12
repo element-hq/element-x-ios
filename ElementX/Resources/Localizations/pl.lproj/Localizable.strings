@@ -230,7 +230,7 @@
 "common_android_shortcuts_remove_reason_left_room" = "Opuściłeś pokój";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Zostałeś wylogowany z sesji";
 "common_app_settings" = "Ustawienia aplikacji";
-"common_appearance" = "Wygląd";
+"common_appearance" = "Motyw";
 "common_audio" = "Dźwięk";
 "common_beta" = "Beta";
 "common_blocked_users" = "Zablokowani użytkownicy";
@@ -310,6 +310,7 @@
 "common_name" = "Nazwa";
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Brak wyników";
+"common_no_results_for" = "Nie znaleziono wyników dla “%1$@”. Prosimy o wpisanie nowego terminu.";
 "common_no_room_name" = "Brak nazwy pokoju";
 "common_no_space_name" = "Brak nazwy przestrzeni";
 "common_not_encrypted" = "Nieszyfrowane";
@@ -348,6 +349,7 @@
 "common_replying_to" = "Odpowiadanie do %1$@";
 "common_report_a_problem" = "Zgłoś problem";
 "common_report_submitted" = "Zgłoszenie wysłane";
+"common_results_for" = "Wyniki dla “%1$@”";
 "common_rich_text_editor" = "Bogaty edytor tekstu";
 "common_role" = "Rola";
 "common_room" = "Pokój";
@@ -863,10 +865,10 @@
 "screen_edit_profile_updating_details" = "Aktualizuję profil…";
 "screen_edit_room_address_room_address_section_footer" = "Aby pokój był widoczny w katalogu pokoi publicznych, potrzebny jest adres pokoju.";
 "screen_edit_room_address_title" = "Edytuj adres";
-"screen_encryption_reset_action_continue_reset" = "Kontynuuj resetowanie";
+"screen_encryption_reset_action_continue_reset" = "Kontynuuj";
 "screen_encryption_reset_bullet_1" = "Szczegóły konta, kontakty, preferencje i lista czatów zostaną zachowane";
 "screen_encryption_reset_bullet_2" = "Utracisz istniejącą historię wiadomości";
-"screen_encryption_reset_bullet_3" = "Wymagana będzie ponowna weryfikacja istniejących urządzeń i kontaktów";
+"screen_encryption_reset_bullet_3" = "Pozostali użytkownicy zobaczą, że Twoja tożsamość cyfrowa została zresetowana";
 "screen_encryption_reset_footer" = "Zresetuj swoją tożsamość tylko wtedy, gdy nie posiadasz dostępu do żadnego innego zweryfikowanego urządzenia i straciłeś swój klucz przywracania.";
 "screen_encryption_reset_title" = "Nie możesz potwierdzić? Zresetuj swoją tożsamość cyfrową.";
 "screen_home_tab_chats" = "Czaty";
@@ -1074,6 +1076,9 @@
 "screen_moderation_and_safety_invites_heading" = "Zaproszenia";
 "screen_moderation_and_safety_other_users_heading" = "Pozostali użytkownicy";
 "screen_moderation_and_safety_share_presence_heading" = "Twój wygląd";
+"screen_multi_account_announcement_action" = "Dodaj konto";
+"screen_multi_account_announcement_description" = "Przejdź do %1$@, aby zalogować się na kolejne konto i łatwo się między nimi przełączać.";
+"screen_multi_account_announcement_title" = "Możesz teraz dodawać wiele kont";
 "screen_notification_optin_subtitle" = "Możesz zmienić ustawienia później.";
 "screen_notification_optin_title" = "Zezwól na powiadomienia i nie przegap żadnej wiadomości";
 "screen_notification_settings_additional_settings_section_title" = "Dodatkowe ustawienia";
@@ -1164,6 +1169,14 @@
 "screen_polls_history_filter_ongoing" = "W trakcie";
 "screen_polls_history_filter_past" = "Przeszłe";
 "screen_polls_history_title" = "Ankiety";
+"screen_ptt_settings_battery_optimization" = "Ignoruj ​​optymalizację baterii";
+"screen_ptt_settings_battery_optimization_description" = "Pozostań aktywny w tle";
+"screen_ptt_settings_covert_mode" = "Tryb ukryty";
+"screen_ptt_settings_covert_mode_description" = "Wycisz wszystkie kanały";
+"screen_ptt_settings_lock_screen" = "Pokaż na ekranie blokady";
+"screen_ptt_settings_lock_screen_description" = "Dostęp z ekranu blokady";
+"screen_ptt_settings_system_overlay" = "Włącz nakładkę systemową";
+"screen_ptt_settings_system_overlay_description" = "Uzyskaj dostęp do pływającego przycisku akcji";
 "screen_push_history_title" = "Historia powiadomień Push";
 "screen_qr_code_login_connecting_subtitle" = "Nawiązanie bezpiecznego połączenia";
 "screen_qr_code_login_connection_note_secure_state_description" = "Nie udało się nawiązać bezpiecznego połączenia z nowym urządzeniem. Twoje istniejące urządzenia są nadal bezpieczne i nie musisz się o nie martwić.";
@@ -1430,6 +1443,7 @@
 "screen_room_roles_and_permissions_room_details" = "Szczegóły pokoju";
 "screen_room_roles_and_permissions_space_details" = "Szczegóły przestrzeni";
 "screen_room_roles_and_permissions_title" = "Role i uprawnienia";
+"screen_room_select_error_cannot_load_rooms" = "Nie można wczytać listy pokoi powiązanej z tym kontem.";
 "screen_room_single_knock_request_accept_button_title" = "Akceptuj";
 "screen_room_single_knock_request_title" = "%1$@ chce dołączyć do tego pokoju";
 "screen_room_single_knock_request_view_button_title" = "Wyświetl";
@@ -1716,7 +1730,7 @@
 "theme_black" = "Czarny";
 "theme_dark" = "Ciemny";
 "theme_light" = "Jasny";
-"theme_system" = "System";
+"theme_system" = "Systemowy";
 "timeline_decryption_failure_historical_event_no_key_backup" = "Historia wiadomości nie jest dostępna na tym urządzeniu";
 "timeline_decryption_failure_historical_event_unverified_device" = "Musisz zweryfikować to urządzenie, aby uzyskać dostęp do historii wiadomości";
 "timeline_decryption_failure_historical_event_user_not_joined" = "Nie masz uprawnień do tej wiadomości";

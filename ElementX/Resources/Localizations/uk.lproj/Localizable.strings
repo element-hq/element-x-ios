@@ -284,7 +284,7 @@
 "common_gallery" = "Галерея";
 "common_gif" = "GIF";
 "common_group_call_in_progress" = "Триває груповий виклик";
-"common_header_rooms" = "Rooms";
+"common_header_rooms" = "Кімнати";
 "common_image" = "Зображення";
 "common_in_reply_to" = "У відповідь на %1$@";
 "common_invite_unknown_profile" = "Цей Matrix-ID не знайдено, тому запрошення може не бути отримано.";
@@ -310,6 +310,7 @@
 "common_name" = "Назва";
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Немає результатів";
+"common_no_results_for" = "Не знайдено результатів за запитом «%1$@». Спробуйте ввести інший пошуковий термін.";
 "common_no_room_name" = "Немає назви кімнати";
 "common_no_space_name" = "Без назви простору";
 "common_not_encrypted" = "Не зашифровано";
@@ -348,6 +349,7 @@
 "common_replying_to" = "Відповідь %1$@";
 "common_report_a_problem" = "Повідомити про проблему";
 "common_report_submitted" = "Звіт подано";
+"common_results_for" = "Результати для запиту «%1$@»";
 "common_rich_text_editor" = "Багатоформатний текстовий редактор";
 "common_role" = "Роль";
 "common_room" = "Кімната";
@@ -863,10 +865,10 @@
 "screen_edit_profile_updating_details" = "Оновлення профілю...";
 "screen_edit_room_address_room_address_section_footer" = "Вам знадобиться адреса кімнати, щоб зробити її видимою в каталозі.";
 "screen_edit_room_address_title" = "Змінити адресу";
-"screen_encryption_reset_action_continue_reset" = "Продовжити скидання налаштувань";
+"screen_encryption_reset_action_continue_reset" = "Продовжити";
 "screen_encryption_reset_bullet_1" = "Дані вашого облікового запису, контакти, налаштування й бесіди будуть збережені";
 "screen_encryption_reset_bullet_2" = "Ви втратите свою наявну історію повідомлень";
-"screen_encryption_reset_bullet_3" = "Вам потрібно буде повторно звірити всі наявні пристрої та контакти";
+"screen_encryption_reset_bullet_3" = "Інші користувачі побачать, що вашу цифрову ідентичність було скинуто";
 "screen_encryption_reset_footer" = "Скидайте свою цифрову ідентичність лише якщо у вас немає доступу до іншого звіреного пристрою та ключа відновлення.";
 "screen_encryption_reset_title" = "Не можете підтвердити? Вам доведеться скинути свою цифрову ідентичність.";
 "screen_home_tab_chats" = "Бесіди";
@@ -1074,6 +1076,9 @@
 "screen_moderation_and_safety_invites_heading" = "Запрошення";
 "screen_moderation_and_safety_other_users_heading" = "Інші користувачі";
 "screen_moderation_and_safety_share_presence_heading" = "Як вас бачать інші";
+"screen_multi_account_announcement_action" = "Додати обліковий запис";
+"screen_multi_account_announcement_description" = "Перейдіть до %1$@, щоб увійти в інший обліковий запис. Після цього ви зможете легко перемикатися між ними.";
+"screen_multi_account_announcement_title" = "Відтепер ви можете додавати кілька облікових записів";
 "screen_notification_optin_subtitle" = "Ви можете змінити свої налаштування пізніше.";
 "screen_notification_optin_title" = "Дозволити сповіщення і ніколи не пропускати повідомлення";
 "screen_notification_settings_additional_settings_section_title" = "Додаткові налаштування";
@@ -1164,6 +1169,14 @@
 "screen_polls_history_filter_ongoing" = "Поточні";
 "screen_polls_history_filter_past" = "Минулі";
 "screen_polls_history_title" = "Опитування";
+"screen_ptt_settings_battery_optimization" = "Ігнорувати оптимізацію заряду акумулятора";
+"screen_ptt_settings_battery_optimization_description" = "Залишати активним у фоновому режимі";
+"screen_ptt_settings_covert_mode" = "Прихований режим";
+"screen_ptt_settings_covert_mode_description" = "Вимкнути звук усіх каналів";
+"screen_ptt_settings_lock_screen" = "Показувати на екрані блокування";
+"screen_ptt_settings_lock_screen_description" = "Доступ з екрана блокування";
+"screen_ptt_settings_system_overlay" = "Увімкнути системне накладання";
+"screen_ptt_settings_system_overlay_description" = "Доступ до рухомої кнопки дій";
 "screen_push_history_title" = "Історія push-сповіщень";
 "screen_qr_code_login_connecting_subtitle" = "Встановлення безпечного з'єднання";
 "screen_qr_code_login_connection_note_secure_state_description" = "Не вдалося встановити безпечне з'єднання з новим пристроєм. Ваші наявні пристрої досі в безпеці, і вам не потрібно про них турбуватися.";
@@ -1430,6 +1443,7 @@
 "screen_room_roles_and_permissions_room_details" = "Деталі кімнати";
 "screen_room_roles_and_permissions_space_details" = "Подробиці простору";
 "screen_room_roles_and_permissions_title" = "Ролі та дозволи";
+"screen_room_select_error_cannot_load_rooms" = "Не вдалося завантажити список кімнат, пов'язаний з цим обліковим записом.";
 "screen_room_single_knock_request_accept_button_title" = "Прийняти";
 "screen_room_single_knock_request_title" = "%1$@ хоче приєднатися до цієї кімнати";
 "screen_room_single_knock_request_view_button_title" = "Переглянути";
@@ -1569,7 +1583,7 @@
 "screen_session_verification_waiting_subtitle" = "Після схвалення ви зможете продовжити звіряння.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Прийміть запит, щоб розпочати процес звіряння в іншому сеансі та продовжити роботу.";
 "screen_session_verification_waiting_to_accept_title" = "Очікування на прийняття запиту";
-"screen_settings_add_account" = "Add account";
+"screen_settings_add_account" = "Додати обліковий запис";
 "screen_settings_user_status_away" = "Не на місці";
 "screen_settings_user_status_be_right_back" = "Зараз повернуся";
 "screen_settings_user_status_custom" = "Власний...";
