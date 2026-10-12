@@ -424,11 +424,10 @@ final class HomeScreenViewModelTests {
     func multiAccountAnnouncementHidden(_ hiddenCase: MultiAccountAnnouncementHiddenCase) async throws {
         userSettings.app.multiAccountEnabled = hiddenCase != .flagOff
         userSettings.app.hasSeenMultiAccountAnnouncement = hiddenCase == .alreadySeen
-        userSettings.app.hasLoggedInThisLaunch = hiddenCase == .loggedInThisLaunch
         let verificationState: SessionVerificationState = switch hiddenCase {
         case .unverified: .unverified
         case .unknownVerificationState: .unknown
-        case .flagOff, .alreadySeen, .loggedInThisLaunch: .verified
+        case .flagOff, .alreadySeen: .verified
         }
         let securityStateSubject = CurrentValueSubject<SessionSecurityState, Never>(.init(verificationState: verificationState, recoveryState: .enabled))
         setupViewModel(securityStatePublisher: securityStateSubject.asCurrentValuePublisher())
@@ -478,7 +477,7 @@ final class HomeScreenViewModelTests {
     
     enum InviteType { case rooms, spaces }
     
-    enum MultiAccountAnnouncementHiddenCase: CaseIterable { case flagOff, alreadySeen, unverified, unknownVerificationState, loggedInThisLaunch }
+    enum MultiAccountAnnouncementHiddenCase: CaseIterable { case flagOff, alreadySeen, unverified, unknownVerificationState }
     
     @Test
     func roomListModeIsSetSynchronouslyOnAWarmLaunch() {

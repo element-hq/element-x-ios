@@ -495,10 +495,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             userSettings.app.hasSeenMultiAccountAnnouncement = true
         }
         
-        // An unverified session gets the identity confirmation cover first, and someone who logged in this launch sees it next launch.
+        // An unverified session gets the identity confirmation cover first.
         guard userSettings.app.multiAccountEnabled,
               !userSettings.app.hasSeenMultiAccountAnnouncement,
-              !userSettings.app.hasLoggedInThisLaunch,
               userSession.sessionSecurityStatePublisher.value.verificationState == .verified,
               !state.bindings.isPresentingMultiAccountAnnouncement else {
             return
