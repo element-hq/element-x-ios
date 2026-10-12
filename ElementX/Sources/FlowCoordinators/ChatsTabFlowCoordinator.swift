@@ -692,8 +692,12 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
             switch action {
             case .resetComplete:
                 navigationSplitCoordinator.setSheetCoordinator(nil)
-            case .cancel, .logoutWithoutConfirmation: // Sign out is only offered when resetting is the only option, which can't happen here.
+            case .cancel:
                 navigationSplitCoordinator.setSheetCoordinator(nil)
+            case .logoutWithoutConfirmation:
+                // Signing out is only offered when resetting is the user's only option, which can't be the case when started from here.
+                MXLog.error("Unexpected sign out request from the encryption reset flow.")
+                fatalError("The encryption reset flow shouldn't offer signing out when started from the chats tab.")
             }
         }
         .store(in: &cancellables)
