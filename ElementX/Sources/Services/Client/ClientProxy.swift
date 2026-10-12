@@ -822,10 +822,9 @@ class ClientProxy: ClientProxyProtocol {
         LinkNewDeviceService(handler: client.newGrantLoginWithQrCodeHandler())
     }
     
-    func deactivateAccount(password: String?, eraseData: Bool) async -> Result<Void, ClientProxyError> {
+    func deactivateAccount(password: String, eraseData: Bool) async -> Result<Void, ClientProxyError> {
         do {
-            try await client.deactivateAccount(authData: password.map { .password(passwordDetails: .init(identifier: userID, password: $0)) },
-                                               eraseData: eraseData)
+            try await client.deactivateAccount(password: password, eraseData: eraseData)
             return .success(())
         } catch {
             return .failure(.sdkError(error))

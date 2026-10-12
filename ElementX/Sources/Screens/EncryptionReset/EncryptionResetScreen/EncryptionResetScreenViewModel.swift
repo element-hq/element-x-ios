@@ -75,12 +75,12 @@ class EncryptionResetScreenViewModel: EncryptionResetScreenViewModelType, Encryp
             identityResetHandle = handle
             
             switch handle.authType() {
-            case .uiaa:
+            case .uiaa(let info):
                 let passwordPublisher = PassthroughSubject<String, Never>()
                 passwordCancellable = passwordPublisher.sink { [weak self] password in
                     guard let self else { return }
                     passwordCancellable = nil
-                    Task { await self.resetWith(password: password) }
+                    Task { await self.resetWith(password: password, session: info.session) }
                 }
                 
                 actionsSubject.send(.requestPassword(passwordPublisher: passwordPublisher))
@@ -93,7 +93,7 @@ class EncryptionResetScreenViewModel: EncryptionResetScreenViewModelType, Encryp
                 
                 actionsSubject.send(.requestOAuthAuthorisation(url: url))
                 
-                await resetWithOAuthAuthorisation()
+                await resetWithOAuthAuthorisation(session: oAuthInfo.session)
             }
         case .failure(let error):
             MXLog.error("Failed resetting encryption with error \(error)")
@@ -101,7 +101,7 @@ class EncryptionResetScreenViewModel: EncryptionResetScreenViewModelType, Encryp
         }
     }
     
-    func resetWith(password: String) async {
+    func resetWith(password: String, session: String) async {
         guard let identityResetHandle else {
             fatalError("Requested reset flow continuation without a stored handle")
         }
@@ -113,7 +113,7 @@ class EncryptionResetScreenViewModel: EncryptionResetScreenViewModelType, Encryp
         }
         
         do {
-            try await identityResetHandle.reset(auth: .password(passwordDetails: .init(identifier: clientProxy.userID, password: password)))
+            try await identityResetHandle.reset(auth: .password(passwordDetails: .init(identifier: clientProxy.userID, password: password, session: session)))
             actionsSubject.send(.resetFinished)
         } catch {
             MXLog.error("Failed resetting encryption with error \(error)")
@@ -121,13 +121,13 @@ class EncryptionResetScreenViewModel: EncryptionResetScreenViewModelType, Encryp
         }
     }
     
-    private func resetWithOAuthAuthorisation() async {
+    private func resetWithOAuthAuthorisation(session: String) async {
         guard let identityResetHandle else {
             fatalError("Requested reset flow continuation without a stored handle")
         }
         
         do {
-            try await identityResetHandle.reset(auth: nil)
+            try await identityResetHandle.reset(auth: .oAuth(session: session))
             actionsSubject.send(.resetFinished)
         } catch {
             MXLog.error("Failed resetting encryption with error \(error)")
