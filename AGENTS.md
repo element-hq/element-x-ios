@@ -60,6 +60,7 @@ PRs must follow rules. Prefer Xcode MCP tools over terminal commands.
 - Exactly one `pr-` label (see `.github/release.yml`).
 - Title = changelog entry — descriptive, no "Fixes #…".
 - Leave description template for developer. Point them to [contributing etiquette](CONTRIBUTING.md#etiquette).
+- Description name model + harness that made PR (e.g. Claude Opus 5.5, Claude Code). Tick template LLM box, fill its line.
 - Screenshots/videos for visual changes.
 - 500 additions max — split big changes.
 - Commits need title + description. No tiny commits, no massive commits.
