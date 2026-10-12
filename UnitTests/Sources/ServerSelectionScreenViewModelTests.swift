@@ -374,6 +374,7 @@ struct ServerSelectionScreenViewModelTests {
                                                    mode: mode,
                                                    authenticationFlow: authenticationFlow,
                                                    appSettings: appSettings,
+                                                   appHooks: AppHooks(),
                                                    homeserverHistoryManager: HomeserverHistoryManager(appSettings: appSettings),
                                                    userIndicatorController: UserIndicatorControllerMock())
         

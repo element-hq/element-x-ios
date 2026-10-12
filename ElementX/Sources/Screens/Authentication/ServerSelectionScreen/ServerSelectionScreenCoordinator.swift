@@ -14,6 +14,7 @@ struct ServerSelectionScreenCoordinatorParameters {
     let authenticationService: AuthenticationServiceProtocol
     let authenticationFlow: AuthenticationFlow
     let appSettings: AppSettings
+    let appHooks: AppHooks
     let homeserverHistoryManager: HomeserverHistoryManager
     let userIndicatorController: UserIndicatorControllerProtocol
 }
@@ -21,6 +22,7 @@ struct ServerSelectionScreenCoordinatorParameters {
 enum ServerSelectionScreenCoordinatorAction {
     case continueWithOAuth(data: OAuthAuthorizationDataProxy, window: UIWindow)
     case continueWithPassword
+    case additionalSettings
 }
 
 /// Note: This code was brought over from Riot, we should move the authentication service logic into the view model.
@@ -48,6 +50,7 @@ final class ServerSelectionScreenCoordinator: CoordinatorProtocol {
                                                    mode: mode,
                                                    authenticationFlow: parameters.authenticationFlow,
                                                    appSettings: parameters.appSettings,
+                                                   appHooks: parameters.appHooks,
                                                    homeserverHistoryManager: parameters.homeserverHistoryManager,
                                                    userIndicatorController: parameters.userIndicatorController)
     }
@@ -64,6 +67,8 @@ final class ServerSelectionScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.continueWithOAuth(data: oAuthData, window: window))
                 case .continueWithPassword:
                     actionsSubject.send(.continueWithPassword)
+                case .additionalSettings:
+                    actionsSubject.send(.additionalSettings)
                 }
             }
             .store(in: &cancellables)

@@ -43,6 +43,9 @@ final nonisolated class AppHooks: AppHooksProtocol {
     @AppHook(default: DefaultUserProfileScreenHook())
     var userProfileScreenHook: UserProfileScreenHookProtocol
     
+    @AppHook(default: DefaultServerSelectionScreenHook())
+    var serverSelectionScreenHook: ServerSelectionScreenHookProtocol
+    
     @AppHook(default: DefaultSettingsScreenHook())
     var settingsScreenHook: SettingsScreenHookProtocol
     

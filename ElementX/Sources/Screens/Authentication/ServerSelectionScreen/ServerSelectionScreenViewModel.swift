@@ -33,6 +33,7 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
          mode: ServerSelectionScreenMode,
          authenticationFlow: AuthenticationFlow,
          appSettings: AppSettings,
+         appHooks: AppHooks,
          homeserverHistoryManager: HomeserverHistoryManager,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.authenticationService = authenticationService
@@ -47,7 +48,7 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
             authenticationService.homeserver.value.accountProvider.serverNameOrBaseURL
         }
         let bindings = ServerSelectionScreenBindings(serverNameOrBaseURL: serverNameOrBaseURL)
-        super.init(initialViewState: ServerSelectionScreenViewState(mode: mode, authenticationFlow: authenticationFlow, bindings: bindings))
+        super.init(initialViewState: ServerSelectionScreenViewState(appHooks: appHooks, mode: mode, authenticationFlow: authenticationFlow, bindings: bindings))
         
         context.viewState.textFieldAdapter.keystrokePublisher
             .sink { [weak self] in
@@ -73,6 +74,8 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
             }
         case .clearFooterError:
             clearFooterError()
+        case .additionalSettings:
+            actionsSubject.send(.additionalSettings)
         }
     }
     

@@ -36,7 +36,12 @@ struct ServerSelectionScreen: View {
             }
             .readableFrame()
         } bottomContent: {
-            continueButton
+            VStack(spacing: 16) {
+                continueButton
+                context.viewState.appHooks.serverSelectionScreenHook.additionalButtons(authenticationFlow: context.viewState.authenticationFlow) {
+                    context.send(viewAction: .additionalSettings)
+                }
+            }
         }
         .background()
         .backgroundStyle(backgroundColor)
@@ -177,6 +182,7 @@ struct ServerSelection_Previews: PreviewProvider, TestablePreview {
                                                        mode: mode,
                                                        authenticationFlow: .login,
                                                        appSettings: appSettings,
+                                                       appHooks: AppHooks(),
                                                        homeserverHistoryManager: HomeserverHistoryManager(appSettings: appSettings),
                                                        userIndicatorController: UserIndicatorControllerMock())
         viewModel.context.serverNameOrBaseURL = serverNameOrBaseURL

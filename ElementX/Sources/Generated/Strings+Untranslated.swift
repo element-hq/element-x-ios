@@ -10,8 +10,28 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 internal nonisolated enum UntranslatedL10n {
+  /// Clear settings
+  internal static var actionClearSettings: String { return UntranslatedL10n.tr("Untranslated", "action_clear_settings") }
+  /// Reset options
+  internal static var actionResetOptions: String { return UntranslatedL10n.tr("Untranslated", "action_reset_options") }
+  /// Save and continue
+  internal static var actionSaveAndContinue: String { return UntranslatedL10n.tr("Untranslated", "action_save_and_continue") }
+  /// Port
+  internal static var commonPort: String { return UntranslatedL10n.tr("Untranslated", "common_port") }
   /// Search
   internal static var screenHomeTabSearch: String { return UntranslatedL10n.tr("Untranslated", "screen_home_tab_search") }
+  /// Access additional settings for a more personalized and tailored experience.
+  internal static var screenPttOnboardingAdditionalSettingsDescription: String { return UntranslatedL10n.tr("Untranslated", "screen_ptt_onboarding_additional_settings_description") }
+  /// Setup PTT connection
+  internal static var screenPttOnboardingConnectionTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_ptt_onboarding_connection_title") }
+  /// Setup PTT options
+  internal static var screenPttOnboardingOptionsTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_ptt_onboarding_options_title") }
+  /// Push to talk server address
+  internal static var screenPttOnboardingServerAddress: String { return UntranslatedL10n.tr("Untranslated", "screen_ptt_onboarding_server_address") }
+  /// Quickly set up with pre-configured settings.
+  internal static var screenPttOnboardingSetupDescription: String { return UntranslatedL10n.tr("Untranslated", "screen_ptt_onboarding_setup_description") }
+  /// Server location
+  internal static var screenPttSettingsServerLocation: String { return UntranslatedL10n.tr("Untranslated", "screen_ptt_settings_server_location") }
   /// Search for chats and messages
   internal static var screenSearchEmptyStateMessage: String { return UntranslatedL10n.tr("Untranslated", "screen_search_empty_state_message") }
   /// Start searching...

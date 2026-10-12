@@ -14,3 +14,14 @@
 "soft_logout_signin_notice" = "Your homeserver (%1$s) admin has signed you out of your account %2$s (%3$s).";
 "soft_logout_signin_title" = "Sign in";
 "untranslated" = "Untranslated";
+
+"screen_ptt_onboarding_additional_settings_description" = "Access additional settings for a more personalized and tailored experience.";
+"screen_ptt_onboarding_connection_title" = "Setup PTT connection";
+"screen_ptt_onboarding_options_title" = "Setup PTT options";
+"screen_ptt_onboarding_setup_description" = "Quickly set up with pre-configured settings.";
+"screen_ptt_onboarding_server_address" = "Push to talk server address";
+"common_port" = "Port";
+"action_save_and_continue" = "Save and continue";
+"action_clear_settings" = "Clear settings";
+"action_reset_options" = "Reset options";
+"screen_ptt_settings_server_location" = "Server location";

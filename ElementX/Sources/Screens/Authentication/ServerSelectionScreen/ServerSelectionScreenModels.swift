@@ -13,6 +13,7 @@ enum ServerSelectionScreenViewModelAction {
     case continueWithOAuth(data: OAuthAuthorizationDataProxy, window: UIWindow)
     /// Continue the flow using password authentication.
     case continueWithPassword
+    case additionalSettings
 }
 
 enum ServerSelectionScreenMode: Equatable {
@@ -23,6 +24,7 @@ enum ServerSelectionScreenMode: Equatable {
 }
 
 struct ServerSelectionScreenViewState: BindableState {
+    let appHooks: AppHooks
     /// Whether the screen is configured to confirm a single account provider or pick one from a list of many.
     var mode: ServerSelectionScreenMode
     /// Whether the screen is configured for registration or existing account login
@@ -114,6 +116,7 @@ enum ServerSelectionScreenViewAction {
     case confirm
     /// Clear any errors shown in the text field footer.
     case clearFooterError
+    case additionalSettings
 }
 
 enum ServerSelectionScreenErrorType: Hashable {

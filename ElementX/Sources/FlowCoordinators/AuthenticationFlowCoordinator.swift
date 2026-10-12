@@ -37,6 +37,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         
         /// The screen used to choose a server
         case serverSelectionScreen
+        case additionalSettings
         
         /// The screen to login with a password.
         case loginScreen
@@ -66,6 +67,8 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         case cancelledLoginWithQR
         /// The user aborted manual login.
         case cancelledServerSelection
+        case additionalSettings
+        case dismissedAdditionalSettings
         
         /// Show the screen to login with password (with the optional login hint in the `userInfo`).
         case continueWithPassword
@@ -155,7 +158,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         case .qrCodeLoginScreen:
             navigationStackCoordinator.setSheetCoordinator(nil)
             stateMachine.tryEvent(.cancelledLoginWithQR) // Needs to be handled manually.
-        case .serverSelectionScreen:
+        case .serverSelectionScreen, .additionalSettings:
             navigationStackCoordinator.popToRoot(animated: animated)
         case .loginScreen:
             navigationStackCoordinator.popToRoot(animated: animated)
@@ -206,6 +209,8 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
             self?.showServerSelectionScreen(authenticationFlow: .register)
         }
         stateMachine.addRoutes(event: .cancelledServerSelection, transitions: [.serverSelectionScreen => .startScreen])
+        stateMachine.addRoutes(event: .additionalSettings, transitions: [.serverSelectionScreen => .additionalSettings])
+        stateMachine.addRoutes(event: .dismissedAdditionalSettings, transitions: [.additionalSettings => .serverSelectionScreen])
         
         stateMachine.addRoutes(event: .continueWithPassword, transitions: [.serverSelectionScreen => .loginScreen,
                                                                            .startScreen => .loginScreen]) { [weak self] context in
@@ -352,6 +357,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         let parameters = ServerSelectionScreenCoordinatorParameters(authenticationService: authenticationService,
                                                                     authenticationFlow: authenticationFlow,
                                                                     appSettings: appSettings,
+                                                                    appHooks: appHooks,
                                                                     homeserverHistoryManager: homeserverHistoryManager,
                                                                     userIndicatorController: userIndicatorController)
         let coordinator = ServerSelectionScreenCoordinator(parameters: parameters)
@@ -365,6 +371,12 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
                     showOAuthAuthentication(oAuthData: oAuthData, presentationAnchor: window)
                 case .continueWithPassword:
                     stateMachine.tryEvent(.continueWithPassword)
+                case .additionalSettings:
+                    guard let coordinator = appHooks.serverSelectionScreenHook.makeCoordinator(navigationStackCoordinator: navigationStackCoordinator) else { return }
+                    stateMachine.tryEvent(.additionalSettings)
+                    navigationStackCoordinator.push(coordinator) { [weak self] in
+                        self?.stateMachine.tryEvent(.dismissedAdditionalSettings)
+                    }
                 }
             }
             .store(in: &cancellables)
