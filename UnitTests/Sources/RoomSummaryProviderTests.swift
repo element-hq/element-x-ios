@@ -22,6 +22,10 @@ final class RoomSummaryProviderTests {
     var dynamicEntriesController: RoomListDynamicEntriesControllerSDKMock!
     var roomSummaryProvider: RoomSummaryProvider!
     
+    enum TestError: Error {
+        case missingRoomInfo
+    }
+    
     @Test
     func defaultRustFilters() async {
         // Given a new room provider.
@@ -119,9 +123,63 @@ final class RoomSummaryProviderTests {
         #expect(dynamicEntriesController.setFilterKindReceivedInvocations.last == .all(filters: [.all(filters: [.favourite, .joined])] + baseFilters + [.identifiers(identifiers: ["SomeRoom"])]))
     }
     
+    @Test
+    func reachingTheBottomAddsAPage() async throws {
+        // Given a provider showing its first page of rooms.
+        setup(roomListPageSize: 10)
+        try await loadRooms(count: 10)
+        
+        // When a picker reports reaching the bottom with an empty range at the end of the list.
+        roomSummaryProvider.updateVisibleRange(10..<10)
+        
+        // Then the next page should be requested.
+        #expect(dynamicEntriesController.addOnePageCallsCount == 1)
+        
+        // When reaching the bottom again before that page has loaded.
+        roomSummaryProvider.updateVisibleRange(10..<10)
+        
+        // Then the request shouldn't be repeated.
+        #expect(dynamicEntriesController.addOnePageCallsCount == 1)
+    }
+    
+    @Test
+    func scrollingNearTheBottomPrefetchesAPage() async throws {
+        // Given a provider showing its first page of rooms.
+        setup(roomListPageSize: 10)
+        try await loadRooms(count: 10)
+        
+        // When scrolling to more than half a page away from the bottom.
+        roomSummaryProvider.updateVisibleRange(0..<4)
+        
+        // Then no page should be requested yet.
+        #expect(dynamicEntriesController.addOnePageCallsCount == 0)
+        
+        // When scrolling to half a page away from the bottom.
+        roomSummaryProvider.updateVisibleRange(1..<5)
+        
+        // Then the next page should be requested.
+        #expect(dynamicEntriesController.addOnePageCallsCount == 1)
+    }
+    
+    @Test
+    func reachingTheTopDoesNotAddAPage() async throws {
+        // Given a provider with fewer rooms than half a page.
+        setup(roomListPageSize: 10)
+        try await loadRooms(count: 4)
+        
+        // When a picker reports reaching the top with an empty range at the start of the list.
+        roomSummaryProvider.updateVisibleRange(0..<0)
+        
+        // Then no page should be requested.
+        #expect(dynamicEntriesController.addOnePageCallsCount == 0)
+    }
+    
     // MARK: - Helpers
     
-    private func setup(isLowPriorityFilterEnabled: Bool = false, includesOnlyJoinedRooms: Bool = false, setsRoomList: Bool = true) {
+    private func setup(isLowPriorityFilterEnabled: Bool = false,
+                       includesOnlyJoinedRooms: Bool = false,
+                       roomListPageSize: UInt32 = 100,
+                       setsRoomList: Bool = true) {
         userSettings = UserSettings.mock()
         userSettings.app.lowPriorityFilterEnabled = isLowPriorityFilterEnabled
         
@@ -136,6 +194,7 @@ final class RoomSummaryProviderTests {
                                                   eventStringBuilder: eventStringBuilder,
                                                   name: "Test",
                                                   includesOnlyJoinedRooms: includesOnlyJoinedRooms,
+                                                  roomListPageSize: roomListPageSize,
                                                   notificationSettings: NotificationSettingsProxyMock(with: .init()),
                                                   userSettings: userSettings)
         
@@ -150,5 +209,21 @@ final class RoomSummaryProviderTests {
         if setsRoomList {
             roomSummaryProvider.setRoomList(roomList)
         }
+    }
+    
+    private func loadRooms(count: Int) async throws {
+        let listener = try #require(roomList.entriesWithDynamicAdaptersPageSizeListenerReceivedArguments?.listener)
+        let rooms = (0..<count).map { index in
+            let room = RoomSDKMock()
+            room.idReturnValue = "!room\(index):matrix.org"
+            room.latestEventReturnValue = LatestEventValue.none
+            // Only the room count matters, so placeholder summaries avoid mocking a whole RoomInfo.
+            room.roomInfoThrowableError = TestError.missingRoomInfo
+            return room
+        }
+        
+        let deferred = deferFulfillment(roomSummaryProvider.roomListPublisher) { $0.count == count }
+        listener.onUpdate(roomEntriesUpdate: [.append(values: rooms)])
+        try await deferred.fulfill()
     }
 }
