@@ -17,9 +17,8 @@ class SpaceAddRoomsScreenViewModel: SpaceAddRoomsScreenViewModelType, SpaceAddRo
     private let userIndicatorController: UserIndicatorControllerProtocol
     
     private var suggestedRooms: [SpaceAddRoomsScreenRoom] = []
-    /// A place to track rooms that were sucessfully added to the space in order to filter them out from
-    /// the roomsSection when a failure occurs part way through the array.
-    private var addedRoomIDs: Set<String> = []
+    /// Keep known children excluded while the space list resets and reloads after saving.
+    private var existingRoomIDs: Set<String>
     
     private var actionsSubject: PassthroughSubject<SpaceAddRoomsScreenViewModelAction, Never> = .init()
     var actions: AnyPublisher<SpaceAddRoomsScreenViewModelAction, Never> {
@@ -31,12 +30,22 @@ class SpaceAddRoomsScreenViewModel: SpaceAddRoomsScreenViewModelType, SpaceAddRo
          roomSummaryProvider: RoomSummaryProviderProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.spaceRoomListProxy = spaceRoomListProxy
+        existingRoomIDs = Set(spaceRoomListProxy.spaceRoomsPublisher.value.map(\.id))
         spaceServiceProxy = userSession.clientProxy.spaceService
         self.roomSummaryProvider = roomSummaryProvider
         self.userIndicatorController = userIndicatorController
         
         super.init(initialViewState: SpaceAddRoomsScreenViewState(roomsSection: .init(type: .suggestions, rooms: [])),
                    mediaProvider: userSession.mediaProvider)
+        
+        spaceRoomListProxy.spaceRoomsPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] spaceRooms in
+                guard let self else { return }
+                existingRoomIDs.formUnion(spaceRooms.map(\.id))
+                updateRooms()
+            }
+            .store(in: &cancellables)
         
         roomSummaryProvider.roomListPublisher
             .receive(on: DispatchQueue.main)
@@ -45,20 +54,18 @@ class SpaceAddRoomsScreenViewModel: SpaceAddRoomsScreenViewModelType, SpaceAddRo
             }
             .store(in: &cancellables)
         
-        Task {
-            let existingRooms = spaceRoomListProxy.spaceRoomsPublisher.value
+        Task { [existingRoomIDs] in
+            // Filter before the recent-room limit so existing children do not displace suggestions.
             suggestedRooms = await userSession.clientProxy
                 .recentlyVisitedRooms { @MainActor roomProxy in
                     !roomProxy.infoPublisher.value.isDirect
                         && !roomProxy.infoPublisher.value.isSpace
                         && roomProxy.infoPublisher.value.membership == .joined
-                        && !existingRooms.contains { $0.id == roomProxy.id }
+                        && !existingRoomIDs.contains(roomProxy.id)
                 }
                 .map { .init(roomProxy: $0) }
             
-            if state.roomsSection.type == .suggestions {
-                state.roomsSection = .init(type: .suggestions, rooms: suggestedRooms)
-            }
+            updateRooms()
         }
     }
     
@@ -90,16 +97,14 @@ class SpaceAddRoomsScreenViewModel: SpaceAddRoomsScreenViewModelType, SpaceAddRo
     
     private func updateRooms() {
         guard !state.bindings.searchQuery.isEmpty else {
-            state.roomsSection = .init(type: .suggestions, rooms: suggestedRooms)
+            state.roomsSection = .init(type: .suggestions, rooms: suggestedRooms.filter { !existingRoomIDs.contains($0.id) })
             return
         }
         
-        let existingRooms = spaceRoomListProxy.spaceRoomsPublisher.value
-        
         let rooms = roomSummaryProvider.roomListPublisher.value
             .lazy
-            .filter { [addedRoomIDs] summary in
-                !summary.isDirect && !existingRooms.contains { $0.id == summary.id } && !addedRoomIDs.contains(summary.id)
+            .filter { [existingRoomIDs] summary in
+                !summary.isDirect && !existingRoomIDs.contains(summary.id)
             }
             .map(SpaceAddRoomsScreenRoom.init)
         
@@ -142,13 +147,13 @@ class SpaceAddRoomsScreenViewModel: SpaceAddRoomsScreenViewModelType, SpaceAddRo
         for room in state.selectedRooms {
             switch await spaceServiceProxy.addChild(room.id, to: spaceRoomListProxy.id) {
             case .success:
-                addedRoomIDs.insert(room.id)
+                existingRoomIDs.insert(room.id)
             case .failure(let error):
                 MXLog.error("Failed adding room to space: \(error)")
                 showErrorIndicator()
                 
                 // Hide rooms that were successfully added.
-                state.selectedRooms.removeAll { addedRoomIDs.contains($0.id) }
+                state.selectedRooms.removeAll { existingRoomIDs.contains($0.id) }
                 updateRooms()
                 
                 return

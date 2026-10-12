@@ -25,7 +25,7 @@ struct SpaceAddRoomsScreenViewModelTests {
         spaceRoomListProxy = SpaceRoomListProxyMock(.init(spaceServiceRoom: SpaceServiceRoom.mock(isSpace: true)))
         
         let clientProxy = ClientProxyMock(.init())
-        clientProxy.recentlyVisitedRoomsFilterReturnValue = .init(repeating: JoinedRoomProxyMock(.init()), count: 5)
+        clientProxy.recentlyVisitedRoomsFilterReturnValue = (0..<5).map { JoinedRoomProxyMock(.init(id: "suggestion-\($0)")) }
         spaceServiceProxy = clientProxy.spaceService as? SpaceServiceProxyMock ?? SpaceServiceProxyMock(.init())
         
         viewModel = SpaceAddRoomsScreenViewModel(spaceRoomListProxy: spaceRoomListProxy,
@@ -63,21 +63,23 @@ struct SpaceAddRoomsScreenViewModelTests {
         #expect(spaceRoomListProxy.resetCalled, "The room list should be reset to pick up the changes.")
     }
     
-    @Test
-    func failureWithMultipleRoomsSelected() async throws {
-        // Given a view model with 4 selected rooms.
+    @Test(arguments: [true, false])
+    func failureWithMultipleRoomsSelected(search: Bool) async throws {
+        let initialCount = search ? 4 : 5
+        let sectionType: SpaceAddRoomsScreenViewState.Section.SectionType = search ? .searchResults : .suggestions
+        // Given a view model with several selected rooms.
         var deferred = deferFulfillment(context.observe(\.viewState.roomsSection),
-                                        message: "There should be 4 search results.") { section in
-            section.type == .searchResults && section.rooms.count == 4
+                                        message: "The candidate rooms should be shown.") { section in
+            section.type == sectionType && section.rooms.count == initialCount
         }
-        context.searchQuery = "f"
+        context.searchQuery = search ? "f" : ""
         context.send(viewAction: .searchQueryChanged)
         try await deferred.fulfill()
         
         for room in context.viewState.roomsSection.rooms {
             context.send(viewAction: .toggleRoom(room))
         }
-        #expect(context.viewState.selectedRooms.count == 4, "All of the rooms should be selected.")
+        #expect(context.viewState.selectedRooms.count == initialCount, "All of the rooms should be selected.")
         
         // When there's a failure half way through saving.
         let successfulIDs = context.viewState.roomsSection.rooms.map(\.id).prefix(2)
@@ -90,8 +92,8 @@ struct SpaceAddRoomsScreenViewModelTests {
         }
         
         deferred = deferFulfillment(context.observe(\.viewState.roomsSection),
-                                    message: "The search results should update.") { section in
-            section.type == .searchResults && section.rooms.count == 2
+                                    message: "The candidates should update after a partial save.") { section in
+            section.type == sectionType && section.rooms.count == initialCount - 2
         }
         context.send(viewAction: .save)
         try await deferred.fulfill()
@@ -102,5 +104,51 @@ struct SpaceAddRoomsScreenViewModelTests {
                 "The added rooms should no longer show as selected.")
         #expect(!context.viewState.roomsSection.rooms.contains { successfulIDs.contains($0.id) },
                 "The added rooms should no longer be listed for selection.")
+    }
+    
+    @Test(arguments: [true, false])
+    func spaceMembershipUpdatesCandidates(search: Bool) async throws {
+        let summaries = [RoomSummary.mock(id: "first", name: "First room"),
+                         .mock(id: "existing", name: "Existing room"),
+                         .mock(id: "second", name: "Second room")]
+        let summariesSubject = CurrentValueSubject<[RoomSummary], Never>(summaries)
+        let summaryProvider = RoomSummaryProviderMock(.init(state: .loaded([])))
+        summaryProvider.roomListPublisher = summariesSubject.asCurrentValuePublisher()
+        let spaceRoomsSubject = CurrentValueSubject<[SpaceServiceRoom], Never>([.mock(id: "existing", isSpace: false)])
+        spaceRoomListProxy.spaceRoomsPublisher = spaceRoomsSubject.asCurrentValuePublisher()
+        let clientProxy = ClientProxyMock(.init())
+        let recentRooms = summaries.map { JoinedRoomProxyMock(.init(id: $0.id)) }
+        clientProxy.recentlyVisitedRoomsFilterClosure = { filter in
+            var rooms: [JoinedRoomProxyProtocol] = []
+            for room in recentRooms where await filter(room) {
+                rooms.append(room)
+            }
+            return rooms
+        }
+        let viewModel = SpaceAddRoomsScreenViewModel(spaceRoomListProxy: spaceRoomListProxy,
+                                                     userSession: UserSessionMock(.init(clientProxy: clientProxy)),
+                                                     roomSummaryProvider: summaryProvider,
+                                                     userIndicatorController: UserIndicatorControllerMock())
+        let context = viewModel.context
+        context.searchQuery = search ? "room" : ""
+        var deferred = deferFulfillment(context.observe(\.viewState.roomsSection)) {
+            $0.rooms.map(\.id) == ["first", "second"]
+        }
+        try await deferred.fulfill()
+        
+        deferred = deferFulfillment(context.observe(\.viewState.roomsSection)) {
+            $0.rooms.map(\.id) == ["second"]
+        }
+        spaceRoomsSubject.send([.mock(id: "existing", isSpace: false), .mock(id: "first", isSpace: false)])
+        try await deferred.fulfill()
+        
+        // An empty snapshot during reload must not make known children selectable again.
+        deferred = deferFulfillment(context.observe(\.viewState.roomsSection)) {
+            $0.type == .searchResults && $0.rooms.map(\.id) == ["second", "third"]
+        }
+        spaceRoomsSubject.send([])
+        context.searchQuery = "room"
+        summariesSubject.send(summaries + [.mock(id: "third", name: "Third room")])
+        try await deferred.fulfill()
     }
 }
