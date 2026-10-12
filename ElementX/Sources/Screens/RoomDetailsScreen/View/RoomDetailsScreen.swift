@@ -20,10 +20,6 @@ struct RoomDetailsScreen: View {
             
             topicSection
             
-            context.viewState.appHooks
-                .roomDetailsScreenHook
-                .additionalSections()
-            
             aboutSection
             
             // The invitation flow is different for DMs
