@@ -3678,14 +3678,14 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         return deactivateAccountPasswordEraseDataCallsCount > 0
     }
     private let deactivateAccountPasswordEraseDataReceivedArgumentsLock = NSLock()
-    private nonisolated(unsafe) var deactivateAccountPasswordEraseDataUnderlyingReceivedArguments: (password: String?, eraseData: Bool)?
-    var deactivateAccountPasswordEraseDataReceivedArguments: (password: String?, eraseData: Bool)? {
+    private nonisolated(unsafe) var deactivateAccountPasswordEraseDataUnderlyingReceivedArguments: (password: String, eraseData: Bool)?
+    var deactivateAccountPasswordEraseDataReceivedArguments: (password: String, eraseData: Bool)? {
         get { deactivateAccountPasswordEraseDataReceivedArgumentsLock.withLock { deactivateAccountPasswordEraseDataUnderlyingReceivedArguments } }
         set { deactivateAccountPasswordEraseDataReceivedArgumentsLock.withLock { deactivateAccountPasswordEraseDataUnderlyingReceivedArguments = newValue } }
     }
     private let deactivateAccountPasswordEraseDataReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var deactivateAccountPasswordEraseDataUnderlyingReceivedInvocations: [(password: String?, eraseData: Bool)] = []
-    var deactivateAccountPasswordEraseDataReceivedInvocations: [(password: String?, eraseData: Bool)] {
+    private nonisolated(unsafe) var deactivateAccountPasswordEraseDataUnderlyingReceivedInvocations: [(password: String, eraseData: Bool)] = []
+    var deactivateAccountPasswordEraseDataReceivedInvocations: [(password: String, eraseData: Bool)] {
         get { deactivateAccountPasswordEraseDataReceivedInvocationsLock.withLock { deactivateAccountPasswordEraseDataUnderlyingReceivedInvocations } }
         set { deactivateAccountPasswordEraseDataReceivedInvocationsLock.withLock { deactivateAccountPasswordEraseDataUnderlyingReceivedInvocations = newValue } }
     }
@@ -3696,9 +3696,9 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         get { deactivateAccountPasswordEraseDataReturnValueLock.withLock { deactivateAccountPasswordEraseDataUnderlyingReturnValue } }
         set { deactivateAccountPasswordEraseDataReturnValueLock.withLock { deactivateAccountPasswordEraseDataUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var deactivateAccountPasswordEraseDataClosure: ((String?, Bool) async -> Result<Void, ClientProxyError>)?
+    nonisolated(unsafe) var deactivateAccountPasswordEraseDataClosure: ((String, Bool) async -> Result<Void, ClientProxyError>)?
 
-    @concurrent func deactivateAccount(password: String?, eraseData: Bool) async -> Result<Void, ClientProxyError> {
+    @concurrent func deactivateAccount(password: String, eraseData: Bool) async -> Result<Void, ClientProxyError> {
         deactivateAccountPasswordEraseDataCallsCountLock.withLock { deactivateAccountPasswordEraseDataUnderlyingCallsCount += 1 }
         deactivateAccountPasswordEraseDataReceivedArguments = (password: password, eraseData: eraseData)
         deactivateAccountPasswordEraseDataReceivedInvocationsLock.withLock { deactivateAccountPasswordEraseDataUnderlyingReceivedInvocations.append((password: password, eraseData: eraseData)) }
