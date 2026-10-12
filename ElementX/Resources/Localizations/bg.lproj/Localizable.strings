@@ -310,6 +310,7 @@
 "common_name" = "Name";
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Няма резултати";
+"common_no_results_for" = "There are no results for “%1$@”. Try a new search term.";
 "common_no_room_name" = "Няма име на стая";
 "common_no_space_name" = "Няма име на пространство";
 "common_not_encrypted" = "Без шифроване";
@@ -348,6 +349,7 @@
 "common_replying_to" = "В отговор на %1$@";
 "common_report_a_problem" = "Съобщаване за проблем";
 "common_report_submitted" = "Докладът е изпратен";
+"common_results_for" = "Results for “%1$@”";
 "common_rich_text_editor" = "Редактор на богат текст";
 "common_role" = "Role";
 "common_room" = "Стая";
@@ -863,10 +865,10 @@
 "screen_edit_profile_updating_details" = "Обновяване на профила…";
 "screen_edit_room_address_room_address_section_footer" = "You’ll need an address in order to make it visible in the public directory.";
 "screen_edit_room_address_title" = "Edit address";
-"screen_encryption_reset_action_continue_reset" = "Continue reset";
+"screen_encryption_reset_action_continue_reset" = "Continue";
 "screen_encryption_reset_bullet_1" = "Your account details, contacts, preferences, and chat list will be kept";
 "screen_encryption_reset_bullet_2" = "You will lose any message history that’s stored only on the server";
-"screen_encryption_reset_bullet_3" = "You will need to verify all your existing devices and contacts again";
+"screen_encryption_reset_bullet_3" = "Other users will see that your digital identity has been reset";
 "screen_encryption_reset_footer" = "Only reset your digital identity if you don't have access to another verified device and you don't have your recovery key.";
 "screen_encryption_reset_title" = "Can't confirm? You’ll need to reset your digital identity.";
 "screen_home_tab_chats" = "Всички чатове";
@@ -1074,6 +1076,9 @@
 "screen_moderation_and_safety_invites_heading" = "Invites";
 "screen_moderation_and_safety_other_users_heading" = "Other users";
 "screen_moderation_and_safety_share_presence_heading" = "Your appearance";
+"screen_multi_account_announcement_action" = "Add account";
+"screen_multi_account_announcement_description" = "Go to %1$@ to sign into another account. Then you can easily switch between them.";
+"screen_multi_account_announcement_title" = "You can now add multiple accounts";
 "screen_notification_optin_subtitle" = "Можете да промените настройките си по-късно.";
 "screen_notification_optin_title" = "Разрешете известията и никога не пропускайте съобщение";
 "screen_notification_settings_additional_settings_section_title" = "Допълнителни настройки";
@@ -1164,6 +1169,14 @@
 "screen_polls_history_filter_ongoing" = "Текущи";
 "screen_polls_history_filter_past" = "Приключили";
 "screen_polls_history_title" = "Анкети";
+"screen_ptt_settings_battery_optimization" = "Ignore battery optimisation";
+"screen_ptt_settings_battery_optimization_description" = "Stay active in background";
+"screen_ptt_settings_covert_mode" = "Covert mode";
+"screen_ptt_settings_covert_mode_description" = "Mute all channels";
+"screen_ptt_settings_lock_screen" = "Show on lock screen";
+"screen_ptt_settings_lock_screen_description" = "Access from the lock screen";
+"screen_ptt_settings_system_overlay" = "Enable system overlay";
+"screen_ptt_settings_system_overlay_description" = "Access a floating action button";
 "screen_push_history_title" = "Push history";
 "screen_qr_code_login_connecting_subtitle" = "Establishing a secure connection";
 "screen_qr_code_login_connection_note_secure_state_description" = "A secure connection could not be made to the new device. Your existing devices are still safe and you don't need to worry about them.";
@@ -1430,6 +1443,7 @@
 "screen_room_roles_and_permissions_room_details" = "Подробности за стаята";
 "screen_room_roles_and_permissions_space_details" = "Подробности за пространството";
 "screen_room_roles_and_permissions_title" = "Роли и разрешения";
+"screen_room_select_error_cannot_load_rooms" = "The room list associated with this account cannot be loaded.";
 "screen_room_single_knock_request_accept_button_title" = "Приемане";
 "screen_room_single_knock_request_title" = "%1$@ wants to join this room";
 "screen_room_single_knock_request_view_button_title" = "View";

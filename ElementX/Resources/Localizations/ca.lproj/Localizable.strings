@@ -310,6 +310,7 @@
 "common_name" = "Name";
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Sense resultats";
+"common_no_results_for" = "There are no results for “%1$@”. Try a new search term.";
 "common_no_room_name" = "Sala sense nom";
 "common_no_space_name" = "No space name";
 "common_not_encrypted" = "Sense xifrar";
@@ -348,6 +349,7 @@
 "common_replying_to" = "Responent a %1$@";
 "common_report_a_problem" = "Informa d'un problema";
 "common_report_submitted" = "S'ha enviat";
+"common_results_for" = "Results for “%1$@”";
 "common_rich_text_editor" = "Editor de text enriquit";
 "common_role" = "Role";
 "common_room" = "Sala";
@@ -1074,6 +1076,9 @@
 "screen_moderation_and_safety_invites_heading" = "Invites";
 "screen_moderation_and_safety_other_users_heading" = "Other users";
 "screen_moderation_and_safety_share_presence_heading" = "Your appearance";
+"screen_multi_account_announcement_action" = "Add account";
+"screen_multi_account_announcement_description" = "Go to %1$@ to sign into another account. Then you can easily switch between them.";
+"screen_multi_account_announcement_title" = "You can now add multiple accounts";
 "screen_notification_optin_subtitle" = "Pots canviar la configuració més tard.";
 "screen_notification_optin_title" = "Permet les notificacions i no perdis cap missatge";
 "screen_notification_settings_additional_settings_section_title" = "Configuració addicional";
@@ -1164,6 +1169,14 @@
 "screen_polls_history_filter_ongoing" = "En curs";
 "screen_polls_history_filter_past" = "Pasades";
 "screen_polls_history_title" = "Votacions";
+"screen_ptt_settings_battery_optimization" = "Ignore battery optimisation";
+"screen_ptt_settings_battery_optimization_description" = "Stay active in background";
+"screen_ptt_settings_covert_mode" = "Covert mode";
+"screen_ptt_settings_covert_mode_description" = "Mute all channels";
+"screen_ptt_settings_lock_screen" = "Show on lock screen";
+"screen_ptt_settings_lock_screen_description" = "Access from the lock screen";
+"screen_ptt_settings_system_overlay" = "Enable system overlay";
+"screen_ptt_settings_system_overlay_description" = "Access a floating action button";
 "screen_push_history_title" = "Push history";
 "screen_qr_code_login_connecting_subtitle" = "Establint una connexió segura";
 "screen_qr_code_login_connection_note_secure_state_description" = "No s'ha pogut establir una connexió segura amb el dispositiu nou. Els dispositius existents continuen sent segurs, no te n'has de preocupar.";
@@ -1430,6 +1443,7 @@
 "screen_room_roles_and_permissions_room_details" = "Detalls de sala";
 "screen_room_roles_and_permissions_space_details" = "Space details";
 "screen_room_roles_and_permissions_title" = "Rols i permisos";
+"screen_room_select_error_cannot_load_rooms" = "The room list associated with this account cannot be loaded.";
 "screen_room_single_knock_request_accept_button_title" = "Accepta";
 "screen_room_single_knock_request_title" = "%1$@ vol unir-se a aquesta sala";
 "screen_room_single_knock_request_view_button_title" = "View";

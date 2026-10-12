@@ -309,6 +309,7 @@
 "common_name" = "الاسم";
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "لا نتائج";
+"common_no_results_for" = "There are no results for “%1$@”. Try a new search term.";
 "common_no_room_name" = "لا يوجد اسم للغرفة";
 "common_no_space_name" = "لا يوجد اسم للمساحة";
 "common_not_encrypted" = "غير مشفّر";
@@ -347,6 +348,7 @@
 "common_replying_to" = "الرد على %1$@";
 "common_report_a_problem" = "الإبلاغ عن مشكلة";
 "common_report_submitted" = "أُرسِل الإبلاغ";
+"common_results_for" = "Results for “%1$@”";
 "common_rich_text_editor" = "محرر النص المنسق";
 "common_role" = "الدور";
 "common_room" = "غرفة";
@@ -1073,6 +1075,9 @@
 "screen_moderation_and_safety_invites_heading" = "Invites";
 "screen_moderation_and_safety_other_users_heading" = "Other users";
 "screen_moderation_and_safety_share_presence_heading" = "Your appearance";
+"screen_multi_account_announcement_action" = "Add account";
+"screen_multi_account_announcement_description" = "Go to %1$@ to sign into another account. Then you can easily switch between them.";
+"screen_multi_account_announcement_title" = "You can now add multiple accounts";
 "screen_notification_optin_subtitle" = "يمكنك تغيير إعداداتك لاحقاً.";
 "screen_notification_optin_title" = "السماح بالإشعارات وعدم تفويت أي رسالة";
 "screen_notification_settings_additional_settings_section_title" = "إعدادات إضافية";
@@ -1163,6 +1168,14 @@
 "screen_polls_history_filter_ongoing" = "جارية";
 "screen_polls_history_filter_past" = "مغلقة";
 "screen_polls_history_title" = "الاستطلاعات";
+"screen_ptt_settings_battery_optimization" = "Ignore battery optimisation";
+"screen_ptt_settings_battery_optimization_description" = "Stay active in background";
+"screen_ptt_settings_covert_mode" = "Covert mode";
+"screen_ptt_settings_covert_mode_description" = "Mute all channels";
+"screen_ptt_settings_lock_screen" = "Show on lock screen";
+"screen_ptt_settings_lock_screen_description" = "Access from the lock screen";
+"screen_ptt_settings_system_overlay" = "Enable system overlay";
+"screen_ptt_settings_system_overlay_description" = "Access a floating action button";
 "screen_push_history_title" = "سجل الإشعارات الفورية";
 "screen_qr_code_login_connecting_subtitle" = "جارٍ إنشاء اتصال آمن";
 "screen_qr_code_login_connection_note_secure_state_description" = "تعذّر إنشاء اتصال آمن بالجهاز الجديد. لا تزال أجهزتك الحالية آمنة ولا داعي للقلق بشأنها.";
@@ -1429,6 +1442,7 @@
 "screen_room_roles_and_permissions_room_details" = "تفاصيل الغرفة";
 "screen_room_roles_and_permissions_space_details" = "تفاصيل المساحة";
 "screen_room_roles_and_permissions_title" = "الأدوار والصلاحيات";
+"screen_room_select_error_cannot_load_rooms" = "The room list associated with this account cannot be loaded.";
 "screen_room_single_knock_request_accept_button_title" = "قبول";
 "screen_room_single_knock_request_title" = "%1$@ يريد الانضمام إلى هذه الغرفة";
 "screen_room_single_knock_request_view_button_title" = "عرض";

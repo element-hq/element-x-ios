@@ -310,6 +310,7 @@
 "common_name" = "نام";
 "common_name_and_id" = "%1$@ ‏(%2$@)";
 "common_no_results" = "بدون نتیجه";
+"common_no_results_for" = "There are no results for “%1$@”. Try a new search term.";
 "common_no_room_name" = "بدون نام اتاق";
 "common_no_space_name" = "بدون نام فضا";
 "common_not_encrypted" = "رمزنگاری نشده";
@@ -348,6 +349,7 @@
 "common_replying_to" = "پاسخ دادن به %1$@";
 "common_report_a_problem" = "گزارش مشکل";
 "common_report_submitted" = "گزارش ثبت شد";
+"common_results_for" = "Results for “%1$@”";
 "common_rich_text_editor" = "ویرایشگر متن غنی";
 "common_role" = "نقش";
 "common_room" = "اتاق";
@@ -1074,6 +1076,9 @@
 "screen_moderation_and_safety_invites_heading" = "Invites";
 "screen_moderation_and_safety_other_users_heading" = "Other users";
 "screen_moderation_and_safety_share_presence_heading" = "Your appearance";
+"screen_multi_account_announcement_action" = "Add account";
+"screen_multi_account_announcement_description" = "Go to %1$@ to sign into another account. Then you can easily switch between them.";
+"screen_multi_account_announcement_title" = "You can now add multiple accounts";
 "screen_notification_optin_subtitle" = "می‌توانید بعداً تنظیماتتان را تغییر دهید.";
 "screen_notification_optin_title" = "اجازه به آگاهی‌ها و از دست ندادن پیام‌ها";
 "screen_notification_settings_additional_settings_section_title" = "تنظیمات اضافی";
@@ -1164,6 +1169,14 @@
 "screen_polls_history_filter_ongoing" = "در جریان";
 "screen_polls_history_filter_past" = "گذشته";
 "screen_polls_history_title" = "نظرسنجی‌ها";
+"screen_ptt_settings_battery_optimization" = "Ignore battery optimisation";
+"screen_ptt_settings_battery_optimization_description" = "Stay active in background";
+"screen_ptt_settings_covert_mode" = "Covert mode";
+"screen_ptt_settings_covert_mode_description" = "Mute all channels";
+"screen_ptt_settings_lock_screen" = "Show on lock screen";
+"screen_ptt_settings_lock_screen_description" = "Access from the lock screen";
+"screen_ptt_settings_system_overlay" = "Enable system overlay";
+"screen_ptt_settings_system_overlay_description" = "Access a floating action button";
 "screen_push_history_title" = "تاریخچهٔ آگاهی‌های ارسالی";
 "screen_qr_code_login_connecting_subtitle" = "برقرار کدن اتّصالی امن";
 "screen_qr_code_login_connection_note_secure_state_description" = "نتوانست اتّصالی امن به افزارهٔ جدید بسازد. افزاره‌های موجودتان هنوز امنند و نیازی نیست نگرانشان باشید.";
@@ -1430,6 +1443,7 @@
 "screen_room_roles_and_permissions_room_details" = "جزییات اتاق";
 "screen_room_roles_and_permissions_space_details" = "جزئیات فضا";
 "screen_room_roles_and_permissions_title" = "نقش‌ها و مجوزها";
+"screen_room_select_error_cannot_load_rooms" = "The room list associated with this account cannot be loaded.";
 "screen_room_single_knock_request_accept_button_title" = "پذیرش";
 "screen_room_single_knock_request_title" = "%1$@ می‌خواهد به این اتاق بپیوندد";
 "screen_room_single_knock_request_view_button_title" = "نما";

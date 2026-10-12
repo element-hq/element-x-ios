@@ -310,6 +310,7 @@
 "common_name" = "Name";
 "common_name_and_id" = "%1$@(%2$@)";
 "common_no_results" = "Keine Ergebnisse";
+"common_no_results_for" = "There are no results for “%1$@”. Try a new search term.";
 "common_no_room_name" = "Kein Chat-Name";
 "common_no_space_name" = "Kein Space Name";
 "common_not_encrypted" = "Nicht verschlüsselt";
@@ -348,6 +349,7 @@
 "common_replying_to" = "Antwort an %1$@";
 "common_report_a_problem" = "Ein Problem melden";
 "common_report_submitted" = "Meldung übermittelt";
+"common_results_for" = "Results for “%1$@”";
 "common_rich_text_editor" = "Rich-Text-Editor";
 "common_role" = "Rolle";
 "common_room" = "Chat";
@@ -1074,6 +1076,9 @@
 "screen_moderation_and_safety_invites_heading" = "Invites";
 "screen_moderation_and_safety_other_users_heading" = "Other users";
 "screen_moderation_and_safety_share_presence_heading" = "Your appearance";
+"screen_multi_account_announcement_action" = "Add account";
+"screen_multi_account_announcement_description" = "Go to %1$@ to sign into another account. Then you can easily switch between them.";
+"screen_multi_account_announcement_title" = "You can now add multiple accounts";
 "screen_notification_optin_subtitle" = "Du kannst deine Einstellungen später ändern.";
 "screen_notification_optin_title" = "Erlaube Benachrichtigungen und verpasse keine Nachricht";
 "screen_notification_settings_additional_settings_section_title" = "Zusätzliche Einstellungen";
@@ -1164,6 +1169,14 @@
 "screen_polls_history_filter_ongoing" = "Laufend";
 "screen_polls_history_filter_past" = "Beendet";
 "screen_polls_history_title" = "Umfragen";
+"screen_ptt_settings_battery_optimization" = "Ignore battery optimisation";
+"screen_ptt_settings_battery_optimization_description" = "Stay active in background";
+"screen_ptt_settings_covert_mode" = "Covert mode";
+"screen_ptt_settings_covert_mode_description" = "Mute all channels";
+"screen_ptt_settings_lock_screen" = "Show on lock screen";
+"screen_ptt_settings_lock_screen_description" = "Access from the lock screen";
+"screen_ptt_settings_system_overlay" = "Enable system overlay";
+"screen_ptt_settings_system_overlay_description" = "Access a floating action button";
 "screen_push_history_title" = "Verlauf pushen";
 "screen_qr_code_login_connecting_subtitle" = "Sichere Verbindung wird aufgebaut";
 "screen_qr_code_login_connection_note_secure_state_description" = "Es konnte keine sichere Verbindung zu dem neuen Gerät hergestellt werden.";
@@ -1430,6 +1443,7 @@
 "screen_room_roles_and_permissions_room_details" = "Chat-Details anpassen";
 "screen_room_roles_and_permissions_space_details" = "Details zum Space";
 "screen_room_roles_and_permissions_title" = "Rollen und Berechtigungen";
+"screen_room_select_error_cannot_load_rooms" = "The room list associated with this account cannot be loaded.";
 "screen_room_single_knock_request_accept_button_title" = "Akzeptieren";
 "screen_room_single_knock_request_title" = "%1$@ möchte diesem Chat beitreten";
 "screen_room_single_knock_request_view_button_title" = "Ansicht";

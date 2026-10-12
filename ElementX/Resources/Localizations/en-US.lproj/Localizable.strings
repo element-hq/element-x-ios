@@ -310,6 +310,7 @@
 "common_name" = "Name";
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "No results";
+"common_no_results_for" = "There are no results for “%1$@”. Try a new search term.";
 "common_no_room_name" = "No room name";
 "common_no_space_name" = "No space name";
 "common_not_encrypted" = "Not encrypted";
@@ -348,6 +349,7 @@
 "common_replying_to" = "Replying to %1$@";
 "common_report_a_problem" = "Report a problem";
 "common_report_submitted" = "Report submitted";
+"common_results_for" = "Results for “%1$@”";
 "common_rich_text_editor" = "Rich text editor";
 "common_role" = "Role";
 "common_room" = "Room";
@@ -863,10 +865,10 @@
 "screen_edit_profile_updating_details" = "Updating profile…";
 "screen_edit_room_address_room_address_section_footer" = "You’ll need an address in order to make it visible in the public directory.";
 "screen_edit_room_address_title" = "Edit address";
-"screen_encryption_reset_action_continue_reset" = "Continue reset";
+"screen_encryption_reset_action_continue_reset" = "Continue";
 "screen_encryption_reset_bullet_1" = "Your account details, contacts, preferences, and chat list will be kept";
 "screen_encryption_reset_bullet_2" = "You will lose any message history that’s stored only on the server";
-"screen_encryption_reset_bullet_3" = "You will need to verify all your existing devices and contacts again";
+"screen_encryption_reset_bullet_3" = "Other users will see that your digital identity has been reset";
 "screen_encryption_reset_footer" = "Only reset your digital identity if you don't have access to another verified device and you don't have your recovery key.";
 "screen_encryption_reset_title" = "Can't confirm? You’ll need to reset your digital identity.";
 "screen_home_tab_chats" = "Chats";
@@ -1167,6 +1169,14 @@
 "screen_polls_history_filter_ongoing" = "Ongoing";
 "screen_polls_history_filter_past" = "Past";
 "screen_polls_history_title" = "Polls";
+"screen_ptt_settings_battery_optimization" = "Ignore battery optimization";
+"screen_ptt_settings_battery_optimization_description" = "Stay active in background";
+"screen_ptt_settings_covert_mode" = "Covert mode";
+"screen_ptt_settings_covert_mode_description" = "Mute all channels";
+"screen_ptt_settings_lock_screen" = "Show on lock screen";
+"screen_ptt_settings_lock_screen_description" = "Access from the lock screen";
+"screen_ptt_settings_system_overlay" = "Enable system overlay";
+"screen_ptt_settings_system_overlay_description" = "Access a floating action button";
 "screen_push_history_title" = "Push history";
 "screen_qr_code_login_connecting_subtitle" = "Establishing a secure connection";
 "screen_qr_code_login_connection_note_secure_state_description" = "A secure connection could not be made to the new device. Your existing devices are still safe and you don't need to worry about them.";
@@ -1433,6 +1443,7 @@
 "screen_room_roles_and_permissions_room_details" = "Room details";
 "screen_room_roles_and_permissions_space_details" = "Space details";
 "screen_room_roles_and_permissions_title" = "Roles & permissions";
+"screen_room_select_error_cannot_load_rooms" = "The room list associated with this account cannot be loaded.";
 "screen_room_single_knock_request_accept_button_title" = "Accept";
 "screen_room_single_knock_request_title" = "%1$@ wants to join this room";
 "screen_room_single_knock_request_view_button_title" = "View";
