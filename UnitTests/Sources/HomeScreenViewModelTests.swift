@@ -424,10 +424,11 @@ final class HomeScreenViewModelTests {
     func multiAccountAnnouncementHidden(_ hiddenCase: MultiAccountAnnouncementHiddenCase) async throws {
         userSettings.app.multiAccountEnabled = hiddenCase != .flagOff
         userSettings.app.hasSeenMultiAccountAnnouncement = hiddenCase == .alreadySeen
+        userSettings.app.hasLoggedInThisLaunch = hiddenCase == .loggedInThisLaunch
         let verificationState: SessionVerificationState = switch hiddenCase {
         case .unverified: .unverified
         case .unknownVerificationState: .unknown
-        case .flagOff, .alreadySeen: .verified
+        case .flagOff, .alreadySeen, .loggedInThisLaunch: .verified
         }
         let securityStateSubject = CurrentValueSubject<SessionSecurityState, Never>(.init(verificationState: verificationState, recoveryState: .enabled))
         setupViewModel(securityStatePublisher: securityStateSubject.asCurrentValuePublisher())
@@ -454,7 +455,7 @@ final class HomeScreenViewModelTests {
         let deferredVerifiedFailure = deferFailure(context.$viewState, timeout: .seconds(1)) { $0.bindings.isPresentingMultiAccountAnnouncement }
         try await deferredVerifiedFailure.fulfill()
         
-        // …the room list appearing again does, e.g. once the identity confirmation cover is dismissed.
+        // …the room list appearing again does, e.g. when coming back from a room.
         let deferred = deferFulfillment(context.$viewState) { $0.bindings.isPresentingMultiAccountAnnouncement }
         context.send(viewAction: .screenAppeared)
         try await deferred.fulfill()
@@ -477,7 +478,7 @@ final class HomeScreenViewModelTests {
     
     enum InviteType { case rooms, spaces }
     
-    enum MultiAccountAnnouncementHiddenCase: CaseIterable { case flagOff, alreadySeen, unverified, unknownVerificationState }
+    enum MultiAccountAnnouncementHiddenCase: CaseIterable { case flagOff, alreadySeen, unverified, unknownVerificationState, loggedInThisLaunch }
     
     @Test
     func roomListModeIsSetSynchronouslyOnAWarmLaunch() {

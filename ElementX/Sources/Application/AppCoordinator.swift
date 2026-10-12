@@ -157,6 +157,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             wipeUserData(includingSettings: true)
         }
         appSettings.lastVersionLaunched = currentVersion.description
+        appSettings.hasLoggedInThisLaunch = false
         
         setupStateMachine()
         
@@ -625,6 +626,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             case (.initial, .startWithAuthentication, .signedOut):
                 startAuthentication()
             case (.signedOut, .createdUserSession, .signedIn):
+                appSettings.hasLoggedInThisLaunch = true
                 setupUserSession(isNewLogin: true)
             case (.initial, .startWithExistingSession, .restoringSession):
                 restoreUserSession()
@@ -634,6 +636,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             case (.restoringSession, .createdUserSession, .signedIn):
                 setupUserSession(isNewLogin: false)
             case (.softLogout, .createdUserSession, .signedIn):
+                appSettings.hasLoggedInThisLaunch = true
                 setupUserSession(isNewLogin: false)
                 
             case (.signingOut, .signOut, .signingOut):

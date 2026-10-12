@@ -119,6 +119,10 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: true)
     var hasSeenMultiAccountAnnouncement: Bool
     
+    /// Reset at every launch and set on login, so launch announcements only show to a session that existed at launch.
+    @UserPreference(defaultValue: false)
+    var hasLoggedInThisLaunch: Bool
+    
     /// The initial set of account providers shown to the user in the authentication flow.
     ///
     /// Account provider is the friendly term for the server name. It should not contain an `https` prefix and should
