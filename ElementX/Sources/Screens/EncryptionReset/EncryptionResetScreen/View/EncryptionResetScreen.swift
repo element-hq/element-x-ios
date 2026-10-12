@@ -12,6 +12,10 @@ import SwiftUI
 struct EncryptionResetScreen: View {
     @Bindable var context: EncryptionResetScreenViewModel.Context
     
+    private var mode: EncryptionResetScreenMode {
+        context.viewState.mode
+    }
+    
     var body: some View {
         FullscreenDialog {
             mainContent
@@ -24,10 +28,6 @@ struct EncryptionResetScreen: View {
         .toolbar { toolbar }
         .toolbar(.visible, for: .navigationBar)
         .alert(item: $context.alertInfo)
-    }
-    
-    private var mode: EncryptionResetScreenMode {
-        context.viewState.mode
     }
     
     /// The main content of the screen that is shown inside the scroll view.
@@ -48,20 +48,10 @@ struct EncryptionResetScreen: View {
     }
     
     private var header: some View {
-        VStack(spacing: 8) {
-            BigIcon(icon: \.userProfile)
-                .padding(.bottom, 8)
-            
-            Text(mode.isResetTheOnlyOption ? UntranslatedL10n.screenEncryptionResetNoOptionsTitle : L10n.screenEncryptionResetTitle)
-                .font(.compound.headingMDBold)
-                .multilineTextAlignment(.center)
-                .foregroundColor(.compound.textPrimary)
-            
-            Text(mode.isResetTheOnlyOption ? UntranslatedL10n.screenEncryptionResetNoOptionsSubtitle : UntranslatedL10n.screenEncryptionResetSubtitle)
-                .font(.compound.bodyMD)
-                .multilineTextAlignment(.center)
-                .foregroundColor(.compound.textSecondary)
-        }
+        TitleAndIcon(title: mode.isResetTheOnlyOption ? UntranslatedL10n.screenEncryptionResetNoOptionsTitle : L10n.screenEncryptionResetTitle,
+                     subtitle: mode.isResetTheOnlyOption ? UntranslatedL10n.screenEncryptionResetNoOptionsSubtitle : UntranslatedL10n.screenEncryptionResetSubtitle,
+                     icon: \.userProfile,
+                     iconStyle: .defaultSolid)
     }
     
     private var footer: some View {
@@ -70,7 +60,7 @@ struct EncryptionResetScreen: View {
             .foregroundColor(.compound.textCriticalPrimary)
             .padding(16)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Color.compound.bgCriticalSubtle, in: RoundedRectangle(cornerRadius: 12))
+            .background(.compound.bgCriticalSubtle, in: .rect(cornerRadius: 12))
     }
     
     private var noRoomsMessage: some View {
@@ -96,6 +86,14 @@ struct EncryptionResetScreen: View {
         .environment(\.backgroundStyle, AnyShapeStyle(.compound.bgSubtleSecondary))
     }
     
+    private func checkMarkItem(title: String, icon: KeyPath<CompoundIcons, Image>, position: ListPosition, positive: Bool) -> some View {
+        VisualListItem(title: title, position: position) {
+            CompoundIcon(icon)
+                .foregroundColor(positive ? .compound.iconAccentPrimary : .compound.iconSecondary)
+                .alignmentGuide(.top) { _ in 2 }
+        }
+    }
+    
     private var actionButtons: some View {
         VStack(spacing: 16) {
             Button(L10n.screenEncryptionResetActionContinueReset, role: mode.isResetTheOnlyOption ? nil : .destructive) {
@@ -110,14 +108,6 @@ struct EncryptionResetScreen: View {
                 }
                 .buttonStyle(.compound(.tertiary))
             }
-        }
-    }
-    
-    private func checkMarkItem(title: String, icon: KeyPath<CompoundIcons, Image>, position: ListPosition, positive: Bool) -> some View {
-        VisualListItem(title: title, position: position) {
-            CompoundIcon(icon)
-                .foregroundColor(positive ? .compound.iconAccentPrimary : .compound.iconSecondary)
-                .alignmentGuide(.top) { _ in 2 }
         }
     }
     
