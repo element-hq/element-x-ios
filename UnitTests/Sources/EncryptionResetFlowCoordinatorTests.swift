@@ -10,7 +10,7 @@ import Testing
 
 @MainActor
 struct EncryptionResetFlowCoordinatorTests {
-    @Test(arguments: [EncryptionResetScreenMode.hasConfirmationOptions, .noOptionsWithEncryptedChats, .noOptionsWithoutEncryptedChats])
+    @Test(arguments: [EncryptionResetScreenMode.hasConfirmationOptions, .noOptionsWithEncryptedRooms, .noOptionsWithoutEncryptedRooms])
     func startPresentsTheResetScreen(mode: EncryptionResetScreenMode) {
         let navigationStackCoordinator = NavigationStackCoordinator()
         let coordinator = makeCoordinator(mode: mode, navigationStackCoordinator: navigationStackCoordinator)

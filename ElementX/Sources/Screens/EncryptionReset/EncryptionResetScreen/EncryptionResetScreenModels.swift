@@ -21,18 +21,18 @@ enum EncryptionResetScreenViewModelAction {
 enum EncryptionResetScreenMode {
     /// The user has another verified device or a recovery key, so resetting is a last resort.
     case hasConfirmationOptions
-    /// The user can only reset, and has encrypted chats whose history will be lost.
-    case noOptionsWithEncryptedChats
-    /// The user can only reset, and has no encrypted chats to lose.
-    case noOptionsWithoutEncryptedChats
+    /// The user can only reset, and has encrypted rooms whose history will be lost.
+    case noOptionsWithEncryptedRooms
+    /// The user can only reset, and has no encrypted rooms to lose.
+    case noOptionsWithoutEncryptedRooms
     
-    init(hasConfirmationOptions: Bool, hasEncryptedChats: @autoclosure () -> Bool) {
+    init(hasConfirmationOptions: Bool, hasEncryptedRooms: @autoclosure () -> Bool) {
         self = if hasConfirmationOptions {
             .hasConfirmationOptions
-        } else if hasEncryptedChats() {
-            .noOptionsWithEncryptedChats
+        } else if hasEncryptedRooms() {
+            .noOptionsWithEncryptedRooms
         } else {
-            .noOptionsWithoutEncryptedChats
+            .noOptionsWithoutEncryptedRooms
         }
     }
     

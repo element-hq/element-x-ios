@@ -312,7 +312,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     
     private func startEncryptionResetFlow(hasConfirmationOptions: Bool) {
         let mode = EncryptionResetScreenMode(hasConfirmationOptions: hasConfirmationOptions,
-                                             hasEncryptedChats: userSession.clientProxy.hasEncryptedRooms())
+                                             hasEncryptedRooms: userSession.clientProxy.hasEncryptedRooms())
         
         let resetNavigationStackCoordinator = NavigationStackCoordinator()
         let coordinator = EncryptionResetFlowCoordinator(parameters: .init(userSession: userSession,
