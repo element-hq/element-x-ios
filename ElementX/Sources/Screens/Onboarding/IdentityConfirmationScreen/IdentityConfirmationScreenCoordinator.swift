@@ -20,7 +20,7 @@ enum IdentityConfirmationScreenCoordinatorAction {
     /// Only possible in debug builds.
     case skip
     case reset(hasConfirmationOptions: Bool)
-    case logout
+    case logoutWithoutConfirmation
 }
 
 final class IdentityConfirmationScreenCoordinator: CoordinatorProtocol {
@@ -51,8 +51,8 @@ final class IdentityConfirmationScreenCoordinator: CoordinatorProtocol {
                 actionsSubject.send(.skip)
             case .reset(let hasConfirmationOptions):
                 actionsSubject.send(.reset(hasConfirmationOptions: hasConfirmationOptions))
-            case .logout:
-                actionsSubject.send(.logout)
+            case .logoutWithoutConfirmation:
+                actionsSubject.send(.logoutWithoutConfirmation)
             }
         }
         .store(in: &cancellables)

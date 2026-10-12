@@ -14,7 +14,7 @@ enum IdentityConfirmationScreenViewModelAction: Equatable {
     /// Only possible in debug builds.
     case skip
     case reset(hasConfirmationOptions: Bool)
-    case logout
+    case logoutWithoutConfirmation
 }
 
 struct IdentityConfirmationScreenViewState: BindableState {

@@ -51,7 +51,7 @@ class EncryptionResetScreenViewModel: EncryptionResetScreenViewModelType, Encryp
             actionsSubject.send(.cancel)
         case .signOut:
             // Resetting is the only option here so there's nothing to lose by signing out.
-            actionsSubject.send(.logout)
+            actionsSubject.send(.logoutWithoutConfirmation)
         }
     }
     
