@@ -192,7 +192,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         visibleItemRangePublisher
             .sink { [weak self] range in
                 guard let self,
-                      !range.isEmpty,
+                      // Pickers send an empty `count..<count` range when reaching the bottom, so only ignore `0..<0` (the initial value or the top).
+                      range.upperBound > 0,
                       range.upperBound >= rooms.count - Int(roomListPageSize) / 2,
                       rooms.count != roomCountOnLastPageAddRequest else {
                     return
