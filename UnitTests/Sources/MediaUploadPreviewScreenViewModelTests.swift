@@ -36,27 +36,28 @@ final class MediaUploadPreviewScreenViewModelTests {
     
     @Test
     func cancelWhileSendWaitsForPreparation() async throws {
-        setUpViewModel(urls: [imageURL], expectedCaption: nil)
-        let started = AsyncStream<Void>.makeStream()
-        let resume = AsyncStream<Void>.makeStream()
-        defer {
-            started.continuation.finish()
-            resume.continuation.finish()
-        }
-        clientProxy.maxMediaUploadSizeClosure = {
-            started.continuation.yield(())
-            for await _ in resume.stream {
-                break
-            }
+        // Given a screen whose media preparation is still running.
+        let (startedStream, startedContinuation) = AsyncStream<Void>.makeStream()
+        let (resumeStream, resumeContinuation) = AsyncStream<Void>.makeStream()
+        defer { resumeContinuation.finish() }
+        
+        let preparationStarted = deferFulfillment(startedStream) { _ in true }
+        setUpViewModel(urls: [imageURL], expectedCaption: nil) {
+            startedContinuation.yield()
+            var iterator = resumeStream.makeAsyncIterator()
+            _ = await iterator.next() // Only returns once the preparation is cancelled.
             return .success(100 * 1024 * 1024)
         }
-        var iterator = started.stream.makeAsyncIterator()
-        await iterator.next()
+        try await preparationStarted.fulfill()
+        
+        // When sending and then dismissing the screen before the preparation finishes.
         context.send(viewAction: .send)
-        let finished = deferFulfillment(context.observe(\.viewState.shouldDisableInteraction)) { !$0 }
+        let loadingFinished = deferFulfillment(context.observe(\.viewState.shouldDisableInteraction)) { !$0 }
         context.send(viewAction: .cancel)
-        resume.continuation.yield(())
-        try await finished.fulfill()
+        viewModel.stopProcessing() // Called by the coordinator when the screen is dismissed.
+        try await loadingFinished.fulfill()
+        
+        // Then nothing is sent and no error is shown.
         #expect(timelineProxy.sendImageUrlThumbnailURLImageInfoCaptionRequestHandleCallsCount == 0)
         #expect(userIndicatorController.submitIndicatorDelayCallsCount == 1, "Only the loading indicator should be shown")
         #expect(context.viewState.bindings.alertInfo == nil)
@@ -321,7 +322,8 @@ final class MediaUploadPreviewScreenViewModelTests {
                                 expectedCaption: String?,
                                 maxUploadSizeResult: Result<UInt, ClientProxyError>? = nil,
                                 simulateGallerySendFailure: Bool = false,
-                                galleryEnabled: Bool = true) {
+                                galleryEnabled: Bool = true,
+                                maxUploadSizeClosure: (() async -> Result<UInt, ClientProxyError>)? = nil) {
         timelineProxy = TimelineProxyMock(.init())
         timelineProxy.sendAudioUrlAudioInfoCaptionRequestHandleClosure = { [weak self] _, _, caption, _ in
             self?.verifyCaption(caption, expectedCaption: expectedCaption) ?? .failure(.sdkError(TestError.unknown))
@@ -344,6 +346,7 @@ final class MediaUploadPreviewScreenViewModelTests {
         if let maxUploadSizeResult {
             clientProxy.underlyingMaxMediaUploadSize = maxUploadSizeResult
         }
+        clientProxy.maxMediaUploadSizeClosure = maxUploadSizeClosure
         
         viewModel = MediaUploadPreviewScreenViewModel(mediaURLs: urls,
                                                       caption: nil,

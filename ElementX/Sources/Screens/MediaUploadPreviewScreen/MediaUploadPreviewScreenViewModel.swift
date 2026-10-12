@@ -102,7 +102,6 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
                 }
             }
         case .cancel:
-            stopProcessing()
             requestHandle?.cancel()
             actionsSubject.send(.dismiss)
         case .editedMedia(let image, let index):
