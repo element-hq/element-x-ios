@@ -35,6 +35,34 @@ final class MediaUploadPreviewScreenViewModelTests {
     }
     
     @Test
+    func cancelWhileSendWaitsForPreparation() async throws {
+        setUpViewModel(urls: [imageURL], expectedCaption: nil)
+        let started = AsyncStream<Void>.makeStream()
+        let resume = AsyncStream<Void>.makeStream()
+        defer {
+            started.continuation.finish()
+            resume.continuation.finish()
+        }
+        clientProxy.maxMediaUploadSizeClosure = {
+            started.continuation.yield(())
+            for await _ in resume.stream {
+                break
+            }
+            return .success(100 * 1024 * 1024)
+        }
+        var iterator = started.stream.makeAsyncIterator()
+        await iterator.next()
+        context.send(viewAction: .send)
+        let finished = deferFulfillment(context.observe(\.viewState.shouldDisableInteraction)) { !$0 }
+        context.send(viewAction: .cancel)
+        resume.continuation.yield(())
+        try await finished.fulfill()
+        #expect(timelineProxy.sendImageUrlThumbnailURLImageInfoCaptionRequestHandleCallsCount == 0)
+        #expect(userIndicatorController.submitIndicatorDelayCallsCount == 1, "Only the loading indicator should be shown")
+        #expect(context.viewState.bindings.alertInfo == nil)
+    }
+    
+    @Test
     func imageUploadWithoutCaption() async throws {
         setUpViewModel(urls: [imageURL], expectedCaption: nil)
         context.caption = .init("")

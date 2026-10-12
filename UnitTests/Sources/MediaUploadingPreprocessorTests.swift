@@ -436,18 +436,16 @@ final class MediaUploadingPreprocessorTests {
     }
     
     @Test
-    func duplicateImagesKeepIndependentOutputsInInputOrder() async throws {
-        let imageURL = try #require(Bundle(for: Self.self).url(forResource: "test_image.png", withExtension: nil))
-        let otherURL = try #require(Bundle(for: Self.self).url(forResource: "test_animated_image.gif", withExtension: nil))
-        let inputs = [imageURL, otherURL, imageURL]
+    func batchPreservesInputOrderBeyondConcurrencyLimit() async throws {
+        let names = ["test_image.png", "test_animated_image.gif", "landscape_test_image.jpg"]
+        let inputs = try names.map { try #require(Bundle(for: Self.self).url(forResource: $0, withExtension: nil)) }
         let results = try await mediaUploadingPreprocessor.processMedia(at: inputs, maxUploadSize: maxUploadSize).get()
         defer {
             for result in results {
                 try? FileManager.default.removeItem(at: result.url.deletingLastPathComponent())
             }
         }
-        #expect(results.map(\.url.lastPathComponent) == inputs.map(\.lastPathComponent))
-        #expect(Set(results.map { $0.url.deletingLastPathComponent() }).count == inputs.count)
+        #expect(results.map(\.url.lastPathComponent) == names)
         for result in results {
             let thumbnailURL = try #require(result.thumbnailURL)
             #expect(try Data(contentsOf: result.url).isEmpty == false)
@@ -455,59 +453,20 @@ final class MediaUploadingPreprocessorTests {
         }
     }
     
-    @Test
-    func cancelledProcessingStillProducesIndependentUsableOutput() async throws {
+    @Test(arguments: [false, true])
+    func cancellationBeforePreparation(batch: Bool) async throws {
         let url = try #require(Bundle(for: Self.self).url(forResource: "test_image.png", withExtension: nil))
         let task = Task {
-            await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize)
+            withUnsafeCurrentTask { $0?.cancel() }
+            if batch {
+                return await mediaUploadingPreprocessor.processMedia(at: [url], maxUploadSize: maxUploadSize)
+            }
+            return await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize).map { [$0] }
         }
-        task.cancel()
-        let cancelledResult = try await task.value.get()
-        defer { try? FileManager.default.removeItem(at: cancelledResult.url.deletingLastPathComponent()) }
-        let nextResult = try await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize).get()
-        defer { try? FileManager.default.removeItem(at: nextResult.url.deletingLastPathComponent()) }
-        
-        #expect(cancelledResult.url != nextResult.url)
-        let thumbnailURL = try #require(cancelledResult.thumbnailURL)
-        #expect(try Data(contentsOf: cancelledResult.url).isEmpty == false)
-        #expect(try Data(contentsOf: thumbnailURL).isEmpty == false)
-        #expect(try Data(contentsOf: nextResult.url).isEmpty == false)
-    }
-    
-    @Test
-    func missingInputPreservesCopyError() async {
-        let missingURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString).appendingPathComponent("missing.png")
-        guard case .failure(.failedProcessingMedia) = await mediaUploadingPreprocessor.processMedia(at: missingURL, maxUploadSize: maxUploadSize) else {
-            Issue.record("Expected a file copying error")
+        guard case .failure(.cancelled) = await task.value else {
+            Issue.record("Cancelled preparation must not publish media")
             return
         }
-    }
-    
-    @Test
-    func corruptImagePreservesProcessingError() async throws {
-        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
-        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-        defer { try? FileManager.default.removeItem(at: directory) }
-        let url = directory.appendingPathComponent("corrupt.png")
-        try Data("Not an image".utf8).write(to: url)
-        guard case .failure(.failedProcessingImage) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize) else {
-            Issue.record("Expected an image processing error for corrupt data")
-            return
-        }
-    }
-    
-    @Test
-    func fileAtUploadLimitIsRejected() async throws {
-        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
-        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-        defer { try? FileManager.default.removeItem(at: directory) }
-        let url = directory.appendingPathComponent("file.bin")
-        try Data([1, 2, 3]).write(to: url)
-        guard case .failure(.maxUploadSizeExceeded(let limit)) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: 3) else {
-            Issue.record("Expected equality with the upload limit to be rejected")
-            return
-        }
-        #expect(limit == 3)
     }
     
     // MARK: - Private

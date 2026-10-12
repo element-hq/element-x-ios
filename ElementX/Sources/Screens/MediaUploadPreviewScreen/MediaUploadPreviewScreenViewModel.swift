@@ -63,10 +63,12 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
         case .send:
             startLoading()
             
-            Task {
+            Task { [processingTask] in
                 defer { stopLoading() }
                 
-                switch await processingTask.value {
+                let result = await processingTask.value
+                guard !processingTask.isCancelled else { return }
+                switch result {
                 case .success(let mediaInfos):
                     if galleryEnabled, mediaInfos.count > 1 {
                         switch await sendGallery(mediaInfos: mediaInfos, caption: caption) {
@@ -100,6 +102,7 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
                 }
             }
         case .cancel:
+            stopProcessing()
             requestHandle?.cancel()
             actionsSubject.send(.dismiss)
         case .editedMedia(let image, let index):
