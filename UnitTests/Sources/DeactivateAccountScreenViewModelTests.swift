@@ -37,18 +37,10 @@ struct DeactivateAccountScreenViewModelTests {
     mutating func validateDeactivate(erasingData shouldErase: Bool) async throws {
         let enteredPassword = UUID().uuidString
         
-        clientProxy.deactivateAccountPasswordEraseDataClosure = { [weak clientProxy] password, eraseData in
-            guard let clientProxy else { return .failure(.sdkError(ClientProxyMockError.generic)) }
-            
-            if clientProxy.deactivateAccountPasswordEraseDataCallsCount == 1 {
-                #expect(password == nil, "The password shouldn't be sent first time round.")
-                #expect(eraseData == shouldErase, "The erase parameter is unexpected.")
-                return .failure(.sdkError(ClientProxyMockError.generic))
-            } else {
-                #expect(password == enteredPassword, "The password should match the user's input on the second call.")
-                #expect(eraseData == shouldErase, "The erase parameter is unexpected.")
-                return .success(())
-            }
+        clientProxy.deactivateAccountPasswordEraseDataClosure = { password, eraseData in
+            #expect(password == enteredPassword, "The password should match the user's input.")
+            #expect(eraseData == shouldErase, "The erase parameter is unexpected.")
+            return .success(())
         }
         
         context.eraseData = shouldErase
@@ -67,7 +59,7 @@ struct DeactivateAccountScreenViewModelTests {
         confirmationAction()
         try await deferredAction.fulfill()
         
-        #expect(clientProxy.deactivateAccountPasswordEraseDataCallsCount == 2)
+        #expect(clientProxy.deactivateAccountPasswordEraseDataCallsCount == 1)
         #expect(clientProxy.deactivateAccountPasswordEraseDataReceivedArguments?.password == enteredPassword)
         #expect(clientProxy.deactivateAccountPasswordEraseDataReceivedArguments?.eraseData == shouldErase)
     }

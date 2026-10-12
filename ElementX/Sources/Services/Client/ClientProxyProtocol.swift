@@ -247,7 +247,7 @@ protocol ClientProxyProtocol: AnyObject {
     
     func linkNewDeviceService() -> LinkNewDeviceServiceProtocol
     
-    func deactivateAccount(password: String?, eraseData: Bool) async -> Result<Void, ClientProxyError>
+    func deactivateAccount(password: String, eraseData: Bool) async -> Result<Void, ClientProxyError>
     
     func logout() async
     

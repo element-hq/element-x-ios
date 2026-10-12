@@ -58,15 +58,6 @@ class DeactivateAccountScreenViewModel: DeactivateAccountScreenViewModelType, De
         
         MXLog.warning("Deactivating account.")
         
-        switch await clientProxy.deactivateAccount(password: nil, eraseData: state.bindings.eraseData) {
-        case .success:
-            MXLog.info("Account deactivated (no password needed).")
-            actionsSubject.send(.accountDeactivated)
-            return
-        case .failure:
-            MXLog.info("Request failed, including password.")
-        }
-        
         switch await clientProxy.deactivateAccount(password: state.bindings.password, eraseData: state.bindings.eraseData) {
         case .success:
             MXLog.info("Account deactivated.")

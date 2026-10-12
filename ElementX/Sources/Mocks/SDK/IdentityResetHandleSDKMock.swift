@@ -16,7 +16,7 @@ nonisolated extension IdentityResetHandleSDKMock {
     convenience init(_ configuration: Configuration) {
         self.init()
         
-        authTypeReturnValue = .uiaa
+        authTypeReturnValue = .uiaa(info: .init(session: "session_token"))
         resetAuthClosure = { _ in
             try await Task.sleep(for: .seconds(60))
         }
