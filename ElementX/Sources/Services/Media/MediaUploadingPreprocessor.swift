@@ -102,7 +102,10 @@ struct MediaUploadingPreprocessor {
     /// - Returns: a collection of results containing specific type of `MediaInfo` depending on the file type
     /// and its associated details or any resulting error
     func processMedia(at urls: [URL], maxUploadSize: UInt) async -> Result<[MediaInfo], MediaUploadingPreprocessorError> {
-        guard !Task.isCancelled else { return .failure(.cancelled) }
+        guard !Task.isCancelled else {
+            return .failure(.cancelled)
+        }
+        
         return await withTaskGroup { taskGroup in
             // Bound the number of decoded images and video exports in this batch.
             let initialCount = min(2, urls.count)
@@ -124,7 +127,11 @@ struct MediaUploadingPreprocessor {
                     failure = failure ?? error
                     taskGroup.cancelAll()
                 }
-                if failure == nil, !Task.isCancelled, nextIndex < urls.count {
+                
+                let canContinueProcessing = failure == nil && !Task.isCancelled
+                let hasRemainingMedia = nextIndex < urls.count
+                
+                if canContinueProcessing, hasRemainingMedia {
                     let index = nextIndex
                     taskGroup.addTask {
                         let result = await processMedia(at: urls[index], maxUploadSize: maxUploadSize)
@@ -135,6 +142,7 @@ struct MediaUploadingPreprocessor {
             }
             
             let mediaInfos = results.compactMap { $0 }
+            
             if Task.isCancelled {
                 failure = .cancelled
             }
@@ -142,6 +150,7 @@ struct MediaUploadingPreprocessor {
                 await Self.removePreparedFiles(at: mediaInfos.map(\.url))
                 return .failure(failure)
             }
+            
             return .success(mediaInfos)
         }
     }
@@ -152,48 +161,68 @@ struct MediaUploadingPreprocessor {
     /// - Returns: a specific type of `MediaInfo` depending on the file type and its associated details
     func processMedia(at url: URL, maxUploadSize: UInt) async -> Result<MediaInfo, MediaUploadingPreprocessorError> {
         let optimizeMediaUploads = userSettings.app.optimizeMediaUploads
-        let newURL: URL
+        let preparedURL: URL
         do {
-            newURL = try await Self.copyToUniqueFolder(url)
+            preparedURL = try await Self.copyToUniqueFolder(url)
         } catch is CancellationError {
             return .failure(.cancelled)
         } catch {
             return .failure(.failedProcessingMedia(error))
         }
         
-        let result: Result<MediaInfo, MediaUploadingPreprocessorError>
-        if let type = UTType(filenameExtension: newURL.pathExtension), let mimeType = type.preferredMIMEType {
-            if type.conforms(to: .image) {
-                result = await Self.processImage(at: newURL, type: type, mimeType: mimeType,
-                                                 maxUploadSize: maxUploadSize, optimizeMediaUploads: optimizeMediaUploads)
-            } else if type.conforms(to: .movie) || type.conforms(to: .video) {
-                result = await processVideo(at: newURL, maxUploadSize: maxUploadSize)
-            } else if type.conforms(to: .audio) {
-                result = await processAudio(at: newURL, mimeType: mimeType, maxUploadSize: maxUploadSize)
-            } else {
-                result = processFile(at: newURL, mimeType: mimeType, maxUploadSize: maxUploadSize)
-            }
-        } else {
-            result = processFile(at: newURL, mimeType: "application/octet-stream", maxUploadSize: maxUploadSize)
-        }
+        let result = await processPreparedMedia(at: preparedURL,
+                                                maxUploadSize: maxUploadSize,
+                                                optimizeMediaUploads: optimizeMediaUploads)
         
         if Task.isCancelled {
-            await Self.removePreparedFiles(at: [newURL])
+            await Self.removePreparedFiles(at: [preparedURL])
             return .failure(.cancelled)
         }
         if case .failure = result {
-            await Self.removePreparedFiles(at: [newURL])
+            await Self.removePreparedFiles(at: [preparedURL])
         }
+        
         return result
     }
     
     // MARK: - Private
     
+    private func processPreparedMedia(at url: URL,
+                                      maxUploadSize: UInt,
+                                      optimizeMediaUploads: Bool) async -> Result<MediaInfo, MediaUploadingPreprocessorError> {
+        guard let type = UTType(filenameExtension: url.pathExtension),
+              let mimeType = type.preferredMIMEType
+        else {
+            return processFile(at: url, mimeType: "application/octet-stream", maxUploadSize: maxUploadSize)
+        }
+        
+        if type.conforms(to: .image) {
+            return await Self.processImage(at: url,
+                                           type: type,
+                                           mimeType: mimeType,
+                                           maxUploadSize: maxUploadSize,
+                                           optimizeMediaUploads: optimizeMediaUploads)
+        }
+        
+        let isVideo = type.conforms(to: .movie) || type.conforms(to: .video)
+        if isVideo {
+            return await processVideo(at: url, maxUploadSize: maxUploadSize)
+        }
+        
+        if type.conforms(to: .audio) {
+            return await processAudio(at: url, mimeType: mimeType, maxUploadSize: maxUploadSize)
+        }
+        
+        return processFile(at: url, mimeType: mimeType, maxUploadSize: maxUploadSize)
+    }
+    
     @concurrent
     private static func copyToUniqueFolder(_ url: URL) async throws -> URL {
         try Task.checkCancellation()
+        
         let folder = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         let newURL = folder.appendingPathComponent(url.lastPathComponent)
+        
         do {
             try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
             try Task.checkCancellation()
@@ -424,7 +453,10 @@ struct MediaUploadingPreprocessor {
         return .init(url: thumbnailURL, height: thumbnail.size.height, width: thumbnail.size.width, mimeType: "image/jpeg", blurhash: blurhash)
     }
     
-    private nonisolated static func resizeImage(at url: URL, maxPixelSize: CGFloat, destination: URL, type: UTType) throws(MediaUploadingPreprocessorError) {
+    private nonisolated static func resizeImage(at url: URL,
+                                                maxPixelSize: CGFloat,
+                                                destination: URL,
+                                                type: UTType) throws(MediaUploadingPreprocessorError) {
         guard let imageSource = CGImageSourceCreateWithURL(url as NSURL, nil) else {
             throw .failedResizingImage
         }
