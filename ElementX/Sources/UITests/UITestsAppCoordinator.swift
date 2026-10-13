@@ -303,7 +303,6 @@ class MockScreen: Identifiable {
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                              appMediator: AppMediatorMock(.init()),
-                                                             appHooks: AppHooks(),
                                                              analytics: analytics,
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
                                                              timelineControllerFactory: TimelineControllerFactoryMock(.init()),
@@ -323,7 +322,6 @@ class MockScreen: Identifiable {
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                              appMediator: AppMediatorMock(.init()),
-                                                             appHooks: AppHooks(),
                                                              analytics: analytics,
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
                                                              timelineControllerFactory: TimelineControllerFactoryMock(.init()),
@@ -343,7 +341,6 @@ class MockScreen: Identifiable {
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                              appMediator: AppMediatorMock(.init()),
-                                                             appHooks: AppHooks(),
                                                              analytics: analytics,
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
                                                              timelineControllerFactory: TimelineControllerFactoryMock(.init()), userIndicatorController: UserIndicatorControllerMock())
@@ -362,7 +359,6 @@ class MockScreen: Identifiable {
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                              appMediator: AppMediatorMock(.init()),
-                                                             appHooks: AppHooks(),
                                                              analytics: analytics,
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
                                                              timelineControllerFactory: TimelineControllerFactoryMock(.init()), userIndicatorController: UserIndicatorControllerMock())
@@ -387,7 +383,6 @@ class MockScreen: Identifiable {
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                              appMediator: AppMediatorMock(.init()),
-                                                             appHooks: AppHooks(),
                                                              analytics: analytics,
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
                                                              timelineControllerFactory: TimelineControllerFactoryMock(.init()), userIndicatorController: UserIndicatorControllerMock())
@@ -412,7 +407,6 @@ class MockScreen: Identifiable {
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                              appMediator: AppMediatorMock(.init()),
-                                                             appHooks: AppHooks(),
                                                              analytics: analytics,
                                                              composerDraftService: ComposerDraftServiceMock(.init()), timelineControllerFactory: TimelineControllerFactoryMock(.init()), userIndicatorController: UserIndicatorControllerMock())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
@@ -436,7 +430,6 @@ class MockScreen: Identifiable {
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                              appMediator: AppMediatorMock(.init()),
-                                                             appHooks: AppHooks(),
                                                              analytics: analytics,
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
                                                              timelineControllerFactory: TimelineControllerFactoryMock(.init()), userIndicatorController: UserIndicatorControllerMock())
@@ -462,7 +455,6 @@ class MockScreen: Identifiable {
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                              appMediator: AppMediatorMock(.init()),
-                                                             appHooks: AppHooks(),
                                                              analytics: analytics,
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
                                                              timelineControllerFactory: TimelineControllerFactoryMock(.init()), userIndicatorController: UserIndicatorControllerMock())
@@ -487,7 +479,6 @@ class MockScreen: Identifiable {
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                              appMediator: AppMediatorMock(.init()),
-                                                             appHooks: AppHooks(),
                                                              analytics: analytics,
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
                                                              timelineControllerFactory: TimelineControllerFactoryMock(.init()), userIndicatorController: UserIndicatorControllerMock())
@@ -508,7 +499,6 @@ class MockScreen: Identifiable {
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                              appMediator: AppMediatorMock(.init()),
-                                                             appHooks: AppHooks(),
                                                              analytics: analytics,
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
                                                              timelineControllerFactory: TimelineControllerFactoryMock(.init()), userIndicatorController: UserIndicatorControllerMock())
@@ -542,7 +532,6 @@ class MockScreen: Identifiable {
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                              appMediator: AppMediatorMock(.init()),
-                                                             appHooks: AppHooks(),
                                                              analytics: analytics,
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
                                                              timelineControllerFactory: TimelineControllerFactoryMock(.init()), userIndicatorController: UserIndicatorControllerMock())
@@ -563,7 +552,6 @@ class MockScreen: Identifiable {
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                              appMediator: AppMediatorMock(.init()),
-                                                             appHooks: AppHooks(),
                                                              analytics: analytics,
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
                                                              timelineControllerFactory: TimelineControllerFactoryMock(.init()), userIndicatorController: UserIndicatorControllerMock())
@@ -584,7 +572,6 @@ class MockScreen: Identifiable {
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                              appMediator: AppMediatorMock(.init()),
-                                                             appHooks: AppHooks(),
                                                              analytics: analytics,
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
                                                              timelineControllerFactory: TimelineControllerFactoryMock(.init()), userIndicatorController: UserIndicatorControllerMock())
@@ -741,7 +728,6 @@ class MockScreen: Identifiable {
             navigationStackCoordinator.setRootCoordinator(BlankFormCoordinator())
             
             let coordinator = EncryptionSettingsFlowCoordinator(parameters: .init(userSession: userSession,
-                                                                                  appHooks: AppHooks(),
                                                                                   userIndicatorController: UserIndicatorControllerMock(),
                                                                                   navigationStackCoordinator: navigationStackCoordinator))
             retainedState.append(coordinator)

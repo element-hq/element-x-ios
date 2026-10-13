@@ -25,7 +25,6 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
     init(userID: String,
          isPresentedModally: Bool,
          userSession: UserSessionProtocol,
-         appHooks: AppHooks,
          analytics: AnalyticsServiceProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.userSession = userSession
@@ -37,7 +36,7 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
                                                           isPresentedModally: isPresentedModally,
                                                           bindings: .init())
         
-        super.init(initialViewState: appHooks.userProfileScreenHook.update(initialViewState),
+        super.init(initialViewState: userSession.userHooks.userProfileScreenHook.update(initialViewState),
                    mediaProvider: userSession.mediaProvider)
         
         showLoadingIndicator(allowsInteraction: true)

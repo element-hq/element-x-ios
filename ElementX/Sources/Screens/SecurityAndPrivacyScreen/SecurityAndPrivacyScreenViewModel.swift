@@ -25,8 +25,7 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
     
     init(roomProxy: JoinedRoomProxyProtocol,
          userSession: UserSessionProtocol,
-         userIndicatorController: UserIndicatorControllerProtocol,
-         appHooks: AppHooks) {
+         userIndicatorController: UserIndicatorControllerProtocol) {
         self.roomProxy = roomProxy
         clientProxy = userSession.clientProxy
         self.userIndicatorController = userIndicatorController
@@ -39,7 +38,7 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
                                                           isKnockingEnabled: userSettings.app.knockingEnabled,
                                                           historySharingDetailsURL: userSettings.app.historySharingDetailsURL)
         
-        super.init(initialViewState: appHooks.securityAndPrivacyScreenHook.update(viewState, homeserver: clientProxy.homeserver))
+        super.init(initialViewState: userSession.userHooks.securityAndPrivacyScreenHook.update(viewState, homeserver: clientProxy.homeserver))
         
         if let powerLevels = roomProxy.infoPublisher.value.powerLevels {
             setupPermissions(powerLevels: powerLevels)

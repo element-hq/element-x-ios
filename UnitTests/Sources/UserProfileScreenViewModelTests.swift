@@ -22,7 +22,6 @@ struct UserProfileScreenViewModelTests {
         let viewModel = UserProfileScreenViewModel(userID: profile.id,
                                                    isPresentedModally: false,
                                                    userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                                   appHooks: AppHooks(),
                                                    analytics: AnalyticsServiceMock(.init()),
                                                    userIndicatorController: userIndicatorController)
         let context = viewModel.context
@@ -46,7 +45,6 @@ struct UserProfileScreenViewModelTests {
         let viewModel = UserProfileScreenViewModel(userID: profile.id,
                                                    isPresentedModally: false,
                                                    userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                                   appHooks: AppHooks(),
                                                    analytics: AnalyticsServiceMock(.init()),
                                                    userIndicatorController: userIndicatorController)
         let context = viewModel.context
@@ -72,7 +70,6 @@ struct UserProfileScreenViewModelTests {
         let viewModel = UserProfileScreenViewModel(userID: profile.id,
                                                    isPresentedModally: false,
                                                    userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                                   appHooks: AppHooks(),
                                                    analytics: AnalyticsServiceMock(.init()),
                                                    userIndicatorController: userIndicatorController)
         

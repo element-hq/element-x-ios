@@ -210,7 +210,6 @@ struct RoomMemberDetailsViewModelTests {
         viewModel = RoomMemberDetailsScreenViewModel(userID: roomMemberProxyMock.userID,
                                                      roomProxy: roomProxyMock,
                                                      userSession: userSession,
-                                                     appHooks: AppHooks(),
                                                      analytics: AnalyticsServiceMock(.init()),
                                                      userIndicatorController: UserIndicatorControllerMock())
     }

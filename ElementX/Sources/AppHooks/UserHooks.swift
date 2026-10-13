@@ -8,9 +8,27 @@
 import Foundation
 
 nonisolated struct UserHooks: Sendable {
+    let roomScreenHook: RoomScreenHookProtocol
+    let roomDetailsScreenHook: RoomDetailsScreenHookProtocol
+    let roomMemberDetailsScreenHook: RoomMemberDetailsScreenHookProtocol
+    let userProfileScreenHook: UserProfileScreenHookProtocol
+    let recoveryKeyScreenHook: RecoveryKeyScreenHookProtocol
     let createRoomScreenHook: CreateRoomScreenHookProtocol
+    let securityAndPrivacyScreenHook: SecurityAndPrivacyScreenHookProtocol
     
-    init(createRoomScreenHook: CreateRoomScreenHookProtocol = DefaultCreateRoomScreenHook()) {
+    init(roomScreenHook: RoomScreenHookProtocol = DefaultRoomScreenHook(),
+         roomDetailsScreenHook: RoomDetailsScreenHookProtocol = DefaultRoomDetailsScreenHook(),
+         roomMemberDetailsScreenHook: RoomMemberDetailsScreenHookProtocol = DefaultRoomMemberDetailsScreenHook(),
+         userProfileScreenHook: UserProfileScreenHookProtocol = DefaultUserProfileScreenHook(),
+         recoveryKeyScreenHook: RecoveryKeyScreenHookProtocol = DefaultRecoveryKeyScreenHook(),
+         createRoomScreenHook: CreateRoomScreenHookProtocol = DefaultCreateRoomScreenHook(),
+         securityAndPrivacyScreenHook: SecurityAndPrivacyScreenHookProtocol = DefaultSecurityAndPrivacyScreenHook()) {
+        self.roomScreenHook = roomScreenHook
+        self.roomDetailsScreenHook = roomDetailsScreenHook
+        self.roomMemberDetailsScreenHook = roomMemberDetailsScreenHook
+        self.userProfileScreenHook = userProfileScreenHook
+        self.recoveryKeyScreenHook = recoveryKeyScreenHook
         self.createRoomScreenHook = createRoomScreenHook
+        self.securityAndPrivacyScreenHook = securityAndPrivacyScreenHook
     }
 }

@@ -54,7 +54,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
          roomProxy: JoinedRoomProxyProtocol,
          initialSelectedPinnedEventID: String?,
          ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never>,
-         appHooks: AppHooks,
          analyticsService: AnalyticsServiceProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         clientProxy = userSession.clientProxy
@@ -73,7 +72,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                             isDM: roomProxy.infoPublisher.value.isDM,
                                             hasSuccessor: roomProxy.infoPublisher.value.successor != nil,
                                             roomHistorySharingState: roomProxy.infoPublisher.value.historySharingState)
-        super.init(initialViewState: appHooks.roomScreenHook.update(viewState),
+        super.init(initialViewState: userSession.userHooks.roomScreenHook.update(viewState),
                    mediaProvider: userSession.mediaProvider)
         
         updateRoomInfo(roomProxy.infoPublisher.value)
@@ -459,13 +458,11 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
 extension RoomScreenViewModel {
     static func mock(roomProxyMock: JoinedRoomProxyMock,
-                     clientProxyMock: ClientProxyMock = ClientProxyMock(.init()),
-                     appHooks: AppHooks = AppHooks()) -> RoomScreenViewModel {
-        RoomScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxyMock)),
+                     userSession: UserSessionProtocol = UserSessionMock(.init())) -> RoomScreenViewModel {
+        RoomScreenViewModel(userSession: userSession,
                             roomProxy: roomProxyMock,
                             initialSelectedPinnedEventID: nil,
                             ongoingCallRoomIDPublisher: .init(.init(nil)),
-                            appHooks: appHooks,
                             analyticsService: AnalyticsServiceMock(.init()),
                             userIndicatorController: UserIndicatorControllerMock())
     }

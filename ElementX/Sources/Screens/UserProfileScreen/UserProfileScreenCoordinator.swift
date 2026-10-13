@@ -13,7 +13,6 @@ struct UserProfileScreenCoordinatorParameters {
     let userID: String
     let isPresentedModally: Bool
     let userSession: UserSessionProtocol
-    let appHooks: AppHooks
     let analytics: AnalyticsServiceProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
 }
@@ -38,7 +37,6 @@ final class UserProfileScreenCoordinator: CoordinatorProtocol {
         viewModel = UserProfileScreenViewModel(userID: parameters.userID,
                                                isPresentedModally: parameters.isPresentedModally,
                                                userSession: parameters.userSession,
-                                               appHooks: parameters.appHooks,
                                                analytics: parameters.analytics,
                                                userIndicatorController: parameters.userIndicatorController)
     }
