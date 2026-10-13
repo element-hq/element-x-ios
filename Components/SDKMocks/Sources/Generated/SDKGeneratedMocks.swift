@@ -5940,44 +5940,44 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
 
     //MARK: - withSearchIndexStore
 
-    private let withSearchIndexStorePathPasswordCallsCountLock = NSLock()
-    private var withSearchIndexStorePathPasswordUnderlyingCallsCount = 0
-    open var withSearchIndexStorePathPasswordCallsCount: Int {
-        get { withSearchIndexStorePathPasswordCallsCountLock.withLock { withSearchIndexStorePathPasswordUnderlyingCallsCount } }
-        set { withSearchIndexStorePathPasswordCallsCountLock.withLock { withSearchIndexStorePathPasswordUnderlyingCallsCount = newValue } }
+    private let withSearchIndexStorePathKeyCallsCountLock = NSLock()
+    private var withSearchIndexStorePathKeyUnderlyingCallsCount = 0
+    open var withSearchIndexStorePathKeyCallsCount: Int {
+        get { withSearchIndexStorePathKeyCallsCountLock.withLock { withSearchIndexStorePathKeyUnderlyingCallsCount } }
+        set { withSearchIndexStorePathKeyCallsCountLock.withLock { withSearchIndexStorePathKeyUnderlyingCallsCount = newValue } }
     }
-    open var withSearchIndexStorePathPasswordCalled: Bool {
-        return withSearchIndexStorePathPasswordCallsCount > 0
+    open var withSearchIndexStorePathKeyCalled: Bool {
+        return withSearchIndexStorePathKeyCallsCount > 0
     }
-    private let withSearchIndexStorePathPasswordReceivedArgumentsLock = NSLock()
-    private var withSearchIndexStorePathPasswordUnderlyingReceivedArguments: (path: String, password: String?)?
-    open var withSearchIndexStorePathPasswordReceivedArguments: (path: String, password: String?)? {
-        get { withSearchIndexStorePathPasswordReceivedArgumentsLock.withLock { withSearchIndexStorePathPasswordUnderlyingReceivedArguments } }
-        set { withSearchIndexStorePathPasswordReceivedArgumentsLock.withLock { withSearchIndexStorePathPasswordUnderlyingReceivedArguments = newValue } }
+    private let withSearchIndexStorePathKeyReceivedArgumentsLock = NSLock()
+    private var withSearchIndexStorePathKeyUnderlyingReceivedArguments: (path: String, key: String?)?
+    open var withSearchIndexStorePathKeyReceivedArguments: (path: String, key: String?)? {
+        get { withSearchIndexStorePathKeyReceivedArgumentsLock.withLock { withSearchIndexStorePathKeyUnderlyingReceivedArguments } }
+        set { withSearchIndexStorePathKeyReceivedArgumentsLock.withLock { withSearchIndexStorePathKeyUnderlyingReceivedArguments = newValue } }
     }
-    private let withSearchIndexStorePathPasswordReceivedInvocationsLock = NSLock()
-    private var withSearchIndexStorePathPasswordUnderlyingReceivedInvocations: [(path: String, password: String?)] = []
-    open var withSearchIndexStorePathPasswordReceivedInvocations: [(path: String, password: String?)] {
-        get { withSearchIndexStorePathPasswordReceivedInvocationsLock.withLock { withSearchIndexStorePathPasswordUnderlyingReceivedInvocations } }
-        set { withSearchIndexStorePathPasswordReceivedInvocationsLock.withLock { withSearchIndexStorePathPasswordUnderlyingReceivedInvocations = newValue } }
+    private let withSearchIndexStorePathKeyReceivedInvocationsLock = NSLock()
+    private var withSearchIndexStorePathKeyUnderlyingReceivedInvocations: [(path: String, key: String?)] = []
+    open var withSearchIndexStorePathKeyReceivedInvocations: [(path: String, key: String?)] {
+        get { withSearchIndexStorePathKeyReceivedInvocationsLock.withLock { withSearchIndexStorePathKeyUnderlyingReceivedInvocations } }
+        set { withSearchIndexStorePathKeyReceivedInvocationsLock.withLock { withSearchIndexStorePathKeyUnderlyingReceivedInvocations = newValue } }
     }
 
-    private let withSearchIndexStorePathPasswordReturnValueLock = NSLock()
-    open var withSearchIndexStorePathPasswordUnderlyingReturnValue: ClientBuilder!
-    open var withSearchIndexStorePathPasswordReturnValue: ClientBuilder! {
-        get { withSearchIndexStorePathPasswordReturnValueLock.withLock { withSearchIndexStorePathPasswordUnderlyingReturnValue } }
-        set { withSearchIndexStorePathPasswordReturnValueLock.withLock { withSearchIndexStorePathPasswordUnderlyingReturnValue = newValue } }
+    private let withSearchIndexStorePathKeyReturnValueLock = NSLock()
+    open var withSearchIndexStorePathKeyUnderlyingReturnValue: ClientBuilder!
+    open var withSearchIndexStorePathKeyReturnValue: ClientBuilder! {
+        get { withSearchIndexStorePathKeyReturnValueLock.withLock { withSearchIndexStorePathKeyUnderlyingReturnValue } }
+        set { withSearchIndexStorePathKeyReturnValueLock.withLock { withSearchIndexStorePathKeyUnderlyingReturnValue = newValue } }
     }
-    open var withSearchIndexStorePathPasswordClosure: ((String, String?) -> ClientBuilder)?
+    open var withSearchIndexStorePathKeyClosure: ((String, String?) -> ClientBuilder)?
 
-    open override func withSearchIndexStore(path: String, password: String?) -> ClientBuilder {
-        withSearchIndexStorePathPasswordCallsCountLock.withLock { withSearchIndexStorePathPasswordUnderlyingCallsCount += 1 }
-        withSearchIndexStorePathPasswordReceivedArguments = (path: path, password: password)
-        withSearchIndexStorePathPasswordReceivedInvocationsLock.withLock { withSearchIndexStorePathPasswordUnderlyingReceivedInvocations.append((path: path, password: password)) }
-        if let withSearchIndexStorePathPasswordClosure = withSearchIndexStorePathPasswordClosure {
-            return withSearchIndexStorePathPasswordClosure(path, password)
+    open override func withSearchIndexStore(path: String, key: String?) -> ClientBuilder {
+        withSearchIndexStorePathKeyCallsCountLock.withLock { withSearchIndexStorePathKeyUnderlyingCallsCount += 1 }
+        withSearchIndexStorePathKeyReceivedArguments = (path: path, key: key)
+        withSearchIndexStorePathKeyReceivedInvocationsLock.withLock { withSearchIndexStorePathKeyUnderlyingReceivedInvocations.append((path: path, key: key)) }
+        if let withSearchIndexStorePathKeyClosure = withSearchIndexStorePathKeyClosure {
+            return withSearchIndexStorePathKeyClosure(path, key)
         } else {
-            return withSearchIndexStorePathPasswordReturnValue
+            return withSearchIndexStorePathKeyReturnValue
         }
     }
 }

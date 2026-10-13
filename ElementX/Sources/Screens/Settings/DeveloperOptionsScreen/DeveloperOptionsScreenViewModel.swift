@@ -51,6 +51,9 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
                 if let mediaStore = sizes.mediaStore {
                     components.append(.init(name: "MediaStore", size: formatter.format(Int64(mediaStore))))
                 }
+                if let searchIndex = sizes.searchIndex {
+                    components.append(.init(name: "SearchIndex", size: formatter.format(Int64(searchIndex))))
+                }
                 if let logsSize = try? FileManager.default.sizeForDirectory(at: .appGroupLogsDirectory) {
                     components.append(.init(name: "Log Files", size: formatter.format(Int64(logsSize))))
                 }
