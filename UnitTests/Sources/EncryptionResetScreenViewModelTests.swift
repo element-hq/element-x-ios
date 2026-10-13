@@ -59,6 +59,7 @@ struct EncryptionResetScreenViewModelTests {
     
     @Test
     func modeWithConfirmationOptionsIgnoresEncryptedRooms() {
+        // Encrypted rooms only choose between the no options modes, so skip going through every room when there are options.
         var checkedForRooms = false
         let mode = EncryptionResetScreenMode(hasConfirmationOptions: true, hasEncryptedRooms: {
             checkedForRooms = true

@@ -26,6 +26,7 @@ enum EncryptionResetScreenMode {
     /// The user can only reset, and has no encrypted rooms to lose.
     case noOptionsWithoutEncryptedRooms
     
+    /// - Parameter hasEncryptedRooms: Only evaluated when the user has no confirmation options, as it just chooses between the no options modes.
     init(hasConfirmationOptions: Bool, hasEncryptedRooms: @autoclosure () -> Bool) {
         self = if hasConfirmationOptions {
             .hasConfirmationOptions
