@@ -37,7 +37,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private var backgroundRefreshSyncObserver: AnyCancellable?
     
     private var userSessionMigrationsOldVersion: Version?
-    private var otherSessionsRestorationTask: Task<Void, Never>?
+    /// The accounts migrated since launch, so restoring one again (e.g. after clearing the cache) never migrates it twice.
+    private var migratedUserIDs: Set<String> = []
+    /// Restores the signed in accounts. Cancelled when signing out or clearing the cache.
+    private var restorationTask: Task<Void, Never>?
     private var userSession: UserSessionProtocol? {
         userSessionManager.activeSession
     }
@@ -370,6 +373,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     // MARK: - AuthenticationFlowCoordinatorDelegate
     
     func authenticationFlowCoordinator(didLoginWithSession userSession: UserSessionProtocol) {
+        // A new login has nothing to migrate.
+        migratedUserIDs.insert(userSession.clientProxy.userID)
         userSessionManager.add(userSession)
         configureActiveSession()
         authenticationFlowCoordinator = nil
@@ -490,8 +495,11 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     }
     
     // swiftlint:disable:next cyclomatic_complexity
-    private func performUserSessionMigrations(_ userSession: UserSessionProtocol, from oldVersion: Version?) async {
-        guard let oldVersion else { return }
+    private func performUserSessionMigrations(_ userSession: UserSessionProtocol) async {
+        guard let oldVersion = userSessionMigrationsOldVersion,
+              migratedUserIDs.insert(userSession.clientProxy.userID).inserted else {
+            return
+        }
         
         MXLog.info("Migrating user session from \(oldVersion)")
         
@@ -660,8 +668,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 startAuthentication()
             case (.signedOut, .createdUserSession, .signedIn):
                 setupUserSession(isNewLogin: true)
+                restoreUserSessions()
             case (.initial, .startWithExistingSession, .restoringSession):
-                restoreUserSession()
+                restoreUserSessions()
             case (.restoringSession, .failedRestoringSession, .signedOut):
                 showLoginErrorToast()
                 presentSplashScreen()
@@ -669,6 +678,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 setupUserSession(isNewLogin: false)
             case (.softLogout, .createdUserSession, .signedIn):
                 setupUserSession(isNewLogin: false)
+                restoreUserSessions()
                 
             case (.signingOut, .signOut, .signingOut):
                 // We can ignore signOut when already in the process of signing out,
@@ -696,34 +706,31 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
     }
     
-    private func restoreUserSession() {
-        Task {
-            switch await userSessionManager.restoreActiveSession() {
-            case .success(let userSession):
-                // Taken once, so restoring again (e.g. after clearing the cache) never migrates twice.
-                let migrationsOldVersion = userSessionMigrationsOldVersion
-                userSessionMigrationsOldVersion = nil
-                
-                await self.performUserSessionMigrations(userSession, from: migrationsOldVersion)
-                userSessionManager.add(userSession)
-                configureActiveSession()
-                stateMachine.processEvent(.createdUserSession)
-                
-                otherSessionsRestorationTask = Task { await self.restoreOtherSessions(migratingFrom: migrationsOldVersion) }
-            case .failure:
+    private func restoreUserSessions() {
+        let previousRestorationTask = restorationTask
+        restorationTask = Task {
+            // A cancelled restoration may still be building a client, which mustn't share a store with a new one.
+            await previousRestorationTask?.value
+            
+            await userSessionManager.restoreSessions { [weak self] userSession in
+                await self?.performUserSessionMigrations(userSession)
+            } didAdd: { [weak self] _ in
+                self?.showActiveSessionIfRestoring()
+            }
+            
+            if !Task.isCancelled, stateMachine.state == .restoringSession {
                 MXLog.error("Failed to restore an existing session.")
                 stateMachine.processEvent(.failedRestoringSession)
             }
         }
     }
     
-    /// Brings the other signed in accounts live too, one after the other, so they sync.
-    private func restoreOtherSessions(migratingFrom oldVersion: Version?) async {
-        guard appSettings.multiAccountEnabled else { return }
+    /// Shows the active session as soon as it's live, while the app is waiting for one.
+    private func showActiveSessionIfRestoring() {
+        guard stateMachine.state == .restoringSession, userSession != nil else { return }
         
-        await userSessionManager.restoreOtherSessions { [weak self] userSession in
-            await self?.performUserSessionMigrations(userSession, from: oldVersion)
-        }
+        configureActiveSession()
+        stateMachine.processEvent(.createdUserSession)
     }
     
     private func startAuthentication() {
@@ -806,6 +813,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                     
                     switch action {
                     case .signedIn(let session):
+                        self.migratedUserIDs.insert(session.clientProxy.userID)
                         self.userSessionManager.add(session)
                         self.configureActiveSession()
                         self.softLogoutCoordinator = nil
@@ -882,7 +890,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             fatalError("User session not setup")
         }
         
-        otherSessionsRestorationTask?.cancel()
+        restorationTask?.cancel()
         windowManager.closeAllSecondaryWindows()
         
         showLoadingIndicator()
@@ -960,10 +968,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             fatalError("User session not setup")
         }
         
-        // TODO: Notifications only follow the active account, the NotificationManager must change to handle every account.
-        configureNotificationManager(for: userSession)
         // TODO: Calls only follow the active account, ElementCallService must change to hold every account's session.
         elementCallService.setUserSession(userSession)
+        // TODO: Notifications only follow the active account, the NotificationManager must change to handle every account.
+        configureNotificationManager(for: userSession)
         Task {
             await resumeClientServices()
             await appHooks.configure(with: userSession)
@@ -1019,11 +1027,11 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     }
     
     private func clearCache() {
-        guard let userSession else {
+        guard userSession != nil else {
             fatalError("User session not setup")
         }
         
-        otherSessionsRestorationTask?.cancel()
+        restorationTask?.cancel()
         showLoadingIndicator()
         
         navigationRootCoordinator.setRootCoordinator(PlaceholderScreenCoordinator(hideBrandChrome: appSettings.hideBrandChrome))
@@ -1033,7 +1041,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         // Allow for everything to deallocate properly
         Task {
-            await userSession.clientProxy.clearCaches()
+            await userSessionManager.clearCaches()
             stateMachine.processEvent(.startWithExistingSession)
             hideLoadingIndicator()
         }

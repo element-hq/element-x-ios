@@ -21,6 +21,8 @@ final class UserSessionManager: UserSessionManagerProtocol {
     private let sessionsSubject = CurrentValueSubject<[UserSessionProtocol], Never>([])
     /// Whether the services are running, so that the sessions restored meanwhile are resumed too.
     private var areServicesRunning = false
+    /// Accounts whose caches were cleared. Their old session stays live until restoring replaces it.
+    private var clearedUserIDs: Set<String> = []
     
     /// Every signed in account, most recently selected first, with its session once it's live.
     /// Assigning `nil` removes an account rather than clearing its session.
@@ -61,6 +63,11 @@ final class UserSessionManager: UserSessionManagerProtocol {
         userSessionStore.clientSessionDelegate
     }
     
+    /// Whether an account has a session that's live and up to date (its caches weren't cleared).
+    private var hasLiveSession: Bool {
+        accounts.contains { userID, userSession in userSession != nil && !clearedUserIDs.contains(userID) }
+    }
+    
     init(userSessionStore: UserSessionStoreProtocol, appSettings: AppSettings) {
         self.userSessionStore = userSessionStore
         self.appSettings = appSettings
@@ -85,33 +92,37 @@ final class UserSessionManager: UserSessionManagerProtocol {
     
     // MARK: - Lifecycle
     
-    func restoreActiveSession() async -> Result<UserSessionProtocol, UserSessionManagerError> {
-        guard !accounts.isEmpty else {
-            return .failure(.noAccounts)
-        }
-        
-        while let userID = accounts.keys.first {
-            if let userSession = await restoreUserSession(userID: userID) {
-                return .success(userSession)
-            }
-        }
-        
-        return .failure(.failedRestoringSessions)
-    }
-    
-    func restoreOtherSessions(prepare: @MainActor (UserSessionProtocol) async -> Void) async {
-        for userID in accounts.keys where session(for: userID) == nil {
-            // Clearing the cache or signing out cancels this and restores from scratch.
-            guard !Task.isCancelled, let userSession = await restoreUserSession(userID: userID) else { continue }
+    func restoreSessions(prepare: @MainActor (UserSessionProtocol) async -> Void, didAdd: @MainActor (UserSessionProtocol) -> Void) async {
+        for userID in accounts.keys where session(for: userID) == nil || clearedUserIDs.contains(userID) {
+            // Every live session syncs, so without multi-account only one account is ever made live.
+            guard appSettings.multiAccountEnabled || !hasLiveSession else { return }
+            // Signing out or clearing the cache cancels this, after which nothing may go live.
+            guard !Task.isCancelled else { return }
+            guard let userSession = await restoreUserSession(userID: userID) else { continue }
+            guard !Task.isCancelled else { return }
             
             await prepare(userSession)
             guard !Task.isCancelled else { return }
             
             add(userSession)
+            didAdd(userSession)
             
             if areServicesRunning {
                 await userSession.clientProxy.resumeServices()
             }
+            
+            // Lets the work queued for this session (e.g. its first sync) start before the next account's restore.
+            await Task.yield()
+        }
+    }
+    
+    func clearCaches() async {
+        let userSessions = sessionsSubject.value
+        // Marked before clearing, so a restore that starts meanwhile replaces the sessions.
+        clearedUserIDs.formUnion(userSessions.map(\.clientProxy.userID))
+        
+        for userSession in userSessions {
+            await userSession.clientProxy.clearCaches()
         }
     }
     
@@ -121,6 +132,7 @@ final class UserSessionManager: UserSessionManagerProtocol {
     
     func add(_ userSession: UserSessionProtocol) {
         let userID = userSession.clientProxy.userID
+        clearedUserIDs.remove(userID)
         
         if accounts.keys.contains(userID) {
             accounts[userID] = userSession
@@ -137,11 +149,13 @@ final class UserSessionManager: UserSessionManagerProtocol {
         }
         
         userSessionStore.logout(userSession: userSession)
+        clearedUserIDs.remove(userID)
         accounts.removeValue(forKey: userID)
     }
     
     func reset() {
         userSessionStore.reset()
+        clearedUserIDs.removeAll()
         accounts.removeAll()
     }
     
@@ -188,6 +202,7 @@ final class UserSessionManager: UserSessionManagerProtocol {
             return userSession
         case .failure(let error):
             MXLog.error("Failed restoring \(userID): \(error)")
+            clearedUserIDs.remove(userID)
             accounts.removeValue(forKey: userID)
             return nil
         }

@@ -14881,50 +14881,39 @@ nonisolated class UserSessionManagerMock: UserSessionManagerProtocol, @unchecked
             return sessionForReturnValue
         }
     }
-    //MARK: - restoreActiveSession
+    //MARK: - restoreSessions
 
-    private let restoreActiveSessionCallsCountLock = NSLock()
-    private nonisolated(unsafe) var restoreActiveSessionUnderlyingCallsCount = 0
-    var restoreActiveSessionCallsCount: Int {
-        get { restoreActiveSessionCallsCountLock.withLock { restoreActiveSessionUnderlyingCallsCount } }
-        set { restoreActiveSessionCallsCountLock.withLock { restoreActiveSessionUnderlyingCallsCount = newValue } }
+    private let restoreSessionsPrepareDidAddCallsCountLock = NSLock()
+    private nonisolated(unsafe) var restoreSessionsPrepareDidAddUnderlyingCallsCount = 0
+    var restoreSessionsPrepareDidAddCallsCount: Int {
+        get { restoreSessionsPrepareDidAddCallsCountLock.withLock { restoreSessionsPrepareDidAddUnderlyingCallsCount } }
+        set { restoreSessionsPrepareDidAddCallsCountLock.withLock { restoreSessionsPrepareDidAddUnderlyingCallsCount = newValue } }
     }
-    var restoreActiveSessionCalled: Bool {
-        return restoreActiveSessionCallsCount > 0
+    var restoreSessionsPrepareDidAddCalled: Bool {
+        return restoreSessionsPrepareDidAddCallsCount > 0
     }
+    nonisolated(unsafe) var restoreSessionsPrepareDidAddClosure: ((@MainActor (UserSessionProtocol) async -> Void, @MainActor (UserSessionProtocol) -> Void) async -> Void)?
 
-    private let restoreActiveSessionReturnValueLock = NSLock()
-    private nonisolated(unsafe) var restoreActiveSessionUnderlyingReturnValue: Result<UserSessionProtocol, UserSessionManagerError>!
-    var restoreActiveSessionReturnValue: Result<UserSessionProtocol, UserSessionManagerError>! {
-        get { restoreActiveSessionReturnValueLock.withLock { restoreActiveSessionUnderlyingReturnValue } }
-        set { restoreActiveSessionReturnValueLock.withLock { restoreActiveSessionUnderlyingReturnValue = newValue } }
+    @concurrent func restoreSessions(prepare: @MainActor (UserSessionProtocol) async -> Void, didAdd: @MainActor (UserSessionProtocol) -> Void) async {
+        restoreSessionsPrepareDidAddCallsCountLock.withLock { restoreSessionsPrepareDidAddUnderlyingCallsCount += 1 }
+        await restoreSessionsPrepareDidAddClosure?(prepare, didAdd)
     }
-    nonisolated(unsafe) var restoreActiveSessionClosure: (() async -> Result<UserSessionProtocol, UserSessionManagerError>)?
+    //MARK: - clearCaches
 
-    @concurrent func restoreActiveSession() async -> Result<UserSessionProtocol, UserSessionManagerError> {
-        restoreActiveSessionCallsCountLock.withLock { restoreActiveSessionUnderlyingCallsCount += 1 }
-        if let restoreActiveSessionClosure = restoreActiveSessionClosure {
-            return await restoreActiveSessionClosure()
-        } else {
-            return restoreActiveSessionReturnValue
-        }
+    private let clearCachesCallsCountLock = NSLock()
+    private nonisolated(unsafe) var clearCachesUnderlyingCallsCount = 0
+    var clearCachesCallsCount: Int {
+        get { clearCachesCallsCountLock.withLock { clearCachesUnderlyingCallsCount } }
+        set { clearCachesCallsCountLock.withLock { clearCachesUnderlyingCallsCount = newValue } }
     }
-    //MARK: - restoreOtherSessions
+    var clearCachesCalled: Bool {
+        return clearCachesCallsCount > 0
+    }
+    nonisolated(unsafe) var clearCachesClosure: (() async -> Void)?
 
-    private let restoreOtherSessionsPrepareCallsCountLock = NSLock()
-    private nonisolated(unsafe) var restoreOtherSessionsPrepareUnderlyingCallsCount = 0
-    var restoreOtherSessionsPrepareCallsCount: Int {
-        get { restoreOtherSessionsPrepareCallsCountLock.withLock { restoreOtherSessionsPrepareUnderlyingCallsCount } }
-        set { restoreOtherSessionsPrepareCallsCountLock.withLock { restoreOtherSessionsPrepareUnderlyingCallsCount = newValue } }
-    }
-    var restoreOtherSessionsPrepareCalled: Bool {
-        return restoreOtherSessionsPrepareCallsCount > 0
-    }
-    nonisolated(unsafe) var restoreOtherSessionsPrepareClosure: ((@MainActor (UserSessionProtocol) async -> Void) async -> Void)?
-
-    @concurrent func restoreOtherSessions(prepare: @MainActor (UserSessionProtocol) async -> Void) async {
-        restoreOtherSessionsPrepareCallsCountLock.withLock { restoreOtherSessionsPrepareUnderlyingCallsCount += 1 }
-        await restoreOtherSessionsPrepareClosure?(prepare)
+    @concurrent func clearCaches() async {
+        clearCachesCallsCountLock.withLock { clearCachesUnderlyingCallsCount += 1 }
+        await clearCachesClosure?()
     }
     //MARK: - userSession
 

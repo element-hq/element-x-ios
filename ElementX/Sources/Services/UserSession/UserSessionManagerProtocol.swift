@@ -9,13 +9,6 @@ import Combine
 import Foundation
 import MatrixRustSDK
 
-enum UserSessionManagerError: Error {
-    /// There are no signed in accounts to restore.
-    case noAccounts
-    /// None of the signed in accounts could be restored, so they have all been removed.
-    case failedRestoringSessions
-}
-
 enum UserSessionManagerCallback: Equatable {
     case didReceiveAuthError(userID: String, isSoftLogout: Bool)
 }
@@ -37,13 +30,12 @@ protocol UserSessionManagerProtocol: AnyObject {
     
     // MARK: - Lifecycle
     
-    /// Restores the most recently active account, falling back to the next one when it fails (the store deletes failed accounts).
-    ///
-    /// The session isn't registered: `add` it once it's ready to be used, e.g. after any migrations.
-    func restoreActiveSession() async -> Result<UserSessionProtocol, UserSessionManagerError>
-    /// Restores every account that isn't live yet, one after the other. Each session is `prepare`d before it's added,
-    /// and resumed when the services are running.
-    func restoreOtherSessions(prepare: @MainActor (UserSessionProtocol) async -> Void) async
+    /// Restores every account that isn't live, or whose caches were cleared, most recently selected first and one after the other.
+    /// Each session is `prepare`d (e.g. migrated), added, passed to `didAdd`, then resumed if the services are running.
+    /// An account that fails is removed (the store deletes its data). Without `multiAccountEnabled` only one account is ever live.
+    func restoreSessions(prepare: @MainActor (UserSessionProtocol) async -> Void, didAdd: @MainActor (UserSessionProtocol) -> Void) async
+    /// Clears the caches of every live account. Their sessions stay live until `restoreSessions` replaces them.
+    func clearCaches() async
     /// Creates the session of an account that has just signed in, and stores its credentials.
     ///
     /// The session isn't registered: `add` it once it's ready to be used.
