@@ -99,7 +99,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         spacesTabDetails = .init(tag: HomeTab.spaces, title: L10n.screenHomeTabSpaces, icon: \.space, selectedIcon: \.spaceSolid)
         spacesTabDetails.navigationSplitCoordinator = spacesSplitCoordinator
         
-        if flowParameters.userSession.userSettings.app.globalSearchEnabled, #available(iOS 26.0, *) {
+        if flowParameters.userSession.userSettings.app.globalSearchEnabled {
             let searchCoordinator = SearchScreenCoordinator(parameters: .init(roomSummaryProvider: flowParameters.userSession.clientProxy.alternateRoomSummaryProvider,
                                                                               userSession: flowParameters.userSession,
                                                                               userIndicatorController: flowParameters.userIndicatorController))
@@ -171,7 +171,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 navigationTabCoordinator.selectedTab = .chats
             }
         case .search:
-            // Switch to the dedicated search tab when it's available (iOS 26 + flag), otherwise ignore.
+            // Switch to the dedicated search tab when it's available (flag enabled), otherwise ignore.
             if searchTabNavigationStackCoordinator != nil {
                 navigationTabCoordinator.selectedTab = .search
             }

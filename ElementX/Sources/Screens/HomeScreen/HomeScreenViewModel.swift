@@ -54,7 +54,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                                            bindings: .init(filtersState: .init(userSettings: userSession.userSettings))),
                    mediaProvider: userSession.mediaProvider)
         
-        if userSettings.app.globalSearchEnabled, #available(iOS 26.0, *) {
+        if userSettings.app.globalSearchEnabled {
             state.isRoomListSearchEnabled = false
         }
         

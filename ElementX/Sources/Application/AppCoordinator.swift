@@ -1421,7 +1421,7 @@ private extension AppCoordinator {
     }
     
     func scheduleSearchBackfill() {
-        guard let userSession, userSession.userSettings.app.globalSearchEnabled, #available(iOS 26.0, *) else {
+        guard let userSession, userSession.userSettings.app.globalSearchEnabled else {
             return
         }
         
