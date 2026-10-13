@@ -30,7 +30,7 @@ nonisolated struct ClientFactory: ClientFactoryProtocol {
             .sqliteStore(config: .init(dataPath: sessionDirectories.dataPath, cachePath: sessionDirectories.cachePath)
                 .highEntropyPassphrase(passphrase: passphrase, base64Variant: .padded))
             .withSearchIndexStore(path: sessionDirectories.dataPath,
-                                  password: passphrase.base64EncodedString())
+                                  key: passphrase.base64EncodedString())
             .serverNameOrHomeserverUrl(serverNameOrUrl: serverNameOrBaseURL)
         
         return try await build(builder, for: .authentication, appHooks: appHooks)
@@ -71,7 +71,7 @@ nonisolated struct ClientFactory: ClientFactoryProtocol {
                                        cachePath: credentials.restorationToken.sessionDirectories.cachePath)
                     .highEntropyPassphrase(passphrase: credentials.restorationToken.passphrase, base64Variant: .padded))
             .withSearchIndexStore(path: credentials.restorationToken.sessionDirectories.dataPath,
-                                  password: credentials.restorationToken.passphrase.base64EncodedString())
+                                  key: credentials.restorationToken.passphrase.base64EncodedString())
             .homeserverUrl(url: homeserverURL)
         
         return try await build(builder, for: .restoration(credentials.restorationToken.session, .all), appHooks: appHooks)
