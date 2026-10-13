@@ -51,6 +51,7 @@ class ShareExtensionViewController: UIViewController {
         if let credentials = keychainController.restorationTokens().first {
             let homeserverURL = credentials.restorationToken.session.homeserverUrl
             appHooks.remoteSettingsHook.loadCache(forHomeserver: homeserverURL, applyingTo: appSettings)
+            _ = appHooks.userSessionHook.configure(appSettings.userSettings(for: credentials.userID), forHomeserver: homeserverURL)
         } else {
             // We should really show a different state when there isn't a logged in user, but for now this is fine.
             MXLog.error("Not logged in, launching app to show the authentication flow.")

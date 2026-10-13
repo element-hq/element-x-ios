@@ -60,7 +60,8 @@ final nonisolated class NSEUserSession: NSEUserSessionProtocol {
          appSettings: AppSettings,
          appHooks: AppHooks) async throws {
         userID = credentials.userID
-        userSettings = appSettings.userSettings(for: credentials.userID)
+        userSettings = appHooks.userSessionHook.configure(appSettings.userSettings(for: credentials.userID),
+                                                          forHomeserver: credentials.restorationToken.session.homeserverUrl)
         
         baseClient = try await clientFactory.makeNSEClient(credentials: credentials,
                                                            roomID: roomID,

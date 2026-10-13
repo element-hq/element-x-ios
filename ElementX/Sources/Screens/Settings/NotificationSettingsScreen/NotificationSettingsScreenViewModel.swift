@@ -42,7 +42,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
                                                                    showAllRoomListActivity: userSettings.account.showAllRoomListActivity)
         super.init(initialViewState: NotificationSettingsScreenViewState(bindings: bindings,
                                                                          isModallyPresented: isModallyPresented,
-                                                                         selectedAlertTone: userSettings.account.selectedNotificationTone ?? NotificationToneManager.defaultElementXMessageTone,
+                                                                         selectedAlertTone: userSettings.account.selectedNotificationTone ?? userSettings.account.defaultNotificationTone.publisher.value,
                                                                          availableCustomTones: notificationToneManager.customTones(),
                                                                          // macos lacks default sounds and its sandbox Sounds directory is immutable
                                                                          customToneSelectionEnabled: !ProcessInfo.processInfo.isiOSAppOnMac))
@@ -53,7 +53,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
             .store(in: &cancellables)
         
         userSettings.account.selectedNotificationTonePublisher
-            .map { $0 ?? NotificationToneManager.defaultElementXMessageTone }
+            .map { $0 ?? userSettings.account.defaultNotificationTone.publisher.value }
             .weakAssign(to: \.state.selectedAlertTone, on: self)
             .store(in: &cancellables)
         

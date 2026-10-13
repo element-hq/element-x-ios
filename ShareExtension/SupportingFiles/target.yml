@@ -89,9 +89,11 @@ targets:
     - path: ../../ElementX/Sources/AppHooks/Hooks/TracingHook.swift
     - path: ../../ElementX/Sources/AppHooks/Hooks/ClientFactoryHook.swift
     - path: ../../ElementX/Sources/AppHooks/Hooks/RemoteSettingsHook.swift
+    - path: ../../ElementX/Sources/AppHooks/Hooks/UserSessionHook.swift
     - path: ../../Components/Secrets/Secrets.swift
     - path: ../../ElementX/Sources/Application/Settings
     - path: ../../ElementX/Sources/Application/TargetConfiguration.swift
+    - path: ../../ElementX/Sources/Generated/Strings.swift
     - path: ../../ElementX/Sources/Services/AlertTones/NotificationTone.swift
     - path: ../../ElementX/Sources/Services/Keychain/KeychainController.swift
     - path: ../../ElementX/Sources/Services/Keychain/KeychainControllerProtocol.swift

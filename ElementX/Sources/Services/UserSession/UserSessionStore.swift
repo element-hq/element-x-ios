@@ -57,7 +57,8 @@ class UserSessionStore: UserSessionStoreProtocol {
             return .failure(.unknownAccount)
         }
         
-        let userSettings = appSettings.userSettings(for: credentials.userID)
+        let userSettings = appHooks.userSessionHook.configure(appSettings.userSettings(for: credentials.userID),
+                                                              forHomeserver: credentials.restorationToken.session.homeserverUrl)
         
         switch await restorePreviousLogin(credentials, userSettings: userSettings) {
         case .success(let clientProxy):
@@ -81,7 +82,7 @@ class UserSessionStore: UserSessionStoreProtocol {
         do {
             let session = try client.session()
             let userID = try client.userId()
-            let userSettings = appSettings.userSettings(for: userID)
+            let userSettings = appHooks.userSessionHook.configure(appSettings.userSettings(for: userID), forHomeserver: client.homeserver())
             let clientProxy = try await setupProxyForClient(client, userSettings: userSettings)
             
             keychainController.setRestorationToken(RestorationToken(session: session,

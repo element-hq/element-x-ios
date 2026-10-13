@@ -32,7 +32,10 @@ final nonisolated class AccountSettings: @unchecked Sendable {
     @UserPreference(defaultValue: true)
     var showAllRoomListActivity: Bool
     
-    /// The sound played when delivering noisy notifications. If nil, use the Element X default
+    /// The tone played when the user hasn't selected one, which the homeserver can configure remotely.
+    let defaultNotificationTone: RemotePreference<NotificationTone> = .init(.default)
+    
+    /// The sound played when delivering noisy notifications. If nil, use ``defaultNotificationTone``.
     @UserPreference
     var selectedNotificationTone: NotificationTone?
     

@@ -8,9 +8,19 @@
 import MatrixRustSDK
 
 nonisolated protocol UserSessionHookProtocol: Sendable {
+    #if IS_MAIN_APP
     func configure(with userSession: UserSessionProtocol?) async
+    #endif
+    
+    func configure(_ userSettings: UserSettings, forHomeserver homeserver: String) -> UserSettings
 }
 
 nonisolated struct DefaultUserSessionHook: UserSessionHookProtocol {
+    #if IS_MAIN_APP
     func configure(with userSession: UserSessionProtocol?) async { }
+    #endif
+    
+    func configure(_ userSettings: UserSettings, forHomeserver homeserver: String) -> UserSettings {
+        userSettings
+    }
 }
