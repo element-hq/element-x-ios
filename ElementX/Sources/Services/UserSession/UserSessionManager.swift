@@ -19,6 +19,10 @@ final class UserSessionManager: UserSessionManagerProtocol {
     private let appSettings: AppSettings
     
     private let sessionsSubject = CurrentValueSubject<[UserSessionProtocol], Never>([])
+    /// Whether the services are running, so that the sessions restored meanwhile are resumed too.
+    private var areServicesRunning = false
+    /// Accounts whose caches were cleared. Their old session stays live until restoring replaces it.
+    private var clearedUserIDs: Set<String> = []
     
     /// Every signed in account, most recently selected first, with its session once it's live.
     /// Assigning `nil` removes an account rather than clearing its session.
@@ -38,8 +42,30 @@ final class UserSessionManager: UserSessionManagerProtocol {
         accounts.values.first ?? nil
     }
     
+    var callbacksPublisher: AnyPublisher<UserSessionManagerCallback, Never> {
+        sessionsSubject
+            .map { userSessions in
+                Publishers.MergeMany(userSessions.map { userSession in
+                    let userID = userSession.clientProxy.userID
+                    return userSession.callbacks.map { callback in
+                        switch callback {
+                        case .didReceiveAuthError(let isSoftLogout):
+                            UserSessionManagerCallback.didReceiveAuthError(userID: userID, isSoftLogout: isSoftLogout)
+                        }
+                    }
+                })
+            }
+            .switchToLatest()
+            .eraseToAnyPublisher()
+    }
+    
     var clientSessionDelegate: ClientSessionDelegate {
         userSessionStore.clientSessionDelegate
+    }
+    
+    /// Whether an account has a session that's live and up to date (its caches weren't cleared).
+    private var hasLiveSession: Bool {
+        accounts.contains { userID, userSession in userSession != nil && !clearedUserIDs.contains(userID) }
     }
     
     init(userSessionStore: UserSessionStoreProtocol, appSettings: AppSettings) {
@@ -66,22 +92,36 @@ final class UserSessionManager: UserSessionManagerProtocol {
     
     // MARK: - Lifecycle
     
-    func restoreActiveSession() async -> Result<UserSessionProtocol, UserSessionManagerError> {
-        guard !accounts.isEmpty else {
-            return .failure(.noAccounts)
-        }
-        
-        while let userID = accounts.keys.first {
-            switch await userSessionStore.restoreUserSession(userID: userID) {
-            case .success(let userSession):
-                return .success(userSession)
-            case .failure(let error):
-                MXLog.error("Failed restoring \(userID), falling back to the next account: \(error)")
-                accounts.removeValue(forKey: userID)
+    func restoreSessions(prepare: @MainActor (UserSessionProtocol) async -> Void, didAdd: @MainActor (UserSessionProtocol) -> Void) async {
+        for userID in accounts.keys where session(for: userID) == nil || clearedUserIDs.contains(userID) {
+            // Every live session syncs, so without multi-account only one account is ever made live.
+            guard appSettings.multiAccountEnabled || !hasLiveSession else { return }
+            // Signing out or clearing the cache cancels this, after which nothing may go live.
+            guard !Task.isCancelled else { return }
+            guard let userSession = await restoreUserSession(userID: userID) else { continue }
+            guard !Task.isCancelled else { return }
+            
+            await prepare(userSession)
+            guard !Task.isCancelled else { return }
+            
+            add(userSession)
+            didAdd(userSession)
+            
+            if areServicesRunning {
+                await userSession.clientProxy.resumeServices()
             }
+            
+            // Lets the work queued for this session (e.g. its first sync) start before the next account's restore.
+            await Task.yield()
         }
+    }
+    
+    func clearCaches(userID: String) async {
+        guard let userSession = session(for: userID) else { return }
         
-        return .failure(.failedRestoringSessions)
+        // Marked before clearing, so a restore that starts meanwhile replaces the session.
+        clearedUserIDs.insert(userID)
+        await userSession.clientProxy.clearCaches()
     }
     
     func userSession(for client: ClientProtocol, sessionDirectories: SessionDirectories, passphrase: Data) async -> Result<UserSessionProtocol, UserSessionStoreError> {
@@ -90,6 +130,7 @@ final class UserSessionManager: UserSessionManagerProtocol {
     
     func add(_ userSession: UserSessionProtocol) {
         let userID = userSession.clientProxy.userID
+        clearedUserIDs.remove(userID)
         
         if accounts.keys.contains(userID) {
             accounts[userID] = userSession
@@ -106,11 +147,62 @@ final class UserSessionManager: UserSessionManagerProtocol {
         }
         
         userSessionStore.logout(userSession: userSession)
+        clearedUserIDs.remove(userID)
         accounts.removeValue(forKey: userID)
     }
     
     func reset() {
         userSessionStore.reset()
+        clearedUserIDs.removeAll()
         accounts.removeAll()
+    }
+    
+    // MARK: - Services
+    
+    var isSearchBackfillRunning: Bool {
+        sessionsSubject.value.contains { $0.clientProxy.isSearchBackfillRunning }
+    }
+    
+    func resumeServices() async {
+        areServicesRunning = true
+        for userSession in sessionsSubject.value {
+            await userSession.clientProxy.resumeServices()
+        }
+    }
+    
+    func pauseServices() async {
+        areServicesRunning = false
+        for userSession in sessionsSubject.value {
+            await userSession.clientProxy.pauseServices()
+        }
+    }
+    
+    func configurePresence(_ presence: ClientProxyPresence, sendImmediately: Bool) async {
+        for userSession in sessionsSubject.value {
+            _ = await userSession.clientProxy.configurePresence(presence, sendImmediately: sendImmediately)
+        }
+    }
+    
+    func startSearchBackfill(strategy: SearchBackfillStrategy) {
+        sessionsSubject.value.forEach { $0.clientProxy.startSearchBackfill(strategy: strategy) }
+    }
+    
+    func stopSearchBackfill() {
+        sessionsSubject.value.forEach { $0.clientProxy.stopSearchBackfill() }
+    }
+    
+    // MARK: - Private
+    
+    /// Restores an account's session, removing the account when that fails (the store deletes its data).
+    private func restoreUserSession(userID: String) async -> UserSessionProtocol? {
+        switch await userSessionStore.restoreUserSession(userID: userID) {
+        case .success(let userSession):
+            return userSession
+        case .failure(let error):
+            MXLog.error("Failed restoring \(userID): \(error)")
+            clearedUserIDs.remove(userID)
+            accounts.removeValue(forKey: userID)
+            return nil
+        }
     }
 }

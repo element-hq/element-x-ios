@@ -9,11 +9,8 @@ import Combine
 import Foundation
 import MatrixRustSDK
 
-enum UserSessionManagerError: Error {
-    /// There are no signed in accounts to restore.
-    case noAccounts
-    /// None of the signed in accounts could be restored, so they have all been removed.
-    case failedRestoringSessions
+enum UserSessionManagerCallback: Equatable {
+    case didReceiveAuthError(userID: String, isSoftLogout: Bool)
 }
 
 // sourcery: AutoMockable
@@ -24,6 +21,8 @@ protocol UserSessionManagerProtocol: AnyObject {
     var sessionsPublisher: CurrentValuePublisher<[UserSessionProtocol], Never> { get }
     /// The session of the account whose UI is on screen.
     var activeSession: UserSessionProtocol? { get }
+    /// The auth errors of every live session, with the account they belong to.
+    var callbacksPublisher: AnyPublisher<UserSessionManagerCallback, Never> { get }
     /// The delegate that stores changes to a client's session, such as refreshed tokens.
     var clientSessionDelegate: ClientSessionDelegate { get }
     
@@ -31,10 +30,12 @@ protocol UserSessionManagerProtocol: AnyObject {
     
     // MARK: - Lifecycle
     
-    /// Restores the most recently active account, falling back to the next one when it fails (the store deletes failed accounts).
-    ///
-    /// The session isn't registered: `add` it once it's ready to be used, e.g. after any migrations.
-    func restoreActiveSession() async -> Result<UserSessionProtocol, UserSessionManagerError>
+    /// Restores every account that isn't live, or whose caches were cleared, most recently selected first and one after the other.
+    /// Each session is `prepare`d (e.g. migrated), added, passed to `didAdd`, then resumed if the services are running.
+    /// An account that fails is removed (the store deletes its data). Without `multiAccountEnabled` only one account is ever live.
+    func restoreSessions(prepare: @MainActor (UserSessionProtocol) async -> Void, didAdd: @MainActor (UserSessionProtocol) -> Void) async
+    /// Clears an account's caches. Its session stays live until `restoreSessions` replaces it.
+    func clearCaches(userID: String) async
     /// Creates the session of an account that has just signed in, and stores its credentials.
     ///
     /// The session isn't registered: `add` it once it's ready to be used.
@@ -46,4 +47,17 @@ protocol UserSessionManagerProtocol: AnyObject {
     func remove(userID: String)
     /// Deletes every account's credentials and data.
     func reset()
+    
+    // MARK: - Services
+    
+    /// Whether any live session is still running a search backfill.
+    var isSearchBackfillRunning: Bool { get }
+    
+    /// Resumes every live session's services, and those of the sessions restored while they're running.
+    func resumeServices() async
+    /// Pauses every live session's services.
+    func pauseServices() async
+    func configurePresence(_ presence: ClientProxyPresence, sendImmediately: Bool) async
+    func startSearchBackfill(strategy: SearchBackfillStrategy)
+    func stopSearchBackfill()
 }

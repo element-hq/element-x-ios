@@ -14823,11 +14823,21 @@ nonisolated class UserSessionManagerMock: UserSessionManagerProtocol, @unchecked
     }
     nonisolated(unsafe) var underlyingSessionsPublisher: CurrentValuePublisher<[UserSessionProtocol], Never>!
     nonisolated(unsafe) var activeSession: UserSessionProtocol?
+    var callbacksPublisher: AnyPublisher<UserSessionManagerCallback, Never> {
+        get { return underlyingCallbacksPublisher }
+        set(value) { underlyingCallbacksPublisher = value }
+    }
+    nonisolated(unsafe) var underlyingCallbacksPublisher: AnyPublisher<UserSessionManagerCallback, Never>!
     var clientSessionDelegate: ClientSessionDelegate {
         get { return underlyingClientSessionDelegate }
         set(value) { underlyingClientSessionDelegate = value }
     }
     nonisolated(unsafe) var underlyingClientSessionDelegate: ClientSessionDelegate!
+    var isSearchBackfillRunning: Bool {
+        get { return underlyingIsSearchBackfillRunning }
+        set(value) { underlyingIsSearchBackfillRunning = value }
+    }
+    nonisolated(unsafe) var underlyingIsSearchBackfillRunning: Bool!
 
     //MARK: - session
 
@@ -14871,33 +14881,53 @@ nonisolated class UserSessionManagerMock: UserSessionManagerProtocol, @unchecked
             return sessionForReturnValue
         }
     }
-    //MARK: - restoreActiveSession
+    //MARK: - restoreSessions
 
-    private let restoreActiveSessionCallsCountLock = NSLock()
-    private nonisolated(unsafe) var restoreActiveSessionUnderlyingCallsCount = 0
-    var restoreActiveSessionCallsCount: Int {
-        get { restoreActiveSessionCallsCountLock.withLock { restoreActiveSessionUnderlyingCallsCount } }
-        set { restoreActiveSessionCallsCountLock.withLock { restoreActiveSessionUnderlyingCallsCount = newValue } }
+    private let restoreSessionsPrepareDidAddCallsCountLock = NSLock()
+    private nonisolated(unsafe) var restoreSessionsPrepareDidAddUnderlyingCallsCount = 0
+    var restoreSessionsPrepareDidAddCallsCount: Int {
+        get { restoreSessionsPrepareDidAddCallsCountLock.withLock { restoreSessionsPrepareDidAddUnderlyingCallsCount } }
+        set { restoreSessionsPrepareDidAddCallsCountLock.withLock { restoreSessionsPrepareDidAddUnderlyingCallsCount = newValue } }
     }
-    var restoreActiveSessionCalled: Bool {
-        return restoreActiveSessionCallsCount > 0
+    var restoreSessionsPrepareDidAddCalled: Bool {
+        return restoreSessionsPrepareDidAddCallsCount > 0
     }
+    nonisolated(unsafe) var restoreSessionsPrepareDidAddClosure: ((@MainActor (UserSessionProtocol) async -> Void, @MainActor (UserSessionProtocol) -> Void) async -> Void)?
 
-    private let restoreActiveSessionReturnValueLock = NSLock()
-    private nonisolated(unsafe) var restoreActiveSessionUnderlyingReturnValue: Result<UserSessionProtocol, UserSessionManagerError>!
-    var restoreActiveSessionReturnValue: Result<UserSessionProtocol, UserSessionManagerError>! {
-        get { restoreActiveSessionReturnValueLock.withLock { restoreActiveSessionUnderlyingReturnValue } }
-        set { restoreActiveSessionReturnValueLock.withLock { restoreActiveSessionUnderlyingReturnValue = newValue } }
+    @concurrent func restoreSessions(prepare: @MainActor (UserSessionProtocol) async -> Void, didAdd: @MainActor (UserSessionProtocol) -> Void) async {
+        restoreSessionsPrepareDidAddCallsCountLock.withLock { restoreSessionsPrepareDidAddUnderlyingCallsCount += 1 }
+        await restoreSessionsPrepareDidAddClosure?(prepare, didAdd)
     }
-    nonisolated(unsafe) var restoreActiveSessionClosure: (() async -> Result<UserSessionProtocol, UserSessionManagerError>)?
+    //MARK: - clearCaches
 
-    @concurrent func restoreActiveSession() async -> Result<UserSessionProtocol, UserSessionManagerError> {
-        restoreActiveSessionCallsCountLock.withLock { restoreActiveSessionUnderlyingCallsCount += 1 }
-        if let restoreActiveSessionClosure = restoreActiveSessionClosure {
-            return await restoreActiveSessionClosure()
-        } else {
-            return restoreActiveSessionReturnValue
-        }
+    private let clearCachesUserIDCallsCountLock = NSLock()
+    private nonisolated(unsafe) var clearCachesUserIDUnderlyingCallsCount = 0
+    var clearCachesUserIDCallsCount: Int {
+        get { clearCachesUserIDCallsCountLock.withLock { clearCachesUserIDUnderlyingCallsCount } }
+        set { clearCachesUserIDCallsCountLock.withLock { clearCachesUserIDUnderlyingCallsCount = newValue } }
+    }
+    var clearCachesUserIDCalled: Bool {
+        return clearCachesUserIDCallsCount > 0
+    }
+    private let clearCachesUserIDReceivedUserIDLock = NSLock()
+    private nonisolated(unsafe) var clearCachesUserIDUnderlyingReceivedUserID: String?
+    var clearCachesUserIDReceivedUserID: String? {
+        get { clearCachesUserIDReceivedUserIDLock.withLock { clearCachesUserIDUnderlyingReceivedUserID } }
+        set { clearCachesUserIDReceivedUserIDLock.withLock { clearCachesUserIDUnderlyingReceivedUserID = newValue } }
+    }
+    private let clearCachesUserIDReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var clearCachesUserIDUnderlyingReceivedInvocations: [String] = []
+    var clearCachesUserIDReceivedInvocations: [String] {
+        get { clearCachesUserIDReceivedInvocationsLock.withLock { clearCachesUserIDUnderlyingReceivedInvocations } }
+        set { clearCachesUserIDReceivedInvocationsLock.withLock { clearCachesUserIDUnderlyingReceivedInvocations = newValue } }
+    }
+    nonisolated(unsafe) var clearCachesUserIDClosure: ((String) async -> Void)?
+
+    @concurrent func clearCaches(userID: String) async {
+        clearCachesUserIDCallsCountLock.withLock { clearCachesUserIDUnderlyingCallsCount += 1 }
+        clearCachesUserIDReceivedUserID = userID
+        clearCachesUserIDReceivedInvocationsLock.withLock { clearCachesUserIDUnderlyingReceivedInvocations.append(userID) }
+        await clearCachesUserIDClosure?(userID)
     }
     //MARK: - userSession
 
@@ -15019,6 +15049,119 @@ nonisolated class UserSessionManagerMock: UserSessionManagerProtocol, @unchecked
     func reset() {
         resetCallsCountLock.withLock { resetUnderlyingCallsCount += 1 }
         resetClosure?()
+    }
+    //MARK: - resumeServices
+
+    private let resumeServicesCallsCountLock = NSLock()
+    private nonisolated(unsafe) var resumeServicesUnderlyingCallsCount = 0
+    var resumeServicesCallsCount: Int {
+        get { resumeServicesCallsCountLock.withLock { resumeServicesUnderlyingCallsCount } }
+        set { resumeServicesCallsCountLock.withLock { resumeServicesUnderlyingCallsCount = newValue } }
+    }
+    var resumeServicesCalled: Bool {
+        return resumeServicesCallsCount > 0
+    }
+    nonisolated(unsafe) var resumeServicesClosure: (() async -> Void)?
+
+    @concurrent func resumeServices() async {
+        resumeServicesCallsCountLock.withLock { resumeServicesUnderlyingCallsCount += 1 }
+        await resumeServicesClosure?()
+    }
+    //MARK: - pauseServices
+
+    private let pauseServicesCallsCountLock = NSLock()
+    private nonisolated(unsafe) var pauseServicesUnderlyingCallsCount = 0
+    var pauseServicesCallsCount: Int {
+        get { pauseServicesCallsCountLock.withLock { pauseServicesUnderlyingCallsCount } }
+        set { pauseServicesCallsCountLock.withLock { pauseServicesUnderlyingCallsCount = newValue } }
+    }
+    var pauseServicesCalled: Bool {
+        return pauseServicesCallsCount > 0
+    }
+    nonisolated(unsafe) var pauseServicesClosure: (() async -> Void)?
+
+    @concurrent func pauseServices() async {
+        pauseServicesCallsCountLock.withLock { pauseServicesUnderlyingCallsCount += 1 }
+        await pauseServicesClosure?()
+    }
+    //MARK: - configurePresence
+
+    private let configurePresenceSendImmediatelyCallsCountLock = NSLock()
+    private nonisolated(unsafe) var configurePresenceSendImmediatelyUnderlyingCallsCount = 0
+    var configurePresenceSendImmediatelyCallsCount: Int {
+        get { configurePresenceSendImmediatelyCallsCountLock.withLock { configurePresenceSendImmediatelyUnderlyingCallsCount } }
+        set { configurePresenceSendImmediatelyCallsCountLock.withLock { configurePresenceSendImmediatelyUnderlyingCallsCount = newValue } }
+    }
+    var configurePresenceSendImmediatelyCalled: Bool {
+        return configurePresenceSendImmediatelyCallsCount > 0
+    }
+    private let configurePresenceSendImmediatelyReceivedArgumentsLock = NSLock()
+    private nonisolated(unsafe) var configurePresenceSendImmediatelyUnderlyingReceivedArguments: (presence: ClientProxyPresence, sendImmediately: Bool)?
+    var configurePresenceSendImmediatelyReceivedArguments: (presence: ClientProxyPresence, sendImmediately: Bool)? {
+        get { configurePresenceSendImmediatelyReceivedArgumentsLock.withLock { configurePresenceSendImmediatelyUnderlyingReceivedArguments } }
+        set { configurePresenceSendImmediatelyReceivedArgumentsLock.withLock { configurePresenceSendImmediatelyUnderlyingReceivedArguments = newValue } }
+    }
+    private let configurePresenceSendImmediatelyReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var configurePresenceSendImmediatelyUnderlyingReceivedInvocations: [(presence: ClientProxyPresence, sendImmediately: Bool)] = []
+    var configurePresenceSendImmediatelyReceivedInvocations: [(presence: ClientProxyPresence, sendImmediately: Bool)] {
+        get { configurePresenceSendImmediatelyReceivedInvocationsLock.withLock { configurePresenceSendImmediatelyUnderlyingReceivedInvocations } }
+        set { configurePresenceSendImmediatelyReceivedInvocationsLock.withLock { configurePresenceSendImmediatelyUnderlyingReceivedInvocations = newValue } }
+    }
+    nonisolated(unsafe) var configurePresenceSendImmediatelyClosure: ((ClientProxyPresence, Bool) async -> Void)?
+
+    @concurrent func configurePresence(_ presence: ClientProxyPresence, sendImmediately: Bool) async {
+        configurePresenceSendImmediatelyCallsCountLock.withLock { configurePresenceSendImmediatelyUnderlyingCallsCount += 1 }
+        configurePresenceSendImmediatelyReceivedArguments = (presence: presence, sendImmediately: sendImmediately)
+        configurePresenceSendImmediatelyReceivedInvocationsLock.withLock { configurePresenceSendImmediatelyUnderlyingReceivedInvocations.append((presence: presence, sendImmediately: sendImmediately)) }
+        await configurePresenceSendImmediatelyClosure?(presence, sendImmediately)
+    }
+    //MARK: - startSearchBackfill
+
+    private let startSearchBackfillStrategyCallsCountLock = NSLock()
+    private nonisolated(unsafe) var startSearchBackfillStrategyUnderlyingCallsCount = 0
+    var startSearchBackfillStrategyCallsCount: Int {
+        get { startSearchBackfillStrategyCallsCountLock.withLock { startSearchBackfillStrategyUnderlyingCallsCount } }
+        set { startSearchBackfillStrategyCallsCountLock.withLock { startSearchBackfillStrategyUnderlyingCallsCount = newValue } }
+    }
+    var startSearchBackfillStrategyCalled: Bool {
+        return startSearchBackfillStrategyCallsCount > 0
+    }
+    private let startSearchBackfillStrategyReceivedStrategyLock = NSLock()
+    private nonisolated(unsafe) var startSearchBackfillStrategyUnderlyingReceivedStrategy: SearchBackfillStrategy?
+    var startSearchBackfillStrategyReceivedStrategy: SearchBackfillStrategy? {
+        get { startSearchBackfillStrategyReceivedStrategyLock.withLock { startSearchBackfillStrategyUnderlyingReceivedStrategy } }
+        set { startSearchBackfillStrategyReceivedStrategyLock.withLock { startSearchBackfillStrategyUnderlyingReceivedStrategy = newValue } }
+    }
+    private let startSearchBackfillStrategyReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var startSearchBackfillStrategyUnderlyingReceivedInvocations: [SearchBackfillStrategy] = []
+    var startSearchBackfillStrategyReceivedInvocations: [SearchBackfillStrategy] {
+        get { startSearchBackfillStrategyReceivedInvocationsLock.withLock { startSearchBackfillStrategyUnderlyingReceivedInvocations } }
+        set { startSearchBackfillStrategyReceivedInvocationsLock.withLock { startSearchBackfillStrategyUnderlyingReceivedInvocations = newValue } }
+    }
+    nonisolated(unsafe) var startSearchBackfillStrategyClosure: ((SearchBackfillStrategy) -> Void)?
+
+    func startSearchBackfill(strategy: SearchBackfillStrategy) {
+        startSearchBackfillStrategyCallsCountLock.withLock { startSearchBackfillStrategyUnderlyingCallsCount += 1 }
+        startSearchBackfillStrategyReceivedStrategy = strategy
+        startSearchBackfillStrategyReceivedInvocationsLock.withLock { startSearchBackfillStrategyUnderlyingReceivedInvocations.append(strategy) }
+        startSearchBackfillStrategyClosure?(strategy)
+    }
+    //MARK: - stopSearchBackfill
+
+    private let stopSearchBackfillCallsCountLock = NSLock()
+    private nonisolated(unsafe) var stopSearchBackfillUnderlyingCallsCount = 0
+    var stopSearchBackfillCallsCount: Int {
+        get { stopSearchBackfillCallsCountLock.withLock { stopSearchBackfillUnderlyingCallsCount } }
+        set { stopSearchBackfillCallsCountLock.withLock { stopSearchBackfillUnderlyingCallsCount = newValue } }
+    }
+    var stopSearchBackfillCalled: Bool {
+        return stopSearchBackfillCallsCount > 0
+    }
+    nonisolated(unsafe) var stopSearchBackfillClosure: (() -> Void)?
+
+    func stopSearchBackfill() {
+        stopSearchBackfillCallsCountLock.withLock { stopSearchBackfillUnderlyingCallsCount += 1 }
+        stopSearchBackfillClosure?()
     }
 }
 nonisolated class UserSessionMock: UserSessionProtocol, @unchecked Sendable {
