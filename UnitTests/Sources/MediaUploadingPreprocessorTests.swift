@@ -456,7 +456,7 @@ final class MediaUploadingPreprocessorTests {
     
     @Test
     func failedPreparationRemovesItsFiles() async throws {
-        let url = try makeUniquelyNamedCopy(of: "test_image.png")
+        let url = try copyResourceToTemporaryDirectory("test_image.png")
         defer { try? FileManager.default.removeItem(at: url.deletingLastPathComponent()) }
         
         guard case .failure(.maxUploadSizeExceeded) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: 1) else {
@@ -468,7 +468,7 @@ final class MediaUploadingPreprocessorTests {
     
     @Test
     func batchFailureReturnsTheErrorAndRemovesPreparedFiles() async throws {
-        let url = try makeUniquelyNamedCopy(of: "test_image.png")
+        let url = try copyResourceToTemporaryDirectory("test_image.png")
         defer { try? FileManager.default.removeItem(at: url.deletingLastPathComponent()) }
         let missingURL = url.deletingLastPathComponent().appendingPathComponent("missing.png")
         
@@ -482,7 +482,7 @@ final class MediaUploadingPreprocessorTests {
     
     @Test
     func cancellationRemovesPreparedFiles() async throws {
-        let url = try makeUniquelyNamedCopy(of: "test_image.png")
+        let url = try copyResourceToTemporaryDirectory("test_image.png")
         defer { try? FileManager.default.removeItem(at: url.deletingLastPathComponent()) }
         
         let task = Task { await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize) }
@@ -499,7 +499,7 @@ final class MediaUploadingPreprocessorTests {
     // MARK: - Private
     
     /// Copies a test asset to a uniquely named file, so the folders the preprocessor prepares from it can be found afterwards.
-    private func makeUniquelyNamedCopy(of resource: String) throws -> URL {
+    private func copyResourceToTemporaryDirectory(_ resource: String) throws -> URL {
         let assetURL = try #require(Bundle(for: Self.self).url(forResource: resource, withExtension: nil))
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent("\(Self.self)-\(UUID().uuidString)")
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)

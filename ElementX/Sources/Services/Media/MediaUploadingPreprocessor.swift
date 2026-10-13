@@ -94,15 +94,14 @@ nonisolated struct MediaUploadingPreprocessor {
         static let optimizedMaxPixelSize = 2048.0
         static let jpegCompressionQuality = 0.78
         static let videoThumbnailTime = 5.0 // seconds
-        /// Bounds the number of decoded images and video exports in a batch.
         static let maximumConcurrentProcessingCount = 2
     }
     
     /// Processes media at the given URLs. It will generate thumbnails for images and videos, convert videos to 1080p mp4, strip GPS locations
-    /// from images and retrieve associated media information
+    /// from images and retrieve associated media information. On failure or cancellation all the prepared files are removed.
     /// - Parameter urls: the file URLs
     /// - Returns: a collection of results containing specific type of `MediaInfo` depending on the file type
-    /// and its associated details or any resulting error. On failure or cancellation all the prepared files are removed.
+    /// and its associated details or any resulting error
     func processMedia(at urls: [URL], maxUploadSize: UInt) async -> Result<[MediaInfo], MediaUploadingPreprocessorError> {
         await withTaskGroup(of: (Int, Result<MediaInfo, MediaUploadingPreprocessorError>).self) { taskGroup in
             var pendingIndices = urls.indices.makeIterator()
@@ -148,10 +147,9 @@ nonisolated struct MediaUploadingPreprocessor {
     }
     
     /// Processes media at a given URL. It will generate thumbnails for images and videos, convert videos to 1080p mp4, strip GPS locations
-    /// from images and retrieve associated media information
+    /// from images and retrieve associated media information. On failure or cancellation all the prepared files are removed.
     /// - Parameter url: the file URL
-    /// - Returns: a specific type of `MediaInfo` depending on the file type and its associated details.
-    /// On failure or cancellation all the prepared files are removed.
+    /// - Returns: a specific type of `MediaInfo` depending on the file type and its associated details
     func processMedia(at url: URL, maxUploadSize: UInt) async -> Result<MediaInfo, MediaUploadingPreprocessorError> {
         guard !Task.isCancelled else { return .failure(.cancelled) }
         
