@@ -529,21 +529,11 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func setupUnreadNotificationsObserver() {
-        let roomListPublisher = userSession.clientProxy.staticRoomSummaryProvider.roomListPublisher
-        
-        Task { [weak self] in
-            for await roomSummaries in roomListPublisher.values {
-                guard let self else { return }
-                
-                let badgeCount = Int(userSession.clientProxy.totalUnreadNotifications)
-                
-                chatsTabDetails.badgeCount = badgeCount
-                
-                await flowParameters.notificationManager.removeDeliveredNotificationsForFullyReadRooms(roomSummaries)
-                await flowParameters.notificationManager.updateAppBadgeCount(badgeCount)
+        userSession.notificationService.badgeCountPublisher
+            .sink { [weak self] badgeCount in
+                self?.chatsTabDetails.badgeCount = badgeCount
             }
-        }
-        .store(in: &cancellables)
+            .store(in: &cancellables)
     }
     
     // MARK: - Native calls

@@ -15,7 +15,6 @@ struct HomeScreenCoordinatorParameters {
     let bugReportService: BugReportServiceProtocol
     let selectedRoomPublisher: CurrentValuePublisher<String?, Never>
     let analyticsService: AnalyticsServiceProtocol
-    let notificationManager: NotificationManagerProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
 }
 
@@ -53,7 +52,6 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
                                         selectedRoomPublisher: parameters.selectedRoomPublisher,
                                         analyticsService: parameters.analyticsService,
                                         bugReportService: parameters.bugReportService,
-                                        notificationManager: parameters.notificationManager,
                                         userIndicatorController: parameters.userIndicatorController)
         
         viewModel.actions
