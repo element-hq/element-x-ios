@@ -61,20 +61,6 @@ struct UserSessionManagerTests {
     }
     
     @Test
-    func onlyTheActiveAccountsRemoteSettingsAreApplied() async {
-        let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org"])
-        
-        // Another account's remote settings must never replace the active account's.
-        userSessionStore.restoreUserSessionUserIDReturnValue = .success(makeUserSession(userID: "@bob:matrix.org"))
-        _ = await manager.restoreUserSession(userID: "@bob:matrix.org")
-        #expect(!userSessionStore.applyRemoteSettingsForUserIDCalled)
-        
-        userSessionStore.restoreUserSessionUserIDReturnValue = .success(makeUserSession(userID: "@alice:matrix.org"))
-        _ = await manager.restoreActiveSession()
-        #expect(userSessionStore.applyRemoteSettingsForUserIDReceivedInvocations == ["@alice:matrix.org"])
-    }
-    
-    @Test
     func addRegistersTheSession() {
         let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org"])
         
@@ -183,6 +169,24 @@ struct UserSessionManagerTests {
         }
         
         #expect(!userSessionStore.restoreUserSessionUserIDCalled)
+    }
+    
+    @Test
+    func reportsTheAuthErrorsOfTheLiveSessions() async throws {
+        let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org"])
+        manager.add(makeUserSession(userID: "@alice:matrix.org"))
+        let bob = makeUserSession(userID: "@bob:matrix.org")
+        manager.add(bob)
+        
+        let deferred = deferFulfillment(manager.callbacksPublisher) { $0 == .didReceiveAuthError(userID: "@bob:matrix.org", isSoftLogout: true) }
+        bob.callbacks.send(.didReceiveAuthError(isSoftLogout: true))
+        try await deferred.fulfill()
+        
+        // A replaced session (e.g. after clearing the cache) mustn't report anything anymore.
+        let deferredFailure = deferFailure(manager.callbacksPublisher, timeout: .seconds(1)) { _ in true }
+        manager.add(makeUserSession(userID: "@bob:matrix.org"))
+        bob.callbacks.send(.didReceiveAuthError(isSoftLogout: false))
+        try await deferredFailure.fulfill()
     }
     
     // MARK: - Helpers

@@ -15,9 +15,7 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
     private let notificationCenter: UserNotificationCenterProtocol
     private let appSettings: AppSettings
     
-    private var userSessions: [String: UserSessionProtocol] = [:]
-    /// Every account's unread count, summed for the app badge.
-    private var badgeCounts: [String: Int] = [:]
+    private var userSession: UserSessionProtocol?
     
     private var cancellables = Set<AnyCancellable>()
     private var notificationsEnabled = false
@@ -67,7 +65,7 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
     }
     
     func requestAuthorization() {
-        guard appSettings.enableNotifications, !userSessions.isEmpty else { return }
+        guard appSettings.enableNotifications, !userSession.isNil else { return }
         Task {
             do {
                 let permissionGranted = try await notificationCenter.requestAuthorization(options: [.alert, .sound, .badge])
@@ -84,20 +82,14 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
     }
     
     func register(with deviceToken: Data) async -> Bool {
-        guard !userSessions.isEmpty else {
+        guard let userSession else {
             return false
         }
-        
-        var success = true
-        for userSession in userSessions.values {
-            let isPusherSet = await setPusher(with: deviceToken, clientProxy: userSession.clientProxy)
-            success = success && isPusherSet
-        }
-        return success
+        return await setPusher(with: deviceToken, clientProxy: userSession.clientProxy)
     }
     
-    func addUserSession(_ userSession: UserSessionProtocol) {
-        userSessions[userSession.clientProxy.userID] = userSession
+    func setUserSession(_ userSession: UserSessionProtocol?) {
+        self.userSession = userSession
         
         // If notification permissions were given previously then attempt re-registering
         // for remote notifications on startup. Otherwise let the onboarding flow handle it
@@ -113,11 +105,6 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
             let settings = await notificationCenter.notificationSettings()
             MXLog.info("Notification sound enabled: \(settings.soundSetting == .enabled)")
         }
-    }
-    
-    func removeUserSession(userID: String) {
-        userSessions[userID] = nil
-        badgeCounts[userID] = nil
     }
     
     func registrationFailed(with error: Error) {
@@ -149,7 +136,7 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
         notificationCenter.removeDeliveredNotifications(withIdentifiers: notificationsIdentifiers)
     }
     
-    func removeDeliveredNotificationsForFullyReadRooms(_ rooms: [RoomSummary], for userID: String) async {
+    func removeDeliveredNotificationsForFullyReadRooms(_ rooms: [RoomSummary]) async {
         let roomsToLastMessageDates = rooms
             .filter { $0.hasUnreadMessages == false }
             .reduce(into: [:]) { partialResult, roomSummary in
@@ -159,9 +146,7 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
         let notificationsIdentifiers = await notificationCenter
             .deliveredNotifications()
             .filter { notification in
-                // A room can be shared by several accounts, only clear this account's notifications.
-                guard (notification.request.content.receiverID ?? userID) == userID,
-                      let roomID = notification.request.content.roomID,
+                guard let roomID = notification.request.content.roomID,
                       let lastMessageDate = roomsToLastMessageDates[roomID] else {
                     return false
                 }
@@ -176,18 +161,15 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
         notificationCenter.removeDeliveredNotifications(withIdentifiers: notificationsIdentifiers)
     }
     
-    func updateAppBadgeCount(_ badgeCount: Int, for userID: String) async {
-        guard userSessions[userID] != nil else { return }
+    func updateAppBadgeCount(_ badgeCount: Int) async {
+        guard let userSession else { return }
         
-        badgeCounts[userID] = badgeCount
-        let totalBadgeCount = badgeCounts.values.reduce(0, +)
+        appSettings.lastKnownBadgeCount = badgeCount
         
-        appSettings.lastKnownBadgeCount = totalBadgeCount
-        
-        MXLog.debug("Updating app badge count to \(totalBadgeCount)")
+        MXLog.debug("Updating app badge count to \(badgeCount)")
         
         do {
-            try await notificationCenter.setBadgeCount(totalBadgeCount)
+            try await notificationCenter.setBadgeCount(badgeCount)
         } catch {
             MXLog.error("Failed updating the app badge count with error: \(error)")
         }
@@ -212,8 +194,7 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
                                                         appDisplayName: "\(InfoPlistReader.main.bundleDisplayName) (iOS)",
                                                         deviceDisplayName: UIDevice.current.name,
                                                         profileTag: pusherProfileTag(),
-                                                        lang: Bundle.app.preferredLocalizations.first ?? "en",
-                                                        append: appSettings.multiAccountEnabled)
+                                                        lang: Bundle.app.preferredLocalizations.first ?? "en")
             try await clientProxy.setPusher(with: configuration)
             MXLog.info("Set pusher succeeded")
             return true

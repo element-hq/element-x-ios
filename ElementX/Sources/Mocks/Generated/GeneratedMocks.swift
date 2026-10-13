@@ -8923,67 +8923,36 @@ nonisolated class NotificationManagerMock: NotificationManagerProtocol, @uncheck
         showLocalNotificationWithSubtitleReceivedInvocationsLock.withLock { showLocalNotificationWithSubtitleUnderlyingReceivedInvocations.append((title: title, subtitle: subtitle)) }
         await showLocalNotificationWithSubtitleClosure?(title, subtitle)
     }
-    //MARK: - addUserSession
+    //MARK: - setUserSession
 
-    private let addUserSessionCallsCountLock = NSLock()
-    private nonisolated(unsafe) var addUserSessionUnderlyingCallsCount = 0
-    var addUserSessionCallsCount: Int {
-        get { addUserSessionCallsCountLock.withLock { addUserSessionUnderlyingCallsCount } }
-        set { addUserSessionCallsCountLock.withLock { addUserSessionUnderlyingCallsCount = newValue } }
+    private let setUserSessionCallsCountLock = NSLock()
+    private nonisolated(unsafe) var setUserSessionUnderlyingCallsCount = 0
+    var setUserSessionCallsCount: Int {
+        get { setUserSessionCallsCountLock.withLock { setUserSessionUnderlyingCallsCount } }
+        set { setUserSessionCallsCountLock.withLock { setUserSessionUnderlyingCallsCount = newValue } }
     }
-    var addUserSessionCalled: Bool {
-        return addUserSessionCallsCount > 0
+    var setUserSessionCalled: Bool {
+        return setUserSessionCallsCount > 0
     }
-    private let addUserSessionReceivedUserSessionLock = NSLock()
-    private nonisolated(unsafe) var addUserSessionUnderlyingReceivedUserSession: UserSessionProtocol?
-    var addUserSessionReceivedUserSession: UserSessionProtocol? {
-        get { addUserSessionReceivedUserSessionLock.withLock { addUserSessionUnderlyingReceivedUserSession } }
-        set { addUserSessionReceivedUserSessionLock.withLock { addUserSessionUnderlyingReceivedUserSession = newValue } }
+    private let setUserSessionReceivedUserSessionLock = NSLock()
+    private nonisolated(unsafe) var setUserSessionUnderlyingReceivedUserSession: UserSessionProtocol?
+    var setUserSessionReceivedUserSession: UserSessionProtocol? {
+        get { setUserSessionReceivedUserSessionLock.withLock { setUserSessionUnderlyingReceivedUserSession } }
+        set { setUserSessionReceivedUserSessionLock.withLock { setUserSessionUnderlyingReceivedUserSession = newValue } }
     }
-    private let addUserSessionReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var addUserSessionUnderlyingReceivedInvocations: [UserSessionProtocol] = []
-    var addUserSessionReceivedInvocations: [UserSessionProtocol] {
-        get { addUserSessionReceivedInvocationsLock.withLock { addUserSessionUnderlyingReceivedInvocations } }
-        set { addUserSessionReceivedInvocationsLock.withLock { addUserSessionUnderlyingReceivedInvocations = newValue } }
+    private let setUserSessionReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var setUserSessionUnderlyingReceivedInvocations: [UserSessionProtocol?] = []
+    var setUserSessionReceivedInvocations: [UserSessionProtocol?] {
+        get { setUserSessionReceivedInvocationsLock.withLock { setUserSessionUnderlyingReceivedInvocations } }
+        set { setUserSessionReceivedInvocationsLock.withLock { setUserSessionUnderlyingReceivedInvocations = newValue } }
     }
-    nonisolated(unsafe) var addUserSessionClosure: ((UserSessionProtocol) -> Void)?
+    nonisolated(unsafe) var setUserSessionClosure: ((UserSessionProtocol?) -> Void)?
 
-    func addUserSession(_ userSession: UserSessionProtocol) {
-        addUserSessionCallsCountLock.withLock { addUserSessionUnderlyingCallsCount += 1 }
-        addUserSessionReceivedUserSession = userSession
-        addUserSessionReceivedInvocationsLock.withLock { addUserSessionUnderlyingReceivedInvocations.append(userSession) }
-        addUserSessionClosure?(userSession)
-    }
-    //MARK: - removeUserSession
-
-    private let removeUserSessionUserIDCallsCountLock = NSLock()
-    private nonisolated(unsafe) var removeUserSessionUserIDUnderlyingCallsCount = 0
-    var removeUserSessionUserIDCallsCount: Int {
-        get { removeUserSessionUserIDCallsCountLock.withLock { removeUserSessionUserIDUnderlyingCallsCount } }
-        set { removeUserSessionUserIDCallsCountLock.withLock { removeUserSessionUserIDUnderlyingCallsCount = newValue } }
-    }
-    var removeUserSessionUserIDCalled: Bool {
-        return removeUserSessionUserIDCallsCount > 0
-    }
-    private let removeUserSessionUserIDReceivedUserIDLock = NSLock()
-    private nonisolated(unsafe) var removeUserSessionUserIDUnderlyingReceivedUserID: String?
-    var removeUserSessionUserIDReceivedUserID: String? {
-        get { removeUserSessionUserIDReceivedUserIDLock.withLock { removeUserSessionUserIDUnderlyingReceivedUserID } }
-        set { removeUserSessionUserIDReceivedUserIDLock.withLock { removeUserSessionUserIDUnderlyingReceivedUserID = newValue } }
-    }
-    private let removeUserSessionUserIDReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var removeUserSessionUserIDUnderlyingReceivedInvocations: [String] = []
-    var removeUserSessionUserIDReceivedInvocations: [String] {
-        get { removeUserSessionUserIDReceivedInvocationsLock.withLock { removeUserSessionUserIDUnderlyingReceivedInvocations } }
-        set { removeUserSessionUserIDReceivedInvocationsLock.withLock { removeUserSessionUserIDUnderlyingReceivedInvocations = newValue } }
-    }
-    nonisolated(unsafe) var removeUserSessionUserIDClosure: ((String) -> Void)?
-
-    func removeUserSession(userID: String) {
-        removeUserSessionUserIDCallsCountLock.withLock { removeUserSessionUserIDUnderlyingCallsCount += 1 }
-        removeUserSessionUserIDReceivedUserID = userID
-        removeUserSessionUserIDReceivedInvocationsLock.withLock { removeUserSessionUserIDUnderlyingReceivedInvocations.append(userID) }
-        removeUserSessionUserIDClosure?(userID)
+    func setUserSession(_ userSession: UserSessionProtocol?) {
+        setUserSessionCallsCountLock.withLock { setUserSessionUnderlyingCallsCount += 1 }
+        setUserSessionReceivedUserSession = userSession
+        setUserSessionReceivedInvocationsLock.withLock { setUserSessionUnderlyingReceivedInvocations.append(userSession) }
+        setUserSessionClosure?(userSession)
     }
     //MARK: - requestAuthorization
 
@@ -9035,65 +9004,65 @@ nonisolated class NotificationManagerMock: NotificationManagerProtocol, @uncheck
     }
     //MARK: - removeDeliveredNotificationsForFullyReadRooms
 
-    private let removeDeliveredNotificationsForFullyReadRoomsForCallsCountLock = NSLock()
-    private nonisolated(unsafe) var removeDeliveredNotificationsForFullyReadRoomsForUnderlyingCallsCount = 0
-    var removeDeliveredNotificationsForFullyReadRoomsForCallsCount: Int {
-        get { removeDeliveredNotificationsForFullyReadRoomsForCallsCountLock.withLock { removeDeliveredNotificationsForFullyReadRoomsForUnderlyingCallsCount } }
-        set { removeDeliveredNotificationsForFullyReadRoomsForCallsCountLock.withLock { removeDeliveredNotificationsForFullyReadRoomsForUnderlyingCallsCount = newValue } }
+    private let removeDeliveredNotificationsForFullyReadRoomsCallsCountLock = NSLock()
+    private nonisolated(unsafe) var removeDeliveredNotificationsForFullyReadRoomsUnderlyingCallsCount = 0
+    var removeDeliveredNotificationsForFullyReadRoomsCallsCount: Int {
+        get { removeDeliveredNotificationsForFullyReadRoomsCallsCountLock.withLock { removeDeliveredNotificationsForFullyReadRoomsUnderlyingCallsCount } }
+        set { removeDeliveredNotificationsForFullyReadRoomsCallsCountLock.withLock { removeDeliveredNotificationsForFullyReadRoomsUnderlyingCallsCount = newValue } }
     }
-    var removeDeliveredNotificationsForFullyReadRoomsForCalled: Bool {
-        return removeDeliveredNotificationsForFullyReadRoomsForCallsCount > 0
+    var removeDeliveredNotificationsForFullyReadRoomsCalled: Bool {
+        return removeDeliveredNotificationsForFullyReadRoomsCallsCount > 0
     }
-    private let removeDeliveredNotificationsForFullyReadRoomsForReceivedArgumentsLock = NSLock()
-    private nonisolated(unsafe) var removeDeliveredNotificationsForFullyReadRoomsForUnderlyingReceivedArguments: (rooms: [RoomSummary], userID: String)?
-    var removeDeliveredNotificationsForFullyReadRoomsForReceivedArguments: (rooms: [RoomSummary], userID: String)? {
-        get { removeDeliveredNotificationsForFullyReadRoomsForReceivedArgumentsLock.withLock { removeDeliveredNotificationsForFullyReadRoomsForUnderlyingReceivedArguments } }
-        set { removeDeliveredNotificationsForFullyReadRoomsForReceivedArgumentsLock.withLock { removeDeliveredNotificationsForFullyReadRoomsForUnderlyingReceivedArguments = newValue } }
+    private let removeDeliveredNotificationsForFullyReadRoomsReceivedRoomsLock = NSLock()
+    private nonisolated(unsafe) var removeDeliveredNotificationsForFullyReadRoomsUnderlyingReceivedRooms: [RoomSummary]?
+    var removeDeliveredNotificationsForFullyReadRoomsReceivedRooms: [RoomSummary]? {
+        get { removeDeliveredNotificationsForFullyReadRoomsReceivedRoomsLock.withLock { removeDeliveredNotificationsForFullyReadRoomsUnderlyingReceivedRooms } }
+        set { removeDeliveredNotificationsForFullyReadRoomsReceivedRoomsLock.withLock { removeDeliveredNotificationsForFullyReadRoomsUnderlyingReceivedRooms = newValue } }
     }
-    private let removeDeliveredNotificationsForFullyReadRoomsForReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var removeDeliveredNotificationsForFullyReadRoomsForUnderlyingReceivedInvocations: [(rooms: [RoomSummary], userID: String)] = []
-    var removeDeliveredNotificationsForFullyReadRoomsForReceivedInvocations: [(rooms: [RoomSummary], userID: String)] {
-        get { removeDeliveredNotificationsForFullyReadRoomsForReceivedInvocationsLock.withLock { removeDeliveredNotificationsForFullyReadRoomsForUnderlyingReceivedInvocations } }
-        set { removeDeliveredNotificationsForFullyReadRoomsForReceivedInvocationsLock.withLock { removeDeliveredNotificationsForFullyReadRoomsForUnderlyingReceivedInvocations = newValue } }
+    private let removeDeliveredNotificationsForFullyReadRoomsReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var removeDeliveredNotificationsForFullyReadRoomsUnderlyingReceivedInvocations: [[RoomSummary]] = []
+    var removeDeliveredNotificationsForFullyReadRoomsReceivedInvocations: [[RoomSummary]] {
+        get { removeDeliveredNotificationsForFullyReadRoomsReceivedInvocationsLock.withLock { removeDeliveredNotificationsForFullyReadRoomsUnderlyingReceivedInvocations } }
+        set { removeDeliveredNotificationsForFullyReadRoomsReceivedInvocationsLock.withLock { removeDeliveredNotificationsForFullyReadRoomsUnderlyingReceivedInvocations = newValue } }
     }
-    nonisolated(unsafe) var removeDeliveredNotificationsForFullyReadRoomsForClosure: (([RoomSummary], String) async -> Void)?
+    nonisolated(unsafe) var removeDeliveredNotificationsForFullyReadRoomsClosure: (([RoomSummary]) async -> Void)?
 
-    @concurrent func removeDeliveredNotificationsForFullyReadRooms(_ rooms: [RoomSummary], for userID: String) async {
-        removeDeliveredNotificationsForFullyReadRoomsForCallsCountLock.withLock { removeDeliveredNotificationsForFullyReadRoomsForUnderlyingCallsCount += 1 }
-        removeDeliveredNotificationsForFullyReadRoomsForReceivedArguments = (rooms: rooms, userID: userID)
-        removeDeliveredNotificationsForFullyReadRoomsForReceivedInvocationsLock.withLock { removeDeliveredNotificationsForFullyReadRoomsForUnderlyingReceivedInvocations.append((rooms: rooms, userID: userID)) }
-        await removeDeliveredNotificationsForFullyReadRoomsForClosure?(rooms, userID)
+    @concurrent func removeDeliveredNotificationsForFullyReadRooms(_ rooms: [RoomSummary]) async {
+        removeDeliveredNotificationsForFullyReadRoomsCallsCountLock.withLock { removeDeliveredNotificationsForFullyReadRoomsUnderlyingCallsCount += 1 }
+        removeDeliveredNotificationsForFullyReadRoomsReceivedRooms = rooms
+        removeDeliveredNotificationsForFullyReadRoomsReceivedInvocationsLock.withLock { removeDeliveredNotificationsForFullyReadRoomsUnderlyingReceivedInvocations.append(rooms) }
+        await removeDeliveredNotificationsForFullyReadRoomsClosure?(rooms)
     }
     //MARK: - updateAppBadgeCount
 
-    private let updateAppBadgeCountForCallsCountLock = NSLock()
-    private nonisolated(unsafe) var updateAppBadgeCountForUnderlyingCallsCount = 0
-    var updateAppBadgeCountForCallsCount: Int {
-        get { updateAppBadgeCountForCallsCountLock.withLock { updateAppBadgeCountForUnderlyingCallsCount } }
-        set { updateAppBadgeCountForCallsCountLock.withLock { updateAppBadgeCountForUnderlyingCallsCount = newValue } }
+    private let updateAppBadgeCountCallsCountLock = NSLock()
+    private nonisolated(unsafe) var updateAppBadgeCountUnderlyingCallsCount = 0
+    var updateAppBadgeCountCallsCount: Int {
+        get { updateAppBadgeCountCallsCountLock.withLock { updateAppBadgeCountUnderlyingCallsCount } }
+        set { updateAppBadgeCountCallsCountLock.withLock { updateAppBadgeCountUnderlyingCallsCount = newValue } }
     }
-    var updateAppBadgeCountForCalled: Bool {
-        return updateAppBadgeCountForCallsCount > 0
+    var updateAppBadgeCountCalled: Bool {
+        return updateAppBadgeCountCallsCount > 0
     }
-    private let updateAppBadgeCountForReceivedArgumentsLock = NSLock()
-    private nonisolated(unsafe) var updateAppBadgeCountForUnderlyingReceivedArguments: (badgeCount: Int, userID: String)?
-    var updateAppBadgeCountForReceivedArguments: (badgeCount: Int, userID: String)? {
-        get { updateAppBadgeCountForReceivedArgumentsLock.withLock { updateAppBadgeCountForUnderlyingReceivedArguments } }
-        set { updateAppBadgeCountForReceivedArgumentsLock.withLock { updateAppBadgeCountForUnderlyingReceivedArguments = newValue } }
+    private let updateAppBadgeCountReceivedBadgeCountLock = NSLock()
+    private nonisolated(unsafe) var updateAppBadgeCountUnderlyingReceivedBadgeCount: Int?
+    var updateAppBadgeCountReceivedBadgeCount: Int? {
+        get { updateAppBadgeCountReceivedBadgeCountLock.withLock { updateAppBadgeCountUnderlyingReceivedBadgeCount } }
+        set { updateAppBadgeCountReceivedBadgeCountLock.withLock { updateAppBadgeCountUnderlyingReceivedBadgeCount = newValue } }
     }
-    private let updateAppBadgeCountForReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var updateAppBadgeCountForUnderlyingReceivedInvocations: [(badgeCount: Int, userID: String)] = []
-    var updateAppBadgeCountForReceivedInvocations: [(badgeCount: Int, userID: String)] {
-        get { updateAppBadgeCountForReceivedInvocationsLock.withLock { updateAppBadgeCountForUnderlyingReceivedInvocations } }
-        set { updateAppBadgeCountForReceivedInvocationsLock.withLock { updateAppBadgeCountForUnderlyingReceivedInvocations = newValue } }
+    private let updateAppBadgeCountReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var updateAppBadgeCountUnderlyingReceivedInvocations: [Int] = []
+    var updateAppBadgeCountReceivedInvocations: [Int] {
+        get { updateAppBadgeCountReceivedInvocationsLock.withLock { updateAppBadgeCountUnderlyingReceivedInvocations } }
+        set { updateAppBadgeCountReceivedInvocationsLock.withLock { updateAppBadgeCountUnderlyingReceivedInvocations = newValue } }
     }
-    nonisolated(unsafe) var updateAppBadgeCountForClosure: ((Int, String) async -> Void)?
+    nonisolated(unsafe) var updateAppBadgeCountClosure: ((Int) async -> Void)?
 
-    @concurrent func updateAppBadgeCount(_ badgeCount: Int, for userID: String) async {
-        updateAppBadgeCountForCallsCountLock.withLock { updateAppBadgeCountForUnderlyingCallsCount += 1 }
-        updateAppBadgeCountForReceivedArguments = (badgeCount: badgeCount, userID: userID)
-        updateAppBadgeCountForReceivedInvocationsLock.withLock { updateAppBadgeCountForUnderlyingReceivedInvocations.append((badgeCount: badgeCount, userID: userID)) }
-        await updateAppBadgeCountForClosure?(badgeCount, userID)
+    @concurrent func updateAppBadgeCount(_ badgeCount: Int) async {
+        updateAppBadgeCountCallsCountLock.withLock { updateAppBadgeCountUnderlyingCallsCount += 1 }
+        updateAppBadgeCountReceivedBadgeCount = badgeCount
+        updateAppBadgeCountReceivedInvocationsLock.withLock { updateAppBadgeCountUnderlyingReceivedInvocations.append(badgeCount) }
+        await updateAppBadgeCountClosure?(badgeCount)
     }
 }
 nonisolated class NotificationSettingsProxyMock: NotificationSettingsProxyProtocol, @unchecked Sendable {
@@ -14854,6 +14823,11 @@ nonisolated class UserSessionManagerMock: UserSessionManagerProtocol, @unchecked
     }
     nonisolated(unsafe) var underlyingSessionsPublisher: CurrentValuePublisher<[UserSessionProtocol], Never>!
     nonisolated(unsafe) var activeSession: UserSessionProtocol?
+    var callbacksPublisher: AnyPublisher<UserSessionManagerCallback, Never> {
+        get { return underlyingCallbacksPublisher }
+        set(value) { underlyingCallbacksPublisher = value }
+    }
+    nonisolated(unsafe) var underlyingCallbacksPublisher: AnyPublisher<UserSessionManagerCallback, Never>!
     var clientSessionDelegate: ClientSessionDelegate {
         get { return underlyingClientSessionDelegate }
         set(value) { underlyingClientSessionDelegate = value }
@@ -14933,48 +14907,6 @@ nonisolated class UserSessionManagerMock: UserSessionManagerProtocol, @unchecked
             return await restoreActiveSessionClosure()
         } else {
             return restoreActiveSessionReturnValue
-        }
-    }
-    //MARK: - restoreUserSession
-
-    private let restoreUserSessionUserIDCallsCountLock = NSLock()
-    private nonisolated(unsafe) var restoreUserSessionUserIDUnderlyingCallsCount = 0
-    var restoreUserSessionUserIDCallsCount: Int {
-        get { restoreUserSessionUserIDCallsCountLock.withLock { restoreUserSessionUserIDUnderlyingCallsCount } }
-        set { restoreUserSessionUserIDCallsCountLock.withLock { restoreUserSessionUserIDUnderlyingCallsCount = newValue } }
-    }
-    var restoreUserSessionUserIDCalled: Bool {
-        return restoreUserSessionUserIDCallsCount > 0
-    }
-    private let restoreUserSessionUserIDReceivedUserIDLock = NSLock()
-    private nonisolated(unsafe) var restoreUserSessionUserIDUnderlyingReceivedUserID: String?
-    var restoreUserSessionUserIDReceivedUserID: String? {
-        get { restoreUserSessionUserIDReceivedUserIDLock.withLock { restoreUserSessionUserIDUnderlyingReceivedUserID } }
-        set { restoreUserSessionUserIDReceivedUserIDLock.withLock { restoreUserSessionUserIDUnderlyingReceivedUserID = newValue } }
-    }
-    private let restoreUserSessionUserIDReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var restoreUserSessionUserIDUnderlyingReceivedInvocations: [String] = []
-    var restoreUserSessionUserIDReceivedInvocations: [String] {
-        get { restoreUserSessionUserIDReceivedInvocationsLock.withLock { restoreUserSessionUserIDUnderlyingReceivedInvocations } }
-        set { restoreUserSessionUserIDReceivedInvocationsLock.withLock { restoreUserSessionUserIDUnderlyingReceivedInvocations = newValue } }
-    }
-
-    private let restoreUserSessionUserIDReturnValueLock = NSLock()
-    private nonisolated(unsafe) var restoreUserSessionUserIDUnderlyingReturnValue: Result<UserSessionProtocol, UserSessionManagerError>!
-    var restoreUserSessionUserIDReturnValue: Result<UserSessionProtocol, UserSessionManagerError>! {
-        get { restoreUserSessionUserIDReturnValueLock.withLock { restoreUserSessionUserIDUnderlyingReturnValue } }
-        set { restoreUserSessionUserIDReturnValueLock.withLock { restoreUserSessionUserIDUnderlyingReturnValue = newValue } }
-    }
-    nonisolated(unsafe) var restoreUserSessionUserIDClosure: ((String) async -> Result<UserSessionProtocol, UserSessionManagerError>)?
-
-    @concurrent func restoreUserSession(userID: String) async -> Result<UserSessionProtocol, UserSessionManagerError> {
-        restoreUserSessionUserIDCallsCountLock.withLock { restoreUserSessionUserIDUnderlyingCallsCount += 1 }
-        restoreUserSessionUserIDReceivedUserID = userID
-        restoreUserSessionUserIDReceivedInvocationsLock.withLock { restoreUserSessionUserIDUnderlyingReceivedInvocations.append(userID) }
-        if let restoreUserSessionUserIDClosure = restoreUserSessionUserIDClosure {
-            return await restoreUserSessionUserIDClosure(userID)
-        } else {
-            return restoreUserSessionUserIDReturnValue
         }
     }
     //MARK: - restoreOtherSessions
@@ -15412,37 +15344,6 @@ nonisolated class UserSessionStoreMock: UserSessionStoreProtocol, @unchecked Sen
         logoutUserSessionReceivedUserSession = userSession
         logoutUserSessionReceivedInvocationsLock.withLock { logoutUserSessionUnderlyingReceivedInvocations.append(userSession) }
         logoutUserSessionClosure?(userSession)
-    }
-    //MARK: - applyRemoteSettings
-
-    private let applyRemoteSettingsForUserIDCallsCountLock = NSLock()
-    private nonisolated(unsafe) var applyRemoteSettingsForUserIDUnderlyingCallsCount = 0
-    var applyRemoteSettingsForUserIDCallsCount: Int {
-        get { applyRemoteSettingsForUserIDCallsCountLock.withLock { applyRemoteSettingsForUserIDUnderlyingCallsCount } }
-        set { applyRemoteSettingsForUserIDCallsCountLock.withLock { applyRemoteSettingsForUserIDUnderlyingCallsCount = newValue } }
-    }
-    var applyRemoteSettingsForUserIDCalled: Bool {
-        return applyRemoteSettingsForUserIDCallsCount > 0
-    }
-    private let applyRemoteSettingsForUserIDReceivedUserIDLock = NSLock()
-    private nonisolated(unsafe) var applyRemoteSettingsForUserIDUnderlyingReceivedUserID: String?
-    var applyRemoteSettingsForUserIDReceivedUserID: String? {
-        get { applyRemoteSettingsForUserIDReceivedUserIDLock.withLock { applyRemoteSettingsForUserIDUnderlyingReceivedUserID } }
-        set { applyRemoteSettingsForUserIDReceivedUserIDLock.withLock { applyRemoteSettingsForUserIDUnderlyingReceivedUserID = newValue } }
-    }
-    private let applyRemoteSettingsForUserIDReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var applyRemoteSettingsForUserIDUnderlyingReceivedInvocations: [String] = []
-    var applyRemoteSettingsForUserIDReceivedInvocations: [String] {
-        get { applyRemoteSettingsForUserIDReceivedInvocationsLock.withLock { applyRemoteSettingsForUserIDUnderlyingReceivedInvocations } }
-        set { applyRemoteSettingsForUserIDReceivedInvocationsLock.withLock { applyRemoteSettingsForUserIDUnderlyingReceivedInvocations = newValue } }
-    }
-    nonisolated(unsafe) var applyRemoteSettingsForUserIDClosure: ((String) -> Void)?
-
-    func applyRemoteSettings(forUserID userID: String) {
-        applyRemoteSettingsForUserIDCallsCountLock.withLock { applyRemoteSettingsForUserIDUnderlyingCallsCount += 1 }
-        applyRemoteSettingsForUserIDReceivedUserID = userID
-        applyRemoteSettingsForUserIDReceivedInvocationsLock.withLock { applyRemoteSettingsForUserIDUnderlyingReceivedInvocations.append(userID) }
-        applyRemoteSettingsForUserIDClosure?(userID)
     }
 }
 nonisolated class VoiceMessageCacheMock: VoiceMessageCacheProtocol, @unchecked Sendable {

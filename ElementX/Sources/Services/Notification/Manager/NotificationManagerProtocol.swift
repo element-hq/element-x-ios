@@ -29,14 +29,13 @@ protocol NotificationManagerProtocol: AnyObject {
     func register(with deviceToken: Data) async -> Bool
     func registrationFailed(with error: Error)
     func showLocalNotification(with title: String, subtitle: String?) async
-    func addUserSession(_ userSession: UserSessionProtocol)
-    func removeUserSession(userID: String)
+    func setUserSession(_ userSession: UserSessionProtocol?)
     
     func requestAuthorization()
     
     func removeDeliveredMessageNotifications(for roomID: String) async
     
-    func removeDeliveredNotificationsForFullyReadRooms(_ rooms: [RoomSummary], for userID: String) async
+    func removeDeliveredNotificationsForFullyReadRooms(_ rooms: [RoomSummary]) async
     
-    func updateAppBadgeCount(_ badgeCount: Int, for userID: String) async
+    func updateAppBadgeCount(_ badgeCount: Int) async
 }

@@ -40,6 +40,23 @@ final class UserSessionManager: UserSessionManagerProtocol {
         accounts.values.first ?? nil
     }
     
+    var callbacksPublisher: AnyPublisher<UserSessionManagerCallback, Never> {
+        sessionsSubject
+            .map { userSessions in
+                Publishers.MergeMany(userSessions.map { userSession in
+                    let userID = userSession.clientProxy.userID
+                    return userSession.callbacks.map { callback in
+                        switch callback {
+                        case .didReceiveAuthError(let isSoftLogout):
+                            UserSessionManagerCallback.didReceiveAuthError(userID: userID, isSoftLogout: isSoftLogout)
+                        }
+                    }
+                })
+            }
+            .switchToLatest()
+            .eraseToAnyPublisher()
+    }
+    
     var clientSessionDelegate: ClientSessionDelegate {
         userSessionStore.clientSessionDelegate
     }
@@ -74,7 +91,7 @@ final class UserSessionManager: UserSessionManagerProtocol {
         }
         
         while let userID = accounts.keys.first {
-            if case .success(let userSession) = await restoreUserSession(userID: userID) {
+            if let userSession = await restoreUserSession(userID: userID) {
                 return .success(userSession)
             }
         }
@@ -82,27 +99,10 @@ final class UserSessionManager: UserSessionManagerProtocol {
         return .failure(.failedRestoringSessions)
     }
     
-    func restoreUserSession(userID: String) async -> Result<UserSessionProtocol, UserSessionManagerError> {
-        // Remote settings are app wide, so only the active account's are ever applied.
-        if userID == accounts.keys.first {
-            userSessionStore.applyRemoteSettings(forUserID: userID)
-        }
-        
-        switch await userSessionStore.restoreUserSession(userID: userID) {
-        case .success(let userSession):
-            return .success(userSession)
-        case .failure(let error):
-            MXLog.error("Failed restoring \(userID): \(error)")
-            accounts.removeValue(forKey: userID)
-            return .failure(.failedRestoringSession)
-        }
-    }
-    
     func restoreOtherSessions(prepare: @MainActor (UserSessionProtocol) async -> Void) async {
         for userID in accounts.keys where session(for: userID) == nil {
             // Clearing the cache or signing out cancels this and restores from scratch.
-            guard !Task.isCancelled,
-                  case .success(let userSession) = await restoreUserSession(userID: userID) else { continue }
+            guard !Task.isCancelled, let userSession = await restoreUserSession(userID: userID) else { continue }
             
             await prepare(userSession)
             guard !Task.isCancelled else { return }
@@ -177,5 +177,19 @@ final class UserSessionManager: UserSessionManagerProtocol {
     
     func stopSearchBackfill() {
         sessionsSubject.value.forEach { $0.clientProxy.stopSearchBackfill() }
+    }
+    
+    // MARK: - Private
+    
+    /// Restores an account's session, removing the account when that fails (the store deletes its data).
+    private func restoreUserSession(userID: String) async -> UserSessionProtocol? {
+        switch await userSessionStore.restoreUserSession(userID: userID) {
+        case .success(let userSession):
+            return userSession
+        case .failure(let error):
+            MXLog.error("Failed restoring \(userID): \(error)")
+            accounts.removeValue(forKey: userID)
+            return nil
+        }
     }
 }

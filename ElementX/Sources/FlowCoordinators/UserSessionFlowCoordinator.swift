@@ -532,10 +532,15 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         let roomListPublisher = userSession.clientProxy.staticRoomSummaryProvider.roomListPublisher
         
         Task { [weak self] in
-            for await _ in roomListPublisher.values {
+            for await roomSummaries in roomListPublisher.values {
                 guard let self else { return }
                 
-                chatsTabDetails.badgeCount = Int(userSession.clientProxy.totalUnreadNotifications)
+                let badgeCount = Int(userSession.clientProxy.totalUnreadNotifications)
+                
+                chatsTabDetails.badgeCount = badgeCount
+                
+                await flowParameters.notificationManager.removeDeliveredNotificationsForFullyReadRooms(roomSummaries)
+                await flowParameters.notificationManager.updateAppBadgeCount(badgeCount)
             }
         }
         .store(in: &cancellables)

@@ -37,7 +37,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private var backgroundRefreshSyncObserver: AnyCancellable?
     
     private var userSessionMigrationsOldVersion: Version?
-    private var otherSessionsRestoreTask: Task<Void, Never>?
+    private var otherSessionsRestorationTask: Task<Void, Never>?
     private var userSession: UserSessionProtocol? {
         userSessionManager.activeSession
     }
@@ -49,7 +49,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private var userSessionFlowCoordinator: UserSessionFlowCoordinator?
     private var softLogoutCoordinator: SoftLogoutScreenCoordinator?
     private var appDelegateObserver: AnyCancellable?
-    private var userSessionObservers: [String: Set<AnyCancellable>] = [:]
     /// Becomes `true` once the app is no longer waiting on a session restore, whatever the outcome.
     private let isSessionRestoredSubject = CurrentValueSubject<Bool, Never>(false)
     private var clientProxyObserver: AnyCancellable?
@@ -162,6 +161,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         setupStateMachine()
         
         observeApplicationState()
+        observeUserSessionChanges()
         observeAppLockChanges()
         
         registerBackgroundAppRefresh()
@@ -709,7 +709,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 configureActiveSession()
                 stateMachine.processEvent(.createdUserSession)
                 
-                otherSessionsRestoreTask = Task { await self.restoreOtherSessions(migratingFrom: migrationsOldVersion) }
+                otherSessionsRestorationTask = Task { await self.restoreOtherSessions(migratingFrom: migrationsOldVersion) }
             case .failure:
                 MXLog.error("Failed to restore an existing session.")
                 stateMachine.processEvent(.failedRestoringSession)
@@ -717,17 +717,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
     }
     
-    /// Brings the other signed in accounts live too, one after the other, so they sync and get notifications.
+    /// Brings the other signed in accounts live too, one after the other, so they sync.
     private func restoreOtherSessions(migratingFrom oldVersion: Version?) async {
         guard appSettings.multiAccountEnabled else { return }
         
         await userSessionManager.restoreOtherSessions { [weak self] userSession in
-            guard let self else { return }
-            
-            await performUserSessionMigrations(userSession, from: oldVersion)
-            guard !Task.isCancelled else { return }
-            
-            configureServices(for: userSession)
+            await self?.performUserSessionMigrations(userSession, from: oldVersion)
         }
     }
     
@@ -887,7 +882,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             fatalError("User session not setup")
         }
         
-        otherSessionsRestoreTask?.cancel()
+        otherSessionsRestorationTask?.cancel()
         windowManager.closeAllSecondaryWindows()
         
         showLoadingIndicator()
@@ -917,7 +912,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             
             // Regardless of the result, clear user data
             userSessionManager.remove(userID: userSession.clientProxy.userID)
-            tearDownUserSession(userID: userSession.clientProxy.userID)
+            tearDownUserSession()
             
             userSession.userSettings.account.reset()
             appHooks.remoteSettingsHook.reset(appSettings)
@@ -932,14 +927,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
     }
     
-    private func tearDownUserSession(userID: String) {
+    private func tearDownUserSession() {
         userIndicatorController.retractAllIndicators()
-        
-        userSessionObservers[userID] = nil
         
         userSessionFlowCoordinator = nil
         
-        notificationManager.removeUserSession(userID: userID)
+        notificationManager.setUserSession(nil)
     }
     
     private func presentSplashScreen(isSoftLogout: Bool = false, disableAppLock: Bool = false) {
@@ -967,7 +960,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             fatalError("User session not setup")
         }
         
-        configureServices(for: userSession)
+        // TODO: Notifications only follow the active account, the NotificationManager must change to handle every account.
+        configureNotificationManager(for: userSession)
         // TODO: Calls only follow the active account, ElementCallService must change to hold every account's session.
         elementCallService.setUserSession(userSession)
         Task {
@@ -976,17 +970,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
     }
     
-    /// Wires the services that work for every signed in account, not only the active one.
-    private func configureServices(for userSession: UserSessionProtocol) {
-        // Wiring an account again (e.g. after clearing the cache) must replace its observers, not add to them.
-        userSessionObservers[userSession.clientProxy.userID] = nil
-        configureNotificationManager(for: userSession)
-        observeUserSessionChanges(userSession)
-        observeUnreadNotifications(userSession)
-    }
-    
     private func configureNotificationManager(for userSession: UserSessionProtocol) {
-        notificationManager.addUserSession(userSession)
+        notificationManager.setUserSession(userSession)
         
         appDelegateObserver = appDelegate.callbacks
             .receive(on: DispatchQueue.main)
@@ -1000,14 +985,13 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             }
     }
     
-    private func observeUserSessionChanges(_ userSession: UserSessionProtocol) {
-        let userID = userSession.clientProxy.userID
-        userSession.callbacks
+    private func observeUserSessionChanges() {
+        userSessionManager.callbacksPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] callback in
                 guard let self else { return }
                 switch callback {
-                case .didReceiveAuthError(let isSoftLogout):
+                case .didReceiveAuthError(let userID, let isSoftLogout):
                     // Only the active account can be signed out for now.
                     guard userID == userSessionManager.activeSession?.clientProxy.userID else {
                         MXLog.error("Ignoring an auth error for \(userID), it isn't the active account.")
@@ -1016,23 +1000,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                     stateMachine.processEvent(.signOut(isSoft: isSoftLogout, disableAppLock: false))
                 }
             }
-            .store(in: &userSessionObservers[userID, default: []])
-    }
-    
-    /// Keeps the app badge and the delivered notifications in sync with the account's rooms.
-    private func observeUnreadNotifications(_ userSession: UserSessionProtocol) {
-        let clientProxy = userSession.clientProxy
-        let userID = clientProxy.userID
-        
-        Task { [weak self] in
-            for await roomSummaries in clientProxy.staticRoomSummaryProvider.roomListPublisher.values {
-                guard let self else { return }
-                
-                await notificationManager.removeDeliveredNotificationsForFullyReadRooms(roomSummaries, for: userID)
-                await notificationManager.updateAppBadgeCount(Int(clientProxy.totalUnreadNotifications), for: userID)
-            }
-        }
-        .store(in: &userSessionObservers[userID, default: []])
+            .store(in: &cancellables)
     }
     
     private func observeAppLockChanges() {
@@ -1055,7 +1023,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             fatalError("User session not setup")
         }
         
-        otherSessionsRestoreTask?.cancel()
+        otherSessionsRestorationTask?.cancel()
         showLoadingIndicator()
         
         navigationRootCoordinator.setRootCoordinator(PlaceholderScreenCoordinator(hideBrandChrome: appSettings.hideBrandChrome))

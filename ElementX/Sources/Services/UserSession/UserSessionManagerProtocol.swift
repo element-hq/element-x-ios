@@ -12,10 +12,12 @@ import MatrixRustSDK
 enum UserSessionManagerError: Error {
     /// There are no signed in accounts to restore.
     case noAccounts
-    /// The account couldn't be restored, so it has been removed.
-    case failedRestoringSession
     /// None of the signed in accounts could be restored, so they have all been removed.
     case failedRestoringSessions
+}
+
+enum UserSessionManagerCallback: Equatable {
+    case didReceiveAuthError(userID: String, isSoftLogout: Bool)
 }
 
 // sourcery: AutoMockable
@@ -26,6 +28,8 @@ protocol UserSessionManagerProtocol: AnyObject {
     var sessionsPublisher: CurrentValuePublisher<[UserSessionProtocol], Never> { get }
     /// The session of the account whose UI is on screen.
     var activeSession: UserSessionProtocol? { get }
+    /// The auth errors of every live session, with the account they belong to.
+    var callbacksPublisher: AnyPublisher<UserSessionManagerCallback, Never> { get }
     /// The delegate that stores changes to a client's session, such as refreshed tokens.
     var clientSessionDelegate: ClientSessionDelegate { get }
     
@@ -37,10 +41,6 @@ protocol UserSessionManagerProtocol: AnyObject {
     ///
     /// The session isn't registered: `add` it once it's ready to be used, e.g. after any migrations.
     func restoreActiveSession() async -> Result<UserSessionProtocol, UserSessionManagerError>
-    /// Restores an account's session, removing the account when that fails (the store deletes its data).
-    ///
-    /// The session isn't registered: `add` it once it's ready to be used, e.g. after any migrations.
-    func restoreUserSession(userID: String) async -> Result<UserSessionProtocol, UserSessionManagerError>
     /// Restores every account that isn't live yet, one after the other. Each session is `prepare`d before it's added,
     /// and resumed when the services are running.
     func restoreOtherSessions(prepare: @MainActor (UserSessionProtocol) async -> Void) async

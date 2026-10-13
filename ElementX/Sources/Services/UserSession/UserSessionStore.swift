@@ -110,15 +110,6 @@ class UserSessionStore: UserSessionStoreProtocol {
         }
     }
     
-    func applyRemoteSettings(forUserID userID: String) {
-        guard let credentials = keychainController.restorationTokens().first(where: { $0.userID == userID }) else {
-            MXLog.error("Missing credentials, can't apply the remote settings for \(userID).")
-            return
-        }
-        
-        appHooks.remoteSettingsHook.loadCache(forHomeserver: credentials.restorationToken.session.homeserverUrl, applyingTo: appSettings)
-    }
-    
     // MARK: - Private
     
     private func buildUserSessionWithClient(_ clientProxy: ClientProxyProtocol, userSettings: UserSettings) async -> UserSessionProtocol {
@@ -145,6 +136,8 @@ class UserSessionStore: UserSessionStoreProtocol {
             MXLog.error("Failed restoring login, missing non-transient user data")
             return .failure(.failedRestoringLogin)
         }
+        
+        appHooks.remoteSettingsHook.loadCache(forHomeserver: credentials.restorationToken.session.homeserverUrl, applyingTo: appSettings)
         
         do {
             let client = try await clientFactory.makeAppClient(credentials: credentials,

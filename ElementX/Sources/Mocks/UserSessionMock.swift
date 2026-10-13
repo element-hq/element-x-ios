@@ -22,6 +22,7 @@ struct UserSessionMockConfiguration {
         
         clientProxy = configuration.clientProxy
         userSettings = configuration.userSettings
+        callbacks = .init()
         
         mediaProvider = MediaProviderMock(.init())
         voiceMessageMediaManager = VoiceMessageMediaManagerMock()

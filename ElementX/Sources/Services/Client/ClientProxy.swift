@@ -846,7 +846,7 @@ class ClientProxy: ClientProxyProtocol {
                                    deviceDisplayName: configuration.deviceDisplayName,
                                    profileTag: configuration.profileTag,
                                    lang: configuration.lang,
-                                   append: configuration.append)
+                                   append: false)
     }
     
     func searchUsers(searchTerm: String, limit: UInt) async -> Result<SearchUsersResults, ClientProxyError> {
