@@ -435,7 +435,89 @@ final class MediaUploadingPreprocessorTests {
         #expect(optimizedImageInfo.height == 2048)
     }
     
+    @Test
+    func batchPreservesInputOrderBeyondConcurrencyLimit() async throws {
+        let names = ["test_image.png", "test_animated_image.gif", "landscape_test_image.jpg"]
+        try #require(names.count > MediaUploadingPreprocessor.Constants.maximumConcurrentProcessingCount)
+        let inputs = try names.map { try #require(Bundle(for: Self.self).url(forResource: $0, withExtension: nil)) }
+        let results = try await mediaUploadingPreprocessor.processMedia(at: inputs, maxUploadSize: maxUploadSize).get()
+        defer {
+            for result in results {
+                try? FileManager.default.removeItem(at: result.url.deletingLastPathComponent())
+            }
+        }
+        #expect(results.map(\.url.lastPathComponent) == names)
+        for result in results {
+            let thumbnailURL = try #require(result.thumbnailURL)
+            #expect(try Data(contentsOf: result.url).isEmpty == false)
+            #expect(try Data(contentsOf: thumbnailURL).isEmpty == false)
+        }
+    }
+    
+    @Test
+    func failedPreparationRemovesItsFiles() async throws {
+        let url = try copyResourceToTemporaryDirectory("test_image.png")
+        defer { try? FileManager.default.removeItem(at: url.deletingLastPathComponent()) }
+        
+        guard case .failure(.maxUploadSizeExceeded) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: 1) else {
+            Issue.record("Expected the upload size to be exceeded")
+            return
+        }
+        #expect(try preparedFolders(for: url).isEmpty)
+    }
+    
+    @Test
+    func batchFailureReturnsTheErrorAndRemovesPreparedFiles() async throws {
+        let url = try copyResourceToTemporaryDirectory("test_image.png")
+        defer { try? FileManager.default.removeItem(at: url.deletingLastPathComponent()) }
+        let missingURL = url.deletingLastPathComponent().appendingPathComponent("missing.png")
+        
+        // The missing file comes last so that at least one image has already been prepared when the batch fails.
+        guard case .failure(.failedProcessingMedia) = await mediaUploadingPreprocessor.processMedia(at: [url, url, missingURL], maxUploadSize: maxUploadSize) else {
+            Issue.record("Expected the missing file to fail the batch")
+            return
+        }
+        #expect(try preparedFolders(for: url).isEmpty)
+    }
+    
+    @Test
+    func cancellationRemovesPreparedFiles() async throws {
+        let url = try copyResourceToTemporaryDirectory("test_image.png")
+        defer { try? FileManager.default.removeItem(at: url.deletingLastPathComponent()) }
+        
+        let task = Task { await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize) }
+        await Task.yield() // Let the preparation start.
+        task.cancel()
+        
+        guard case .failure(.cancelled) = await task.value else {
+            Issue.record("Expected the preparation to be cancelled")
+            return
+        }
+        #expect(try preparedFolders(for: url).isEmpty)
+    }
+    
     // MARK: - Private
+    
+    /// Copies a test asset to a uniquely named file, so the folders the preprocessor prepares from it can be found afterwards.
+    private func copyResourceToTemporaryDirectory(_ resource: String) throws -> URL {
+        let assetURL = try #require(Bundle(for: Self.self).url(forResource: resource, withExtension: nil))
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("\(Self.self)-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        let url = directory.appendingPathComponent("\(UUID().uuidString).\(assetURL.pathExtension)")
+        try FileManager.default.copyItem(at: assetURL, to: url)
+        return url
+    }
+    
+    /// The unique folders created by the preprocessor for the given file that still exist.
+    private func preparedFolders(for url: URL) throws -> [URL] {
+        let name = url.deletingPathExtension().lastPathComponent
+        return try FileManager.default.contentsOfDirectory(at: FileManager.default.temporaryDirectory, includingPropertiesForKeys: nil)
+            .filter { UUID(uuidString: $0.lastPathComponent) != nil }
+            .filter { folder in
+                let contents = (try? FileManager.default.contentsOfDirectory(atPath: folder.path(percentEncoded: false))) ?? []
+                return contents.contains { $0.contains(name) }
+            }
+    }
     
     private func isEqual<N: UnsignedInteger>(_ lhs: N, _ rhs: N, within tolerance: N) -> Bool {
         isEqual(Double(lhs), Double(rhs), within: Double(tolerance))

@@ -8,10 +8,11 @@
 
 import AVFoundation
 import MatrixRustSDK
-import UIKit
+import SwiftUI
 import UniformTypeIdentifiers
 
-indirect enum MediaUploadingPreprocessorError: Error {
+indirect nonisolated enum MediaUploadingPreprocessorError: Error {
+    case cancelled
     case maxUploadSizeUnknown
     case maxUploadSizeExceeded(limit: UInt)
     
@@ -30,7 +31,7 @@ indirect enum MediaUploadingPreprocessorError: Error {
     case failedConvertingVideo
 }
 
-enum MediaInfo {
+nonisolated enum MediaInfo {
     case image(imageURL: URL, thumbnailURL: URL, imageInfo: ImageInfo)
     case video(videoURL: URL, thumbnailURL: URL, videoInfo: VideoInfo)
     case audio(audioURL: URL, audioInfo: AudioInfo)
@@ -69,7 +70,7 @@ enum MediaInfo {
     }
 }
 
-private struct ImageProcessingInfo {
+private nonisolated struct ImageProcessingInfo {
     let url: URL
     let height: Double
     let width: Double
@@ -77,7 +78,7 @@ private struct ImageProcessingInfo {
     let blurhash: String?
 }
 
-private struct VideoProcessingInfo {
+private nonisolated struct VideoProcessingInfo {
     let url: URL
     let height: Double
     let width: Double
@@ -85,80 +86,138 @@ private struct VideoProcessingInfo {
     let mimeType: String
 }
 
-struct MediaUploadingPreprocessor {
+nonisolated struct MediaUploadingPreprocessor {
     let userSettings: UserSettings
     
-    enum Constants {
+    nonisolated enum Constants {
         static let maximumThumbnailSize = CGSize(width: 800, height: 600)
         static let optimizedMaxPixelSize = 2048.0
         static let jpegCompressionQuality = 0.78
         static let videoThumbnailTime = 5.0 // seconds
+        static let maximumConcurrentProcessingCount = 2
     }
     
     /// Processes media at the given URLs. It will generate thumbnails for images and videos, convert videos to 1080p mp4, strip GPS locations
-    /// from images and retrieve associated media information
-    /// - Parameter urls: the file URL
+    /// from images and retrieve associated media information. On failure or cancellation all the prepared files are removed.
+    /// - Parameter urls: the file URLs
     /// - Returns: a collection of results containing specific type of `MediaInfo` depending on the file type
     /// and its associated details or any resulting error
     func processMedia(at urls: [URL], maxUploadSize: UInt) async -> Result<[MediaInfo], MediaUploadingPreprocessorError> {
-        await withTaskGroup { taskGroup in
-            for (index, url) in urls.enumerated() {
-                taskGroup.addTask {
-                    let result = await processMedia(at: url, maxUploadSize: maxUploadSize)
-                    return (index, result)
+        await withTaskGroup(of: (Int, Result<MediaInfo, MediaUploadingPreprocessorError>).self) { taskGroup in
+            var pendingIndices = urls.indices.makeIterator()
+            
+            func processNextURL() {
+                guard let index = pendingIndices.next() else { return }
+                _ = taskGroup.addTaskUnlessCancelled {
+                    await (index, processMedia(at: urls[index], maxUploadSize: maxUploadSize))
                 }
+            }
+            
+            for _ in 0..<Constants.maximumConcurrentProcessingCount {
+                processNextURL()
             }
             
             // Store results in their respective index as they come in
             var results = [MediaInfo?](repeating: nil, count: urls.count)
+            var failure: MediaUploadingPreprocessorError?
             
             for await (index, result) in taskGroup {
                 switch result {
                 case .success(let mediaInfo):
                     results[index] = mediaInfo
+                    processNextURL()
                 case .failure(let error):
-                    return .failure(error)
+                    failure = failure ?? error
+                    taskGroup.cancelAll()
                 }
             }
             
-            return .success(results.compactMap { $0 })
+            let mediaInfos = results.compactMap { $0 }
+            
+            if Task.isCancelled {
+                failure = .cancelled
+            }
+            if let failure {
+                await removeUniqueFolders(containing: mediaInfos.map(\.url))
+                return .failure(failure)
+            }
+            
+            return .success(mediaInfos)
         }
     }
     
     /// Processes media at a given URL. It will generate thumbnails for images and videos, convert videos to 1080p mp4, strip GPS locations
-    /// from images and retrieve associated media information
+    /// from images and retrieve associated media information. On failure or cancellation all the prepared files are removed.
     /// - Parameter url: the file URL
     /// - Returns: a specific type of `MediaInfo` depending on the file type and its associated details
     func processMedia(at url: URL, maxUploadSize: UInt) async -> Result<MediaInfo, MediaUploadingPreprocessorError> {
-        // Start by copying the file to a unique temporary location in order to avoid conflicts if processing it multiple times
-        // All the other operations will be made relative to it
-        let uniqueFolder = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
-        var newURL = uniqueFolder.appendingPathComponent(url.lastPathComponent)
+        guard !Task.isCancelled else { return .failure(.cancelled) }
+        
+        let preparedURL: URL
         do {
-            try FileManager.default.createDirectory(at: uniqueFolder, withIntermediateDirectories: true)
-            try FileManager.default.copyItem(at: url, to: newURL)
+            preparedURL = try await copyToUniqueFolder(url)
         } catch {
-            return .failure(.failedProcessingMedia(error))
+            return .failure(error)
         }
         
-        // Process unknown types as plain files
-        guard let type = UTType(filenameExtension: newURL.pathExtension),
-              let mimeType = type.preferredMIMEType else {
-            return processFile(at: newURL, mimeType: "application/octet-stream", maxUploadSize: maxUploadSize)
+        let result = await processPreparedMedia(at: preparedURL, maxUploadSize: maxUploadSize)
+        
+        if Task.isCancelled {
+            await removeUniqueFolders(containing: [preparedURL])
+            return .failure(.cancelled)
+        }
+        if case .failure = result {
+            await removeUniqueFolders(containing: [preparedURL])
         }
         
-        if type.conforms(to: .image) {
-            return processImage(at: &newURL, type: type, mimeType: mimeType, maxUploadSize: maxUploadSize)
-        } else if type.conforms(to: .movie) || type.conforms(to: .video) {
-            return await processVideo(at: newURL, maxUploadSize: maxUploadSize)
-        } else if type.conforms(to: .audio) {
-            return await processAudio(at: newURL, mimeType: mimeType, maxUploadSize: maxUploadSize)
-        } else {
-            return processFile(at: newURL, mimeType: mimeType, maxUploadSize: maxUploadSize)
-        }
+        return result
     }
     
     // MARK: - Private
+    
+    /// Copies the file into a new unique folder to avoid conflicts when processing the same file more than once.
+    /// Every file derived from the copy (converted media, thumbnails) is written into that same folder.
+    @concurrent
+    private func copyToUniqueFolder(_ url: URL) async throws(MediaUploadingPreprocessorError) -> URL {
+        let uniqueFolder = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        let newURL = uniqueFolder.appendingPathComponent(url.lastPathComponent)
+        do {
+            try FileManager.default.createDirectory(at: uniqueFolder, withIntermediateDirectories: true)
+            try FileManager.default.copyItem(at: url, to: newURL)
+            return newURL
+        } catch {
+            try? FileManager.default.removeItem(at: uniqueFolder)
+            throw .failedProcessingMedia(error)
+        }
+    }
+    
+    /// Removes the whole unique folder (see `copyToUniqueFolder`) that holds each of the given files.
+    @concurrent
+    private func removeUniqueFolders(containing urls: [URL]) async {
+        for url in urls {
+            try? FileManager.default.removeItem(at: url.deletingLastPathComponent())
+        }
+    }
+    
+    private func processPreparedMedia(at url: URL, maxUploadSize: UInt) async -> Result<MediaInfo, MediaUploadingPreprocessorError> {
+        guard !Task.isCancelled else { return .failure(.cancelled) }
+        
+        // Process unknown types as plain files
+        guard let type = UTType(filenameExtension: url.pathExtension),
+              let mimeType = type.preferredMIMEType else {
+            return processFile(at: url, mimeType: "application/octet-stream", maxUploadSize: maxUploadSize)
+        }
+        
+        if type.conforms(to: .image) {
+            return await processImage(at: url, type: type, mimeType: mimeType, maxUploadSize: maxUploadSize)
+        } else if type.conforms(to: .movie) || type.conforms(to: .video) {
+            return await processVideo(at: url, maxUploadSize: maxUploadSize)
+        } else if type.conforms(to: .audio) {
+            return await processAudio(at: url, mimeType: mimeType, maxUploadSize: maxUploadSize)
+        } else {
+            return processFile(at: url, mimeType: mimeType, maxUploadSize: maxUploadSize)
+        }
+    }
     
     /// Prepares an image for upload. Strips location data from it and generates a thumbnail
     /// - Parameters:
@@ -166,9 +225,12 @@ struct MediaUploadingPreprocessor {
     ///   - type: its UTType
     ///   - mimeType: the mimeType extracted from the UTType
     /// - Returns: Returns a `MediaInfo.image` containing the URLs for the modified image and its thumbnail plus the corresponding `ImageInfo`
-    private func processImage(at url: inout URL, type: UTType, mimeType: String, maxUploadSize: UInt) -> Result<MediaInfo, MediaUploadingPreprocessorError> {
+    @concurrent
+    private func processImage(at url: URL, type: UTType, mimeType: String, maxUploadSize: UInt) async -> Result<MediaInfo, MediaUploadingPreprocessorError> {
+        var url = url
         do {
             try stripLocationFromImage(at: url, type: type)
+            guard !Task.isCancelled else { return .failure(.cancelled) }
             
             var mimeType = mimeType
             if userSettings.app.optimizeMediaUploads, !type.conforms(to: .gif) {
@@ -187,6 +249,7 @@ struct MediaUploadingPreprocessor {
                     url = convertedURL
                 }
             }
+            guard !Task.isCancelled else { return .failure(.cancelled) }
             
             let thumbnailResult = try generateThumbnailForImage(at: url)
             
@@ -231,7 +294,9 @@ struct MediaUploadingPreprocessor {
     private func processVideo(at url: URL, maxUploadSize: UInt) async -> Result<MediaInfo, MediaUploadingPreprocessorError> {
         do {
             let result = try await convertVideoToMP4(url, targetFileSize: UInt(maxUploadSize))
-            let thumbnailResult = try await generateThumbnailForVideoAt(result.url)
+            guard !Task.isCancelled else { return .failure(.cancelled) }
+            
+            let thumbnailResult = try await generateThumbnailForVideo(at: result.url)
             
             let videoSize = (try? FileManager.default.sizeForItem(at: result.url)) ?? 0
             let thumbnailSize = (try? FileManager.default.sizeForItem(at: thumbnailResult.url)) ?? 0
@@ -396,7 +461,8 @@ struct MediaUploadingPreprocessor {
     /// Generates a thumbnail for the video at the given URL
     /// - Parameter url: the video URL
     /// - Returns: the URL for the resulting thumbnail and its sizing info as an `ImageProcessingResult`
-    private func generateThumbnailForVideoAt(_ url: URL) async throws(MediaUploadingPreprocessorError) -> ImageProcessingInfo {
+    @concurrent
+    private func generateThumbnailForVideo(at url: URL) async throws(MediaUploadingPreprocessorError) -> ImageProcessingInfo {
         let assetImageGenerator = AVAssetImageGenerator(asset: AVURLAsset(url: url))
         assetImageGenerator.appliesPreferredTrackTransform = true
         assetImageGenerator.maximumSize = Constants.maximumThumbnailSize
@@ -464,6 +530,7 @@ struct MediaUploadingPreprocessor {
         do {
             try await exportSession.export(to: outputURL, as: .mp4)
         } catch {
+            guard !Task.isCancelled else { throw .cancelled }
             MXLog.error("Video conversion failed: \(error)")
             throw .failedConvertingVideo
         }
@@ -494,7 +561,7 @@ struct MediaUploadingPreprocessor {
 
 // MARK: - Extensions
 
-private extension CGImageSource {
+private nonisolated extension CGImageSource {
     var size: CGSize? {
         guard let properties = CGImageSourceCopyPropertiesAtIndex(self, 0, nil) as? [NSString: Any],
               var width = properties[kCGImagePropertyPixelWidth] as? Int,
@@ -517,7 +584,7 @@ private extension CGImageSource {
     }
 }
 
-private extension AVAssetTrack {
+private nonisolated extension AVAssetTrack {
     var size: CGSize {
         get async throws {
             let naturalSize = try await load(.naturalSize)
