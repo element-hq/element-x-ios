@@ -15,15 +15,14 @@ import Testing
 @MainActor
 final class NotificationManagerTests {
     var notificationManager: NotificationManager!
-    private let clientProxy = ClientProxyMock(.init(userID: "@test:user.net"))
-    private lazy var mockUserSession = UserSessionMock(.init(clientProxy: clientProxy))
     private var notificationCenter: UserNotificationCenterMock!
+    private let sessionsSubject = CurrentValueSubject<[UserSessionProtocol], Never>([])
+    private let appSettings: AppSettings
     private var authorizationStatusWasGranted = false
     private var shouldDisplayInAppNotificationReturnValue = false
     private var handleInlineReplyDelegateCalled = false
     private var notificationTappedDelegateCalled = false
     private var registerForRemoteNotificationsDelegateCalled: (() -> Void)?
-    private let appSettings: AppSettings
     
     init() {
         appSettings = AppSettings.volatile()
@@ -32,9 +31,10 @@ final class NotificationManagerTests {
         notificationCenter.authorizationStatusReturnValue = .authorized
         notificationCenter.notificationSettingsClosure = { await UNUserNotificationCenter.current().notificationSettings() }
         
-        notificationManager = NotificationManager(notificationCenter: notificationCenter, appSettings: appSettings)
+        notificationManager = NotificationManager(notificationCenter: notificationCenter,
+                                                  appSettings: appSettings,
+                                                  sessionsPublisher: sessionsSubject.asCurrentValuePublisher())
         notificationManager.start()
-        notificationManager.setUserSession(mockUserSession)
     }
     
     isolated deinit {
@@ -43,70 +43,189 @@ final class NotificationManagerTests {
     }
     
     @Test
-    func whenRegistered_pusherIsCalled() async {
-        _ = await notificationManager.register(with: Data())
+    func registeringHandsTheTokenToEveryAccount() async {
+        let alice = NotificationServiceMock(.init())
+        let bob = NotificationServiceMock(.init())
+        sessionsSubject.send([makeSession(notificationService: alice), makeSession(notificationService: bob)])
+        let deviceToken = Data("1234".utf8)
         
-        #expect(clientProxy.setPusherWithCalled)
+        await notificationManager.register(with: deviceToken)
+        
+        #expect(alice.registerDeviceTokenReceivedDeviceToken == deviceToken)
+        #expect(bob.registerDeviceTokenReceivedDeviceToken == deviceToken)
     }
     
     @Test
-    func whenRegisteredSuccess_completionSuccessIsCalled() async {
-        let success = await notificationManager.register(with: Data())
-        #expect(success)
-    }
-    
-    @Test
-    func whenRegisteredAndPusherThrowsError_completionFalseIsCalled() async {
-        enum TestError: Error {
-            case someError
+    func anAccountGoingLiveAfterwardsGetsTheSavedToken() async {
+        let deviceToken = Data("1234".utf8)
+        await notificationManager.register(with: deviceToken)
+        let alice = NotificationServiceMock(.init())
+        
+        await waitForConfirmation("The saved token should be registered", timeout: .seconds(10)) { confirm in
+            alice.registerDeviceTokenClosure = { _ in confirm() }
+            sessionsSubject.send([makeSession(notificationService: alice)])
         }
         
-        clientProxy.setPusherWithThrowableError = TestError.someError
-        let success = await notificationManager.register(with: Data())
-        #expect(!success)
+        #expect(alice.registerDeviceTokenReceivedDeviceToken == deviceToken)
     }
     
     @Test
-    func whenRegistered_pusherIsCalledWithCorrectValues() async throws {
-        let pushkeyData = Data("1234".utf8)
-        _ = await notificationManager.register(with: pushkeyData)
+    func aSessionReplacedAfterClearingTheCacheRegistersAgain() async {
+        let oldService = NotificationServiceMock(.init())
+        sessionsSubject.send([makeSession(notificationService: oldService)])
+        await notificationManager.register(with: Data("1234".utf8))
+        let newService = NotificationServiceMock(.init())
         
-        guard let configuration = clientProxy.setPusherWithReceivedInvocations.first else {
-            Issue.record("Invalid pusher configuration sent")
-            return
+        await waitForConfirmation("The new session should register", timeout: .seconds(10)) { confirm in
+            newService.registerDeviceTokenClosure = { _ in confirm() }
+            sessionsSubject.send([makeSession(notificationService: newService)])
         }
         
-        #expect(configuration.identifiers.pushkey == pushkeyData.base64EncodedString())
-        #expect(configuration.identifiers.appId == appSettings.pusherAppID)
-        #expect(configuration.appDisplayName == "\(InfoPlistReader.main.bundleDisplayName) (iOS)")
-        #expect(configuration.deviceDisplayName == UIDevice.current.name)
-        #expect(configuration.profileTag != nil)
-        #expect(configuration.lang == Bundle.app.preferredLocalizations.first)
-        guard case let .http(data) = configuration.kind else {
-            Issue.record("Http kind expected")
-            return
+        #expect(oldService.registerDeviceTokenCallsCount == 1)
+    }
+    
+    @Test
+    func launchingRegistersWhenAnAccountIsOnAndPermissionWasGiven() async {
+        notificationManager.delegate = self
+        
+        await waitForConfirmation("registerForRemoteNotifications should be called", timeout: .seconds(10)) { confirm in
+            registerForRemoteNotificationsDelegateCalled = { confirm() }
+            sessionsSubject.send([makeSession(notificationService: NotificationServiceMock(.init()))])
         }
-        #expect(data.url == appSettings.pushGatewayNotifyEndpoint.absoluteString)
-        #expect(data.format == .eventIdOnly)
-        let defaultPayload = APNSPayload(aps: APSInfo(mutableContent: 1,
-                                                      alert: APSAlert(locKey: "Notification",
-                                                                      locArgs: [])),
-                                         pusherNotificationClientIdentifier: nil)
-        #expect(try data.defaultPayload == (defaultPayload.toJsonString()))
+        
+        #expect(authorizationStatusWasGranted)
     }
     
     @Test
-    func whenRegisteredAndPusherTagNotSetInSettings_tagGeneratedAndSavedInSettings() async {
-        appSettings.pusherProfileTag = nil
-        _ = await notificationManager.register(with: Data())
-        #expect(appSettings.pusherProfileTag != nil)
+    func launchingRegistersEvenWhenEveryAccountIsOff() async {
+        notificationManager.delegate = self
+        
+        // So that accounts turned off delete any pusher left on their homeserver.
+        await waitForConfirmation("registerForRemoteNotifications should be called", timeout: .seconds(10)) { confirm in
+            registerForRemoteNotificationsDelegateCalled = { confirm() }
+            sessionsSubject.send([makeSession(notificationService: NotificationServiceMock(.init(isEnabled: false)))])
+        }
+        
+        #expect(authorizationStatusWasGranted)
     }
     
     @Test
-    func whenRegisteredAndPusherTagIsSetInSettings_tagNotGenerated() async {
-        appSettings.pusherProfileTag = "12345"
-        _ = await notificationManager.register(with: Data())
-        #expect(appSettings.pusherProfileTag == "12345")
+    func theTokenIsForgottenOnceTheLastAccountIsGone() async throws {
+        sessionsSubject.send([makeSession(notificationService: NotificationServiceMock(.init()))])
+        await notificationManager.register(with: Data("1234".utf8))
+        sessionsSubject.send([])
+        let bob = NotificationServiceMock(.init())
+        
+        // The app unregisters from APNs when signing out of the last account, so the old token is dead.
+        sessionsSubject.send([makeSession(notificationService: bob)])
+        try await Task.sleep(for: .milliseconds(500))
+        
+        #expect(!bob.registerDeviceTokenCalled)
+    }
+    
+    @Test
+    func launchingNeverAsksForPermission() async throws {
+        notificationCenter.authorizationStatusReturnValue = .notDetermined
+        notificationManager.delegate = self
+        
+        sessionsSubject.send([makeSession(notificationService: NotificationServiceMock(.init()))])
+        try await Task.sleep(for: .seconds(1))
+        
+        #expect(!notificationCenter.requestAuthorizationOptionsCalled)
+        #expect(!authorizationStatusWasGranted)
+    }
+    
+    @Test
+    func turningAnAccountOnAsksForPermission() async {
+        let isEnabledSubject = CurrentValueSubject<Bool, Never>(false)
+        let alice = NotificationServiceMock(.init())
+        alice.isEnabledPublisher = isEnabledSubject.asCurrentValuePublisher()
+        sessionsSubject.send([makeSession(notificationService: alice)])
+        
+        await waitForConfirmation("requestAuthorization should be called", timeout: .seconds(10)) { confirm in
+            notificationCenter.requestAuthorizationOptionsClosure = { _ in
+                confirm()
+                return true
+            }
+            isEnabledSubject.send(true)
+        }
+        
+        #expect(notificationCenter.requestAuthorizationOptionsReceivedOptions == [.alert, .sound, .badge])
+    }
+    
+    @Test
+    func grantingPermissionRegistersForRemoteNotifications() async {
+        notificationCenter.authorizationStatusReturnValue = .notDetermined
+        notificationManager.delegate = self
+        sessionsSubject.send([makeSession(notificationService: NotificationServiceMock(.init()))])
+        
+        await waitForConfirmation("registerForRemoteNotifications should be called", timeout: .seconds(10)) { confirm in
+            registerForRemoteNotificationsDelegateCalled = { confirm() }
+            notificationManager.requestAuthorization()
+        }
+        
+        #expect(notificationCenter.requestAuthorizationOptionsReceivedOptions == [.alert, .sound, .badge])
+    }
+    
+    @Test
+    func requestingAuthorizationWithEveryAccountOffDoesNothing() async throws {
+        sessionsSubject.send([makeSession(notificationService: NotificationServiceMock(.init(isEnabled: false)))])
+        
+        notificationManager.requestAuthorization()
+        try await Task.sleep(for: .seconds(1))
+        
+        #expect(!notificationCenter.requestAuthorizationOptionsCalled)
+    }
+    
+    @Test
+    func appBadgeSumsEveryAccount() {
+        sessionsSubject.send([makeSession(notificationService: NotificationServiceMock(.init(badgeCount: 3))),
+                              makeSession(notificationService: NotificationServiceMock(.init(badgeCount: 2)))])
+        
+        #expect(appSettings.lastKnownBadgeCount == 5)
+    }
+    
+    @Test
+    func appBadgeFollowsAnAccountsCount() {
+        let badgeCountSubject = CurrentValueSubject<Int, Never>(3)
+        let alice = NotificationServiceMock(.init())
+        alice.badgeCountPublisher = badgeCountSubject.asCurrentValuePublisher()
+        sessionsSubject.send([makeSession(notificationService: alice)])
+        
+        badgeCountSubject.send(7)
+        
+        #expect(appSettings.lastKnownBadgeCount == 7)
+    }
+    
+    @Test
+    func appBadgeDropsARemovedAccount() {
+        let alice = makeSession(notificationService: NotificationServiceMock(.init(badgeCount: 3)))
+        let bob = makeSession(notificationService: NotificationServiceMock(.init(badgeCount: 2)))
+        sessionsSubject.send([alice, bob])
+        
+        sessionsSubject.send([alice])
+        
+        #expect(appSettings.lastKnownBadgeCount == 3)
+    }
+    
+    @Test
+    func appBadgeIsLeftAloneWithoutAnAccount() {
+        appSettings.lastKnownBadgeCount = 4
+        
+        sessionsSubject.send([])
+        
+        #expect(appSettings.lastKnownBadgeCount == 4)
+        #expect(!notificationCenter.setBadgeCountCalled)
+    }
+    
+    @Test
+    func updatingTheAppBadge() async {
+        await waitForConfirmation("The app badge should be set", timeout: .seconds(10)) { confirm in
+            notificationCenter.setBadgeCountClosure = { _ in confirm() }
+            sessionsSubject.send([makeSession(notificationService: NotificationServiceMock(.init(badgeCount: 7)))])
+        }
+        
+        #expect(notificationCenter.setBadgeCountReceivedNewBadgeCount == 7)
     }
     
     @Test
@@ -138,81 +257,6 @@ final class NotificationManagerTests {
     func whenStart_delegateIsSet() throws {
         let delegate = try #require(notificationCenter.delegate)
         #expect(delegate.isEqual(notificationManager))
-    }
-    
-    @Test
-    func whenStart_requestAuthorizationCalledWithCorrectParams() async {
-        await waitForConfirmation("requestAuthorization should be called", timeout: .seconds(10)) { confirm in
-            notificationCenter.requestAuthorizationOptionsClosure = { _ in
-                confirm()
-                return true
-            }
-            notificationManager.requestAuthorization()
-        }
-        #expect(notificationCenter.requestAuthorizationOptionsReceivedOptions == [.alert, .sound, .badge])
-    }
-    
-    @Test
-    func whenStartAndAuthorizationGranted_delegateCalled() async {
-        authorizationStatusWasGranted = false
-        notificationManager.delegate = self
-        await waitForConfirmation("registerForRemoteNotifications delegate function should be called", timeout: .seconds(10)) { confirm in
-            registerForRemoteNotificationsDelegateCalled = {
-                confirm()
-            }
-            notificationManager.requestAuthorization()
-        }
-        #expect(authorizationStatusWasGranted)
-    }
-    
-    @Test
-    func whenStartAndAuthorizedAndNotificationDisabled_registerForRemoteNotificationsNotCalled() async throws {
-        appSettings.enableNotifications = false
-        notificationCenter.authorizationStatusReturnValue = .authorized
-        notificationManager.delegate = self
-        
-        notificationManager.setUserSession(UserSessionMock(.init()))
-        try await Task.sleep(for: .seconds(1))
-        
-        #expect(!authorizationStatusWasGranted)
-    }
-    
-    @Test
-    func whenStartAndAuthorized_registerForRemoteNotificationsCalled() async {
-        appSettings.enableNotifications = true
-        notificationCenter.authorizationStatusReturnValue = .authorized
-        notificationManager.delegate = self
-        
-        await waitForConfirmation("registerForRemoteNotifications delegate function should be called", timeout: .seconds(10)) { confirm in
-            registerForRemoteNotificationsDelegateCalled = {
-                confirm()
-            }
-            notificationManager.setUserSession(UserSessionMock(.init()))
-        }
-        
-        #expect(authorizationStatusWasGranted)
-    }
-    
-    @Test
-    func removeDeliveredNotificationsForFullyReadRooms() async throws {
-        let room = RoomSummary(room: RoomSDKMock(), id: "!room:matrix.org", settingsMode: .allMessages,
-                               hasUnreadMessages: false, hasUnreadMentions: false, hasUnreadNotifications: false)
-        let lastMessageDate = try #require(room.lastMessageDate)
-        
-        // Delivered after the last message was sent, which is always the case for the last message's notification.
-        let readNotification = try UNNotification.with(userInfo: [NotificationConstants.UserInfoKey.roomIdentifier: room.id,
-                                                                  NotificationConstants.UserInfoKey.eventDate: lastMessageDate.addingTimeInterval(0.5)],
-                                                       identifier: "read",
-                                                       date: lastMessageDate.addingTimeInterval(5))
-        let newerNotification = try UNNotification.with(userInfo: [NotificationConstants.UserInfoKey.roomIdentifier: room.id,
-                                                                   NotificationConstants.UserInfoKey.eventDate: lastMessageDate.addingTimeInterval(1)],
-                                                        identifier: "newer",
-                                                        date: lastMessageDate.addingTimeInterval(5))
-        notificationCenter.deliveredNotificationsReturnValue = [readNotification, newerNotification]
-        
-        await notificationManager.removeDeliveredNotificationsForFullyReadRooms([room])
-        
-        #expect(notificationCenter.removeDeliveredNotificationsWithIdentifiersReceivedIdentifiers == ["read"])
     }
     
     @Test
@@ -261,21 +305,10 @@ final class NotificationManagerTests {
         #expect(notificationTappedDelegateCalled)
     }
     
-    @Test
-    func updatingAppBadgeCount() async {
-        await notificationManager.updateAppBadgeCount(7)
-        
-        #expect(notificationCenter.setBadgeCountReceivedNewBadgeCount == 7)
-        #expect(appSettings.lastKnownBadgeCount == 7)
-    }
+    // MARK: - Helpers
     
-    @Test
-    func updatingAppBadgeCountWithoutASessionDoesNothing() async {
-        notificationManager.setUserSession(nil)
-        
-        await notificationManager.updateAppBadgeCount(7)
-        
-        #expect(!notificationCenter.setBadgeCountCalled)
+    private func makeSession(notificationService: NotificationServiceMock) -> UserSessionMock {
+        UserSessionMock(.init(notificationService: notificationService))
     }
 }
 
@@ -283,10 +316,6 @@ extension NotificationManagerTests: @MainActor NotificationManagerDelegate {
     func registerForRemoteNotifications() {
         authorizationStatusWasGranted = true
         registerForRemoteNotificationsDelegateCalled?()
-    }
-    
-    func unregisterForRemoteNotifications() {
-        authorizationStatusWasGranted = false
     }
     
     func shouldDisplayInAppNotification(content: UNNotificationContent) -> Bool {

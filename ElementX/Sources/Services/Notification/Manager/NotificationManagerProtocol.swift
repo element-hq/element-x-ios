@@ -16,7 +16,6 @@ protocol NotificationManagerDelegate: AnyObject {
                            content: UNNotificationContent,
                            replyText: String) async
     func registerForRemoteNotifications()
-    func unregisterForRemoteNotifications()
 }
 
 // MARK: - NotificationManagerProtocol
@@ -26,16 +25,9 @@ protocol NotificationManagerProtocol: AnyObject {
     var delegate: NotificationManagerDelegate? { get set }
     
     func start()
-    func register(with deviceToken: Data) async -> Bool
+    func register(with deviceToken: Data) async
     func registrationFailed(with error: Error)
     func showLocalNotification(with title: String, subtitle: String?) async
-    func setUserSession(_ userSession: UserSessionProtocol?)
     
     func requestAuthorization()
-    
-    func removeDeliveredMessageNotifications(for roomID: String) async
-    
-    func removeDeliveredNotificationsForFullyReadRooms(_ rooms: [RoomSummary]) async
-    
-    func updateAppBadgeCount(_ badgeCount: Int) async
 }
