@@ -59,8 +59,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         
         let topic = attributedStringBuilder.fromPlain(roomProxy.infoPublisher.value.topic)
         
-        let viewState = RoomDetailsScreenViewState(appHooks: appHooks,
-                                                   details: roomProxy.details,
+        let viewState = RoomDetailsScreenViewState(details: roomProxy.details,
                                                    isEncrypted: roomProxy.infoPublisher.value.isEncrypted,
                                                    isDirect: roomProxy.infoPublisher.value.isDirect,
                                                    topic: topic,
