@@ -20,6 +20,7 @@ struct NotificationSettingsScreenViewState: BindableState {
     let isModallyPresented: Bool
     var isUserPermissionGranted: Bool?
     var fixingConfigurationMismatch = false
+    var isTogglingNotifications = false
     /// Hide calls settings until calls are available in El-X
     let showCallsSettings = false
     

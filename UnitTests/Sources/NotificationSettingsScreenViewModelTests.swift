@@ -6,6 +6,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Combine
 @testable import ElementX
 import Foundation
 import MatrixRustSDK
@@ -16,6 +17,7 @@ struct NotificationSettingsScreenViewModelTests {
     private var viewModel: NotificationSettingsScreenViewModelProtocol
     private var context: NotificationSettingsScreenViewModelType.Context
     private var userSettings: UserSettings
+    private var notificationService: NotificationServiceMock
     private var userNotificationCenter: UserNotificationCenterMock
     private var notificationSettingsProxy: NotificationSettingsProxyMock
     private var toneManager: NotificationToneManagerMock
@@ -24,6 +26,7 @@ struct NotificationSettingsScreenViewModelTests {
         userNotificationCenter = UserNotificationCenterMock()
         userNotificationCenter.authorizationStatusReturnValue = .authorized
         userSettings = UserSettings.mock()
+        notificationService = NotificationServiceMock(.init())
         notificationSettingsProxy = NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration())
         notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue = .allMessages
         notificationSettingsProxy.isRoomMentionEnabledReturnValue = true
@@ -32,6 +35,7 @@ struct NotificationSettingsScreenViewModelTests {
         toneManager.customTonesReturnValue = []
         
         viewModel = NotificationSettingsScreenViewModel(userSettings: userSettings,
+                                                        notificationService: notificationService,
                                                         userNotificationCenter: userNotificationCenter,
                                                         notificationToneManager: toneManager,
                                                         notificationSettingsProxy: notificationSettingsProxy,
@@ -41,17 +45,48 @@ struct NotificationSettingsScreenViewModelTests {
     }
     
     @Test
-    func enableNotifications() {
-        userSettings.app.enableNotifications = false
-        context.send(viewAction: .changedEnableNotifications)
-        #expect(userSettings.app.enableNotifications)
+    func enableNotifications() async {
+        notificationService.isEnabledPublisher = CurrentValueSubject(false).asCurrentValuePublisher()
+        
+        await waitForConfirmation("Notifications should be turned on", timeout: .seconds(10)) { confirm in
+            notificationService.setEnabledClosure = { isEnabled in
+                #expect(isEnabled)
+                confirm()
+                return .success(())
+            }
+            context.enableNotifications = true
+            context.send(viewAction: .changedEnableNotifications)
+        }
     }
     
     @Test
-    func disableNotifications() {
-        userSettings.app.enableNotifications = true
+    func disableNotifications() async {
+        await waitForConfirmation("Notifications should be turned off", timeout: .seconds(10)) { confirm in
+            notificationService.setEnabledClosure = { isEnabled in
+                #expect(!isEnabled)
+                confirm()
+                return .success(())
+            }
+            context.enableNotifications = false
+            context.send(viewAction: .changedEnableNotifications)
+        }
+    }
+    
+    @Test
+    func failingToChangeTheSwitchRevertsItOnce() async throws {
+        notificationService.setEnabledReturnValue = .failure(.failedUpdatingPusher)
+        let deferred = deferFulfillment(context.observe(\.viewState.bindings.alertInfo)) { $0 != nil }
+        
+        context.enableNotifications = false
         context.send(viewAction: .changedEnableNotifications)
-        #expect(!userSettings.app.enableNotifications)
+        try await deferred.fulfill()
+        
+        #expect(context.enableNotifications)
+        
+        // The view sends the action again when the switch is reverted.
+        context.send(viewAction: .changedEnableNotifications)
+        try await Task.sleep(for: .milliseconds(100))
+        #expect(notificationService.setEnabledCallsCount == 1)
     }
     
     @Test
@@ -458,6 +493,7 @@ struct NotificationSettingsScreenViewModelTests {
         var remainingTones = [customTone]
         toneManager.customTonesClosure = { remainingTones }
         let localVM = NotificationSettingsScreenViewModel(userSettings: userSettings,
+                                                          notificationService: notificationService,
                                                           userNotificationCenter: userNotificationCenter,
                                                           notificationToneManager: toneManager,
                                                           notificationSettingsProxy: notificationSettingsProxy,

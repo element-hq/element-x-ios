@@ -56,6 +56,12 @@ final nonisolated class AccountSettings: @unchecked Sendable {
         store.migrateAppSettingsValue(forKey: storeKey)
     }
     
+    /// Copies a value previously saved by the app settings, leaving it in place for the other accounts.
+    func copyAppSettingsValue(_ keyPath: KeyPath<AccountSettings, UserPreferenceKey>) {
+        let storeKey = self[keyPath: keyPath].rawValue
+        store.copyAppSettingsValue(forKey: storeKey)
+    }
+    
     func reset() {
         MXLog.warning("Resetting AccountSettings for \(userID).")
         store.reset()

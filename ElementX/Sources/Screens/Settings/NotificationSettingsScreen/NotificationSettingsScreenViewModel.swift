@@ -14,6 +14,7 @@ typealias NotificationSettingsScreenViewModelType = StateStoreViewModelV2<Notifi
 class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelType, NotificationSettingsScreenViewModelProtocol {
     private var actionsSubject: PassthroughSubject<NotificationSettingsScreenViewModelAction, Never> = .init()
     private let userSettings: UserSettings
+    private let notificationService: NotificationServiceProtocol
     private let userNotificationCenter: UserNotificationCenterProtocol
     private let notificationSettingsProxy: NotificationSettingsProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
@@ -26,19 +27,21 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
     }
     
     init(userSettings: UserSettings,
+         notificationService: NotificationServiceProtocol,
          userNotificationCenter: UserNotificationCenterProtocol,
          notificationToneManager: NotificationToneManagerProtocol,
          notificationSettingsProxy: NotificationSettingsProxyProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          isModallyPresented: Bool) {
         self.userSettings = userSettings
+        self.notificationService = notificationService
         self.userNotificationCenter = userNotificationCenter
         self.notificationSettingsProxy = notificationSettingsProxy
         self.userIndicatorController = userIndicatorController
         notificationTonePreviewer = AudioPlayer()
         self.notificationToneManager = notificationToneManager
         
-        let bindings = NotificationSettingsScreenViewStateBindings(enableNotifications: userSettings.app.enableNotifications,
+        let bindings = NotificationSettingsScreenViewStateBindings(enableNotifications: notificationService.isEnabledPublisher.value,
                                                                    showAllRoomListActivity: userSettings.account.showAllRoomListActivity)
         super.init(initialViewState: NotificationSettingsScreenViewState(bindings: bindings,
                                                                          isModallyPresented: isModallyPresented,
@@ -48,10 +51,6 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
                                                                          customToneSelectionEnabled: !ProcessInfo.processInfo.isiOSAppOnMac))
         
         // Listen for changes to UserSettings.
-        userSettings.app.enableNotificationsPublisher
-            .weakAssign(to: \.state.bindings.enableNotifications, on: self)
-            .store(in: &cancellables)
-        
         userSettings.account.selectedNotificationTonePublisher
             .map { $0 ?? userSettings.account.defaultNotificationTone.publisher.value }
             .weakAssign(to: \.state.selectedAlertTone, on: self)
@@ -83,7 +82,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
     override func process(viewAction: NotificationSettingsScreenViewAction) {
         switch viewAction {
         case .changedEnableNotifications:
-            toggleNotifications()
+            Task { await toggleNotifications() }
         case .groupChatsTapped:
             actionsSubject.send(.editDefaultMode(chatType: .groupChat))
         case .directChatsTapped:
@@ -126,8 +125,17 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
         state.isUserPermissionGranted = await userNotificationCenter.authorizationStatus() == .authorized
     }
     
-    func toggleNotifications() {
-        userSettings.app.enableNotifications.toggle()
+    private func toggleNotifications() async {
+        let isEnabled = state.bindings.enableNotifications
+        // Reverting the switch after a failure sends this action again, with nothing left to change.
+        guard isEnabled != notificationService.isEnabledPublisher.value else { return }
+        
+        state.isTogglingNotifications = true
+        if case .failure = await notificationService.setEnabled(isEnabled) {
+            state.bindings.enableNotifications = !isEnabled
+            state.bindings.alertInfo = AlertInfo(id: .alert)
+        }
+        state.isTogglingNotifications = false
     }
     
     private func setupDidBecomeActiveSubscription() {

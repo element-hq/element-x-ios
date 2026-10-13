@@ -50,6 +50,15 @@ final nonisolated class AccountUserDefaults: UserDefaultsProtocol, @unchecked Se
         store.removeObject(forKey: key)
     }
     
+    func copyAppSettingsValue(forKey key: String) {
+        guard let value = store.object(forKey: key) else {
+            MXLog.info("Ignoring \(key), not set.")
+            return
+        }
+        
+        store.set(value, forKey: keyPrefix + key)
+    }
+    
     func reset() {
         for key in dictionaryRepresentation().keys {
             removeObject(forKey: key)

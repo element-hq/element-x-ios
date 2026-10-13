@@ -76,6 +76,23 @@ struct UserSettingsTests {
     }
     
     @Test
+    func copyingTheNotificationsSwitchKeepsItOffForEveryAccount() {
+        // Given notifications turned off under the key previously used by the app settings.
+        // The key is hardcoded so that renaming the property breaks this test instead of the migration.
+        store.set(false, forKey: "enableNotifications")
+        #expect(aliceSettings.account.enableNotifications)
+        #expect(bobSettings.account.enableNotifications)
+        
+        // When copying it into both accounts.
+        aliceSettings.account.copyAppSettingsValue(\.enableNotificationsKey)
+        bobSettings.account.copyAppSettingsValue(\.enableNotificationsKey)
+        
+        // Then notifications stay off for both.
+        #expect(!aliceSettings.account.enableNotifications)
+        #expect(!bobSettings.account.enableNotifications)
+    }
+    
+    @Test
     func resetSessionSpecificSettings() {
         // Given app settings and account settings for two different accounts.
         appSettings.hasSignedInBefore = true

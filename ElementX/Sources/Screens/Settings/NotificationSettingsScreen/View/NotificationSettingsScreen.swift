@@ -88,7 +88,9 @@ struct NotificationSettingsScreen: View {
     private var enableNotificationSection: some View {
         Section {
             ListRow(label: .plain(title: L10n.screenNotificationSettingsEnableNotifications),
+                    details: context.viewState.isTogglingNotifications ? .isWaiting(true) : nil,
                     kind: .toggle($context.enableNotifications))
+                .disabled(context.viewState.isTogglingNotifications)
                 .onChange(of: context.enableNotifications) {
                     context.send(viewAction: .changedEnableNotifications)
                 }
@@ -280,6 +282,7 @@ struct NotificationSettingsScreen_Previews: PreviewProvider, TestablePreview {
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "John Doe"))))
         
         var viewModel = NotificationSettingsScreenViewModel(userSettings: userSettings,
+                                                            notificationService: NotificationServiceMock(.init()),
                                                             userNotificationCenter: notificationCenter,
                                                             notificationToneManager: NotificationToneManagerMock(.init()),
                                                             notificationSettingsProxy: notificationSettingsProxy,
@@ -310,6 +313,7 @@ struct NotificationSettingsScreen_Previews: PreviewProvider, TestablePreview {
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "John Doe"))))
         
         var viewModel = NotificationSettingsScreenViewModel(userSettings: userSettings,
+                                                            notificationService: NotificationServiceMock(.init()),
                                                             userNotificationCenter: notificationCenter,
                                                             notificationToneManager: NotificationToneManagerMock(.init()),
                                                             notificationSettingsProxy: notificationSettingsProxy,
