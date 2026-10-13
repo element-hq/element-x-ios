@@ -8,6 +8,7 @@
 import MatrixRustSDK
 
 struct NSEUserSessionMockConfiguration {
+    var userSettings = UserSettings.mock()
     var inviteAvatarsVisibility = InviteAvatars.on
     var mediaPreviewVisibility = MediaPreviews.on
     var threadsEnabled = true
@@ -17,6 +18,7 @@ extension NSEUserSessionMock {
     convenience init(_ configuration: NSEUserSessionMockConfiguration) {
         self.init()
         
+        underlyingUserSettings = configuration.userSettings
         underlyingInviteAvatarsVisibility = configuration.inviteAvatarsVisibility
         underlyingMediaPreviewVisibility = configuration.mediaPreviewVisibility
         threadsEnabled = configuration.threadsEnabled

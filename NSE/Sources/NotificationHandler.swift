@@ -39,7 +39,6 @@ nonisolated class NotificationHandler {
                                                                style: .plain)
         
         notificationContentBuilder = NotificationContentBuilder(messageEventStringBuilder: eventStringBuilder,
-                                                                notificationSoundName: userSession.userSettings.app.notificationSoundName,
                                                                 userSession: userSession)
     }
     

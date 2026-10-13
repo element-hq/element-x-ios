@@ -28,9 +28,6 @@ final nonisolated class AppHooks: AppHooksProtocol {
     @AppHook(default: DefaultOAuthPresenterHook())
     var oAuthPresenterHook: OAuthPresenterHookProtocol
     
-    @AppHook(default: DefaultUserSessionHook())
-    var userSessionHook: UserSessionHookProtocol
-    
     @AppHook(default: DefaultRoomScreenHook())
     var roomScreenHook: RoomScreenHookProtocol
     
@@ -64,6 +61,9 @@ final nonisolated class AppHooks: AppHooksProtocol {
     
     @AppHook(default: DefaultRemoteSettingsHook())
     var remoteSettingsHook: RemoteSettingsHookProtocol
+    
+    @AppHook(default: DefaultUserSessionHook())
+    var userSessionHook: UserSessionHookProtocol
 }
 
 nonisolated protocol AppHooksProtocol: Sendable {

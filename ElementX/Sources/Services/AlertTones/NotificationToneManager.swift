@@ -31,26 +31,40 @@ nonisolated struct NotificationToneManager: NotificationToneManagerProtocol {
     
     private let userSettings: UserSettings
     
-    /// The default Element X bundled message tone.
-    static let defaultElementXMessageTone: NotificationTone = .createBundledSound(label: L10n.screenNotificationSettingsSoundElementDefault,
-                                                                                  filename: "message.caf")
-    
     /// All default tones (system + Element X), sorted by name.
-    static let allDefaultAlerts: [NotificationTone] = (defaultSystemAlerts + defaultElementXAlerts).sorted()
+    static let allDefaultAlerts: [NotificationTone] = (defaultSystemAlerts + defaultBundledAlerts).sorted()
     
-    /// Filename of the active tone file used by the notification service.
-    static let selectedToneFilename = "currentAlert.caf"
+    /// The name the notification service uses to find the tone's file in the app bundle or Library/Sounds.
+    ///
+    /// Note: Names with a subdirectory aren't documented for `UNNotificationSound(named:)` but do work.
+    static func soundName(for tone: NotificationTone) -> String {
+        switch tone.storageLocationRoot {
+        case .appBundle:
+            tone.filename
+        case .appLibrary:
+            "\(URL.customTonesDirectory.lastPathComponent)/\(tone.filename)"
+        case .system:
+            "\(URL.systemTonesDirectory.lastPathComponent)/\(tone.filename)"
+        }
+    }
     
-    /// Directory where user-imported custom tones are stored.
-    nonisolated static let libraryLocation = URL.libraryDirectory.appending(components: "Sounds", "AvailableSounds", directoryHint: .isDirectory)
+    /// Copies a system tone into Library/Sounds, as the system sounds directory isn't searched for notification sounds.
+    static func copySystemToneIfNeeded(_ tone: NotificationTone) throws {
+        guard tone.storageLocationRoot == .system else { return }
+        
+        let copyLocation = URL.systemTonesDirectory.appending(component: tone.filename)
+        guard (try? copyLocation.checkResourceIsReachable()) != true else { return }
+        
+        try FileManager.default.createDirectory(at: URL.systemTonesDirectory, withIntermediateDirectories: true)
+        try FileManager.default.copyItem(at: toneLocation(for: tone), to: copyLocation)
+    }
     
     /// Creates the manager and ensures required library directories exist.
     init(userSettings: UserSettings) {
         self.userSettings = userSettings
         
         do {
-            try FileManager.default.createDirectory(at: NotificationToneManager.libraryLocation, withIntermediateDirectories: true)
-            try FileManager.default.createDirectory(at: Self.selectedToneLocation.deletingLastPathComponent(), withIntermediateDirectories: true)
+            try FileManager.default.createDirectory(at: URL.customTonesDirectory, withIntermediateDirectories: true)
         } catch {
             // Don't crash on a recoverable file system error. The underlying problem (directory creation
             // failing on launch, e.g. a background launch before the container is writable) is acknowledged
@@ -60,29 +74,17 @@ nonisolated struct NotificationToneManager: NotificationToneManagerProtocol {
     }
     
     /// Sets the given tone as the active notification alert tone.
-    ///
-    /// Copies the tone's audio file to `selectedToneLocation` and persists the selection in app settings.
     func setSelectedTone(_ alertTone: NotificationTone) throws -> URL {
-        do {
-            try? FileManager.default.removeItem(at: Self.selectedToneLocation)
-            let toneLocation = Self.toneLocation(for: alertTone)
-            try FileManager.default.copyItem(at: toneLocation, to: Self.selectedToneLocation)
-            userSettings.app.selectedNotificationTone = alertTone
-            return Self.selectedToneLocation
-        } catch {
-            if (try? Self.selectedToneLocation.checkResourceIsReachable()) != true {
-                // make sure the selected tone is reset if there's no custom tone present
-                userSettings.app.selectedNotificationTone = nil
-            }
-            throw error
-        }
+        try Self.copySystemToneIfNeeded(alertTone)
+        userSettings.account.selectedNotificationTone = alertTone
+        return Self.toneLocation(for: alertTone)
     }
     
     /// Returns all user-imported CAF tones from the library directory, sorted by name.
     func customTones() -> [NotificationTone] {
         let availableFiles = try? FileManager
             .default
-            .contentsOfDirectory(at: NotificationToneManager.libraryLocation, includingPropertiesForKeys: nil)
+            .contentsOfDirectory(at: URL.customTonesDirectory, includingPropertiesForKeys: nil)
         
         return (availableFiles ?? [])
             .compactMap {
@@ -100,7 +102,7 @@ nonisolated struct NotificationToneManager: NotificationToneManagerProtocol {
     @discardableResult
     func addNewToneToLibrary(from sourceURL: URL) throws -> URL {
         let baseName = sourceURL.deletingPathExtension().lastPathComponent
-        let outputURL = NotificationToneManager.libraryLocation.appending(component: baseName).appendingPathExtension("caf")
+        let outputURL = URL.customTonesDirectory.appending(component: baseName).appendingPathExtension("caf")
         
         guard (try? outputURL.checkResourceIsReachable()) != true else {
             throw ManagerError.fileAlreadyExists
@@ -119,7 +121,7 @@ nonisolated struct NotificationToneManager: NotificationToneManagerProtocol {
     /// - Throws: `DeletionError.notACustomTone` if the tone is not stored in the library directory.
     func deleteCustomTone(_ alertTone: NotificationTone) throws {
         let toneLocation = Self.toneLocation(for: alertTone)
-        guard toneLocation.deletingLastPathComponent() == NotificationToneManager.libraryLocation else {
+        guard toneLocation.deletingLastPathComponent() == URL.customTonesDirectory else {
             throw ManagerError.notACustomTone
         }
         
@@ -171,9 +173,6 @@ nonisolated struct NotificationToneManager: NotificationToneManagerProtocol {
         try FileManager.default.moveItem(at: tempURL, to: destURL)
         MXLog.info("Converted \(sourceURL.path(percentEncoded: false)) to caf")
     }
-    
-    /// File URL of the active tone copied/linked for use by the system.
-    private static let selectedToneLocation = NotificationToneManager.libraryLocation.deletingLastPathComponent().appending(component: selectedToneFilename)
     
     /// Pre-defined iOS system tones available for selection, sorted by name.
     private static let defaultSystemAlerts: [NotificationTone] = [
@@ -256,9 +255,9 @@ nonisolated struct NotificationToneManager: NotificationToneManagerProtocol {
     }
     .sorted()
     
-    /// Element X bundled tones available for selection, sorted by name.
-    private static let defaultElementXAlerts: [NotificationTone] = [
-        defaultElementXMessageTone,
+    /// Bundled tones available for selection, sorted by name.
+    private static let defaultBundledAlerts: [NotificationTone] = [
+        .default,
         .createBundledSound(label: L10n.screenNotificationSettingsSoundElementFade,
                             filename: "sound_01.caf")
     ].sorted()
@@ -280,7 +279,7 @@ nonisolated struct NotificationToneManager: NotificationToneManagerProtocol {
         case .appBundle:
             root = Self.bundledLocation
         case .appLibrary:
-            root = Self.libraryLocation
+            root = URL.customTonesDirectory
         }
         
         return tone.relativePath.reduce(root) {
