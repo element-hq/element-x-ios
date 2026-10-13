@@ -46,9 +46,6 @@ final nonisolated class AppHooks: AppHooksProtocol {
     @AppHook(default: DefaultRecoveryKeyScreenHook())
     var recoveryKeyScreenHook: RecoveryKeyScreenHookProtocol
     
-    @AppHook(default: DefaultCreateRoomScreenHook())
-    var createRoomScreenHook: CreateRoomScreenHookProtocol
-    
     @AppHook(default: DefaultSecurityAndPrivacyScreenHook())
     var securityAndPrivacyScreenHook: SecurityAndPrivacyScreenHookProtocol
     #endif

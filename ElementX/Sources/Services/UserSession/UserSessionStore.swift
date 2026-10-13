@@ -59,10 +59,11 @@ class UserSessionStore: UserSessionStoreProtocol {
         
         let userSettings = appHooks.userSessionHook.configure(appSettings.userSettings(for: credentials.userID),
                                                               forHomeserver: credentials.restorationToken.session.homeserverUrl)
+        let userHooks = appHooks.userSessionHook.makeUserHooks(forHomeserver: credentials.restorationToken.session.homeserverUrl)
         
         switch await restorePreviousLogin(credentials, userSettings: userSettings) {
         case .success(let clientProxy):
-            return await .success(buildUserSessionWithClient(clientProxy, userSettings: userSettings))
+            return await .success(buildUserSessionWithClient(clientProxy, userSettings: userSettings, userHooks: userHooks))
         case .failure(let error):
             MXLog.error("Failed restoring login with error: \(error)")
             
@@ -83,6 +84,7 @@ class UserSessionStore: UserSessionStoreProtocol {
             let session = try client.session()
             let userID = try client.userId()
             let userSettings = appHooks.userSessionHook.configure(appSettings.userSettings(for: userID), forHomeserver: client.homeserver())
+            let userHooks = appHooks.userSessionHook.makeUserHooks(forHomeserver: client.homeserver())
             let clientProxy = try await setupProxyForClient(client, userSettings: userSettings)
             
             keychainController.setRestorationToken(RestorationToken(session: session,
@@ -93,7 +95,7 @@ class UserSessionStore: UserSessionStoreProtocol {
             
             MXLog.info("Set up session for user \(userID) at: \(sessionDirectories)")
             
-            return await .success(buildUserSessionWithClient(clientProxy, userSettings: userSettings))
+            return await .success(buildUserSessionWithClient(clientProxy, userSettings: userSettings, userHooks: userHooks))
         } catch {
             MXLog.error("Failed creating user session with error: \(error)")
             return .failure(.failedSettingUpSession)
@@ -112,7 +114,7 @@ class UserSessionStore: UserSessionStoreProtocol {
     
     // MARK: - Private
     
-    private func buildUserSessionWithClient(_ clientProxy: ClientProxyProtocol, userSettings: UserSettings) async -> UserSessionProtocol {
+    private func buildUserSessionWithClient(_ clientProxy: ClientProxyProtocol, userSettings: UserSettings, userHooks: UserHooks) async -> UserSessionProtocol {
         let mediaProvider = MediaProvider(mediaLoader: clientProxy.mediaLoader,
                                           imageCache: .onlyInMemory,
                                           homeserverReachabilityPublisher: clientProxy.homeserverReachabilityPublisher)
@@ -126,6 +128,7 @@ class UserSessionStore: UserSessionStoreProtocol {
         
         return UserSession(clientProxy: clientProxy,
                            userSettings: userSettings,
+                           userHooks: userHooks,
                            mediaProvider: mediaProvider,
                            voiceMessageMediaManager: voiceMessageMediaManager,
                            liveLocationManager: liveLocationManager)
