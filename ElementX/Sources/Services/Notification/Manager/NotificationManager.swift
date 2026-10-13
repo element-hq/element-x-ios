@@ -194,7 +194,8 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
                                                         appDisplayName: "\(InfoPlistReader.main.bundleDisplayName) (iOS)",
                                                         deviceDisplayName: UIDevice.current.name,
                                                         profileTag: pusherProfileTag(),
-                                                        lang: Bundle.app.preferredLocalizations.first ?? "en")
+                                                        lang: Bundle.app.preferredLocalizations.first ?? "en",
+                                                        append: false)
             try await clientProxy.setPusher(with: configuration)
             MXLog.info("Set pusher succeeded")
             return true

@@ -8,6 +8,7 @@
 
 import Foundation
 import MatrixRustSDK
+import UserNotifications
 
 class UserSessionStore: UserSessionStoreProtocol {
     private let keychainController: KeychainControllerProtocol
@@ -124,11 +125,18 @@ class UserSessionStore: UserSessionStoreProtocol {
                                 userSettings: userSettings)
         }
         
+        let notificationService = await MainActor.run {
+            NotificationService(clientProxy: clientProxy,
+                                userSettings: userSettings,
+                                notificationCenter: UNUserNotificationCenter.current())
+        }
+        
         return UserSession(clientProxy: clientProxy,
                            userSettings: userSettings,
                            mediaProvider: mediaProvider,
                            voiceMessageMediaManager: voiceMessageMediaManager,
-                           liveLocationManager: liveLocationManager)
+                           liveLocationManager: liveLocationManager,
+                           notificationService: notificationService)
     }
     
     private func restorePreviousLogin(_ credentials: KeychainCredentials, userSettings: UserSettings) async -> Result<ClientProxyProtocol, UserSessionStoreError> {
