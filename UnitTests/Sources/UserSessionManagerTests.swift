@@ -140,55 +140,49 @@ struct UserSessionManagerTests {
     }
     
     @Test
-    func clearingCachesReplacesEverySessionOnTheNextRestore() async {
+    func clearingCachesReplacesTheSessionOnTheNextRestore() async {
         appSettings.multiAccountEnabled = true
         let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org"])
         let aliceClientProxy = ClientProxyMock(.init(userID: "@alice:matrix.org"))
-        let bobClientProxy = ClientProxyMock(.init(userID: "@bob:matrix.org"))
         aliceClientProxy.clearCachesReturnValue = .success(())
-        bobClientProxy.clearCachesReturnValue = .success(())
         let oldAlice = UserSessionMock(.init(clientProxy: aliceClientProxy))
+        let bob = makeUserSession(userID: "@bob:matrix.org")
         manager.add(oldAlice)
-        manager.add(UserSessionMock(.init(clientProxy: bobClientProxy)))
+        manager.add(bob)
         
-        await manager.clearCaches()
+        await manager.clearCaches(userID: "@alice:matrix.org")
         #expect(aliceClientProxy.clearCachesCalled)
-        #expect(bobClientProxy.clearCachesCalled)
         
-        let newSessions = ["@alice:matrix.org": makeUserSession(userID: "@alice:matrix.org"), "@bob:matrix.org": makeUserSession(userID: "@bob:matrix.org")]
-        userSessionStore.restoreUserSessionUserIDClosure = { userID in newSessions[userID].map { .success($0) } ?? .failure(.failedRestoringLogin) }
-        let recorder = RestorationRecorder()
-        await manager.restoreSessions { userSession in
-            // The cleared sessions stay live until the new ones replace them.
-            if userSession.clientProxy.userID == "@alice:matrix.org" {
-                #expect((manager.activeSession as? UserSessionMock) === oldAlice)
-            }
-        } didAdd: { recorder.addedUserIDs.append($0.clientProxy.userID) }
+        let newAlice = makeUserSession(userID: "@alice:matrix.org")
+        userSessionStore.restoreUserSessionUserIDReturnValue = .success(newAlice)
+        await manager.restoreSessions { _ in
+            // The cleared session stays live until the new one replaces it.
+            #expect((manager.activeSession as? UserSessionMock) === oldAlice)
+        } didAdd: { _ in }
         
-        #expect(userSessionStore.restoreUserSessionUserIDReceivedInvocations == ["@alice:matrix.org", "@bob:matrix.org"])
-        #expect(recorder.addedUserIDs == ["@alice:matrix.org", "@bob:matrix.org"])
-        #expect((manager.activeSession as? UserSessionMock) === newSessions["@alice:matrix.org"])
-        #expect((manager.session(for: "@bob:matrix.org") as? UserSessionMock) === newSessions["@bob:matrix.org"])
+        #expect(userSessionStore.restoreUserSessionUserIDReceivedInvocations == ["@alice:matrix.org"])
+        #expect((manager.activeSession as? UserSessionMock) === newAlice)
+        #expect((manager.session(for: "@bob:matrix.org") as? UserSessionMock) === bob)
         
         await manager.restoreSessions { _ in } didAdd: { _ in }
-        #expect(userSessionStore.restoreUserSessionUserIDCallsCount == 2)
+        #expect(userSessionStore.restoreUserSessionUserIDCallsCount == 1)
     }
     
     @Test
-    func restoringAfterClearingCachesFallsBackToTheNextAccount() async {
+    func restoringAfterClearingCachesFallsBackToALiveAccount() async {
+        appSettings.multiAccountEnabled = true
         let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org"])
         let aliceClientProxy = ClientProxyMock(.init(userID: "@alice:matrix.org"))
         aliceClientProxy.clearCachesReturnValue = .success(())
         manager.add(UserSessionMock(.init(clientProxy: aliceClientProxy)))
         let bob = makeUserSession(userID: "@bob:matrix.org")
-        userSessionStore.restoreUserSessionUserIDClosure = { userID in
-            userID == "@bob:matrix.org" ? .success(bob) : .failure(.failedRestoringLogin)
-        }
+        manager.add(bob)
+        userSessionStore.restoreUserSessionUserIDReturnValue = .failure(.failedRestoringLogin)
         
-        await manager.clearCaches()
+        await manager.clearCaches(userID: "@alice:matrix.org")
         await manager.restoreSessions { _ in } didAdd: { _ in }
         
-        #expect(userSessionStore.restoreUserSessionUserIDReceivedInvocations == ["@alice:matrix.org", "@bob:matrix.org"])
+        #expect(userSessionStore.restoreUserSessionUserIDReceivedInvocations == ["@alice:matrix.org"])
         #expect(manager.userIDs == ["@bob:matrix.org"])
         #expect((manager.activeSession as? UserSessionMock) === bob)
     }

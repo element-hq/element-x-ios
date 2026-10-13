@@ -116,14 +116,12 @@ final class UserSessionManager: UserSessionManagerProtocol {
         }
     }
     
-    func clearCaches() async {
-        let userSessions = sessionsSubject.value
-        // Marked before clearing, so a restore that starts meanwhile replaces the sessions.
-        clearedUserIDs.formUnion(userSessions.map(\.clientProxy.userID))
+    func clearCaches(userID: String) async {
+        guard let userSession = session(for: userID) else { return }
         
-        for userSession in userSessions {
-            await userSession.clientProxy.clearCaches()
-        }
+        // Marked before clearing, so a restore that starts meanwhile replaces the session.
+        clearedUserIDs.insert(userID)
+        await userSession.clientProxy.clearCaches()
     }
     
     func userSession(for client: ClientProtocol, sessionDirectories: SessionDirectories, passphrase: Data) async -> Result<UserSessionProtocol, UserSessionStoreError> {

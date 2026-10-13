@@ -14900,20 +14900,34 @@ nonisolated class UserSessionManagerMock: UserSessionManagerProtocol, @unchecked
     }
     //MARK: - clearCaches
 
-    private let clearCachesCallsCountLock = NSLock()
-    private nonisolated(unsafe) var clearCachesUnderlyingCallsCount = 0
-    var clearCachesCallsCount: Int {
-        get { clearCachesCallsCountLock.withLock { clearCachesUnderlyingCallsCount } }
-        set { clearCachesCallsCountLock.withLock { clearCachesUnderlyingCallsCount = newValue } }
+    private let clearCachesUserIDCallsCountLock = NSLock()
+    private nonisolated(unsafe) var clearCachesUserIDUnderlyingCallsCount = 0
+    var clearCachesUserIDCallsCount: Int {
+        get { clearCachesUserIDCallsCountLock.withLock { clearCachesUserIDUnderlyingCallsCount } }
+        set { clearCachesUserIDCallsCountLock.withLock { clearCachesUserIDUnderlyingCallsCount = newValue } }
     }
-    var clearCachesCalled: Bool {
-        return clearCachesCallsCount > 0
+    var clearCachesUserIDCalled: Bool {
+        return clearCachesUserIDCallsCount > 0
     }
-    nonisolated(unsafe) var clearCachesClosure: (() async -> Void)?
+    private let clearCachesUserIDReceivedUserIDLock = NSLock()
+    private nonisolated(unsafe) var clearCachesUserIDUnderlyingReceivedUserID: String?
+    var clearCachesUserIDReceivedUserID: String? {
+        get { clearCachesUserIDReceivedUserIDLock.withLock { clearCachesUserIDUnderlyingReceivedUserID } }
+        set { clearCachesUserIDReceivedUserIDLock.withLock { clearCachesUserIDUnderlyingReceivedUserID = newValue } }
+    }
+    private let clearCachesUserIDReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var clearCachesUserIDUnderlyingReceivedInvocations: [String] = []
+    var clearCachesUserIDReceivedInvocations: [String] {
+        get { clearCachesUserIDReceivedInvocationsLock.withLock { clearCachesUserIDUnderlyingReceivedInvocations } }
+        set { clearCachesUserIDReceivedInvocationsLock.withLock { clearCachesUserIDUnderlyingReceivedInvocations = newValue } }
+    }
+    nonisolated(unsafe) var clearCachesUserIDClosure: ((String) async -> Void)?
 
-    @concurrent func clearCaches() async {
-        clearCachesCallsCountLock.withLock { clearCachesUnderlyingCallsCount += 1 }
-        await clearCachesClosure?()
+    @concurrent func clearCaches(userID: String) async {
+        clearCachesUserIDCallsCountLock.withLock { clearCachesUserIDUnderlyingCallsCount += 1 }
+        clearCachesUserIDReceivedUserID = userID
+        clearCachesUserIDReceivedInvocationsLock.withLock { clearCachesUserIDUnderlyingReceivedInvocations.append(userID) }
+        await clearCachesUserIDClosure?(userID)
     }
     //MARK: - userSession
 

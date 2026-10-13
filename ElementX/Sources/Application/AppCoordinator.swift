@@ -718,7 +718,11 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 self?.showActiveSessionIfRestoring()
             }
             
-            if !Task.isCancelled, stateMachine.state == .restoringSession {
+            guard !Task.isCancelled else { return }
+            // An account that was already live becomes the active one when those before it fail (e.g. after clearing the cache).
+            showActiveSessionIfRestoring()
+            
+            if stateMachine.state == .restoringSession {
                 MXLog.error("Failed to restore an existing session.")
                 stateMachine.processEvent(.failedRestoringSession)
             }
@@ -1027,7 +1031,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     }
     
     private func clearCache() {
-        guard userSession != nil else {
+        guard let userSession else {
             fatalError("User session not setup")
         }
         
@@ -1041,7 +1045,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         // Allow for everything to deallocate properly
         Task {
-            await userSessionManager.clearCaches()
+            await userSessionManager.clearCaches(userID: userSession.clientProxy.userID)
             stateMachine.processEvent(.startWithExistingSession)
             hideLoadingIndicator()
         }

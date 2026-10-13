@@ -34,8 +34,8 @@ protocol UserSessionManagerProtocol: AnyObject {
     /// Each session is `prepare`d (e.g. migrated), added, passed to `didAdd`, then resumed if the services are running.
     /// An account that fails is removed (the store deletes its data). Without `multiAccountEnabled` only one account is ever live.
     func restoreSessions(prepare: @MainActor (UserSessionProtocol) async -> Void, didAdd: @MainActor (UserSessionProtocol) -> Void) async
-    /// Clears the caches of every live account. Their sessions stay live until `restoreSessions` replaces them.
-    func clearCaches() async
+    /// Clears an account's caches. Its session stays live until `restoreSessions` replaces it.
+    func clearCaches(userID: String) async
     /// Creates the session of an account that has just signed in, and stores its credentials.
     ///
     /// The session isn't registered: `add` it once it's ready to be used.
