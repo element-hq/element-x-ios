@@ -10,6 +10,7 @@ import Combine
 import SwiftUI
 
 struct HomeScreenCoordinatorParameters {
+    let appHooks: AppHooks
     let userSession: UserSessionProtocol
     let bugReportService: BugReportServiceProtocol
     let selectedRoomPublisher: CurrentValuePublisher<String?, Never>
@@ -28,6 +29,7 @@ enum HomeScreenCoordinatorAction {
     case presentSpace(SpaceRoomListProxyProtocol)
     case roomLeft(roomIdentifier: String)
     case transferOwnership(roomIdentifier: String)
+    case presentSupplementaryFlow(String)
     case presentSettingsScreen
     case presentFeedbackScreen
     case presentSecureBackupSettings
@@ -54,7 +56,8 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
                                         analyticsService: parameters.analyticsService,
                                         bugReportService: parameters.bugReportService,
                                         notificationManager: parameters.notificationManager,
-                                        userIndicatorController: parameters.userIndicatorController)
+                                        userIndicatorController: parameters.userIndicatorController,
+                                        appHooks: parameters.appHooks)
         
         viewModel.actions
             .sink { [weak self] action in
@@ -77,6 +80,8 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.roomLeft(roomIdentifier: roomIdentifier))
                 case .presentFeedbackScreen:
                     actionsSubject.send(.presentFeedbackScreen)
+                case .presentSupplementaryFlow(let flowID):
+                    actionsSubject.send(.presentSupplementaryFlow(flowID))
                 case .presentSettingsScreen:
                     actionsSubject.send(.presentSettingsScreen)
                 case .presentSecureBackupSettings:

@@ -112,6 +112,7 @@ struct HomeScreenContent: View {
     
     @ViewBuilder
     private var topSection: some View {
+        context.viewState.appHooks.homeScreenHook.supplementaryView(placement: .banner) { context.send(viewAction: .supplementaryAction($0)) }
         // An empty VStack causes glitches within the room list
         if context.viewState.shouldShowFilters || context.viewState.shouldShowBanner {
             VStack(spacing: 0) {

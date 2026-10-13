@@ -38,7 +38,8 @@ struct HomeScreenRoomList: View {
                 HomeScreenRoomCell(room: room,
                                    isSelected: isSelected,
                                    mediaProvider: context.mediaProvider,
-                                   action: context.send)
+                                   action: context.send,
+                                   supplementaryBadge: context.viewState.appHooks.homeScreenHook.roomBadge(roomID: room.id))
                     .simultaneousGesture(TapGesture(count: 2).onEnded {
                         context.send(viewAction: .detachRoom(roomIdentifier: room.id))
                     })

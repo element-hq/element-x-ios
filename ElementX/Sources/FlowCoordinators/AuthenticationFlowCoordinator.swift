@@ -92,6 +92,9 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     private let stateMachine: StateMachine<State, Event>
     private var cancellables = Set<AnyCancellable>()
     
+    private var supplementaryFlowCoordinator: (any ServerSelectionSupplementaryFlowCoordinatorProtocol)?
+    private var supplementaryFlowCancellable: AnyCancellable?
+    
     private var oAuthPresenter: OAuthAuthenticationPresenter?
     
     // periphery:ignore - retaining purpose
@@ -150,6 +153,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     func clearRoute(animated: Bool) {
+        supplementaryFlowCoordinator?.clearRoute(animated: animated)
         oAuthPresenter?.cancel() // Handle ongoing OAuth authentication first.
         
         switch stateMachine.state {
@@ -372,11 +376,16 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
                 case .continueWithPassword:
                     stateMachine.tryEvent(.continueWithPassword)
                 case .additionalSettings:
-                    guard let coordinator = appHooks.serverSelectionScreenHook.makeCoordinator(navigationStackCoordinator: navigationStackCoordinator) else { return }
+                    guard supplementaryFlowCoordinator == nil,
+                          let coordinator = appHooks.serverSelectionScreenHook.makeSupplementaryFlowCoordinator(navigationStackCoordinator: navigationStackCoordinator) else { return }
                     stateMachine.tryEvent(.additionalSettings)
-                    navigationStackCoordinator.push(coordinator) { [weak self] in
+                    supplementaryFlowCoordinator = coordinator
+                    supplementaryFlowCancellable = coordinator.actionsPublisher.sink { [weak self] _ in
+                        self?.supplementaryFlowCoordinator = nil
+                        self?.supplementaryFlowCancellable = nil
                         self?.stateMachine.tryEvent(.dismissedAdditionalSettings)
                     }
+                    coordinator.start(animated: true)
                 }
             }
             .store(in: &cancellables)

@@ -18,6 +18,7 @@ struct HomeScreenRoomCell: View {
     let isSelected: Bool
     let mediaProvider: MediaProviderProtocol!
     let action: (HomeScreenViewAction) -> Void
+    var supplementaryBadge: AnyView?
     
     private let verticalInsets = 12.0
     private let horizontalInsets = 16.0
@@ -30,6 +31,7 @@ struct HomeScreenRoomCell: View {
         } label: {
             HStack(spacing: 16.0) {
                 avatar
+                    .overlay(alignment: .bottomTrailing) { supplementaryBadge }
                 
                 content
                     .padding(.vertical, verticalInsets)
@@ -74,6 +76,9 @@ struct HomeScreenRoomCell: View {
     private var header: some View {
         HStack(alignment: .top, spacing: 16) {
             HStack(spacing: 4) {
+                if dynamicTypeSize >= .accessibility3 {
+                    supplementaryBadge
+                }
                 Text(room.name)
                     .lineLimit(1)
                 

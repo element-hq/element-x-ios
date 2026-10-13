@@ -7,9 +7,15 @@
 
 import SwiftUI
 
+enum ServerSelectionSupplementaryFlowAction {
+    case finished
+}
+
+@MainActor protocol ServerSelectionSupplementaryFlowCoordinatorProtocol: FlowCoordinatorProtocol where Action == ServerSelectionSupplementaryFlowAction { }
+
 nonisolated protocol ServerSelectionScreenHookProtocol: Sendable {
     @MainActor func additionalButtons(authenticationFlow: AuthenticationFlow, action: @escaping () -> Void) -> AnyView?
-    @MainActor func makeCoordinator(navigationStackCoordinator: NavigationStackCoordinator) -> (any CoordinatorProtocol)?
+    @MainActor func makeSupplementaryFlowCoordinator(navigationStackCoordinator: NavigationStackCoordinator) -> (any ServerSelectionSupplementaryFlowCoordinatorProtocol)?
 }
 
 struct DefaultServerSelectionScreenHook: ServerSelectionScreenHookProtocol {
@@ -17,7 +23,7 @@ struct DefaultServerSelectionScreenHook: ServerSelectionScreenHookProtocol {
         nil
     }
     
-    func makeCoordinator(navigationStackCoordinator: NavigationStackCoordinator) -> (any CoordinatorProtocol)? {
+    func makeSupplementaryFlowCoordinator(navigationStackCoordinator: NavigationStackCoordinator) -> (any ServerSelectionSupplementaryFlowCoordinatorProtocol)? {
         nil
     }
 }

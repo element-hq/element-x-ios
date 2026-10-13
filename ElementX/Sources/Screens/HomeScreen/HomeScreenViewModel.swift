@@ -36,7 +36,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
          analyticsService: AnalyticsServiceProtocol,
          bugReportService: BugReportServiceProtocol,
          notificationManager: NotificationManagerProtocol,
-         userIndicatorController: UserIndicatorControllerProtocol) {
+         userIndicatorController: UserIndicatorControllerProtocol,
+         appHooks: AppHooks = AppHooks()) {
         self.userSession = userSession
         self.analyticsService = analyticsService
         self.bugReportService = bugReportService
@@ -48,7 +49,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         roomSummaryProvider = userSession.clientProxy.roomSummaryProvider
         
-        super.init(initialViewState: .init(userProfile: userSession.clientProxy.userProfilePublisher.value,
+        super.init(initialViewState: .init(appHooks: appHooks,
+                                           userProfile: userSession.clientProxy.userProfilePublisher.value,
                                            bindings: .init(filtersState: .init(userSettings: userSettings))),
                    mediaProvider: userSession.mediaProvider)
         
@@ -199,6 +201,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             Task { await leaveRoom(roomID: roomIdentifier) }
         case .reportRoom(let roomIdentifier):
             actionsSubject.send(.presentReportRoom(roomIdentifier: roomIdentifier))
+        case .supplementaryAction(let action):
+            switch action {
+            case .room(let roomID): actionsSubject.send(.presentRoom(roomIdentifier: roomID))
+            case .settings(let flowID): actionsSubject.send(.presentSupplementaryFlow(flowID))
+            }
         case .showSettings:
             actionsSubject.send(.presentSettingsScreen)
         case .setupRecovery:

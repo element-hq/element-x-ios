@@ -12,7 +12,12 @@ import MatrixRustSDK
 import SwiftUI
 import WysiwygComposer
 
+extension EnvironmentValues {
+    @Entry var composerSupplementaryContent: AnyView?
+}
+
 struct ComposerToolbar: View {
+    @Environment(\.composerSupplementaryContent) private var supplementaryContent
     @Environment(\.verticalSizeClass) private var verticalSizeClass
     
     @ObservedObject var context: ComposerToolbarViewModel.Context
@@ -109,6 +114,9 @@ struct ComposerToolbar: View {
                     voiceMessageRecordingButton(mode: context.viewState.isVoiceMessageModeActivated ? .recording : .idle)
                         .scaledPadding(.vertical, trailingButtonVerticalPadding, relativeTo: .compound.headingLG)
                 }
+            }
+            if !context.composerFormattingEnabled, !context.viewState.isVoiceMessageModeActivated {
+                supplementaryContent
             }
         }
         .animation(.linear(duration: 0.15), value: context.viewState.composerMode)

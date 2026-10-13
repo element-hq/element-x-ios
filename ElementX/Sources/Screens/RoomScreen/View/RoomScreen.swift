@@ -117,6 +117,14 @@ struct RoomScreen: View {
                     }
                 }
             }
+            .safeAreaInset(edge: .top, spacing: 0) {
+                supplementaryView(.banner)
+            }
+            .accessibilityHidden(context.viewState.appHooks.roomScreenHook.isContentCovered(roomID: context.viewState.roomID))
+            .overlay {
+                supplementaryView(.overlay)
+            }
+            .toolbar(context.viewState.appHooks.roomScreenHook.isContentCovered(roomID: context.viewState.roomID) ? .hidden : .visible, for: .navigationBar)
             .navigationBarBackButtonHidden(isMessageSelectionActive)
             .toolbarRole(RoomHeaderView.toolbarRole)
             .navigationTitle(L10n.screenRoomTitle) // Hidden but used for back button text.
@@ -133,6 +141,12 @@ struct RoomScreen: View {
             }
             .track(screen: .Room)
             .sentryTrace("\(Self.self)")
+    }
+    
+    private func supplementaryView(_ placement: RoomScreenSupplementaryPlacement) -> AnyView? {
+        context.viewState.appHooks.roomScreenHook.supplementaryView(roomID: context.viewState.roomID,
+                                                                    roomName: context.viewState.roomTitle,
+                                                                    placement: placement)
     }
     
     private var liveLocationBanner: some View {
@@ -254,6 +268,7 @@ struct RoomScreen: View {
         } else if context.viewState.canSendMessage, !ProcessInfo.isRunningAccessibilityTests {
             // We are not sure why but when wrapped in the room screen the composer toolbar breaks the accessibility tests
             composerToolbar
+                .environment(\.composerSupplementaryContent, isMessageSelectionActive ? nil : supplementaryView(.composer))
         } else {
             ComposerDisabledView()
         }
@@ -316,6 +331,9 @@ struct RoomScreen: View {
             }
         } else {
             roomActions
+            if let content = supplementaryView(.toolbar) {
+                ToolbarItem(placement: .primaryAction) { content }
+            }
         }
     }
     

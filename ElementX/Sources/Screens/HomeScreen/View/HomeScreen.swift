@@ -25,6 +25,14 @@ struct HomeScreen: View {
     
     var body: some View {
         HomeScreenContent(context: context, scrollViewAdapter: scrollViewAdapter)
+            .safeAreaInset(edge: .bottom, spacing: 0) {
+                context.viewState.appHooks.homeScreenHook.supplementaryView(placement: .floating) { context.send(viewAction: .supplementaryAction($0)) }
+            }
+            .accessibilityHidden(context.viewState.appHooks.homeScreenHook.isContentCovered())
+            .overlay {
+                context.viewState.appHooks.homeScreenHook.supplementaryView(placement: .overlay) { context.send(viewAction: .supplementaryAction($0)) }
+            }
+            .toolbar(context.viewState.appHooks.homeScreenHook.isContentCovered() ? .hidden : .visible, for: .navigationBar)
             .alert(item: $context.alertInfo)
             .alert(item: $context.leaveRoomAlertItem,
                    actions: leaveRoomAlertActions,

@@ -31,6 +31,9 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
     
     private let stateMachine: ChatsTabFlowCoordinatorStateMachine
     
+    private var supplementaryFlowCoordinator: (any SettingsSupplementaryFlowCoordinatorProtocol)?
+    private var supplementaryFlowCancellable: AnyCancellable?
+    
     private var roomFlowCoordinator: RoomFlowCoordinator?
     // periphery:ignore - retaining purpose
     private var spaceFlowCoordinator: SpaceFlowCoordinator?
@@ -86,12 +89,14 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     func clearRoute(animated: Bool) {
+        supplementaryFlowCoordinator?.clearRoute(animated: animated)
         roomFlowCoordinator?.clearRoute(animated: animated)
     }
     
     // MARK: - Private
     
     func asyncHandleAppRoute(_ appRoute: AppRoute, animated: Bool) async {
+        supplementaryFlowCoordinator?.clearRoute(animated: animated)
         showLoadingIndicator(delay: .seconds(0.5))
         defer { hideLoadingIndicator() }
         
@@ -379,8 +384,21 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
                                             wasVisibleToUser: nil)
     }
     
+    private func startSupplementaryFlow(flowID: String) {
+        guard supplementaryFlowCoordinator == nil,
+              let coordinator = flowParameters.appHooks.settingsScreenHook.makeSupplementaryFlowCoordinator(flowID: flowID,
+                                                                                                            navigationStackCoordinator: sidebarNavigationStackCoordinator) else { return }
+        supplementaryFlowCoordinator = coordinator
+        supplementaryFlowCancellable = coordinator.actionsPublisher.sink { [weak self] _ in
+            self?.supplementaryFlowCoordinator = nil
+            self?.supplementaryFlowCancellable = nil
+        }
+        coordinator.start(animated: true)
+    }
+    
     private func presentHomeScreen() {
-        let parameters = HomeScreenCoordinatorParameters(userSession: userSession,
+        let parameters = HomeScreenCoordinatorParameters(appHooks: flowParameters.appHooks,
+                                                         userSession: userSession,
                                                          bugReportService: flowParameters.bugReportService,
                                                          selectedRoomPublisher: selectedRoomSubject.asCurrentValuePublisher(),
                                                          userSettings: flowParameters.userSettings,
@@ -409,6 +427,8 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
                        detailStateRoomID == roomID {
                         clearRoute(animated: true)
                     }
+                case .presentSupplementaryFlow(let flowID):
+                    startSupplementaryFlow(flowID: flowID)
                 case .presentSettingsScreen:
                     actionsSubject.send(.showSettings)
                 case .presentFeedbackScreen:

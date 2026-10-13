@@ -10,28 +10,18 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 internal nonisolated enum UntranslatedL10n {
-  /// Clear settings
-  internal static var actionClearSettings: String { return UntranslatedL10n.tr("Untranslated", "action_clear_settings") }
   /// Reset options
   internal static var actionResetOptions: String { return UntranslatedL10n.tr("Untranslated", "action_reset_options") }
   /// Save and continue
   internal static var actionSaveAndContinue: String { return UntranslatedL10n.tr("Untranslated", "action_save_and_continue") }
-  /// Port
-  internal static var commonPort: String { return UntranslatedL10n.tr("Untranslated", "common_port") }
   /// Search
   internal static var screenHomeTabSearch: String { return UntranslatedL10n.tr("Untranslated", "screen_home_tab_search") }
   /// Access additional settings for a more personalized and tailored experience.
   internal static var screenPttOnboardingAdditionalSettingsDescription: String { return UntranslatedL10n.tr("Untranslated", "screen_ptt_onboarding_additional_settings_description") }
-  /// Setup PTT connection
-  internal static var screenPttOnboardingConnectionTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_ptt_onboarding_connection_title") }
   /// Setup PTT options
   internal static var screenPttOnboardingOptionsTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_ptt_onboarding_options_title") }
-  /// Push to talk server address
-  internal static var screenPttOnboardingServerAddress: String { return UntranslatedL10n.tr("Untranslated", "screen_ptt_onboarding_server_address") }
   /// Quickly set up with pre-configured settings.
   internal static var screenPttOnboardingSetupDescription: String { return UntranslatedL10n.tr("Untranslated", "screen_ptt_onboarding_setup_description") }
-  /// Server location
-  internal static var screenPttSettingsServerLocation: String { return UntranslatedL10n.tr("Untranslated", "screen_ptt_settings_server_location") }
   /// Search for chats and messages
   internal static var screenSearchEmptyStateMessage: String { return UntranslatedL10n.tr("Untranslated", "screen_search_empty_state_message") }
   /// Start searching...
@@ -46,6 +36,44 @@ internal nonisolated enum UntranslatedL10n {
   internal static var screenSearchTabChats: String { return UntranslatedL10n.tr("Untranslated", "screen_search_tab_chats") }
   /// Messages
   internal static var screenSearchTabMessages: String { return UntranslatedL10n.tr("Untranslated", "screen_search_tab_messages") }
+  /// Hold to speak, or activate to start and activate Stop speaking to finish.
+  internal static var screenSessionAccessibleHint: String { return UntranslatedL10n.tr("Untranslated", "screen_session_accessible_hint") }
+  /// Push to talk session ended
+  internal static var screenSessionEnded: String { return UntranslatedL10n.tr("Untranslated", "screen_session_ended") }
+  /// Push to talk inactivity timeout
+  internal static var screenSessionInactivity: String { return UntranslatedL10n.tr("Untranslated", "screen_session_inactivity") }
+  /// Join Push to talk
+  internal static var screenSessionJoin: String { return UntranslatedL10n.tr("Untranslated", "screen_session_join") }
+  /// Leave Push to talk
+  internal static var screenSessionLeave: String { return UntranslatedL10n.tr("Untranslated", "screen_session_leave") }
+  /// No current push to talk participants
+  internal static var screenSessionNoParticipants: String { return UntranslatedL10n.tr("Untranslated", "screen_session_no_participants") }
+  /// Another participant is speaking
+  internal static var screenSessionOtherSpeaker: String { return UntranslatedL10n.tr("Untranslated", "screen_session_other_speaker") }
+  /// UI prototype · no audio or connection
+  internal static var screenSessionPrototype: String { return UntranslatedL10n.tr("Untranslated", "screen_session_prototype") }
+  /// Preview: ending session in %1$d seconds
+  internal static func screenSessionSampleCountdown(_ p1: Int) -> String {
+    return UntranslatedL10n.tr("Untranslated", "screen_session_sample_countdown", p1)
+  }
+  /// %1$d sample participants
+  internal static func screenSessionSampleParticipants(_ p1: Int) -> String {
+    return UntranslatedL10n.tr("Untranslated", "screen_session_sample_participants", p1)
+  }
+  /// Explore Push-to-Talk settings. This UI prototype does not connect or transmit audio.
+  internal static var screenSessionSetupDescription: String { return UntranslatedL10n.tr("Untranslated", "screen_session_setup_description") }
+  /// Enable Push-to-Talk
+  internal static var screenSessionSetupTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_session_setup_title") }
+  /// Hold to speak, release to listen.
+  internal static var screenSessionSpeakingHint: String { return UntranslatedL10n.tr("Untranslated", "screen_session_speaking_hint") }
+  /// Stop speaking
+  internal static var screenSessionStopSpeaking: String { return UntranslatedL10n.tr("Untranslated", "screen_session_stop_speaking") }
+  /// Talk
+  internal static var screenSessionTalk: String { return UntranslatedL10n.tr("Untranslated", "screen_session_talk") }
+  /// Push to talk session
+  internal static var screenSessionTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_session_title") }
+  /// Update settings
+  internal static var screenSessionUpdateSettings: String { return UntranslatedL10n.tr("Untranslated", "screen_session_update_settings") }
   /// Clear all data currently stored on this device?
   /// Sign in again to access your account data and messages.
   internal static var softLogoutClearDataDialogContent: String { return UntranslatedL10n.tr("Untranslated", "soft_logout_clear_data_dialog_content") }

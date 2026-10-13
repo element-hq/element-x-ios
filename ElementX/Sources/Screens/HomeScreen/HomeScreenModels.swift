@@ -22,6 +22,7 @@ enum HomeScreenViewModelAction {
     case presentSecureBackupSettings
     case presentRecoveryKeyScreen
     case presentEncryptionResetScreen
+    case presentSupplementaryFlow(String)
     case presentSettingsScreen
     case presentFeedbackScreen
     case presentStartChatScreen
@@ -35,6 +36,7 @@ enum HomeScreenViewAction {
     case leaveRoom(roomIdentifier: String)
     case confirmLeaveRoom(roomIdentifier: String)
     case reportRoom(roomIdentifier: String)
+    case supplementaryAction(HomeScreenSupplementaryAction)
     case showSettings
     case startChat
     case setupRecovery
@@ -90,6 +92,7 @@ enum HomeScreenSecurityBannerMode: Equatable {
 }
 
 struct HomeScreenViewState: BindableState {
+    var appHooks = AppHooks()
     var userProfile: UserProfile
     
     var securityBannerMode = HomeScreenSecurityBannerMode.none

@@ -31,6 +31,9 @@ final nonisolated class AppHooks: AppHooksProtocol {
     @AppHook(default: DefaultUserSessionHook())
     var userSessionHook: UserSessionHookProtocol
     
+    @AppHook(default: DefaultHomeScreenHook())
+    var homeScreenHook: HomeScreenHookProtocol
+    
     @AppHook(default: DefaultRoomScreenHook())
     var roomScreenHook: RoomScreenHookProtocol
     

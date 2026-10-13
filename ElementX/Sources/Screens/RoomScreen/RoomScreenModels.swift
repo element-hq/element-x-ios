@@ -40,6 +40,8 @@ enum RoomScreenViewAction {
 }
 
 struct RoomScreenViewState: BindableState {
+    var appHooks = AppHooks()
+    var roomID = ""
     var roomTitle = ""
     var roomAvatar: RoomAvatar
     var dmRecipientDetails = RoomHeaderView.DMRecipientDetails()

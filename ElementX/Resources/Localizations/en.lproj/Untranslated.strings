@@ -16,12 +16,26 @@
 "untranslated" = "Untranslated";
 
 "screen_ptt_onboarding_additional_settings_description" = "Access additional settings for a more personalized and tailored experience.";
-"screen_ptt_onboarding_connection_title" = "Setup PTT connection";
 "screen_ptt_onboarding_options_title" = "Setup PTT options";
 "screen_ptt_onboarding_setup_description" = "Quickly set up with pre-configured settings.";
-"screen_ptt_onboarding_server_address" = "Push to talk server address";
-"common_port" = "Port";
 "action_save_and_continue" = "Save and continue";
-"action_clear_settings" = "Clear settings";
 "action_reset_options" = "Reset options";
-"screen_ptt_settings_server_location" = "Server location";
+
+"screen_session_join" = "Join Push to talk";
+"screen_session_leave" = "Leave Push to talk";
+"screen_session_prototype" = "UI prototype · no audio or connection";
+"screen_session_title" = "Push to talk session";
+"screen_session_talk" = "Talk";
+"screen_session_other_speaker" = "Another participant is speaking";
+"screen_session_accessible_hint" = "Hold to speak, or activate to start and activate Stop speaking to finish.";
+"screen_session_stop_speaking" = "Stop speaking";
+"screen_session_speaking_hint" = "Hold to speak, release to listen.";
+"screen_session_ended" = "Push to talk session ended";
+"screen_session_no_participants" = "No current push to talk participants";
+"screen_session_inactivity" = "Push to talk inactivity timeout";
+"screen_session_sample_countdown" = "Preview: ending session in %1$d seconds";
+"screen_session_sample_participants" = "%1$d sample participants";
+
+"screen_session_setup_title" = "Enable Push-to-Talk";
+"screen_session_setup_description" = "Explore Push-to-Talk settings. This UI prototype does not connect or transmit audio.";
+"screen_session_update_settings" = "Update settings";
