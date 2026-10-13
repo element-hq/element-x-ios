@@ -491,6 +491,18 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             }
         }
         
+        if oldVersion < Version(26, 10, 3) {
+            MXLog.info("Migrating to version 26.10.3, copying the notifications switch into every account.")
+            let accountSettings = userSessionManager.userIDs.map { appSettings.userSettings(for: $0).account }
+            if let firstAccountSettings = accountSettings.first {
+                // The first account moves the value out of the app settings, the others get the same switch.
+                firstAccountSettings.migrateAppSettingsValue(\.enableNotificationsKey)
+                for otherAccountSettings in accountSettings.dropFirst() {
+                    otherAccountSettings.enableNotifications = firstAccountSettings.enableNotifications
+                }
+            }
+        }
+        
         // Store the old version to run additional migrations on the user session once it has been set up.
         userSessionMigrationsOldVersion = oldVersion
     }

@@ -32,6 +32,10 @@ final nonisolated class AccountSettings: @unchecked Sendable {
     @UserPreference(defaultValue: true)
     var showAllRoomListActivity: Bool
     
+    /// Whether this account's notifications are on. When off, its pusher is deleted from the homeserver.
+    @UserPreference(defaultValue: true)
+    var enableNotifications: Bool
+    
     /// The tone played when the user hasn't selected one, which the homeserver can configure remotely.
     let defaultNotificationTone: RemotePreference<NotificationTone> = .init(.default)
     
