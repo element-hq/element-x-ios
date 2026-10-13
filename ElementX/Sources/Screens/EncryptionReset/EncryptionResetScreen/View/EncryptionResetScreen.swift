@@ -48,8 +48,8 @@ struct EncryptionResetScreen: View {
     }
     
     private var header: some View {
-        TitleAndIcon(title: mode.isResetTheOnlyOption ? UntranslatedL10n.screenEncryptionResetNoOptionsTitle : L10n.screenEncryptionResetTitle,
-                     subtitle: mode.isResetTheOnlyOption ? UntranslatedL10n.screenEncryptionResetNoOptionsSubtitle : UntranslatedL10n.screenEncryptionResetSubtitle,
+        TitleAndIcon(title: mode.isResetTheOnlyOption ? L10n.screenEncryptionResetNoOptionsTitle : L10n.screenEncryptionResetTitle,
+                     subtitle: mode.isResetTheOnlyOption ? L10n.screenEncryptionResetNoOptionsSubtitle : L10n.screenEncryptionResetSubtitle,
                      icon: \.userProfile,
                      iconStyle: .defaultSolid)
     }
@@ -64,7 +64,7 @@ struct EncryptionResetScreen: View {
     }
     
     private var noRoomsMessage: some View {
-        VisualListItem(title: UntranslatedL10n.screenEncryptionResetNoChatsMessage, position: .single) {
+        VisualListItem(title: L10n.screenEncryptionResetNoChatsMessage, position: .single) {
             CompoundIcon(\.check)
                 .foregroundColor(.compound.iconAccentPrimary)
                 .alignmentGuide(.top) { _ in 2 }
@@ -78,7 +78,7 @@ struct EncryptionResetScreen: View {
             checkMarkItem(title: L10n.screenEncryptionResetBullet2, icon: \.visibilityOff, position: .middle, positive: false)
             checkMarkItem(title: L10n.screenEncryptionResetBullet3, icon: \.user, position: showsDevicesItem ? .middle : .bottom, positive: false)
             if showsDevicesItem {
-                checkMarkItem(title: UntranslatedL10n.screenEncryptionResetBullet4, icon: \.devices, position: .bottom, positive: false)
+                checkMarkItem(title: L10n.screenEncryptionResetBullet4, icon: \.devices, position: .bottom, positive: false)
             }
         }
         .fixedSize(horizontal: false, vertical: true)
@@ -103,7 +103,7 @@ struct EncryptionResetScreen: View {
             .accessibilityIdentifier(A11yIdentifiers.encryptionResetScreen.continueReset)
             
             if mode.isResetTheOnlyOption {
-                Button(UntranslatedL10n.screenIdentityConfirmationSignOut) {
+                Button(L10n.screenIdentityConfirmationSignOut) {
                     context.send(viewAction: .signOut)
                 }
                 .buttonStyle(.compound(.tertiary))
