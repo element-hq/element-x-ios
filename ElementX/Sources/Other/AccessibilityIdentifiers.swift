@@ -101,6 +101,8 @@ enum A11yIdentifiers {
     
     struct EncryptionResetScreen {
         let continueReset = "encryption_reset-continue_reset"
+        let signOut = "encryption_reset-sign_out"
+        let cancel = "encryption_reset-cancel"
     }
     
     struct EncryptionResetPasswordScreen {

@@ -107,6 +107,7 @@ struct EncryptionResetScreen: View {
                     context.send(viewAction: .signOut)
                 }
                 .buttonStyle(.compound(.tertiary))
+                .accessibilityIdentifier(A11yIdentifiers.encryptionResetScreen.signOut)
             }
         }
     }
@@ -118,6 +119,7 @@ struct EncryptionResetScreen: View {
                 Button(L10n.actionCancel) {
                     context.send(viewAction: .cancel)
                 }
+                .accessibilityIdentifier(A11yIdentifiers.encryptionResetScreen.cancel)
             }
         }
     }
