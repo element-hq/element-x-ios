@@ -15,6 +15,7 @@ import Sentry
 import SwiftUI
 import Version
 
+// swiftlint:disable:next type_body_length
 class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDelegate, NotificationManagerDelegate, SecureWindowManagerDelegate {
     private let stateMachine: AppCoordinatorStateMachine
     private let navigationRootCoordinator: NavigationRootCoordinator
@@ -894,6 +895,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             fatalError("User session not setup")
         }
         
+        // TODO: With other accounts signed in, switch to the most recently used one instead (element-hq/element-meta#3325).
         restorationTask?.cancel()
         windowManager.closeAllSecondaryWindows()
         
@@ -1468,11 +1470,6 @@ private extension AppCoordinator {
         MXLog.info("Started search backfill task")
         
         await waitForSessionRestore()
-        
-        guard userSession != nil else {
-            task.setTaskCompleted(success: false)
-            return
-        }
         
         task.expirationHandler = { @Sendable [weak self] in
             MXLog.info("Search backfill task is about to expire.")
