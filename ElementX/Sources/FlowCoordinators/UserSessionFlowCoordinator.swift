@@ -90,13 +90,13 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         let chatsSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator(hideBrandChrome: flowParameters.userSession.userSettings.app.hideBrandChrome))
         chatsTabFlowCoordinator = ChatsTabFlowCoordinator(navigationSplitCoordinator: chatsSplitCoordinator,
                                                           flowParameters: flowParameters)
-        chatsTabDetails = .init(tag: HomeTab.chats, title: L10n.screenHomeTabChats, icon: \.chat, selectedIcon: \.chatSolid)
+        chatsTabDetails = .init(tag: HomeTab.chats, title: L10n.screenHomeTabChats, icon: \.chat, selectedIcon: \.chatSolid, accessibilityIdentifier: A11yIdentifiers.homeTabs.chats)
         chatsTabDetails.navigationSplitCoordinator = chatsSplitCoordinator
         
         let spacesSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator(hideBrandChrome: flowParameters.userSession.userSettings.app.hideBrandChrome))
         spacesTabFlowCoordinator = SpacesTabFlowCoordinator(navigationSplitCoordinator: spacesSplitCoordinator,
                                                             flowParameters: flowParameters)
-        spacesTabDetails = .init(tag: HomeTab.spaces, title: L10n.screenHomeTabSpaces, icon: \.space, selectedIcon: \.spaceSolid)
+        spacesTabDetails = .init(tag: HomeTab.spaces, title: L10n.screenHomeTabSpaces, icon: \.space, selectedIcon: \.spaceSolid, accessibilityIdentifier: A11yIdentifiers.homeTabs.spaces)
         spacesTabDetails.navigationSplitCoordinator = spacesSplitCoordinator
         
         if flowParameters.userSession.userSettings.app.globalSearchEnabled {
@@ -108,7 +108,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             
             searchScreenCoordinator = searchCoordinator
             searchTabNavigationStackCoordinator = searchStackCoordinator
-            searchTabDetails = .init(tag: HomeTab.search, title: UntranslatedL10n.screenHomeTabSearch, icon: \.search, selectedIcon: \.search, isSearch: true)
+            searchTabDetails = .init(tag: HomeTab.search, title: UntranslatedL10n.screenHomeTabSearch, icon: \.search, selectedIcon: \.search, isSearch: true, accessibilityIdentifier: A11yIdentifiers.homeTabs.search)
         } else {
             searchScreenCoordinator = nil
             searchTabNavigationStackCoordinator = nil

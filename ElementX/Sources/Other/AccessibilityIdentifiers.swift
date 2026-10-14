@@ -20,6 +20,7 @@ enum A11yIdentifiers {
     static let encryptionResetScreen = EncryptionResetScreen()
     static let encryptionResetPasswordScreen = EncryptionResetPasswordScreen()
     static let homeScreen = HomeScreen()
+    static let homeTabs = HomeTabs()
     static let loginScreen = LoginScreen()
     static let authenticationStartScreen = AuthenticationStartScreen()
     static let reportContent = ReportContent()
@@ -48,6 +49,7 @@ enum A11yIdentifiers {
     static let spacesScreen = SpacesScreen()
     static let spaceScreen = SpaceScreen()
     static let spaceAddRoomsScreen = SpaceAddRoomsScreen()
+    static let searchScreen = SearchScreen()
     static let spaceSettingsScreen = SpaceSettingsScreen()
     static let linkNewDeviceScreen = LinkNewDeviceScreen()
     
@@ -118,6 +120,12 @@ enum A11yIdentifiers {
         func roomName(_ name: String) -> String {
             "\(roomNamePrefix):\(name)"
         }
+    }
+    
+    struct HomeTabs {
+        let chats = "home_tabs-chats"
+        let spaces = "home_tabs-spaces"
+        let search = "home_tabs-search"
     }
     
     struct InviteUsersScreen {
@@ -351,6 +359,13 @@ enum A11yIdentifiers {
     
     struct SpaceAddRoomsScreen {
         let cancel = "space_add_rooms_screen-cancel"
+    }
+    
+    struct SearchScreen {
+        let roomNamePrefix = "search_screen-room_name"
+        func roomName(_ name: String) -> String {
+            "\(roomNamePrefix):\(name)"
+        }
     }
     
     struct SpaceSettingsScreen {

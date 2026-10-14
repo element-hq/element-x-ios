@@ -26,18 +26,20 @@ import SwiftUI
         /// When `true` the tab is given the `.search` role, which on iOS 26 detaches it
         /// into the trailing search button in the tab bar.
         let isSearch: Bool
+        let accessibilityIdentifier: String?
         var badgeCount = 0
         
         /// Provide the tab's split coordinator in here to have the tab bar automatically hidden
         /// when pushing a child into the split view's details on iPhone/compact iPad.
         weak var navigationSplitCoordinator: NavigationSplitCoordinator?
         
-        init(tag: Tag, title: String, icon: KeyPath<CompoundIcons, Image>, selectedIcon: KeyPath<CompoundIcons, Image>, isSearch: Bool = false) {
+        init(tag: Tag, title: String, icon: KeyPath<CompoundIcons, Image>, selectedIcon: KeyPath<CompoundIcons, Image>, isSearch: Bool = false, accessibilityIdentifier: String? = nil) {
             self.tag = tag
             self.title = title
             self.icon = icon
             self.selectedIcon = selectedIcon
             self.isSearch = isSearch
+            self.accessibilityIdentifier = accessibilityIdentifier
         }
         
         func barVisibility(in horizontalSizeClass: UserInterfaceSizeClass?) -> Visibility {
@@ -406,6 +408,7 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
                     }
                 }
                 .badge(module.details.badgeCount)
+                .accessibilityIdentifier(module.details.accessibilityIdentifier ?? "")
             }
         }
         .backportTabBarMinimizeBehaviorOnScrollDown()
