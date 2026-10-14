@@ -17,7 +17,7 @@ struct ChatsTabFlowCoordinatorTests {
     var timelineControllerFactory: TimelineControllerFactoryMock!
     var chatsTabFlowCoordinator: ChatsTabFlowCoordinator!
     var splitCoordinator: NavigationSplitCoordinator!
-    var notificationManager: NotificationManagerMock!
+    var notificationService: NotificationServiceMock!
     let stateMachineFactory = PublishedStateMachineFactory()
     
     var detailCoordinator: CoordinatorProtocol? {
@@ -34,9 +34,9 @@ struct ChatsTabFlowCoordinatorTests {
         
         splitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator(hideBrandChrome: false))
         
-        notificationManager = NotificationManagerMock()
+        notificationService = NotificationServiceMock(.init())
         
-        let userSession = UserSessionMock(.init(clientProxy: clientProxy))
+        let userSession = UserSessionMock(.init(clientProxy: clientProxy, notificationService: notificationService))
         let flowParameters = CommonFlowParameters(userSession: userSession,
                                                   availableSessionsPublisher: .init([.init(userSession: userSession)]),
                                                   bugReportService: BugReportServiceMock(.init()),
@@ -48,7 +48,6 @@ struct ChatsTabFlowCoordinatorTests {
                                                   appHooks: AppHooks(),
                                                   analytics: AnalyticsServiceMock(.init()),
                                                   userIndicatorController: UserIndicatorControllerMock(),
-                                                  notificationManager: notificationManager,
                                                   stateMachineFactory: stateMachineFactory)
         chatsTabFlowCoordinator = ChatsTabFlowCoordinator(navigationSplitCoordinator: splitCoordinator,
                                                           flowParameters: flowParameters)
@@ -80,7 +79,7 @@ struct ChatsTabFlowCoordinatorTests {
         #expect(detailNavigationStack?.rootCoordinator == nil)
         #expect(detailCoordinator == nil)
         
-        #expect(notificationManager.removeDeliveredMessageNotificationsForReceivedInvocations == ["1", "1", "2"])
+        #expect(notificationService.removeDeliveredMessageNotificationsForReceivedInvocations == ["1", "1", "2"])
     }
     
     @Test
@@ -109,7 +108,7 @@ struct ChatsTabFlowCoordinatorTests {
         #expect(detailNavigationStack?.rootCoordinator == nil)
         #expect(detailCoordinator == nil)
         
-        #expect(notificationManager.removeDeliveredMessageNotificationsForReceivedInvocations == ["1", "1", "2"])
+        #expect(notificationService.removeDeliveredMessageNotificationsForReceivedInvocations == ["1", "1", "2"])
     }
     
     @Test

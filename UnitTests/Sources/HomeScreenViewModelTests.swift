@@ -19,7 +19,7 @@ final class HomeScreenViewModelTests {
     
     var clientProxy: ClientProxyMock!
     var roomSummaryProvider: RoomSummaryProviderMock!
-    var notificationManager: NotificationManagerMock!
+    var notificationService: NotificationServiceMock!
     private let userSettings: UserSettings
     
     var cancellables = Set<AnyCancellable>()
@@ -297,7 +297,7 @@ final class HomeScreenViewModelTests {
         try await deferred.fulfill()
         
         #expect(userSettings.app.seenInvites == [invitedRoomIDs[1]])
-        #expect(!notificationManager.removeDeliveredMessageNotificationsForCalled, "The notification will be dismissed when opening the room.")
+        #expect(!notificationService.removeDeliveredMessageNotificationsForCalled, "The notification will be dismissed when opening the room.")
     }
     
     @Test
@@ -315,7 +315,7 @@ final class HomeScreenViewModelTests {
         try await deferred.fulfill()
         
         #expect(userSettings.app.seenInvites == [invitedRoomIDs[1]])
-        #expect(!notificationManager.removeDeliveredMessageNotificationsForCalled, "The notification will be dismissed when opening the room.")
+        #expect(!notificationService.removeDeliveredMessageNotificationsForCalled, "The notification will be dismissed when opening the room.")
     }
     
     @Test
@@ -346,8 +346,8 @@ final class HomeScreenViewModelTests {
         #expect(rejectCalled)
         
         #expect(userSettings.app.seenInvites == [invitedRoomIDs[1]])
-        #expect(notificationManager.removeDeliveredMessageNotificationsForCalled)
-        #expect(notificationManager.removeDeliveredMessageNotificationsForReceivedInvocations == [invitedRoomIDs[0]])
+        #expect(notificationService.removeDeliveredMessageNotificationsForCalled)
+        #expect(notificationService.removeDeliveredMessageNotificationsForReceivedInvocations == [invitedRoomIDs[0]])
     }
     
     @Test
@@ -601,12 +601,11 @@ final class HomeScreenViewModelTests {
             break
         }
         
-        let userSession = UserSessionMock(.init(clientProxy: clientProxy, userSettings: userSettings))
+        notificationService = NotificationServiceMock(.init())
+        let userSession = UserSessionMock(.init(clientProxy: clientProxy, userSettings: userSettings, notificationService: notificationService))
         if let securityStatePublisher {
             userSession.sessionSecurityStatePublisher = securityStatePublisher
         }
-        
-        notificationManager = NotificationManagerMock()
         
         let sessionDetails = [UserSessionDetails(userSession: userSession)] + otherAccountUserIDs.map { UserSessionDetails(userID: $0) }
         
@@ -615,7 +614,6 @@ final class HomeScreenViewModelTests {
                                         selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
                                         analyticsService: AnalyticsServiceMock(.init()),
                                         bugReportService: BugReportServiceMock(.init()),
-                                        notificationManager: notificationManager,
                                         userIndicatorController: UserIndicatorControllerMock())
     }
 }

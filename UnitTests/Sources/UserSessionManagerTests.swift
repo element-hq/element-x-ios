@@ -12,6 +12,7 @@ import Testing
 struct UserSessionManagerTests {
     let userSessionStore = UserSessionStoreMock()
     let appSettings = AppSettings.volatile()
+    let notificationManager = NotificationManagerMock()
     
     @Test
     func ordersAccountsByWhenTheyWereLastSelected() {
@@ -234,6 +235,46 @@ struct UserSessionManagerTests {
     }
     
     @Test
+    func addingASessionConnectsItsNotificationService() {
+        let manager = makeManager(userIDs: [])
+        let alice = makeUserSession(userID: "@alice:matrix.org")
+        
+        manager.add(alice)
+        
+        #expect(notificationManager.addReceivedService === alice.notificationService)
+    }
+    
+    @Test
+    func removingAnAccountDisconnectsItsNotificationService() {
+        let manager = makeManager(userIDs: ["@alice:matrix.org"])
+        manager.add(makeUserSession(userID: "@alice:matrix.org"))
+        
+        manager.remove(userID: "@alice:matrix.org")
+        
+        #expect(notificationManager.removeUserIDReceivedInvocations == ["@alice:matrix.org"])
+    }
+    
+    @Test
+    func resettingDisconnectsEveryNotificationService() {
+        let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org"])
+        manager.add(makeUserSession(userID: "@alice:matrix.org"))
+        
+        manager.reset()
+        
+        #expect(Set(notificationManager.removeUserIDReceivedInvocations) == ["@alice:matrix.org", "@bob:matrix.org"])
+    }
+    
+    @Test
+    func aFailedRestoreDisconnectsTheAccountsNotificationService() async {
+        let manager = makeManager(userIDs: ["@alice:matrix.org"])
+        userSessionStore.restoreUserSessionUserIDReturnValue = .failure(.failedRestoringLogin)
+        
+        await manager.restoreSessions { _ in } didAdd: { _ in }
+        
+        #expect(notificationManager.removeUserIDReceivedInvocations == ["@alice:matrix.org"])
+    }
+    
+    @Test
     func resumingAndPausingReachEverySession() async {
         let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org"])
         let aliceClientProxy = ClientProxyMock(.init(userID: "@alice:matrix.org"))
@@ -272,7 +313,7 @@ struct UserSessionManagerTests {
     
     private func makeManager(userIDs: [String]) -> UserSessionManager {
         userSessionStore.userIDs = userIDs
-        return UserSessionManager(userSessionStore: userSessionStore, appSettings: appSettings)
+        return UserSessionManager(userSessionStore: userSessionStore, appSettings: appSettings, notificationManager: notificationManager)
     }
     
     private func makeUserSession(userID: String) -> UserSessionMock {

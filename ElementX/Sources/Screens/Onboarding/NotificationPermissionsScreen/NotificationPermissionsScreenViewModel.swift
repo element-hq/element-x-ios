@@ -12,15 +12,15 @@ import SwiftUI
 typealias NotificationPermissionsScreenViewModelType = StateStoreViewModel<NotificationPermissionsScreenViewState, NotificationPermissionsScreenViewAction>
 
 class NotificationPermissionsScreenViewModel: NotificationPermissionsScreenViewModelType, NotificationPermissionsScreenViewModelProtocol {
-    private let notificationManager: NotificationManagerProtocol
+    private let notificationService: NotificationServiceProtocol
     
     private var actionsSubject: PassthroughSubject<NotificationPermissionsScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<NotificationPermissionsScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(notificationManager: NotificationManagerProtocol) {
-        self.notificationManager = notificationManager
+    init(notificationService: NotificationServiceProtocol) {
+        self.notificationService = notificationService
         
         super.init(initialViewState: .init())
     }
@@ -30,7 +30,7 @@ class NotificationPermissionsScreenViewModel: NotificationPermissionsScreenViewM
     override func process(viewAction: NotificationPermissionsScreenViewAction) {
         switch viewAction {
         case .enable:
-            notificationManager.requestAuthorization()
+            notificationService.requestAuthorization()
             
             actionsSubject.send(.done)
         case .notNow:

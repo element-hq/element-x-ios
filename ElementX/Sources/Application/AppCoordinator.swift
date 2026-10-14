@@ -125,16 +125,14 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                 analyticsService: analyticsService,
                                                 appHooks: appHooks,
                                                 networkMonitor: networkMonitor)
-        userSessionManager = UserSessionManager(userSessionStore: userSessionStore, appSettings: appSettings)
+        notificationManager = NotificationManager(notificationCenter: UNUserNotificationCenter.current(), appSettings: appSettings)
+        userSessionManager = UserSessionManager(userSessionStore: userSessionStore, appSettings: appSettings, notificationManager: notificationManager)
         
         let appLockService = AppLockService(keychainController: keychainController, appSettings: appSettings)
         let appLockNavigationCoordinator = NavigationRootCoordinator()
         appLockFlowCoordinator = AppLockFlowCoordinator(appLockService: appLockService,
                                                         navigationCoordinator: appLockNavigationCoordinator,
                                                         appSettings: appSettings)
-        
-        notificationManager = NotificationManager(notificationCenter: UNUserNotificationCenter.current(),
-                                                  appSettings: appSettings)
         
         bugReportService = BugReportService(rageshakeURLPublisher: appSettings.bugReportRageshakeURL.publisher,
                                             applicationID: appSettings.bugReportApplicationID,
@@ -147,8 +145,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         windowManager.delegate = self
         
-        notificationManager.delegate = self
-        notificationManager.start()
+        configureNotificationManager()
         
         guard let currentVersion = Version(InfoPlistReader(bundle: .main).bundleShortVersionString) else {
             fatalError("The app's version number **must** use semver for migration purposes.")
@@ -870,7 +867,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                   appHooks: appHooks,
                                                   analytics: analyticsService,
                                                   userIndicatorController: userIndicatorController,
-                                                  notificationManager: notificationManager,
                                                   stateMachineFactory: StateMachineFactory())
         
         let userSessionFlowCoordinator = UserSessionFlowCoordinator(isNewLogin: isNewLogin,
@@ -957,8 +953,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         userIndicatorController.retractAllIndicators()
         
         userSessionFlowCoordinator = nil
-        
-        notificationManager.setUserSession(nil)
     }
     
     private func presentSplashScreen(isSoftLogout: Bool = false, disableAppLock: Bool = false) {
@@ -988,16 +982,15 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         // TODO: Calls only follow the active account, ElementCallService must change to hold every account's session.
         elementCallService.setUserSession(userSession)
-        // TODO: Notifications only follow the active account, the NotificationManager must change to handle every account.
-        configureNotificationManager(for: userSession)
         Task {
             await resumeClientServices()
             await appHooks.configure(with: userSession)
         }
     }
     
-    private func configureNotificationManager(for userSession: UserSessionProtocol) {
-        notificationManager.setUserSession(userSession)
+    private func configureNotificationManager() {
+        notificationManager.delegate = self
+        notificationManager.start()
         
         appDelegateObserver = appDelegate.callbacks
             .receive(on: DispatchQueue.main)

@@ -10,7 +10,7 @@ import Combine
 import SwiftUI
 
 struct NotificationPermissionsScreenCoordinatorParameters {
-    let notificationManager: NotificationManagerProtocol
+    let notificationService: NotificationServiceProtocol
 }
 
 enum NotificationPermissionsScreenCoordinatorAction {
@@ -27,7 +27,7 @@ final class NotificationPermissionsScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: NotificationPermissionsScreenCoordinatorParameters) {
-        viewModel = NotificationPermissionsScreenViewModel(notificationManager: parameters.notificationManager)
+        viewModel = NotificationPermissionsScreenViewModel(notificationService: parameters.notificationService)
     }
     
     // MARK: - Public

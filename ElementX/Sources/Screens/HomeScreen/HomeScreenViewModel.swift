@@ -20,7 +20,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     private let analyticsService: AnalyticsServiceProtocol
     private let bugReportService: BugReportServiceProtocol
     private let userSettings: UserSettings
-    private let notificationManager: NotificationManagerProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     
     private let roomSummaryProvider: RoomSummaryProviderProtocol?
@@ -36,14 +35,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
          selectedRoomPublisher: CurrentValuePublisher<String?, Never>,
          analyticsService: AnalyticsServiceProtocol,
          bugReportService: BugReportServiceProtocol,
-         notificationManager: NotificationManagerProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.userSession = userSession
         self.availableSessionsPublisher = availableSessionsPublisher
         self.analyticsService = analyticsService
         self.bugReportService = bugReportService
         userSettings = userSession.userSettings
-        self.notificationManager = notificationManager
         self.userIndicatorController = userIndicatorController
         
         spaceFilterSubject = CurrentValueSubject<SpaceServiceFilter?, Never>(nil)
@@ -602,7 +599,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         switch result {
         case .success:
-            await notificationManager.removeDeliveredMessageNotifications(for: roomID) // Normally handled by the room flow, but that's never presented in this case.
+            userSession.notificationService.removeDeliveredMessageNotifications(for: roomID) // Normally handled by the room flow, but that's never presented in this case.
             userSettings.app.seenInvites.remove(roomID)
         case .failure:
             displayError()

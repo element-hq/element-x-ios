@@ -379,7 +379,6 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
                                                          bugReportService: flowParameters.bugReportService,
                                                          selectedRoomPublisher: selectedRoomSubject.asCurrentValuePublisher(),
                                                          analyticsService: flowParameters.analytics,
-                                                         notificationManager: flowParameters.notificationManager,
                                                          userIndicatorController: flowParameters.userIndicatorController)
         let coordinator = HomeScreenCoordinator(parameters: parameters)
         
@@ -565,7 +564,7 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
         Task {
             let _ = await userSession.clientProxy.trackRecentlyVisitedRoom(roomID)
             
-            await flowParameters.notificationManager.removeDeliveredMessageNotifications(for: roomID)
+            userSession.notificationService.removeDeliveredMessageNotifications(for: roomID)
         }
     }
     

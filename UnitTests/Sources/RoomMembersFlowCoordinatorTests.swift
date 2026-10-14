@@ -64,7 +64,6 @@ struct RoomMembersFlowCoordinatorTests {
                                                   appHooks: AppHooks(),
                                                   analytics: AnalyticsServiceMock(.init()),
                                                   userIndicatorController: UserIndicatorControllerMock(),
-                                                  notificationManager: NotificationManagerMock(),
                                                   stateMachineFactory: stateMachineFactory)
         
         let roomProxy = JoinedRoomProxyMock(.init())

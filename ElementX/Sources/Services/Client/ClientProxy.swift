@@ -846,7 +846,11 @@ class ClientProxy: ClientProxyProtocol {
                                    deviceDisplayName: configuration.deviceDisplayName,
                                    profileTag: configuration.profileTag,
                                    lang: configuration.lang,
-                                   append: false)
+                                   append: configuration.append)
+    }
+    
+    func deletePusher(with identifiers: PusherIdentifiers) async throws {
+        try await client.deletePusher(identifiers: identifiers)
     }
     
     func searchUsers(searchTerm: String, limit: UInt) async -> Result<SearchUsersResults, ClientProxyError> {
