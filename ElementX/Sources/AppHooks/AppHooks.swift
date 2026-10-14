@@ -12,10 +12,6 @@ import Synchronization
 
 final nonisolated class AppHooks: AppHooksProtocol {
     #if IS_MAIN_APP
-    func configure(with userSession: UserSessionProtocol?) async {
-        await userSessionHook.configure(with: userSession)
-    }
-    
     @AppHook(default: DefaultAppSettingsHook())
     var appSettingsHook: AppSettingsHookProtocol
     
