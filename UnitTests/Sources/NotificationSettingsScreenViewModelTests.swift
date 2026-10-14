@@ -42,16 +42,16 @@ struct NotificationSettingsScreenViewModelTests {
     
     @Test
     func enableNotifications() {
-        userSettings.app.enableNotifications = false
+        userSettings.account.enableNotifications = false
         context.send(viewAction: .changedEnableNotifications)
-        #expect(userSettings.app.enableNotifications)
+        #expect(userSettings.account.enableNotifications)
     }
     
     @Test
     func disableNotifications() {
-        userSettings.app.enableNotifications = true
+        userSettings.account.enableNotifications = true
         context.send(viewAction: .changedEnableNotifications)
-        #expect(!userSettings.app.enableNotifications)
+        #expect(!userSettings.account.enableNotifications)
     }
     
     @Test
