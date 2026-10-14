@@ -22,6 +22,7 @@ final class NotificationManagerTests {
     private var handleInlineReplyDelegateCalled = false
     private var notificationTappedDelegateCalled = false
     private var registerForRemoteNotificationsDelegateCalled: (() -> Void)?
+    private var unregisterForRemoteNotificationsDelegateCalled = false
     
     init() {
         appSettings = AppSettings.volatile()
@@ -232,6 +233,23 @@ final class NotificationManagerTests {
         #expect(notificationCenter.setBadgeCountReceivedNewBadgeCount == 7)
     }
     
+    @Test
+    func resettingClearsEveryNotificationAndStopsReceivingNew() async {
+        notificationManager.delegate = self
+        appSettings.lastKnownBadgeCount = 4
+        
+        await waitForConfirmation("The app badge should be reset", timeout: .seconds(10)) { confirm in
+            notificationCenter.setBadgeCountClosure = { _ in confirm() }
+            notificationManager.reset()
+        }
+        
+        #expect(notificationCenter.removeAllPendingNotificationRequestsCalled)
+        #expect(notificationCenter.removeAllDeliveredNotificationsCalled)
+        #expect(notificationCenter.setBadgeCountReceivedNewBadgeCount == 0)
+        #expect(appSettings.lastKnownBadgeCount == 0)
+        #expect(unregisterForRemoteNotificationsDelegateCalled)
+    }
+    
     // MARK: - Delivered notifications
     
     @Test
@@ -351,6 +369,10 @@ extension NotificationManagerTests: @MainActor NotificationManagerDelegate {
     func registerForRemoteNotifications() {
         authorizationStatusWasGranted = true
         registerForRemoteNotificationsDelegateCalled?()
+    }
+    
+    func unregisterForRemoteNotifications() {
+        unregisterForRemoteNotificationsDelegateCalled = true
     }
     
     func shouldDisplayInAppNotification(content: UNNotificationContent) -> Bool {

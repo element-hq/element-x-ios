@@ -124,6 +124,20 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
         }
     }
     
+    func reset() {
+        notificationCenter.removeAllPendingNotificationRequests()
+        notificationCenter.removeAllDeliveredNotifications()
+        appSettings.lastKnownBadgeCount = 0
+        Task {
+            do {
+                try await notificationCenter.setBadgeCount(0)
+            } catch {
+                MXLog.error("Failed resetting the app badge count with error: \(error)")
+            }
+        }
+        delegate?.unregisterForRemoteNotifications()
+    }
+    
     // MARK: - Private
     
     private func handle(_ action: NotificationServiceAction, from userID: String) {

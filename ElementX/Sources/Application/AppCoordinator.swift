@@ -64,7 +64,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private let appRouteURLParser: AppRouteURLParser
     
     private var storedAppRoute: AppRoute?
-    @Consumable private var storedInlineReply: (roomID: String, message: String)?
+    /// The account of a notification tapped while restoring, its route only opens once that account is the active one.
+    @Consumable private var storedAppRouteReceiverID: String?
+    /// A reply made from a notification before its account was live.
+    private var storedInlineReply: StoredInlineReply?
     @Consumable private var storedRoomsToAwait: Set<String>?
     
     init(appDelegate: AppDelegate) {
@@ -404,6 +407,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             // there is not a user session yet
             return false
         }
+        // Only the active account's rooms can be on screen.
+        if let receiverID = content.receiverID, receiverID != userSession?.clientProxy.userID {
+            return true
+        }
         return !userSessionFlowCoordinator.isDisplayingRoomScreen(withRoomID: roomID)
     }
     
@@ -411,8 +418,18 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         MXLog.info("Tapped Notification")
         
         guard let roomID = content.roomID,
-              content.receiverID != nil else {
+              let receiverID = content.receiverID else {
             return
+        }
+        
+        if let userSession {
+            guard receiverID == userSession.clientProxy.userID else {
+                // TODO: Switch to the receiver's account and open the room (element-hq/element-meta#3328).
+                MXLog.info("Ignoring a notification tap for \(receiverID), it isn't the active account.")
+                return
+            }
+        } else {
+            storedAppRouteReceiverID = receiverID
         }
         
         let eventID = appSettings.focusEventOnNotificationTap ? content.eventID : nil
@@ -437,17 +454,18 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     func handleInlineReply(_ service: NotificationManagerProtocol, content: UNNotificationContent, replyText: String) async {
         MXLog.info("Handle notification reply")
         
-        guard let roomID = content.roomID else {
+        guard let roomID = content.roomID,
+              let receiverID = content.receiverID else {
             return
         }
         
-        if userSession == nil {
-            // Store the data so it can be used after the session is established
-            storedInlineReply = (roomID, replyText)
+        guard let userSession = userSessionManager.session(for: receiverID) else {
+            // Store the data so it can be sent once the receiver's session is live.
+            storedInlineReply = StoredInlineReply(userID: receiverID, roomID: roomID, message: replyText)
             return
         }
         
-        await processInlineReply(roomID: roomID, replyText: replyText)
+        await processInlineReply(replyText, roomID: roomID, userSession: userSession)
     }
     
     // MARK: - Private
@@ -724,8 +742,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             
             await userSessionManager.restoreSessions { [weak self] userSession in
                 await self?.performUserSessionMigrations(userSession)
-            } didAdd: { [weak self] _ in
+            } didAdd: { [weak self] userSession in
                 self?.showActiveSessionIfRestoring()
+                self?.sendStoredInlineReply(from: userSession)
             }
             
             guard !Task.isCancelled else { return }
@@ -745,6 +764,16 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         configureActiveSession()
         stateMachine.processEvent(.createdUserSession)
+    }
+    
+    /// Sends a reply made from a notification before its account was live.
+    private func sendStoredInlineReply(from userSession: UserSessionProtocol) {
+        guard let storedInlineReply, storedInlineReply.userID == userSession.clientProxy.userID else { return }
+        self.storedInlineReply = nil
+        
+        Task {
+            await processInlineReply(storedInlineReply.message, roomID: storedInlineReply.roomID, userSession: userSession)
+        }
     }
     
     private func startAuthentication() {
@@ -780,6 +809,13 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             fatalError("User session not setup")
         }
         
+        if let storedAppRouteReceiverID, storedAppRouteReceiverID != userSession.clientProxy.userID {
+            // TODO: Switch to the receiver's account and open the room (element-hq/element-meta#3328).
+            MXLog.info("Dropping a notification tap for \(storedAppRouteReceiverID), it isn't the active account.")
+            storedAppRoute = nil
+            storedRoomsToAwait = nil
+        }
+        
         if let storedRoomsToAwait {
             userSession.clientProxy.roomsToAwait = storedRoomsToAwait
         }
@@ -787,10 +823,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         if storedAppRoute?.isAuthenticationRoute == false,
            let storedAppRoute = storedAppRoute.take() {
             userSessionFlowCoordinator.handleAppRoute(storedAppRoute, animated: false)
-        }
-        
-        if let storedInlineReply {
-            await processInlineReply(roomID: storedInlineReply.roomID, replyText: storedInlineReply.message)
         }
     }
     
@@ -921,20 +953,21 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             return
         }
         
-        // The user will log out, clear any existing notifications and unregister from receving new ones
-        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-        UNUserNotificationCenter.current().removeAllDeliveredNotifications()
-        UNUserNotificationCenter.current().setBadgeCount(0)
-        
-        unregisterForRemoteNotifications()
-        
         Task {
+            // Delete the pusher while the session can still reach the server.
+            await userSession.notificationService.tearDown()
+            
             // First log out from the server
             await userSession.clientProxy.logout()
             
             // Regardless of the result, clear user data
             userSessionManager.remove(userID: userSession.clientProxy.userID)
             tearDownUserSession()
+            
+            // Signed in accounts that aren't live yet still count.
+            if userSessionManager.userIDs.isEmpty {
+                notificationManager.reset()
+            }
             
             userSession.userSettings.account.reset()
             appHooks.remoteSettingsHook.reset(appSettings)
@@ -1148,11 +1181,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         MXLog.info("Sentry configured (enabled: \(options.enabled))")
     }
     
-    private func processInlineReply(roomID: String, replyText: String) async {
-        guard let userSession else {
-            fatalError("User session not setup")
-        }
-        
+    private func processInlineReply(_ replyText: String, roomID: String, userSession: UserSessionProtocol) async {
         guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
             MXLog.error("Tried to reply in an unjoined room: \(roomID)")
             return
@@ -1491,4 +1520,10 @@ private extension AppCoordinator {
         MXLog.info("Marking search backfill task as complete.")
         task.setTaskCompleted(success: true)
     }
+}
+
+private struct StoredInlineReply {
+    let userID: String
+    let roomID: String
+    let message: String
 }
