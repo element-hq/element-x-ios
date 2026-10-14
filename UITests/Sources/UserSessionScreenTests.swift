@@ -197,7 +197,7 @@ class UserSessionScreenTests: XCTestCase {
         try await app.assertScreenshot(step: Step.homeScreenWithTabBar)
         
         // app.tabBars doesn't work on iPadOS 18 😐
-        app.buttons["Spaces"].firstMatch.tap(.center)
+        app.buttons[A11yIdentifiers.homeTabs.spaces].firstMatch.tap(.center)
         
         try await app.assertScreenshot(step: Step.spacesScreen)
         

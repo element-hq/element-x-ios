@@ -283,7 +283,7 @@ struct SearchScreen: View {
 private extension View {
     /// Searchable makes the preview contents randomly appear lower
     @ViewBuilder func conditionalSearchable(searchQuery: Binding<String>) -> some View {
-        if !ProcessInfo.isXcodePreview, !ProcessInfo.isRunningTests {
+        if !ProcessInfo.isXcodePreview, !ProcessInfo.isRunningTests || ProcessInfo.isRunningIntegrationTests {
             searchable(text: searchQuery, placement: .toolbarPrincipal)
         } else {
             self
@@ -334,6 +334,7 @@ private struct SearchScreenRoomCell: View {
             .padding(.vertical, 12)
         }
         .buttonStyle(SearchScreenRoomCellButtonStyle(isSelected: isSelected))
+        .accessibilityIdentifier(A11yIdentifiers.searchScreen.roomName(room.title))
         .listRowInsets(.init())
         .listRowSeparator(.hidden)
         .rowDivider()

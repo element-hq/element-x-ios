@@ -31,12 +31,17 @@ class UserFlowTests: XCTestCase {
     /// Assumes app is on the home screen
     private func checkRoomFlows() {
         // Search for the special test room
-        let searchField = app.searchFields.firstMatch
+        let searchTab = app.buttons[A11yIdentifiers.homeTabs.search].firstMatch
+        XCTAssertTrue(searchTab.waitForExistence(timeout: 30))
+        searchTab.tap(.center)
+        
+        // The search tab hosts its field in the tab bar, which exposes it as a text field.
+        let searchField = app.textFields.firstMatch
         XCTAssertTrue(searchField.waitForExistence(timeout: 30))
         searchField.clearAndTypeText(Self.integrationTestsRoomName, app: app)
         
         // And open it
-        let firstRoom = app.buttons.matching(NSPredicate(format: "identifier CONTAINS %@", Self.integrationTestsRoomName)).firstMatch
+        let firstRoom = app.buttons[A11yIdentifiers.searchScreen.roomName(Self.integrationTestsRoomName)].firstMatch
         
         // The backend is sometimes really slow and having a longer timeout
         // beats having to rerun the whole suite again.
@@ -50,11 +55,6 @@ class UserFlowTests: XCTestCase {
         
         // Go back to the room list
         tapOnBackButton("Chats")
-        
-        // Cancel initial the room search
-        let searchCancelButton = app.buttons["Close"].firstMatch
-        XCTAssertTrue(searchCancelButton.waitForExistence(timeout: 10.0))
-        searchCancelButton.tap(.center)
     }
     
     private func sendMessages() {
