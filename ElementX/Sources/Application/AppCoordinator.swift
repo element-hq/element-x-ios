@@ -581,8 +581,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
         
         if oldVersion < Version(26, 10, 4) {
-            MXLog.info("Migrating to version 26.10.4, moving the seen invites into the account.")
+            MXLog.info("Migrating to version 26.10.4, moving the seen invites and live location shares into the account.")
             userSession.userSettings.account.migrateAppSettingsValue(\.seenInvitesKey)
+            userSession.userSettings.account.migrateAppSettingsValue(\.liveLocationSharingSessionsByRoomIDKey)
         }
     }
     

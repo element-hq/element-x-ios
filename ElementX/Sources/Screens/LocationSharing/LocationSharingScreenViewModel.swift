@@ -171,7 +171,7 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
         }
         .store(in: &cancellables)
         
-        userSettings.app.liveLocationSharingSessionsByRoomIDPublisher
+        userSettings.account.liveLocationSharingSessionsByRoomIDPublisher
             .map { [roomID = roomProxy.id] sessions in sessions[roomID] != nil }
             .removeDuplicates()
             .sink { [weak self] isSharingLiveLocationOnThisDevice in
