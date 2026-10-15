@@ -360,8 +360,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
         accountSettingsPresenter = OAuthAccountSettingsPresenter(accountURL: url,
                                                                  presentationAnchor: flowParameters.windowManager.mainWindow,
                                                                  appMediator: flowParameters.appMediator,
-                                                                 userSettings: userSettings,
-                                                                 appHooks: flowParameters.appHooks,
+                                                                 userSession: flowParameters.userSession,
                                                                  continuation: continuation)
         accountSettingsPresenter?.start()
     }

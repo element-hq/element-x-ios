@@ -22,7 +22,6 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     private let analyticsService: AnalyticsServiceProtocol
     private let appMediator: AppMediatorProtocol
     private let userSettings: UserSettings
-    private let appHooks: AppHooks
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let windowManager: WindowManagerProtocol
     private var isNewLogin: Bool
@@ -69,7 +68,6 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         analyticsService = flowParameters.analytics
         appMediator = flowParameters.appMediator
         userSettings = flowParameters.userSession.userSettings
-        appHooks = flowParameters.appHooks
         userIndicatorController = flowParameters.userIndicatorController
         windowManager = flowParameters.windowManager
         
@@ -318,7 +316,6 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         let resetNavigationStackCoordinator = NavigationStackCoordinator()
         let coordinator = EncryptionResetFlowCoordinator(parameters: .init(userSession: userSession,
                                                                            appMediator: appMediator,
-                                                                           appHooks: appHooks,
                                                                            userIndicatorController: userIndicatorController,
                                                                            navigationStackCoordinator: resetNavigationStackCoordinator,
                                                                            windowManger: windowManager))
