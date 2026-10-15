@@ -67,6 +67,13 @@ final nonisolated class AccountSettings: @unchecked Sendable {
         store.migrateAppSettingsValue(forKey: storeKey)
     }
     
+    /// Migrates the value, then sets it again so that subscribers who read it before the migration see it.
+    func migrateAppSettingsValue<Value>(_ keyPath: KeyPath<AccountSettings, UserPreferenceKey>,
+                                        publishing valueKeyPath: ReferenceWritableKeyPath<AccountSettings, Value>) {
+        migrateAppSettingsValue(keyPath)
+        self[keyPath: valueKeyPath] = self[keyPath: valueKeyPath]
+    }
+    
     func reset() {
         MXLog.warning("Resetting AccountSettings for \(userID).")
         store.reset()
