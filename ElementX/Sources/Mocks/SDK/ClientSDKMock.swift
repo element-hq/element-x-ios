@@ -61,6 +61,7 @@ nonisolated extension ClientSDKMock {
         }
         
         userIdReturnValue = configuration.userID
+        totalUnreadNotificationsReturnValue = 0
         deviceIdReturnValue = configuration.deviceID
         sessionReturnValue = configuration.session
         getUrlUrlClosure = { url in

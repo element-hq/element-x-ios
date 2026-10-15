@@ -38,7 +38,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
         notificationTonePreviewer = AudioPlayer()
         self.notificationToneManager = notificationToneManager
         
-        let bindings = NotificationSettingsScreenViewStateBindings(enableNotifications: userSettings.app.enableNotifications,
+        let bindings = NotificationSettingsScreenViewStateBindings(enableNotifications: userSettings.account.enableNotifications,
                                                                    showAllRoomListActivity: userSettings.account.showAllRoomListActivity)
         super.init(initialViewState: NotificationSettingsScreenViewState(bindings: bindings,
                                                                          isModallyPresented: isModallyPresented,
@@ -48,7 +48,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
                                                                          customToneSelectionEnabled: !ProcessInfo.processInfo.isiOSAppOnMac))
         
         // Listen for changes to UserSettings.
-        userSettings.app.enableNotificationsPublisher
+        userSettings.account.enableNotificationsPublisher
             .weakAssign(to: \.state.bindings.enableNotifications, on: self)
             .store(in: &cancellables)
         
@@ -127,7 +127,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
     }
     
     func toggleNotifications() {
-        userSettings.app.enableNotifications.toggle()
+        userSettings.account.enableNotifications.toggle()
     }
     
     private func setupDidBecomeActiveSubscription() {

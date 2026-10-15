@@ -29,6 +29,7 @@ protocol UserSessionProtocol: Sendable {
     var liveLocationManager: LiveLocationManagerProtocol { get }
     /// Scans media content, `nil` when no content scanner is configured for the server.
     var contentScannerService: ContentScannerServiceProtocol? { get }
+    var notificationService: NotificationServiceProtocol { get }
     
     var sessionSecurityStatePublisher: CurrentValuePublisher<SessionSecurityState, Never> { get }
     

@@ -15,6 +15,7 @@ struct UserSessionMockConfiguration {
     var userHooks = UserHooks()
     var contentScannerService: ContentScannerServiceProtocol?
     var liveLocationManager: LiveLocationManagerProtocol = LiveLocationManagerMock(.init())
+    var notificationService: NotificationServiceProtocol = NotificationServiceMock(.init())
 }
 
 @MainActor extension UserSessionMock {
@@ -33,5 +34,6 @@ struct UserSessionMockConfiguration {
         sessionSecurityStatePublisher = CurrentValueSubject<SessionSecurityState, Never>(.init(verificationState: .verified, recoveryState: .enabled)).asCurrentValuePublisher()
         
         liveLocationManager = configuration.liveLocationManager
+        notificationService = configuration.notificationService
     }
 }

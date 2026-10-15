@@ -637,7 +637,6 @@ class MockScreen: Identifiable {
                                                                                                   appHooks: AppHooks(),
                                                                                                   analytics: analytics,
                                                                                                   userIndicatorController: UserIndicatorControllerMock(),
-                                                                                                  notificationManager: NotificationManagerMock(),
                                                                                                   stateMachineFactory: StateMachineFactory()))
             
             flowCoordinator.start()
@@ -690,7 +689,6 @@ class MockScreen: Identifiable {
                                                                                                 appHooks: AppHooks(),
                                                                                                 analytics: analytics,
                                                                                                 userIndicatorController: UserIndicatorControllerMock(),
-                                                                                                notificationManager: NotificationManagerMock(),
                                                                                                 stateMachineFactory: StateMachineFactory()))
             flowCoordinator.actionsPublisher
                 .sink { [weak self] action in
@@ -790,7 +788,6 @@ class MockScreen: Identifiable {
                                                                                                     appHooks: AppHooks(),
                                                                                                     analytics: analytics,
                                                                                                     userIndicatorController: UserIndicatorControllerMock(),
-                                                                                                    notificationManager: NotificationManagerMock(),
                                                                                                     stateMachineFactory: StateMachineFactory()))
             flowCoordinator.actionsPublisher
                 .sink { [weak self] action in
@@ -847,7 +844,6 @@ class MockScreen: Identifiable {
                                                                                                appHooks: AppHooks(),
                                                                                                analytics: analytics,
                                                                                                userIndicatorController: UserIndicatorControllerMock(),
-                                                                                               notificationManager: NotificationManagerMock(),
                                                                                                stateMachineFactory: StateMachineFactory()))
             
             flowCoordinator.start()

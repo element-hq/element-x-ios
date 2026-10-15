@@ -124,12 +124,15 @@ class UserSessionStore: UserSessionStoreProtocol {
                                 userSettings: userSettings)
         }
         
+        let notificationService = NotificationService(clientProxy: clientProxy, userSettings: userSettings)
+        
         return UserSession(clientProxy: clientProxy,
                            userSettings: userSettings,
                            userHooks: appHooks.userSessionHook.makeUserHooks(for: clientProxy),
                            mediaProvider: mediaProvider,
                            voiceMessageMediaManager: voiceMessageMediaManager,
-                           liveLocationManager: liveLocationManager)
+                           liveLocationManager: liveLocationManager,
+                           notificationService: notificationService)
     }
     
     private func restorePreviousLogin(_ credentials: KeychainCredentials, userSettings: UserSettings) async -> Result<ClientProxyProtocol, UserSessionStoreError> {

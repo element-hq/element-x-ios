@@ -534,7 +534,6 @@ final class RoomFlowCoordinatorTests {
                                                   appHooks: AppHooks(),
                                                   analytics: AnalyticsServiceMock(.init()),
                                                   userIndicatorController: UserIndicatorControllerMock(),
-                                                  notificationManager: NotificationManagerMock(),
                                                   stateMachineFactory: StateMachineFactory())
         
         roomFlowCoordinator = RoomFlowCoordinator(roomID: roomID,

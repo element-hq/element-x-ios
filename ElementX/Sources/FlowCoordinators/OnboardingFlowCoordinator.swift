@@ -23,7 +23,6 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     private let appMediator: AppMediatorProtocol
     private let userSettings: UserSettings
     private let appHooks: AppHooks
-    private let notificationManager: NotificationManagerProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let windowManager: WindowManagerProtocol
     private var isNewLogin: Bool
@@ -71,7 +70,6 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         appMediator = flowParameters.appMediator
         userSettings = flowParameters.userSession.userSettings
         appHooks = flowParameters.appHooks
-        notificationManager = flowParameters.notificationManager
         userIndicatorController = flowParameters.userIndicatorController
         windowManager = flowParameters.windowManager
         
@@ -399,7 +397,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentNotificationPermissionsScreen() {
-        let coordinator = NotificationPermissionsScreenCoordinator(parameters: .init(notificationManager: notificationManager))
+        let coordinator = NotificationPermissionsScreenCoordinator(parameters: .init(notificationService: userSession.notificationService))
         
         coordinator.actions
             .sink { [weak self] action in

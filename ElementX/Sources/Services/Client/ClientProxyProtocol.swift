@@ -75,13 +75,15 @@ enum CreateRoomAccessType: Equatable {
 /// This struct represents the configuration that we are using to register the application through Pusher to Sygnal
 /// using the Matrix Rust SDK, more info here:
 /// https://github.com/matrix-org/sygnal
-struct PusherConfiguration {
+struct PusherConfiguration: Equatable {
     let identifiers: PusherIdentifiers
     let kind: PusherKind
     let appDisplayName: String
     let deviceDisplayName: String
     let profileTag: String?
     let lang: String
+    /// Whether to keep the pushers of the other accounts using the same pushkey on this device.
+    let append: Bool
 }
 
 enum SessionVerificationState {
@@ -252,6 +254,8 @@ protocol ClientProxyProtocol: AnyObject {
     func logout() async
     
     func setPusher(with configuration: PusherConfiguration) async throws
+    
+    func deletePusher(with identifiers: PusherIdentifiers) async throws
     
     func searchUsers(searchTerm: String, limit: UInt) async -> Result<SearchUsersResults, ClientProxyError>
     

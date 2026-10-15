@@ -23,6 +23,7 @@ class UserSession: UserSessionProtocol {
     let liveLocationManager: LiveLocationManagerProtocol
     /// Scans media content, `nil` when no content scanner is configured for the server.
     let contentScannerService: ContentScannerServiceProtocol?
+    let notificationService: NotificationServiceProtocol
     
     let callbacks = PassthroughSubject<UserSessionCallback, Never>()
     
@@ -36,7 +37,8 @@ class UserSession: UserSessionProtocol {
          userHooks: UserHooks,
          mediaProvider: MediaProviderProtocol,
          voiceMessageMediaManager: VoiceMessageMediaManagerProtocol,
-         liveLocationManager: LiveLocationManagerProtocol) {
+         liveLocationManager: LiveLocationManagerProtocol,
+         notificationService: NotificationServiceProtocol) {
         self.clientProxy = clientProxy
         self.userSettings = userSettings
         self.userHooks = userHooks
@@ -44,6 +46,7 @@ class UserSession: UserSessionProtocol {
         self.mediaProvider = mediaProvider
         self.voiceMessageMediaManager = voiceMessageMediaManager
         self.liveLocationManager = liveLocationManager
+        self.notificationService = notificationService
         contentScannerService = clientProxy.contentScanner.map(ContentScannerService.init)
         
         authErrorCancellable = clientProxy.actionsPublisher

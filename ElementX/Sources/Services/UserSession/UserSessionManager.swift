@@ -17,6 +17,7 @@ import OrderedCollections
 final class UserSessionManager: UserSessionManagerProtocol {
     private let userSessionStore: UserSessionStoreProtocol
     private let appSettings: AppSettings
+    private let notificationManager: NotificationManagerProtocol
     
     private let sessionsSubject = CurrentValueSubject<[UserSessionProtocol], Never>([])
     /// Whether the services are running, so that the sessions restored meanwhile are resumed too.
@@ -68,9 +69,10 @@ final class UserSessionManager: UserSessionManagerProtocol {
         accounts.contains { userID, userSession in userSession != nil && !clearedUserIDs.contains(userID) }
     }
     
-    init(userSessionStore: UserSessionStoreProtocol, appSettings: AppSettings) {
+    init(userSessionStore: UserSessionStoreProtocol, appSettings: AppSettings, notificationManager: NotificationManagerProtocol) {
         self.userSessionStore = userSessionStore
         self.appSettings = appSettings
+        self.notificationManager = notificationManager
         
         let userIDs = userSessionStore.userIDs
             .map { (userID: $0, lastSelectedDate: appSettings.userSettings(for: $0).account.lastSelectedDate) }
@@ -138,6 +140,8 @@ final class UserSessionManager: UserSessionManagerProtocol {
             appSettings.userSettings(for: userID).account.lastSelectedDate = .now
             accounts.updateValue(userSession, forKey: userID, insertingAt: 0)
         }
+        
+        notificationManager.add(userSession.notificationService)
     }
     
     func remove(userID: String) {
@@ -149,9 +153,13 @@ final class UserSessionManager: UserSessionManagerProtocol {
         userSessionStore.logout(userSession: userSession)
         clearedUserIDs.remove(userID)
         accounts.removeValue(forKey: userID)
+        notificationManager.remove(userID: userID)
     }
     
     func reset() {
+        for userID in accounts.keys {
+            notificationManager.remove(userID: userID)
+        }
         userSessionStore.reset()
         clearedUserIDs.removeAll()
         accounts.removeAll()
@@ -202,6 +210,7 @@ final class UserSessionManager: UserSessionManagerProtocol {
             MXLog.error("Failed restoring \(userID): \(error)")
             clearedUserIDs.remove(userID)
             accounts.removeValue(forKey: userID)
+            notificationManager.remove(userID: userID)
             return nil
         }
     }

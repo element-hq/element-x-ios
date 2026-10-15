@@ -232,9 +232,6 @@ final nonisolated class AppSettings: @unchecked Sendable {
         pushGatewayBaseURL.appending(path: "_matrix/push/v1/notify")
     }
     
-    @UserPreference(defaultValue: true)
-    var enableNotifications: Bool
-    
     @UserPreference(defaultValue: false)
     var hideQuietNotificationAlerts: Bool
     
