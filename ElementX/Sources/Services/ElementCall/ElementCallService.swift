@@ -244,6 +244,21 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         MXLog.info("Not tearing down the call session, no call for room \(roomID)")
     }
     
+    func reportCallSessionEnded(roomID: String, reason: CXCallEndedReason) {
+        guard let ongoingCallID, ongoingCallID.roomID == roomID else {
+            MXLog.info("Not reporting the end of a call for \(roomID), it isn't the ongoing call")
+            return
+        }
+        
+        // A web view call is not tracked by CallKit, as in `reportCallSessionConnected`.
+        if ongoingCallID.isNative {
+            MXLog.info("Reporting the call as ended without us: \(reason.rawValue)")
+            callProvider.reportCall(with: ongoingCallID.callKitID, endedAt: nil, reason: reason)
+        }
+        
+        self.ongoingCallID = nil
+    }
+    
     func setAudioEnabled(_ enabled: Bool, roomID: String) {
         guard let ongoingCallID else {
             MXLog.error("Failed toggling call microphone, no calls running")

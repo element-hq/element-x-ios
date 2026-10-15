@@ -6,6 +6,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import CallKit
 import Combine
 import ElementCall
 
@@ -65,6 +66,11 @@ protocol ElementCallServiceProtocol: AnyObject {
     
     /// Ends the call for the room, including an answered call the native stack never took over.
     func tearDownCallSession(roomID: String)
+    
+    /// The call for the room ended without us: declined, unanswered, the other side gone, or failed.
+    /// Reported to the system as such rather than as an end call action, which would log it as one
+    /// we hung up and ask the call stack to end a call it already has.
+    func reportCallSessionEnded(roomID: String, reason: CXCallEndedReason)
     
     func setAudioEnabled(_ enabled: Bool, roomID: String)
 }

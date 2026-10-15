@@ -5,6 +5,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import CallKit
 import Combine
 import ElementCall
 
@@ -55,8 +56,19 @@ final class NativeCallSystem: ElementCallSystemProvidingProtocol {
         service?.reportCallSessionConnected(roomID: roomID)
     }
     
-    func endCall(roomID: String) {
-        service?.tearDownCallSession(roomID: roomID)
+    /// Only our own hang-up is an end call action; the rest the system hears as the call ending on
+    /// its own, so the call log does not show a declined or unanswered call as one we ended.
+    func endCall(roomID: String, reason: ElementCallEndReason) {
+        switch reason {
+        case .local:
+            service?.tearDownCallSession(roomID: roomID)
+        case .remoteEnded:
+            service?.reportCallSessionEnded(roomID: roomID, reason: .remoteEnded)
+        case .unanswered:
+            service?.reportCallSessionEnded(roomID: roomID, reason: .unanswered)
+        case .failed:
+            service?.reportCallSessionEnded(roomID: roomID, reason: .failed)
+        }
     }
     
     func setMicrophoneEnabled(_ enabled: Bool, roomID: String) {

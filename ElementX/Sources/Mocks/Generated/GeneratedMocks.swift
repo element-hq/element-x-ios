@@ -5317,6 +5317,37 @@ nonisolated class ElementCallServiceMock: ElementCallServiceProtocol, @unchecked
         tearDownCallSessionRoomIDReceivedInvocationsLock.withLock { tearDownCallSessionRoomIDUnderlyingReceivedInvocations.append(roomID) }
         tearDownCallSessionRoomIDClosure?(roomID)
     }
+    //MARK: - reportCallSessionEnded
+
+    private let reportCallSessionEndedRoomIDReasonCallsCountLock = NSLock()
+    private nonisolated(unsafe) var reportCallSessionEndedRoomIDReasonUnderlyingCallsCount = 0
+    var reportCallSessionEndedRoomIDReasonCallsCount: Int {
+        get { reportCallSessionEndedRoomIDReasonCallsCountLock.withLock { reportCallSessionEndedRoomIDReasonUnderlyingCallsCount } }
+        set { reportCallSessionEndedRoomIDReasonCallsCountLock.withLock { reportCallSessionEndedRoomIDReasonUnderlyingCallsCount = newValue } }
+    }
+    var reportCallSessionEndedRoomIDReasonCalled: Bool {
+        return reportCallSessionEndedRoomIDReasonCallsCount > 0
+    }
+    private let reportCallSessionEndedRoomIDReasonReceivedArgumentsLock = NSLock()
+    private nonisolated(unsafe) var reportCallSessionEndedRoomIDReasonUnderlyingReceivedArguments: (roomID: String, reason: CXCallEndedReason)?
+    var reportCallSessionEndedRoomIDReasonReceivedArguments: (roomID: String, reason: CXCallEndedReason)? {
+        get { reportCallSessionEndedRoomIDReasonReceivedArgumentsLock.withLock { reportCallSessionEndedRoomIDReasonUnderlyingReceivedArguments } }
+        set { reportCallSessionEndedRoomIDReasonReceivedArgumentsLock.withLock { reportCallSessionEndedRoomIDReasonUnderlyingReceivedArguments = newValue } }
+    }
+    private let reportCallSessionEndedRoomIDReasonReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var reportCallSessionEndedRoomIDReasonUnderlyingReceivedInvocations: [(roomID: String, reason: CXCallEndedReason)] = []
+    var reportCallSessionEndedRoomIDReasonReceivedInvocations: [(roomID: String, reason: CXCallEndedReason)] {
+        get { reportCallSessionEndedRoomIDReasonReceivedInvocationsLock.withLock { reportCallSessionEndedRoomIDReasonUnderlyingReceivedInvocations } }
+        set { reportCallSessionEndedRoomIDReasonReceivedInvocationsLock.withLock { reportCallSessionEndedRoomIDReasonUnderlyingReceivedInvocations = newValue } }
+    }
+    nonisolated(unsafe) var reportCallSessionEndedRoomIDReasonClosure: ((String, CXCallEndedReason) -> Void)?
+
+    func reportCallSessionEnded(roomID: String, reason: CXCallEndedReason) {
+        reportCallSessionEndedRoomIDReasonCallsCountLock.withLock { reportCallSessionEndedRoomIDReasonUnderlyingCallsCount += 1 }
+        reportCallSessionEndedRoomIDReasonReceivedArguments = (roomID: roomID, reason: reason)
+        reportCallSessionEndedRoomIDReasonReceivedInvocationsLock.withLock { reportCallSessionEndedRoomIDReasonUnderlyingReceivedInvocations.append((roomID: roomID, reason: reason)) }
+        reportCallSessionEndedRoomIDReasonClosure?(roomID, reason)
+    }
     //MARK: - setAudioEnabled
 
     private let setAudioEnabledRoomIDCallsCountLock = NSLock()
