@@ -544,7 +544,7 @@ struct LocationSharingScreenViewModelTests {
         #expect(context.showsUserLocationMode == .hide)
         
         // Another device takes over: this device's session is removed and a new own share arrives.
-        userSettings.app.liveLocationSharingSessionsByRoomID.removeValue(forKey: Self.roomID)
+        userSettings.account.liveLocationSharingSessionsByRoomID.removeValue(forKey: Self.roomID)
         let newOwnShare = makeLiveLocationShare(userID: RoomMemberProxyMock.mockMe.userID, latitude: 48.8, longitude: 2.3)
         
         let deferred = deferFulfillment(context.observe(\.showsUserLocationMode)) { $0 == .show }
@@ -647,7 +647,7 @@ struct LocationSharingScreenViewModelTests {
                                                     isSharingLiveLocationFromThisDevice: Bool = false) {
         userSettings = UserSettings.mock()
         if isSharingLiveLocationFromThisDevice {
-            userSettings.app.liveLocationSharingSessionsByRoomID[Self.roomID] = .init(eventID: "$event:matrix.org", expirationDate: .distantFuture)
+            userSettings.account.liveLocationSharingSessionsByRoomID[Self.roomID] = .init(eventID: "$event:matrix.org", expirationDate: .distantFuture)
         }
         
         let liveLocationServiceMock = RoomLiveLocationServiceMock()

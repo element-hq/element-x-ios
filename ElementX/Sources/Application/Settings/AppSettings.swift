@@ -307,9 +307,6 @@ final nonisolated class AppSettings: @unchecked Sendable {
     
     // MARK: - Live Location
     
-    @UserPreference(key: "liveLocationSharingTimeoutDatesByRoomID", defaultValue: [String: LiveLocationSession]())
-    var liveLocationSharingSessionsByRoomID: [String: LiveLocationSession]
-    
     @UserPreference(defaultValue: 10)
     var liveLocationMinimumDistanceUpdate: Int
     
