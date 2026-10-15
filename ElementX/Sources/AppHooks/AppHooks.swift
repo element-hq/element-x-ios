@@ -12,10 +12,6 @@ import Synchronization
 
 final nonisolated class AppHooks: AppHooksProtocol {
     #if IS_MAIN_APP
-    func configure(with userSession: UserSessionProtocol?) async {
-        await userSessionHook.configure(with: userSession)
-    }
-    
     @AppHook(default: DefaultAppSettingsHook())
     var appSettingsHook: AppSettingsHookProtocol
     
@@ -28,29 +24,8 @@ final nonisolated class AppHooks: AppHooksProtocol {
     @AppHook(default: DefaultOAuthPresenterHook())
     var oAuthPresenterHook: OAuthPresenterHookProtocol
     
-    @AppHook(default: DefaultRoomScreenHook())
-    var roomScreenHook: RoomScreenHookProtocol
-    
-    @AppHook(default: DefaultRoomDetailsScreenHook())
-    var roomDetailsScreenHook: RoomDetailsScreenHookProtocol
-    
-    @AppHook(default: DefaultRoomMemberDetailsScreenHook())
-    var roomMemberDetailsScreenHook: RoomMemberDetailsScreenHookProtocol
-    
-    @AppHook(default: DefaultUserProfileScreenHook())
-    var userProfileScreenHook: UserProfileScreenHookProtocol
-    
     @AppHook(default: DefaultDeveloperOptionsScreenHook())
     var developerOptionsScreenHook: DeveloperOptionsScreenHookProtocol
-    
-    @AppHook(default: DefaultRecoveryKeyScreenHook())
-    var recoveryKeyScreenHook: RecoveryKeyScreenHookProtocol
-    
-    @AppHook(default: DefaultCreateRoomScreenHook())
-    var createRoomScreenHook: CreateRoomScreenHookProtocol
-    
-    @AppHook(default: DefaultSecurityAndPrivacyScreenHook())
-    var securityAndPrivacyScreenHook: SecurityAndPrivacyScreenHookProtocol
     #endif
     
     @AppHook(default: DefaultTracingHook())

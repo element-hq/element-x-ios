@@ -231,7 +231,6 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
         let params = RoomMemberDetailsScreenCoordinatorParameters(userID: userID,
                                                                   roomProxy: roomProxy,
                                                                   userSession: flowParameters.userSession,
-                                                                  appHooks: flowParameters.appHooks,
                                                                   analytics: flowParameters.analytics,
                                                                   userIndicatorController: flowParameters.userIndicatorController)
         let coordinator = RoomMemberDetailsScreenCoordinator(parameters: params)
@@ -288,7 +287,6 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
         let parameters = UserProfileScreenCoordinatorParameters(userID: userID,
                                                                 isPresentedModally: false,
                                                                 userSession: flowParameters.userSession,
-                                                                appHooks: flowParameters.appHooks,
                                                                 analytics: flowParameters.analytics,
                                                                 userIndicatorController: flowParameters.userIndicatorController)
         let coordinator = UserProfileScreenCoordinator(parameters: parameters)

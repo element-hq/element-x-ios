@@ -36,7 +36,6 @@ final class RoomScreenViewModelTests {
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                            appHooks: AppHooks(),
                                             analyticsService: AnalyticsServiceMock(.init()),
                                             userIndicatorController: UserIndicatorControllerMock())
         
@@ -115,7 +114,6 @@ final class RoomScreenViewModelTests {
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: "test1",
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                            appHooks: AppHooks(),
                                             analyticsService: AnalyticsServiceMock(.init()),
                                             userIndicatorController: UserIndicatorControllerMock())
         
@@ -176,7 +174,6 @@ final class RoomScreenViewModelTests {
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: "test1",
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                            appHooks: AppHooks(),
                                             analyticsService: AnalyticsServiceMock(.init()),
                                             userIndicatorController: UserIndicatorControllerMock())
         
@@ -231,7 +228,6 @@ final class RoomScreenViewModelTests {
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                            appHooks: AppHooks(),
                                             analyticsService: AnalyticsServiceMock(.init()),
                                             userIndicatorController: UserIndicatorControllerMock())
         
@@ -265,7 +261,6 @@ final class RoomScreenViewModelTests {
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
                                             ongoingCallRoomIDPublisher: ongoingCallRoomIDSubject.asCurrentValuePublisher(),
-                                            appHooks: AppHooks(),
                                             analyticsService: AnalyticsServiceMock(.init()),
                                             userIndicatorController: UserIndicatorControllerMock())
         #expect(viewModel.state.shouldShowCallButton)
@@ -311,7 +306,6 @@ final class RoomScreenViewModelTests {
                                                 roomProxy: roomProxyMock,
                                                 initialSelectedPinnedEventID: nil,
                                                 ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                                appHooks: AppHooks(),
                                                 analyticsService: AnalyticsServiceMock(.init()),
                                                 userIndicatorController: UserIndicatorControllerMock())
             viewModel.stop()
@@ -332,7 +326,6 @@ final class RoomScreenViewModelTests {
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                            appHooks: AppHooks(),
                                             analyticsService: AnalyticsServiceMock(.init()),
                                             userIndicatorController: UserIndicatorControllerMock())
         
@@ -364,7 +357,6 @@ final class RoomScreenViewModelTests {
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                            appHooks: AppHooks(),
                                             analyticsService: AnalyticsServiceMock(.init()),
                                             userIndicatorController: UserIndicatorControllerMock())
         
@@ -391,7 +383,6 @@ final class RoomScreenViewModelTests {
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                            appHooks: AppHooks(),
                                             analyticsService: AnalyticsServiceMock(.init()),
                                             userIndicatorController: UserIndicatorControllerMock())
         
@@ -409,7 +400,6 @@ final class RoomScreenViewModelTests {
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                            appHooks: AppHooks(),
                                             analyticsService: AnalyticsServiceMock(.init()),
                                             userIndicatorController: UserIndicatorControllerMock())
         
@@ -434,7 +424,6 @@ final class RoomScreenViewModelTests {
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                            appHooks: AppHooks(),
                                             analyticsService: AnalyticsServiceMock(.init()),
                                             userIndicatorController: UserIndicatorControllerMock())
         

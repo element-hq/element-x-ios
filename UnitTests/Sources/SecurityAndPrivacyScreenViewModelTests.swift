@@ -474,7 +474,6 @@ final class SecurityAndPrivacyScreenViewModelTests {
         
         viewModel = SecurityAndPrivacyScreenViewModel(roomProxy: roomProxy,
                                                       userSession: UserSessionMock(.init(clientProxy: clientProxy, userSettings: userSettings)),
-                                                      userIndicatorController: UserIndicatorControllerMock(),
-                                                      appHooks: AppHooks())
+                                                      userIndicatorController: UserIndicatorControllerMock())
     }
 }

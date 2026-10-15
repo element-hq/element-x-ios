@@ -681,7 +681,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                          completionSuggestionService: completionSuggestionService,
                                                          ongoingCallRoomIDPublisher: flowParameters.ongoingCallRoomIDPublisher,
                                                          appMediator: flowParameters.appMediator,
-                                                         appHooks: flowParameters.appHooks,
                                                          analytics: flowParameters.analytics,
                                                          composerDraftService: composerDraftService,
                                                          timelineControllerFactory: flowParameters.timelineControllerFactory,
@@ -937,7 +936,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private func presentRoomDetails(isRoot: Bool, animated: Bool) async {
         let params = RoomDetailsScreenCoordinatorParameters(roomProxy: roomProxy,
                                                             userSession: userSession,
-                                                            appHooks: flowParameters.appHooks,
                                                             analyticsService: flowParameters.analytics,
                                                             userIndicatorController: flowParameters.userIndicatorController,
                                                             notificationSettings: userSession.clientProxy.notificationSettings,
@@ -1413,8 +1411,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private func presentSecurityAndPrivacyScreen() {
         let coordinator = SecurityAndPrivacyScreenCoordinator(parameters: .init(roomProxy: roomProxy,
                                                                                 userSession: userSession,
-                                                                                userIndicatorController: flowParameters.userIndicatorController,
-                                                                                appHooks: flowParameters.appHooks))
+                                                                                userIndicatorController: flowParameters.userIndicatorController))
         
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }

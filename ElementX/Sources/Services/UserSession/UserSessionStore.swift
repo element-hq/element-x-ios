@@ -126,6 +126,7 @@ class UserSessionStore: UserSessionStoreProtocol {
         
         return UserSession(clientProxy: clientProxy,
                            userSettings: userSettings,
+                           userHooks: appHooks.userSessionHook.makeUserHooks(for: clientProxy),
                            mediaProvider: mediaProvider,
                            voiceMessageMediaManager: voiceMessageMediaManager,
                            liveLocationManager: liveLocationManager)

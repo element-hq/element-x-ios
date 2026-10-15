@@ -211,7 +211,6 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
     private func presentSpaceSettings(animated: Bool) {
         let coordinator = RoomDetailsScreenCoordinator(parameters: .init(roomProxy: roomProxy,
                                                                          userSession: flowParameters.userSession,
-                                                                         appHooks: flowParameters.appHooks,
                                                                          analyticsService: flowParameters.analytics,
                                                                          userIndicatorController: flowParameters.userIndicatorController,
                                                                          notificationSettings: flowParameters.userSession.clientProxy.notificationSettings,
@@ -276,8 +275,7 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
     private func presentSecurityAndPrivacyScreen() {
         let coordinator = SecurityAndPrivacyScreenCoordinator(parameters: .init(roomProxy: roomProxy,
                                                                                 userSession: flowParameters.userSession,
-                                                                                userIndicatorController: flowParameters.userIndicatorController,
-                                                                                appHooks: flowParameters.appHooks))
+                                                                                userIndicatorController: flowParameters.userIndicatorController))
         
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }

@@ -22,6 +22,7 @@ struct SessionSecurityState: Equatable {
 protocol UserSessionProtocol: Sendable {
     var clientProxy: ClientProxyProtocol { get }
     var userSettings: UserSettings { get }
+    var userHooks: UserHooks { get }
     
     var mediaProvider: MediaProviderProtocol { get }
     var voiceMessageMediaManager: VoiceMessageMediaManagerProtocol { get }

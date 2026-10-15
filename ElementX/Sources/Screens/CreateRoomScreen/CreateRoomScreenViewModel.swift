@@ -32,8 +32,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
          shouldShowCancelButton: Bool,
          userSession: UserSessionProtocol,
          analytics: AnalyticsServiceProtocol,
-         userIndicatorController: UserIndicatorControllerProtocol,
-         appHooks: AppHooks) {
+         userIndicatorController: UserIndicatorControllerProtocol) {
         self.userSession = userSession
         mediaUploadingPreprocessor = MediaUploadingPreprocessor(userSettings: userSession.userSettings)
         self.analytics = analytics
@@ -68,7 +67,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
                                                   aliasLocalPart: roomAliasNameFromRoomDisplayName(roomName: ""),
                                                   bindings: bindings)
         
-        super.init(initialViewState: appHooks.createRoomScreenHook.update(viewState, homeserver: userSession.clientProxy.homeserver),
+        super.init(initialViewState: userSession.userHooks.createRoomScreenHook.update(viewState, homeserver: userSession.clientProxy.homeserver),
                    mediaProvider: userSession.mediaProvider)
         
         setupBindings()

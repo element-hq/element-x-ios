@@ -980,7 +980,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         configureNotificationManager(for: userSession)
         Task {
             await resumeClientServices()
-            await appHooks.configure(with: userSession)
         }
     }
     

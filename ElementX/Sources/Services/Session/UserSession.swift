@@ -16,6 +16,7 @@ class UserSession: UserSessionProtocol {
     
     let clientProxy: ClientProxyProtocol
     let userSettings: UserSettings
+    let userHooks: UserHooks
     
     let mediaProvider: MediaProviderProtocol
     let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
@@ -32,11 +33,13 @@ class UserSession: UserSessionProtocol {
     
     init(clientProxy: ClientProxyProtocol,
          userSettings: UserSettings,
+         userHooks: UserHooks,
          mediaProvider: MediaProviderProtocol,
          voiceMessageMediaManager: VoiceMessageMediaManagerProtocol,
          liveLocationManager: LiveLocationManagerProtocol) {
         self.clientProxy = clientProxy
         self.userSettings = userSettings
+        self.userHooks = userHooks
         
         self.mediaProvider = mediaProvider
         self.voiceMessageMediaManager = voiceMessageMediaManager

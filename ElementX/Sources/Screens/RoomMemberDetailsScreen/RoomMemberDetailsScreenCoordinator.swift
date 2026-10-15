@@ -13,7 +13,6 @@ struct RoomMemberDetailsScreenCoordinatorParameters {
     let userID: String
     let roomProxy: JoinedRoomProxyProtocol
     let userSession: UserSessionProtocol
-    let appHooks: AppHooks
     let analytics: AnalyticsServiceProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
 }
@@ -39,7 +38,6 @@ final class RoomMemberDetailsScreenCoordinator: CoordinatorProtocol {
         viewModel = RoomMemberDetailsScreenViewModel(userID: parameters.userID,
                                                      roomProxy: parameters.roomProxy,
                                                      userSession: parameters.userSession,
-                                                     appHooks: parameters.appHooks,
                                                      analytics: parameters.analytics,
                                                      userIndicatorController: parameters.userIndicatorController)
     }

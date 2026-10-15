@@ -24,7 +24,6 @@ struct RoomScreenCoordinatorParameters {
     let completionSuggestionService: CompletionSuggestionServiceProtocol
     let ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never>
     let appMediator: AppMediatorProtocol
-    let appHooks: AppHooks
     let analytics: AnalyticsServiceProtocol
     let composerDraftService: ComposerDraftServiceProtocol
     let timelineControllerFactory: TimelineControllerFactoryProtocol
@@ -77,7 +76,6 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                                             roomProxy: parameters.roomProxy,
                                             initialSelectedPinnedEventID: selectedPinnedEventID,
                                             ongoingCallRoomIDPublisher: parameters.ongoingCallRoomIDPublisher,
-                                            appHooks: parameters.appHooks,
                                             analyticsService: parameters.analytics,
                                             userIndicatorController: parameters.userIndicatorController)
         

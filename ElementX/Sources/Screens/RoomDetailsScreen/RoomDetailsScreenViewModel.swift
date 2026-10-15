@@ -45,7 +45,6 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     
     init(roomProxy: JoinedRoomProxyProtocol,
          userSession: UserSessionProtocol,
-         appHooks: AppHooks,
          analyticsService: AnalyticsServiceProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          notificationSettingsProxy: NotificationSettingsProxyProtocol,
@@ -68,7 +67,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                                                    notificationSettingsState: .loading,
                                                    isNativeCallingEnabled: userSession.userSettings.app.nativeCallEnabled,
                                                    bindings: .init())
-        super.init(initialViewState: appHooks.roomDetailsScreenHook.update(viewState),
+        super.init(initialViewState: userSession.userHooks.roomDetailsScreenHook.update(viewState),
                    mediaProvider: userSession.mediaProvider)
         
         Task {
