@@ -56,7 +56,7 @@ class OAuthAuthenticationPresenter: NSObject {
     /// In particular if the authentication URL requires opening an external app, then the user may return
     /// to the app without completing (or cancelling) the authentication.
     func authenticate(using oAuthData: OAuthAuthorizationDataProxy) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
-        let authenticationURL = appHooks.oAuthPresenterHook.update(oAuthData.url)
+        let authenticationURL = appHooks.oAuthAuthenticationPresenterHook.update(oAuthData.url, homeserver: oAuthData.homeserver)
         
         let response = await withCheckedContinuation { continuation in
             let session = ASWebAuthenticationSession(url: authenticationURL, callback: .oAuthRedirectURL(redirectURL)) { url, error in

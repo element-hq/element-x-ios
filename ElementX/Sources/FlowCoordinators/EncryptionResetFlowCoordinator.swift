@@ -20,7 +20,6 @@ enum EncryptionResetFlowCoordinatorAction: Equatable {
 struct EncryptionResetFlowCoordinatorParameters {
     let userSession: UserSessionProtocol
     let appMediator: AppMediatorProtocol
-    let appHooks: AppHooks
     let userIndicatorController: UserIndicatorControllerProtocol
     let navigationStackCoordinator: NavigationStackCoordinator
     let windowManger: WindowManagerProtocol
@@ -29,8 +28,6 @@ struct EncryptionResetFlowCoordinatorParameters {
 class EncryptionResetFlowCoordinator: FlowCoordinatorProtocol {
     private let userSession: UserSessionProtocol
     private let appMediator: AppMediatorProtocol
-    private let userSettings: UserSettings
-    private let appHooks: AppHooks
     private let userIndicatorController: UserIndicatorControllerProtocol
     
     private let navigationStackCoordinator: NavigationStackCoordinator
@@ -66,8 +63,6 @@ class EncryptionResetFlowCoordinator: FlowCoordinatorProtocol {
     init(parameters: EncryptionResetFlowCoordinatorParameters) {
         userSession = parameters.userSession
         appMediator = parameters.appMediator
-        userSettings = parameters.userSession.userSettings
-        appHooks = parameters.appHooks
         userIndicatorController = parameters.userIndicatorController
         navigationStackCoordinator = parameters.navigationStackCoordinator
         windowManager = parameters.windowManger
@@ -164,8 +159,7 @@ class EncryptionResetFlowCoordinator: FlowCoordinatorProtocol {
         accountSettingsPresenter = OAuthAccountSettingsPresenter(accountURL: url,
                                                                  presentationAnchor: windowManager.mainWindow,
                                                                  appMediator: appMediator,
-                                                                 userSettings: userSettings,
-                                                                 appHooks: appHooks)
+                                                                 userSession: userSession)
         accountSettingsPresenter?.start()
     }
 }
