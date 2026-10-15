@@ -34,7 +34,6 @@ struct CommonFlowParameters {
     let emojiProvider: EmojiProviderProtocol
     let linkMetadataProvider: LinkMetadataProviderProtocol
     let appMediator: AppMediatorProtocol
-    let appHooks: AppHooks
     let analytics: AnalyticsServiceProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
     let stateMachineFactory: StateMachineFactoryProtocol
