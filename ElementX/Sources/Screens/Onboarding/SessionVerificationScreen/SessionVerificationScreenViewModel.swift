@@ -130,7 +130,9 @@ class SessionVerificationScreenViewModel: SessionVerificationViewModelType, Sess
                         self.stateMachine.processEvent(.didFail)
                     }
                 }
-            case (.acceptingVerificationRequest, .didAcceptVerificationRequest, .verificationRequestAccepted):
+            case (.acceptingVerificationRequest, .didAcceptVerificationRequest, .verificationRequestAccepted),
+                 (.requestingVerification, .didAcceptVerificationRequest, .verificationRequestAccepted):
+                // Either side may start the SAS verification, the SDK resolves the conflict if both do.
                 startSasVerification()
             case (.showingChallenge, .acceptChallenge, .acceptingChallenge):
                 acceptChallenge()
