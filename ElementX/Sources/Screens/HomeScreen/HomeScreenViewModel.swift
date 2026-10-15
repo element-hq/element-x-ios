@@ -119,7 +119,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             }
             .store(in: &cancellables)
         
-        userSettings.app.seenInvitesPublisher
+        userSettings.account.seenInvitesPublisher
             .removeDuplicates()
             .sink { [weak self] _ in
                 self?.updateRooms()
@@ -388,7 +388,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         }
         
         var rooms = [HomeScreenRoom]()
-        let seenInvites = userSettings.app.seenInvites
+        let seenInvites = userSettings.account.seenInvites
         
         for summary in roomSummaryProvider.roomListPublisher.value {
             let room = HomeScreenRoom(summary: summary,
@@ -550,7 +550,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         analyticsService.trackJoinedRoom(isDM: roomProxy.info.isDirect,
                                          isSpace: roomProxy.info.isSpace,
                                          activeMemberCount: UInt(roomProxy.info.activeMembersCount))
-        userSettings.app.seenInvites.remove(roomProxy.id)
+        userSettings.account.seenInvites.remove(roomProxy.id)
     }
     
     private func showDeclineInviteConfirmationAlert(roomID: String) async {
@@ -600,7 +600,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         switch result {
         case .success:
             userSession.notificationService.removeDeliveredMessageNotifications(for: roomID) // Normally handled by the room flow, but that's never presented in this case.
-            userSettings.app.seenInvites.remove(roomID)
+            userSettings.account.seenInvites.remove(roomID)
         case .failure:
             displayError()
         }

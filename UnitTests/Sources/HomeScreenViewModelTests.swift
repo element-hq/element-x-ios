@@ -275,7 +275,7 @@ final class HomeScreenViewModelTests {
                 room.roomID == invites[0].roomID && room.badges.isDotShown == false
             }
         }
-        userSettings.app.seenInvites = Set(invites.compactMap(\.roomID))
+        userSettings.account.seenInvites = Set(invites.compactMap(\.roomID))
         try await deferred.fulfill()
         invites = context.viewState.rooms.invites
         
@@ -289,14 +289,14 @@ final class HomeScreenViewModelTests {
         setupViewModel(invites: .rooms)
         
         let invitedRoomIDs = context.viewState.rooms.invites.compactMap(\.roomID)
-        userSettings.app.seenInvites = Set(invitedRoomIDs)
+        userSettings.account.seenInvites = Set(invitedRoomIDs)
         #expect(invitedRoomIDs.count == 2)
         
         let deferred = deferFulfillment(viewModel.actions) { $0 == .presentRoom(roomIdentifier: invitedRoomIDs[0]) }
         context.send(viewAction: .acceptInvite(roomIdentifier: invitedRoomIDs[0]))
         try await deferred.fulfill()
         
-        #expect(userSettings.app.seenInvites == [invitedRoomIDs[1]])
+        #expect(userSettings.account.seenInvites == [invitedRoomIDs[1]])
         #expect(!notificationService.removeDeliveredMessageNotificationsForCalled, "The notification will be dismissed when opening the room.")
     }
     
@@ -305,7 +305,7 @@ final class HomeScreenViewModelTests {
         setupViewModel(invites: .spaces)
         
         let invitedRoomIDs = context.viewState.rooms.invites.compactMap(\.roomID)
-        userSettings.app.seenInvites = Set(invitedRoomIDs)
+        userSettings.account.seenInvites = Set(invitedRoomIDs)
         #expect(invitedRoomIDs.count == 2)
         
         let deferred = deferFulfillment(viewModel.actions) {
@@ -314,7 +314,7 @@ final class HomeScreenViewModelTests {
         context.send(viewAction: .acceptInvite(roomIdentifier: invitedRoomIDs[0]))
         try await deferred.fulfill()
         
-        #expect(userSettings.app.seenInvites == [invitedRoomIDs[1]])
+        #expect(userSettings.account.seenInvites == [invitedRoomIDs[1]])
         #expect(!notificationService.removeDeliveredMessageNotificationsForCalled, "The notification will be dismissed when opening the room.")
     }
     
@@ -322,7 +322,7 @@ final class HomeScreenViewModelTests {
     func declineInvite() async throws {
         setupViewModel(invites: .rooms)
         let invitedRoomIDs = context.viewState.rooms.invites.compactMap(\.roomID)
-        userSettings.app.seenInvites = Set(invitedRoomIDs)
+        userSettings.account.seenInvites = Set(invitedRoomIDs)
         #expect(invitedRoomIDs.count == 2)
         
         let deferred = deferFulfillment(context.$viewState) { $0.bindings.alertInfo != nil }
@@ -345,7 +345,7 @@ final class HomeScreenViewModelTests {
         try await Task.sleep(for: .milliseconds(100))
         #expect(rejectCalled)
         
-        #expect(userSettings.app.seenInvites == [invitedRoomIDs[1]])
+        #expect(userSettings.account.seenInvites == [invitedRoomIDs[1]])
         #expect(notificationService.removeDeliveredMessageNotificationsForCalled)
         #expect(notificationService.removeDeliveredMessageNotificationsForReceivedInvocations == [invitedRoomIDs[0]])
     }
@@ -354,7 +354,7 @@ final class HomeScreenViewModelTests {
     func declineAndBlockInvite() async throws {
         setupViewModel(invites: .rooms)
         let invitedRoomIDs = context.viewState.rooms.invites.compactMap(\.roomID)
-        userSettings.app.seenInvites = Set(invitedRoomIDs)
+        userSettings.account.seenInvites = Set(invitedRoomIDs)
         #expect(invitedRoomIDs.count == 2)
         
         let deferred = deferFulfillment(context.$viewState) { $0.bindings.alertInfo != nil }
