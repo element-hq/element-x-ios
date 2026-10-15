@@ -295,6 +295,26 @@ final class ElementCallServiceTests {
         #expect(service.ongoingCallRoomIDPublisher.value == nil)
     }
     
+    /// A declined or unanswered call is the system's to log as such: reported with its reason, and
+    /// never as an end call action, which would log it as one we hung up.
+    @Test
+    func aCallThatEndedWithoutUsIsReportedRatherThanEnded() async throws {
+        enableNativeCalls()
+        await service.setupCallSession(roomID: "!room:example.com", roomDisplayName: "welcome", isVideo: true)
+        let callID = try #require(callProvider.reportCallWithUpdatedReceivedArguments?.uuid)
+        let requestsBeforeTheEnd = callController.requestCompletionCallsCount
+        
+        service.reportCallSessionEnded(roomID: "!other:example.com", reason: .unanswered)
+        #expect(!callProvider.reportCallWithEndedAtReasonCalled, "Another room's end is not this call's")
+        
+        service.reportCallSessionEnded(roomID: "!room:example.com", reason: .unanswered)
+        
+        #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.uuid == callID)
+        #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.reason == .unanswered)
+        #expect(callController.requestCompletionCallsCount == requestsBeforeTheEnd)
+        #expect(service.ongoingCallRoomIDPublisher.value == nil)
+    }
+    
     @Test
     func tearingDownAnotherRoomLeavesTheOngoingCallUp() async {
         // A call screen that is dismissed after another room's call replaced it must not take the

@@ -90,6 +90,8 @@ enum UserAvatarSizeOnScreen {
     case map
     case classicAppAccount
     case search
+    /// The native call's large avatar: a one-to-one call, the spotlight and the ringing screen.
+    case call
     
     var value: CGFloat {
         switch self {
@@ -122,6 +124,8 @@ enum UserAvatarSizeOnScreen {
             75
         case .memberDetails, .editUserDetails, .classicAppAccount:
             96
+        case .call:
+            140
         }
     }
 }
