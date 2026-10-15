@@ -20,6 +20,8 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
     
     /// Debounces autocompletion from user input
     private var debouncedAutocompleteTask: Task<Void, Never>?
+    /// The confirmation in progress, used to ignore repeated confirms (e.g. Continue then keyboard Done).
+    private var confirmTask: Task<Void, Never>?
     
     private var actionsSubject: PassthroughSubject<ServerSelectionScreenViewModelAction, Never> = .init()
     
@@ -65,11 +67,15 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
             guard state.textField != textField else { return } // stop the infinite loop
             state.textField = textField
         case .confirm:
-            switch state.mode {
-            case .userInput:
-                Task { await configureHomeserver() }
-            case .picker:
-                Task { await pickServer() }
+            guard confirmTask == nil else { return }
+            confirmTask = Task {
+                switch state.mode {
+                case .userInput:
+                    await configureHomeserver()
+                case .picker:
+                    await pickServer()
+                }
+                confirmTask = nil
             }
         case .clearFooterError:
             clearFooterError()

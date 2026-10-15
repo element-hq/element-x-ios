@@ -210,6 +210,36 @@ struct ServerSelectionScreenViewModelTests {
         #expect(clientFactory.makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 2)
     }
     
+    @Test
+    mutating func userInputConfirmTwiceContinuesOnce() async throws {
+        // Given a view model for login with a server that doesn't support OAuth.
+        try setup(authenticationFlow: .login)
+        context.serverNameOrBaseURL = Self.passwordOnlyServer
+        
+        // When confirming a second time before the first confirmation has finished (e.g. Continue then keyboard Done).
+        var continueCount = 0
+        let deferredFailure = deferFailure(viewModel.actions, timeout: .seconds(1), message: "The flow should only continue once.") { action in
+            guard action.isContinueWithPassword else { return false }
+            continueCount += 1
+            return continueCount > 1
+        }
+        context.send(viewAction: .confirm)
+        context.send(viewAction: .confirm)
+        try await deferredFailure.fulfill()
+        
+        // Then the server should only be configured once.
+        #expect(continueCount == 1)
+        #expect(clientFactory.makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        
+        // And when confirming again once finished (e.g. after navigating back from the login screen).
+        let deferred = deferFulfillment(viewModel.actions) { $0.isContinueWithPassword }
+        context.send(viewAction: .confirm)
+        try await deferred.fulfill()
+        
+        // Then the flow should continue again.
+        #expect(clientFactory.makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 2)
+    }
+    
     // MARK: - Picker mode
     
     @Test
