@@ -106,11 +106,6 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference
     var lastVersionLaunched: String?
     
-    /// The Set of room identifiers of invites that the user already saw in the invites list.
-    /// This Set is being used to implement badges for unread invites.
-    @UserPreference(defaultValue: Set<String>())
-    var seenInvites: Set<String>
-    
     /// Defaults to `true` for new users, and we use a migration to set it to `false` for existing users.
     @UserPreference(defaultValue: true)
     var hasSeenNewSoundBanner: Bool

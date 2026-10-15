@@ -579,6 +579,11 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             MXLog.info("Migrating to version 26.10.3, moving the notifications switch into the account.")
             userSession.userSettings.account.migrateAppSettingsValue(\.enableNotificationsKey)
         }
+        
+        if oldVersion < Version(26, 10, 4) {
+            MXLog.info("Migrating to version 26.10.4, moving the seen invites into the account.")
+            userSession.userSettings.account.migrateAppSettingsValue(\.seenInvitesKey)
+        }
     }
     
     /// This could be removed once the adoption of 25.06.x is widespread.

@@ -27,6 +27,11 @@ final nonisolated class AccountSettings: @unchecked Sendable {
     @UserPreference(defaultValue: [SearchBreadcrumb]())
     var searchBreadcrumbs: [SearchBreadcrumb]
     
+    /// The Set of room identifiers of invites that the user already saw in the invites list.
+    /// This Set is being used to implement badges for unread invites.
+    @UserPreference(defaultValue: Set<String>())
+    var seenInvites: Set<String>
+    
     // MARK: Visible Preferences
     
     @UserPreference(defaultValue: true)
