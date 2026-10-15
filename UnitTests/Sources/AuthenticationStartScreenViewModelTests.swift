@@ -271,6 +271,64 @@ final class AuthenticationStartScreenViewModelTests {
         try await deferredAction.fulfill()
     }
     
+    // MARK: - Repeated Taps
+    
+    @Test
+    func provisionedPasswordLoginTwiceContinuesOnce() async throws {
+        // Given a view model that has been provisioned with a server that does not support OAuth.
+        await setupViewModel(provisioningParameters: .init(accountProvider: "company.com", loginHint: nil), supportsOAuth: false)
+        
+        // When tapping the login button twice.
+        var continueCount = 0
+        let deferredFailure = deferFailure(viewModel.actions, timeout: .seconds(1), message: "The flow should only continue once.") { action in
+            guard action.isLoginDirectlyWithPassword else { return false }
+            continueCount += 1
+            return continueCount > 1
+        }
+        let deferred = deferFulfillment(viewModel.actions) { $0.isLoginDirectlyWithPassword }
+        context.send(viewAction: .login)
+        context.send(viewAction: .login)
+        try await deferred.fulfill()
+        try await deferredFailure.fulfill()
+        
+        // Then the server should only be configured and the flow continued once.
+        #expect(continueCount == 1)
+        #expect(clientFactory.makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+    }
+    
+    @Test
+    func loginWithQRWhileLoggingInIsIgnored() async throws {
+        // Given a view model for an app that only allows the use of a single provider that does not support OAuth.
+        setAllowedAccountProviders([.generic("company.com")])
+        await setupViewModel(supportsOAuth: false)
+        
+        // When tapping the QR code button while the login is still in progress.
+        let deferredFailure = deferFailure(viewModel.actions, timeout: .seconds(1), message: "The login is still in progress.") { $0 == .loginWithQR }
+        let deferred = deferFulfillment(viewModel.actions) { $0.isLoginDirectlyWithPassword }
+        context.send(viewAction: .login)
+        context.send(viewAction: .loginWithQR)
+        
+        // Then only the login should continue the flow.
+        try await deferred.fulfill()
+        try await deferredFailure.fulfill()
+    }
+    
+    @Test
+    func provisionedOAuthLoginCanBeRetried() async throws {
+        // Given a view model that has been provisioned with a server that supports OAuth, where the OAuth login has started.
+        await setupViewModel(provisioningParameters: .init(accountProvider: "company.com", loginHint: nil))
+        var deferred = deferFulfillment(viewModel.actions) { $0.isLoginDirectlyWithOAuth }
+        context.send(viewAction: .login)
+        try await deferred.fulfill()
+        
+        // When tapping the login button again, as after cancelling the web authentication.
+        deferred = deferFulfillment(viewModel.actions) { $0.isLoginDirectlyWithOAuth }
+        context.send(viewAction: .login)
+        
+        // Then the OAuth login should start again.
+        try await deferred.fulfill()
+    }
+    
     // MARK: - Helpers
     
     private func setupViewModel(classicAppAccount: ClassicAppAccount? = nil,

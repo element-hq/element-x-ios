@@ -19,6 +19,9 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
     
     private let canReportProblem: Bool
     
+    /// The login in progress, used to ignore other taps until it finishes.
+    private var loginTask: Task<Void, Never>?
+    
     private var actionsSubject: PassthroughSubject<AuthenticationStartScreenViewModelAction, Never> = .init()
     
     var actions: AnyPublisher<AuthenticationStartScreenViewModelAction, Never> {
@@ -84,6 +87,8 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
         case .updateWindow(let window):
             guard state.window != window else { return }
             state.window = window
+        case _ where loginTask != nil:
+            break
         case .reportProblem:
             if canReportProblem {
                 actionsSubject.send(.reportProblem)
@@ -94,12 +99,18 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
         case .loginWithQR:
             actionsSubject.send(.loginWithQR)
         case .login:
-            Task { await login() }
+            loginTask = Task {
+                await login()
+                loginTask = nil
+            }
         case .register:
             actionsSubject.send(.register)
             
         case .continueWithClassic(let account):
-            Task { await login(classicAppAccount: account) }
+            loginTask = Task {
+                await login(classicAppAccount: account)
+                loginTask = nil
+            }
         case .otherOptions(let account):
             state.classicAppMode = .otherOptions(account)
         case .closeOtherOptions(let account):
