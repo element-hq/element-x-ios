@@ -16,6 +16,7 @@ nonisolated struct UserHooks: Sendable {
     let createRoomScreenHook: CreateRoomScreenHookProtocol
     let securityAndPrivacyScreenHook: SecurityAndPrivacyScreenHookProtocol
     let oAuthAccountSettingsPresenterHook: OAuthAccountSettingsPresenterHookProtocol
+    let developerOptionsScreenHook: DeveloperOptionsScreenHookProtocol
     
     init(roomScreenHook: RoomScreenHookProtocol = DefaultRoomScreenHook(),
          roomDetailsScreenHook: RoomDetailsScreenHookProtocol = DefaultRoomDetailsScreenHook(),
@@ -24,7 +25,8 @@ nonisolated struct UserHooks: Sendable {
          recoveryKeyScreenHook: RecoveryKeyScreenHookProtocol = DefaultRecoveryKeyScreenHook(),
          createRoomScreenHook: CreateRoomScreenHookProtocol = DefaultCreateRoomScreenHook(),
          securityAndPrivacyScreenHook: SecurityAndPrivacyScreenHookProtocol = DefaultSecurityAndPrivacyScreenHook(),
-         oAuthAccountSettingsPresenterHook: OAuthAccountSettingsPresenterHookProtocol = DefaultOAuthAccountSettingsPresenterHook()) {
+         oAuthAccountSettingsPresenterHook: OAuthAccountSettingsPresenterHookProtocol = DefaultOAuthAccountSettingsPresenterHook(),
+         developerOptionsScreenHook: DeveloperOptionsScreenHookProtocol = DefaultDeveloperOptionsScreenHook()) {
         self.roomScreenHook = roomScreenHook
         self.roomDetailsScreenHook = roomDetailsScreenHook
         self.roomMemberDetailsScreenHook = roomMemberDetailsScreenHook
@@ -33,5 +35,6 @@ nonisolated struct UserHooks: Sendable {
         self.createRoomScreenHook = createRoomScreenHook
         self.securityAndPrivacyScreenHook = securityAndPrivacyScreenHook
         self.oAuthAccountSettingsPresenterHook = oAuthAccountSettingsPresenterHook
+        self.developerOptionsScreenHook = developerOptionsScreenHook
     }
 }

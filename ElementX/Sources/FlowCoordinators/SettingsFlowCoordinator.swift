@@ -315,7 +315,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentDeveloperOptions() {
         let coordinator = DeveloperOptionsScreenCoordinator(appSettings: userSettings.app,
-                                                            appHooks: flowParameters.appHooks,
+                                                            screenHook: flowParameters.userSession.userHooks.developerOptionsScreenHook,
                                                             clientProxy: flowParameters.userSession.clientProxy)
         
         coordinator.actions

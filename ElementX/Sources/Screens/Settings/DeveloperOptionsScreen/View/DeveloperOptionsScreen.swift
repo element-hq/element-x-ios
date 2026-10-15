@@ -54,9 +54,7 @@ struct DeveloperOptionsScreen: View {
                     Text("Moves search to a separate tab")
                 }
                 
-                context.viewState.appHooks
-                    .developerOptionsScreenHook
-                    .generalSectionRows(isSignedIn: context.viewState.isSignedIn)
+                context.viewState.screenHook.generalSectionRows()
             }
             
             Section("Accounts") {
@@ -257,7 +255,7 @@ private extension Set<TraceLogPack> {
 
 struct DeveloperOptionsScreen_Previews: PreviewProvider {
     static let viewModel = DeveloperOptionsScreenViewModel(developerOptions: AppSettings.volatile(),
-                                                           appHooks: AppHooks(),
+                                                           screenHook: DefaultDeveloperOptionsScreenHook(),
                                                            clientProxy: ClientProxyMock(.init()))
     
     static var previews: some View {
