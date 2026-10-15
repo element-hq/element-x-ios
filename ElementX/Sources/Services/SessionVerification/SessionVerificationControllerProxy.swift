@@ -200,10 +200,10 @@ class SessionVerificationControllerProxy: SessionVerificationControllerProxyProt
     }
     
     fileprivate func didAcceptVerificationRequest() {
-        // Noop because the rust side state machine changes states before sending
-        // the actual request, leading to race conditions with the SAS verification
-        // startup. The `acceptedVerificationRequest` is now called from the `startSasVerification`
-        // method above.
+        // Only called when the other device accepted our request. Accepting an incoming one is
+        // reported from the `acceptVerificationRequest` method above.
+        MXLog.info("Verification request accepted by the other device")
+        actions.send(.acceptedVerificationRequest)
     }
     
     fileprivate func didStartSasVerification() {
