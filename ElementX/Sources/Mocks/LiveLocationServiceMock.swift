@@ -8,14 +8,20 @@
 import Combine
 import CoreLocation
 
-extension LiveLocationManagerMock {
+extension LiveLocationServiceMock {
     struct Configuration {
+        var userID = "@alice:matrix.org"
         var authorizationStatus: CLAuthorizationStatus = .notDetermined
         var requestAlwaysAuthorizationIfPossibleReturnValue = true
+        var isSharing = false
     }
     
     convenience init(_ configuration: Configuration) {
         self.init()
+        
+        userID = configuration.userID
+        actionsPublisher = PassthroughSubject<LiveLocationServiceAction, Never>().eraseToAnyPublisher()
+        isSharingPublisher = CurrentValueSubject(configuration.isSharing).asCurrentValuePublisher()
         
         let authorizationStatusSubject = CurrentValueSubject<CLAuthorizationStatus, Never>(configuration.authorizationStatus)
         authorizationStatus = .init(authorizationStatusSubject)
