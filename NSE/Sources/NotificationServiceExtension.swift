@@ -153,18 +153,10 @@ actor NotificationServiceExtensionActor {
             return contentHandler(request.content)
         }
         
-        let allCredentials = keychainController.restorationTokens()
-        guard let credentials = allCredentials.first(where: { $0.restorationToken.pusherNotificationClientIdentifier == clientID }) else {
-            // Don't log until the app hooks have been run:
-            // swiftlint:disable:next print_deprecation
-            print("Credentials not found, bailing out.")
-            // With other accounts still signed in, this push comes from an account that signed out.
-            return contentHandler(allCredentials.isEmpty ? request.content : .init())
-        }
-        
-        // The pusher of an account with its notifications off can outlive a failed deletion.
-        guard appSettings.userSettings(for: credentials.userID).account.enableNotifications else {
-            return contentHandler(.init())
+        guard let credentials = keychainController.restorationTokens().first(where: { $0.restorationToken.pusherNotificationClientIdentifier == clientID }) else {
+            // Logged before the app hooks run, as there's no account to run them for.
+            MXLog.error("\(tag) Received a push that matches no signed-in account.")
+            return contentHandler(request.content)
         }
         
         let homeserverURL = credentials.restorationToken.session.homeserverUrl

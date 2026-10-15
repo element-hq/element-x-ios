@@ -33,6 +33,6 @@ protocol NotificationManagerProtocol: AnyObject {
     /// Starts handling a live account's notifications, replacing the service it had before (e.g. after clearing the cache).
     func add(_ service: NotificationServiceProtocol)
     func remove(userID: String)
-    /// Clears every notification and stops receiving new ones, once no account is signed in.
+    /// Resets the app badge and stops receiving notifications, once no account is signed in.
     func reset()
 }

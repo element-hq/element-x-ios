@@ -73,7 +73,9 @@ final class NotificationManagerTests {
     
     @Test
     func aReplacedServiceRegistersAgainAndTheOldOneIsIgnored() async {
-        let oldAlice = makeService("@alice:example.com", badgeCount: 3)
+        let oldBadgeCountSubject = CurrentValueSubject<Int, Never>(3)
+        let oldAlice = makeService("@alice:example.com")
+        oldAlice.service.badgeCountPublisher = oldBadgeCountSubject.asCurrentValuePublisher()
         notificationManager.add(oldAlice.service)
         await notificationManager.register(with: Data("1234".utf8))
         let newAlice = makeService("@alice:example.com", badgeCount: 1)
@@ -82,7 +84,7 @@ final class NotificationManagerTests {
             newAlice.service.registerDeviceTokenClosure = { _ in confirm() }
             notificationManager.add(newAlice.service)
         }
-        oldAlice.actions.send(.badgeCountChanged(9))
+        oldBadgeCountSubject.send(5)
         
         #expect(oldAlice.service.registerDeviceTokenCallsCount == 1)
         #expect(appSettings.lastKnownBadgeCount == 1)
@@ -195,10 +197,12 @@ final class NotificationManagerTests {
     
     @Test
     func appBadgeFollowsAnAccountsCount() {
-        let alice = makeService("@alice:example.com", badgeCount: 3)
+        let badgeCountSubject = CurrentValueSubject<Int, Never>(3)
+        let alice = makeService("@alice:example.com")
+        alice.service.badgeCountPublisher = badgeCountSubject.asCurrentValuePublisher()
         notificationManager.add(alice.service)
         
-        alice.actions.send(.badgeCountChanged(7))
+        badgeCountSubject.send(7)
         
         #expect(appSettings.lastKnownBadgeCount == 7)
     }
@@ -234,7 +238,7 @@ final class NotificationManagerTests {
     }
     
     @Test
-    func resettingClearsEveryNotificationAndStopsReceivingNew() async {
+    func resettingStopsReceivingNotifications() async {
         notificationManager.delegate = self
         appSettings.lastKnownBadgeCount = 4
         
@@ -243,8 +247,6 @@ final class NotificationManagerTests {
             notificationManager.reset()
         }
         
-        #expect(notificationCenter.removeAllPendingNotificationRequestsCalled)
-        #expect(notificationCenter.removeAllDeliveredNotificationsCalled)
         #expect(notificationCenter.setBadgeCountReceivedNewBadgeCount == 0)
         #expect(appSettings.lastKnownBadgeCount == 0)
         #expect(unregisterForRemoteNotificationsDelegateCalled)
@@ -266,7 +268,7 @@ final class NotificationManagerTests {
             alice.actions.send(.removeDeliveredNotifications { $0.request.content.roomID == "!room:example.com" })
         }
         
-        // Notifications without a receiver predate multiple accounts.
+        // Notifications without a receiver weren't processed by the extension, so any account may clear them.
         #expect(notificationCenter.removeDeliveredNotificationsWithIdentifiersReceivedIdentifiers == ["alice room", "legacy room"])
     }
     

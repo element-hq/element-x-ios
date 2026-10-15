@@ -34,25 +34,19 @@ final class NotificationServiceTests {
         
         await service.register(deviceToken: deviceToken)
         
-        let configuration = try #require(clientProxy.setPusherWithReceivedInvocations.first)
-        #expect(configuration.identifiers.pushkey == deviceToken.base64EncodedString())
-        #expect(configuration.identifiers.appId == appSettings.pusherAppID)
-        #expect(configuration.appDisplayName == "\(InfoPlistReader.main.bundleDisplayName) (iOS)")
-        #expect(configuration.deviceDisplayName == UIDevice.current.name)
-        #expect(configuration.profileTag != nil)
-        #expect(configuration.lang == Bundle.app.preferredLocalizations.first)
-        #expect(!configuration.append)
-        guard case let .http(data) = configuration.kind else {
-            Issue.record("Http kind expected")
-            return
-        }
-        #expect(data.url == appSettings.pushGatewayNotifyEndpoint.absoluteString)
-        #expect(data.format == .eventIdOnly)
         let defaultPayload = APNSPayload(aps: APSInfo(mutableContent: 1,
-                                                      alert: APSAlert(locKey: "Notification",
-                                                                      locArgs: [])),
+                                                      alert: APSAlert(locKey: "Notification", locArgs: [])),
                                          pusherNotificationClientIdentifier: nil)
-        #expect(try data.defaultPayload == defaultPayload.toJsonString())
+        let expectedConfiguration = try PusherConfiguration(identifiers: .init(pushkey: deviceToken.base64EncodedString(), appId: appSettings.pusherAppID),
+                                                            kind: .http(data: .init(url: appSettings.pushGatewayNotifyEndpoint.absoluteString,
+                                                                                    format: .eventIdOnly,
+                                                                                    defaultPayload: defaultPayload.toJsonString())),
+                                                            appDisplayName: "\(InfoPlistReader.main.bundleDisplayName) (iOS)",
+                                                            deviceDisplayName: UIDevice.current.name,
+                                                            profileTag: appSettings.pusherProfileTag,
+                                                            lang: Bundle.app.preferredLocalizations.first ?? "en",
+                                                            append: false)
+        #expect(clientProxy.setPusherWithReceivedInvocations == [expectedConfiguration])
     }
     
     @Test
@@ -169,12 +163,6 @@ final class NotificationServiceTests {
         clientProxy.totalUnreadNotifications = 7
         roomListSubject.send([])
         try await deferred.fulfill()
-        
-        let badgeCounts = actions.compactMap { action -> Int? in
-            guard case let .badgeCountChanged(badgeCount) = action else { return nil }
-            return badgeCount
-        }
-        #expect(badgeCounts.last == 7)
     }
     
     // MARK: - Delivered notifications

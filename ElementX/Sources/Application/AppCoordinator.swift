@@ -67,7 +67,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     /// The account of a notification tapped while restoring, its route only opens once that account is the active one.
     @Consumable private var storedAppRouteReceiverID: String?
     /// A reply made from a notification before its account was live.
-    private var storedInlineReply: StoredInlineReply?
+    private var storedInlineReply: PendingInlineReplyDetails?
     @Consumable private var storedRoomsToAwait: Set<String>?
     
     init(appDelegate: AppDelegate) {
@@ -461,7 +461,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         guard let userSession = userSessionManager.session(for: receiverID) else {
             // Store the data so it can be sent once the receiver's session is live.
-            storedInlineReply = StoredInlineReply(userID: receiverID, roomID: roomID, message: replyText)
+            storedInlineReply = PendingInlineReplyDetails(userID: receiverID, roomID: roomID, message: replyText)
             return
         }
         
@@ -502,18 +502,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                     try FileManager.default.moveItem(at: oldCustomTonesLocation, to: URL.customTonesDirectory)
                 } catch {
                     MXLog.error("Failed moving custom notification sounds: \(error)")
-                }
-            }
-        }
-        
-        if oldVersion < Version(26, 10, 3) {
-            MXLog.info("Migrating to version 26.10.3, copying the notifications switch into every account.")
-            let accountSettings = userSessionManager.userIDs.map { appSettings.userSettings(for: $0).account }
-            if let firstAccountSettings = accountSettings.first {
-                // The first account moves the value out of the app settings, the others get the same switch.
-                firstAccountSettings.migrateAppSettingsValue(\.enableNotificationsKey)
-                for otherAccountSettings in accountSettings.dropFirst() {
-                    otherAccountSettings.enableNotifications = firstAccountSettings.enableNotifications
                 }
             }
         }
@@ -585,6 +573,11 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                     MXLog.error("Failed migrating the selected notification sound: \(error)")
                 }
             }
+        }
+        
+        if oldVersion < Version(26, 10, 3) {
+            MXLog.info("Migrating to version 26.10.3, moving the notifications switch into the account.")
+            userSession.userSettings.account.migrateAppSettingsValue(\.enableNotificationsKey)
         }
     }
     
@@ -1522,7 +1515,7 @@ private extension AppCoordinator {
     }
 }
 
-private struct StoredInlineReply {
+private struct PendingInlineReplyDetails {
     let userID: String
     let roomID: String
     let message: String

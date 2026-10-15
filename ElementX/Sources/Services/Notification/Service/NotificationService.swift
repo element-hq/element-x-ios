@@ -43,8 +43,7 @@ final class NotificationService: NotificationServiceProtocol {
         self.userSettings = userSettings
         badgeCountSubject = .init(Int(clientProxy.totalUnreadNotifications))
         
-        observeRoomList()
-        observeSwitch()
+        setupSubscriptions()
     }
     
     func register(deviceToken: Data) async {
@@ -89,7 +88,7 @@ final class NotificationService: NotificationServiceProtocol {
     
     // MARK: - Private
     
-    private func observeRoomList() {
+    private func setupSubscriptions() {
         let roomListPublisher = clientProxy.staticRoomSummaryProvider.roomListPublisher
         
         Task { [weak self] in
@@ -101,19 +100,17 @@ final class NotificationService: NotificationServiceProtocol {
             }
         }
         .store(in: &cancellables)
-    }
-    
-    /// The settings screen turns notifications on and off through `AccountSettings.enableNotifications`.
-    private func observeSwitch() {
+        
+        // The settings screen turns notifications on and off through `AccountSettings.enableNotifications`.
         userSettings.account.enableNotificationsPublisher
             .dropFirst()
             .sink { [weak self] isEnabled in
-                self?.switchChanged(to: isEnabled)
+                self?.enableNotificationsChanged(to: isEnabled)
             }
             .store(in: &cancellables)
     }
     
-    private func switchChanged(to isEnabled: Bool) {
+    private func enableNotificationsChanged(to isEnabled: Bool) {
         MXLog.info("Notifications turned \(isEnabled ? "on" : "off") for \(userID)")
         // The extension drops pushes for an account turned off, so a pusher that fails to update is fixed on the next launch.
         Task { await updatePusher(isEnabled: isEnabled) }
@@ -126,7 +123,6 @@ final class NotificationService: NotificationServiceProtocol {
     private func updateBadgeCount(_ badgeCount: Int) {
         guard badgeCount != badgeCountSubject.value else { return }
         badgeCountSubject.send(badgeCount)
-        actionsSubject.send(.badgeCountChanged(badgeCount))
     }
     
     /// Sets the pusher when enabled and deletes it otherwise. Nothing to update until the device token is known.
@@ -136,7 +132,7 @@ final class NotificationService: NotificationServiceProtocol {
         let identifiers = PusherIdentifiers(pushkey: deviceToken.base64EncodedString(), appId: userSettings.app.pusherAppID)
         do {
             if isEnabled {
-                try await clientProxy.setPusher(with: pusherConfiguration(identifiers: identifiers))
+                try await clientProxy.setPusher(with: pusherConfiguration(for: identifiers))
                 MXLog.info("Set pusher succeeded")
             } else {
                 try await clientProxy.deletePusher(with: identifiers)
@@ -147,7 +143,7 @@ final class NotificationService: NotificationServiceProtocol {
         }
     }
     
-    private func pusherConfiguration(identifiers: PusherIdentifiers) throws -> PusherConfiguration {
+    private func pusherConfiguration(for identifiers: PusherIdentifiers) throws -> PusherConfiguration {
         let defaultPayload = APNSPayload(aps: APSInfo(mutableContent: 1,
                                                       alert: APSAlert(locKey: "Notification",
                                                                       locArgs: [])),

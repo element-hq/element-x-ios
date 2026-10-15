@@ -530,9 +530,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     private func setupUnreadNotificationsObserver() {
         userSession.notificationService.badgeCountPublisher
-            .sink { [weak self] badgeCount in
-                self?.chatsTabDetails.badgeCount = badgeCount
-            }
+            .weakAssign(to: \.badgeCount, on: chatsTabDetails)
             .store(in: &cancellables)
     }
     

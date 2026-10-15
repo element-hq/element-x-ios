@@ -13,7 +13,6 @@ enum NotificationServiceAction {
     /// Removes the account's delivered notifications that match.
     case removeDeliveredNotifications(where: (UNNotification) -> Bool)
     case requestAuthorization
-    case badgeCountChanged(Int)
 }
 
 // sourcery: AutoMockable

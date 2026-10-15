@@ -124,9 +124,7 @@ class UserSessionStore: UserSessionStoreProtocol {
                                 userSettings: userSettings)
         }
         
-        let notificationService = await MainActor.run {
-            NotificationService(clientProxy: clientProxy, userSettings: userSettings)
-        }
+        let notificationService = NotificationService(clientProxy: clientProxy, userSettings: userSettings)
         
         return UserSession(clientProxy: clientProxy,
                            userSettings: userSettings,

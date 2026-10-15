@@ -45,6 +45,13 @@ nonisolated class NotificationHandler {
     func processEvent(_ eventID: String, roomID: String) async {
         MXLog.info("\(tag) Processing event: \(eventID) in room: \(roomID)")
         
+        // The pusher of an account with its notifications off can outlive a failed deletion.
+        guard userSettings.account.enableNotifications else {
+            MXLog.error("\(tag) Received a push for an account with notifications off, discarding.")
+            discardNotification()
+            return
+        }
+        
         guard let notificationItemProxy = await userSession.notificationItemProxy(roomID: roomID, eventID: eventID) else {
             MXLog.error("\(tag) Failed retrieving notification item")
             discardNotification()

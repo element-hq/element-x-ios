@@ -75,7 +75,7 @@ enum CreateRoomAccessType: Equatable {
 /// This struct represents the configuration that we are using to register the application through Pusher to Sygnal
 /// using the Matrix Rust SDK, more info here:
 /// https://github.com/matrix-org/sygnal
-struct PusherConfiguration {
+struct PusherConfiguration: Equatable {
     let identifiers: PusherIdentifiers
     let kind: PusherKind
     let appDisplayName: String

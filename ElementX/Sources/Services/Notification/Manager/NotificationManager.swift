@@ -19,9 +19,7 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
     /// The APNs token, kept for the accounts added after it arrived.
     private var deviceToken: Data?
     private var services: [String: NotificationServiceProtocol] = [:]
-    private var serviceCancellables: [String: AnyCancellable] = [:]
-    /// Each account's unread count, summed for the app badge.
-    private var badgeCounts: [String: Int] = [:]
+    private var serviceCancellables: [String: Set<AnyCancellable>] = [:]
     private var cancellables = Set<AnyCancellable>()
     
     private var isAnyAccountEnabled: Bool {
@@ -97,12 +95,14 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
     func add(_ service: NotificationServiceProtocol) {
         let userID = service.userID
         services[userID] = service
-        badgeCounts[userID] = service.badgeCountPublisher.value
-        serviceCancellables[userID] = service.actionsPublisher
-            .sink { [weak self] action in
+        serviceCancellables[userID] = [
+            service.actionsPublisher.sink { [weak self] action in
                 self?.handle(action, from: userID)
+            },
+            service.badgeCountPublisher.sink { [weak self] _ in
+                self?.updateAppBadgeCount()
             }
-        updateAppBadgeCount()
+        ]
         
         if let deviceToken {
             Task { await service.register(deviceToken: deviceToken) }
@@ -112,9 +112,8 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
     }
     
     func remove(userID: String) {
-        services[userID] = nil
         serviceCancellables[userID] = nil
-        guard badgeCounts.removeValue(forKey: userID) != nil else { return }
+        guard services.removeValue(forKey: userID) != nil else { return }
         
         if services.isEmpty {
             // Signing out of the last account unregisters from APNs, so the next account registers again.
@@ -125,8 +124,6 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
     }
     
     func reset() {
-        notificationCenter.removeAllPendingNotificationRequests()
-        notificationCenter.removeAllDeliveredNotifications()
         appSettings.lastKnownBadgeCount = 0
         Task {
             do {
@@ -146,9 +143,6 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
             Task { await removeDeliveredNotifications(of: userID, where: isIncluded) }
         case .requestAuthorization:
             requestAuthorization()
-        case .badgeCountChanged(let badgeCount):
-            badgeCounts[userID] = badgeCount
-            updateAppBadgeCount()
         }
     }
     
@@ -180,7 +174,7 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
         // Signing out of the last account resets the badge.
         guard !services.isEmpty else { return }
         
-        let badgeCount = badgeCounts.values.reduce(0, +)
+        let badgeCount = services.values.map(\.badgeCountPublisher.value).reduce(0, +)
         appSettings.lastKnownBadgeCount = badgeCount
         MXLog.debug("Updating app badge count to \(badgeCount)")
         
@@ -195,7 +189,7 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
     
     private func removeDeliveredNotifications(of userID: String, where isIncluded: (UNNotification) -> Bool) async {
         let identifiers = await notificationCenter.deliveredNotifications()
-            // A room can be shared by several accounts. Notifications without a receiver predate multiple accounts.
+            // A room can be shared by several accounts. Notifications without a receiver weren't processed by the extension, so any account may clear them.
             .filter { ($0.request.content.receiverID ?? userID) == userID }
             .filter(isIncluded)
             .map(\.request.identifier)

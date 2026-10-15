@@ -14808,40 +14808,6 @@ nonisolated class UserNotificationCenterMock: UserNotificationCenterProtocol, @u
         setBadgeCountReceivedInvocationsLock.withLock { setBadgeCountUnderlyingReceivedInvocations.append(newBadgeCount) }
         try await setBadgeCountClosure?(newBadgeCount)
     }
-    //MARK: - removeAllPendingNotificationRequests
-
-    private let removeAllPendingNotificationRequestsCallsCountLock = NSLock()
-    private nonisolated(unsafe) var removeAllPendingNotificationRequestsUnderlyingCallsCount = 0
-    var removeAllPendingNotificationRequestsCallsCount: Int {
-        get { removeAllPendingNotificationRequestsCallsCountLock.withLock { removeAllPendingNotificationRequestsUnderlyingCallsCount } }
-        set { removeAllPendingNotificationRequestsCallsCountLock.withLock { removeAllPendingNotificationRequestsUnderlyingCallsCount = newValue } }
-    }
-    var removeAllPendingNotificationRequestsCalled: Bool {
-        return removeAllPendingNotificationRequestsCallsCount > 0
-    }
-    nonisolated(unsafe) var removeAllPendingNotificationRequestsClosure: (() -> Void)?
-
-    func removeAllPendingNotificationRequests() {
-        removeAllPendingNotificationRequestsCallsCountLock.withLock { removeAllPendingNotificationRequestsUnderlyingCallsCount += 1 }
-        removeAllPendingNotificationRequestsClosure?()
-    }
-    //MARK: - removeAllDeliveredNotifications
-
-    private let removeAllDeliveredNotificationsCallsCountLock = NSLock()
-    private nonisolated(unsafe) var removeAllDeliveredNotificationsUnderlyingCallsCount = 0
-    var removeAllDeliveredNotificationsCallsCount: Int {
-        get { removeAllDeliveredNotificationsCallsCountLock.withLock { removeAllDeliveredNotificationsUnderlyingCallsCount } }
-        set { removeAllDeliveredNotificationsCallsCountLock.withLock { removeAllDeliveredNotificationsUnderlyingCallsCount = newValue } }
-    }
-    var removeAllDeliveredNotificationsCalled: Bool {
-        return removeAllDeliveredNotificationsCallsCount > 0
-    }
-    nonisolated(unsafe) var removeAllDeliveredNotificationsClosure: (() -> Void)?
-
-    func removeAllDeliveredNotifications() {
-        removeAllDeliveredNotificationsCallsCountLock.withLock { removeAllDeliveredNotificationsUnderlyingCallsCount += 1 }
-        removeAllDeliveredNotificationsClosure?()
-    }
     //MARK: - setNotificationCategories
 
     private let setNotificationCategoriesCallsCountLock = NSLock()
