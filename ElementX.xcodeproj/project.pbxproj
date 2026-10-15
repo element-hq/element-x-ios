@@ -11059,7 +11059,7 @@
 			repositoryURL = "https://github.com/element-hq/element-call-ios";
 			requirement = {
 				kind = exactVersion;
-				version = "0.1.0-rc.10";
+				version = "0.1.0-rc.11";
 			};
 		};
 		395DE6AE429B7ACC7C7FE31D /* XCRemoteSwiftPackageReference "KZFileWatchers" */ = {
@@ -11115,7 +11115,7 @@
 			repositoryURL = "https://github.com/element-hq/matrix-rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 26.10.13;
+				version = 26.10.15;
 			};
 		};
 		701C7BEF8F70F7A83E852DCC /* XCRemoteSwiftPackageReference "GZIP" */ = {

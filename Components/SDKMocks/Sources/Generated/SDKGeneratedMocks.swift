@@ -12325,39 +12325,6 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         }
     }
 
-    //MARK: - roomEventsDebugString
-
-    open var roomEventsDebugStringThrowableError: Error?
-    private let roomEventsDebugStringCallsCountLock = NSLock()
-    private var roomEventsDebugStringUnderlyingCallsCount = 0
-    open var roomEventsDebugStringCallsCount: Int {
-        get { roomEventsDebugStringCallsCountLock.withLock { roomEventsDebugStringUnderlyingCallsCount } }
-        set { roomEventsDebugStringCallsCountLock.withLock { roomEventsDebugStringUnderlyingCallsCount = newValue } }
-    }
-    open var roomEventsDebugStringCalled: Bool {
-        return roomEventsDebugStringCallsCount > 0
-    }
-
-    private let roomEventsDebugStringReturnValueLock = NSLock()
-    open var roomEventsDebugStringUnderlyingReturnValue: [String]!
-    open var roomEventsDebugStringReturnValue: [String]! {
-        get { roomEventsDebugStringReturnValueLock.withLock { roomEventsDebugStringUnderlyingReturnValue } }
-        set { roomEventsDebugStringReturnValueLock.withLock { roomEventsDebugStringUnderlyingReturnValue = newValue } }
-    }
-    open var roomEventsDebugStringClosure: (() async throws -> [String])?
-
-    open override func roomEventsDebugString() async throws -> [String] {
-        if let error = roomEventsDebugStringThrowableError {
-            throw error
-        }
-        roomEventsDebugStringCallsCountLock.withLock { roomEventsDebugStringUnderlyingCallsCount += 1 }
-        if let roomEventsDebugStringClosure = roomEventsDebugStringClosure {
-            return try await roomEventsDebugStringClosure()
-        } else {
-            return roomEventsDebugStringReturnValue
-        }
-    }
-
     //MARK: - roomInfo
 
     open var roomInfoThrowableError: Error?
