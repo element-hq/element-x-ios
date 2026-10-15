@@ -154,8 +154,9 @@ actor NotificationServiceExtensionActor {
         }
         
         guard let credentials = keychainController.restorationTokens().first(where: { $0.restorationToken.pusherNotificationClientIdentifier == clientID }) else {
-            // Logged before the app hooks run, as there's no account to run them for.
-            MXLog.error("\(tag) Received a push that matches no signed-in account.")
+            // Don't log until the app hooks have been run:
+            // swiftlint:disable:next print_deprecation
+            print("Credentials not found, bailing out.")
             return contentHandler(request.content)
         }
         
