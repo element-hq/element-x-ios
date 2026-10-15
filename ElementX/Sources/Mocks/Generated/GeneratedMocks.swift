@@ -8120,6 +8120,86 @@ nonisolated class LinkNewDeviceServiceMock: LinkNewDeviceServiceProtocol, @unche
     }
 }
 nonisolated class LiveLocationManagerMock: LiveLocationManagerProtocol, @unchecked Sendable {
+
+    //MARK: - add
+
+    private let addCallsCountLock = NSLock()
+    private nonisolated(unsafe) var addUnderlyingCallsCount = 0
+    var addCallsCount: Int {
+        get { addCallsCountLock.withLock { addUnderlyingCallsCount } }
+        set { addCallsCountLock.withLock { addUnderlyingCallsCount = newValue } }
+    }
+    var addCalled: Bool {
+        return addCallsCount > 0
+    }
+    private let addReceivedServiceLock = NSLock()
+    private nonisolated(unsafe) var addUnderlyingReceivedService: LiveLocationServiceProtocol?
+    var addReceivedService: LiveLocationServiceProtocol? {
+        get { addReceivedServiceLock.withLock { addUnderlyingReceivedService } }
+        set { addReceivedServiceLock.withLock { addUnderlyingReceivedService = newValue } }
+    }
+    private let addReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var addUnderlyingReceivedInvocations: [LiveLocationServiceProtocol] = []
+    var addReceivedInvocations: [LiveLocationServiceProtocol] {
+        get { addReceivedInvocationsLock.withLock { addUnderlyingReceivedInvocations } }
+        set { addReceivedInvocationsLock.withLock { addUnderlyingReceivedInvocations = newValue } }
+    }
+    nonisolated(unsafe) var addClosure: ((LiveLocationServiceProtocol) -> Void)?
+
+    func add(_ service: LiveLocationServiceProtocol) {
+        addCallsCountLock.withLock { addUnderlyingCallsCount += 1 }
+        addReceivedService = service
+        addReceivedInvocationsLock.withLock { addUnderlyingReceivedInvocations.append(service) }
+        addClosure?(service)
+    }
+    //MARK: - remove
+
+    private let removeUserIDCallsCountLock = NSLock()
+    private nonisolated(unsafe) var removeUserIDUnderlyingCallsCount = 0
+    var removeUserIDCallsCount: Int {
+        get { removeUserIDCallsCountLock.withLock { removeUserIDUnderlyingCallsCount } }
+        set { removeUserIDCallsCountLock.withLock { removeUserIDUnderlyingCallsCount = newValue } }
+    }
+    var removeUserIDCalled: Bool {
+        return removeUserIDCallsCount > 0
+    }
+    private let removeUserIDReceivedUserIDLock = NSLock()
+    private nonisolated(unsafe) var removeUserIDUnderlyingReceivedUserID: String?
+    var removeUserIDReceivedUserID: String? {
+        get { removeUserIDReceivedUserIDLock.withLock { removeUserIDUnderlyingReceivedUserID } }
+        set { removeUserIDReceivedUserIDLock.withLock { removeUserIDUnderlyingReceivedUserID = newValue } }
+    }
+    private let removeUserIDReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var removeUserIDUnderlyingReceivedInvocations: [String] = []
+    var removeUserIDReceivedInvocations: [String] {
+        get { removeUserIDReceivedInvocationsLock.withLock { removeUserIDUnderlyingReceivedInvocations } }
+        set { removeUserIDReceivedInvocationsLock.withLock { removeUserIDUnderlyingReceivedInvocations = newValue } }
+    }
+    nonisolated(unsafe) var removeUserIDClosure: ((String) -> Void)?
+
+    func remove(userID: String) {
+        removeUserIDCallsCountLock.withLock { removeUserIDUnderlyingCallsCount += 1 }
+        removeUserIDReceivedUserID = userID
+        removeUserIDReceivedInvocationsLock.withLock { removeUserIDUnderlyingReceivedInvocations.append(userID) }
+        removeUserIDClosure?(userID)
+    }
+}
+nonisolated class LiveLocationServiceMock: LiveLocationServiceProtocol, @unchecked Sendable {
+    var userID: String {
+        get { return underlyingUserID }
+        set(value) { underlyingUserID = value }
+    }
+    nonisolated(unsafe) var underlyingUserID: String!
+    var actionsPublisher: AnyPublisher<LiveLocationServiceAction, Never> {
+        get { return underlyingActionsPublisher }
+        set(value) { underlyingActionsPublisher = value }
+    }
+    nonisolated(unsafe) var underlyingActionsPublisher: AnyPublisher<LiveLocationServiceAction, Never>!
+    var isSharingPublisher: CurrentValuePublisher<Bool, Never> {
+        get { return underlyingIsSharingPublisher }
+        set(value) { underlyingIsSharingPublisher = value }
+    }
+    nonisolated(unsafe) var underlyingIsSharingPublisher: CurrentValuePublisher<Bool, Never>!
     var authorizationStatus: CurrentValuePublisher<CLAuthorizationStatus, Never> {
         get { return underlyingAuthorizationStatus }
         set(value) { underlyingAuthorizationStatus = value }
@@ -8180,14 +8260,14 @@ nonisolated class LiveLocationManagerMock: LiveLocationManagerProtocol, @uncheck
     }
 
     private let startLiveLocationRoomIDDurationReturnValueLock = NSLock()
-    private nonisolated(unsafe) var startLiveLocationRoomIDDurationUnderlyingReturnValue: Result<Void, LiveLocationManagerError>!
-    var startLiveLocationRoomIDDurationReturnValue: Result<Void, LiveLocationManagerError>! {
+    private nonisolated(unsafe) var startLiveLocationRoomIDDurationUnderlyingReturnValue: Result<Void, LiveLocationServiceError>!
+    var startLiveLocationRoomIDDurationReturnValue: Result<Void, LiveLocationServiceError>! {
         get { startLiveLocationRoomIDDurationReturnValueLock.withLock { startLiveLocationRoomIDDurationUnderlyingReturnValue } }
         set { startLiveLocationRoomIDDurationReturnValueLock.withLock { startLiveLocationRoomIDDurationUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var startLiveLocationRoomIDDurationClosure: ((String, Duration) async -> Result<Void, LiveLocationManagerError>)?
+    nonisolated(unsafe) var startLiveLocationRoomIDDurationClosure: ((String, Duration) async -> Result<Void, LiveLocationServiceError>)?
 
-    @concurrent func startLiveLocation(roomID: String, duration: Duration) async -> Result<Void, LiveLocationManagerError> {
+    @concurrent func startLiveLocation(roomID: String, duration: Duration) async -> Result<Void, LiveLocationServiceError> {
         startLiveLocationRoomIDDurationCallsCountLock.withLock { startLiveLocationRoomIDDurationUnderlyingCallsCount += 1 }
         startLiveLocationRoomIDDurationReceivedArguments = (roomID: roomID, duration: duration)
         startLiveLocationRoomIDDurationReceivedInvocationsLock.withLock { startLiveLocationRoomIDDurationUnderlyingReceivedInvocations.append((roomID: roomID, duration: duration)) }
@@ -8227,6 +8307,85 @@ nonisolated class LiveLocationManagerMock: LiveLocationManagerProtocol, @uncheck
         stopLiveLocationRoomIDReceivedRoomID = roomID
         stopLiveLocationRoomIDReceivedInvocationsLock.withLock { stopLiveLocationRoomIDUnderlyingReceivedInvocations.append(roomID) }
         await stopLiveLocationRoomIDClosure?(roomID)
+    }
+    //MARK: - authorizationStatusChanged
+
+    private let authorizationStatusChangedToCallsCountLock = NSLock()
+    private nonisolated(unsafe) var authorizationStatusChangedToUnderlyingCallsCount = 0
+    var authorizationStatusChangedToCallsCount: Int {
+        get { authorizationStatusChangedToCallsCountLock.withLock { authorizationStatusChangedToUnderlyingCallsCount } }
+        set { authorizationStatusChangedToCallsCountLock.withLock { authorizationStatusChangedToUnderlyingCallsCount = newValue } }
+    }
+    var authorizationStatusChangedToCalled: Bool {
+        return authorizationStatusChangedToCallsCount > 0
+    }
+    private let authorizationStatusChangedToReceivedStatusLock = NSLock()
+    private nonisolated(unsafe) var authorizationStatusChangedToUnderlyingReceivedStatus: CLAuthorizationStatus?
+    var authorizationStatusChangedToReceivedStatus: CLAuthorizationStatus? {
+        get { authorizationStatusChangedToReceivedStatusLock.withLock { authorizationStatusChangedToUnderlyingReceivedStatus } }
+        set { authorizationStatusChangedToReceivedStatusLock.withLock { authorizationStatusChangedToUnderlyingReceivedStatus = newValue } }
+    }
+    private let authorizationStatusChangedToReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var authorizationStatusChangedToUnderlyingReceivedInvocations: [CLAuthorizationStatus] = []
+    var authorizationStatusChangedToReceivedInvocations: [CLAuthorizationStatus] {
+        get { authorizationStatusChangedToReceivedInvocationsLock.withLock { authorizationStatusChangedToUnderlyingReceivedInvocations } }
+        set { authorizationStatusChangedToReceivedInvocationsLock.withLock { authorizationStatusChangedToUnderlyingReceivedInvocations = newValue } }
+    }
+    nonisolated(unsafe) var authorizationStatusChangedToClosure: ((CLAuthorizationStatus) -> Void)?
+
+    func authorizationStatusChanged(to status: CLAuthorizationStatus) {
+        authorizationStatusChangedToCallsCountLock.withLock { authorizationStatusChangedToUnderlyingCallsCount += 1 }
+        authorizationStatusChangedToReceivedStatus = status
+        authorizationStatusChangedToReceivedInvocationsLock.withLock { authorizationStatusChangedToUnderlyingReceivedInvocations.append(status) }
+        authorizationStatusChangedToClosure?(status)
+    }
+    //MARK: - locationUpdated
+
+    private let locationUpdatedCallsCountLock = NSLock()
+    private nonisolated(unsafe) var locationUpdatedUnderlyingCallsCount = 0
+    var locationUpdatedCallsCount: Int {
+        get { locationUpdatedCallsCountLock.withLock { locationUpdatedUnderlyingCallsCount } }
+        set { locationUpdatedCallsCountLock.withLock { locationUpdatedUnderlyingCallsCount = newValue } }
+    }
+    var locationUpdatedCalled: Bool {
+        return locationUpdatedCallsCount > 0
+    }
+    private let locationUpdatedReceivedCoordinateLock = NSLock()
+    private nonisolated(unsafe) var locationUpdatedUnderlyingReceivedCoordinate: CLLocationCoordinate2D?
+    var locationUpdatedReceivedCoordinate: CLLocationCoordinate2D? {
+        get { locationUpdatedReceivedCoordinateLock.withLock { locationUpdatedUnderlyingReceivedCoordinate } }
+        set { locationUpdatedReceivedCoordinateLock.withLock { locationUpdatedUnderlyingReceivedCoordinate = newValue } }
+    }
+    private let locationUpdatedReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var locationUpdatedUnderlyingReceivedInvocations: [CLLocationCoordinate2D] = []
+    var locationUpdatedReceivedInvocations: [CLLocationCoordinate2D] {
+        get { locationUpdatedReceivedInvocationsLock.withLock { locationUpdatedUnderlyingReceivedInvocations } }
+        set { locationUpdatedReceivedInvocationsLock.withLock { locationUpdatedUnderlyingReceivedInvocations = newValue } }
+    }
+    nonisolated(unsafe) var locationUpdatedClosure: ((CLLocationCoordinate2D) -> Void)?
+
+    func locationUpdated(_ coordinate: CLLocationCoordinate2D) {
+        locationUpdatedCallsCountLock.withLock { locationUpdatedUnderlyingCallsCount += 1 }
+        locationUpdatedReceivedCoordinate = coordinate
+        locationUpdatedReceivedInvocationsLock.withLock { locationUpdatedUnderlyingReceivedInvocations.append(coordinate) }
+        locationUpdatedClosure?(coordinate)
+    }
+    //MARK: - stopAllLiveLocations
+
+    private let stopAllLiveLocationsCallsCountLock = NSLock()
+    private nonisolated(unsafe) var stopAllLiveLocationsUnderlyingCallsCount = 0
+    var stopAllLiveLocationsCallsCount: Int {
+        get { stopAllLiveLocationsCallsCountLock.withLock { stopAllLiveLocationsUnderlyingCallsCount } }
+        set { stopAllLiveLocationsCallsCountLock.withLock { stopAllLiveLocationsUnderlyingCallsCount = newValue } }
+    }
+    var stopAllLiveLocationsCalled: Bool {
+        return stopAllLiveLocationsCallsCount > 0
+    }
+    nonisolated(unsafe) var stopAllLiveLocationsClosure: (() async -> Void)?
+
+    @concurrent func stopAllLiveLocations() async {
+        stopAllLiveLocationsCallsCountLock.withLock { stopAllLiveLocationsUnderlyingCallsCount += 1 }
+        await stopAllLiveLocationsClosure?()
     }
 }
 nonisolated class MediaLoaderMock: MediaLoaderProtocol, @unchecked Sendable {
@@ -15302,11 +15461,11 @@ nonisolated class UserSessionMock: UserSessionProtocol, @unchecked Sendable {
         set(value) { underlyingVoiceMessageMediaManager = value }
     }
     nonisolated(unsafe) var underlyingVoiceMessageMediaManager: VoiceMessageMediaManagerProtocol!
-    var liveLocationManager: LiveLocationManagerProtocol {
-        get { return underlyingLiveLocationManager }
-        set(value) { underlyingLiveLocationManager = value }
+    var liveLocationService: LiveLocationServiceProtocol {
+        get { return underlyingLiveLocationService }
+        set(value) { underlyingLiveLocationService = value }
     }
-    nonisolated(unsafe) var underlyingLiveLocationManager: LiveLocationManagerProtocol!
+    nonisolated(unsafe) var underlyingLiveLocationService: LiveLocationServiceProtocol!
     nonisolated(unsafe) var contentScannerService: ContentScannerServiceProtocol?
     var notificationService: NotificationServiceProtocol {
         get { return underlyingNotificationService }

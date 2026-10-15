@@ -18,6 +18,7 @@ final class UserSessionManager: UserSessionManagerProtocol {
     private let userSessionStore: UserSessionStoreProtocol
     private let appSettings: AppSettings
     private let notificationManager: NotificationManagerProtocol
+    private let liveLocationManager: LiveLocationManagerProtocol
     
     private let sessionsSubject = CurrentValueSubject<[UserSessionProtocol], Never>([])
     /// Whether the services are running, so that the sessions restored meanwhile are resumed too.
@@ -69,10 +70,14 @@ final class UserSessionManager: UserSessionManagerProtocol {
         accounts.contains { userID, userSession in userSession != nil && !clearedUserIDs.contains(userID) }
     }
     
-    init(userSessionStore: UserSessionStoreProtocol, appSettings: AppSettings, notificationManager: NotificationManagerProtocol) {
+    init(userSessionStore: UserSessionStoreProtocol,
+         appSettings: AppSettings,
+         notificationManager: NotificationManagerProtocol,
+         liveLocationManager: LiveLocationManagerProtocol) {
         self.userSessionStore = userSessionStore
         self.appSettings = appSettings
         self.notificationManager = notificationManager
+        self.liveLocationManager = liveLocationManager
         
         let userIDs = userSessionStore.userIDs
             .map { (userID: $0, lastSelectedDate: appSettings.userSettings(for: $0).account.lastSelectedDate) }
@@ -142,6 +147,7 @@ final class UserSessionManager: UserSessionManagerProtocol {
         }
         
         notificationManager.add(userSession.notificationService)
+        liveLocationManager.add(userSession.liveLocationService)
     }
     
     func remove(userID: String) {
@@ -154,11 +160,13 @@ final class UserSessionManager: UserSessionManagerProtocol {
         clearedUserIDs.remove(userID)
         accounts.removeValue(forKey: userID)
         notificationManager.remove(userID: userID)
+        liveLocationManager.remove(userID: userID)
     }
     
     func reset() {
         for userID in accounts.keys {
             notificationManager.remove(userID: userID)
+            liveLocationManager.remove(userID: userID)
         }
         userSessionStore.reset()
         clearedUserIDs.removeAll()
@@ -211,6 +219,7 @@ final class UserSessionManager: UserSessionManagerProtocol {
             clearedUserIDs.remove(userID)
             accounts.removeValue(forKey: userID)
             notificationManager.remove(userID: userID)
+            liveLocationManager.remove(userID: userID)
             return nil
         }
     }

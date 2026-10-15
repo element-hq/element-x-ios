@@ -8,237 +8,168 @@
 import Combine
 import CoreLocation
 @testable import ElementX
-import Foundation
 import Testing
 
 @MainActor
 final class LiveLocationManagerTests {
-    private var clientProxy: ClientProxyMock!
     private var locationManagerMock: CLLocationManagerMock!
     private var manager: LiveLocationManager!
-    private var userSettings: UserSettings!
-    private var beaconInfoSubject: PassthroughSubject<LiveLocationOwnInfoUpdate, Never>!
     
-    // MARK: - startLiveLocation
+    // MARK: - Location updates
     
     @Test
-    func startLiveLocationWithNoExistingLocalSession() async throws {
+    func locationUpdatesRunWhileAnyAccountShares() {
         setUp()
-        let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
-        clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
+        let aliceSharing = CurrentValueSubject<Bool, Never>(false)
+        let bobSharing = CurrentValueSubject<Bool, Never>(false)
+        manager.add(makeService(userID: "@alice:matrix.org", isSharing: aliceSharing))
+        manager.add(makeService(userID: "@bob:matrix.org", isSharing: bobSharing))
+        #expect(!locationManagerMock.startUpdatingLocationCalled)
         
-        var callOrder: [String] = []
-        roomProxy.stopLiveLocationShareClosure = {
-            callOrder.append("stop")
-            return .success(())
-        }
-        roomProxy.startLiveLocationShareDurationClosure = { _ in
-            callOrder.append("start")
-            return .success("$event:matrix.org")
-        }
+        aliceSharing.send(true)
+        bobSharing.send(true)
+        #expect(locationManagerMock.startUpdatingLocationCallsCount == 1)
         
-        let result = await manager.startLiveLocation(roomID: "!room:matrix.org", duration: .seconds(300))
+        aliceSharing.send(false)
+        #expect(!locationManagerMock.stopUpdatingLocationCalled)
         
-        try result.get()
-        #expect(callOrder == ["stop", "start"])
-        #expect(userSettings.account.liveLocationSharingSessionsByRoomID["!room:matrix.org"] == nil)
-        
-        try await simulateBeaconEcho(roomID: "!room:matrix.org", eventID: "$event:matrix.org")
-        
-        #expect(userSettings.account.liveLocationSharingSessionsByRoomID["!room:matrix.org"] != nil)
-        #expect(locationManagerMock.startUpdatingLocationCalled)
+        bobSharing.send(false)
+        #expect(locationManagerMock.stopUpdatingLocationCallsCount == 1)
     }
     
     @Test
-    func startLiveLocationWithExistingSessionStopsItFirst() async throws {
+    func locationsReachOnlyTheSharingAccounts() {
         setUp()
-        let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
-        clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
-        userSettings.account.liveLocationSharingSessionsByRoomID["!room:matrix.org"] = LiveLocationSession(eventID: "$old_event:matrix.org", expirationDate: Date().addingTimeInterval(300))
+        let alice = makeService(userID: "@alice:matrix.org", isSharing: .init(true))
+        let bob = makeService(userID: "@bob:matrix.org")
+        manager.add(alice)
+        manager.add(bob)
         
-        var callOrder: [String] = []
-        roomProxy.stopLiveLocationShareClosure = {
-            callOrder.append("stop")
-            return .success(())
-        }
-        roomProxy.startLiveLocationShareDurationClosure = { _ in
-            callOrder.append("start")
-            return .success("$event:matrix.org")
-        }
+        manager.locationManager(CLLocationManager(), didUpdateLocations: [CLLocation(latitude: 51.5, longitude: -0.1)])
         
-        let result = await manager.startLiveLocation(roomID: "!room:matrix.org", duration: .seconds(600))
-        
-        try result.get()
-        #expect(callOrder == ["stop", "start"])
-        
-        try await simulateBeaconEcho(roomID: "!room:matrix.org", eventID: "$event:matrix.org")
-        
-        #expect(userSettings.account.liveLocationSharingSessionsByRoomID["!room:matrix.org"] != nil)
+        #expect(alice.locationUpdatedCallsCount == 1)
+        #expect(alice.locationUpdatedReceivedCoordinate?.latitude == 51.5)
+        #expect(!bob.locationUpdatedCalled)
     }
     
     @Test
-    func startLiveLocationDoesNotStopSessionForOtherRoom() async {
+    func anAccountThatStartsSharingGetsTheLatestLocation() {
         setUp()
-        let roomProxy = makeRoomProxy(roomID: "!room1:matrix.org")
-        clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
+        let bobSharing = CurrentValueSubject<Bool, Never>(false)
+        let bob = makeService(userID: "@bob:matrix.org", isSharing: bobSharing)
+        manager.add(makeService(userID: "@alice:matrix.org", isSharing: .init(true)))
+        manager.add(bob)
+        manager.locationManager(CLLocationManager(), didUpdateLocations: [CLLocation(latitude: 51.5, longitude: -0.1)])
         
-        userSettings.account.liveLocationSharingSessionsByRoomID["!room2:matrix.org"] = LiveLocationSession(eventID: "$event:matrix.org", expirationDate: Date().addingTimeInterval(300))
+        bobSharing.send(true)
         
-        _ = await manager.startLiveLocation(roomID: "!room1:matrix.org", duration: .seconds(300))
-        
-        #expect(roomProxy.stopLiveLocationShareCalled)
-        #expect(userSettings.account.liveLocationSharingSessionsByRoomID["!room2:matrix.org"] != nil)
+        #expect(bob.locationUpdatedCallsCount == 1)
+        #expect(bob.locationUpdatedReceivedCoordinate?.latitude == 51.5)
     }
     
     @Test
-    func startLiveLocationWhenRoomNotJoined() async {
+    func removingAnAccountOnlyStopsUpdatesWhenNoOtherAccountShares() {
         setUp()
-        clientProxy.roomForIdentifierClosure = { _ in nil }
+        manager.add(makeService(userID: "@alice:matrix.org", isSharing: .init(true)))
+        manager.add(makeService(userID: "@bob:matrix.org", isSharing: .init(true)))
         
-        let result = await manager.startLiveLocation(roomID: "!room:matrix.org", duration: .seconds(300))
+        manager.remove(userID: "@alice:matrix.org")
+        #expect(!locationManagerMock.stopUpdatingLocationCalled)
         
-        #expect(throws: LiveLocationManagerError.roomNotJoined) { try result.get() }
-        #expect(userSettings.account.liveLocationSharingSessionsByRoomID["!room:matrix.org"] == nil)
-    }
-    
-    @Test
-    func startLiveLocationWhenStartShareFails() async {
-        setUp()
-        let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
-        roomProxy.startLiveLocationShareDurationReturnValue = .failure(.sdkError(RoomProxyMockError.generic))
-        clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
-        
-        let result = await manager.startLiveLocation(roomID: "!room:matrix.org", duration: .seconds(300))
-        
-        #expect(throws: LiveLocationManagerError.startFailed) { try result.get() }
-        #expect(userSettings.account.liveLocationSharingSessionsByRoomID["!room:matrix.org"] == nil)
-    }
-    
-    @Test
-    func startLiveLocationStoresTimeoutDate() async throws {
-        setUp()
-        let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
-        clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
-        
-        let duration = Duration.seconds(300)
-        let beforeStart = Date()
-        _ = await manager.startLiveLocation(roomID: "!room:matrix.org", duration: duration)
-        let afterStart = Date()
-        
-        try await simulateBeaconEcho(roomID: "!room:matrix.org", eventID: "$event:matrix.org")
-        
-        let storedSession = try #require(userSettings.account.liveLocationSharingSessionsByRoomID["!room:matrix.org"])
-        let expectedMinTimeout = beforeStart.addingTimeInterval(TimeInterval(duration.seconds))
-        let expectedMaxTimeout = afterStart.addingTimeInterval(TimeInterval(duration.seconds))
-        
-        #expect((expectedMinTimeout...expectedMaxTimeout).contains(storedSession.expirationDate))
-        #expect(storedSession.eventID == "$event:matrix.org")
-    }
-    
-    // MARK: - stopLiveLocation
-    
-    @Test
-    func stopLiveLocationWhenSessionExists() async {
-        setUp()
-        let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
-        clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
-        userSettings.account.liveLocationSharingSessionsByRoomID["!room:matrix.org"] = LiveLocationSession(eventID: "$event:matrix.org", expirationDate: Date().addingTimeInterval(300))
-        
-        await manager.stopLiveLocation(roomID: "!room:matrix.org")
-        
-        #expect(roomProxy.stopLiveLocationShareCalled)
-        #expect(userSettings.account.liveLocationSharingSessionsByRoomID["!room:matrix.org"] == nil)
-        // Setting the timeout date above starts tracking; removing it stops tracking.
-        #expect(locationManagerMock.startUpdatingLocationCalled)
+        manager.remove(userID: "@bob:matrix.org")
         #expect(locationManagerMock.stopUpdatingLocationCalled)
     }
     
     @Test
-    func stopLiveLocationWhenNoSession() async {
+    func addingAnAccountAgainReplacesItsService() {
         setUp()
-        let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
-        clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
+        // E.g. after clearing the cache, the new session's service replaces the old one.
+        let oldAlice = makeService(userID: "@alice:matrix.org", isSharing: .init(true))
+        let newAlice = makeService(userID: "@alice:matrix.org", isSharing: .init(true))
+        manager.add(oldAlice)
+        manager.add(newAlice)
         
-        await manager.stopLiveLocation(roomID: "!room:matrix.org")
+        manager.locationManager(CLLocationManager(), didUpdateLocations: [CLLocation(latitude: 51.5, longitude: -0.1)])
         
-        #expect(roomProxy.stopLiveLocationShareCalled)
+        #expect(!oldAlice.locationUpdatedCalled)
+        #expect(newAlice.locationUpdatedCallsCount == 1)
+        #expect(!locationManagerMock.stopUpdatingLocationCalled)
     }
     
     @Test
-    func stopLiveLocationDoesNotRemoveOtherSessions() async {
-        setUp()
-        let roomProxy = makeRoomProxy(roomID: "!room1:matrix.org")
-        clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
-        userSettings.account.liveLocationSharingSessionsByRoomID["!room1:matrix.org"] = LiveLocationSession(eventID: "$event:matrix.org", expirationDate: Date().addingTimeInterval(300))
-        userSettings.account.liveLocationSharingSessionsByRoomID["!room2:matrix.org"] = LiveLocationSession(eventID: "$event:matrix.org", expirationDate: Date().addingTimeInterval(300))
-        
-        await manager.stopLiveLocation(roomID: "!room1:matrix.org")
-        
-        #expect(userSettings.account.liveLocationSharingSessionsByRoomID["!room1:matrix.org"] == nil)
-        #expect(userSettings.account.liveLocationSharingSessionsByRoomID["!room2:matrix.org"] != nil)
-    }
-    
-    // MARK: - Beacon info updates
-    
-    @Test
-    func beaconInfoUpdateFromAnotherDeviceRemovesActiveSession() async throws {
-        setUp()
-        let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
-        clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
-        
-        try await manager.startLiveLocation(roomID: "!room:matrix.org", duration: .seconds(300)).get()
-        try await simulateBeaconEcho(roomID: "!room:matrix.org", eventID: "$event:matrix.org")
-        #expect(userSettings.account.liveLocationSharingSessionsByRoomID["!room:matrix.org"] != nil)
-        
-        let deferred = deferFulfillment(userSettings.account.liveLocationSharingSessionsByRoomIDPublisher) { $0["!room:matrix.org"] == nil }
-        beaconInfoSubject.send(LiveLocationOwnInfoUpdate(roomID: "!room:matrix.org", eventID: "$external_event:matrix.org", isLive: true))
-        try await deferred.fulfill()
-        
-        #expect(userSettings.account.liveLocationSharingSessionsByRoomID["!room:matrix.org"] == nil)
-    }
-    
-    // MARK: - Reduced accuracy
-    
-    @Test
-    func startLiveLocationInReducedAccuracyMode() async throws {
+    func reducedAccuracyAuthorizationUsesReducedAccuracy() {
         setUp(accuracyAuthorization: .reducedAccuracy)
-        let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
-        clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
         
-        let result = await manager.startLiveLocation(roomID: "!room:matrix.org", duration: .seconds(300))
-        try result.get()
-        
-        try await simulateBeaconEcho(roomID: "!room:matrix.org", eventID: "$event:matrix.org")
-        
-        #expect(locationManagerMock.startUpdatingLocationCalled)
         #expect(locationManagerMock.desiredAccuracy == kCLLocationAccuracyReduced)
+    }
+    
+    // MARK: - Authorization
+    
+    @Test
+    func addingAnAccountSharesTheAuthorizationStatus() {
+        setUp(authorizationStatus: .authorizedAlways)
+        let alice = makeService(userID: "@alice:matrix.org")
         
-        await manager.stopLiveLocation(roomID: "!room:matrix.org")
+        manager.add(alice)
         
-        #expect(locationManagerMock.stopUpdatingLocationCalled)
+        #expect(alice.authorizationStatusChangedToReceivedStatus == .authorizedAlways)
+    }
+    
+    @Test
+    func addingAnAccountWithoutAlwaysAuthorizationStopsItsShares() async {
+        setUp(authorizationStatus: .authorizedWhenInUse)
+        let alice = makeService(userID: "@alice:matrix.org", isSharing: .init(true))
+        
+        await waitForConfirmation("Wait for the shares to stop") { confirm in
+            alice.stopAllLiveLocationsClosure = { confirm() }
+            manager.add(alice)
+        }
+    }
+    
+    @Test
+    func losingAlwaysAuthorizationStopsEveryAccountsShares() async {
+        setUp(authorizationStatus: .authorizedAlways)
+        let alice = makeService(userID: "@alice:matrix.org", isSharing: .init(true))
+        let bob = makeService(userID: "@bob:matrix.org", isSharing: .init(true))
+        manager.add(alice)
+        manager.add(bob)
+        
+        locationManagerMock.authorizationStatus = .denied
+        await waitForConfirmation("Wait for the shares to stop", expectedCount: 2) { confirm in
+            alice.stopAllLiveLocationsClosure = { confirm() }
+            bob.stopAllLiveLocationsClosure = { confirm() }
+            manager.locationManagerDidChangeAuthorization(CLLocationManager())
+        }
+        
+        #expect(alice.authorizationStatusChangedToReceivedStatus == .denied)
+        #expect(bob.authorizationStatusChangedToReceivedStatus == .denied)
+    }
+    
+    @Test
+    func requestingAlwaysAuthorizationAsksTheLocationManager() {
+        setUp()
+        let actions = PassthroughSubject<LiveLocationServiceAction, Never>()
+        manager.add(makeService(userID: "@alice:matrix.org", actions: actions))
+        
+        actions.send(.requestAlwaysAuthorization)
+        
+        #expect(locationManagerMock.requestAlwaysAuthorizationCalled)
     }
     
     // MARK: - Private
     
-    private func makeRoomProxy(roomID: String) -> JoinedRoomProxyMock {
-        let roomProxy = JoinedRoomProxyMock(.init(id: roomID))
-        roomProxy.startLiveLocationShareDurationReturnValue = .success("$event:matrix.org")
-        roomProxy.stopLiveLocationShareReturnValue = .success(())
-        return roomProxy
+    private func setUp(authorizationStatus: CLAuthorizationStatus = .authorizedAlways,
+                       accuracyAuthorization: CLAccuracyAuthorization = .fullAccuracy) {
+        locationManagerMock = CLLocationManagerMock(.init(authorizationStatus: authorizationStatus, accuracyAuthorization: accuracyAuthorization))
+        manager = LiveLocationManager(appSettings: AppSettings.volatile(), locationManager: locationManagerMock)
     }
     
-    private func setUp(accuracyAuthorization: CLAccuracyAuthorization = .fullAccuracy) {
-        userSettings = UserSettings.mock()
-        clientProxy = ClientProxyMock(.init())
-        beaconInfoSubject = PassthroughSubject<LiveLocationOwnInfoUpdate, Never>()
-        clientProxy.liveLocationOwnInfoUpdatesPublisher = beaconInfoSubject.eraseToAnyPublisher()
-        locationManagerMock = CLLocationManagerMock(.init(accuracyAuthorization: accuracyAuthorization))
-        manager = LiveLocationManager(clientProxy: clientProxy, userSettings: userSettings, locationManager: locationManagerMock)
-    }
-    
-    private func simulateBeaconEcho(roomID: String, eventID: String) async throws {
-        let deferred = deferFulfillment(userSettings.account.liveLocationSharingSessionsByRoomIDPublisher) { $0[roomID] != nil }
-        beaconInfoSubject.send(LiveLocationOwnInfoUpdate(roomID: roomID, eventID: eventID, isLive: true))
-        try await deferred.fulfill()
+    private func makeService(userID: String,
+                             isSharing: CurrentValueSubject<Bool, Never> = .init(false),
+                             actions: PassthroughSubject<LiveLocationServiceAction, Never> = .init()) -> LiveLocationServiceMock {
+        let service = LiveLocationServiceMock(.init(userID: userID))
+        service.isSharingPublisher = isSharing.asCurrentValuePublisher()
+        service.actionsPublisher = actions.eraseToAnyPublisher()
+        return service
     }
 }

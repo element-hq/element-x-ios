@@ -119,10 +119,7 @@ class UserSessionStore: UserSessionStoreProtocol {
         
         let voiceMessageMediaManager = VoiceMessageMediaManager(mediaProvider: mediaProvider)
         
-        let liveLocationManager = await MainActor.run {
-            LiveLocationManager(clientProxy: clientProxy,
-                                userSettings: userSettings)
-        }
+        let liveLocationService = LiveLocationService(clientProxy: clientProxy, userSettings: userSettings)
         
         let notificationService = NotificationService(clientProxy: clientProxy, userSettings: userSettings)
         
@@ -131,7 +128,7 @@ class UserSessionStore: UserSessionStoreProtocol {
                            userHooks: appHooks.userSessionHook.makeUserHooks(for: clientProxy),
                            mediaProvider: mediaProvider,
                            voiceMessageMediaManager: voiceMessageMediaManager,
-                           liveLocationManager: liveLocationManager,
+                           liveLocationService: liveLocationService,
                            notificationService: notificationService)
     }
     
