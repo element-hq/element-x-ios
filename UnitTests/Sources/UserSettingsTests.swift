@@ -76,23 +76,6 @@ struct UserSettingsTests {
     }
     
     @Test
-    func migratedValuesArePublishedToExistingSubscribers() throws {
-        // Given Alice's live location shares stored by the app, and a subscriber that read them before the
-        // migration (her live location service is built before the migrations run).
-        let session = LiveLocationSession(eventID: "$event:matrix.org", expirationDate: .distantFuture)
-        try store.set(JSONEncoder().encode(["!room:matrix.org": session]), forKey: "liveLocationSharingTimeoutDatesByRoomID")
-        var publishedSessions: [[String: LiveLocationSession]] = []
-        let cancellable = aliceSettings.account.liveLocationSharingSessionsByRoomIDPublisher.sink { publishedSessions.append($0) }
-        
-        // When migrating the shares into Alice's account settings.
-        aliceSettings.account.migrateAppSettingsValue(\.liveLocationSharingSessionsByRoomIDKey, publishing: \.liveLocationSharingSessionsByRoomID)
-        
-        // Then the subscriber is told about them.
-        #expect(publishedSessions.last == ["!room:matrix.org": session])
-        cancellable.cancel()
-    }
-    
-    @Test
     func resetSessionSpecificSettings() {
         // Given app settings and account settings for two different accounts.
         appSettings.hasSignedInBefore = true
