@@ -2044,8 +2044,18 @@ internal nonisolated enum L10n {
   internal static var screenEncryptionResetBullet2: String { return L10n.tr("Localizable", "screen_encryption_reset_bullet_2") }
   /// Other users will see that your digital identity has been reset
   internal static var screenEncryptionResetBullet3: String { return L10n.tr("Localizable", "screen_encryption_reset_bullet_3") }
+  /// Any devices you’re signed in to will need to be reconfirmed
+  internal static var screenEncryptionResetBullet4: String { return L10n.tr("Localizable", "screen_encryption_reset_bullet_4") }
   /// Only reset your digital identity if you don't have access to another verified device and you don't have your recovery key.
   internal static var screenEncryptionResetFooter: String { return L10n.tr("Localizable", "screen_encryption_reset_footer") }
+  /// It looks like you don’t have any chats yet. If this is correct, you can safely proceed with resetting your digital identity
+  internal static var screenEncryptionResetNoChatsMessage: String { return L10n.tr("Localizable", "screen_encryption_reset_no_chats_message") }
+  /// You don’t have access to any other verified devices or a recovery key, so you’ll need to reset your digital identity to continue using the app.
+  internal static var screenEncryptionResetNoOptionsSubtitle: String { return L10n.tr("Localizable", "screen_encryption_reset_no_options_subtitle") }
+  /// You need to reset your digital identity
+  internal static var screenEncryptionResetNoOptionsTitle: String { return L10n.tr("Localizable", "screen_encryption_reset_no_options_title") }
+  /// If you don’t have access to any other verified devices and you don’t have your recovery key, then you’ll need to reset your digital identity to continue using the app.
+  internal static var screenEncryptionResetSubtitle: String { return L10n.tr("Localizable", "screen_encryption_reset_subtitle") }
   /// Can't confirm? You’ll need to reset your digital identity.
   internal static var screenEncryptionResetTitle: String { return L10n.tr("Localizable", "screen_encryption_reset_title") }
   /// Chats
@@ -2056,6 +2066,8 @@ internal nonisolated enum L10n {
   internal static var screenIdentityConfirmationCannotConfirm: String { return L10n.tr("Localizable", "screen_identity_confirmation_cannot_confirm") }
   /// Create a new recovery key
   internal static var screenIdentityConfirmationCreateNewRecoveryKey: String { return L10n.tr("Localizable", "screen_identity_confirmation_create_new_recovery_key") }
+  /// Sign out
+  internal static var screenIdentityConfirmationSignOut: String { return L10n.tr("Localizable", "screen_identity_confirmation_sign_out") }
   /// Choose how to verify to set up secure messaging.
   internal static var screenIdentityConfirmationSubtitle: String { return L10n.tr("Localizable", "screen_identity_confirmation_subtitle") }
   /// Confirm your digital identity

@@ -20,8 +20,8 @@ enum IdentityConfirmationScreenCoordinatorAction {
     case recoveryKey
     /// Only possible in debug builds.
     case skip
-    case reset
-    case logoutConfirmed
+    case reset(hasConfirmationOptions: Bool)
+    case logoutWithoutConfirmation
 }
 
 final class IdentityConfirmationScreenCoordinator: CoordinatorProtocol {
@@ -52,10 +52,10 @@ final class IdentityConfirmationScreenCoordinator: CoordinatorProtocol {
                 actionsSubject.send(.recoveryKey)
             case .skip:
                 actionsSubject.send(.skip)
-            case .reset:
-                actionsSubject.send(.reset)
-            case .logoutConfirmed:
-                actionsSubject.send(.logoutConfirmed)
+            case .reset(let hasConfirmationOptions):
+                actionsSubject.send(.reset(hasConfirmationOptions: hasConfirmationOptions))
+            case .logoutWithoutConfirmation:
+                actionsSubject.send(.logoutWithoutConfirmation)
             }
         }
         .store(in: &cancellables)

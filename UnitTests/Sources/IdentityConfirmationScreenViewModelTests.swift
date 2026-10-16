@@ -19,17 +19,11 @@ struct IdentityConfirmationScreenViewModelTests {
     }
     
     @Test
-    mutating func logoutShowsConfirmation() async throws {
+    mutating func logoutSignsOutWithoutConfirmation() async throws {
         setupViewModel()
         
-        #expect(context.alertInfo == nil)
-        
+        let deferred = deferFulfillment(viewModel.actionsPublisher) { $0 == .logoutWithoutConfirmation }
         context.send(viewAction: .logout)
-        
-        let alertInfo = try #require(context.alertInfo)
-        
-        let deferred = deferFulfillment(viewModel.actionsPublisher) { $0 == .logoutConfirmed }
-        alertInfo.primaryButton.action?()
         try await deferred.fulfill()
     }
     
@@ -95,6 +89,34 @@ struct IdentityConfirmationScreenViewModelTests {
         try await deferred.fulfill()
         
         #expect(context.viewState.availableActions == nil)
+    }
+    
+    // MARK: - Reset
+    
+    @Test
+    mutating func resetWithoutOptions() async throws {
+        setupViewModel(hasDevicesToVerifyAgainst: false)
+        
+        let loaded = deferFulfillment(context.observe(\.viewState.availableActions)) { $0 != nil }
+        securityStateSubject.send(.init(verificationState: .unverified, recoveryState: .disabled))
+        try await loaded.fulfill()
+        
+        let deferred = deferFulfillment(viewModel.actionsPublisher) { $0 == .reset(hasConfirmationOptions: false) }
+        context.send(viewAction: .reset)
+        try await deferred.fulfill()
+    }
+    
+    @Test
+    mutating func resetWithOptions() async throws {
+        setupViewModel(hasDevicesToVerifyAgainst: true)
+        
+        let loaded = deferFulfillment(context.observe(\.viewState.availableActions)) { $0 != nil }
+        securityStateSubject.send(.init(verificationState: .unverified, recoveryState: .enabled))
+        try await loaded.fulfill()
+        
+        let deferred = deferFulfillment(viewModel.actionsPublisher) { $0 == .reset(hasConfirmationOptions: true) }
+        context.send(viewAction: .reset)
+        try await deferred.fulfill()
     }
     
     // MARK: - Private
