@@ -664,24 +664,50 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentSecureBackupLogoutConfirmationScreen(mode: SecureBackupLogoutConfirmationScreenViewMode) {
+        let sheetNavigationStackCoordinator = NavigationStackCoordinator()
         let coordinator = SecureBackupLogoutConfirmationScreenCoordinator(parameters: .init(secureBackupController: userSession.clientProxy.secureBackupController,
                                                                                             homeserverReachabilityPublisher: userSession.clientProxy.homeserverReachabilityPublisher,
                                                                                             learnMoreURL: userSession.userSettings.app.encryptionURL,
                                                                                             mode: mode))
         
         coordinator.actions
-            .sink { [weak self] action in
-                guard let self else { return }
+            .sink { [weak self, weak coordinator, weak sheetNavigationStackCoordinator] action in
+                guard let self, let coordinator, let sheetNavigationStackCoordinator else { return }
                 
                 switch action {
                 case .cancel:
                     navigationTabCoordinator.setSheetCoordinator(nil)
+                case .generateRecoveryKey:
+                    presentRecoveryKeyScreen(on: sheetNavigationStackCoordinator, confirmationCoordinator: coordinator)
                 case .logout:
                     actionsSubject.send(.logout)
                 }
             }
             .store(in: &cancellables)
         
-        navigationTabCoordinator.setSheetCoordinator(coordinator, animated: true)
+        sheetNavigationStackCoordinator.setRootCoordinator(coordinator)
+        navigationTabCoordinator.setSheetCoordinator(sheetNavigationStackCoordinator, animated: true)
+    }
+    
+    /// Takes the user through generating a new recovery key, and then carries on removing the device.
+    private func presentRecoveryKeyScreen(on navigationStackCoordinator: NavigationStackCoordinator,
+                                          confirmationCoordinator: SecureBackupLogoutConfirmationScreenCoordinator) {
+        let parameters = SecureBackupRecoveryKeyScreenCoordinatorParameters(secureBackupController: userSession.clientProxy.secureBackupController,
+                                                                            userIndicatorController: flowParameters.userIndicatorController,
+                                                                            isModallyPresented: false,
+                                                                            completionButtonTitle: L10n.screenSignoutSaveRecoveryKeyActionContinue)
+        let coordinator = userSession.userHooks.recoveryKeyScreenHook.makeCoordinator(parameters: parameters)
+        
+        coordinator.actions
+            .sink { [weak navigationStackCoordinator, weak confirmationCoordinator] action in
+                switch action {
+                case .complete:
+                    navigationStackCoordinator?.popToRoot(animated: true)
+                    confirmationCoordinator?.continueRemovalWithNewRecoveryKey()
+                }
+            }
+            .store(in: &cancellables)
+        
+        navigationStackCoordinator.push(coordinator)
     }
 }
