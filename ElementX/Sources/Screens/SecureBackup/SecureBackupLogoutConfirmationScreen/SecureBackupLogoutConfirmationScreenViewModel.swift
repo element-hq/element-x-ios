@@ -27,16 +27,19 @@ class SecureBackupLogoutConfirmationScreenViewModel: SecureBackupLogoutConfirmat
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(secureBackupController: SecureBackupControllerProtocol, homeserverReachabilityPublisher: CurrentValuePublisher<HomeserverReachability, Never>) {
+    init(secureBackupController: SecureBackupControllerProtocol,
+         homeserverReachabilityPublisher: CurrentValuePublisher<HomeserverReachability, Never>,
+         learnMoreURL: URL,
+         mode: SecureBackupLogoutConfirmationScreenViewMode = .saveRecoveryKey) {
         self.secureBackupController = secureBackupController
         self.homeserverReachabilityPublisher = homeserverReachabilityPublisher
         
-        super.init(initialViewState: .init(mode: .saveRecoveryKey))
+        super.init(initialViewState: .init(learnMoreURL: learnMoreURL, mode: mode))
         
         backupUploadStateSubject.combineLatest(homeserverReachabilityPublisher)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] backupState, reachability in
-                guard let self, state.mode != .saveRecoveryKey else { return }
+                guard let self, !state.mode.isInitial else { return }
                 updateMode(backupState: backupState, reachability: reachability)
             }
             .store(in: &cancellables)
@@ -51,8 +54,6 @@ class SecureBackupLogoutConfirmationScreenViewModel: SecureBackupLogoutConfirmat
         case .cancel:
             keyUploadWaitingTask = nil
             actionsSubject.send(.cancel)
-        case .settings:
-            actionsSubject.send(.settings)
         case .logout:
             attemptLogout()
         }

@@ -10,18 +10,26 @@ import Foundation
 
 enum SecureBackupLogoutConfirmationScreenViewModelAction {
     case cancel
-    case settings
     case logout
 }
 
 nonisolated enum SecureBackupLogoutConfirmationScreenViewMode: Equatable {
+    /// The user has a recovery key but this is their only verified device.
     case saveRecoveryKey
+    /// The user has no recovery key and this is their only verified device.
+    case noRecovery
     case waitingToStart(hasStalled: Bool)
     case backupOngoing(progress: Double)
     case offline
+    
+    /// Whether the user is still being asked about removing the device, as opposed to the removal being underway.
+    var isInitial: Bool {
+        self == .saveRecoveryKey || self == .noRecovery
+    }
 }
 
 struct SecureBackupLogoutConfirmationScreenViewState: BindableState {
+    let learnMoreURL: URL
     var mode: SecureBackupLogoutConfirmationScreenViewMode
     var bindings = SecureBackupLogoutConfirmationScreenBindings()
 }
@@ -36,6 +44,5 @@ enum SecureBackupLogoutConfirmationScreenAlertType {
 
 enum SecureBackupLogoutConfirmationScreenViewAction {
     case cancel
-    case settings
     case logout
 }
