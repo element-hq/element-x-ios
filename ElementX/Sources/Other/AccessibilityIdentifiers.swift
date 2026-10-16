@@ -239,6 +239,7 @@ enum A11yIdentifiers {
         let generateRecoveryKey = "secure_backup_recovery_key-generate_recovery_key"
         let copyRecoveryKey = "secure_backup_recovery_key-copy_recovery_key"
         let done = "secure_backup_recovery_key-done"
+        let finish = "secure_backup_recovery_key-finish"
         let recoveryKeyField = "secure_backup_recovery_key-recovery_key_field"
         let confirm = "secure_backup_recovery_key-confirm"
     }
