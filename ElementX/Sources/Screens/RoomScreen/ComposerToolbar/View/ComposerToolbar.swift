@@ -379,16 +379,15 @@ struct ComposerToolbarButtonStyle: ButtonStyle {
 }
 
 private extension View {
-    /// Wraps the voice message composer in the same box as the text composer when recording a reply.
-    @ViewBuilder
+    /// Wraps the voice message composer in the same box as the text composer, with the reply header when replying.
     func voiceMessageReplyHeader(context: ComposerToolbarViewModel.Context) -> some View {
+        var header: MessageComposerReplyHeader?
         if case let .reply(_, replyDetails, _) = context.viewState.voiceMessageReplyMode {
-            messageComposerStyle(header: MessageComposerReplyHeader(replyDetails: replyDetails) {
+            header = MessageComposerReplyHeader(replyDetails: replyDetails) {
                 context.send(viewAction: .cancelReply)
-            })
-        } else {
-            self
+            }
         }
+        return messageComposerStyle(header: header, padsContent: false)
     }
 }
 
