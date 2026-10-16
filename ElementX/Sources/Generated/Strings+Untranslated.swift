@@ -10,6 +10,12 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 internal nonisolated enum UntranslatedL10n {
+  /// Make sure you always have access to another verified device or your recovery key to avoid losing your encrypted chat history.
+  internal static var screenSignoutOtherVerifiedDeviceDialogContent: String { return UntranslatedL10n.tr("Untranslated", "screen_signout_other_verified_device_dialog_content") }
+  /// Are you sure you want to remove this device?
+  internal static var screenSignoutOtherVerifiedDeviceDialogTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_signout_other_verified_device_dialog_title") }
+  /// Continue to remove this device
+  internal static var screenSignoutSaveRecoveryKeyActionContinue: String { return UntranslatedL10n.tr("Untranslated", "screen_signout_save_recovery_key_action_continue") }
   /// Clear all data currently stored on this device?
   /// Sign in again to access your account data and messages.
   internal static var softLogoutClearDataDialogContent: String { return UntranslatedL10n.tr("Untranslated", "soft_logout_clear_data_dialog_content") }
