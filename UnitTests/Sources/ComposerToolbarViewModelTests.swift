@@ -1012,6 +1012,27 @@ final class ComposerToolbarViewModelTests {
         #expect(viewModel.state.composerMode == recordMode)
     }
     
+    @Test
+    func saveDraftWhileRecordingVoiceMessageKeepsReply() async throws {
+        viewModel.context.composerFormattingEnabled = false
+        viewModel.process(timelineAction: .setMode(mode: replyMode))
+        viewModel.process(timelineAction: .setMode(mode: .recordVoiceMessage(state: AudioRecorderState())))
+        
+        var capturedDraft: ComposerDraftProxy?
+        await waitForConfirmation("Save draft") { confirmation in
+            draftServiceMock.saveDraftClosure = { draft in
+                capturedDraft = draft
+                confirmation()
+                return .success(())
+            }
+            viewModel.saveDraft()
+        }
+        
+        let draft = try #require(capturedDraft)
+        #expect(draft.draftType == .reply(eventID: "testID"))
+        #expect(!draftServiceMock.clearDraftCalled)
+    }
+    
     // MARK: - Helpers
     
     private let replyMode = ComposerMode.reply(eventID: "testID",
