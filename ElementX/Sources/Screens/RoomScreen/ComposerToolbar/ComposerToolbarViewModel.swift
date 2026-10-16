@@ -368,9 +368,11 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         let plainText: String
         let htmlText: String?
         let type: ComposerDraftProxy.ComposerDraftType
+        // Keep the reply of a voice message being recorded.
+        let composerMode = state.voiceMessageReplyMode ?? state.composerMode
         
         if context.composerFormattingEnabled {
-            if wysiwygViewModel.isContentEmpty, state.composerMode == .default {
+            if wysiwygViewModel.isContentEmpty, composerMode == .default {
                 if isVolatile {
                     draftService.clearVolatileDraft()
                 } else {
@@ -383,7 +385,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             plainText = wysiwygViewModel.content.markdown
             htmlText = wysiwygViewModel.content.html
         } else {
-            if context.plainComposerText.string.isEmpty, state.composerMode == .default {
+            if context.plainComposerText.string.isEmpty, composerMode == .default {
                 if isVolatile {
                     draftService.clearVolatileDraft()
                 } else {
@@ -397,7 +399,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             htmlText = nil
         }
         
-        switch state.composerMode {
+        switch composerMode {
         case .default:
             type = .newMessage
         case .edit(.eventID(let originalEventID), .default):
