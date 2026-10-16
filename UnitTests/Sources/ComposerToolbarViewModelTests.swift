@@ -977,6 +977,17 @@ final class ComposerToolbarViewModelTests {
         #expect(viewModel.state.voiceMessageReplyMode == nil)
     }
     
+    @Test
+    func discardingVoiceMessageDoesNotFocusComposer() {
+        viewModel.process(timelineAction: .setMode(mode: replyMode))
+        viewModel.process(timelineAction: .setMode(mode: .recordVoiceMessage(state: AudioRecorderState())))
+        viewModel.context.composerFocused = false
+        
+        viewModel.process(timelineAction: .setMode(mode: .default))
+        #expect(viewModel.state.composerMode == replyMode)
+        #expect(!viewModel.context.composerFocused)
+    }
+    
     // MARK: - Helpers
     
     private let replyMode = ComposerMode.reply(eventID: "testID",
