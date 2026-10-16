@@ -142,6 +142,7 @@ protocol TimelineProxyProtocol: Sendable {
     func sendVoiceMessage(url: URL,
                           audioInfo: AudioInfo,
                           waveform: [Float],
+                          inReplyToEventID: String?,
                           requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>
     
     func sendGallery(itemInfos: [GalleryItemInfo],

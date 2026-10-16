@@ -901,7 +901,151 @@ final class ComposerToolbarViewModelTests {
         try await deferred.fulfill()
     }
     
+    // MARK: - Voice message replies
+    
+    @Test
+    func voiceMessageIsSentAsReply() {
+        viewModel.process(timelineAction: .setMode(mode: replyMode))
+        viewModel.process(timelineAction: .setMode(mode: .recordVoiceMessage(state: AudioRecorderState())))
+        viewModel.process(timelineAction: .setMode(mode: voicePreviewMode(isUploading: false)))
+        
+        var sentReplyEventID: String?
+        viewModel.actions
+            .sink { action in
+                if case .voiceMessage(.send(let inReplyToEventID)) = action {
+                    sentReplyEventID = inReplyToEventID
+                }
+            }
+            .store(in: &cancellables)
+        viewModel.process(viewAction: .sendMessage)
+        
+        #expect(sentReplyEventID == "testID")
+    }
+    
+    @Test
+    func discardingVoiceMessageRestoresReply() {
+        viewModel.process(timelineAction: .setMode(mode: replyMode))
+        viewModel.process(timelineAction: .setMode(mode: .recordVoiceMessage(state: AudioRecorderState())))
+        #expect(viewModel.state.voiceMessageReplyMode == replyMode)
+        
+        viewModel.process(timelineAction: .setMode(mode: .default))
+        #expect(viewModel.state.composerMode == replyMode)
+        #expect(viewModel.state.voiceMessageReplyMode == nil)
+    }
+    
+    @Test
+    func sendingVoiceMessageClearsReply() {
+        viewModel.process(timelineAction: .setMode(mode: replyMode))
+        viewModel.process(timelineAction: .setMode(mode: .recordVoiceMessage(state: AudioRecorderState())))
+        viewModel.process(timelineAction: .setMode(mode: voicePreviewMode(isUploading: true)))
+        
+        viewModel.process(timelineAction: .setMode(mode: .default))
+        #expect(viewModel.state.composerMode == .default)
+        #expect(viewModel.state.voiceMessageReplyMode == nil)
+    }
+    
+    @Test
+    func cancellingReplyKeepsVoiceMessage() {
+        viewModel.process(timelineAction: .setMode(mode: replyMode))
+        let recordMode = ComposerMode.recordVoiceMessage(state: AudioRecorderState())
+        viewModel.process(timelineAction: .setMode(mode: recordMode))
+        
+        viewModel.process(viewAction: .cancelReply)
+        #expect(viewModel.state.composerMode == recordMode)
+        #expect(viewModel.state.voiceMessageReplyMode == nil)
+    }
+    
+    @Test
+    func replyingToAnotherMessageKeepsVoiceMessage() {
+        viewModel.process(timelineAction: .setMode(mode: replyMode))
+        viewModel.process(timelineAction: .setMode(mode: .recordVoiceMessage(state: AudioRecorderState())))
+        let previewMode = voicePreviewMode(isUploading: false)
+        viewModel.process(timelineAction: .setMode(mode: previewMode))
+        
+        let otherReplyMode = ComposerMode.reply(eventID: "otherID", replyDetails: .loading(eventID: "otherID"), isThread: false)
+        viewModel.process(timelineAction: .setMode(mode: otherReplyMode))
+        #expect(viewModel.state.composerMode == previewMode)
+        #expect(viewModel.state.voiceMessageReplyMode == otherReplyMode)
+    }
+    
+    @Test
+    func editingWhileComposingVoiceMessageDropsStoredReply() {
+        viewModel.process(timelineAction: .setMode(mode: replyMode))
+        viewModel.process(timelineAction: .setMode(mode: .recordVoiceMessage(state: AudioRecorderState())))
+        
+        viewModel.process(timelineAction: .setMode(mode: .edit(originalEventOrTransactionID: .eventID("editID"), type: .default)))
+        #expect(viewModel.state.voiceMessageReplyMode == nil)
+    }
+    
+    @Test
+    func discardingVoiceMessageDoesNotFocusComposer() {
+        viewModel.process(timelineAction: .setMode(mode: replyMode))
+        viewModel.process(timelineAction: .setMode(mode: .recordVoiceMessage(state: AudioRecorderState())))
+        viewModel.context.composerFocused = false
+        
+        viewModel.process(timelineAction: .setMode(mode: .default))
+        #expect(viewModel.state.composerMode == replyMode)
+        #expect(!viewModel.context.composerFocused)
+    }
+    
+    @Test
+    func loadingReplyFinishesWhileRecordingVoiceMessage() async throws {
+        let loadedReply = TimelineItemReplyDetails.loaded(sender: .init(id: "userID"),
+                                                          eventID: "testID",
+                                                          eventContent: .message(.text(.init(body: "Reply text"))))
+        draftServiceMock.loadDraftClosure = {
+            .success(.init(plainText: "", htmlText: nil, draftType: .reply(eventID: "testID")))
+        }
+        draftServiceMock.getReplyEventIDClosure = { _ in
+            try? await Task.sleep(for: .milliseconds(100))
+            return .success(.init(details: loadedReply, isThreaded: false))
+        }
+        await viewModel.loadDraft()
+        
+        let recordMode = ComposerMode.recordVoiceMessage(state: AudioRecorderState())
+        let deferredReplyLoaded = deferFulfillment(viewModel.context.$viewState) {
+            $0.voiceMessageReplyMode == .reply(eventID: "testID", replyDetails: loadedReply, isThread: false)
+        }
+        viewModel.process(timelineAction: .setMode(mode: recordMode))
+        
+        try await deferredReplyLoaded.fulfill()
+        #expect(viewModel.state.composerMode == recordMode)
+    }
+    
+    @Test
+    func saveDraftWhileRecordingVoiceMessageKeepsReply() async throws {
+        viewModel.context.composerFormattingEnabled = false
+        viewModel.process(timelineAction: .setMode(mode: replyMode))
+        viewModel.process(timelineAction: .setMode(mode: .recordVoiceMessage(state: AudioRecorderState())))
+        
+        var capturedDraft: ComposerDraftProxy?
+        await waitForConfirmation("Save draft") { confirmation in
+            draftServiceMock.saveDraftClosure = { draft in
+                capturedDraft = draft
+                confirmation()
+                return .success(())
+            }
+            viewModel.saveDraft()
+        }
+        
+        let draft = try #require(capturedDraft)
+        #expect(draft.draftType == .reply(eventID: "testID"))
+        #expect(!draftServiceMock.clearDraftCalled)
+    }
+    
     // MARK: - Helpers
+    
+    private let replyMode = ComposerMode.reply(eventID: "testID",
+                                               replyDetails: .loaded(sender: .init(id: ""),
+                                                                     eventID: "testID",
+                                                                     eventContent: .message(.text(.init(body: "reply text")))),
+                                               isThread: false)
+    
+    private func voicePreviewMode(isUploading: Bool) -> ComposerMode {
+        .previewVoiceMessage(state: AudioPlayerState(id: .recorderPreview, title: L10n.commonVoiceMessage, duration: 10.0),
+                             waveform: .data([1.0]),
+                             isUploading: isUploading)
+    }
     
     private func collectSentMessages() -> CurrentValueSubject<[ComposerToolbarViewModelAction], Never> {
         let subject = CurrentValueSubject<[ComposerToolbarViewModelAction], Never>([])
