@@ -11,6 +11,8 @@ fetch_unshallow_repository
 # Upload dsyms no matter the workflow
 # Perform this step before releasing to github in case it fails.
 swift run -q tools ci upload-dsyms --dsym-path "$CI_ARCHIVE_PATH/dSYMs"
+# Rust panics are reported to their own project and need the dSYMs there to be symbolicated.
+swift run -q tools ci upload-dsyms --dsym-path "$CI_ARCHIVE_PATH/dSYMs" --project-slug matrix-rust-sdk
 
 generate_what_to_test_notes
 
