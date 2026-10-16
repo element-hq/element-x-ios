@@ -26,8 +26,8 @@ struct SecureBackupLogoutConfirmationScreenViewModelTests {
         
         reachabilitySubject = CurrentValueSubject<HomeserverReachability, Never>(.reachable)
         
-        viewModel = SecureBackupLogoutConfirmationScreenViewModel(secureBackupController: secureBackupController,
-                                                                  homeserverReachabilityPublisher: reachabilitySubject.asCurrentValuePublisher())
+        viewModel = Self.makeViewModel(secureBackupController: secureBackupController,
+                                       reachabilitySubject: reachabilitySubject)
     }
     
     @Test
@@ -85,5 +85,39 @@ struct SecureBackupLogoutConfirmationScreenViewModelTests {
         let deferred = deferFulfillment(context.observe(\.viewState.mode)) { $0 == .offline }
         reachabilitySubject.send(.unreachable)
         try await deferred.fulfill()
+    }
+    
+    @Test
+    func noRecoveryLogsOutStraightAway() async throws {
+        let viewModel = Self.makeViewModel(secureBackupController: secureBackupController,
+                                           reachabilitySubject: reachabilitySubject,
+                                           mode: .noRecovery)
+        #expect(viewModel.context.viewState.mode == .noRecovery)
+        
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .logout }
+        viewModel.context.send(viewAction: .logout)
+        try await deferred.fulfill()
+        
+        // There are no keys to wait for without a recovery key, and the question stays as it is.
+        #expect(viewModel.context.viewState.mode == .noRecovery)
+        #expect(secureBackupController.waitForKeyBackupUploadUploadStateSubjectCallsCount == 0)
+    }
+    
+    @Test
+    func cancelIsForwarded() async throws {
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .cancel }
+        context.send(viewAction: .cancel)
+        try await deferred.fulfill()
+    }
+    
+    // MARK: - Helpers
+    
+    private static func makeViewModel(secureBackupController: SecureBackupControllerMock,
+                                      reachabilitySubject: CurrentValueSubject<HomeserverReachability, Never>,
+                                      mode: SecureBackupLogoutConfirmationScreenViewMode = .saveRecoveryKey) -> SecureBackupLogoutConfirmationScreenViewModel {
+        SecureBackupLogoutConfirmationScreenViewModel(secureBackupController: secureBackupController,
+                                                      homeserverReachabilityPublisher: reachabilitySubject.asCurrentValuePublisher(),
+                                                      learnMoreURL: "https://example.org/encryption",
+                                                      mode: mode)
     }
 }

@@ -13,15 +13,22 @@ import SwiftUI
 struct SecureBackupLogoutConfirmationScreen: View {
     @Bindable var context: SecureBackupLogoutConfirmationScreenViewModel.Context
     
+    @State private var contentHeight: CGFloat = .zero
+    @State private var buttonsHeight: CGFloat = .zero
+    
+    private var mode: SecureBackupLogoutConfirmationScreenViewMode {
+        context.viewState.mode
+    }
+    
     var body: some View {
-        FullscreenDialog {
-            VStack(spacing: 16) {
-                BigIcon(icon: \.keyOffSolid)
-                content
+        // The container stays the same when moving from the question to the progress, as replacing the root
+        // of the screen makes the navigation stack lay it out differently on iPad.
+        ZStack {
+            if mode.isInitial {
+                initialBody
+            } else {
+                progressBody
             }
-            .padding()
-        } bottomContent: {
-            footer.padding()
         }
         .toolbar { toolbar }
         .background()
@@ -29,19 +36,88 @@ struct SecureBackupLogoutConfirmationScreen: View {
         .alert(item: $context.alertInfo)
     }
     
+    // MARK: - Initial
+    
+    /// The question shown first, in a sheet that is as tall as its content.
+    private var initialBody: some View {
+        ScrollView {
+            initialHeader
+                .padding(.horizontal, 24)
+                .padding(.vertical, 16)
+                .readHeight($contentHeight)
+        }
+        .backportSafeAreaBar(edge: .bottom, spacing: 0) {
+            initialButtons
+                .readHeight($buttonsHeight)
+        }
+        .scrollBounceBehavior(.basedOnSize)
+        .presentationDetents([.height(contentHeight + buttonsHeight + Self.navigationBarHeight)])
+    }
+    
+    private var initialHeader: some View {
+        switch mode {
+        case .noRecovery:
+            TitleAndIcon(title: L10n.screenSignoutRecoveryDisabledTitle,
+                         subtitle: L10n.screenSignoutRecoveryDisabledSubtitle,
+                         icon: \.errorSolid,
+                         iconStyle: .alertSolid,
+                         button: .init(title: L10n.actionLearnMore) { UIApplication.shared.open(context.viewState.learnMoreURL) })
+        default:
+            TitleAndIcon(title: L10n.screenSignoutSaveRecoveryKeyTitle,
+                         subtitle: L10n.screenSignoutSaveRecoveryKeySubtitle,
+                         icon: \.info,
+                         iconStyle: .defaultSolid)
+        }
+    }
+    
+    private var initialButtons: some View {
+        VStack(spacing: 16) {
+            switch mode {
+            case .noRecovery:
+                Button(L10n.actionSignoutAnyway, role: .destructive) {
+                    context.send(viewAction: .logout)
+                }
+                .buttonStyle(.compound(.tertiary))
+            default:
+                Button(UntranslatedL10n.screenSignoutSaveRecoveryKeyActionContinue, role: .destructive) {
+                    context.send(viewAction: .logout)
+                }
+                .buttonStyle(.compound(.primary))
+            }
+        }
+        .padding(.horizontal, 16)
+        .padding(.top, 16)
+        .padding(.bottom, 8)
+    }
+    
+    // MARK: - Progress
+    
+    /// The screen shown while waiting for the keys to be backed up before removing the device.
+    private var progressBody: some View {
+        FullscreenDialog {
+            VStack(spacing: 16) {
+                BigIcon(icon: \.keyOffSolid)
+                progressContent
+            }
+            .padding()
+        } bottomContent: {
+            progressFooter.padding()
+        }
+    }
+    
     @ViewBuilder
-    private var content: some View {
-        Text(title)
+    private var progressContent: some View {
+        Text(progressTitle)
             .foregroundColor(.compound.textPrimary)
             .font(.compound.headingMDBold)
             .multilineTextAlignment(.center)
         
-        Text(subtitle)
+        Text(progressSubtitle)
             .foregroundColor(.compound.textSecondary)
             .font(.compound.bodyMD)
             .multilineTextAlignment(.center)
         
-        if case let .waitingToStart(hasStalled) = context.viewState.mode {
+        if case let .waitingToStart(hasStalled) = mode {
             Spacer()
             ProgressView()
             
@@ -50,23 +126,14 @@ struct SecureBackupLogoutConfirmationScreen: View {
                     .font(.compound.bodySM)
                     .foregroundColor(.compound.textPrimary)
             }
-        } else if case let .backupOngoing(progress) = context.viewState.mode {
+        } else if case let .backupOngoing(progress) = mode {
             Spacer()
             ProgressView(value: progress)
         }
     }
     
-    private var footer: some View {
+    private var progressFooter: some View {
         VStack(spacing: 16.0) {
-            if case .saveRecoveryKey = context.viewState.mode {
-                Button {
-                    context.send(viewAction: .settings)
-                } label: {
-                    Text(L10n.commonSettings)
-                }
-                .buttonStyle(.compound(.primary))
-            }
-            
             Button(role: .destructive) {
                 context.send(viewAction: .logout)
             } label: {
@@ -76,36 +143,39 @@ struct SecureBackupLogoutConfirmationScreen: View {
         }
     }
     
+    private var progressTitle: String {
+        switch mode {
+        case .offline:
+            L10n.screenSignoutKeyBackupOfflineTitle
+        default:
+            L10n.screenSignoutKeyBackupOngoingTitle
+        }
+    }
+    
+    private var progressSubtitle: String {
+        switch mode {
+        case .offline:
+            L10n.screenSignoutKeyBackupOfflineSubtitle
+        default:
+            L10n.screenSignoutKeyBackupOngoingSubtitle
+        }
+    }
+    
+    // MARK: - Shared
+    
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
         ToolbarItem(placement: .cancellationAction) {
-            Button(L10n.actionCancel) {
-                context.send(viewAction: .cancel)
+            if mode.isInitial {
+                ToolbarButton(role: .close) { context.send(viewAction: .cancel) }
+            } else {
+                Button(L10n.actionCancel) { context.send(viewAction: .cancel) }
             }
         }
     }
     
-    private var title: String {
-        switch context.viewState.mode {
-        case .saveRecoveryKey:
-            return L10n.screenSignoutSaveRecoveryKeyTitle
-        case .waitingToStart, .backupOngoing:
-            return L10n.screenSignoutKeyBackupOngoingTitle
-        case .offline:
-            return L10n.screenSignoutKeyBackupOfflineTitle
-        }
-    }
-    
-    private var subtitle: String {
-        switch context.viewState.mode {
-        case .saveRecoveryKey:
-            return L10n.screenSignoutSaveRecoveryKeySubtitle
-        case .waitingToStart, .backupOngoing:
-            return L10n.screenSignoutKeyBackupOngoingSubtitle
-        case .offline:
-            return L10n.screenSignoutKeyBackupOfflineSubtitle
-        }
-    }
+    /// The height of the navigation bar the sheet's content is shown below.
+    private static let navigationBarHeight = 56.0
 }
 
 // MARK: - Previews
@@ -113,6 +183,7 @@ struct SecureBackupLogoutConfirmationScreen: View {
 @available(iOS 26.0, *)
 struct SecureBackupLogoutConfirmationScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = makeViewModel(mode: .saveRecoveryKey)
+    static let noRecoveryViewModel = makeViewModel(mode: .noRecovery)
     static let waitingViewModel = makeViewModel(mode: .waitingToStart(hasStalled: false))
     static let ongoingViewModel = makeViewModel(mode: .backupOngoing(progress: 0.5))
     static let offlineViewModel = makeViewModel(mode: .offline)
@@ -122,6 +193,11 @@ struct SecureBackupLogoutConfirmationScreen_Previews: PreviewProvider, TestableP
             SecureBackupLogoutConfirmationScreen(context: viewModel.context)
         }
         .previewDisplayName("Confirmation")
+        
+        ElementNavigationStack {
+            SecureBackupLogoutConfirmationScreen(context: noRecoveryViewModel.context)
+        }
+        .previewDisplayName("No recovery")
         
         ElementNavigationStack {
             SecureBackupLogoutConfirmationScreen(context: waitingViewModel.context)
@@ -163,10 +239,13 @@ struct SecureBackupLogoutConfirmationScreen_Previews: PreviewProvider, TestableP
         
         let reachability: HomeserverReachability = mode == .offline ? .unreachable : .reachable
         
+        // The later modes are reached by attempting to log out from the first one.
         let viewModel = SecureBackupLogoutConfirmationScreenViewModel(secureBackupController: secureBackupController,
-                                                                      homeserverReachabilityPublisher: .init(reachability))
+                                                                      homeserverReachabilityPublisher: .init(reachability),
+                                                                      learnMoreURL: UserSettings.mock().app.encryptionURL,
+                                                                      mode: mode.isInitial ? mode : .saveRecoveryKey)
         
-        if mode != .saveRecoveryKey {
+        if !mode.isInitial {
             viewModel.context.send(viewAction: .logout)
         }
         
