@@ -313,6 +313,7 @@ struct TimelineState {
     var scrollToBottomPublisher = PassthroughSubject<Void, Never>()
     var scrollToFirstItemForDatePublisher = PassthroughSubject<Void, Never>()
     var scrollToReadMarkerPublisher = PassthroughSubject<TimelineItemIdentifier.UniqueID, Never>()
+    var sendProgressPublisher = PassthroughSubject<TimelineSendProgress, Never>()
     
     var itemsDictionary = OrderedDictionary<TimelineItemIdentifier.UniqueID, RoomTimelineItemViewState>()
     
@@ -347,6 +348,15 @@ struct TimelineState {
     func hasLoadedItem(with eventID: String) -> Bool {
         itemViewStates.contains { $0.identifier.eventID == eventID }
     }
+}
+
+/// The steps of sending a message from the composer that move the timeline, so the table
+/// can keep it still until the sent message is in place.
+enum TimelineSendProgress {
+    /// A message that adds a new timeline item is being sent.
+    case sending
+    /// A `sending` message went through and the composer is about to be cleared.
+    case clearingComposer
 }
 
 enum ScrollDirection: Equatable {

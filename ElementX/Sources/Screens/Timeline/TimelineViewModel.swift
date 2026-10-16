@@ -47,6 +47,9 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     private var paginateBackwardsTask: Task<Void, Never>?
     private var paginateForwardsTask: Task<Void, Never>?
     
+    /// Sends that told the table to hold the timeline and haven't cleared the composer yet.
+    private var heldComposerSendCount = 0
+    
     init(roomProxy: JoinedRoomProxyProtocol,
          focussedEventID: String? = nil,
          timelineController: TimelineControllerProtocol,
@@ -253,6 +256,11 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     func process(composerAction: ComposerToolbarViewModelAction) {
         switch composerAction {
         case .sendMessage(let message, let html, let mode, let intentionalMentions):
+            // Before the send starts, so the table pins the timeline ahead of the composer clear and the echo.
+            if sendsNewTimelineItem(message: message, mode: mode) {
+                heldComposerSendCount += 1
+                state.timelineState.sendProgressPublisher.send(.sending)
+            }
             Task {
                 await sendCurrentMessage(message,
                                          html: html,
@@ -467,7 +475,11 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                 
                 switch callback {
                 case .updatedTimelineItems(let updatedItems, let isSwitchingTimelines):
-                    buildTimelineViews(timelineItems: updatedItems, isSwitchingTimelines: isSwitchingTimelines)
+                    var transaction = Transaction()
+                    transaction.disablesAnimations = landsOwnMessage(updatedItems)
+                    withTransaction(transaction) {
+                        buildTimelineViews(timelineItems: updatedItems, isSwitchingTimelines: isSwitchingTimelines)
+                    }
                     reconcileSelection(with: updatedItems, isSwitchingTimelines: isSwitchingTimelines)
                     
                     if !updatedItems.isEmpty {
@@ -487,6 +499,11 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                         }
                     }
                 case .messageSentOrEdited:
+                    // Media, voice and edit sends report here too, without having held the timeline.
+                    if heldComposerSendCount > 0 {
+                        heldComposerSendCount -= 1
+                        state.timelineState.sendProgressPublisher.send(.clearingComposer)
+                    }
                     actionsSubject.send(.composer(action: .clear))
                 }
             }
@@ -1281,6 +1298,26 @@ extension TimelineViewModel {
                                                               type: .toast,
                                                               title: L10n.screenRoomMaximumMessagesSelected,
                                                               icon: \.info))
+    }
+}
+
+// MARK: - Sending
+
+extension TimelineViewModel {
+    private func sendsNewTimelineItem(message: String, mode: ComposerMode) -> Bool {
+        switch mode {
+        case .default: slashCommand(message: message) == nil
+        case .reply: true
+        case .edit, .recordVoiceMessage, .previewVoiceMessage: false
+        }
+    }
+    
+    /// Whether the update adds a message of the user's own at the bottom. That regroups the previous message and
+    /// drops its sent badge while the table holds the rows still, so animating them would slide the bubble inside
+    /// a cell that has already resized.
+    private func landsOwnMessage(_ timelineItems: [RoomTimelineItemProtocol]) -> Bool {
+        guard let newestItem = timelineItems.last as? EventBasedTimelineItemProtocol else { return false }
+        return newestItem.isOutgoing && state.timelineState.itemsDictionary[newestItem.id.uniqueID] == nil
     }
 }
 

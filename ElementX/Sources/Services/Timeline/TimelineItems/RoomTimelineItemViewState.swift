@@ -128,6 +128,14 @@ enum RoomTimelineItemType: Equatable {
     }
     
     var id: TimelineItemIdentifier {
+        item.id
+    }
+    
+    var isOutgoing: Bool {
+        (item as? EventBasedTimelineItemProtocol)?.isOutgoing ?? false
+    }
+    
+    private var item: RoomTimelineItemProtocol {
         switch self {
         case .text(let item as RoomTimelineItemProtocol),
              .separator(let item as RoomTimelineItemProtocol),
@@ -153,7 +161,7 @@ enum RoomTimelineItemType: Equatable {
              .callInvite(let item as RoomTimelineItemProtocol),
              .callNotification(let item as RoomTimelineItemProtocol),
              .liveLocation(let item as RoomTimelineItemProtocol):
-            return item.id
+            return item
         }
     }
     
