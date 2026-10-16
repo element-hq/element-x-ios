@@ -612,17 +612,19 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         switch (state.composerMode, mode) {
         case (.reply, .recordVoiceMessage):
             state.voiceMessageReplyMode = state.composerMode
-        case (.previewVoiceMessage(_, _, isUploading: true), .default):
-            // The voice message has been sent, so the reply is complete.
-            state.voiceMessageReplyMode = nil
-        case (.recordVoiceMessage, .default), (.previewVoiceMessage, .default):
-            // The voice message was discarded, go back to replying.
-            if let voiceMessageReplyMode = state.voiceMessageReplyMode {
-                state.voiceMessageReplyMode = nil
-                mode = voiceMessageReplyMode
-            }
-        default:
+        case (_, .recordVoiceMessage), (_, .previewVoiceMessage):
             break
+        case (.recordVoiceMessage, .reply), (.previewVoiceMessage(_, _, isUploading: false), .reply):
+            // Replying to another message keeps the voice message and sends it as a reply to that one instead.
+            state.voiceMessageReplyMode = mode
+            return
+        case (.recordVoiceMessage, .default), (.previewVoiceMessage(_, _, isUploading: false), .default):
+            // The voice message was discarded, go back to replying.
+            mode = state.voiceMessageReplyMode ?? mode
+            state.voiceMessageReplyMode = nil
+        default:
+            // Any other mode (sent voice message or edit) drops the stored reply.
+            state.voiceMessageReplyMode = nil
         }
         
         state.composerMode = mode

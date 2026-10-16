@@ -955,6 +955,28 @@ final class ComposerToolbarViewModelTests {
         #expect(viewModel.state.voiceMessageReplyMode == nil)
     }
     
+    @Test
+    func replyingToAnotherMessageKeepsVoiceMessage() {
+        viewModel.process(timelineAction: .setMode(mode: replyMode))
+        viewModel.process(timelineAction: .setMode(mode: .recordVoiceMessage(state: AudioRecorderState())))
+        let previewMode = voicePreviewMode(isUploading: false)
+        viewModel.process(timelineAction: .setMode(mode: previewMode))
+        
+        let otherReplyMode = ComposerMode.reply(eventID: "otherID", replyDetails: .loading(eventID: "otherID"), isThread: false)
+        viewModel.process(timelineAction: .setMode(mode: otherReplyMode))
+        #expect(viewModel.state.composerMode == previewMode)
+        #expect(viewModel.state.voiceMessageReplyMode == otherReplyMode)
+    }
+    
+    @Test
+    func editingWhileComposingVoiceMessageDropsStoredReply() {
+        viewModel.process(timelineAction: .setMode(mode: replyMode))
+        viewModel.process(timelineAction: .setMode(mode: .recordVoiceMessage(state: AudioRecorderState())))
+        
+        viewModel.process(timelineAction: .setMode(mode: .edit(originalEventOrTransactionID: .eventID("editID"), type: .default)))
+        #expect(viewModel.state.voiceMessageReplyMode == nil)
+    }
+    
     // MARK: - Helpers
     
     private let replyMode = ComposerMode.reply(eventID: "testID",
