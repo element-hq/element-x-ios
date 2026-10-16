@@ -353,7 +353,13 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                     return
                 }
                 
-                set(mode: .reply(eventID: eventID, replyDetails: reply.details, isThread: reply.isThreaded))
+                let replyMode = ComposerMode.reply(eventID: eventID, replyDetails: reply.details, isThread: reply.isThreaded)
+                // A voice message may have been started while the reply was loading.
+                if state.voiceMessageReplyMode?.replyEventID == eventID {
+                    state.voiceMessageReplyMode = replyMode
+                } else if state.composerMode.replyEventID == eventID {
+                    set(mode: replyMode)
+                }
             }
         }
     }
@@ -602,7 +608,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     }
     
     private func set(mode: ComposerMode) {
-        if state.composerMode.isLoadingReply, state.composerMode.replyEventID != mode.replyEventID {
+        if state.composerMode.isLoadingReply, state.composerMode.replyEventID != mode.replyEventID, mode.isTextEditingEnabled {
             replyLoadingTask?.cancel()
         }
         
