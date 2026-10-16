@@ -20,7 +20,7 @@ class UserSession: UserSessionProtocol {
     
     let mediaProvider: MediaProviderProtocol
     let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
-    let liveLocationManager: LiveLocationManagerProtocol
+    let liveLocationService: LiveLocationServiceProtocol
     /// Scans media content, `nil` when no content scanner is configured for the server.
     let contentScannerService: ContentScannerServiceProtocol?
     let notificationService: NotificationServiceProtocol
@@ -37,7 +37,7 @@ class UserSession: UserSessionProtocol {
          userHooks: UserHooks,
          mediaProvider: MediaProviderProtocol,
          voiceMessageMediaManager: VoiceMessageMediaManagerProtocol,
-         liveLocationManager: LiveLocationManagerProtocol,
+         liveLocationService: LiveLocationServiceProtocol,
          notificationService: NotificationServiceProtocol) {
         self.clientProxy = clientProxy
         self.userSettings = userSettings
@@ -45,7 +45,7 @@ class UserSession: UserSessionProtocol {
         
         self.mediaProvider = mediaProvider
         self.voiceMessageMediaManager = voiceMessageMediaManager
-        self.liveLocationManager = liveLocationManager
+        self.liveLocationService = liveLocationService
         self.notificationService = notificationService
         contentScannerService = clientProxy.contentScanner.map(ContentScannerService.init)
         

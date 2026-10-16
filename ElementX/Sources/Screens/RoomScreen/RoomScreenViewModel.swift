@@ -169,7 +169,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             .weakAssign(to: \.state.roomThreadListEnabled, on: self)
             .store(in: &cancellables)
         
-        userSettings.app.liveLocationSharingSessionsByRoomIDPublisher
+        userSettings.account.liveLocationSharingSessionsByRoomIDPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] sessionsByRoomID in
                 guard let self else { return }
