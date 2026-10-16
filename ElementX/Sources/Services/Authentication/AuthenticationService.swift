@@ -230,7 +230,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
             do {
                 let client = try await makeClient(serverNameOrBaseURL: scannedServerNameOrBaseURL)
                 let qrCodeHandler = client.newLoginWithQrCodeHandler(oauthConfiguration: appSettings.oAuthConfiguration.rustValue)
-                try await qrCodeHandler.scan(qrCodeData: qrData, progressListener: listener)
+                try await qrCodeHandler.scan(qrCodeData: qrData, progressListener: listener).wait()
                 
                 switch await userSession(for: client) {
                 case .success(let userSession):
