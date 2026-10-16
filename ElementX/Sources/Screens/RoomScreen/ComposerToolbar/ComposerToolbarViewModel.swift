@@ -608,7 +608,6 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         
         guard mode != state.composerMode else { return }
         
-        var mode = mode
         switch (state.composerMode, mode) {
         case (.reply, .recordVoiceMessage):
             state.voiceMessageReplyMode = state.composerMode
@@ -619,9 +618,11 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             state.voiceMessageReplyMode = mode
             return
         case (.recordVoiceMessage, .default), (.previewVoiceMessage(_, _, isUploading: false), .default):
-            // The voice message was discarded, go back to replying.
-            mode = state.voiceMessageReplyMode ?? mode
+            guard let voiceMessageReplyMode = state.voiceMessageReplyMode else { break }
+            // The voice message was discarded, go back to replying without popping the keyboard.
             state.voiceMessageReplyMode = nil
+            state.composerMode = voiceMessageReplyMode
+            return
         default:
             // Any other mode (sent voice message or edit) drops the stored reply.
             state.voiceMessageReplyMode = nil
