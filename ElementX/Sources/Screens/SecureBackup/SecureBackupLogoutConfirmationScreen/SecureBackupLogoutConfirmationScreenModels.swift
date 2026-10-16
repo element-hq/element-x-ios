@@ -11,6 +11,7 @@ import SwiftUI
 
 enum SecureBackupLogoutConfirmationScreenViewModelAction {
     case cancel
+    case generateRecoveryKey
     case logout
 }
 
@@ -82,5 +83,6 @@ enum SecureBackupLogoutConfirmationScreenAlertType {
 
 enum SecureBackupLogoutConfirmationScreenViewAction {
     case cancel
+    case generateRecoveryKey
     case logout
 }

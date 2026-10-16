@@ -25,6 +25,10 @@ struct SecureBackupRecoveryKeyScreenViewState: BindableState {
     var isModallyPresented: Bool
     
     let mode: SecureBackupRecoveryKeyScreenViewMode
+    /// The title of the button that closes the screen once the new recovery key is active.
+    let completionButtonTitle: String
+    /// Whether the new recovery key is saved and the screen is showing that it is now active.
+    var isCompleted = false
     
     var recoveryKey: String?
     var isGeneratingKey = false
@@ -32,12 +36,19 @@ struct SecureBackupRecoveryKeyScreenViewState: BindableState {
     
     var bindings: SecureBackupRecoveryKeyScreenViewBindings
     
+    /// Setting up or changing the key goes straight to generating it, so the introduction is only seen if that failed.
+    private var hasKeyOrIsGenerating: Bool {
+        recoveryKey != nil || isGeneratingKey
+    }
+    
     var title: String {
+        guard !isCompleted else { return UntranslatedL10n.screenRecoveryKeySuccessTitle }
+        
         switch mode {
         case .setupRecovery:
-            return recoveryKey == nil ? L10n.screenRecoveryKeySetupTitle : L10n.screenRecoveryKeySaveTitle
+            return hasKeyOrIsGenerating ? L10n.screenRecoveryKeySaveTitle : L10n.screenRecoveryKeySetupTitle
         case .changeRecovery:
-            return recoveryKey == nil ? L10n.screenRecoveryKeyChangeTitle : L10n.screenRecoveryKeySaveTitle
+            return hasKeyOrIsGenerating ? L10n.screenRecoveryKeySaveTitle : L10n.screenRecoveryKeyChangeTitle
         case .fixRecovery:
             return L10n.screenRecoveryKeyConfirmTitle
         default:
@@ -46,11 +57,13 @@ struct SecureBackupRecoveryKeyScreenViewState: BindableState {
     }
     
     var subtitle: String? {
+        guard !isCompleted else { return L10n.screenCustomRecoveryKeySuccessSubtitle }
+        
         switch mode {
         case .setupRecovery:
-            return recoveryKey == nil ? L10n.screenRecoveryKeySetupDescription : L10n.screenRecoveryKeySaveDescription
+            return hasKeyOrIsGenerating ? L10n.screenRecoveryKeySaveDescription : L10n.screenRecoveryKeySetupDescription
         case .changeRecovery:
-            return recoveryKey == nil ? L10n.screenRecoveryKeyChangeDescription : L10n.screenRecoveryKeySaveDescription
+            return hasKeyOrIsGenerating ? L10n.screenRecoveryKeySaveDescription : L10n.screenRecoveryKeyChangeDescription
         case .fixRecovery:
             return L10n.screenRecoveryKeyConfirmDescription
         default:
@@ -61,9 +74,9 @@ struct SecureBackupRecoveryKeyScreenViewState: BindableState {
     var recoveryKeySubtitle: String? {
         switch mode {
         case .setupRecovery:
-            return recoveryKey == nil ? L10n.screenRecoveryKeySetupGenerateKeyDescription : L10n.screenRecoveryKeySaveKeyDescription
+            return hasKeyOrIsGenerating ? L10n.screenRecoveryKeySaveKeyDescription : L10n.screenRecoveryKeySetupGenerateKeyDescription
         case .changeRecovery:
-            return recoveryKey == nil ? L10n.screenRecoveryKeyChangeGenerateKeyDescription : L10n.screenRecoveryKeySaveKeyDescription
+            return hasKeyOrIsGenerating ? L10n.screenRecoveryKeySaveKeyDescription : L10n.screenRecoveryKeyChangeGenerateKeyDescription
         case .fixRecovery:
             return L10n.screenRecoveryKeyConfirmKeyDescription
         default:
@@ -83,5 +96,6 @@ enum SecureBackupRecoveryKeyScreenViewAction {
     case keySaved
     case confirmKey
     case done
+    case finish
     case cancel
 }

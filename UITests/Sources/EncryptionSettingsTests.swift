@@ -53,24 +53,26 @@ class EncryptionSettingsUITests: XCTestCase {
         app.switches[A11yIdentifiers.secureBackupScreen.keyStorage].switches.firstMatch.switches.firstMatch.tap()
         app.buttons[A11yIdentifiers.secureBackupScreen.recoveryKey].tap()
         
+        // The key is generated straight away when there's no recovery yet.
         try await app.assertScreenshot(step: Step.setUpRecovery)
         
-        // Generate and copy a new recovery key.
-        app.buttons[A11yIdentifiers.secureBackupRecoveryKeyScreen.generateRecoveryKey].tap()
+        // Copy the new recovery key.
         app.buttons[A11yIdentifiers.secureBackupRecoveryKeyScreen.copyRecoveryKey].tap()
         app.buttons[A11yIdentifiers.secureBackupRecoveryKeyScreen.done].tap()
         app.buttons[A11yIdentifiers.alertInfo.primaryButton].firstMatch.tap()
+        app.buttons[A11yIdentifiers.secureBackupRecoveryKeyScreen.finish].tap()
         try await app.assertScreenshot(step: Step.secureBackupScreenSetUp)
         
         // Change the recovery key.
         app.buttons[A11yIdentifiers.secureBackupScreen.recoveryKey].tap()
+        // The updated key is generated straight away as well.
         try await app.assertScreenshot(step: Step.changeRecovery)
         
-        // Generate and copy the updated recovery key.
-        app.buttons[A11yIdentifiers.secureBackupRecoveryKeyScreen.generateRecoveryKey].tap()
+        // Copy the updated recovery key.
         app.buttons[A11yIdentifiers.secureBackupRecoveryKeyScreen.copyRecoveryKey].tap()
         app.buttons[A11yIdentifiers.secureBackupRecoveryKeyScreen.done].tap()
         app.buttons[A11yIdentifiers.alertInfo.primaryButton].firstMatch.tap()
+        app.buttons[A11yIdentifiers.secureBackupRecoveryKeyScreen.finish].tap()
         try await app.assertScreenshot(step: Step.secureBackupScreenSetUp)
     }
     

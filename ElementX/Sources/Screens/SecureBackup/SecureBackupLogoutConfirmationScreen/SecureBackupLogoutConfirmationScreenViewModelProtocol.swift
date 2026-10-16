@@ -11,4 +11,7 @@ import Combine
 protocol SecureBackupLogoutConfirmationScreenViewModelProtocol {
     var actions: AnyPublisher<SecureBackupLogoutConfirmationScreenViewModelAction, Never> { get }
     var context: SecureBackupLogoutConfirmationScreenViewModelType.Context { get }
+    
+    /// Carries on with the removal, as the user now has a recovery key to restore their chats with.
+    func continueRemovalWithNewRecoveryKey()
 }

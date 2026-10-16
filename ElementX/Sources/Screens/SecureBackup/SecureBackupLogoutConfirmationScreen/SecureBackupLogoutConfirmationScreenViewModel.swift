@@ -54,9 +54,17 @@ class SecureBackupLogoutConfirmationScreenViewModel: SecureBackupLogoutConfirmat
         case .cancel:
             keyUploadWaitingTask = nil
             actionsSubject.send(.cancel)
+        case .generateRecoveryKey:
+            actionsSubject.send(.generateRecoveryKey)
         case .logout:
             attemptLogout()
         }
+    }
+    
+    func continueRemovalWithNewRecoveryKey() {
+        // The keys now have to be backed up before the device can go.
+        state.mode = .saveRecoveryKey
+        attemptLogout()
     }
     
     // MARK: - Private

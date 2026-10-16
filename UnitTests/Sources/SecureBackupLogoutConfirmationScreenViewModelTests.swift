@@ -133,4 +133,27 @@ struct SecureBackupLogoutConfirmationScreenViewModelTests {
         context.send(viewAction: .cancel)
         try await deferred.fulfill()
     }
+    
+    @Test
+    func generatingARecoveryKeyIsForwarded() async throws {
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .generateRecoveryKey }
+        context.send(viewAction: .generateRecoveryKey)
+        try await deferred.fulfill()
+    }
+    
+    @Test
+    func continuingWithANewRecoveryKeyWaitsForTheBackupFirst() async throws {
+        let viewModel = SecureBackupLogoutConfirmationScreenViewModel(secureBackupController: secureBackupController,
+                                                                      homeserverReachabilityPublisher: reachabilitySubject.asCurrentValuePublisher(),
+                                                                      learnMoreURL: "https://example.org/encryption",
+                                                                      mode: .noRecovery)
+        secureBackupController.waitForKeyBackupUploadUploadStateSubjectClosure = { _ in .success(()) }
+        
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .logout }
+        viewModel.continueRemovalWithNewRecoveryKey()
+        try await deferred.fulfill()
+        
+        // Unlike removing the device without a recovery key, the new keys have to be uploaded.
+        #expect(secureBackupController.waitForKeyBackupUploadUploadStateSubjectCallsCount == 1)
+    }
 }

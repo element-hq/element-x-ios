@@ -83,6 +83,13 @@ struct SecureBackupLogoutConfirmationScreen: View {
         VStack(spacing: 16) {
             switch mode {
             case .noRecovery:
+                Button {
+                    context.send(viewAction: .generateRecoveryKey)
+                } label: {
+                    Label(L10n.screenChatBackupRecoveryActionSetup, icon: \.key)
+                }
+                .buttonStyle(.compound(.primary))
+                
                 Button(L10n.actionSignoutAnyway, role: .destructive) {
                     context.send(viewAction: .logout)
                 }
@@ -92,6 +99,11 @@ struct SecureBackupLogoutConfirmationScreen: View {
                     context.send(viewAction: .logout)
                 }
                 .buttonStyle(.compound(.primary))
+                
+                Button(UntranslatedL10n.screenSignoutSaveRecoveryKeyActionGenerate) {
+                    context.send(viewAction: .generateRecoveryKey)
+                }
+                .buttonStyle(.compound(.tertiary))
             case .waitingToStart, .backupOngoing, .offline:
                 Button(L10n.actionSignout, role: .destructive) {
                     context.send(viewAction: .logout)
