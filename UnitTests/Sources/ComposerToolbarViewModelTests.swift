@@ -988,6 +988,30 @@ final class ComposerToolbarViewModelTests {
         #expect(!viewModel.context.composerFocused)
     }
     
+    @Test
+    func loadingReplyFinishesWhileRecordingVoiceMessage() async throws {
+        let loadedReply = TimelineItemReplyDetails.loaded(sender: .init(id: "userID"),
+                                                          eventID: "testID",
+                                                          eventContent: .message(.text(.init(body: "Reply text"))))
+        draftServiceMock.loadDraftClosure = {
+            .success(.init(plainText: "", htmlText: nil, draftType: .reply(eventID: "testID")))
+        }
+        draftServiceMock.getReplyEventIDClosure = { _ in
+            try? await Task.sleep(for: .milliseconds(100))
+            return .success(.init(details: loadedReply, isThreaded: false))
+        }
+        await viewModel.loadDraft()
+        
+        let recordMode = ComposerMode.recordVoiceMessage(state: AudioRecorderState())
+        let deferredReplyLoaded = deferFulfillment(viewModel.context.$viewState) {
+            $0.voiceMessageReplyMode == .reply(eventID: "testID", replyDetails: loadedReply, isThread: false)
+        }
+        viewModel.process(timelineAction: .setMode(mode: recordMode))
+        
+        try await deferredReplyLoaded.fulfill()
+        #expect(viewModel.state.composerMode == recordMode)
+    }
+    
     // MARK: - Helpers
     
     private let replyMode = ComposerMode.reply(eventID: "testID",
