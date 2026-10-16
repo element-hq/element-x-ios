@@ -58,7 +58,6 @@ struct UserSessionFlowCoordinatorTests {
                                                   emojiProvider: EmojiProvider(userSettings: userSession.userSettings),
                                                   linkMetadataProvider: LinkMetadataProvider(),
                                                   appMediator: appMediator,
-                                                  appHooks: AppHooks(),
                                                   analytics: AnalyticsServiceMock(.init()),
                                                   userIndicatorController: userIndicatorController,
                                                   stateMachineFactory: stateMachineFactory)

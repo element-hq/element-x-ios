@@ -45,7 +45,6 @@ struct ChatsTabFlowCoordinatorTests {
                                                   emojiProvider: EmojiProvider(userSettings: userSession.userSettings),
                                                   linkMetadataProvider: LinkMetadataProvider(),
                                                   appMediator: AppMediatorMock(.init()),
-                                                  appHooks: AppHooks(),
                                                   analytics: AnalyticsServiceMock(.init()),
                                                   userIndicatorController: UserIndicatorControllerMock(),
                                                   stateMachineFactory: stateMachineFactory)

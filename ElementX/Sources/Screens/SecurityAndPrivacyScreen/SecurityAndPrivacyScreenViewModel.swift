@@ -38,7 +38,7 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
                                                           isKnockingEnabled: userSettings.app.knockingEnabled,
                                                           historySharingDetailsURL: userSettings.app.historySharingDetailsURL)
         
-        super.init(initialViewState: userSession.userHooks.securityAndPrivacyScreenHook.update(viewState, homeserver: clientProxy.homeserver))
+        super.init(initialViewState: userSession.userHooks.securityAndPrivacyScreenHook.update(viewState))
         
         if let powerLevels = roomProxy.infoPublisher.value.powerLevels {
             setupPermissions(powerLevels: powerLevels)

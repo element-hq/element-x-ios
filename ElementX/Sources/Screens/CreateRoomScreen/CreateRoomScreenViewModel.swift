@@ -67,7 +67,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
                                                   aliasLocalPart: roomAliasNameFromRoomDisplayName(roomName: ""),
                                                   bindings: bindings)
         
-        super.init(initialViewState: userSession.userHooks.createRoomScreenHook.update(viewState, homeserver: userSession.clientProxy.homeserver),
+        super.init(initialViewState: userSession.userHooks.createRoomScreenHook.update(viewState),
                    mediaProvider: userSession.mediaProvider)
         
         setupBindings()

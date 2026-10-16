@@ -21,8 +21,8 @@ final nonisolated class AppHooks: AppHooksProtocol {
     @AppHook(default: DefaultBugReportHook())
     var bugReportHook: BugReportHookProtocol
     
-    @AppHook(default: DefaultOAuthPresenterHook())
-    var oAuthPresenterHook: OAuthPresenterHookProtocol
+    @AppHook(default: DefaultOAuthAuthenticationPresenterHook())
+    var oAuthAuthenticationPresenterHook: OAuthAuthenticationPresenterHookProtocol
     
     @AppHook(default: DefaultDeveloperOptionsScreenHook())
     var developerOptionsScreenHook: DeveloperOptionsScreenHookProtocol

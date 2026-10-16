@@ -20,9 +20,9 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
     
     private let clientProxy: ClientProxyProtocol?
     
-    init(developerOptions: DeveloperOptionsProtocol, appHooks: AppHooks, clientProxy: ClientProxyProtocol?) {
+    init(developerOptions: DeveloperOptionsProtocol, screenHook: DeveloperOptionsScreenHookProtocol, clientProxy: ClientProxyProtocol?) {
         self.clientProxy = clientProxy
-        super.init(initialViewState: .init(appHooks: appHooks,
+        super.init(initialViewState: .init(screenHook: screenHook,
                                            shouldShowClearCache: clientProxy != nil,
                                            isSignedIn: clientProxy != nil,
                                            bindings: .init(developerOptions: developerOptions)))
