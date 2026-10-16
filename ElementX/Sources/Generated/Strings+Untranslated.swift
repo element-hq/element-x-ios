@@ -12,6 +12,8 @@ import Foundation
 internal nonisolated enum UntranslatedL10n {
   /// Search
   internal static var screenHomeTabSearch: String { return UntranslatedL10n.tr("Untranslated", "screen_home_tab_search") }
+  /// Your new recovery key is now active
+  internal static var screenRecoveryKeySuccessTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_recovery_key_success_title") }
   /// Search for chats and messages
   internal static var screenSearchEmptyStateMessage: String { return UntranslatedL10n.tr("Untranslated", "screen_search_empty_state_message") }
   /// Start searching...
@@ -32,6 +34,8 @@ internal nonisolated enum UntranslatedL10n {
   internal static var screenSignoutOtherVerifiedDeviceDialogTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_signout_other_verified_device_dialog_title") }
   /// Continue to remove this device
   internal static var screenSignoutSaveRecoveryKeyActionContinue: String { return UntranslatedL10n.tr("Untranslated", "screen_signout_save_recovery_key_action_continue") }
+  /// Generate new recovery key
+  internal static var screenSignoutSaveRecoveryKeyActionGenerate: String { return UntranslatedL10n.tr("Untranslated", "screen_signout_save_recovery_key_action_generate") }
   /// Clear all data currently stored on this device?
   /// Sign in again to access your account data and messages.
   internal static var softLogoutClearDataDialogContent: String { return UntranslatedL10n.tr("Untranslated", "soft_logout_clear_data_dialog_content") }
