@@ -33,6 +33,9 @@ struct AuthenticationStartScreenViewState: BindableState {
     
     let hideBrandChrome: Bool
     
+    /// Disables the buttons from the start of a login until it stops on this screen or the screen appears again.
+    var isLoggingIn = false
+    
     var bindings = AuthenticationStartScreenViewStateBindings()
     
     var loginButtonTitle: String {
@@ -58,6 +61,7 @@ enum AuthenticationStartScreenAlertType {
 enum AuthenticationStartScreenViewAction {
     /// Updates the window used as the OAuth presentation anchor.
     case updateWindow(UIWindow)
+    case screenAppeared
     case developerOptions
     case reportProblem
     

@@ -252,8 +252,9 @@ final class AuthenticationStartScreenViewModelTests {
         var deferred = deferFulfillment(context.observe(\.viewState.bindings.showClassicAppBackupInstructions)) { $0 }
         context.send(viewAction: .continueWithClassic(classicAppAccount))
         
-        // Then the backup instructions should be shown.
+        // Then the backup instructions should be shown and the buttons enabled.
         try await deferred.fulfill()
+        #expect(!context.viewState.isLoggingIn)
         
         // When the user completes the backup in the Classic app and the app returns to the foreground.
         classicAppManager?.availableSecretsForReturnValue = .complete
@@ -269,6 +270,55 @@ final class AuthenticationStartScreenViewModelTests {
         
         // Then the flow should continue the login process.
         try await deferredAction.fulfill()
+    }
+    
+    // MARK: - Logging In
+    
+    @Test
+    func loginDisablesTheButtonsUntilTheScreenAppears() async throws {
+        // Given a view model that needs a server to be selected to login.
+        await setupViewModel()
+        
+        // When tapping the login button.
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .login }
+        context.send(viewAction: .login)
+        try await deferred.fulfill()
+        
+        // Then the buttons should stay disabled while the next screen covers this one.
+        #expect(context.viewState.isLoggingIn)
+        
+        // When the screen appears again.
+        context.send(viewAction: .screenAppeared)
+        
+        // Then the buttons should be enabled.
+        #expect(!context.viewState.isLoggingIn)
+    }
+    
+    @Test
+    func provisionedOAuthLoginEnablesTheButtons() async throws {
+        // Given a view model that has been provisioned with a server that supports OAuth.
+        await setupViewModel(provisioningParameters: .init(accountProvider: "company.com", loginHint: nil))
+        
+        // When tapping the login button.
+        let deferred = deferFulfillment(context.observe(\.viewState.isLoggingIn), transitionValues: [true, false])
+        context.send(viewAction: .login)
+        
+        // Then the buttons should be disabled until the web authentication starts, as cancelling it returns to this screen.
+        try await deferred.fulfill()
+    }
+    
+    @Test
+    func provisionedLoginFailureEnablesTheButtons() async throws {
+        // Given a view model that has been provisioned with a server that can't be configured.
+        await setupViewModel(provisioningParameters: .init(accountProvider: "unknown-server.org", loginHint: nil))
+        
+        // When tapping the login button.
+        let deferred = deferFulfillment(context.observe(\.viewState.isLoggingIn), transitionValues: [true, false])
+        context.send(viewAction: .login)
+        
+        // Then the buttons should be disabled until the error is shown.
+        try await deferred.fulfill()
+        #expect(context.viewState.bindings.alertInfo != nil)
     }
     
     // MARK: - Helpers

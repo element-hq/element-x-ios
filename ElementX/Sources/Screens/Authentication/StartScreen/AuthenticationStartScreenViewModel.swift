@@ -84,6 +84,8 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
         case .updateWindow(let window):
             guard state.window != window else { return }
             state.window = window
+        case .screenAppeared:
+            state.isLoggingIn = false
         case .reportProblem:
             if canReportProblem {
                 actionsSubject.send(.reportProblem)
@@ -94,11 +96,14 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
         case .loginWithQR:
             actionsSubject.send(.loginWithQR)
         case .login:
+            state.isLoggingIn = true
             Task { await login() }
         case .register:
+            state.isLoggingIn = true
             actionsSubject.send(.register)
             
         case .continueWithClassic(let account):
+            state.isLoggingIn = true
             Task { await login(classicAppAccount: account) }
         case .otherOptions(let account):
             state.classicAppMode = .otherOptions(account)
@@ -115,6 +120,7 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
     private func login(classicAppAccount: ClassicAppAccount? = nil) async {
         if let classicAppAccount {
             if classicAppAccount.state.availableSecrets == .requiresBackup {
+                state.isLoggingIn = false
                 state.bindings.showClassicAppBackupInstructions = true
             } else {
                 await loginDirectly(using: classicAppAccount.serverName,
@@ -157,6 +163,8 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
         
         switch await authenticationService.urlForOAuthLogin(loginHint: loginHint) {
         case .success(let oAuthData):
+            // The web authentication leaves this screen in place, so cancelling it must find the buttons enabled.
+            state.isLoggingIn = false
             actionsSubject.send(.loginDirectlyWithOAuth(data: oAuthData, window: window))
         case .failure:
             displayError()
@@ -194,6 +202,7 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
     }
     
     private func displayError() {
+        state.isLoggingIn = false
         state.bindings.alertInfo = AlertInfo(id: .genericError)
     }
 }
