@@ -77,7 +77,7 @@ class LinkNewDeviceService: LinkNewDeviceServiceProtocol {
             defer { progressContinuation.finish() }
             do {
                 // Note: The SDK doesn't provide us with a way to cancel the grant if the user hit the cancel button 🤷‍♂️
-                try await grantLoginHandler.generate(progressListener: listener) // The success state is handled by the listener.
+                try await grantLoginHandler.generate(progressListener: listener).wait() // The success state is handled by the listener.
                 // We send the .done progress in case the listener didn't get a chance to pass it on from the SDK before being deallocated
                 progressSubject.send(LinkMobileProgress.done)
             } catch let error as HumanQrGrantLoginError {
@@ -131,7 +131,7 @@ class LinkNewDeviceService: LinkNewDeviceServiceProtocol {
             defer { progressContinuation.finish() }
             do {
                 // Note: The SDK doesn't provide us with a way to cancel the grant if the user hit the cancel button 🤷‍♂️
-                try await grantLoginHandler.scan(qrCodeData: qrCodeData, progressListener: listener) // The success state is handled by the listener.
+                try await grantLoginHandler.scan(qrCodeData: qrCodeData, progressListener: listener).wait() // The success state is handled by the listener.
                 // We send the .done progress in case the listener didn't get a chance to pass it on from the SDK before being deallocated
                 progressSubject.send(LinkDesktopProgress.done)
             } catch let error as HumanQrGrantLoginError {
