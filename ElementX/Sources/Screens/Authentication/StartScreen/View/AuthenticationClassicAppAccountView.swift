@@ -40,6 +40,7 @@ struct AuthenticationClassicAppAccountView: View {
         .introspect(.window, on: .supportedVersions) { window in
             context.send(viewAction: .updateWindow(window))
         }
+        .onAppear { context.send(viewAction: .screenAppeared) }
     }
     
     var header: some View {
@@ -108,6 +109,7 @@ struct AuthenticationClassicAppAccountView: View {
                 .buttonStyle(.compound(.secondary))
             }
         }
+        .disabled(context.viewState.isLoggingIn)
     }
 }
 

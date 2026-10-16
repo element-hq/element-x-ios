@@ -59,6 +59,7 @@ struct AuthenticationStartScreen: View {
         .introspect(.window, on: .supportedVersions) { window in
             context.send(viewAction: .updateWindow(window))
         }
+        .onAppear { context.send(viewAction: .screenAppeared) }
     }
     
     var content: some View {
@@ -134,6 +135,7 @@ struct AuthenticationStartScreen: View {
                 }
                 .padding(.top, 16)
         }
+        .disabled(context.viewState.isLoggingIn)
         .padding(.horizontal, verticalSizeClass == .compact ? 128 : 24)
         .readableFrame()
     }

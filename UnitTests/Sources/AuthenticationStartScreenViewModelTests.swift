@@ -252,8 +252,9 @@ final class AuthenticationStartScreenViewModelTests {
         var deferred = deferFulfillment(context.observe(\.viewState.bindings.showClassicAppBackupInstructions)) { $0 }
         context.send(viewAction: .continueWithClassic(classicAppAccount))
         
-        // Then the backup instructions should be shown.
+        // Then the backup instructions should be shown and the buttons enabled.
         try await deferred.fulfill()
+        #expect(!context.viewState.isLoggingIn)
         
         // When the user completes the backup in the Classic app and the app returns to the foreground.
         classicAppManager?.availableSecretsForReturnValue = .complete
@@ -271,62 +272,53 @@ final class AuthenticationStartScreenViewModelTests {
         try await deferredAction.fulfill()
     }
     
-    // MARK: - Repeated Taps
+    // MARK: - Logging In
     
     @Test
-    func provisionedPasswordLoginTwiceContinuesOnce() async throws {
-        // Given a view model that has been provisioned with a server that does not support OAuth.
-        await setupViewModel(provisioningParameters: .init(accountProvider: "company.com", loginHint: nil), supportsOAuth: false)
+    func loginDisablesTheButtonsUntilTheScreenAppears() async throws {
+        // Given a view model that needs a server to be selected to login.
+        await setupViewModel()
         
-        // When tapping the login button twice.
-        var continueCount = 0
-        let deferredFailure = deferFailure(viewModel.actions, timeout: .seconds(1), message: "The flow should only continue once.") { action in
-            guard action.isLoginDirectlyWithPassword else { return false }
-            continueCount += 1
-            return continueCount > 1
-        }
-        let deferred = deferFulfillment(viewModel.actions) { $0.isLoginDirectlyWithPassword }
-        context.send(viewAction: .login)
+        // When tapping the login button.
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .login }
         context.send(viewAction: .login)
         try await deferred.fulfill()
-        try await deferredFailure.fulfill()
         
-        // Then the server should only be configured and the flow continued once.
-        #expect(continueCount == 1)
-        #expect(clientFactory.makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        // Then the buttons should stay disabled while the next screen covers this one.
+        #expect(context.viewState.isLoggingIn)
+        
+        // When the screen appears again.
+        context.send(viewAction: .screenAppeared)
+        
+        // Then the buttons should be enabled.
+        #expect(!context.viewState.isLoggingIn)
     }
     
     @Test
-    func loginWithQRWhileLoggingInIsIgnored() async throws {
-        // Given a view model for an app that only allows the use of a single provider that does not support OAuth.
-        setAllowedAccountProviders([.generic("company.com")])
-        await setupViewModel(supportsOAuth: false)
-        
-        // When tapping the QR code button while the login is still in progress.
-        let deferredFailure = deferFailure(viewModel.actions, timeout: .seconds(1), message: "The login is still in progress.") { $0 == .loginWithQR }
-        let deferred = deferFulfillment(viewModel.actions) { $0.isLoginDirectlyWithPassword }
-        context.send(viewAction: .login)
-        context.send(viewAction: .loginWithQR)
-        
-        // Then only the login should continue the flow.
-        try await deferred.fulfill()
-        try await deferredFailure.fulfill()
-    }
-    
-    @Test
-    func provisionedOAuthLoginCanBeRetried() async throws {
-        // Given a view model that has been provisioned with a server that supports OAuth, where the OAuth login has started.
+    func provisionedOAuthLoginEnablesTheButtons() async throws {
+        // Given a view model that has been provisioned with a server that supports OAuth.
         await setupViewModel(provisioningParameters: .init(accountProvider: "company.com", loginHint: nil))
-        var deferred = deferFulfillment(viewModel.actions) { $0.isLoginDirectlyWithOAuth }
-        context.send(viewAction: .login)
-        try await deferred.fulfill()
         
-        // When tapping the login button again, as after cancelling the web authentication.
-        deferred = deferFulfillment(viewModel.actions) { $0.isLoginDirectlyWithOAuth }
+        // When tapping the login button.
+        let deferred = deferFulfillment(context.observe(\.viewState.isLoggingIn), transitionValues: [true, false])
         context.send(viewAction: .login)
         
-        // Then the OAuth login should start again.
+        // Then the buttons should be disabled until the web authentication starts, as cancelling it returns to this screen.
         try await deferred.fulfill()
+    }
+    
+    @Test
+    func provisionedLoginFailureEnablesTheButtons() async throws {
+        // Given a view model that has been provisioned with a server that can't be configured.
+        await setupViewModel(provisioningParameters: .init(accountProvider: "unknown-server.org", loginHint: nil))
+        
+        // When tapping the login button.
+        let deferred = deferFulfillment(context.observe(\.viewState.isLoggingIn), transitionValues: [true, false])
+        context.send(viewAction: .login)
+        
+        // Then the buttons should be disabled until the error is shown.
+        try await deferred.fulfill()
+        #expect(context.viewState.bindings.alertInfo != nil)
     }
     
     // MARK: - Helpers

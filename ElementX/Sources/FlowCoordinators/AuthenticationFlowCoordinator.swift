@@ -271,7 +271,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         
         coordinator.actions
             .sink { [weak self] action in
-                guard let self, stateMachine.state == .startScreen else { return }
+                guard let self else { return }
                 
                 switch action {
                 case .loginWithQR:
