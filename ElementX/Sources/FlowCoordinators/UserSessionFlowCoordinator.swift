@@ -676,8 +676,10 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 switch action {
                 case .cancel:
                     navigationTabCoordinator.setSheetCoordinator(nil)
+                case .checkRecoveryKey:
+                    presentRecoveryKeyScreen(mode: .checkRecovery, on: sheetNavigationStackCoordinator, confirmationCoordinator: coordinator)
                 case .generateRecoveryKey:
-                    presentRecoveryKeyScreen(on: sheetNavigationStackCoordinator, confirmationCoordinator: coordinator)
+                    presentRecoveryKeyScreen(mode: nil, on: sheetNavigationStackCoordinator, confirmationCoordinator: coordinator)
                 case .logout:
                     actionsSubject.send(.logout)
                 }
@@ -688,12 +690,14 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         navigationTabCoordinator.setSheetCoordinator(sheetNavigationStackCoordinator, animated: true)
     }
     
-    /// Takes the user through generating a new recovery key, and then carries on removing the device.
-    private func presentRecoveryKeyScreen(on navigationStackCoordinator: NavigationStackCoordinator,
+    /// Takes the user through generating or checking their recovery key, and then carries on removing the device.
+    private func presentRecoveryKeyScreen(mode: SecureBackupRecoveryKeyScreenViewMode?,
+                                          on navigationStackCoordinator: NavigationStackCoordinator,
                                           confirmationCoordinator: SecureBackupLogoutConfirmationScreenCoordinator) {
         let parameters = SecureBackupRecoveryKeyScreenCoordinatorParameters(secureBackupController: userSession.clientProxy.secureBackupController,
                                                                             userIndicatorController: flowParameters.userIndicatorController,
                                                                             isModallyPresented: false,
+                                                                            mode: mode,
                                                                             completionButtonTitle: L10n.screenSignoutSaveRecoveryKeyActionContinue)
         let coordinator = userSession.userHooks.recoveryKeyScreenHook.makeCoordinator(parameters: parameters)
         

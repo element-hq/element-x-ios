@@ -152,6 +152,16 @@ class SecureBackupController: SecureBackupControllerProtocol {
         }
     }
     
+    func checkRecoveryKey(_ key: String) async -> Result<Void, SecureBackupControllerError> {
+        do {
+            try await encryption.recover(recoveryKey: key)
+            return .success(())
+        } catch {
+            MXLog.info("Recovery key check failed with error: \(error)")
+            return .failure(.failedConfirmingRecoveryKey)
+        }
+    }
+    
     func waitForKeyBackupUpload(uploadStateSubject: CurrentValueSubject<SecureBackupSteadyState, Never>) async -> Result<Void, SecureBackupControllerError> {
         do {
             MXLog.info("Waiting for backup upload steady state")
