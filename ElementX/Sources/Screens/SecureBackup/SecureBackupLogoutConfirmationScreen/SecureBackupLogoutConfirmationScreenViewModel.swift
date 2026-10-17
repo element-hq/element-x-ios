@@ -54,6 +54,8 @@ class SecureBackupLogoutConfirmationScreenViewModel: SecureBackupLogoutConfirmat
         case .cancel:
             keyUploadWaitingTask = nil
             actionsSubject.send(.cancel)
+        case .checkRecoveryKey:
+            actionsSubject.send(.checkRecoveryKey)
         case .generateRecoveryKey:
             actionsSubject.send(.generateRecoveryKey)
         case .logout:
