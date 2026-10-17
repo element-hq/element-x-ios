@@ -34,7 +34,7 @@ class SecureBackupLogoutFlowCoordinator: FlowCoordinatorProtocol {
         case initial
         /// The root screen for this flow.
         case confirmationScreen
-        /// Generating a new recovery key.
+        /// Generating a new recovery key, or checking the existing one.
         case recoveryKeyScreen
     }
     
@@ -44,6 +44,8 @@ class SecureBackupLogoutFlowCoordinator: FlowCoordinatorProtocol {
         
         /// The user wants to generate a new recovery key.
         case generateRecoveryKey
+        /// The user wants to check their existing recovery key.
+        case checkRecoveryKey
         /// The recovery key screen is no longer shown.
         case finishedRecoveryKey
     }
@@ -95,7 +97,13 @@ class SecureBackupLogoutFlowCoordinator: FlowCoordinatorProtocol {
             guard let continuation = context.userInfo as? SecureBackupLogoutConfirmationScreenRecoveryKeyContinuation else {
                 fatalError("Expected a continuation in the userInfo.")
             }
-            self?.presentRecoveryKeyScreen(continuation: continuation)
+            self?.presentRecoveryKeyScreen(mode: nil, continuation: continuation)
+        }
+        stateMachine.addRoutes(event: .checkRecoveryKey, transitions: [.confirmationScreen => .recoveryKeyScreen]) { [weak self] context in
+            guard let continuation = context.userInfo as? SecureBackupLogoutConfirmationScreenRecoveryKeyContinuation else {
+                fatalError("Expected a continuation in the userInfo.")
+            }
+            self?.presentRecoveryKeyScreen(mode: .checkRecovery, continuation: continuation)
         }
         stateMachine.addRoutes(event: .finishedRecoveryKey, transitions: [.recoveryKeyScreen => .confirmationScreen])
         
@@ -117,6 +125,8 @@ class SecureBackupLogoutFlowCoordinator: FlowCoordinatorProtocol {
                 switch action {
                 case .cancel:
                     actionsSubject.send(.cancel)
+                case .checkRecoveryKey(let continuation):
+                    stateMachine.tryEvent(.checkRecoveryKey, userInfo: continuation)
                 case .generateRecoveryKey(let continuation):
                     stateMachine.tryEvent(.generateRecoveryKey, userInfo: continuation)
                 case .logout:
@@ -128,10 +138,12 @@ class SecureBackupLogoutFlowCoordinator: FlowCoordinatorProtocol {
         navigationStackCoordinator.setRootCoordinator(coordinator)
     }
     
-    private func presentRecoveryKeyScreen(continuation: SecureBackupLogoutConfirmationScreenRecoveryKeyContinuation) {
+    private func presentRecoveryKeyScreen(mode: SecureBackupRecoveryKeyScreenViewMode?,
+                                          continuation: SecureBackupLogoutConfirmationScreenRecoveryKeyContinuation) {
         let parameters = SecureBackupRecoveryKeyScreenCoordinatorParameters(secureBackupController: userSession.clientProxy.secureBackupController,
                                                                             userIndicatorController: userIndicatorController,
                                                                             isModallyPresented: false,
+                                                                            mode: mode,
                                                                             presentationContext: .deviceRemoval)
         let coordinator = userSession.userHooks.recoveryKeyScreenHook.makeCoordinator(parameters: parameters)
         

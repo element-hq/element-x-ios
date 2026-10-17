@@ -13,6 +13,7 @@ import SwiftUI
 struct SecureBackupRecoveryKeyScreen: View {
     @Bindable var context: SecureBackupRecoveryKeyScreenViewModel.Context
     @FocusState private var focused
+    @State private var isCheckedKeyRevealed = false
     private let textFieldIdentifier = "textFieldIdentifier"
     
     var body: some View {
@@ -47,6 +48,8 @@ struct SecureBackupRecoveryKeyScreen: View {
                     generateRecoveryKeySection
                 case .fixRecovery:
                     confirmRecoveryKeySection
+                case .checkRecovery:
+                    checkRecoveryKeySection
                 case .unknown:
                     EmptyView()
                 }
@@ -81,6 +84,8 @@ struct SecureBackupRecoveryKeyScreen: View {
             recoveryCreatedActionButtons
         case .fixRecovery:
             incompleteVerificationActionButtons
+        case .checkRecovery:
+            checkActionButtons
         case .unknown:
             EmptyView()
         }
@@ -97,6 +102,15 @@ struct SecureBackupRecoveryKeyScreen: View {
             .disabled(context.confirmationRecoveryKey.isEmpty)
             .accessibilityIdentifier(A11yIdentifiers.secureBackupRecoveryKeyScreen.confirm)
         }
+    }
+    
+    private var checkActionButtons: some View {
+        Button(L10n.actionContinue) {
+            context.send(viewAction: .completeCheck)
+        }
+        .buttonStyle(.compound(.primary))
+        .disabled(context.viewState.keyValidity != .valid)
+        .accessibilityIdentifier(A11yIdentifiers.secureBackupRecoveryKeyScreen.confirm)
     }
     
     private var completedActionButtons: some View {
@@ -187,6 +201,63 @@ struct SecureBackupRecoveryKeyScreen: View {
         }
     }
     
+    private var checkRecoveryKeySection: some View {
+        let isInvalid = context.viewState.keyValidity == .invalid
+        
+        return VStack(alignment: .leading, spacing: 8) {
+            Text(UntranslatedL10n.screenRecoveryKeyCheckKeyTitle)
+                .foregroundColor(isInvalid ? .compound.textCriticalPrimary : .compound.textPrimary)
+                .font(.compound.bodySMSemibold)
+                .padding(.leading, 16)
+            
+            HStack(spacing: 8) {
+                Group {
+                    if isCheckedKeyRevealed {
+                        TextField("", text: $context.confirmationRecoveryKey, axis: .vertical)
+                    } else {
+                        SecureField("", text: $context.confirmationRecoveryKey)
+                    }
+                }
+                .focused($focused)
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
+                .tint(.compound.iconAccentTertiary)
+                .onSubmit { context.send(viewAction: .submitCheckedKey) }
+                .accessibilityIdentifier(A11yIdentifiers.secureBackupRecoveryKeyScreen.recoveryKeyField)
+                
+                Button {
+                    isCheckedKeyRevealed.toggle()
+                } label: {
+                    CompoundIcon(isCheckedKeyRevealed ? \.visibilityOff : \.visibilityOn)
+                        .foregroundStyle(.compound.iconSecondary)
+                }
+            }
+            .padding(.vertical, 14)
+            .padding(.horizontal, 16)
+            .frame(maxWidth: .infinity)
+            .background(isInvalid ? Color.compound.bgCriticalSubtle : Color.compound.bgSubtleSecondaryLevel0)
+            .clipShape(RoundedRectangle(cornerRadius: 14))
+            .overlay {
+                RoundedRectangle(cornerRadius: 14)
+                    .strokeBorder(isInvalid ? Color.compound.borderCriticalPrimary : .clear)
+            }
+            
+            if isInvalid {
+                HStack(spacing: 4) {
+                    CompoundIcon(\.errorSolid, size: .xSmall, relativeTo: .compound.bodySM)
+                    Text(L10n.screenRecoveryKeyConfirmErrorTitle)
+                }
+                .foregroundStyle(.compound.textCriticalPrimary)
+                .font(.compound.bodySM)
+                .padding(.leading, 16)
+            }
+        }
+        .onChange(of: context.confirmationRecoveryKey) { _, _ in
+            context.send(viewAction: .checkedKeyChanged)
+        }
+        .onAppear { focused = true }
+    }
+    
     private var generateButtonTitle: String {
         context.viewState.mode == .setupRecovery ? L10n.screenRecoveryKeySetupGenerateKey : L10n.screenRecoveryKeyChangeGenerateKey
     }
@@ -247,6 +318,10 @@ struct SecureBackupRecoveryKeyScreen_Previews: PreviewProvider, TestablePreview 
     static let incompleteViewModel = viewModel(recoveryState: .incomplete)
     static let unknownViewModel = viewModel(recoveryState: .unknown)
     static let completedViewModel = viewModel(recoveryState: .enabled, key: key, isCompleted: true)
+    static let checkViewModel = viewModel(recoveryState: .enabled, mode: .checkRecovery)
+    static let checkInvalidViewModel = viewModel(recoveryState: .enabled, mode: .checkRecovery, enteredKey: "Not the key", checkResult: .failure(.failedConfirmingRecoveryKey))
+    static let checkValidViewModel = viewModel(recoveryState: .enabled, mode: .checkRecovery, enteredKey: key)
+    static let checkCompletedViewModel = viewModel(recoveryState: .enabled, isCompleted: true, mode: .checkRecovery, enteredKey: key)
     
     static var previews: some View {
         ElementNavigationStack {
@@ -274,9 +349,37 @@ struct SecureBackupRecoveryKeyScreen_Previews: PreviewProvider, TestablePreview 
             SecureBackupRecoveryKeyScreen(context: completedViewModel.context)
         }
         .previewDisplayName("Completed")
+        
+        ElementNavigationStack {
+            SecureBackupRecoveryKeyScreen(context: checkViewModel.context)
+        }
+        .previewDisplayName("Check")
+        
+        ElementNavigationStack {
+            SecureBackupRecoveryKeyScreen(context: checkInvalidViewModel.context)
+        }
+        .snapshotPreferences(expect: checkInvalidViewModel.context.observe(\.viewState.keyValidity).map { $0 == .invalid })
+        .previewDisplayName("Check incorrect")
+        
+        ElementNavigationStack {
+            SecureBackupRecoveryKeyScreen(context: checkValidViewModel.context)
+        }
+        .snapshotPreferences(expect: checkValidViewModel.context.observe(\.viewState.keyValidity).map { $0 == .valid })
+        .previewDisplayName("Check correct")
+        
+        ElementNavigationStack {
+            SecureBackupRecoveryKeyScreen(context: checkCompletedViewModel.context)
+        }
+        .snapshotPreferences(expect: checkCompletedViewModel.context.observe(\.viewState.isCompleted))
+        .previewDisplayName("Check completed")
     }
     
-    static func viewModel(recoveryState: SecureBackupRecoveryState, key: String? = nil, isCompleted: Bool = false) -> SecureBackupRecoveryKeyScreenViewModelType {
+    static func viewModel(recoveryState: SecureBackupRecoveryState,
+                          key: String? = nil,
+                          isCompleted: Bool = false,
+                          mode: SecureBackupRecoveryKeyScreenViewMode? = nil,
+                          enteredKey: String? = nil,
+                          checkResult: Result<Void, SecureBackupControllerError> = .success(())) -> SecureBackupRecoveryKeyScreenViewModelType {
         let backupController = SecureBackupControllerMock()
         backupController.recoveryState = CurrentValueSubject<SecureBackupRecoveryState, Never>(recoveryState).asCurrentValuePublisher()
         
@@ -289,11 +392,27 @@ struct SecureBackupRecoveryKeyScreen_Previews: PreviewProvider, TestablePreview 
             }
         }
         
+        backupController.checkRecoveryKeyReturnValue = checkResult
+        
         let viewModel = SecureBackupRecoveryKeyScreenViewModel(secureBackupController: backupController,
                                                                userIndicatorController: UserIndicatorControllerMock(),
-                                                               isModallyPresented: true)
+                                                               isModallyPresented: true,
+                                                               mode: mode)
         
-        if isCompleted {
+        if let enteredKey {
+            viewModel.context.confirmationRecoveryKey = enteredKey
+            viewModel.context.send(viewAction: .submitCheckedKey)
+        }
+        
+        if isCompleted, mode == .checkRecovery {
+            Task {
+                // Waits for the key to be checked.
+                while viewModel.context.viewState.keyValidity != .valid {
+                    await Task.yield()
+                }
+                viewModel.context.send(viewAction: .completeCheck)
+            }
+        } else if isCompleted {
             viewModel.context.send(viewAction: .confirmKeySaved)
             viewModel.context.alertInfo?.primaryButton.action?()
         }

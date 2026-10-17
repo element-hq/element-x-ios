@@ -56,8 +56,10 @@ class SecureBackupLogoutConfirmationScreenViewModel: SecureBackupLogoutConfirmat
         case .cancel:
             keyUploadWaitingTask = nil
             actionsSubject.send(.cancel)
+        case .checkRecoveryKey:
+            requestRecoveryKey { .checkRecoveryKey($0) }
         case .generateRecoveryKey:
-            generateRecoveryKey()
+            requestRecoveryKey { .generateRecoveryKey($0) }
         case .logout:
             attemptLogout()
         }
@@ -65,9 +67,10 @@ class SecureBackupLogoutConfirmationScreenViewModel: SecureBackupLogoutConfirmat
     
     // MARK: - Private
     
-    private func generateRecoveryKey() {
+    /// Asks for the user to be taken through a recovery key screen, and carries on removing the device once they have finished it.
+    private func requestRecoveryKey(action: (SecureBackupLogoutConfirmationScreenRecoveryKeyContinuation) -> SecureBackupLogoutConfirmationScreenViewModelAction) {
         let (stream, continuation) = AsyncStream<Void>.makeStream()
-        actionsSubject.send(.generateRecoveryKey(continuation))
+        actionsSubject.send(action(continuation))
         
         recoveryKeyTask = Task { [weak self] in
             for await _ in stream {
