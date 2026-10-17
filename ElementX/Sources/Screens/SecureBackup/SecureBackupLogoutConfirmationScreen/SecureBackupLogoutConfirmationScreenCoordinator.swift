@@ -18,6 +18,7 @@ struct SecureBackupLogoutConfirmationScreenCoordinatorParameters {
 
 enum SecureBackupLogoutConfirmationScreenCoordinatorAction {
     case cancel
+    case checkRecoveryKey(SecureBackupLogoutConfirmationScreenRecoveryKeyContinuation)
     case generateRecoveryKey(SecureBackupLogoutConfirmationScreenRecoveryKeyContinuation)
     case logout
 }
@@ -47,6 +48,8 @@ final class SecureBackupLogoutConfirmationScreenCoordinator: CoordinatorProtocol
             switch action {
             case .cancel:
                 actionsSubject.send(.cancel)
+            case .checkRecoveryKey(let continuation):
+                actionsSubject.send(.checkRecoveryKey(continuation))
             case .generateRecoveryKey(let continuation):
                 actionsSubject.send(.generateRecoveryKey(continuation))
             case .logout:

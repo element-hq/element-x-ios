@@ -160,6 +160,19 @@ struct SecureBackupLogoutConfirmationScreenViewModelTests {
     }
     
     @Test
+    func checkingTheRecoveryKeyIsForwarded() async throws {
+        let deferred = deferFulfillment(viewModel.actions) { action in
+            if case .checkRecoveryKey = action {
+                true
+            } else {
+                false
+            }
+        }
+        context.send(viewAction: .checkRecoveryKey)
+        try await deferred.fulfill()
+    }
+    
+    @Test
     func continuingWithANewRecoveryKeyWaitsForTheBackupFirst() async throws {
         let viewModel = SecureBackupLogoutConfirmationScreenViewModel(secureBackupController: secureBackupController,
                                                                       homeserverReachabilityPublisher: reachabilitySubject.asCurrentValuePublisher(),

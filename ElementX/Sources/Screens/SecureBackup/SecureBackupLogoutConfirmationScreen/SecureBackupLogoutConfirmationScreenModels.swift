@@ -14,6 +14,7 @@ typealias SecureBackupLogoutConfirmationScreenRecoveryKeyContinuation = AsyncStr
 
 enum SecureBackupLogoutConfirmationScreenViewModelAction {
     case cancel
+    case checkRecoveryKey(SecureBackupLogoutConfirmationScreenRecoveryKeyContinuation)
     case generateRecoveryKey(SecureBackupLogoutConfirmationScreenRecoveryKeyContinuation)
     case logout
 }
@@ -86,6 +87,7 @@ enum SecureBackupLogoutConfirmationScreenAlertType {
 
 enum SecureBackupLogoutConfirmationScreenViewAction {
     case cancel
+    case checkRecoveryKey
     case generateRecoveryKey
     case logout
 }

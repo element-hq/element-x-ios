@@ -91,6 +91,59 @@ struct SecureBackupRecoveryKeyScreenViewModelTests {
         #expect(!secureBackupController.generateRecoveryKeyCalled)
     }
     
+    // MARK: - Checking the key
+    
+    @Test
+    func checkingStartsWithoutAnyVerdict() async throws {
+        let viewModel = try await makeViewModel(mode: .checkRecovery)
+        
+        #expect(viewModel.context.viewState.mode == .checkRecovery)
+        #expect(viewModel.context.viewState.keyValidity == .unchecked)
+    }
+    
+    @Test
+    func correctKeyEnablesContinuingToTheSuccessScreen() async throws {
+        let viewModel = try await makeViewModel(mode: .checkRecovery, checkResult: .success(()))
+        #expect(!viewModel.context.viewState.isCompleted)
+        
+        let deferred = deferFulfillment(viewModel.context.observe(\.viewState.keyValidity)) { $0 == .valid }
+        viewModel.context.confirmationRecoveryKey = recoveryKey
+        viewModel.context.send(viewAction: .submitCheckedKey)
+        try await deferred.fulfill()
+        
+        viewModel.context.send(viewAction: .completeCheck)
+        #expect(viewModel.context.viewState.isCompleted)
+        #expect(viewModel.context.viewState.title == UntranslatedL10n.screenRecoveryKeyCheckSuccessTitle)
+    }
+    
+    @Test
+    func incorrectKeyIsFlaggedAndCannotBeContinuedFrom() async throws {
+        let viewModel = try await makeViewModel(mode: .checkRecovery, checkResult: .failure(.failedConfirmingRecoveryKey))
+        
+        let deferred = deferFulfillment(viewModel.context.observe(\.viewState.keyValidity)) { $0 == .invalid }
+        viewModel.context.confirmationRecoveryKey = "Not the key"
+        viewModel.context.send(viewAction: .submitCheckedKey)
+        try await deferred.fulfill()
+        
+        viewModel.context.send(viewAction: .completeCheck)
+        #expect(!viewModel.context.viewState.isCompleted)
+    }
+    
+    @Test
+    func clearingTheKeyRemovesTheVerdict() async throws {
+        let viewModel = try await makeViewModel(mode: .checkRecovery, checkResult: .failure(.failedConfirmingRecoveryKey))
+        
+        let invalid = deferFulfillment(viewModel.context.observe(\.viewState.keyValidity)) { $0 == .invalid }
+        viewModel.context.confirmationRecoveryKey = "Not the key"
+        viewModel.context.send(viewAction: .submitCheckedKey)
+        try await invalid.fulfill()
+        
+        viewModel.context.confirmationRecoveryKey = ""
+        viewModel.context.send(viewAction: .checkedKeyChanged)
+        
+        #expect(viewModel.context.viewState.keyValidity == .unchecked)
+    }
+    
     // MARK: - Helpers
     
     private func confirmKeyIsSaved(on viewModel: SecureBackupRecoveryKeyScreenViewModel) async throws {
@@ -103,15 +156,19 @@ struct SecureBackupRecoveryKeyScreenViewModelTests {
     }
     
     private func makeViewModel(recoveryState: SecureBackupRecoveryState = .enabled,
-                               presentationContext: SecureBackupRecoveryKeyScreenPresentationContext = .standard) -> (SecureBackupRecoveryKeyScreenViewModel, SecureBackupControllerMock) {
+                               mode: SecureBackupRecoveryKeyScreenViewMode? = nil,
+                               presentationContext: SecureBackupRecoveryKeyScreenPresentationContext = .standard,
+                               checkResult: Result<Void, SecureBackupControllerError> = .success(()),
+                               waitingForKey: Bool = false) async throws -> SecureBackupRecoveryKeyScreenViewModel {
         let secureBackupController = SecureBackupControllerMock()
         secureBackupController.recoveryState = CurrentValueSubject<SecureBackupRecoveryState, Never>(recoveryState).asCurrentValuePublisher()
-        secureBackupController.generateRecoveryKeyReturnValue = recoveryKey
-        secureBackupController.activateRecoveryKeyReturnValue = .success(())
+        secureBackupController.generateRecoveryKeyWithPassphraseReturnValue = .success(recoveryKey)
+        secureBackupController.checkRecoveryKeyReturnValue = checkResult
         
         let viewModel = SecureBackupRecoveryKeyScreenViewModel(secureBackupController: secureBackupController,
                                                                userIndicatorController: UserIndicatorControllerMock(),
                                                                isModallyPresented: false,
+                                                               mode: mode,
                                                                presentationContext: presentationContext)
         
         return (viewModel, secureBackupController)
