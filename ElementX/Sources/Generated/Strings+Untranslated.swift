@@ -12,6 +12,14 @@ import Foundation
 internal nonisolated enum UntranslatedL10n {
   /// Search
   internal static var screenHomeTabSearch: String { return UntranslatedL10n.tr("Untranslated", "screen_home_tab_search") }
+  /// Enter recovery key
+  internal static var screenRecoveryKeyCheckKeyTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_recovery_key_check_key_title") }
+  /// Enter the recovery key you’ve saved to make sure that it’s correct and active.
+  internal static var screenRecoveryKeyCheckSubtitle: String { return UntranslatedL10n.tr("Untranslated", "screen_recovery_key_check_subtitle") }
+  /// Your recovery key is active
+  internal static var screenRecoveryKeyCheckSuccessTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_recovery_key_check_success_title") }
+  /// Check your recovery key
+  internal static var screenRecoveryKeyCheckTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_recovery_key_check_title") }
   /// Your new recovery key is now active
   internal static var screenRecoveryKeySuccessTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_recovery_key_success_title") }
   /// Search for chats and messages
@@ -32,6 +40,8 @@ internal nonisolated enum UntranslatedL10n {
   internal static var screenSignoutOtherVerifiedDeviceDialogContent: String { return UntranslatedL10n.tr("Untranslated", "screen_signout_other_verified_device_dialog_content") }
   /// Are you sure you want to remove this device?
   internal static var screenSignoutOtherVerifiedDeviceDialogTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_signout_other_verified_device_dialog_title") }
+  /// Check your recovery key
+  internal static var screenSignoutSaveRecoveryKeyActionCheck: String { return UntranslatedL10n.tr("Untranslated", "screen_signout_save_recovery_key_action_check") }
   /// Continue to remove this device
   internal static var screenSignoutSaveRecoveryKeyActionContinue: String { return UntranslatedL10n.tr("Untranslated", "screen_signout_save_recovery_key_action_continue") }
   /// Generate new recovery key

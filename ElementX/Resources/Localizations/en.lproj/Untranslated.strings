@@ -1,4 +1,8 @@
 "screen_home_tab_search" = "Search";
+"screen_recovery_key_check_key_title" = "Enter recovery key";
+"screen_recovery_key_check_subtitle" = "Enter the recovery key you’ve saved to make sure that it’s correct and active.";
+"screen_recovery_key_check_success_title" = "Your recovery key is active";
+"screen_recovery_key_check_title" = "Check your recovery key";
 "screen_recovery_key_success_title" = "Your new recovery key is now active";
 "screen_search_empty_state_message" = "Search for chats and messages";
 "screen_search_empty_state_title" = "Start searching...";
@@ -8,6 +12,7 @@
 "screen_search_tab_messages" = "Messages";
 "screen_signout_other_verified_device_dialog_content" = "Make sure you always have access to another verified device or your recovery key to avoid losing your encrypted chat history.";
 "screen_signout_other_verified_device_dialog_title" = "Are you sure you want to remove this device?";
+"screen_signout_save_recovery_key_action_check" = "Check your recovery key";
 "screen_signout_save_recovery_key_action_continue" = "Continue to remove this device";
 "screen_signout_save_recovery_key_action_generate" = "Generate new recovery key";
 "soft_logout_clear_data_dialog_content" = "Clear all data currently stored on this device?\nSign in again to access your account data and messages.";
