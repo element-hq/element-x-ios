@@ -115,6 +115,12 @@ final class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocati
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        // Core Location keeps trying after this one, so the shares can carry on.
+        if (error as? CLError)?.code == .locationUnknown {
+            MXLog.info("Location manager couldn't find the location yet")
+            return
+        }
+        
         MXLog.error("Location manager failed with error: \(error)")
         stopAllLiveLocations()
     }
