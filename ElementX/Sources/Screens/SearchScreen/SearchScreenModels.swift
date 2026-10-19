@@ -124,34 +124,34 @@ struct SearchScreenMessage: Identifiable, Equatable {
         timestamp = result.timestamp
     }
     
-    var preview: AttributedString? {
+    var preview: String? {
         guard let messageBody else { return nil }
-        return AttributedString("\(senderName): ") + messageBody
+        return "\(senderName): \(messageBody)"
     }
     
-    private var messageBody: AttributedString? {
+    private var messageBody: String? {
         switch content {
         case .message(let content):
             switch content {
             case .text(let content):
-                content.formattedBody ?? AttributedString(content.body)
+                content.body
             case .notice(let content):
-                content.formattedBody ?? AttributedString(content.body)
+                content.body
             case .emote(let content):
-                content.formattedBody ?? AttributedString(content.body)
+                content.body
             case .audio, .file, .image, .video, .gallery:
                 nil
             case .voice:
-                AttributedString(L10n.commonVoiceMessage)
+                L10n.commonVoiceMessage
             case .location:
-                AttributedString(L10n.commonSharedLocation)
+                L10n.commonSharedLocation
             }
         case .poll(let question):
-            AttributedString(question)
+            question
         case .liveLocation:
-            AttributedString(L10n.commonSharedLiveLocation)
+            L10n.commonSharedLiveLocation
         case .redacted:
-            AttributedString(L10n.commonMessageRemoved)
+            L10n.commonMessageRemoved
         }
     }
     
