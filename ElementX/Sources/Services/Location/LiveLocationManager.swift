@@ -59,12 +59,12 @@ final class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocati
         
         serviceCancellables[userID] = [
             service.actionsPublisher.sink { [weak self] action in
-                self?.handle(action)
+                self?.process(action)
             },
             service.isSharingPublisher
                 .removeDuplicates()
                 .sink { [weak self] isSharing in
-                    self?.sharingChanged(isSharing, userID: userID)
+                    self?.isSharingChanged(isSharing, for: userID)
                 }
         ]
         
@@ -77,7 +77,7 @@ final class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocati
     func remove(userID: String) {
         serviceCancellables[userID] = nil
         guard services.removeValue(forKey: userID) != nil else { return }
-        updateLocationUpdates()
+        syncLocationUpdates()
     }
     
     // MARK: - CLLocationManagerDelegate
@@ -131,22 +131,23 @@ final class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocati
             .store(in: &cancellables)
     }
     
-    private func handle(_ action: LiveLocationServiceAction) {
+    private func process(_ action: LiveLocationServiceAction) {
         switch action {
         case .requestAlwaysAuthorization:
+            appSettings.hasRequestedLocationAlwaysLocationAuthorization = true
             locationManager.requestAlwaysAuthorization()
         }
     }
     
-    private func sharingChanged(_ isSharing: Bool, userID: String) {
+    private func isSharingChanged(_ isSharing: Bool, for userID: String) {
         // A share that starts while updates already run gets the latest location straight away.
         if isSharing, let lastLocation {
             services[userID]?.locationUpdated(lastLocation)
         }
-        updateLocationUpdates()
+        syncLocationUpdates()
     }
     
-    private func updateLocationUpdates() {
+    private func syncLocationUpdates() {
         if isAnyAccountSharing {
             startUpdatingLocation()
         } else {

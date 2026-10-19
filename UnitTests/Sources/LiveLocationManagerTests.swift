@@ -12,6 +12,7 @@ import Testing
 
 @MainActor
 final class LiveLocationManagerTests {
+    private var appSettings: AppSettings!
     private var locationManagerMock: CLLocationManagerMock!
     private var manager: LiveLocationManager!
     
@@ -154,6 +155,7 @@ final class LiveLocationManagerTests {
         actions.send(.requestAlwaysAuthorization)
         
         #expect(locationManagerMock.requestAlwaysAuthorizationCalled)
+        #expect(appSettings.hasRequestedLocationAlwaysLocationAuthorization)
     }
     
     // MARK: - Private
@@ -161,7 +163,8 @@ final class LiveLocationManagerTests {
     private func setUp(authorizationStatus: CLAuthorizationStatus = .authorizedAlways,
                        accuracyAuthorization: CLAccuracyAuthorization = .fullAccuracy) {
         locationManagerMock = CLLocationManagerMock(.init(authorizationStatus: authorizationStatus, accuracyAuthorization: accuracyAuthorization))
-        manager = LiveLocationManager(appSettings: AppSettings.volatile(), locationManager: locationManagerMock)
+        appSettings = AppSettings.volatile()
+        manager = LiveLocationManager(appSettings: appSettings, locationManager: locationManagerMock)
     }
     
     private func makeService(userID: String,

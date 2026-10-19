@@ -14,7 +14,7 @@ enum LiveLocationServiceError: Error {
     case startFailed
 }
 
-/// What an account's service asks of the `LiveLocationManager`, which owns the location manager.
+/// What an account's service asks of the `LiveLocationManager`, which owns the system location manager.
 enum LiveLocationServiceAction {
     case requestAlwaysAuthorization
 }
@@ -26,7 +26,7 @@ protocol LiveLocationServiceProtocol: AnyObject {
     
     /// Whether this account is sharing its live location in at least one room.
     var isSharingPublisher: CurrentValuePublisher<Bool, Never> { get }
-    /// The app's location authorization status, kept up to date by the `LiveLocationManager`.
+    /// The app's location authorization status.
     var authorizationStatus: CurrentValuePublisher<CLAuthorizationStatus, Never> { get }
     
     /// Requests "Always" location authorization from the user if the system allows it.

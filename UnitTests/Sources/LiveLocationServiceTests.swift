@@ -252,7 +252,7 @@ final class LiveLocationServiceTests {
     }
     
     @Test
-    func requestingAlwaysAuthorizationAsksTheManagerOnlyOnce() {
+    func requestingAlwaysAuthorizationAsksTheManagerUntilItRemembersTheRequest() {
         setUp()
         var requestCount = 0
         let cancellable = service.actionsPublisher.sink { action in
@@ -263,7 +263,11 @@ final class LiveLocationServiceTests {
         }
         
         #expect(service.requestAlwaysAuthorizationIfPossible())
-        #expect(userSettings.app.hasRequestedLocationAlwaysLocationAuthorization)
+        #expect(requestCount == 1)
+        // Remembering the request is the manager's job.
+        #expect(!userSettings.app.hasRequestedLocationAlwaysLocationAuthorization)
+        
+        userSettings.app.hasRequestedLocationAlwaysLocationAuthorization = true
         #expect(!service.requestAlwaysAuthorizationIfPossible())
         #expect(requestCount == 1)
         cancellable.cancel()

@@ -64,7 +64,6 @@ final class LiveLocationService: LiveLocationServiceProtocol {
     @discardableResult
     func requestAlwaysAuthorizationIfPossible() -> Bool {
         guard !userSettings.app.hasRequestedLocationAlwaysLocationAuthorization else { return false }
-        userSettings.app.hasRequestedLocationAlwaysLocationAuthorization = true
         actionsSubject.send(.requestAlwaysAuthorization)
         return true
     }

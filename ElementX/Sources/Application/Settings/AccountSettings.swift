@@ -32,6 +32,10 @@ final nonisolated class AccountSettings: @unchecked Sendable {
     @UserPreference(defaultValue: Set<String>())
     var seenInvites: Set<String>
     
+    /// The rooms this account is sharing its live location in.
+    @UserPreference(key: "liveLocationSharingTimeoutDatesByRoomID", defaultValue: [String: LiveLocationSession]())
+    var liveLocationSharingSessionsByRoomID: [String: LiveLocationSession]
+    
     // MARK: Visible Preferences
     
     @UserPreference(defaultValue: true)
@@ -50,12 +54,6 @@ final nonisolated class AccountSettings: @unchecked Sendable {
     
     @UserPreference(defaultValue: true)
     var sharePresence: Bool
-    
-    // MARK: Live Location
-    
-    /// The rooms this account is sharing its live location in.
-    @UserPreference(key: "liveLocationSharingTimeoutDatesByRoomID", defaultValue: [String: LiveLocationSession]())
-    var liveLocationSharingSessionsByRoomID: [String: LiveLocationSession]
     
     init(userID: String, store: UserDefaultsProtocol) {
         self.store = .init(userID: userID, store: store)
