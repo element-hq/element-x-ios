@@ -178,31 +178,19 @@ struct SecureBackupRecoveryKeyScreen: View {
     }
     
     private var confirmRecoveryKeySection: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(L10n.commonRecoveryKey)
-                .foregroundColor(.compound.textPrimary)
-                .font(.compound.bodySMSemibold)
-            
-            SecureField(L10n.screenRecoveryKeyConfirmKeyPlaceholder, text: $context.confirmationRecoveryKey)
-                .tint(.compound.iconAccentTertiary)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(Color.compound.bgSubtleSecondaryLevel0)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
-                .id(textFieldIdentifier)
-                .focused($focused)
-                .submitLabel(.done)
-                .onSubmit {
-                    context.send(viewAction: .confirmKey)
-                }
-                .accessibilityIdentifier(A11yIdentifiers.secureBackupRecoveryKeyScreen.recoveryKeyField)
-            
-            if let subtitle = context.viewState.recoveryKeySubtitle {
-                Text(subtitle)
-                    .foregroundColor(.compound.textSecondary)
-                    .font(.compound.bodySM)
+        SecureField(L10n.screenRecoveryKeyConfirmKeyPlaceholder, text: $context.confirmationRecoveryKey)
+            .focused($focused)
+            .textFieldStyle(.compound(.plain(.secure(hideLabel: L10n.a11yHidePassword, showLabel: L10n.a11yShowPassword)),
+                                      labelText: L10n.commonRecoveryKey,
+                                      footerText: context.viewState.recoveryKeySubtitle,
+                                      accessibilityIdentifier: A11yIdentifiers.secureBackupRecoveryKeyScreen.recoveryKeyField))
+            .textInputAutocapitalization(.never)
+            .autocorrectionDisabled()
+            .submitLabel(.done)
+            .onSubmit {
+                context.send(viewAction: .confirmKey)
             }
-        }
+            .id(textFieldIdentifier)
     }
 }
 
