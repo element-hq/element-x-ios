@@ -378,7 +378,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
                                                      redirectURL: appSettings.oAuthRedirectURL,
                                                      presentationAnchor: presentationAnchor,
                                                      appMediator: appMediator,
-                                                     appHooks: appHooks,
+                                                     presenterHook: appHooks.oAuthAuthenticationPresenterHook,
                                                      userIndicatorController: userIndicatorController)
         oAuthPresenter = presenter
         
