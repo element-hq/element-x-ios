@@ -233,7 +233,7 @@ public struct CompoundTextFieldStyle: @MainActor TextFieldStyle {
                         isSecureTextRevealed.toggle()
                         secureTextField?.isSecureTextEntry = !isSecureTextRevealed
                     } label: {
-                        CompoundIcon(isSecureTextRevealed ? \.visibilityOn : \.visibilityOff,
+                        CompoundIcon(isSecureTextRevealed ? \.visibilityOff : \.visibilityOn,
                                      size: .medium,
                                      relativeTo: .compound.bodyLG)
                             .foregroundStyle(.compound.iconSecondary)
