@@ -7,6 +7,7 @@
 //
 
 import Compound
+import MatrixRustSDKMocks
 import SwiftUI
 
 struct QRCodeLoginScreen: View {
@@ -322,8 +323,6 @@ private struct QRScannerViewOverlay: View {
 }
 
 // MARK: - Previews
-
-import MatrixRustSDKMocks
 
 struct QRCodeLoginScreen_Previews: PreviewProvider, TestablePreview {
     // Instructions

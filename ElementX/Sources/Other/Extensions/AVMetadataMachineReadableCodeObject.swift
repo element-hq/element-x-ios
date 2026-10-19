@@ -20,9 +20,7 @@ nonisolated enum AVMetadataBinaryValueError: Error {
 nonisolated extension AVMetadataMachineReadableCodeObject {
     var qrBinaryValue: Data? {
         get throws(AVMetadataBinaryValueError) {
-            guard type == .qr else { return nil }
-            
-            guard let qrCodeDescriptor = descriptor as? CIQRCodeDescriptor else { return nil }
+            guard type == .qr, let qrCodeDescriptor = descriptor as? CIQRCodeDescriptor else { return nil }
             return try Self.removeQRProtocolData(qrCodeDescriptor.errorCorrectedPayload, symbolVersion: qrCodeDescriptor.symbolVersion)
         }
     }

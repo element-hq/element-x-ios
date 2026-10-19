@@ -191,9 +191,8 @@ private struct AccountProvisioningURLParser: URLParser {
     let domain: String
     
     func route(from url: URL) -> AppRoute? {
-        guard url.host() == domain else { return nil }
-        
-        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+        guard url.host() == domain,
+              let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
               let serverName = components.queryItems?.first(where: { $0.name == AccountProvisioningParameters.CodingKeys.accountProvider.rawValue })?.value else {
             return nil
         }

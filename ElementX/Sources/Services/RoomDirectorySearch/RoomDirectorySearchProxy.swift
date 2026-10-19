@@ -88,11 +88,8 @@ final class RoomDirectorySearchProxy: RoomDirectorySearchProxyProtocol {
     }
     
     private nonisolated static func processDiff(_ diff: RoomDirectorySearchEntryUpdate, on currentItems: [RoomDirectorySearchResult]) -> [RoomDirectorySearchResult] {
-        guard let collectionDiff = buildDiff(from: diff, on: currentItems) else {
-            return currentItems
-        }
-        
-        guard let updatedItems = currentItems.applying(collectionDiff) else {
+        guard let collectionDiff = buildDiff(from: diff, on: currentItems),
+              let updatedItems = currentItems.applying(collectionDiff) else {
             return currentItems
         }
         

@@ -88,11 +88,9 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     // MARK: - Preview
     
     func startPlayback() async -> Result<Void, VoiceMessageRecorderError> {
-        guard let previewAudioPlayerState, let url = audioRecorder.audioFileURL else {
-            return .failure(.previewNotAvailable)
-        }
-        
-        guard let audioPlayer = previewAudioPlayer else {
+        guard let previewAudioPlayerState,
+              let url = audioRecorder.audioFileURL,
+              let audioPlayer = previewAudioPlayer else {
             return .failure(.previewNotAvailable)
         }
         
@@ -213,14 +211,13 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
             MXLog.info("audio recorder did stop recording")
             if !recordingCancelled {
                 Task {
-                    guard case .success = await finalizeRecording() else {
+                    guard case .success = await finalizeRecording(),
+                          let recordingURL = audioRecorder.audioFileURL,
+                          let previewAudioPlayerState else {
                         actionsSubject.send(.didFailWithError(error: VoiceMessageRecorderError.previewNotAvailable))
                         return
                     }
-                    guard let recordingURL = audioRecorder.audioFileURL, let previewAudioPlayerState else {
-                        actionsSubject.send(.didFailWithError(error: VoiceMessageRecorderError.previewNotAvailable))
-                        return
-                    }
+                    
                     mediaPlayerProvider.register(audioPlayerState: previewAudioPlayerState)
                     actionsSubject.send(.didStopRecording(previewState: previewAudioPlayerState, url: recordingURL))
                 }

@@ -18,8 +18,8 @@ struct KnockedRoomProxyMockConfiguration {
     var members: [RoomMemberProxyMock] = .allMembers
 }
 
+@MainActor
 extension KnockedRoomProxyMock {
-    @MainActor
     convenience init(_ configuration: KnockedRoomProxyMockConfiguration) {
         self.init()
         id = configuration.id
@@ -27,8 +27,9 @@ extension KnockedRoomProxyMock {
     }
 }
 
+@MainActor
 extension RoomInfoProxyMock {
-    @MainActor convenience init(_ configuration: KnockedRoomProxyMockConfiguration) {
+    convenience init(_ configuration: KnockedRoomProxyMockConfiguration) {
         self.init()
         
         id = configuration.id

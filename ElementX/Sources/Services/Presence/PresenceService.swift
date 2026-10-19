@@ -83,11 +83,8 @@ final class PresenceService {
     
     private func reportCurrentState() {
         let presence = desiredPresence
-        guard sendTask != nil || presence != lastSentPresence else {
-            return
-        }
-        
-        guard pendingPresence != presence else {
+        guard sendTask != nil || presence != lastSentPresence,
+              pendingPresence != presence else {
             return
         }
         

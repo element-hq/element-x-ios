@@ -8,6 +8,7 @@
 
 import Compound
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct TimelineMediaPreviewRedactConfirmationView: View {
     @Environment(\.dismiss) private var dismiss
@@ -121,8 +122,6 @@ struct TimelineMediaPreviewRedactConfirmationView: View {
 }
 
 // MARK: - Previews
-
-import UniformTypeIdentifiers
 
 struct TimelineMediaPreviewRedactConfirmationView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = makeViewModel(contentType: .jpeg)

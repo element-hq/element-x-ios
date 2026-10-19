@@ -18,8 +18,8 @@ struct BannedRoomProxyMockConfiguration {
     var members: [RoomMemberProxyMock] = .allMembers
 }
 
+@MainActor
 extension BannedRoomProxyMock {
-    @MainActor
     convenience init(_ configuration: BannedRoomProxyMockConfiguration) {
         self.init()
         id = configuration.id
@@ -27,8 +27,9 @@ extension BannedRoomProxyMock {
     }
 }
 
+@MainActor
 extension RoomInfoProxyMock {
-    @MainActor convenience init(_ configuration: BannedRoomProxyMockConfiguration) {
+    convenience init(_ configuration: BannedRoomProxyMockConfiguration) {
         self.init()
         
         id = configuration.id

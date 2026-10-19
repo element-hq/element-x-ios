@@ -35,11 +35,10 @@ extension MediaProviderMock {
                    let data = try? Data(contentsOf: url) {
                     return UIImage(data: data)
                 }
-            } else if mediaSource?.url == .mockMXCUserAvatar {
-                if let url = Bundle.main.url(forResource: "preview_avatar_user", withExtension: "jpg"),
-                   let data = try? Data(contentsOf: url) {
-                    return UIImage(data: data)
-                }
+            } else if mediaSource?.url == .mockMXCUserAvatar,
+                      let url = Bundle.main.url(forResource: "preview_avatar_user", withExtension: "jpg"),
+                      let data = try? Data(contentsOf: url) {
+                return UIImage(data: data)
             }
             
             return UIImage(systemName: "photo")
