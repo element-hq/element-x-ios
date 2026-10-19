@@ -217,6 +217,8 @@
 "banner_set_up_recovery_content" = "A csevegései automatikusan mentve vannak, végpontok közti titkosítással Ahhoz, hogy az eszközei elvesztése esetén helyre tudja állítani a biztonsági mentést és megtartsa a digitális személyazonosságát, egy helyreállítási kulcsra van szüksége.";
 "banner_set_up_recovery_submit" = "Helyreállítási kulcs beszerzése";
 "banner_set_up_recovery_title" = "Csevegések biztonsági mentése";
+"banner_swipe_avatar_content" = "Swipe up or down on your avatar to switch between your accounts without going to the app settings.";
+"banner_swipe_avatar_title" = "Swipe your avatar to switch accounts";
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Az Element Call nem támogatja a Bluetooth hangeszközök használatát ebben az Android-verzióban. Válasszon másik hangeszközt.";
 "common_about" = "Névjegy";
 "common_acceptable_use_policy" = "Elfogadható használatra vonatkozó szabályzat";
@@ -499,6 +501,7 @@
 "emoji_picker_category_recent" = "Legutóbbi emodzsik";
 "emoji_picker_category_symbols" = "Szimbólumok";
 "emoji_picker_search_placeholder" = "Emodzsik keresése";
+"error_account_already_logged_in_title" = "Duplicate sign-in";
 "error_account_creation_not_possible" = "A Matrix-kiszolgálót frissíteni kell a Matrix Authentication Service és a fióklétrehozás támogatásához.";
 "error_failed_creating_the_permalink" = "Nem sikerült létrehozni az állandó hivatkozást";
 "error_failed_loading_map" = "Az %1$@ nem tudta betölteni a térképet. Próbálja meg újra később.";
@@ -869,12 +872,18 @@
 "screen_encryption_reset_bullet_1" = "A fiókadatok, a kapcsolatok, a beállítások és a csevegéslista megmarad";
 "screen_encryption_reset_bullet_2" = "Elveszíti meglévő üzenetelőzményeit";
 "screen_encryption_reset_bullet_3" = "A többi felhasználó számára látható lesz, hogy digitális identitása visszaállításra került";
+"screen_encryption_reset_bullet_4" = "Any devices you’re signed in to will need to be reconfirmed";
 "screen_encryption_reset_footer" = "Csak akkor állítsa alaphelyzetbe a személyazonosságát, ha nem fér hozzá más bejelentkezett eszközhöz, és elveszítette a helyreállítási kulcsát.";
+"screen_encryption_reset_no_chats_message" = "It looks like you don’t have any chats yet. If this is correct, you can safely proceed with resetting your digital identity";
+"screen_encryption_reset_no_options_subtitle" = "You don’t have access to any other verified devices or a recovery key, so you’ll need to reset your digital identity to continue using the app.";
+"screen_encryption_reset_no_options_title" = "You need to reset your digital identity";
+"screen_encryption_reset_subtitle" = "If you don’t have access to any other verified devices and you don’t have your recovery key, then you’ll need to reset your digital identity to continue using the app.";
 "screen_encryption_reset_title" = "Nem tudja megerősíteni? Alaphelyzetbe kell állítania a digitális személyazonosságát.";
 "screen_home_tab_chats" = "Csevegések";
 "screen_home_tab_spaces" = "Terek";
 "screen_identity_confirmation_cannot_confirm" = "Nem tudja megerősíteni?";
 "screen_identity_confirmation_create_new_recovery_key" = "Új helyreállítási kulcs létrehozása";
+"screen_identity_confirmation_sign_out" = "Sign out";
 "screen_identity_confirmation_subtitle" = "Válassza ki az ellenőrzés módját a biztonságos üzenetküldés beállításához.";
 "screen_identity_confirmation_title" = "Erősítse meg digitális személyazonosságát";
 "screen_identity_confirmation_use_another_device" = "Másik eszköz használata";
@@ -1081,6 +1090,7 @@
 "screen_multi_account_announcement_title" = "Mostantól több fiókot is hozzáadhat";
 "screen_notification_optin_subtitle" = "A beállításokat később is módosíthatja.";
 "screen_notification_optin_title" = "Értesítések engedélyezése, hogy soha ne maradjon le egyetlen üzenetről sem";
+"screen_notification_settings_activity_section_title" = "Activity";
 "screen_notification_settings_additional_settings_section_title" = "További beállítások";
 "screen_notification_settings_call_ringtone_label" = "Csengőhang";
 "screen_notification_settings_calls_label" = "Hang- és videóhívások";
@@ -1151,6 +1161,8 @@
 "screen_notification_settings_system_notifications_action_required_content_link" = "rendszerbeállításokat";
 "screen_notification_settings_system_notifications_turned_off" = "A rendszerértesítések ki vannak kapcsolva";
 "screen_notification_settings_title" = "Értesítések";
+"screen_onboarding_add_account_subtitle" = "You can add multiple accounts to the app and switch between them easily.";
+"screen_onboarding_add_account_title" = "Sign in to another account";
 "screen_onboarding_app_version" = "Verzió: %1$@";
 "screen_onboarding_checking_account" = "Fiók ellenőrzése";
 "screen_onboarding_sign_in_manually" = "Kézi bejelentkezés";
@@ -1169,14 +1181,6 @@
 "screen_polls_history_filter_ongoing" = "Folyamatban";
 "screen_polls_history_filter_past" = "Korábbi";
 "screen_polls_history_title" = "Szavazások";
-"screen_ptt_settings_battery_optimization" = "Az akkumulátoroptimalizálás figyelmen kívül hagyása";
-"screen_ptt_settings_battery_optimization_description" = "Háttérben is aktív marad";
-"screen_ptt_settings_covert_mode" = "Rejtett mód";
-"screen_ptt_settings_covert_mode_description" = "Az összes csatorna némítása";
-"screen_ptt_settings_lock_screen" = "Megjelenítés a zárolási képernyőn";
-"screen_ptt_settings_lock_screen_description" = "Hozzáférés a zárolási képernyőről";
-"screen_ptt_settings_system_overlay" = "Rendszer-overlay engedélyezése";
-"screen_ptt_settings_system_overlay_description" = "Lebegő műveletgomb elérése";
 "screen_push_history_title" = "Leküldéses értesítések előzmények";
 "screen_qr_code_login_connecting_subtitle" = "Biztonságos kapcsolat létesítése";
 "screen_qr_code_login_connection_note_secure_state_description" = "Nem sikerült biztonságos kapcsolatot létesíteni az új eszközzel. A meglévő eszközei továbbra is biztonságban vannak, és nem kell aggódnia miattuk.";
@@ -1354,9 +1358,6 @@
 "screen_room_details_profile_row_title" = "Profil";
 "screen_room_details_requests_to_join_title" = "Csatlakozási kérelem";
 "screen_room_details_roles_and_permissions" = "Szerepkörök és jogosultságok";
-"screen_room_details_room_audio_ptt" = "Adó-vevő";
-"screen_room_details_room_audio_title" = "Hang szoba";
-"screen_room_details_room_audio_video_calls" = "Videohívások";
 "screen_room_details_room_name_label" = "Név";
 "screen_room_details_security_and_privacy_title" = "Biztonság és adatvédelem";
 "screen_room_details_security_title" = "Biztonság";

@@ -217,6 +217,8 @@
 "banner_set_up_recovery_content" = "چت‌های شما به طور خودکار با رمزگذاری سراسری پشتیبان‌گیری می‌شوند. برای بازیابی این پشتیبان‌گیری و حفظ هویت دیجیتال خود در زمانی که دسترسی به تمام دستگاه‌هایتان را از دست می‌دهید، به کلید بازیابی خود نیاز خواهید داشت.";
 "banner_set_up_recovery_submit" = "دریافت کلید بازیابی";
 "banner_set_up_recovery_title" = "از چت‌هایتان پشتیبان بگیرید";
+"banner_swipe_avatar_content" = "Swipe up or down on your avatar to switch between your accounts without going to the app settings.";
+"banner_swipe_avatar_title" = "Swipe your avatar to switch accounts";
 "call_invalid_audio_device_bluetooth_devices_disabled" = "برنامه Element Call در این نسخه اندروید از دستگاه‌های صوتی بلوتوث پشتیبانی نمی‌کند. لطفاً دستگاه صوتی دیگری را انتخاب کنید.";
 "common_about" = "درباره";
 "common_acceptable_use_policy" = "سیاست استفادهٔ پذیرفتنی";
@@ -499,6 +501,7 @@
 "emoji_picker_category_recent" = "شکلک‌های اخیر";
 "emoji_picker_category_symbols" = "نمادها";
 "emoji_picker_search_placeholder" = "حست‌وجوی شکلک‌ها";
+"error_account_already_logged_in_title" = "Duplicate sign-in";
 "error_account_creation_not_possible" = "سرور خانگی شما باید ارتقا یابد تا از سرویس احراز هویت ماتریکس و ایجاد حساب کاربری پشتیبانی کند.";
 "error_failed_creating_the_permalink" = "شکست در ایجاد پایاپیوند";
 "error_failed_loading_map" = "%1$@ نتوانست نقشه را بارگیری کند. لطفا بعدا دوباره امتحان کنید.";
@@ -869,12 +872,18 @@
 "screen_encryption_reset_bullet_1" = "جزییات حساب، آشنایان، ترجیحات و سیاههٔ گپ‌هایتان حفظ خواهند شد";
 "screen_encryption_reset_bullet_2" = "تاریخچهٔ گپ‌هایتان را از دست خواهید داد";
 "screen_encryption_reset_bullet_3" = "لازم است دوباره همهٔ آشنایان و افزاره‌های موجودتان را تأیید کنید";
+"screen_encryption_reset_bullet_4" = "Any devices you’re signed in to will need to be reconfirmed";
 "screen_encryption_reset_footer" = "فقط در صورتی که به دستگاه تأیید شده دیگری دسترسی ندارید و کلید بازیابی خود را ندارید، هویت دیجیتال خود را بازنشانی کنید.";
+"screen_encryption_reset_no_chats_message" = "It looks like you don’t have any chats yet. If this is correct, you can safely proceed with resetting your digital identity";
+"screen_encryption_reset_no_options_subtitle" = "You don’t have access to any other verified devices or a recovery key, so you’ll need to reset your digital identity to continue using the app.";
+"screen_encryption_reset_no_options_title" = "You need to reset your digital identity";
+"screen_encryption_reset_subtitle" = "If you don’t have access to any other verified devices and you don’t have your recovery key, then you’ll need to reset your digital identity to continue using the app.";
 "screen_encryption_reset_title" = "نمی‌توانید تأیید کنید؟ باید هویت دیجیتال خود را مجدداً تنظیم کنید.";
 "screen_home_tab_chats" = "گپ‌ها";
 "screen_home_tab_spaces" = "فضاها";
 "screen_identity_confirmation_cannot_confirm" = "نمی‌توانید تأیید کنید؟";
 "screen_identity_confirmation_create_new_recovery_key" = "ایجاد کلید بازیابی جدید";
+"screen_identity_confirmation_sign_out" = "Sign out";
 "screen_identity_confirmation_subtitle" = "گزینش چگونگی تأیید برای برپایی پیام‌رسانی امن.";
 "screen_identity_confirmation_title" = "تأیید هویت دیجیتالیتان";
 "screen_identity_confirmation_use_another_device" = "استفاده از افزاره‌ای دیگر";
@@ -1081,6 +1090,7 @@
 "screen_multi_account_announcement_title" = "You can now add multiple accounts";
 "screen_notification_optin_subtitle" = "می‌توانید بعداً تنظیماتتان را تغییر دهید.";
 "screen_notification_optin_title" = "اجازه به آگاهی‌ها و از دست ندادن پیام‌ها";
+"screen_notification_settings_activity_section_title" = "Activity";
 "screen_notification_settings_additional_settings_section_title" = "تنظیمات اضافی";
 "screen_notification_settings_call_ringtone_label" = "آهنگ زنگ تماس";
 "screen_notification_settings_calls_label" = "تماس‌های صوتی و تصویری";
@@ -1151,6 +1161,8 @@
 "screen_notification_settings_system_notifications_action_required_content_link" = "تنظیمات سامانه";
 "screen_notification_settings_system_notifications_turned_off" = "آگاهی‌های سامانه‌ای خاموش شدند";
 "screen_notification_settings_title" = "آگاهی‌ها";
+"screen_onboarding_add_account_subtitle" = "You can add multiple accounts to the app and switch between them easily.";
+"screen_onboarding_add_account_title" = "Sign in to another account";
 "screen_onboarding_app_version" = "نگارش %1$@";
 "screen_onboarding_checking_account" = "درحال بررسی حساب...";
 "screen_onboarding_sign_in_manually" = "ورود دستی";
@@ -1169,14 +1181,6 @@
 "screen_polls_history_filter_ongoing" = "در جریان";
 "screen_polls_history_filter_past" = "گذشته";
 "screen_polls_history_title" = "نظرسنجی‌ها";
-"screen_ptt_settings_battery_optimization" = "Ignore battery optimisation";
-"screen_ptt_settings_battery_optimization_description" = "Stay active in background";
-"screen_ptt_settings_covert_mode" = "Covert mode";
-"screen_ptt_settings_covert_mode_description" = "Mute all channels";
-"screen_ptt_settings_lock_screen" = "Show on lock screen";
-"screen_ptt_settings_lock_screen_description" = "Access from the lock screen";
-"screen_ptt_settings_system_overlay" = "Enable system overlay";
-"screen_ptt_settings_system_overlay_description" = "Access a floating action button";
 "screen_push_history_title" = "تاریخچهٔ آگاهی‌های ارسالی";
 "screen_qr_code_login_connecting_subtitle" = "برقرار کدن اتّصالی امن";
 "screen_qr_code_login_connection_note_secure_state_description" = "نتوانست اتّصالی امن به افزارهٔ جدید بسازد. افزاره‌های موجودتان هنوز امنند و نیازی نیست نگرانشان باشید.";
@@ -1354,9 +1358,6 @@
 "screen_room_details_profile_row_title" = "نمایه";
 "screen_room_details_requests_to_join_title" = "درخواست‌های پیوستن";
 "screen_room_details_roles_and_permissions" = "نقش‌ها و مجوزها";
-"screen_room_details_room_audio_ptt" = "Push to talk";
-"screen_room_details_room_audio_title" = "Room Audio";
-"screen_room_details_room_audio_video_calls" = "Video calls";
 "screen_room_details_room_name_label" = "نام";
 "screen_room_details_security_and_privacy_title" = "امنیت و محرمانگی";
 "screen_room_details_security_title" = "امنیت";

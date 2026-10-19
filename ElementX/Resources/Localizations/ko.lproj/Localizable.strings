@@ -217,6 +217,8 @@
 "banner_set_up_recovery_content" = "대화 내용은 종단간 암호화 기술로 자동 백업됩니다. 모든 기기를 사용할 수 없는 상황에서 백업을 복구하고 디지털 신원을 유지하려면 복구 키가 반드시 필요합니다.";
 "banner_set_up_recovery_submit" = "복구 키 가져오기";
 "banner_set_up_recovery_title" = "대화 백업하기";
+"banner_swipe_avatar_content" = "Swipe up or down on your avatar to switch between your accounts without going to the app settings.";
+"banner_swipe_avatar_title" = "Swipe your avatar to switch accounts";
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call은 이 Android 버전에서 Bluetooth 오디오 장치 사용을 지원하지 않습니다. 다른 오디오 장치를 선택하세요.";
 "common_about" = "정보";
 "common_acceptable_use_policy" = "이용 목적 제한 방침";
@@ -499,6 +501,7 @@
 "emoji_picker_category_recent" = "최근 이모지";
 "emoji_picker_category_symbols" = "상징";
 "emoji_picker_search_placeholder" = "이모지 검색";
+"error_account_already_logged_in_title" = "Duplicate sign-in";
 "error_account_creation_not_possible" = "Matrix Authentication Service 및 계정 생성을 지원하려면 홈서버를 업그레이드해야 합니다.";
 "error_failed_creating_the_permalink" = "퍼머링크 생성 실패";
 "error_failed_loading_map" = "%1$@에서 맵을 로딩할 수 없습니다. 다시 시도해주세요.";
@@ -869,12 +872,18 @@
 "screen_encryption_reset_bullet_1" = "귀하의 계정 정보, 연락처, 기본 설정 및 채팅 목록은 보관됩니다";
 "screen_encryption_reset_bullet_2" = "서버에만 저장된 모든 메시지 기록이 손실됩니다.";
 "screen_encryption_reset_bullet_3" = "기존 장치와 연락처를 모두 다시 확인해야 합니다.";
+"screen_encryption_reset_bullet_4" = "Any devices you’re signed in to will need to be reconfirmed";
 "screen_encryption_reset_footer" = "다른 인증된 기기를 사용할 수 없고 복구 키도 없는 경우에만 디지털 신원을 재설정하세요.";
+"screen_encryption_reset_no_chats_message" = "It looks like you don’t have any chats yet. If this is correct, you can safely proceed with resetting your digital identity";
+"screen_encryption_reset_no_options_subtitle" = "You don’t have access to any other verified devices or a recovery key, so you’ll need to reset your digital identity to continue using the app.";
+"screen_encryption_reset_no_options_title" = "You need to reset your digital identity";
+"screen_encryption_reset_subtitle" = "If you don’t have access to any other verified devices and you don’t have your recovery key, then you’ll need to reset your digital identity to continue using the app.";
 "screen_encryption_reset_title" = "확인할 수 없나요? 디지털 신원을 재설정해야 합니다.";
 "screen_home_tab_chats" = "채팅";
 "screen_home_tab_spaces" = "스페이스";
 "screen_identity_confirmation_cannot_confirm" = "확인할 수 없나요?";
 "screen_identity_confirmation_create_new_recovery_key" = "새로운 복구 키 만들기";
+"screen_identity_confirmation_sign_out" = "Sign out";
 "screen_identity_confirmation_subtitle" = "보안 메시징 설정을 위해 인증 방법을 선택해 주세요.";
 "screen_identity_confirmation_title" = "디지털 신원 확인";
 "screen_identity_confirmation_use_another_device" = "다른 기기 사용";
@@ -1081,6 +1090,7 @@
 "screen_multi_account_announcement_title" = "You can now add multiple accounts";
 "screen_notification_optin_subtitle" = "나중에 설정을 변경할 수 있습니다.";
 "screen_notification_optin_title" = "알림을 허용하고 메시지를 놓치지 마세요.";
+"screen_notification_settings_activity_section_title" = "Activity";
 "screen_notification_settings_additional_settings_section_title" = "추가 설정";
 "screen_notification_settings_call_ringtone_label" = "통화 벨소리";
 "screen_notification_settings_calls_label" = "음성 및 동영상 통화";
@@ -1151,6 +1161,8 @@
 "screen_notification_settings_system_notifications_action_required_content_link" = "시스템 설정";
 "screen_notification_settings_system_notifications_turned_off" = "시스템 알림이 꺼져 있습니다.";
 "screen_notification_settings_title" = "알림";
+"screen_onboarding_add_account_subtitle" = "You can add multiple accounts to the app and switch between them easily.";
+"screen_onboarding_add_account_title" = "Sign in to another account";
 "screen_onboarding_app_version" = "버전 %1$@";
 "screen_onboarding_checking_account" = "계정 확인 중";
 "screen_onboarding_sign_in_manually" = "수동으로 로그인";
@@ -1169,14 +1181,6 @@
 "screen_polls_history_filter_ongoing" = "진행 중";
 "screen_polls_history_filter_past" = "과거";
 "screen_polls_history_title" = "투표";
-"screen_ptt_settings_battery_optimization" = "Ignore battery optimisation";
-"screen_ptt_settings_battery_optimization_description" = "Stay active in background";
-"screen_ptt_settings_covert_mode" = "Covert mode";
-"screen_ptt_settings_covert_mode_description" = "Mute all channels";
-"screen_ptt_settings_lock_screen" = "Show on lock screen";
-"screen_ptt_settings_lock_screen_description" = "Access from the lock screen";
-"screen_ptt_settings_system_overlay" = "Enable system overlay";
-"screen_ptt_settings_system_overlay_description" = "Access a floating action button";
 "screen_push_history_title" = "푸시 기록";
 "screen_qr_code_login_connecting_subtitle" = "안전한 연결 설정";
 "screen_qr_code_login_connection_note_secure_state_description" = "새 장치에 안전하게 연결할 수 없습니다. 기존 장치는 여전히 안전하므로 걱정할 필요가 없습니다.";
@@ -1354,9 +1358,6 @@
 "screen_room_details_profile_row_title" = "프로필";
 "screen_room_details_requests_to_join_title" = "참여 요청";
 "screen_room_details_roles_and_permissions" = "역할 및 권한";
-"screen_room_details_room_audio_ptt" = "Push to talk";
-"screen_room_details_room_audio_title" = "Room Audio";
-"screen_room_details_room_audio_video_calls" = "Video calls";
 "screen_room_details_room_name_label" = "이름";
 "screen_room_details_security_and_privacy_title" = "보안 및 개인정보 보호";
 "screen_room_details_security_title" = "보안";

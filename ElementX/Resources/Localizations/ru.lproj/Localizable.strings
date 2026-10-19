@@ -217,6 +217,8 @@
 "banner_set_up_recovery_content" = "Ваши чаты автоматически резервируются с использованием сквозного шифрования. Для восстановления этой резервной копии и сохранения вашей цифровой личности в случае потери доступа ко всем вашим устройствам вам потребуется ключ восстановления.";
 "banner_set_up_recovery_submit" = "Получить ключ восстановления";
 "banner_set_up_recovery_title" = "Сделайте резервную копию своих чатов.";
+"banner_swipe_avatar_content" = "Swipe up or down on your avatar to switch between your accounts without going to the app settings.";
+"banner_swipe_avatar_title" = "Swipe your avatar to switch accounts";
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call не поддерживает использование устройств Bluetooth в данной версии Android. Пожалуйста, выберите другое устройство.";
 "common_about" = "О приложении";
 "common_acceptable_use_policy" = "Политика допустимого использования";
@@ -499,6 +501,7 @@
 "emoji_picker_category_recent" = "Недавние эмодзи";
 "emoji_picker_category_symbols" = "Символы";
 "emoji_picker_search_placeholder" = "Поиск эмодзи";
+"error_account_already_logged_in_title" = "Duplicate sign-in";
 "error_account_creation_not_possible" = "Ваш сервер необходимо обновить, чтобы он поддерживал Matrix Authentication Service и создание учётных записей.";
 "error_failed_creating_the_permalink" = "Не удалось создать постоянную ссылку";
 "error_failed_loading_map" = "Не удалось загрузить карту %1$@. Пожалуйста, повторите попытку позже.";
@@ -869,12 +872,18 @@
 "screen_encryption_reset_bullet_1" = "Данные вашего аккаунта, контакты, настройки и список чатов будут сохранены";
 "screen_encryption_reset_bullet_2" = "Вы потеряете историю тех сообщений, которые хранятся только на сервере";
 "screen_encryption_reset_bullet_3" = "Вам нужно будет заново подтвердить все существующие устройства и контакты.";
+"screen_encryption_reset_bullet_4" = "Any devices you’re signed in to will need to be reconfirmed";
 "screen_encryption_reset_footer" = "Сбрасывайте ключ шифрования только в том случае, если у Вас нет доступа к другому устройству, на котором выполнен вход, и Вы потеряли ключ восстановления.";
+"screen_encryption_reset_no_chats_message" = "It looks like you don’t have any chats yet. If this is correct, you can safely proceed with resetting your digital identity";
+"screen_encryption_reset_no_options_subtitle" = "You don’t have access to any other verified devices or a recovery key, so you’ll need to reset your digital identity to continue using the app.";
+"screen_encryption_reset_no_options_title" = "You need to reset your digital identity";
+"screen_encryption_reset_subtitle" = "If you don’t have access to any other verified devices and you don’t have your recovery key, then you’ll need to reset your digital identity to continue using the app.";
 "screen_encryption_reset_title" = "Не можете подтвердить? Вам потребуется сбросить свою цифровую идентификацию.";
 "screen_home_tab_chats" = "Чаты";
 "screen_home_tab_spaces" = "Пространства";
 "screen_identity_confirmation_cannot_confirm" = "Не можете подтвердить?";
 "screen_identity_confirmation_create_new_recovery_key" = "Создайте новый ключ восстановления";
+"screen_identity_confirmation_sign_out" = "Sign out";
 "screen_identity_confirmation_subtitle" = "Выберите способ подтверждения для настройки защищенного обмена сообщениями.";
 "screen_identity_confirmation_title" = "Подтвердите личность";
 "screen_identity_confirmation_use_another_device" = "Использовать другое устройство";
@@ -1081,6 +1090,7 @@
 "screen_multi_account_announcement_title" = "You can now add multiple accounts";
 "screen_notification_optin_subtitle" = "Вы можете изменить настройки позже.";
 "screen_notification_optin_title" = "Разрешите отправку уведомлений";
+"screen_notification_settings_activity_section_title" = "Activity";
 "screen_notification_settings_additional_settings_section_title" = "Дополнительные параметры";
 "screen_notification_settings_call_ringtone_label" = "Мелодия звонка";
 "screen_notification_settings_calls_label" = "Аудио и видео звонки";
@@ -1151,6 +1161,8 @@
 "screen_notification_settings_system_notifications_action_required_content_link" = "системные настройки";
 "screen_notification_settings_system_notifications_turned_off" = "Системные уведомления выключены";
 "screen_notification_settings_title" = "Уведомления";
+"screen_onboarding_add_account_subtitle" = "You can add multiple accounts to the app and switch between them easily.";
+"screen_onboarding_add_account_title" = "Sign in to another account";
 "screen_onboarding_app_version" = "Версия %1$@";
 "screen_onboarding_checking_account" = "Проверка аккаунта";
 "screen_onboarding_sign_in_manually" = "Войти";
@@ -1169,14 +1181,6 @@
 "screen_polls_history_filter_ongoing" = "Текущие";
 "screen_polls_history_filter_past" = "Прошлые";
 "screen_polls_history_title" = "Опросы";
-"screen_ptt_settings_battery_optimization" = "Ignore battery optimisation";
-"screen_ptt_settings_battery_optimization_description" = "Stay active in background";
-"screen_ptt_settings_covert_mode" = "Covert mode";
-"screen_ptt_settings_covert_mode_description" = "Mute all channels";
-"screen_ptt_settings_lock_screen" = "Show on lock screen";
-"screen_ptt_settings_lock_screen_description" = "Access from the lock screen";
-"screen_ptt_settings_system_overlay" = "Enable system overlay";
-"screen_ptt_settings_system_overlay_description" = "Access a floating action button";
 "screen_push_history_title" = "История уведомлений";
 "screen_qr_code_login_connecting_subtitle" = "Установление безопасного соединения";
 "screen_qr_code_login_connection_note_secure_state_description" = "Не удалось установить безопасное соединение с новым устройством. Не беспокойтесь, существующие устройства в безопасности.";
@@ -1354,9 +1358,6 @@
 "screen_room_details_profile_row_title" = "Профиль";
 "screen_room_details_requests_to_join_title" = "Запросы на вступление";
 "screen_room_details_roles_and_permissions" = "Роли и разрешения";
-"screen_room_details_room_audio_ptt" = "Push to talk";
-"screen_room_details_room_audio_title" = "Room Audio";
-"screen_room_details_room_audio_video_calls" = "Video calls";
 "screen_room_details_room_name_label" = "Имя";
 "screen_room_details_security_and_privacy_title" = "Безопасность и конфиденциальность";
 "screen_room_details_security_title" = "Безопасность";

@@ -216,6 +216,8 @@
 "banner_set_up_recovery_content" = "يتم نسخ دردشاتك احتياطيًا تلقائيًا بتشفير من طرف إلى طرف. لاستعادة هذه النسخة الاحتياطية والاحتفاظ بهويتك الرقمية إذا فقدت الوصول إلى جميع أجهزتك، ستحتاج إلى مفتاح الاسترداد.";
 "banner_set_up_recovery_submit" = "الحصول على مفتاح الاسترداد";
 "banner_set_up_recovery_title" = "احتفِظ بنسخة احتياطية من دردشاتك";
+"banner_swipe_avatar_content" = "Swipe up or down on your avatar to switch between your accounts without going to the app settings.";
+"banner_swipe_avatar_title" = "Swipe your avatar to switch accounts";
 "call_invalid_audio_device_bluetooth_devices_disabled" = "لا يدعم Element Call استخدام أجهزة الصوت عبر Bluetooth في إصدار Android هذا. يرجى اختيار جهاز صوت آخر.";
 "common_about" = "حول التطبيق";
 "common_acceptable_use_policy" = "سياسة الاستخدام المقبول";
@@ -498,6 +500,7 @@
 "emoji_picker_category_recent" = "الرموز التعبيرية الأخيرة";
 "emoji_picker_category_symbols" = "رموز";
 "emoji_picker_search_placeholder" = "البحث عن رموز تعبيرية";
+"error_account_already_logged_in_title" = "Duplicate sign-in";
 "error_account_creation_not_possible" = "يجب ترقية خادمك المنزلي لدعم Matrix Authentication Service وإنشاء الحسابات.";
 "error_failed_creating_the_permalink" = "فشِل إنشاء رابطٍ دائم (permalink)";
 "error_failed_loading_map" = "%1$@ لم يستطع تحميل الخريطة. يرجى المحاولة مجدداً لاحقاً.";
@@ -868,12 +871,18 @@
 "screen_encryption_reset_bullet_1" = "سيتم الاحتفاظ بتفاصيل حسابك وجهات اتصالك وتفضيلاتك وقائمة الدردشات";
 "screen_encryption_reset_bullet_2" = "ستفقد أي سجل رسائل مخزّن على الخادم فقط";
 "screen_encryption_reset_bullet_3" = "ستحتاج إلى التحقق من جميع أجهزتك وجهات اتصالك الحالية مرة أخرى";
+"screen_encryption_reset_bullet_4" = "Any devices you’re signed in to will need to be reconfirmed";
 "screen_encryption_reset_footer" = "لا تُعد تعيين هويتك الرقمية إلا إذا لم يكن لديك وصول إلى جهاز آخر تم التحقق منه ولا تملك مفتاح الاسترداد.";
+"screen_encryption_reset_no_chats_message" = "It looks like you don’t have any chats yet. If this is correct, you can safely proceed with resetting your digital identity";
+"screen_encryption_reset_no_options_subtitle" = "You don’t have access to any other verified devices or a recovery key, so you’ll need to reset your digital identity to continue using the app.";
+"screen_encryption_reset_no_options_title" = "You need to reset your digital identity";
+"screen_encryption_reset_subtitle" = "If you don’t have access to any other verified devices and you don’t have your recovery key, then you’ll need to reset your digital identity to continue using the app.";
 "screen_encryption_reset_title" = "لا يمكنك التأكيد؟ ستحتاج إلى إعادة تعيين هويتك الرقمية.";
 "screen_home_tab_chats" = "المحادثات";
 "screen_home_tab_spaces" = "المساحات";
 "screen_identity_confirmation_cannot_confirm" = "لا يمكنك التأكيد؟";
 "screen_identity_confirmation_create_new_recovery_key" = "إنشاء مفتاح استرداد جديد";
+"screen_identity_confirmation_sign_out" = "Sign out";
 "screen_identity_confirmation_subtitle" = "اختر طريقة التحقق لإعداد المراسلة الآمنة.";
 "screen_identity_confirmation_title" = "تأكيد هويتك الرقمية";
 "screen_identity_confirmation_use_another_device" = "استخدام جهاز آخر";
@@ -1080,6 +1089,7 @@
 "screen_multi_account_announcement_title" = "You can now add multiple accounts";
 "screen_notification_optin_subtitle" = "يمكنك تغيير إعداداتك لاحقاً.";
 "screen_notification_optin_title" = "السماح بالإشعارات وعدم تفويت أي رسالة";
+"screen_notification_settings_activity_section_title" = "Activity";
 "screen_notification_settings_additional_settings_section_title" = "إعدادات إضافية";
 "screen_notification_settings_call_ringtone_label" = "نغمة رنين المكالمات";
 "screen_notification_settings_calls_label" = "المكالمات الصوتية والفيديو";
@@ -1150,6 +1160,8 @@
 "screen_notification_settings_system_notifications_action_required_content_link" = "إعدادات النظام";
 "screen_notification_settings_system_notifications_turned_off" = "إشعارات النظام مُطفأة";
 "screen_notification_settings_title" = "الإشعارات";
+"screen_onboarding_add_account_subtitle" = "You can add multiple accounts to the app and switch between them easily.";
+"screen_onboarding_add_account_title" = "Sign in to another account";
 "screen_onboarding_app_version" = "الإصدار %1$@";
 "screen_onboarding_checking_account" = "جارٍ التحقق من الحساب";
 "screen_onboarding_sign_in_manually" = "تسجيل الدخول يدوياً";
@@ -1168,14 +1180,6 @@
 "screen_polls_history_filter_ongoing" = "جارية";
 "screen_polls_history_filter_past" = "مغلقة";
 "screen_polls_history_title" = "الاستطلاعات";
-"screen_ptt_settings_battery_optimization" = "Ignore battery optimisation";
-"screen_ptt_settings_battery_optimization_description" = "Stay active in background";
-"screen_ptt_settings_covert_mode" = "Covert mode";
-"screen_ptt_settings_covert_mode_description" = "Mute all channels";
-"screen_ptt_settings_lock_screen" = "Show on lock screen";
-"screen_ptt_settings_lock_screen_description" = "Access from the lock screen";
-"screen_ptt_settings_system_overlay" = "Enable system overlay";
-"screen_ptt_settings_system_overlay_description" = "Access a floating action button";
 "screen_push_history_title" = "سجل الإشعارات الفورية";
 "screen_qr_code_login_connecting_subtitle" = "جارٍ إنشاء اتصال آمن";
 "screen_qr_code_login_connection_note_secure_state_description" = "تعذّر إنشاء اتصال آمن بالجهاز الجديد. لا تزال أجهزتك الحالية آمنة ولا داعي للقلق بشأنها.";
@@ -1353,9 +1357,6 @@
 "screen_room_details_profile_row_title" = "الملف الشخصي";
 "screen_room_details_requests_to_join_title" = "طلبات الانضمام";
 "screen_room_details_roles_and_permissions" = "الأدوار والصلاحيات";
-"screen_room_details_room_audio_ptt" = "Push to talk";
-"screen_room_details_room_audio_title" = "Room Audio";
-"screen_room_details_room_audio_video_calls" = "Video calls";
 "screen_room_details_room_name_label" = "الاسم";
 "screen_room_details_security_and_privacy_title" = "الأمان والخصوصية";
 "screen_room_details_security_title" = "الأمان";

@@ -217,6 +217,8 @@
 "banner_set_up_recovery_content" = "Vaši se razgovori automatski sigurnosno kopiraju enkripcijom od početka do kraja. Da biste vratili ovu sigurnosnu kopiju i zadržali svoj digitalni identitet kada izgubite pristup svim svojim uređajima, trebat će vam ključ za oporavak.";
 "banner_set_up_recovery_submit" = "ključ za oporavak";
 "banner_set_up_recovery_title" = "Napravite sigurnosnu kopiju svojih razgovora";
+"banner_swipe_avatar_content" = "Swipe up or down on your avatar to switch between your accounts without going to the app settings.";
+"banner_swipe_avatar_title" = "Swipe your avatar to switch accounts";
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call ne podržava korištenje Bluetooth audiouređaja u ovoj inačici Androida. Odaberite drugi audiouređaj.";
 "common_about" = "O aplikaciji";
 "common_acceptable_use_policy" = "Pravilnik o prihvatljivoj upotrebi";
@@ -499,6 +501,7 @@
 "emoji_picker_category_recent" = "Nedavni emotikoni";
 "emoji_picker_category_symbols" = "Simboli";
 "emoji_picker_search_placeholder" = "Pretraživanje emotikona";
+"error_account_already_logged_in_title" = "Duplicate sign-in";
 "error_account_creation_not_possible" = "Vaš matični poslužitelj potrebno je nadograditi kako bi podržavao uslugu Matrix Authentication Service i stvaranje računa.";
 "error_failed_creating_the_permalink" = "Nije uspjelo stvaranje trajne poveznice";
 "error_failed_loading_map" = "%1$@ nije mogao učitati kartu. Pokušajte ponovno poslije.";
@@ -869,12 +872,18 @@
 "screen_encryption_reset_bullet_1" = "Sačuvat će se podatci o vašem računu, kontakti, postavke i popis razgovora";
 "screen_encryption_reset_bullet_2" = "Izgubit ćete svu povijest poruka koja je pohranjena samo na poslužitelju";
 "screen_encryption_reset_bullet_3" = "Drugi će korisnici vidjeti da je vaš digitalni identitet poništen";
+"screen_encryption_reset_bullet_4" = "Any devices you’re signed in to will need to be reconfirmed";
 "screen_encryption_reset_footer" = "Poništite svoj identitet samo ako nemate pristup drugom prijavljenom uređaju i ako ste izgubili ključ za oporavak.";
+"screen_encryption_reset_no_chats_message" = "It looks like you don’t have any chats yet. If this is correct, you can safely proceed with resetting your digital identity";
+"screen_encryption_reset_no_options_subtitle" = "You don’t have access to any other verified devices or a recovery key, so you’ll need to reset your digital identity to continue using the app.";
+"screen_encryption_reset_no_options_title" = "You need to reset your digital identity";
+"screen_encryption_reset_subtitle" = "If you don’t have access to any other verified devices and you don’t have your recovery key, then you’ll need to reset your digital identity to continue using the app.";
 "screen_encryption_reset_title" = "Ne možete potvrditi? Morat ćete resetirati svoj digitalni identitet.";
 "screen_home_tab_chats" = "Razgovori";
 "screen_home_tab_spaces" = "Prostori";
 "screen_identity_confirmation_cannot_confirm" = "Ne možete potvrditi?";
 "screen_identity_confirmation_create_new_recovery_key" = "Izradi novi ključ za oporavak";
+"screen_identity_confirmation_sign_out" = "Sign out";
 "screen_identity_confirmation_subtitle" = "Odaberite način potvrde za postavljanje sigurne razmjene poruka.";
 "screen_identity_confirmation_title" = "Potvrdite svoj digitalni identitet";
 "screen_identity_confirmation_use_another_device" = "Upotrijebite drugi uređaj";
@@ -1081,6 +1090,7 @@
 "screen_multi_account_announcement_title" = "Sada možete dodati više računa";
 "screen_notification_optin_subtitle" = "Postavke možete promijeniti poslije.";
 "screen_notification_optin_title" = "Omogućite obavijesti i nikada ne propustite poruku";
+"screen_notification_settings_activity_section_title" = "Activity";
 "screen_notification_settings_additional_settings_section_title" = "Dodatne postavke";
 "screen_notification_settings_call_ringtone_label" = "Ton zvona";
 "screen_notification_settings_calls_label" = "Audiopozivi i videopozivi";
@@ -1151,6 +1161,8 @@
 "screen_notification_settings_system_notifications_action_required_content_link" = "postavke sustava";
 "screen_notification_settings_system_notifications_turned_off" = "Obavijesti sustava su isključene";
 "screen_notification_settings_title" = "Obavijesti";
+"screen_onboarding_add_account_subtitle" = "You can add multiple accounts to the app and switch between them easily.";
+"screen_onboarding_add_account_title" = "Sign in to another account";
 "screen_onboarding_app_version" = "Inačica %1$@";
 "screen_onboarding_checking_account" = "Provjera računa...";
 "screen_onboarding_sign_in_manually" = "Prijavi se ručno";
@@ -1169,14 +1181,6 @@
 "screen_polls_history_filter_ongoing" = "Tekuće";
 "screen_polls_history_filter_past" = "Prijašnje";
 "screen_polls_history_title" = "Ankete";
-"screen_ptt_settings_battery_optimization" = "Zanemari optimizaciju baterije";
-"screen_ptt_settings_battery_optimization_description" = "Održavaj aktivnost u pozadini";
-"screen_ptt_settings_covert_mode" = "Prikriveni način rada";
-"screen_ptt_settings_covert_mode_description" = "Utišaj sve kanale";
-"screen_ptt_settings_lock_screen" = "Prikaži na zaključanom zaslonu";
-"screen_ptt_settings_lock_screen_description" = "Pristup sa zaključanog zaslona";
-"screen_ptt_settings_system_overlay" = "Omogući preklapanje sustava";
-"screen_ptt_settings_system_overlay_description" = "Pristup plutajućem gumbu za radnju";
 "screen_push_history_title" = "Povijest push obavijesti";
 "screen_qr_code_login_connecting_subtitle" = "Uspostavljanje sigurne veze";
 "screen_qr_code_login_connection_note_secure_state_description" = "Nije moguće uspostaviti sigurnu vezu s novim uređajem. Vaši postojeći uređaji i dalje su sigurni i ne morate se brinuti zbog njih.";
@@ -1354,9 +1358,6 @@
 "screen_room_details_profile_row_title" = "Profil";
 "screen_room_details_requests_to_join_title" = "Zahtjevi za pridruživanje";
 "screen_room_details_roles_and_permissions" = "Uloge i dopuštenja";
-"screen_room_details_room_audio_ptt" = "Pritisni za razgovor";
-"screen_room_details_room_audio_title" = "Zvuk u sobi";
-"screen_room_details_room_audio_video_calls" = "Videopozivi";
 "screen_room_details_room_name_label" = "Naziv";
 "screen_room_details_security_and_privacy_title" = "Sigurnost i privatnost";
 "screen_room_details_security_title" = "Sigurnost";

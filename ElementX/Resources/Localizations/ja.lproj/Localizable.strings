@@ -217,6 +217,8 @@
 "banner_set_up_recovery_content" = "あなたのチャットはエンドツーエンド暗号化を使用して自動的にバックアップされています。すべての端末を使用できない状況で、このバックアップからデジタルIDを復元するには、回復鍵が必要となります。";
 "banner_set_up_recovery_submit" = "回復鍵を作成";
 "banner_set_up_recovery_title" = "チャットをバックアップ";
+"banner_swipe_avatar_content" = "Swipe up or down on your avatar to switch between your accounts without going to the app settings.";
+"banner_swipe_avatar_title" = "Swipe your avatar to switch accounts";
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element CallはこのAndroidバージョンにおいて、Bluetoothオーディオデバイスの使用をサポートしていません。別のオーディオデバイスを選択してください。";
 "common_about" = "アプリケーションについて";
 "common_acceptable_use_policy" = "利用規定";
@@ -499,6 +501,7 @@
 "emoji_picker_category_recent" = "最近使用";
 "emoji_picker_category_symbols" = "記号";
 "emoji_picker_search_placeholder" = "絵文字を検索";
+"error_account_already_logged_in_title" = "Duplicate sign-in";
 "error_account_creation_not_possible" = "Matrix Authentication Service とアカウント作成に対応させるため、アカウント提供元のアップグレードが必要です。";
 "error_failed_creating_the_permalink" = "固定リンクの作成に失敗しました";
 "error_failed_loading_map" = "%1$@ で地図を読み込めません。時間を置いて再度お試しください。";
@@ -869,12 +872,18 @@
 "screen_encryption_reset_bullet_1" = "アカウントの情報や連絡先, 設定などは残ります";
 "screen_encryption_reset_bullet_2" = "サーバー上にのみ存在する過去のメッセージは確認できなくなります";
 "screen_encryption_reset_bullet_3" = "すべての端末と連絡先を再度検証する必要があります";
+"screen_encryption_reset_bullet_4" = "Any devices you’re signed in to will need to be reconfirmed";
 "screen_encryption_reset_footer" = "デジタルIDのリセットは、他のサインイン済みの端末と、回復鍵の両方へのアクセスを失った場合にのみ行ってください。";
+"screen_encryption_reset_no_chats_message" = "It looks like you don’t have any chats yet. If this is correct, you can safely proceed with resetting your digital identity";
+"screen_encryption_reset_no_options_subtitle" = "You don’t have access to any other verified devices or a recovery key, so you’ll need to reset your digital identity to continue using the app.";
+"screen_encryption_reset_no_options_title" = "You need to reset your digital identity";
+"screen_encryption_reset_subtitle" = "If you don’t have access to any other verified devices and you don’t have your recovery key, then you’ll need to reset your digital identity to continue using the app.";
 "screen_encryption_reset_title" = "認証できませんか？デジタルIDをリセットする必要があります。";
 "screen_home_tab_chats" = "チャット";
 "screen_home_tab_spaces" = "スペース";
 "screen_identity_confirmation_cannot_confirm" = "認証できませんか？";
 "screen_identity_confirmation_create_new_recovery_key" = "回復鍵を新規作成します";
+"screen_identity_confirmation_sign_out" = "Sign out";
 "screen_identity_confirmation_subtitle" = "安全なメッセージを設定するための検証方法を選択してください。";
 "screen_identity_confirmation_title" = "デジタルIDの認証";
 "screen_identity_confirmation_use_another_device" = "他の端末を使用";
@@ -1081,6 +1090,7 @@
 "screen_multi_account_announcement_title" = "You can now add multiple accounts";
 "screen_notification_optin_subtitle" = "設定は後で変更することができます。";
 "screen_notification_optin_title" = "メッセージを見逃さないために通知を許可しましょう";
+"screen_notification_settings_activity_section_title" = "Activity";
 "screen_notification_settings_additional_settings_section_title" = "追加設定";
 "screen_notification_settings_call_ringtone_label" = "発信音";
 "screen_notification_settings_calls_label" = "音声・ビデオ通話";
@@ -1151,6 +1161,8 @@
 "screen_notification_settings_system_notifications_action_required_content_link" = "システム設定";
 "screen_notification_settings_system_notifications_turned_off" = "システムで通知がオフです";
 "screen_notification_settings_title" = "通知";
+"screen_onboarding_add_account_subtitle" = "You can add multiple accounts to the app and switch between them easily.";
+"screen_onboarding_add_account_title" = "Sign in to another account";
 "screen_onboarding_app_version" = "バージョン %1$@";
 "screen_onboarding_checking_account" = "アカウントを確認中";
 "screen_onboarding_sign_in_manually" = "手動で指定してサインイン";
@@ -1169,14 +1181,6 @@
 "screen_polls_history_filter_ongoing" = "進行中";
 "screen_polls_history_filter_past" = "過去";
 "screen_polls_history_title" = "投票";
-"screen_ptt_settings_battery_optimization" = "Ignore battery optimisation";
-"screen_ptt_settings_battery_optimization_description" = "Stay active in background";
-"screen_ptt_settings_covert_mode" = "Covert mode";
-"screen_ptt_settings_covert_mode_description" = "Mute all channels";
-"screen_ptt_settings_lock_screen" = "Show on lock screen";
-"screen_ptt_settings_lock_screen_description" = "Access from the lock screen";
-"screen_ptt_settings_system_overlay" = "Enable system overlay";
-"screen_ptt_settings_system_overlay_description" = "Access a floating action button";
 "screen_push_history_title" = "プッシュ履歴";
 "screen_qr_code_login_connecting_subtitle" = "安全な通信を確立しています";
 "screen_qr_code_login_connection_note_secure_state_description" = "新しい端末で安全な通信を確立できませんでした。既存の端末は安全な状態を維持しています。";
@@ -1354,9 +1358,6 @@
 "screen_room_details_profile_row_title" = "プロフィール";
 "screen_room_details_requests_to_join_title" = "参加のリクエスト";
 "screen_room_details_roles_and_permissions" = "役割と権限";
-"screen_room_details_room_audio_ptt" = "Push to talk";
-"screen_room_details_room_audio_title" = "Room Audio";
-"screen_room_details_room_audio_video_calls" = "Video calls";
 "screen_room_details_room_name_label" = "名前";
 "screen_room_details_security_and_privacy_title" = "セキュリティとプライバシー";
 "screen_room_details_security_title" = "セキュリティ";

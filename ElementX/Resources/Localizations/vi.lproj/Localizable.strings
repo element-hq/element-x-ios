@@ -217,6 +217,8 @@
 "banner_set_up_recovery_content" = "Các cuộc trò chuyện của bạn được tự động sao lưu bằng mã hóa đầu cuối. Để khôi phục bản sao lưu này và giữ lại danh tính kỹ thuật số của bạn khi bạn mất quyền truy cập vào tất cả các thiết bị, bạn sẽ cần khóa khôi phục.";
 "banner_set_up_recovery_submit" = "Lấy khóa khôi phục.";
 "banner_set_up_recovery_title" = "Sao lưu tin nhắn của bạn";
+"banner_swipe_avatar_content" = "Swipe up or down on your avatar to switch between your accounts without going to the app settings.";
+"banner_swipe_avatar_title" = "Swipe your avatar to switch accounts";
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Ứng dụng Element Call không hỗ trợ sử dụng thiết bị âm thanh Bluetooth trên phiên bản Android này. Vui lòng chọn thiết bị âm thanh khác.";
 "common_about" = "Giới thiệu";
 "common_acceptable_use_policy" = "Quy định sử dụng dịch vụ";
@@ -499,6 +501,7 @@
 "emoji_picker_category_recent" = "Biểu tượng cảm xúc gần đây";
 "emoji_picker_category_symbols" = "Biểu tượng";
 "emoji_picker_search_placeholder" = "Tìm kiếm biểu tượng cảm xúc";
+"error_account_already_logged_in_title" = "Duplicate sign-in";
 "error_account_creation_not_possible" = "Máy chủ  của bạn cần được nâng cấp để hỗ trợ Dịch vụ Xác thực và tạo tài khoản.";
 "error_failed_creating_the_permalink" = "Không tạo được liên kết cố định";
 "error_failed_loading_map" = "%1$@ không thể tải bản đồ. Vui lòng thử lại sau.";
@@ -869,12 +872,18 @@
 "screen_encryption_reset_bullet_1" = "Thông tin tài khoản, danh bạ, tùy chọn và danh sách trò chuyện của bạn sẽ được lưu giữ.";
 "screen_encryption_reset_bullet_2" = "Bạn sẽ mất toàn bộ lịch sử tin nhắn chỉ được lưu trữ trên máy chủ.";
 "screen_encryption_reset_bullet_3" = "Bạn sẽ cần xác minh lại tất cả các thiết bị và danh bạ hiện có của mình.";
+"screen_encryption_reset_bullet_4" = "Any devices you’re signed in to will need to be reconfirmed";
 "screen_encryption_reset_footer" = "Chỉ nên đặt lại danh tính kỹ thuật số của bạn nếu bạn không có quyền truy cập vào thiết bị đã được xác minh khác và bạn không có khóa khôi phục.";
+"screen_encryption_reset_no_chats_message" = "It looks like you don’t have any chats yet. If this is correct, you can safely proceed with resetting your digital identity";
+"screen_encryption_reset_no_options_subtitle" = "You don’t have access to any other verified devices or a recovery key, so you’ll need to reset your digital identity to continue using the app.";
+"screen_encryption_reset_no_options_title" = "You need to reset your digital identity";
+"screen_encryption_reset_subtitle" = "If you don’t have access to any other verified devices and you don’t have your recovery key, then you’ll need to reset your digital identity to continue using the app.";
 "screen_encryption_reset_title" = "Không thể xác nhận? Bạn cần phải thiết lập lại danh tính kỹ thuật số của mình.";
 "screen_home_tab_chats" = "Cuộc trò chuyện";
 "screen_home_tab_spaces" = "Spaces";
 "screen_identity_confirmation_cannot_confirm" = "Không thể xác nhận?";
 "screen_identity_confirmation_create_new_recovery_key" = "Tạo khóa khôi phục mới";
+"screen_identity_confirmation_sign_out" = "Sign out";
 "screen_identity_confirmation_subtitle" = "Chọn phương thức xác minh để bật nhắn tin bảo mật.";
 "screen_identity_confirmation_title" = "Xác nhận danh tính kỹ thuật số của bạn";
 "screen_identity_confirmation_use_another_device" = "Dùng thiết bị khác";
@@ -1081,6 +1090,7 @@
 "screen_multi_account_announcement_title" = "You can now add multiple accounts";
 "screen_notification_optin_subtitle" = "Bạn có thể thay đổi cài đặt sau.";
 "screen_notification_optin_title" = "Cho phép thông báo để không bỏ lỡ bất kỳ tin nhắn nào";
+"screen_notification_settings_activity_section_title" = "Activity";
 "screen_notification_settings_additional_settings_section_title" = "Cài đặt bổ sung";
 "screen_notification_settings_call_ringtone_label" = "Call ringtone";
 "screen_notification_settings_calls_label" = "Cuộc gọi âm thanh và video";
@@ -1151,6 +1161,8 @@
 "screen_notification_settings_system_notifications_action_required_content_link" = "cài đặt hệ thống";
 "screen_notification_settings_system_notifications_turned_off" = "Thông báo hệ thống đã tắt";
 "screen_notification_settings_title" = "Thông báo";
+"screen_onboarding_add_account_subtitle" = "You can add multiple accounts to the app and switch between them easily.";
+"screen_onboarding_add_account_title" = "Sign in to another account";
 "screen_onboarding_app_version" = "Version %1$@";
 "screen_onboarding_checking_account" = "Checking account";
 "screen_onboarding_sign_in_manually" = "Đăng nhập thủ công";
@@ -1169,14 +1181,6 @@
 "screen_polls_history_filter_ongoing" = "Đang diễn ra";
 "screen_polls_history_filter_past" = "Quá khứ";
 "screen_polls_history_title" = "Cuộc thăm dò ý kiến";
-"screen_ptt_settings_battery_optimization" = "Ignore battery optimisation";
-"screen_ptt_settings_battery_optimization_description" = "Stay active in background";
-"screen_ptt_settings_covert_mode" = "Covert mode";
-"screen_ptt_settings_covert_mode_description" = "Mute all channels";
-"screen_ptt_settings_lock_screen" = "Show on lock screen";
-"screen_ptt_settings_lock_screen_description" = "Access from the lock screen";
-"screen_ptt_settings_system_overlay" = "Enable system overlay";
-"screen_ptt_settings_system_overlay_description" = "Access a floating action button";
 "screen_push_history_title" = "Push history";
 "screen_qr_code_login_connecting_subtitle" = "Establishing a secure connection";
 "screen_qr_code_login_connection_note_secure_state_description" = "A secure connection could not be made to the new device. Your existing devices are still safe and you don't need to worry about them.";
@@ -1354,9 +1358,6 @@
 "screen_room_details_profile_row_title" = "Profile";
 "screen_room_details_requests_to_join_title" = "Requests to join";
 "screen_room_details_roles_and_permissions" = "Vai trò và quyền hạn";
-"screen_room_details_room_audio_ptt" = "Push to talk";
-"screen_room_details_room_audio_title" = "Room Audio";
-"screen_room_details_room_audio_video_calls" = "Video calls";
 "screen_room_details_room_name_label" = "Tên";
 "screen_room_details_security_and_privacy_title" = "Security & privacy";
 "screen_room_details_security_title" = "Bảo mật";

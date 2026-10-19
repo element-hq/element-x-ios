@@ -217,6 +217,8 @@
 "banner_set_up_recovery_content" = "Recupera a tua identidade criptográfica e o histórico de mensagens com uma chave de recuperação se tiveres perdido todos os teus dispositivos existentes.";
 "banner_set_up_recovery_submit" = "Chave de recuperação";
 "banner_set_up_recovery_title" = "Configurar a recuperação";
+"banner_swipe_avatar_content" = "Swipe up or down on your avatar to switch between your accounts without going to the app settings.";
+"banner_swipe_avatar_title" = "Swipe your avatar to switch accounts";
 "call_invalid_audio_device_bluetooth_devices_disabled" = "As chamadas do Element não permitem o uso de dispositivos de áudio Bluetooth nesta versão do Android. Por favor, seleciona outro dispositivo.";
 "common_about" = "Sobre";
 "common_acceptable_use_policy" = "Política de utilização aceitável";
@@ -499,6 +501,7 @@
 "emoji_picker_category_recent" = "Emojis recentes";
 "emoji_picker_category_symbols" = "Símbolos";
 "emoji_picker_search_placeholder" = "Pesquisar emojis";
+"error_account_already_logged_in_title" = "Duplicate sign-in";
 "error_account_creation_not_possible" = "Seu homeserver precisa ser atualizado para suportar o Matrix Authentication Service e a criação de conta.";
 "error_failed_creating_the_permalink" = "Falha ao criar ligação permanente";
 "error_failed_loading_map" = "%1$@ não foi possível carregar o mapa. Por favor, tente novamente mais tarde.";
@@ -869,12 +872,18 @@
 "screen_encryption_reset_bullet_1" = "Os detalhes da tua conta, contactos, preferências e lista de conversas serão mantidos.";
 "screen_encryption_reset_bullet_2" = "Perderás o acesso ao teu histórico de mensagens existente";
 "screen_encryption_reset_bullet_3" = "Necessitarás de verificar todos os teus dispositivos e contactos novamente.";
+"screen_encryption_reset_bullet_4" = "Any devices you’re signed in to will need to be reconfirmed";
 "screen_encryption_reset_footer" = "Repõe a tua identidade apenas se não tiveres acesso a mais nenhum dispositivo com sessão iniciada e se tiveres perdido a tua chave de recuperação.";
+"screen_encryption_reset_no_chats_message" = "It looks like you don’t have any chats yet. If this is correct, you can safely proceed with resetting your digital identity";
+"screen_encryption_reset_no_options_subtitle" = "You don’t have access to any other verified devices or a recovery key, so you’ll need to reset your digital identity to continue using the app.";
+"screen_encryption_reset_no_options_title" = "You need to reset your digital identity";
+"screen_encryption_reset_subtitle" = "If you don’t have access to any other verified devices and you don’t have your recovery key, then you’ll need to reset your digital identity to continue using the app.";
 "screen_encryption_reset_title" = "Repõe a tua identidade caso não consigas confirmar de outra forma";
 "screen_home_tab_chats" = "Conversas";
 "screen_home_tab_spaces" = "Espaços";
 "screen_identity_confirmation_cannot_confirm" = "Não é possível confirmar?";
 "screen_identity_confirmation_create_new_recovery_key" = "Criar uma nova chave de recuperação";
+"screen_identity_confirmation_sign_out" = "Sign out";
 "screen_identity_confirmation_subtitle" = "Verifica este dispositivo para configurar o envio seguro de mensagens.";
 "screen_identity_confirmation_title" = "Confirma a tua identidade digital";
 "screen_identity_confirmation_use_another_device" = "Utilizar outro dispositivo";
@@ -1081,6 +1090,7 @@
 "screen_multi_account_announcement_title" = "You can now add multiple accounts";
 "screen_notification_optin_subtitle" = "Podes alterar as tuas definições mais tarde.";
 "screen_notification_optin_title" = "Permite as notificações e nunca percas uma mensagem";
+"screen_notification_settings_activity_section_title" = "Activity";
 "screen_notification_settings_additional_settings_section_title" = "Configurações adicionais";
 "screen_notification_settings_call_ringtone_label" = "Call ringtone";
 "screen_notification_settings_calls_label" = "Chamadas de áudio e vídeo";
@@ -1151,6 +1161,8 @@
 "screen_notification_settings_system_notifications_action_required_content_link" = "configurações do sistema";
 "screen_notification_settings_system_notifications_turned_off" = "Notificações do sistema desativadas";
 "screen_notification_settings_title" = "Notificações";
+"screen_onboarding_add_account_subtitle" = "You can add multiple accounts to the app and switch between them easily.";
+"screen_onboarding_add_account_title" = "Sign in to another account";
 "screen_onboarding_app_version" = "Versão %1$@";
 "screen_onboarding_checking_account" = "Checking account";
 "screen_onboarding_sign_in_manually" = "Iniciar sessão manualmente";
@@ -1169,14 +1181,6 @@
 "screen_polls_history_filter_ongoing" = "Em curso";
 "screen_polls_history_filter_past" = "Passado";
 "screen_polls_history_title" = "Sondagens";
-"screen_ptt_settings_battery_optimization" = "Ignore battery optimisation";
-"screen_ptt_settings_battery_optimization_description" = "Stay active in background";
-"screen_ptt_settings_covert_mode" = "Covert mode";
-"screen_ptt_settings_covert_mode_description" = "Mute all channels";
-"screen_ptt_settings_lock_screen" = "Show on lock screen";
-"screen_ptt_settings_lock_screen_description" = "Access from the lock screen";
-"screen_ptt_settings_system_overlay" = "Enable system overlay";
-"screen_ptt_settings_system_overlay_description" = "Access a floating action button";
 "screen_push_history_title" = "Histórico de push";
 "screen_qr_code_login_connecting_subtitle" = "A estabelecer uma ligação segura";
 "screen_qr_code_login_connection_note_secure_state_description" = "Não foi possível estabelecer uma ligação segura com o novo dispositivo. Os teus outros dispositivos continuam seguros, não precisas de te preocupar com eles.";
@@ -1354,9 +1358,6 @@
 "screen_room_details_profile_row_title" = "Perfil";
 "screen_room_details_requests_to_join_title" = "Pedidos de entrada";
 "screen_room_details_roles_and_permissions" = "Cargos e permissões";
-"screen_room_details_room_audio_ptt" = "Push to talk";
-"screen_room_details_room_audio_title" = "Room Audio";
-"screen_room_details_room_audio_video_calls" = "Video calls";
 "screen_room_details_room_name_label" = "Name";
 "screen_room_details_security_and_privacy_title" = "Segurança e privacidade";
 "screen_room_details_security_title" = "Segurança";
