@@ -2066,6 +2066,8 @@ internal nonisolated enum L10n {
   internal static var screenEncryptionResetTitle: String { return L10n.tr("Localizable", "screen_encryption_reset_title") }
   /// Chats
   internal static var screenHomeTabChats: String { return L10n.tr("Localizable", "screen_home_tab_chats") }
+  /// Search
+  internal static var screenHomeTabSearch: String { return L10n.tr("Localizable", "screen_home_tab_search") }
   /// Spaces
   internal static var screenHomeTabSpaces: String { return L10n.tr("Localizable", "screen_home_tab_spaces") }
   /// Can't confirm?
@@ -3488,6 +3490,20 @@ internal nonisolated enum L10n {
   internal static var screenRoomlistTombstonedRoomDescription: String { return L10n.tr("Localizable", "screen_roomlist_tombstoned_room_description") }
   /// Your spaces
   internal static var screenRoomlistYourSpaces: String { return L10n.tr("Localizable", "screen_roomlist_your_spaces") }
+  /// Search for chats and messages
+  internal static var screenSearchEmptyStateMessage: String { return L10n.tr("Localizable", "screen_search_empty_state_message") }
+  /// Start searching
+  internal static var screenSearchEmptyStateTitle: String { return L10n.tr("Localizable", "screen_search_empty_state_title") }
+  /// There are no results for “%1$@.” Try a new search term.
+  internal static func screenSearchNoResultsMessage(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_search_no_results_message", String(describing: p1))
+  }
+  /// Recent searches
+  internal static var screenSearchRecentSearches: String { return L10n.tr("Localizable", "screen_search_recent_searches") }
+  /// Chats
+  internal static var screenSearchTabChats: String { return L10n.tr("Localizable", "screen_search_tab_chats") }
+  /// Messages
+  internal static var screenSearchTabMessages: String { return L10n.tr("Localizable", "screen_search_tab_messages") }
   /// Add address
   internal static var screenSecurityAndPrivacyAddRoomAddressAction: String { return L10n.tr("Localizable", "screen_security_and_privacy_add_room_address_action") }
   /// Anyone in authorised spaces can join, but everyone else must request access.

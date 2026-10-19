@@ -136,7 +136,7 @@ struct SearchScreen: View {
     private var emptyState: some View {
         if context.viewState.isSearching {
             TitleAndIcon(title: L10n.commonNoResults,
-                         subtitle: UntranslatedL10n.screenSearchNoResultsMessage(context.searchQuery),
+                         subtitle: L10n.screenSearchNoResultsMessage(context.searchQuery),
                          icon: \.search,
                          iconStyle: .defaultSolid)
                 .frame(maxWidth: .infinity)
@@ -144,8 +144,8 @@ struct SearchScreen: View {
         } else if !context.viewState.breadcrumbs.isEmpty {
             breadcrumbsList
         } else {
-            TitleAndIcon(title: UntranslatedL10n.screenSearchEmptyStateTitle,
-                         subtitle: UntranslatedL10n.screenSearchEmptyStateMessage,
+            TitleAndIcon(title: L10n.screenSearchEmptyStateTitle,
+                         subtitle: L10n.screenSearchEmptyStateMessage,
                          icon: \.search,
                          iconStyle: .defaultSolid)
                 .frame(maxWidth: .infinity)
@@ -210,7 +210,7 @@ struct SearchScreen: View {
                 }
             } header: {
                 HStack(spacing: 8) {
-                    Text(UntranslatedL10n.screenSearchRecentSearches)
+                    Text(L10n.screenSearchRecentSearches)
                         .compoundListSectionHeader()
                     
                     Spacer()

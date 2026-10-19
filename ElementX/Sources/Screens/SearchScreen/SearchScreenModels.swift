@@ -22,8 +22,8 @@ enum SearchScreenMode: CaseIterable, Identifiable {
     
     var title: String {
         switch self {
-        case .rooms: UntranslatedL10n.screenSearchTabChats
-        case .messages: UntranslatedL10n.screenSearchTabMessages
+        case .rooms: L10n.screenSearchTabChats
+        case .messages: L10n.screenSearchTabMessages
         }
     }
 }
