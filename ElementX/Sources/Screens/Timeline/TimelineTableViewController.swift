@@ -19,8 +19,62 @@ class TimelineItemCell: UITableViewCell {
     
     var item: RoomTimelineItemViewState?
     
+    private let contentPlacement = ContentPlacement()
+    
+    var isShowingPendingContentChange: Bool {
+        contentPlacement.isTopAligned
+    }
+    
     override func prepareForReuse() {
         item = nil
+        finishPendingContentChange()
+    }
+    
+    func setContent(@ViewBuilder _ content: () -> some View) {
+        contentConfiguration = UIHostingConfiguration { [contentPlacement] in
+            PlacedContent(placement: contentPlacement, content: content())
+        }
+        .margins(.all, 0) // Margins are handled in the stylers
+        .minSize(height: 1)
+        .background(Color.clear)
+        
+        // Flipping the cell can create some issues with cell resizing, so flip the content View
+        contentView.transform = CGAffineTransform(scaleX: 1, y: -1)
+    }
+    
+    /// Makes SwiftUI show the content's pending change now, so that the table's next update resizes the row for it in
+    /// its own batch. Until `finishPendingContentChange`, the content stays at the row's visual top, so it doesn't dip
+    /// while the row shrinks or grows below it.
+    func layOutPendingContentChange() {
+        contentPlacement.isTopAligned = true
+        // Forced, in case SwiftUI hasn't asked for a layout yet.
+        contentView.setNeedsLayout()
+        contentView.layoutIfNeeded()
+    }
+    
+    /// Centres the content again: top-aligned, it would jump twice as far when a sender header comes or goes.
+    func finishPendingContentChange() {
+        guard contentPlacement.isTopAligned else { return }
+        contentPlacement.isTopAligned = false
+    }
+}
+
+/// Where a cell shows its content while the row's height differs from the content's.
+@Observable private final class ContentPlacement {
+    var isTopAligned = false
+}
+
+private struct PlacedContent<Content: View>: View {
+    let placement: ContentPlacement
+    let content: Content
+    
+    var body: some View {
+        // Without `minHeight: 0`, content taller than its row stays centred.
+        content
+            .frame(maxWidth: .infinity,
+                   minHeight: placement.isTopAligned ? 0 : nil,
+                   maxHeight: placement.isTopAligned ? .infinity : nil,
+                   alignment: placement.isTopAligned ? .topLeading : .leading)
     }
 }
 
@@ -306,20 +360,13 @@ class TimelineTableViewController: UIViewController {
                     return cell
                 }
                 
-                cell.contentConfiguration = UIHostingConfiguration { [coordinator, hideTimelineMedia] in
+                cell.setContent { [coordinator, hideTimelineMedia] in
                     RoomTimelineItemView(viewState: viewState)
                         .id(id)
-                        .frame(maxWidth: .infinity, alignment: .leading)
                         .environmentObject(coordinator.context) // Attempted fix at a crash in TimelineItemContextMenu
                         .environment(\.timelineContext, coordinator.context)
                         .environment(\.shouldAutomaticallyLoadImages, !hideTimelineMedia)
                 }
-                .margins(.all, 0) // Margins are handled in the stylers
-                .minSize(height: 1)
-                .background(Color.clear)
-                
-                // Flipping the cell can create some issues with cell resizing, so flip the content View
-                cell.contentView.transform = CGAffineTransform(scaleX: 1, y: -1)
                 return cell
             }
         }
@@ -369,7 +416,11 @@ class TimelineTableViewController: UIViewController {
             nil
         }
         
-        dataSource.apply(snapshot, animatingDifferences: animated)
+        // The previous newest item loses its delivery status as the new one lands.
+        let resizedCell = animated ? currentNewestItemIdentifier.flatMap { layOutPendingContentChange(of: $0) } : nil
+        dataSource.apply(snapshot, animatingDifferences: animated) {
+            resizedCell?.finishPendingContentChange()
+        }
         
         if let focussedEvent, focussedEvent.appearance != .hasAppeared {
             scrollToItem(eventID: focussedEvent.eventID, animated: focussedEvent.appearance == .animated)
@@ -390,6 +441,15 @@ class TimelineTableViewController: UIViewController {
             // Make sure we paginate with the final timeline geometry
             self?.paginatePublisher.send(())
         }
+    }
+    
+    /// Lays out a visible row's pending content change, if the next apply keeps the row, so that it resizes in that batch.
+    private func layOutPendingContentChange(of id: TimelineItemIdentifier.UniqueID) -> TimelineItemCell? {
+        guard timelineItemsDictionary[id] != nil,
+              let indexPath = dataSource?.indexPath(for: id),
+              let cell = tableView.cellForRow(at: indexPath) as? TimelineItemCell else { return nil }
+        cell.layOutPendingContentChange()
+        return cell
     }
     
     /// Scrolls to the newest item in the timeline.
