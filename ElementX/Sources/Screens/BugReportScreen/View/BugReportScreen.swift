@@ -117,7 +117,7 @@ struct BugReportScreen: View {
                     .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.screenshot)
                     .accessibilityLabel(L10n.screenBugReportA11yScreenshot)
                     .overlay(alignment: .topTrailing) {
-                        Button { context.send(viewAction: .removeScreenshot) } label: {
+                        Button(action: removeScreenshot) {
                             CompoundIcon(\.close, size: .small, relativeTo: .compound.bodyMD)
                                 .foregroundStyle(.compound.iconSecondary)
                                 .background {
@@ -151,6 +151,12 @@ struct BugReportScreen: View {
             .disabled(context.reportText.count < 5)
             .disabled(context.viewState.shouldDisableInteraction)
         }
+    }
+    
+    private func removeScreenshot() {
+        // Otherwise the picker keeps the item checked and re-picking it doesn't trigger onChange.
+        selectedScreenshot = nil
+        context.send(viewAction: .removeScreenshot)
     }
 }
 
