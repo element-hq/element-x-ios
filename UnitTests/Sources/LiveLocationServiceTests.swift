@@ -17,6 +17,9 @@ final class LiveLocationServiceTests {
     private var service: LiveLocationService!
     private var userSettings: UserSettings!
     private var beaconInfoSubject: PassthroughSubject<LiveLocationOwnInfoUpdate, Never>!
+    private let clock = ManualClock()
+    /// Whole seconds, so the expiry delays the service works out are exact.
+    private var currentDate = Date(timeIntervalSinceReferenceDate: 800_000_000)
     
     // MARK: - startLiveLocation
     
@@ -120,18 +123,12 @@ final class LiveLocationServiceTests {
         let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
         clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
         
-        let duration = Duration.seconds(300)
-        let beforeStart = Date()
-        _ = await service.startLiveLocation(roomID: "!room:matrix.org", duration: duration)
-        let afterStart = Date()
+        _ = await service.startLiveLocation(roomID: "!room:matrix.org", duration: .seconds(300))
         
         try await simulateBeaconEcho(roomID: "!room:matrix.org", eventID: "$event:matrix.org")
         
         let storedSession = try #require(userSettings.account.liveLocationSharingSessionsByRoomID["!room:matrix.org"])
-        let expectedMinTimeout = beforeStart.addingTimeInterval(TimeInterval(duration.seconds))
-        let expectedMaxTimeout = afterStart.addingTimeInterval(TimeInterval(duration.seconds))
-        
-        #expect((expectedMinTimeout...expectedMaxTimeout).contains(storedSession.expirationDate))
+        #expect(storedSession.expirationDate == currentDate.addingTimeInterval(300))
         #expect(storedSession.eventID == "$event:matrix.org")
     }
     
@@ -240,6 +237,121 @@ final class LiveLocationServiceTests {
         #expect(!service.isSharingPublisher.value)
     }
     
+    // MARK: - Expiry
+    
+    @Test
+    func aShareStopsWhenItExpiresWithoutLocationUpdates() async {
+        setUp()
+        let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
+        clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
+        userSettings.account.liveLocationSharingSessionsByRoomID["!room:matrix.org"] = LiveLocationSession(eventID: "$event:matrix.org", expirationDate: currentDate.addingTimeInterval(60))
+        #expect(await clock.waitForScheduledSleep() == .seconds(60))
+        
+        await waitForConfirmation("Wait for the share to stop") { confirm in
+            roomProxy.stopLiveLocationShareClosure = {
+                confirm()
+                return .success(())
+            }
+            advanceTime(by: 60)
+        }
+        
+        #expect(userSettings.account.liveLocationSharingSessionsByRoomID.isEmpty)
+        #expect(!service.isSharingPublisher.value)
+    }
+    
+    @Test
+    func aShareStillStopsWhenTheWallClockLagsBehindTheTimer() async {
+        setUp()
+        let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
+        clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
+        userSettings.account.liveLocationSharingSessionsByRoomID["!room:matrix.org"] = LiveLocationSession(eventID: "$event:matrix.org", expirationDate: currentDate.addingTimeInterval(60))
+        #expect(await clock.waitForScheduledSleep() == .seconds(60))
+        
+        currentDate = currentDate.addingTimeInterval(59)
+        clock.advance(by: .seconds(60))
+        
+        #expect(await clock.waitForScheduledSleep() == .seconds(1))
+        #expect(service.isSharingPublisher.value)
+        
+        await waitForConfirmation("Wait for the share to stop") { confirm in
+            roomProxy.stopLiveLocationShareClosure = {
+                confirm()
+                return .success(())
+            }
+            advanceTime(by: 1)
+        }
+        
+        #expect(userSettings.account.liveLocationSharingSessionsByRoomID.isEmpty)
+    }
+    
+    @Test
+    func onlyTheExpiredShareStops() async {
+        setUp()
+        let roomProxy = makeRoomProxy(roomID: "!room1:matrix.org")
+        clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
+        userSettings.account.liveLocationSharingSessionsByRoomID = [
+            "!room1:matrix.org": LiveLocationSession(eventID: "$event1:matrix.org", expirationDate: currentDate.addingTimeInterval(60)),
+            "!room2:matrix.org": LiveLocationSession(eventID: "$event2:matrix.org", expirationDate: currentDate.addingTimeInterval(120))
+        ]
+        #expect(await clock.waitForScheduledSleep() == .seconds(60))
+        
+        await waitForConfirmation("Wait for the first share to stop") { confirm in
+            roomProxy.stopLiveLocationShareClosure = {
+                confirm()
+                return .success(())
+            }
+            advanceTime(by: 60)
+        }
+        
+        #expect(Array(userSettings.account.liveLocationSharingSessionsByRoomID.keys) == ["!room2:matrix.org"])
+        #expect(service.isSharingPublisher.value)
+        #expect(await clock.waitForScheduledSleep() == .seconds(60))
+        
+        await waitForConfirmation("Wait for the second share to stop") { confirm in
+            roomProxy.stopLiveLocationShareClosure = {
+                confirm()
+                return .success(())
+            }
+            advanceTime(by: 60)
+        }
+        
+        #expect(userSettings.account.liveLocationSharingSessionsByRoomID.isEmpty)
+        #expect(!service.isSharingPublisher.value)
+    }
+    
+    @Test
+    func sharesThatExpiredBeforeLaunchAreStopped() async {
+        let userSettings = UserSettings.mock()
+        userSettings.account.liveLocationSharingSessionsByRoomID["!room:matrix.org"] = LiveLocationSession(eventID: "$event:matrix.org", expirationDate: currentDate.addingTimeInterval(-60))
+        let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
+        
+        await waitForConfirmation("Wait for the share to stop") { confirm in
+            roomProxy.stopLiveLocationShareClosure = {
+                confirm()
+                return .success(())
+            }
+            setUp(userSettings: userSettings)
+            clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
+            
+            #expect(!service.isSharingPublisher.value)
+        }
+        
+        #expect(userSettings.account.liveLocationSharingSessionsByRoomID.isEmpty)
+    }
+    
+    @Test
+    func stoppingTheLastShareCancelsItsExpiry() async {
+        setUp()
+        let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
+        clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
+        userSettings.account.liveLocationSharingSessionsByRoomID["!room:matrix.org"] = LiveLocationSession(eventID: "$event:matrix.org", expirationDate: currentDate.addingTimeInterval(60))
+        await clock.waitForScheduledSleep()
+        
+        await service.stopLiveLocation(roomID: "!room:matrix.org")
+        
+        #expect(!clock.hasPendingSleep)
+    }
+    
     // MARK: - Authorization
     
     @Test
@@ -287,7 +399,14 @@ final class LiveLocationServiceTests {
         clientProxy = ClientProxyMock(.init())
         beaconInfoSubject = PassthroughSubject<LiveLocationOwnInfoUpdate, Never>()
         clientProxy.liveLocationOwnInfoUpdatesPublisher = beaconInfoSubject.eraseToAnyPublisher()
-        service = LiveLocationService(clientProxy: clientProxy, userSettings: userSettings)
+        service = LiveLocationService(clientProxy: clientProxy,
+                                      userSettings: userSettings,
+                                      timeProvider: TimeProvider(clock: clock) { self.currentDate })
+    }
+    
+    private func advanceTime(by seconds: TimeInterval) {
+        currentDate = currentDate.addingTimeInterval(seconds)
+        clock.advance(by: .seconds(seconds))
     }
     
     private func simulateBeaconEcho(roomID: String, eventID: String) async throws {
