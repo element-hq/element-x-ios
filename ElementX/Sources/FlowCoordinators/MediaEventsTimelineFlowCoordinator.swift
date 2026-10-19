@@ -63,17 +63,13 @@ class MediaEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
                                                                                                                                                  presentation: .mediaFilesScreen,
                                                                                                                                                  roomProxy: roomProxy,
                                                                                                                                                  timelineItemFactory: timelineItemFactory,
-                                                                                                                                                 mediaProvider: userSession.mediaProvider) else {
-            MXLog.error("Failed presenting media timeline")
-            return
-        }
-        
-        guard case let .success(filesTimelineController) = await flowParameters.timelineControllerFactory.buildMessageFilteredTimelineController(focus: .live,
-                                                                                                                                                 allowedMessageTypes: [.file, .audio, .gallery],
-                                                                                                                                                 presentation: .mediaFilesScreen,
-                                                                                                                                                 roomProxy: roomProxy,
-                                                                                                                                                 timelineItemFactory: timelineItemFactory,
-                                                                                                                                                 mediaProvider: userSession.mediaProvider) else {
+                                                                                                                                                 mediaProvider: userSession.mediaProvider),
+            case let .success(filesTimelineController) = await flowParameters.timelineControllerFactory.buildMessageFilteredTimelineController(focus: .live,
+                                                                                                                                               allowedMessageTypes: [.file, .audio, .gallery],
+                                                                                                                                               presentation: .mediaFilesScreen,
+                                                                                                                                               roomProxy: roomProxy,
+                                                                                                                                               timelineItemFactory: timelineItemFactory,
+                                                                                                                                               mediaProvider: userSession.mediaProvider) else {
             MXLog.error("Failed presenting media timeline")
             return
         }

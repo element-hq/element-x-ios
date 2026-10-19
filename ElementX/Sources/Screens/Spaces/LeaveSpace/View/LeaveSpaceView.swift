@@ -7,6 +7,8 @@
 //
 
 import Compound
+import MatrixRustSDK
+import MatrixRustSDKMocks
 import SwiftUI
 
 struct LeaveSpaceView: View {
@@ -125,9 +127,6 @@ struct LeaveSpaceView: View {
 }
 
 // MARK: - Previews
-
-import MatrixRustSDK
-import MatrixRustSDKMocks
 
 struct LeaveSpaceView_Previews: PreviewProvider, TestablePreview {
     static let manyViewModel = makeViewModel(mode: .manyRooms)

@@ -50,8 +50,8 @@ struct JoinedRoomProxyMockConfiguration {
     var powerLevelsConfiguration = RoomPowerLevelsProxyMock.Configuration()
 }
 
+@MainActor
 extension JoinedRoomProxyMock {
-    @MainActor
     convenience init(_ configuration: JoinedRoomProxyMockConfiguration) {
         self.init()
         
@@ -143,8 +143,9 @@ extension JoinedRoomProxyMock {
     }
 }
 
+@MainActor
 extension RoomInfoProxyMock {
-    @MainActor convenience init(_ configuration: JoinedRoomProxyMockConfiguration) {
+    convenience init(_ configuration: JoinedRoomProxyMockConfiguration) {
         self.init()
         
         id = configuration.id

@@ -8,6 +8,7 @@
 
 import Compound
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct TimelineMediaPreviewDetailsView: View {
     let item: TimelineMediaPreviewItem.Media
@@ -166,8 +167,6 @@ struct TimelineMediaPreviewDetailsView: View {
 }
 
 // MARK: - Previews
-
-import UniformTypeIdentifiers
 
 @available(iOS 26.0, *)
 struct TimelineMediaPreviewDetailsView_Previews: PreviewProvider, TestablePreview {

@@ -148,9 +148,11 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         setCurrentItem(previewItem)
         
         if case let .media(mediaItem) = previewItem {
-            guard mediaItem.fileHandle == nil, let source = mediaItem.mediaSource else { return }
-            
-            guard await checkSourceIsSafeIfNeeded(for: mediaItem, source: source) else { return }
+            guard mediaItem.fileHandle == nil,
+                  let source = mediaItem.mediaSource,
+                  await checkSourceIsSafeIfNeeded(for: mediaItem, source: source) else {
+                return
+            }
             
             switch await mediaProvider.loadFileFromSource(source, filename: mediaItem.filename) {
             case .success(let handle):

@@ -8,6 +8,7 @@
 
 import Combine
 import Compound
+import MatrixRustSDKMocks
 import SwiftUI
 
 struct HomeScreenRoomCell: View {
@@ -194,8 +195,6 @@ private extension View {
 }
 
 // MARK: - Previews
-
-import MatrixRustSDKMocks
 
 struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
     static let summaryProviderGeneric = RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))

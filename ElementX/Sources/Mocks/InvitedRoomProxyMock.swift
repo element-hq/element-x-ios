@@ -20,8 +20,8 @@ struct InvitedRoomProxyMockConfiguration {
     var inviter: RoomMemberProxyMock = .mockAlice
 }
 
+@MainActor
 extension InvitedRoomProxyMock {
-    @MainActor
     convenience init(_ configuration: InvitedRoomProxyMockConfiguration) {
         self.init()
         id = configuration.id
@@ -32,8 +32,9 @@ extension InvitedRoomProxyMock {
     }
 }
 
+@MainActor
 extension RoomInfoProxyMock {
-    @MainActor convenience init(_ configuration: InvitedRoomProxyMockConfiguration) {
+    convenience init(_ configuration: InvitedRoomProxyMockConfiguration) {
         self.init()
         
         id = configuration.id

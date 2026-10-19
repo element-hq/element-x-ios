@@ -96,8 +96,10 @@ class RoomNotificationSettingsScreenViewModel: RoomNotificationSettingsScreenVie
     }
     
     private func toogleCustomSetting() {
-        guard case .loaded(let settings) = state.notificationSettingsState else { return }
-        guard state.bindings.allowCustomSetting == settings.isDefault else { return }
+        guard case .loaded(let settings) = state.notificationSettingsState,
+              state.bindings.allowCustomSetting == settings.isDefault else {
+            return
+        }
         
         if state.bindings.allowCustomSetting {
             setCustomMode(settings.mode)
@@ -122,10 +124,10 @@ class RoomNotificationSettingsScreenViewModel: RoomNotificationSettingsScreenVie
     
     private func setCustomMode(_ mode: RoomNotificationModeProxy) {
         // Check if the new mode is already the current one
-        if case .loaded(let currentSettings) = state.notificationSettingsState {
-            if !currentSettings.isDefault, currentSettings.mode == mode {
-                return
-            }
+        if case .loaded(let currentSettings) = state.notificationSettingsState,
+           !currentSettings.isDefault,
+           currentSettings.mode == mode {
+            return
         }
         
         state.pendingCustomMode = mode

@@ -10,12 +10,13 @@ import Foundation
 import Observation
 import Synchronization
 
+@MainActor
 extension Observable {
     /// A convenience wrapper around the `Observations` sequence (SE-0475).
     ///
     /// - Parameter property: The key path to the property you would like to observe.
     @available(iOS 26.0, *)
-    @MainActor func observe<Value: Sendable>(_ property: KeyPath<Self, Value>) -> Observations<Value, Never> {
+    func observe<Value: Sendable>(_ property: KeyPath<Self, Value>) -> Observations<Value, Never> {
         Observations { self[keyPath: property] }
     }
     
@@ -26,7 +27,7 @@ extension Observable {
     /// - Parameter property: The key path to the property you would like to observe.
     @available(iOS, deprecated: 26.0, message: "Use observe(_:) which is backed by the Observations sequence.")
     @_disfavoredOverload
-    @MainActor func observe<Value: Sendable>(_ property: KeyPath<Self, Value>) -> AsyncStream<Value> {
+    func observe<Value: Sendable>(_ property: KeyPath<Self, Value>) -> AsyncStream<Value> {
         let (stream, continuation) = AsyncStream<Value>.makeStream()
         let (changeSignals, changeSignaller) = AsyncStream<Void>.makeStream()
         

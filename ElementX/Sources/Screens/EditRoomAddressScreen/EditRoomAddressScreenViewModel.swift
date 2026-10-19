@@ -157,11 +157,10 @@ class EditRoomAddressScreenViewModel: EditRoomAddressScreenViewModelType, EditRo
         }
         
         // Then try remove the old alias from the room directory on our current HS
-        if let savedAliasFromHomeserver {
-            if case .failure = await roomProxy.removeRoomAliasFromRoomDirectory(savedAliasFromHomeserver) {
-                userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
-                return
-            }
+        if let savedAliasFromHomeserver,
+           case .failure = await roomProxy.removeRoomAliasFromRoomDirectory(savedAliasFromHomeserver) {
+            userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+            return
         }
         
         // Finally update the canonical alias state..

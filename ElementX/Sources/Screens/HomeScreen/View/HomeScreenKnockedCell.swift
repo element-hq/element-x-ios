@@ -8,6 +8,7 @@
 
 import Combine
 import Compound
+import MatrixRustSDKMocks
 import SwiftUI
 
 struct HomeScreenKnockedCell: View {
@@ -96,8 +97,6 @@ struct HomeScreenKnockedCell: View {
 }
 
 // MARK: - Previews
-
-import MatrixRustSDKMocks
 
 struct HomeScreenKnockedCell_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {

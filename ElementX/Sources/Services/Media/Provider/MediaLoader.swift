@@ -8,9 +8,8 @@
 
 import Combine
 import Foundation
-import UIKit
-
 @preconcurrency import MatrixRustSDK
+import UIKit
 
 actor MediaLoader: MediaLoaderProtocol {
     // We noticed that the keyboard appears to hold onto a reference to the `Context` of the last

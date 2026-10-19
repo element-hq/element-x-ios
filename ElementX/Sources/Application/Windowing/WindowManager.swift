@@ -207,15 +207,9 @@ private class PassthroughWindow: UIWindow {
             
             return nil
         } else {
-            guard let hitView = super.hitTest(point, with: event) else {
-                return nil
-            }
-            
-            guard let rootViewController else {
-                return nil
-            }
-            
-            guard hitView != self else {
+            guard let hitView = super.hitTest(point, with: event),
+                  let rootViewController,
+                  hitView != self else {
                 return nil
             }
             

@@ -309,10 +309,9 @@ import SwiftUI
     /// Manually process changes to the compact layout navigation stack and update embedded components
     /// We need to either: pop from the detail, nil the detail or pop from the sidebar
     private func processCompactLayoutStackModuleRemoval(_ module: NavigationModule) {
-        if let sidebarNavigationStackCoordinator = sidebarModule?.coordinator as? NavigationStackCoordinator {
-            if sidebarNavigationStackCoordinator.stackModules.contains(module) {
-                sidebarNavigationStackCoordinator.stackModules.removeAll { $0 == module }
-            }
+        if let sidebarNavigationStackCoordinator = sidebarModule?.coordinator as? NavigationStackCoordinator,
+           sidebarNavigationStackCoordinator.stackModules.contains(module) {
+            sidebarNavigationStackCoordinator.stackModules.removeAll { $0 == module }
         }
         
         if module == detailModule {
