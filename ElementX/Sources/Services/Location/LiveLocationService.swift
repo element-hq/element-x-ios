@@ -13,6 +13,7 @@ import CoreLocation
 final class LiveLocationService: LiveLocationServiceProtocol {
     private let clientProxy: ClientProxyProtocol
     private let userSettings: UserSettings
+    private let timeProvider: TimeProvider
     
     private let actionsSubject = PassthroughSubject<LiveLocationServiceAction, Never>()
     var actionsPublisher: AnyPublisher<LiveLocationServiceAction, Never> {
@@ -49,13 +50,19 @@ final class LiveLocationService: LiveLocationServiceProtocol {
     
     private var lastLocation: CLLocationCoordinate2D?
     
+    /// Stops the next share to expire. A phone that doesn't move gets no location updates to notice it.
+    @CancellableTask private var expiryTask: Task<Void, Never>?
+    
     private var cancellables = Set<AnyCancellable>()
     
-    init(clientProxy: ClientProxyProtocol, userSettings: UserSettings) {
+    init(clientProxy: ClientProxyProtocol, userSettings: UserSettings, timeProvider: TimeProvider? = nil) {
         self.clientProxy = clientProxy
         self.userSettings = userSettings
+        self.timeProvider = timeProvider ?? TimeProvider(clock: ContinuousClock(), now: Date.init)
         isSharingSubject = .init(!userSettings.account.liveLocationSharingSessionsByRoomID.isEmpty)
         
+        // Before subscribing, so shares that expired while the app wasn't running never count as sharing.
+        stopExpiredLiveLocations()
         setupSubscriptions()
     }
     
@@ -94,7 +101,7 @@ final class LiveLocationService: LiveLocationServiceProtocol {
             return .failure(.startFailed)
         }
         
-        let expirationDate = Date().addingTimeInterval(TimeInterval(duration.seconds))
+        let expirationDate = timeProvider.now().addingTimeInterval(TimeInterval(duration.seconds))
         startingLiveLocationSharingSessionsByRoomID[roomID] = LiveLocationSession(eventID: eventID, expirationDate: expirationDate)
         
         return .success(())
@@ -155,6 +162,7 @@ final class LiveLocationService: LiveLocationServiceProtocol {
             .sink { [weak self] sessions in
                 guard let self else { return }
                 syncActiveRoomProxies(with: sessions)
+                scheduleExpiry(of: sessions)
                 
                 if sessions.isEmpty {
                     lastLocation = nil
@@ -199,6 +207,45 @@ final class LiveLocationService: LiveLocationServiceProtocol {
         }
     }
     
+    private func scheduleExpiry(of sessions: [String: LiveLocationSession]) {
+        guard let nextExpirationDate = sessions.values.map(\.expirationDate).min() else {
+            expiryTask = nil
+            return
+        }
+        
+        let delay = nextExpirationDate.timeIntervalSince(timeProvider.now())
+        expiryTask = Task { [weak self, clock = timeProvider.clock] in
+            try? await clock.sleep(for: .seconds(delay))
+            guard !Task.isCancelled, let self else { return }
+            
+            // The wall clock can lag behind the sleep's clock, so wait out whatever is left.
+            if !stopExpiredLiveLocations() {
+                scheduleExpiry(of: userSettings.account.liveLocationSharingSessionsByRoomID)
+            }
+        }
+    }
+    
+    /// Returns whether any share had expired.
+    @discardableResult
+    private func stopExpiredLiveLocations() -> Bool {
+        let now = timeProvider.now()
+        let sessions = userSettings.account.liveLocationSharingSessionsByRoomID
+        let expiredRoomIDs = sessions.filter { now >= $0.value.expirationDate }.map(\.key)
+        guard !expiredRoomIDs.isEmpty else { return false }
+        
+        MXLog.info("Live location sessions expired for rooms: \(expiredRoomIDs)")
+        // Forgotten straight away so sharing stops now, their stop events follow.
+        userSettings.account.liveLocationSharingSessionsByRoomID = sessions.filter { now < $0.value.expirationDate }
+        
+        Task { [weak self] in
+            for roomID in expiredRoomIDs {
+                await self?.stopLiveLocation(roomID: roomID)
+            }
+        }
+        
+        return true
+    }
+    
     /// Kicks off a send cycle if one isn't already running. Each cycle:
     /// 1. Takes the latest pending location and clears it.
     /// 2. Sends the location to all active rooms **and** waits a minimum 3-second delay (in parallel).
@@ -239,7 +286,7 @@ final class LiveLocationService: LiveLocationServiceProtocol {
         let geoURI = GeoURI(coordinate: coordinate, uncertainty: nil)
         
         for (roomID, session) in sessions {
-            if Date() >= session.expirationDate {
+            if timeProvider.now() >= session.expirationDate {
                 MXLog.info("Live location session expired for room: \(roomID)")
                 await stopLiveLocation(roomID: roomID)
                 continue
