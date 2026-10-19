@@ -19,7 +19,7 @@ class OAuthAccountSettingsPresenter: NSObject {
     private let redirectURL: URL
     private let presentationAnchor: UIWindow
     private let appMediator: AppMediatorProtocol
-    private let appHooks: AppHooks
+    private let presenterHook: OAuthAccountSettingsPresenterHookProtocol
     
     typealias Continuation = AsyncStream<Result<Void, OAuthError>>.Continuation
     private let continuation: Continuation?
@@ -27,14 +27,13 @@ class OAuthAccountSettingsPresenter: NSObject {
     init(accountURL: URL,
          presentationAnchor: UIWindow,
          appMediator: AppMediatorProtocol,
-         userSettings: UserSettings,
-         appHooks: AppHooks,
+         userSession: UserSessionProtocol,
          continuation: Continuation? = nil) {
         self.accountURL = accountURL
-        redirectURL = userSettings.app.oAuthRedirectURL
+        redirectURL = userSession.userSettings.app.oAuthRedirectURL
         self.presentationAnchor = presentationAnchor
         self.appMediator = appMediator
-        self.appHooks = appHooks
+        presenterHook = userSession.userHooks.oAuthAccountSettingsPresenterHook
         self.continuation = continuation
         
         super.init()
@@ -42,7 +41,7 @@ class OAuthAccountSettingsPresenter: NSObject {
     
     /// Presents a web authentication session for the supplied data.
     func start() {
-        let accountURL = appHooks.oAuthPresenterHook.update(accountURL)
+        let accountURL = presenterHook.update(accountURL)
         
         let session = ASWebAuthenticationSession(url: accountURL, callback: .oAuthRedirectURL(redirectURL)) { [continuation] _, error in
             guard let continuation else { return }

@@ -85,7 +85,10 @@ enum OAuthError: Error {
 }
 
 struct OAuthAuthorizationDataProxy: Hashable {
+    /// The authorisation data supplied by the SDK.
     let underlyingData: OAuthAuthorizationData
+    /// The homeserver that the authorisation is for.
+    let homeserver: String
     
     var url: URL {
         guard let url = URL(string: underlyingData.loginUrl()) else {

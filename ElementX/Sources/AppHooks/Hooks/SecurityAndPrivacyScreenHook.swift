@@ -8,11 +8,11 @@
 import Foundation
 
 nonisolated protocol SecurityAndPrivacyScreenHookProtocol: Sendable {
-    @MainActor func update(_ viewState: SecurityAndPrivacyScreenViewState, homeserver: String) -> SecurityAndPrivacyScreenViewState
+    @MainActor func update(_ viewState: SecurityAndPrivacyScreenViewState) -> SecurityAndPrivacyScreenViewState
 }
 
 struct DefaultSecurityAndPrivacyScreenHook: SecurityAndPrivacyScreenHookProtocol {
-    func update(_ viewState: SecurityAndPrivacyScreenViewState, homeserver: String) -> SecurityAndPrivacyScreenViewState {
+    func update(_ viewState: SecurityAndPrivacyScreenViewState) -> SecurityAndPrivacyScreenViewState {
         viewState
     }
 }

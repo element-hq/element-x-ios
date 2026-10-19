@@ -18,7 +18,7 @@ class OAuthAuthenticationPresenter: NSObject {
     private let redirectURL: URL
     private let presentationAnchor: UIWindow
     private let appMediator: AppMediatorProtocol
-    private let appHooks: AppHooks
+    private let presenterHook: OAuthAuthenticationPresenterHookProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     
     /// The data required to complete a request.
@@ -39,13 +39,13 @@ class OAuthAuthenticationPresenter: NSObject {
          redirectURL: URL,
          presentationAnchor: UIWindow,
          appMediator: AppMediatorProtocol,
-         appHooks: AppHooks,
+         presenterHook: OAuthAuthenticationPresenterHookProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.authenticationService = authenticationService
         self.redirectURL = redirectURL
         self.presentationAnchor = presentationAnchor
         self.appMediator = appMediator
-        self.appHooks = appHooks
+        self.presenterHook = presenterHook
         self.userIndicatorController = userIndicatorController
         super.init()
     }
@@ -56,7 +56,7 @@ class OAuthAuthenticationPresenter: NSObject {
     /// In particular if the authentication URL requires opening an external app, then the user may return
     /// to the app without completing (or cancelling) the authentication.
     func authenticate(using oAuthData: OAuthAuthorizationDataProxy) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
-        let authenticationURL = appHooks.oAuthPresenterHook.update(oAuthData.url)
+        let authenticationURL = presenterHook.update(oAuthData.url, homeserver: oAuthData.homeserver)
         
         let response = await withCheckedContinuation { continuation in
             let session = ASWebAuthenticationSession(url: authenticationURL, callback: .oAuthRedirectURL(redirectURL)) { url, error in

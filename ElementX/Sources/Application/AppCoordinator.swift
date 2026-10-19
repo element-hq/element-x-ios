@@ -894,7 +894,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                   emojiProvider: EmojiProvider(userSettings: userSession.userSettings),
                                                   linkMetadataProvider: LinkMetadataProvider(),
                                                   appMediator: appMediator,
-                                                  appHooks: appHooks,
                                                   analytics: analyticsService,
                                                   userIndicatorController: userIndicatorController,
                                                   stateMachineFactory: StateMachineFactory())

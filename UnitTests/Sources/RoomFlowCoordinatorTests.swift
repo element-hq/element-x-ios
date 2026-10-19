@@ -531,7 +531,6 @@ final class RoomFlowCoordinatorTests {
                                                   emojiProvider: EmojiProvider(userSettings: userSettings),
                                                   linkMetadataProvider: LinkMetadataProvider(),
                                                   appMediator: AppMediatorMock(.init()),
-                                                  appHooks: AppHooks(),
                                                   analytics: AnalyticsServiceMock(.init()),
                                                   userIndicatorController: UserIndicatorControllerMock(),
                                                   stateMachineFactory: StateMachineFactory())

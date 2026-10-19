@@ -634,7 +634,6 @@ class MockScreen: Identifiable {
                                                                                                   emojiProvider: EmojiProvider(userSettings: userSession.userSettings),
                                                                                                   linkMetadataProvider: LinkMetadataProvider(),
                                                                                                   appMediator: appMediator,
-                                                                                                  appHooks: AppHooks(),
                                                                                                   analytics: analytics,
                                                                                                   userIndicatorController: UserIndicatorControllerMock(),
                                                                                                   stateMachineFactory: StateMachineFactory()))
@@ -686,7 +685,6 @@ class MockScreen: Identifiable {
                                                                                                 emojiProvider: EmojiProvider(userSettings: userSession.userSettings),
                                                                                                 linkMetadataProvider: LinkMetadataProvider(),
                                                                                                 appMediator: AppMediatorMock(.init()),
-                                                                                                appHooks: AppHooks(),
                                                                                                 analytics: analytics,
                                                                                                 userIndicatorController: UserIndicatorControllerMock(),
                                                                                                 stateMachineFactory: StateMachineFactory()))
@@ -743,7 +741,6 @@ class MockScreen: Identifiable {
             
             let coordinator = EncryptionResetFlowCoordinator(parameters: .init(userSession: userSession,
                                                                                appMediator: AppMediatorMock(.init()),
-                                                                               appHooks: AppHooks(),
                                                                                userIndicatorController: userIndicatorController,
                                                                                navigationStackCoordinator: navigationStackCoordinator,
                                                                                windowManger: windowManager))
@@ -785,7 +782,6 @@ class MockScreen: Identifiable {
                                                                                                     emojiProvider: EmojiProvider(userSettings: userSession.userSettings),
                                                                                                     linkMetadataProvider: LinkMetadataProvider(),
                                                                                                     appMediator: AppMediatorMock(.init()),
-                                                                                                    appHooks: AppHooks(),
                                                                                                     analytics: analytics,
                                                                                                     userIndicatorController: UserIndicatorControllerMock(),
                                                                                                     stateMachineFactory: StateMachineFactory()))
@@ -841,7 +837,6 @@ class MockScreen: Identifiable {
                                                                                                emojiProvider: EmojiProvider(userSettings: userSession.userSettings),
                                                                                                linkMetadataProvider: LinkMetadataProvider(),
                                                                                                appMediator: AppMediatorMock(.init()),
-                                                                                               appHooks: AppHooks(),
                                                                                                analytics: analytics,
                                                                                                userIndicatorController: UserIndicatorControllerMock(),
                                                                                                stateMachineFactory: StateMachineFactory()))

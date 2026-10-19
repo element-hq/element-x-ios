@@ -161,7 +161,7 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
                                                              redirectURL: parameters.appSettings.oAuthRedirectURL,
                                                              presentationAnchor: presentationAnchor,
                                                              appMediator: parameters.appMediator,
-                                                             appHooks: parameters.appHooks,
+                                                             presenterHook: parameters.appHooks.oAuthAuthenticationPresenterHook,
                                                              userIndicatorController: parameters.userIndicatorController)
                 self.oAuthPresenter = presenter
                 switch await presenter.authenticate(using: oAuthData) {
