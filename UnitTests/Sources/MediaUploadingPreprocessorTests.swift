@@ -348,6 +348,22 @@ final class MediaUploadingPreprocessorTests {
     }
     
     @Test
+    func hdrImageProcessingPreservesGainMap() async throws {
+        let url = try makeHDRImageWithLocation()
+        
+        guard case let .success(result) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize),
+              case let .image(convertedImageURL, _, _) = result else {
+            Issue.record("Failed processing asset")
+            return
+        }
+        
+        let imageSource = try #require(CGImageSourceCreateWithURL(convertedImageURL as NSURL, nil))
+        let metadata = try #require(CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) as NSDictionary?)
+        #expect(metadata.value(forKeyPath: "\(kCGImagePropertyGPSDictionary)") == nil)
+        #expect(CGImageSourceCopyAuxiliaryDataInfoAtIndex(imageSource, 0, kCGImageAuxiliaryDataTypeHDRGainMap) != nil)
+    }
+    
+    @Test
     func gifImageProcessing() async throws {
         let url = try #require(Bundle(for: Self.self).url(forResource: "test_animated_image.gif", withExtension: nil), "Failed retrieving test asset")
         let originalSizeValue = try UInt64(FileManager.default.sizeForItem(at: url))
@@ -505,6 +521,32 @@ final class MediaUploadingPreprocessorTests {
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         let url = directory.appendingPathComponent("\(UUID().uuidString).\(assetURL.pathExtension)")
         try FileManager.default.copyItem(at: assetURL, to: url)
+        return url
+    }
+    
+    /// Generates a HEIC with an HDR gain map and GPS metadata in a unique temporary directory.
+    private func makeHDRImageWithLocation() throws -> URL {
+        let image = CIImage(color: .gray).cropped(to: CGRect(x: 0, y: 0, width: 64, height: 64))
+        let gainMap = CIImage(color: .white).cropped(to: CGRect(x: 0, y: 0, width: 32, height: 32))
+        let colorSpace = try #require(CGColorSpace(name: CGColorSpace.displayP3))
+        let hdrData = try #require(CIContext().heifRepresentation(of: image, format: .RGBA8, colorSpace: colorSpace, options: [.hdrGainMapImage: gainMap]))
+        let hdrSource = try #require(CGImageSourceCreateWithData(hdrData as NSData, nil))
+        let gainMapInfo = try #require(CGImageSourceCopyAuxiliaryDataInfoAtIndex(hdrSource, 0, kCGImageAuxiliaryDataTypeHDRGainMap))
+        
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("\(Self.self)-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        let url = directory.appendingPathComponent("hdr_test_image.heic")
+        
+        let destination = try #require(CGImageDestinationCreateWithURL(url as NSURL, UTType.heic.identifier as CFString, 1, nil))
+        let location = [kCGImagePropertyGPSDictionary: [kCGImagePropertyGPSLatitude: 51.5, kCGImagePropertyGPSLongitude: 0.1]]
+        CGImageDestinationAddImageFromSource(destination, hdrSource, 0, location as NSDictionary)
+        CGImageDestinationAddAuxiliaryDataInfo(destination, kCGImageAuxiliaryDataTypeHDRGainMap, gainMapInfo)
+        try #require(CGImageDestinationFinalize(destination))
+        
+        // Without location data the preprocessor leaves the image untouched.
+        let metadata = try metadata(from: Data(contentsOf: url))
+        try #require(metadata.value(forKeyPath: "\(kCGImagePropertyGPSDictionary)") != nil)
+        
         return url
     }
     

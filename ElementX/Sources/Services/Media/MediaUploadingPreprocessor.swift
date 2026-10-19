@@ -392,6 +392,14 @@ nonisolated struct MediaUploadingPreprocessor {
         }
         
         CGImageDestinationAddImageFromSource(destination, imageSource, 0, metadataKeysToRemove as NSDictionary)
+        
+        // HDR gain maps are stored as auxiliary data which isn't copied along with the image.
+        for auxiliaryDataType in [kCGImageAuxiliaryDataTypeHDRGainMap, kCGImageAuxiliaryDataTypeISOGainMap] {
+            if let auxiliaryDataInfo = CGImageSourceCopyAuxiliaryDataInfoAtIndex(imageSource, 0, auxiliaryDataType) {
+                CGImageDestinationAddAuxiliaryDataInfo(destination, auxiliaryDataType, auxiliaryDataInfo)
+            }
+        }
+        
         CGImageDestinationFinalize(destination)
         
         do {
