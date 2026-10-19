@@ -106,17 +106,17 @@ class LinkNewDeviceScreenViewModel: LinkNewDeviceScreenViewModelType, LinkNewDev
         
         let linkNewDeviceService = clientProxy.linkNewDeviceService()
         
-        let progressPublisher = linkNewDeviceService.linkMobileDevice()
+        let linkMobileOperation = linkNewDeviceService.linkMobileDevice()
         
         do {
-            var iterator = progressPublisher.values.makeAsyncIterator()
+            var iterator = linkMobileOperation.progressPublisher.values.makeAsyncIterator()
             while let progress = try await iterator.next(isolation: #isolation) {
                 if case .qrReady = progress {
                     break
                 }
             }
             
-            actionsSubject.send(.linkMobileDevice(progressPublisher))
+            actionsSubject.send(.linkMobileDevice(linkMobileOperation))
             state.mode = .readyToLink(.idle)
         } catch {
             // This is hard to share a mapping from the QRCodeLoginError with the

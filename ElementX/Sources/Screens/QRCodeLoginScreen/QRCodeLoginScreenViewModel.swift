@@ -38,8 +38,8 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
         let initialViewState: QRCodeLoginState = switch mode {
         case .login: .loginInstructions
         case .linkDesktop: .linkDesktopInstructions
-        case .linkMobile(let progressPublisher):
-            switch progressPublisher.value {
+        case .linkMobile(let operation):
+            switch operation.progressPublisher.value {
             case .qrReady(let image): .displayQR(image)
             default: .error(.unknown)
             }
@@ -51,8 +51,8 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
         switch mode {
         case .linkDesktop:
             scheduleLinkDesktopExpiration()
-        case .linkMobile(let progressPublisher):
-            listenToDisplayQRProgress(progressPublisher: progressPublisher)
+        case .linkMobile(let operation):
+            listenToDisplayQRProgress(linkMobileOperation: operation)
         case .login:
             break
         }
@@ -121,7 +121,7 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
         state.state = .scan(.connecting)
         
         MXLog.info("Login scanning QR code")
-        let progressPublisher = loginService.loginWithQRCode(data: qrData)
+        let progressPublisher = loginService.loginWithQRCode(data: qrData).progressPublisher
         
         currentTask = progressPublisher
             .removeDuplicates()
@@ -168,7 +168,7 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
         state.state = .scan(.connecting)
         
         MXLog.info("Link scanning QR code")
-        let progressPublisher = linkService.linkDesktopDevice(with: qrData)
+        let progressPublisher = linkService.linkDesktopDevice(with: qrData).progressPublisher
         
         currentTask = progressPublisher
             .removeDuplicates()
@@ -206,12 +206,12 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
             }
     }
     
-    private func listenToDisplayQRProgress(progressPublisher: LinkNewDeviceService.LinkMobileProgressPublisher) {
+    private func listenToDisplayQRProgress(linkMobileOperation: LinkNewDeviceService.LinkMobileOperation) {
         state.bindings.qrResult = nil
         
         MXLog.info("Link showing QR code.")
         
-        currentTask = progressPublisher
+        currentTask = linkMobileOperation.progressPublisher
             .removeDuplicates()
             .receive(on: DispatchQueue.main)
             .sink { [weak self] completion in

@@ -181,7 +181,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
         }
     }
     
-    func loginWithQRCode(data: Data) -> QRLoginProgressPublisher {
+    func loginWithQRCode(data: Data) -> QRLoginOperation {
         let progressSubject = CurrentValueSubject<QRLoginProgress, AuthenticationServiceError>(.starting)
         
         let qrData: QrCodeData
@@ -190,7 +190,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
         } catch {
             MXLog.error("QRCode decode error: \(error)")
             progressSubject.send(completion: .failure(.qrCodeError(.invalidQRCode)))
-            return progressSubject.asCurrentValuePublisher()
+            return QRLoginOperation(progressPublisher: progressSubject.asCurrentValuePublisher())
         }
         
         // n.b. We rely on the SDK checking that the intent of the QR is suitable for us to login with.
@@ -201,7 +201,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
             // is not signed in.
             MXLog.error("The QR code is from a device that is not yet signed in.")
             progressSubject.send(completion: .failure(.qrCodeError(.deviceNotSignedIn)))
-            return progressSubject.asCurrentValuePublisher()
+            return QRLoginOperation(progressPublisher: progressSubject.asCurrentValuePublisher())
         }
         
         // When account provider selection is restricted, make sure the scanned server is allowed.
@@ -215,7 +215,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
                 let error = QRCodeLoginError.providerNotAllowed(scannedProvider: scannedServerNameOrBaseURL,
                                                                 allowedProviders: appSettings.accountProviders.map(\.serverNameOrBaseURL))
                 progressSubject.send(completion: .failure(.qrCodeError(error)))
-                return progressSubject.asCurrentValuePublisher()
+                return QRLoginOperation(progressPublisher: progressSubject.asCurrentValuePublisher())
             }
         }
         
@@ -226,11 +226,12 @@ class AuthenticationService: AuthenticationServiceProtocol {
             progressSubject.send(progress)
         }
         
-        Task {
+        let task = Task {
             do {
                 let client = try await makeClient(serverNameOrBaseURL: scannedServerNameOrBaseURL)
                 let qrCodeHandler = client.newLoginWithQrCodeHandler(oauthConfiguration: appSettings.oAuthConfiguration.rustValue)
-                try await qrCodeHandler.scan(qrCodeData: qrData, progressListener: listener).wait()
+                let sdkTask = try qrCodeHandler.scan(qrCodeData: qrData, progressListener: listener)
+                try await withTaskCancellationHandler(operation: sdkTask.wait, onCancel: sdkTask.cancel)
                 
                 switch await userSession(for: client) {
                 case .success(let userSession):
@@ -251,7 +252,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
             }
         }
         
-        return progressSubject.asCurrentValuePublisher()
+        return QRLoginOperation(progressPublisher: progressSubject.asCurrentValuePublisher(), task: task)
     }
     
     func reset() {

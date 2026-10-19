@@ -754,7 +754,7 @@ class MockScreen: Identifiable {
             return navigationStackCoordinator
         case .linkNewDevice, .linkNewDeviceWithAppLockPIN:
             let linkMobileProgressSubject: CurrentValueSubject<LinkNewDeviceService.LinkMobileProgress, QRCodeLoginError> = .init(.qrReady(LinkNewDeviceServiceMock.mockQRCodeImage))
-            let linkNewDeviceService = LinkNewDeviceServiceMock(.init(linkMobileProgressPublisher: linkMobileProgressSubject.asCurrentValuePublisher()))
+            let linkNewDeviceService = LinkNewDeviceServiceMock(.init(linkMobileOperation: .init(progressPublisher: linkMobileProgressSubject.asCurrentValuePublisher())))
             
             let clientProxy = ClientProxyMock(.init())
             clientProxy.linkNewDeviceServiceReturnValue = linkNewDeviceService

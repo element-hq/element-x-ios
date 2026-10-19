@@ -20,14 +20,14 @@ extension LinkNewDeviceServiceMock {
     """
     
     struct Configuration {
-        var linkMobileProgressPublisher: LinkNewDeviceService.LinkMobileProgressPublisher = .init(.starting)
-        var linkDesktopProgressPublisher: LinkNewDeviceService.LinkDesktopProgressPublisher = .init(.starting)
+        var linkMobileOperation: LinkNewDeviceService.LinkMobileOperation = .init(progressPublisher: .init(.starting))
+        var linkDesktopOperation: LinkNewDeviceService.LinkDesktopOperation = .init(progressPublisher: .init(.starting))
     }
     
     convenience init(_ configuration: Configuration) {
         self.init()
         
-        linkMobileDeviceReturnValue = configuration.linkMobileProgressPublisher
-        linkDesktopDeviceWithReturnValue = configuration.linkDesktopProgressPublisher
+        linkMobileDeviceReturnValue = configuration.linkMobileOperation
+        linkDesktopDeviceWithReturnValue = configuration.linkDesktopOperation
     }
 }

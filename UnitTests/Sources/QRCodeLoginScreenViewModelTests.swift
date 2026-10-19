@@ -228,12 +228,12 @@ struct QRCodeLoginScreenViewModelTests {
     private mutating func setup(mode: Mode, linkDesktopTimeout: Duration = .seconds(120)) {
         qrLoginProgressSubject = .init(.starting)
         qrCodeLoginService = QRCodeLoginServiceMock()
-        qrCodeLoginService.loginWithQRCodeDataReturnValue = qrLoginProgressSubject.asCurrentValuePublisher()
+        qrCodeLoginService.loginWithQRCodeDataReturnValue = .init(progressPublisher: qrLoginProgressSubject.asCurrentValuePublisher())
         
         linkMobileProgressSubject = .init(.qrReady(LinkNewDeviceServiceMock.mockQRCodeImage))
         linkDesktopProgressSubject = .init(.starting)
-        linkNewDeviceService = LinkNewDeviceServiceMock(.init(linkMobileProgressPublisher: linkMobileProgressSubject.asCurrentValuePublisher(),
-                                                              linkDesktopProgressPublisher: linkDesktopProgressSubject.asCurrentValuePublisher()))
+        linkNewDeviceService = LinkNewDeviceServiceMock(.init(linkMobileOperation: .init(progressPublisher: linkMobileProgressSubject.asCurrentValuePublisher()),
+                                                              linkDesktopOperation: .init(progressPublisher: linkDesktopProgressSubject.asCurrentValuePublisher())))
         
         let screenMode: QRCodeLoginScreenMode
         switch mode {
