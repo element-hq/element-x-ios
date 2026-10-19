@@ -10,7 +10,7 @@ import LocalAuthentication
 
 /// A customised context that allows injecting a few mock values but otherwise behaves as expected.
 /// It works as the actual context does and won't update the return values of `biometryType` and
-/// `evaluatedPolicyDomainStateValue` until either `canEvaluatePolicy` or
+/// `biometricStateHash` until either `canEvaluatePolicy` or
 /// `evaluatePolicy` have been called.
 nonisolated class LAContextMock: LAContext {
     var biometryTypeValue: LABiometryType!
@@ -19,10 +19,10 @@ nonisolated class LAContextMock: LAContext {
         internalBiometryTypeValue
     }
     
-    var evaluatedPolicyDomainStateValue: Data?
-    private var internalEvaluatedPolicyDomainStateValue: Data?
-    override var evaluatedPolicyDomainState: Data? {
-        internalEvaluatedPolicyDomainStateValue
+    var biometricStateHashValue: Data?
+    private var internalBiometricStateHashValue: Data?
+    override var biometricStateHash: Data? {
+        internalBiometricStateHashValue
     }
     
     var canEvaluatePolicyReturnValue: Bool?
@@ -50,6 +50,6 @@ nonisolated class LAContextMock: LAContext {
     
     private func updateInternalValues() {
         internalBiometryTypeValue = biometryTypeValue
-        internalEvaluatedPolicyDomainStateValue = evaluatedPolicyDomainStateValue
+        internalBiometricStateHashValue = biometricStateHashValue
     }
 }

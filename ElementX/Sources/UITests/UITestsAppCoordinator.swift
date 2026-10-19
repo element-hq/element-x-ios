@@ -207,7 +207,7 @@ class MockScreen: Identifiable {
             let context = LAContextMock()
             context.biometryTypeValue = UIDevice.current.isPhone ? .faceID : .touchID // (iPhone 14 & iPad 9th gen)
             context.evaluatePolicyReturnValue = true
-            context.evaluatedPolicyDomainStateValue = Data("😎".utf8)
+            context.biometricStateHashValue = Data("😎".utf8)
             
             let appLockService = AppLockService(keychainController: keychainController,
                                                 appSettings: appSettings,
@@ -263,7 +263,7 @@ class MockScreen: Identifiable {
             let context = LAContextMock()
             context.biometryTypeValue = UIDevice.current.isPhone ? .faceID : .touchID // (iPhone 14 & iPad 9th gen)
             context.evaluatePolicyReturnValue = true
-            context.evaluatedPolicyDomainStateValue = Data("😎".utf8)
+            context.biometricStateHashValue = Data("😎".utf8)
             
             let appLockService = AppLockService(keychainController: keychainController,
                                                 appSettings: appSettings,
