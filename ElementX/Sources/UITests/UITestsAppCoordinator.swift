@@ -732,7 +732,7 @@ class MockScreen: Identifiable {
             coordinator.start()
             
             return navigationStackCoordinator
-        case .encryptionReset:
+        case .encryptionReset, .encryptionResetNoOptions:
             let recoveryState: SecureBackupRecoveryState = id == .encryptionSettings ? .enabled : .incomplete
             let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com", recoveryState: recoveryState))
             let userSession = UserSessionMock(.init(clientProxy: clientProxy))
@@ -746,7 +746,8 @@ class MockScreen: Identifiable {
                                                                                appHooks: AppHooks(),
                                                                                userIndicatorController: userIndicatorController,
                                                                                navigationStackCoordinator: navigationStackCoordinator,
-                                                                               windowManger: windowManager))
+                                                                               windowManger: windowManager,
+                                                                               mode: id == .encryptionResetNoOptions ? .noOptionsWithEncryptedRooms : .hasConfirmationOptions))
             
             retainedState.append(coordinator)
             coordinator.start()

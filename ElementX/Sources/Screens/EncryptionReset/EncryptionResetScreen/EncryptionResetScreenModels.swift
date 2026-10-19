@@ -14,9 +14,36 @@ enum EncryptionResetScreenViewModelAction {
     case requestOAuthAuthorisation(url: URL)
     case resetFinished
     case cancel
+    case logoutWithoutConfirmation
+}
+
+/// How the reset is presented, depending on what else the user could do to confirm their identity.
+enum EncryptionResetScreenMode {
+    /// The user has another verified device or a recovery key, so resetting is a last resort.
+    case hasConfirmationOptions
+    /// The user can only reset, and has encrypted rooms whose history will be lost.
+    case noOptionsWithEncryptedRooms
+    /// The user can only reset, and has no encrypted rooms to lose.
+    case noOptionsWithoutEncryptedRooms
+    
+    /// - Parameter hasEncryptedRooms: Only evaluated when the user has no confirmation options, as it just chooses between the no options modes.
+    init(hasConfirmationOptions: Bool, hasEncryptedRooms: @autoclosure () -> Bool) {
+        self = if hasConfirmationOptions {
+            .hasConfirmationOptions
+        } else if hasEncryptedRooms() {
+            .noOptionsWithEncryptedRooms
+        } else {
+            .noOptionsWithoutEncryptedRooms
+        }
+    }
+    
+    var isResetTheOnlyOption: Bool {
+        self != .hasConfirmationOptions
+    }
 }
 
 struct EncryptionResetScreenViewState: BindableState {
+    let mode: EncryptionResetScreenMode
     var bindings: EncryptionResetScreenViewStateBindings
 }
 
@@ -27,4 +54,5 @@ struct EncryptionResetScreenViewStateBindings {
 enum EncryptionResetScreenViewAction {
     case reset
     case cancel
+    case signOut
 }

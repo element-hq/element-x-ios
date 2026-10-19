@@ -13,7 +13,7 @@ import SwiftState
 enum OnboardingFlowCoordinatorAction {
     case requestPresentation(animated: Bool)
     case dismiss
-    case logoutConfirmed
+    case logoutWithoutConfirmation
 }
 
 class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
@@ -261,10 +261,10 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
             case .skip:
                 userSettings.account.hasRunIdentityConfirmationOnboarding = true
                 stateMachine.tryEvent(.nextSkippingIdentityConfirmed)
-            case .reset:
-                startEncryptionResetFlow()
-            case .logoutConfirmed:
-                actionsSubject.send(.logoutConfirmed)
+            case .reset(let hasConfirmationOptions):
+                startEncryptionResetFlow(hasConfirmationOptions: hasConfirmationOptions)
+            case .logoutWithoutConfirmation:
+                actionsSubject.send(.logoutWithoutConfirmation)
             }
         }
         .store(in: &cancellables)
@@ -315,18 +315,25 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         presentCoordinator(coordinator)
     }
     
-    private func startEncryptionResetFlow() {
+    private func startEncryptionResetFlow(hasConfirmationOptions: Bool) {
+        let mode = EncryptionResetScreenMode(hasConfirmationOptions: hasConfirmationOptions,
+                                             hasEncryptedRooms: userSession.clientProxy.hasEncryptedRooms())
+        
         let resetNavigationStackCoordinator = NavigationStackCoordinator()
         let coordinator = EncryptionResetFlowCoordinator(parameters: .init(userSession: userSession,
                                                                            appMediator: appMediator,
                                                                            appHooks: appHooks,
                                                                            userIndicatorController: userIndicatorController,
                                                                            navigationStackCoordinator: resetNavigationStackCoordinator,
-                                                                           windowManger: windowManager))
+                                                                           windowManger: windowManager,
+                                                                           mode: mode))
         
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
             switch action {
+            case .logoutWithoutConfirmation:
+                navigationStackCoordinator.setSheetCoordinator(nil)
+                actionsSubject.send(.logoutWithoutConfirmation)
             case .resetComplete:
                 // Moving to next state is handled by the global session verification listener
                 navigationStackCoordinator.setSheetCoordinator(nil)
