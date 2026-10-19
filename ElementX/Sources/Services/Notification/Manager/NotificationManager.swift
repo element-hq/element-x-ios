@@ -97,7 +97,7 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
         services[userID] = service
         serviceCancellables[userID] = [
             service.actionsPublisher.sink { [weak self] action in
-                self?.handle(action, from: userID)
+                self?.process(action, from: userID)
             },
             service.badgeCountPublisher.sink { [weak self] _ in
                 self?.updateAppBadgeCount()
@@ -137,7 +137,7 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
     
     // MARK: - Private
     
-    private func handle(_ action: NotificationServiceAction, from userID: String) {
+    private func process(_ action: NotificationServiceAction, from userID: String) {
         switch action {
         case .removeDeliveredNotifications(let isIncluded):
             Task { await removeDeliveredNotifications(of: userID, where: isIncluded) }

@@ -13,6 +13,7 @@ struct UserSessionManagerTests {
     let userSessionStore = UserSessionStoreMock()
     let appSettings = AppSettings.volatile()
     let notificationManager = NotificationManagerMock()
+    let liveLocationManager = LiveLocationManagerMock()
     
     @Test
     func ordersAccountsByWhenTheyWereLastSelected() {
@@ -235,43 +236,47 @@ struct UserSessionManagerTests {
     }
     
     @Test
-    func addingASessionConnectsItsNotificationService() {
+    func addingASessionConnectsItsServices() {
         let manager = makeManager(userIDs: [])
         let alice = makeUserSession(userID: "@alice:matrix.org")
         
         manager.add(alice)
         
         #expect(notificationManager.addReceivedService === alice.notificationService)
+        #expect(liveLocationManager.addReceivedService === alice.liveLocationService)
     }
     
     @Test
-    func removingAnAccountDisconnectsItsNotificationService() {
+    func removingAnAccountDisconnectsItsServices() {
         let manager = makeManager(userIDs: ["@alice:matrix.org"])
         manager.add(makeUserSession(userID: "@alice:matrix.org"))
         
         manager.remove(userID: "@alice:matrix.org")
         
         #expect(notificationManager.removeUserIDReceivedInvocations == ["@alice:matrix.org"])
+        #expect(liveLocationManager.removeUserIDReceivedInvocations == ["@alice:matrix.org"])
     }
     
     @Test
-    func resettingDisconnectsEveryNotificationService() {
+    func resettingDisconnectsEveryService() {
         let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org"])
         manager.add(makeUserSession(userID: "@alice:matrix.org"))
         
         manager.reset()
         
         #expect(Set(notificationManager.removeUserIDReceivedInvocations) == ["@alice:matrix.org", "@bob:matrix.org"])
+        #expect(Set(liveLocationManager.removeUserIDReceivedInvocations) == ["@alice:matrix.org", "@bob:matrix.org"])
     }
     
     @Test
-    func aFailedRestoreDisconnectsTheAccountsNotificationService() async {
+    func aFailedRestoreDisconnectsTheAccountsServices() async {
         let manager = makeManager(userIDs: ["@alice:matrix.org"])
         userSessionStore.restoreUserSessionUserIDReturnValue = .failure(.failedRestoringLogin)
         
         await manager.restoreSessions { _ in } didAdd: { _ in }
         
         #expect(notificationManager.removeUserIDReceivedInvocations == ["@alice:matrix.org"])
+        #expect(liveLocationManager.removeUserIDReceivedInvocations == ["@alice:matrix.org"])
     }
     
     @Test
@@ -313,7 +318,10 @@ struct UserSessionManagerTests {
     
     private func makeManager(userIDs: [String]) -> UserSessionManager {
         userSessionStore.userIDs = userIDs
-        return UserSessionManager(userSessionStore: userSessionStore, appSettings: appSettings, notificationManager: notificationManager)
+        return UserSessionManager(userSessionStore: userSessionStore,
+                                  appSettings: appSettings,
+                                  notificationManager: notificationManager,
+                                  liveLocationManager: liveLocationManager)
     }
     
     private func makeUserSession(userID: String) -> UserSessionMock {

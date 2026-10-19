@@ -129,7 +129,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                 appHooks: appHooks,
                                                 networkMonitor: networkMonitor)
         notificationManager = NotificationManager(notificationCenter: UNUserNotificationCenter.current(), appSettings: appSettings)
-        userSessionManager = UserSessionManager(userSessionStore: userSessionStore, appSettings: appSettings, notificationManager: notificationManager)
+        userSessionManager = UserSessionManager(userSessionStore: userSessionStore, appSettings: appSettings, notificationManager: notificationManager, liveLocationManager: LiveLocationManager(appSettings: appSettings))
         
         let appLockService = AppLockService(keychainController: keychainController, appSettings: appSettings)
         let appLockNavigationCoordinator = NavigationRootCoordinator()
@@ -952,8 +952,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
         
         Task {
-            // Delete the pusher while the session can still reach the server.
+            // Delete the pusher and stop the live location shares while the session can still reach the server.
             await userSession.notificationService.tearDown()
+            await userSession.liveLocationService.stopAllLiveLocations()
             
             // First log out from the server
             await userSession.clientProxy.logout()

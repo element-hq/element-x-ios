@@ -308,7 +308,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     }
     
     func stopLiveLocationSharing() async {
-        await userSession.liveLocationManager.stopLiveLocation(roomID: roomProxy.id)
+        await userSession.liveLocationService.stopLiveLocation(roomID: roomProxy.id)
     }
     
     // MARK: - Private
