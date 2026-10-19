@@ -158,6 +158,35 @@ final class LiveLocationManagerTests {
         #expect(appSettings.hasRequestedLocationAlwaysLocationAuthorization)
     }
     
+    // MARK: - Errors
+    
+    @Test
+    func notFindingTheLocationYetKeepsTheShares() async {
+        setUp()
+        let alice = makeService(userID: "@alice:matrix.org", isSharing: .init(true))
+        manager.add(alice)
+        
+        await waitForConfirmation("The shares keep running", expectedCount: 0, timeout: .milliseconds(500)) { confirm in
+            alice.stopAllLiveLocationsClosure = { confirm() }
+            manager.locationManager(CLLocationManager(), didFailWithError: CLError(.locationUnknown))
+        }
+    }
+    
+    @Test
+    func otherLocationErrorsStopEveryAccountsShares() async {
+        setUp()
+        let alice = makeService(userID: "@alice:matrix.org", isSharing: .init(true))
+        let bob = makeService(userID: "@bob:matrix.org", isSharing: .init(true))
+        manager.add(alice)
+        manager.add(bob)
+        
+        await waitForConfirmation("Wait for the shares to stop", expectedCount: 2) { confirm in
+            alice.stopAllLiveLocationsClosure = { confirm() }
+            bob.stopAllLiveLocationsClosure = { confirm() }
+            manager.locationManager(CLLocationManager(), didFailWithError: CLError(.denied))
+        }
+    }
+    
     // MARK: - Private
     
     private func setUp(authorizationStatus: CLAuthorizationStatus = .authorizedAlways,
