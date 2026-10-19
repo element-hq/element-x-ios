@@ -217,6 +217,8 @@
 "banner_set_up_recovery_content" = "Vaše chaty jsou automaticky zálohovány pomocí koncového šifrování. Chcete-li tuto zálohu obnovit a zachovat si svou digitální identitu v případě, že ztratíte přístup ke všem svým zařízením, budete potřebovat svůj klíč pro obnovení.";
 "banner_set_up_recovery_submit" = "Získat klíč pro obnovení";
 "banner_set_up_recovery_title" = "Zálohujte své chaty";
+"banner_swipe_avatar_content" = "Swipe up or down on your avatar to switch between your accounts without going to the app settings.";
+"banner_swipe_avatar_title" = "Swipe your avatar to switch accounts";
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call nepodporuje používání Bluetooth zvukových zařízení v této verzi systému Android. Vyberte jiné zvukové zařízení.";
 "common_about" = "O aplikaci";
 "common_acceptable_use_policy" = "Zásady používání";
@@ -499,6 +501,7 @@
 "emoji_picker_category_recent" = "Nedávné emotikony";
 "emoji_picker_category_symbols" = "Symboly";
 "emoji_picker_search_placeholder" = "Hledat emotikony";
+"error_account_already_logged_in_title" = "Duplicate sign-in";
 "error_account_creation_not_possible" = "Váš poskytovatel účtu musí být upgradeován, aby podporoval Matrix Authentication Service a vytváření účtů.";
 "error_failed_creating_the_permalink" = "Vytvoření trvalého odkazu se nezdařilo";
 "error_failed_loading_map" = "%1$@ nemohl načíst mapu. Zkuste to prosím později.";
@@ -869,12 +872,18 @@
 "screen_encryption_reset_bullet_1" = "Podrobnosti o vašem účtu, kontaktech, preferencích a seznamu chatu budou zachovány";
 "screen_encryption_reset_bullet_2" = "Ztratíte svou stávající historii zpráv";
 "screen_encryption_reset_bullet_3" = "Budete muset znovu ověřit všechna stávající zařízení a kontakty";
+"screen_encryption_reset_bullet_4" = "Any devices you’re signed in to will need to be reconfirmed";
 "screen_encryption_reset_footer" = "Digitální identitu resetujte pouze v případě, že nemáte přístup k jinému ověřenému zařízení a nemáte klíč pro obnovení.";
+"screen_encryption_reset_no_chats_message" = "It looks like you don’t have any chats yet. If this is correct, you can safely proceed with resetting your digital identity";
+"screen_encryption_reset_no_options_subtitle" = "You don’t have access to any other verified devices or a recovery key, so you’ll need to reset your digital identity to continue using the app.";
+"screen_encryption_reset_no_options_title" = "You need to reset your digital identity";
+"screen_encryption_reset_subtitle" = "If you don’t have access to any other verified devices and you don’t have your recovery key, then you’ll need to reset your digital identity to continue using the app.";
 "screen_encryption_reset_title" = "Nelze potvrdit? Budete muset resetovat svou digitální identitu.";
 "screen_home_tab_chats" = "Chaty";
 "screen_home_tab_spaces" = "Prostory";
 "screen_identity_confirmation_cannot_confirm" = "Nemůžete potvrdit?";
 "screen_identity_confirmation_create_new_recovery_key" = "Vytvoření nového klíče pro obnovení";
+"screen_identity_confirmation_sign_out" = "Sign out";
 "screen_identity_confirmation_subtitle" = "Vyberte způsob ověření pro nastavení zabezpečeného zasílání zpráv.";
 "screen_identity_confirmation_title" = "Potvrďte svou digitální identitu";
 "screen_identity_confirmation_use_another_device" = "Použít jiné zařízení";
@@ -1081,6 +1090,7 @@
 "screen_multi_account_announcement_title" = "You can now add multiple accounts";
 "screen_notification_optin_subtitle" = "Nastavení můžete později změnit.";
 "screen_notification_optin_title" = "Povolte oznámení a nezmeškejte žádnou zprávu";
+"screen_notification_settings_activity_section_title" = "Activity";
 "screen_notification_settings_additional_settings_section_title" = "Další nastavení";
 "screen_notification_settings_call_ringtone_label" = "Vyzváněcí tón hovoru";
 "screen_notification_settings_calls_label" = "Halsové a video hovory";
@@ -1151,6 +1161,8 @@
 "screen_notification_settings_system_notifications_action_required_content_link" = "systémová nastavení";
 "screen_notification_settings_system_notifications_turned_off" = "Systémová oznámení byla vypnuta";
 "screen_notification_settings_title" = "Oznámení";
+"screen_onboarding_add_account_subtitle" = "You can add multiple accounts to the app and switch between them easily.";
+"screen_onboarding_add_account_title" = "Sign in to another account";
 "screen_onboarding_app_version" = "Verze %1$@";
 "screen_onboarding_checking_account" = "Kontrola účtu";
 "screen_onboarding_sign_in_manually" = "Ruční přihlášení";
@@ -1169,14 +1181,6 @@
 "screen_polls_history_filter_ongoing" = "Probíhající";
 "screen_polls_history_filter_past" = "Minulé";
 "screen_polls_history_title" = "Hlasování";
-"screen_ptt_settings_battery_optimization" = "Ignore battery optimisation";
-"screen_ptt_settings_battery_optimization_description" = "Stay active in background";
-"screen_ptt_settings_covert_mode" = "Covert mode";
-"screen_ptt_settings_covert_mode_description" = "Mute all channels";
-"screen_ptt_settings_lock_screen" = "Show on lock screen";
-"screen_ptt_settings_lock_screen_description" = "Access from the lock screen";
-"screen_ptt_settings_system_overlay" = "Enable system overlay";
-"screen_ptt_settings_system_overlay_description" = "Access a floating action button";
 "screen_push_history_title" = "Historie push oznámení";
 "screen_qr_code_login_connecting_subtitle" = "Navazování zabezpečeného spojení";
 "screen_qr_code_login_connection_note_secure_state_description" = "K novému zařízení se nepodařilo navázat bezpečné připojení. Vaše stávající zařízení jsou stále v bezpečí a nemusíte se o ně obávat.";
@@ -1354,9 +1358,6 @@
 "screen_room_details_profile_row_title" = "Profil";
 "screen_room_details_requests_to_join_title" = "Žádosti o vstup";
 "screen_room_details_roles_and_permissions" = "Role a oprávnění";
-"screen_room_details_room_audio_ptt" = "Push to talk";
-"screen_room_details_room_audio_title" = "Room Audio";
-"screen_room_details_room_audio_video_calls" = "Video calls";
 "screen_room_details_room_name_label" = "Název";
 "screen_room_details_security_and_privacy_title" = "Zabezpečení a soukromí";
 "screen_room_details_security_title" = "Zabezpečení";

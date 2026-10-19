@@ -217,6 +217,8 @@
 "banner_set_up_recovery_content" = "Dine chats sikkerhedskopieres automatisk med end-to-end-kryptering. For at kunne gendanne denne sikkerhedskopi og bevare din digitale identitet, hvis du mister adgang til alle dine enheder, får du brug for din gendannelsesnøgle.";
 "banner_set_up_recovery_submit" = "Hent gendannelsesnøgle";
 "banner_set_up_recovery_title" = "Sikkerhedskopier dine samtaler";
+"banner_swipe_avatar_content" = "Swipe up or down on your avatar to switch between your accounts without going to the app settings.";
+"banner_swipe_avatar_title" = "Swipe your avatar to switch accounts";
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call understøtter desværre ikke brug af Bluetooth-lydenheder i denne Android-version. Vælg venligst en anden lydenhed.";
 "common_about" = "Om";
 "common_acceptable_use_policy" = "Politik for acceptabel brug";
@@ -499,6 +501,7 @@
 "emoji_picker_category_recent" = "Seneste emojis";
 "emoji_picker_category_symbols" = "Symboler";
 "emoji_picker_search_placeholder" = "Søg emojis";
+"error_account_already_logged_in_title" = "Duplicate sign-in";
 "error_account_creation_not_possible" = "Din hjemmeserver skal opgraderes for at understøtte Matrix Authentication Service og kontooprettelse.";
 "error_failed_creating_the_permalink" = "Oprettelse af permalink mislykkedes";
 "error_failed_loading_map" = "%1$@ kunne ikke indlæse kortet. Prøv igen senere.";
@@ -869,12 +872,18 @@
 "screen_encryption_reset_bullet_1" = "Dine kontodetaljer, kontakter, personlige indstilliger og samtaler vil blive gemt";
 "screen_encryption_reset_bullet_2" = "Du mister al beskedhistorik, der kun er gemt på serveren.";
 "screen_encryption_reset_bullet_3" = "Du bliver nødt til at verificere alle dine eksisterende enheder og kontakter påny";
+"screen_encryption_reset_bullet_4" = "Any devices you’re signed in to will need to be reconfirmed";
 "screen_encryption_reset_footer" = "Nulstil kun din digitale identitet, hvis du ikke har adgang til en anden enhed, der er logget ind, og du har mistet din gendannelsesnøgle.";
+"screen_encryption_reset_no_chats_message" = "It looks like you don’t have any chats yet. If this is correct, you can safely proceed with resetting your digital identity";
+"screen_encryption_reset_no_options_subtitle" = "You don’t have access to any other verified devices or a recovery key, so you’ll need to reset your digital identity to continue using the app.";
+"screen_encryption_reset_no_options_title" = "You need to reset your digital identity";
+"screen_encryption_reset_subtitle" = "If you don’t have access to any other verified devices and you don’t have your recovery key, then you’ll need to reset your digital identity to continue using the app.";
 "screen_encryption_reset_title" = "Kan du ikke bekræfte? Du er nødt til at nulstille din digitale identitet.";
 "screen_home_tab_chats" = "Samtaler";
 "screen_home_tab_spaces" = "Klynger";
 "screen_identity_confirmation_cannot_confirm" = "Kan ikke bekræfte?";
 "screen_identity_confirmation_create_new_recovery_key" = "Opret en ny gendannelsesnøgle";
+"screen_identity_confirmation_sign_out" = "Sign out";
 "screen_identity_confirmation_subtitle" = "Vælg, hvordan du vil verificere dig for at konfigurere sikre beskeder.";
 "screen_identity_confirmation_title" = "Bekræft din digitale identitet";
 "screen_identity_confirmation_use_another_device" = "Brug en anden enhed";
@@ -1081,6 +1090,7 @@
 "screen_multi_account_announcement_title" = "You can now add multiple accounts";
 "screen_notification_optin_subtitle" = "Du kan ændre dine indstillinger senere.";
 "screen_notification_optin_title" = "Tillad notifikationer, og gå aldrig glip af en besked";
+"screen_notification_settings_activity_section_title" = "Activity";
 "screen_notification_settings_additional_settings_section_title" = "Yderligere indstillinger";
 "screen_notification_settings_call_ringtone_label" = "Call ringtone";
 "screen_notification_settings_calls_label" = "Lyd- og videoopkald";
@@ -1151,6 +1161,8 @@
 "screen_notification_settings_system_notifications_action_required_content_link" = "systemindstillinger";
 "screen_notification_settings_system_notifications_turned_off" = "Systemmeddelelser slået fra";
 "screen_notification_settings_title" = "Notifikationer";
+"screen_onboarding_add_account_subtitle" = "You can add multiple accounts to the app and switch between them easily.";
+"screen_onboarding_add_account_title" = "Sign in to another account";
 "screen_onboarding_app_version" = "Version %1$@";
 "screen_onboarding_checking_account" = "Kontoen kontrolleres…";
 "screen_onboarding_sign_in_manually" = "Log ind manuelt";
@@ -1169,14 +1181,6 @@
 "screen_polls_history_filter_ongoing" = "Igangværende";
 "screen_polls_history_filter_past" = "Tidligere";
 "screen_polls_history_title" = "Afstemninger";
-"screen_ptt_settings_battery_optimization" = "Ignore battery optimisation";
-"screen_ptt_settings_battery_optimization_description" = "Stay active in background";
-"screen_ptt_settings_covert_mode" = "Covert mode";
-"screen_ptt_settings_covert_mode_description" = "Mute all channels";
-"screen_ptt_settings_lock_screen" = "Show on lock screen";
-"screen_ptt_settings_lock_screen_description" = "Access from the lock screen";
-"screen_ptt_settings_system_overlay" = "Enable system overlay";
-"screen_ptt_settings_system_overlay_description" = "Access a floating action button";
 "screen_push_history_title" = "Push-historik";
 "screen_qr_code_login_connecting_subtitle" = "Etablerer en sikker forbindelse";
 "screen_qr_code_login_connection_note_secure_state_description" = "Der kunne ikke oprettes en sikker forbindelse til den nye enhed. Dine eksisterende enheder er stadig sikre, og du behøver ikke bekymre dig om dem.";
@@ -1354,9 +1358,6 @@
 "screen_room_details_profile_row_title" = "Profil";
 "screen_room_details_requests_to_join_title" = "Anmodninger om at deltage";
 "screen_room_details_roles_and_permissions" = "Roller og tilladelser";
-"screen_room_details_room_audio_ptt" = "Push to talk";
-"screen_room_details_room_audio_title" = "Room Audio";
-"screen_room_details_room_audio_video_calls" = "Video calls";
 "screen_room_details_room_name_label" = "Navn";
 "screen_room_details_security_and_privacy_title" = "Sikkerhed og privatliv";
 "screen_room_details_security_title" = "Sikkerhed";

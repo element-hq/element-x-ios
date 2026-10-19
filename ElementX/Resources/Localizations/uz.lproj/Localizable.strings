@@ -217,6 +217,8 @@
 "banner_set_up_recovery_content" = "Chatlaringiz avtomatik ravishda boshidan oxirigacha shifrlash bilan zaxiralanadi. Bu zaxirani tiklash va barcha qurilmalaringizdan foydalana olmay qolganingizda raqamli identifikatoringizni saqlab qolish uchun sizga tiklash kaliti kerak bo‘ladi.";
 "banner_set_up_recovery_submit" = "Qayta tiklashni sozlang";
 "banner_set_up_recovery_title" = "Chatlaringizni zaxiralang";
+"banner_swipe_avatar_content" = "Swipe up or down on your avatar to switch between your accounts without going to the app settings.";
+"banner_swipe_avatar_title" = "Swipe your avatar to switch accounts";
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call ushbu Android versiyasida Bluetooth audio qurilmalaridan foydalanishni qoʻllab-quvvatlamaydi. Iltimos, boshqa audio qurilmani tanlang.";
 "common_about" = "Haqida";
 "common_acceptable_use_policy" = "Qabul qilinadigan foydalanish siyosati";
@@ -499,6 +501,7 @@
 "emoji_picker_category_recent" = "Oxirgi kulgichlar";
 "emoji_picker_category_symbols" = "Belgilar";
 "emoji_picker_search_placeholder" = "Emojilarni qidiring";
+"error_account_already_logged_in_title" = "Duplicate sign-in";
 "error_account_creation_not_possible" = "Matrix autentifikatsiya xizmati va hisob yaratish imkoniyatini qo‘llab-quvvatlash uchun uy serveringizni yangilash talab etiladi.";
 "error_failed_creating_the_permalink" = "Doimiy havola yaratilmadi";
 "error_failed_loading_map" = "%1$@xaritani yuklay olmadi. Iltimos keyinroq qayta urinib ko'ring.";
@@ -869,12 +872,18 @@
 "screen_encryption_reset_bullet_1" = "Hisob maʼlumotlaringiz, kontaktlaringiz, sozlamalaringiz va suhbatlar roʻyxatingiz saqlanib qoladi";
 "screen_encryption_reset_bullet_2" = "Faqat serverda saqlangan har qanday xabarlar tarixi oʻchib ketadi";
 "screen_encryption_reset_bullet_3" = "Barcha mavjud qurilma va kontaktlarni qayta tasdiqlashingiz kerak boʻladi";
+"screen_encryption_reset_bullet_4" = "Any devices you’re signed in to will need to be reconfirmed";
 "screen_encryption_reset_footer" = "Agar boshqa tasdiqlangan qurilmaga kira olmasangiz va zaxira kalitingiz bo‘lmasa, raqamli identifikatoringizni asliga qaytaring.";
+"screen_encryption_reset_no_chats_message" = "It looks like you don’t have any chats yet. If this is correct, you can safely proceed with resetting your digital identity";
+"screen_encryption_reset_no_options_subtitle" = "You don’t have access to any other verified devices or a recovery key, so you’ll need to reset your digital identity to continue using the app.";
+"screen_encryption_reset_no_options_title" = "You need to reset your digital identity";
+"screen_encryption_reset_subtitle" = "If you don’t have access to any other verified devices and you don’t have your recovery key, then you’ll need to reset your digital identity to continue using the app.";
 "screen_encryption_reset_title" = "Tasdiqlay olmayapsizmi? Raqamli identifikatoringizni asliga qaytarishingiz kerak.";
 "screen_home_tab_chats" = "Suhbatlar";
 "screen_home_tab_spaces" = "Maydonlar";
 "screen_identity_confirmation_cannot_confirm" = "Tasdiqlay olmayapsizmi?";
 "screen_identity_confirmation_create_new_recovery_key" = "Yangi tiklash kalitini yarating";
+"screen_identity_confirmation_sign_out" = "Sign out";
 "screen_identity_confirmation_subtitle" = "Xavfsiz xabar almashinuvni sozlash uchun tasdiqlash usulini tanlang.";
 "screen_identity_confirmation_title" = "Raqamli shaxsingizni tasdiqlang";
 "screen_identity_confirmation_use_another_device" = "Boshqa qurilmadan foydalanish";
@@ -1081,6 +1090,7 @@
 "screen_multi_account_announcement_title" = "You can now add multiple accounts";
 "screen_notification_optin_subtitle" = "Sozlamalaringizni keyinroq o'zgartirishingiz mumkin.";
 "screen_notification_optin_title" = "Bildirishnomalarga ruxsat bering va hech qachon xabarni o'tkazib yubormang";
+"screen_notification_settings_activity_section_title" = "Activity";
 "screen_notification_settings_additional_settings_section_title" = "Qo'shimcha sozlamalar";
 "screen_notification_settings_call_ringtone_label" = "Qoʻngʻroq ohangi";
 "screen_notification_settings_calls_label" = "Audio va video qo'ng'iroqlar";
@@ -1151,6 +1161,8 @@
 "screen_notification_settings_system_notifications_action_required_content_link" = "tizim sozlamalari";
 "screen_notification_settings_system_notifications_turned_off" = "Tizim bildirishnomalari o'chirilgan";
 "screen_notification_settings_title" = "Bildirishnomalar";
+"screen_onboarding_add_account_subtitle" = "You can add multiple accounts to the app and switch between them easily.";
+"screen_onboarding_add_account_title" = "Sign in to another account";
 "screen_onboarding_app_version" = "%1$@ versiya";
 "screen_onboarding_checking_account" = "Joriy hisob";
 "screen_onboarding_sign_in_manually" = "Qo'lda tizimga kiring";
@@ -1169,14 +1181,6 @@
 "screen_polls_history_filter_ongoing" = "Jarayonda";
 "screen_polls_history_filter_past" = "Oʻtgan";
 "screen_polls_history_title" = "Soʻrovnomalar";
-"screen_ptt_settings_battery_optimization" = "Ignore battery optimisation";
-"screen_ptt_settings_battery_optimization_description" = "Stay active in background";
-"screen_ptt_settings_covert_mode" = "Covert mode";
-"screen_ptt_settings_covert_mode_description" = "Mute all channels";
-"screen_ptt_settings_lock_screen" = "Show on lock screen";
-"screen_ptt_settings_lock_screen_description" = "Access from the lock screen";
-"screen_ptt_settings_system_overlay" = "Enable system overlay";
-"screen_ptt_settings_system_overlay_description" = "Access a floating action button";
 "screen_push_history_title" = "Bildirishnoma tarixi";
 "screen_qr_code_login_connecting_subtitle" = "Xavfsiz aloqa oʻrnatish";
 "screen_qr_code_login_connection_note_secure_state_description" = "Yangi qurilmaga xavfsiz ulanish amalga oshirilmadi. Mavjud qurilmalaringiz hali ham xavfsiz va ular haqida qaygʻurishingiz shart emas.";
@@ -1354,9 +1358,6 @@
 "screen_room_details_profile_row_title" = "Profil";
 "screen_room_details_requests_to_join_title" = "Qo‘shilish uchun so‘rovlar";
 "screen_room_details_roles_and_permissions" = "Rollar va ruxsatlar";
-"screen_room_details_room_audio_ptt" = "Push to talk";
-"screen_room_details_room_audio_title" = "Room Audio";
-"screen_room_details_room_audio_video_calls" = "Video calls";
 "screen_room_details_room_name_label" = "Ism";
 "screen_room_details_security_and_privacy_title" = "Xavfsizlik va maxfiylik";
 "screen_room_details_security_title" = "Xavfsizlik";

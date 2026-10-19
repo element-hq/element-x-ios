@@ -217,6 +217,8 @@
 "banner_set_up_recovery_content" = "您的聊天會自動使用端到端加密備份。若您失去對您所有裝置的存取權，且要還原此備份並保留您的數位身份的話，您就會需要您的還原金鑰。";
 "banner_set_up_recovery_submit" = "取得還原金鑰";
 "banner_set_up_recovery_title" = "備份您的聊天";
+"banner_swipe_avatar_content" = "Swipe up or down on your avatar to switch between your accounts without going to the app settings.";
+"banner_swipe_avatar_title" = "Swipe your avatar to switch accounts";
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call 不支援在此 Android 版本中使用藍牙音訊裝置。請選取其他音訊裝置。";
 "common_about" = "關於";
 "common_acceptable_use_policy" = "可接受使用政策";
@@ -499,6 +501,7 @@
 "emoji_picker_category_recent" = "最近使用的表情符號";
 "emoji_picker_category_symbols" = "標誌";
 "emoji_picker_search_placeholder" = "搜尋表情符號";
+"error_account_already_logged_in_title" = "Duplicate sign-in";
 "error_account_creation_not_possible" = "您的帳號服務提供者需要進行升級，才能支援 Matrix Authentication Service 及帳號建立功能。";
 "error_failed_creating_the_permalink" = "無法建立永久連結";
 "error_failed_loading_map" = "%1$@無法載入地圖。請稍後再試。";
@@ -869,12 +872,18 @@
 "screen_encryption_reset_bullet_1" = "您的帳號詳細資訊、聯絡人、偏好設定與聊天清單都會保留";
 "screen_encryption_reset_bullet_2" = "您將會遺失僅儲存在伺服器上的任何訊息歷史紀錄";
 "screen_encryption_reset_bullet_3" = "您將需要再次驗證所有現有裝置與聯絡人";
+"screen_encryption_reset_bullet_4" = "Any devices you’re signed in to will need to be reconfirmed";
 "screen_encryption_reset_footer" = "僅當您無法存取其他已驗證的裝置且沒有還原金鑰時才重設您的數位身份。";
+"screen_encryption_reset_no_chats_message" = "It looks like you don’t have any chats yet. If this is correct, you can safely proceed with resetting your digital identity";
+"screen_encryption_reset_no_options_subtitle" = "You don’t have access to any other verified devices or a recovery key, so you’ll need to reset your digital identity to continue using the app.";
+"screen_encryption_reset_no_options_title" = "You need to reset your digital identity";
+"screen_encryption_reset_subtitle" = "If you don’t have access to any other verified devices and you don’t have your recovery key, then you’ll need to reset your digital identity to continue using the app.";
 "screen_encryption_reset_title" = "無法確認？您需要重設數位身份。";
 "screen_home_tab_chats" = "聊天";
 "screen_home_tab_spaces" = "空間";
 "screen_identity_confirmation_cannot_confirm" = "無法確認？";
 "screen_identity_confirmation_create_new_recovery_key" = "建立新的復原金鑰";
+"screen_identity_confirmation_sign_out" = "Sign out";
 "screen_identity_confirmation_subtitle" = "選擇驗證方式以設定安全訊息傳遞。";
 "screen_identity_confirmation_title" = "確認您的數位身份";
 "screen_identity_confirmation_use_another_device" = "使用另一部裝置";
@@ -1081,6 +1090,7 @@
 "screen_multi_account_announcement_title" = "You can now add multiple accounts";
 "screen_notification_optin_subtitle" = "您稍後仍可變更設定。";
 "screen_notification_optin_title" = "允許通知，永遠不會錯誤任何訊息";
+"screen_notification_settings_activity_section_title" = "Activity";
 "screen_notification_settings_additional_settings_section_title" = "其他設定";
 "screen_notification_settings_call_ringtone_label" = "通話鈴聲";
 "screen_notification_settings_calls_label" = "音訊與視訊通話";
@@ -1151,6 +1161,8 @@
 "screen_notification_settings_system_notifications_action_required_content_link" = "系統設定";
 "screen_notification_settings_system_notifications_turned_off" = "已關閉系統通知";
 "screen_notification_settings_title" = "通知";
+"screen_onboarding_add_account_subtitle" = "You can add multiple accounts to the app and switch between them easily.";
+"screen_onboarding_add_account_title" = "Sign in to another account";
 "screen_onboarding_app_version" = "版本 %1$@";
 "screen_onboarding_checking_account" = "檢查帳號";
 "screen_onboarding_sign_in_manually" = "手動登入";
@@ -1169,14 +1181,6 @@
 "screen_polls_history_filter_ongoing" = "進行中";
 "screen_polls_history_filter_past" = "已結束";
 "screen_polls_history_title" = "所有投票";
-"screen_ptt_settings_battery_optimization" = "Ignore battery optimisation";
-"screen_ptt_settings_battery_optimization_description" = "Stay active in background";
-"screen_ptt_settings_covert_mode" = "Covert mode";
-"screen_ptt_settings_covert_mode_description" = "Mute all channels";
-"screen_ptt_settings_lock_screen" = "Show on lock screen";
-"screen_ptt_settings_lock_screen_description" = "Access from the lock screen";
-"screen_ptt_settings_system_overlay" = "Enable system overlay";
-"screen_ptt_settings_system_overlay_description" = "Access a floating action button";
 "screen_push_history_title" = "推播通知歷史紀錄";
 "screen_qr_code_login_connecting_subtitle" = "建立安全連線";
 "screen_qr_code_login_connection_note_secure_state_description" = "無法與新裝置建立安全連線。您現有的裝置仍然安全，您不必擔心它們。";
@@ -1354,9 +1358,6 @@
 "screen_room_details_profile_row_title" = "個人檔案";
 "screen_room_details_requests_to_join_title" = "請求加入";
 "screen_room_details_roles_and_permissions" = "角色與權限";
-"screen_room_details_room_audio_ptt" = "Push to talk";
-"screen_room_details_room_audio_title" = "Room Audio";
-"screen_room_details_room_audio_video_calls" = "Video calls";
 "screen_room_details_room_name_label" = "名稱";
 "screen_room_details_security_and_privacy_title" = "安全與隱私";
 "screen_room_details_security_title" = "安全性";

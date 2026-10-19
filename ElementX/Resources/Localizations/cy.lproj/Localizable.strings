@@ -217,6 +217,8 @@
 "banner_set_up_recovery_content" = "Adferwch eich hunaniaeth cryptograffig a hanes negeseuon gydag allwedd adfer os ydych wedi colli eich holl ddyfeisiau presennol.";
 "banner_set_up_recovery_submit" = "Gosod adfer";
 "banner_set_up_recovery_title" = "Gosodwch adferiad i ddiogelu eich cyfrif";
+"banner_swipe_avatar_content" = "Swipe up or down on your avatar to switch between your accounts without going to the app settings.";
+"banner_swipe_avatar_title" = "Swipe your avatar to switch accounts";
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Nid yw Element Call yn cefnogi defnyddio dyfeisiau sain Bluetooth yn y fersiwn Android hon. Dewiswch ddyfais sain wahanol.";
 "common_about" = "Ynghylch";
 "common_acceptable_use_policy" = "Polisi defnydd derbyniol";
@@ -499,6 +501,7 @@
 "emoji_picker_category_recent" = "Emojis diweddar";
 "emoji_picker_category_symbols" = "Symbolau";
 "emoji_picker_search_placeholder" = "Chwilio emojis";
+"error_account_already_logged_in_title" = "Duplicate sign-in";
 "error_account_creation_not_possible" = "Mae angen uwchraddio eich gweinydd cartref i gefnogi Gwasanaeth Dilysu Matrix a chreu cyfrif.";
 "error_failed_creating_the_permalink" = "Wedi methu creu'r ddolen barhaol";
 "error_failed_loading_map" = "Methodd %1$@ â llwytho'r map. Ceisiwch eto yn nes ymlaen.";
@@ -869,12 +872,18 @@
 "screen_encryption_reset_bullet_1" = "Bydd manylion eich cyfrif, eich cysylltiadau, eich dewisiadau a'ch rhestr sgwrsio yn cael eu cadw";
 "screen_encryption_reset_bullet_2" = "Byddwch yn colli unrhyw hanes neges sydd wedi'i gadw dim ond ar y gweinydd";
 "screen_encryption_reset_bullet_3" = "Bydd angen i chi wirio'ch holl ddyfeisiau a chysylltiadau presennol eto";
+"screen_encryption_reset_bullet_4" = "Any devices you’re signed in to will need to be reconfirmed";
 "screen_encryption_reset_footer" = "Ailosodwch eich hunaniaeth dim ond os nad oes gennych fynediad i ddyfais arall sydd wedi'i mewngofnodi a'ch bod wedi colli'ch allwedd adfer.";
+"screen_encryption_reset_no_chats_message" = "It looks like you don’t have any chats yet. If this is correct, you can safely proceed with resetting your digital identity";
+"screen_encryption_reset_no_options_subtitle" = "You don’t have access to any other verified devices or a recovery key, so you’ll need to reset your digital identity to continue using the app.";
+"screen_encryption_reset_no_options_title" = "You need to reset your digital identity";
+"screen_encryption_reset_subtitle" = "If you don’t have access to any other verified devices and you don’t have your recovery key, then you’ll need to reset your digital identity to continue using the app.";
 "screen_encryption_reset_title" = "Methu cadarnhau? Bydd angen i chi ailosod eich hunaniaeth.";
 "screen_home_tab_chats" = "Sgyrsiau";
 "screen_home_tab_spaces" = "Gofodau";
 "screen_identity_confirmation_cannot_confirm" = "Methu cadarnhau?";
 "screen_identity_confirmation_create_new_recovery_key" = "Crëwch allwedd adfer newydd";
+"screen_identity_confirmation_sign_out" = "Sign out";
 "screen_identity_confirmation_subtitle" = "Dilyswch y ddyfais hon er mwyn gosod negeseuon diogel.";
 "screen_identity_confirmation_title" = "Cadarnhewch eich hunaniaeth";
 "screen_identity_confirmation_use_another_device" = "Defnyddiwch ddyfais arall";
@@ -1081,6 +1090,7 @@
 "screen_multi_account_announcement_title" = "You can now add multiple accounts";
 "screen_notification_optin_subtitle" = "Gallwch newid eich gosodiadau yn nes ymlaen.";
 "screen_notification_optin_title" = "Caniatáu hysbysiadau a pheidio byth â cholli neges";
+"screen_notification_settings_activity_section_title" = "Activity";
 "screen_notification_settings_additional_settings_section_title" = "Gosodiadau ychwanegol";
 "screen_notification_settings_call_ringtone_label" = "Call ringtone";
 "screen_notification_settings_calls_label" = "Galwadau sain a fideo";
@@ -1151,6 +1161,8 @@
 "screen_notification_settings_system_notifications_action_required_content_link" = "gosodiadau system";
 "screen_notification_settings_system_notifications_turned_off" = "Hysbysiadau system wedi'u diffodd";
 "screen_notification_settings_title" = "Hysbysiadau";
+"screen_onboarding_add_account_subtitle" = "You can add multiple accounts to the app and switch between them easily.";
+"screen_onboarding_add_account_title" = "Sign in to another account";
 "screen_onboarding_app_version" = "Fersiwn %1$@";
 "screen_onboarding_checking_account" = "Checking account";
 "screen_onboarding_sign_in_manually" = "Mewngofnodwch â llaw";
@@ -1169,14 +1181,6 @@
 "screen_polls_history_filter_ongoing" = "Parhaus";
 "screen_polls_history_filter_past" = "Gorffennol";
 "screen_polls_history_title" = "Pleidleisiau";
-"screen_ptt_settings_battery_optimization" = "Ignore battery optimisation";
-"screen_ptt_settings_battery_optimization_description" = "Stay active in background";
-"screen_ptt_settings_covert_mode" = "Covert mode";
-"screen_ptt_settings_covert_mode_description" = "Mute all channels";
-"screen_ptt_settings_lock_screen" = "Show on lock screen";
-"screen_ptt_settings_lock_screen_description" = "Access from the lock screen";
-"screen_ptt_settings_system_overlay" = "Enable system overlay";
-"screen_ptt_settings_system_overlay_description" = "Access a floating action button";
 "screen_push_history_title" = "Hanes gwthio";
 "screen_qr_code_login_connecting_subtitle" = "Yn creu cysylltiad diogel";
 "screen_qr_code_login_connection_note_secure_state_description" = "Nid oedd modd gwneud cysylltiad diogel â'r ddyfais newydd. Mae eich dyfeisiau presennol yn dal yn ddiogel a does dim angen i chi boeni amdanyn nhw.";
@@ -1354,9 +1358,6 @@
 "screen_room_details_profile_row_title" = "Proffil";
 "screen_room_details_requests_to_join_title" = "Ceisiadau i ymuno";
 "screen_room_details_roles_and_permissions" = "Rolau a chaniatâd";
-"screen_room_details_room_audio_ptt" = "Push to talk";
-"screen_room_details_room_audio_title" = "Room Audio";
-"screen_room_details_room_audio_video_calls" = "Video calls";
 "screen_room_details_room_name_label" = "Name";
 "screen_room_details_security_and_privacy_title" = "Diogelwch a phreifatrwydd";
 "screen_room_details_security_title" = "Diogelwch";

@@ -217,6 +217,8 @@
 "banner_set_up_recovery_content" = "Ваші бесіди автоматично резервуються з використанням наскрізного шифрування. Щоб відновити цю резервну копію та зберегти свою цифрову ідентичність у разі втрати доступу до всіх своїх пристроїв, вам знадобиться ключ відновлення.";
 "banner_set_up_recovery_submit" = "Отримати ключ відновлення";
 "banner_set_up_recovery_title" = "Створити резервну копію своїх бесід";
+"banner_swipe_avatar_content" = "Проведіть пальцем вгору або вниз по своєму аватару, щоб перемикатися між обліковими записами без переходу до налаштувань застосунку.";
+"banner_swipe_avatar_title" = "Перемикатися між обліковими записами проведенням пальця по аватару";
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call не підтримує використання аудіопристроїв Bluetooth у цій версії Android. Виберіть інший аудіопристрій.";
 "common_about" = "Відомості";
 "common_acceptable_use_policy" = "Політика прийнятного використання";
@@ -499,6 +501,7 @@
 "emoji_picker_category_recent" = "Нещодавні емодзі";
 "emoji_picker_category_symbols" = "Символи";
 "emoji_picker_search_placeholder" = "Пошук емоджі";
+"error_account_already_logged_in_title" = "Duplicate sign-in";
 "error_account_creation_not_possible" = "Постачальника послуг облікового запису потрібно оновити для підтримки Matrix Authentication Service та створення облікових записів.";
 "error_failed_creating_the_permalink" = "Не вдалося створити постійне посилання";
 "error_failed_loading_map" = "%1$@ не може завантажити мапу. Повторіть спробу пізніше.";
@@ -869,12 +872,18 @@
 "screen_encryption_reset_bullet_1" = "Дані вашого облікового запису, контакти, налаштування й бесіди будуть збережені";
 "screen_encryption_reset_bullet_2" = "Ви втратите свою наявну історію повідомлень";
 "screen_encryption_reset_bullet_3" = "Інші користувачі побачать, що вашу цифрову ідентичність було скинуто";
+"screen_encryption_reset_bullet_4" = "Всі пристрої, на яких ви ввійшли, потребуватимуть повторного підтвердження";
 "screen_encryption_reset_footer" = "Скидайте свою цифрову ідентичність лише якщо у вас немає доступу до іншого звіреного пристрою та ключа відновлення.";
+"screen_encryption_reset_no_chats_message" = "Схоже, у вас ще немає чатів. Якщо це так, ви можете сміливо скинути свою цифрову ідентичність.";
+"screen_encryption_reset_no_options_subtitle" = "У вас немає доступу до інших звірених пристроїв або ключа відновлення, тому вам доведеться скинути свою цифрову ідентичність, щоб продовжити користуватися застосунком.";
+"screen_encryption_reset_no_options_title" = "Вам потрібно скинути налаштування вашої цифрової ідентичності";
+"screen_encryption_reset_subtitle" = "Якщо у вас немає доступу до інших звірених пристроїв і ви не маєте ключа відновлення, вам доведеться скинути свою цифрову ідентичність, щоб продовжити користуватися застосунком.";
 "screen_encryption_reset_title" = "Не можете підтвердити? Вам доведеться скинути свою цифрову ідентичність.";
 "screen_home_tab_chats" = "Бесіди";
 "screen_home_tab_spaces" = "Простори";
 "screen_identity_confirmation_cannot_confirm" = "Не можете підтвердити?";
 "screen_identity_confirmation_create_new_recovery_key" = "Створити новий ключ відновлення";
+"screen_identity_confirmation_sign_out" = "Вийти";
 "screen_identity_confirmation_subtitle" = "Виберіть спосіб звіряння, щоб налаштувати безпечний обмін повідомленнями.";
 "screen_identity_confirmation_title" = "Підтвердьте свою цифрову ідентичність";
 "screen_identity_confirmation_use_another_device" = "Використовуйте інший пристрій";
@@ -1081,6 +1090,7 @@
 "screen_multi_account_announcement_title" = "Відтепер ви можете додавати кілька облікових записів";
 "screen_notification_optin_subtitle" = "Ви можете змінити свої налаштування пізніше.";
 "screen_notification_optin_title" = "Дозволити сповіщення і ніколи не пропускати повідомлення";
+"screen_notification_settings_activity_section_title" = "Діяльність";
 "screen_notification_settings_additional_settings_section_title" = "Додаткові налаштування";
 "screen_notification_settings_call_ringtone_label" = "Мелодія виклику";
 "screen_notification_settings_calls_label" = "Аудіо та відеовиклики";
@@ -1151,6 +1161,8 @@
 "screen_notification_settings_system_notifications_action_required_content_link" = "системні налаштування";
 "screen_notification_settings_system_notifications_turned_off" = "Системні сповіщення вимкнені";
 "screen_notification_settings_title" = "Сповіщення";
+"screen_onboarding_add_account_subtitle" = "Ви можете додати кілька облікових записів у застосунку та легко перемикатися між ними.";
+"screen_onboarding_add_account_title" = "Увійти в інший обліковий запис";
 "screen_onboarding_app_version" = "Версія %1$@";
 "screen_onboarding_checking_account" = "Перевірка облікового запису";
 "screen_onboarding_sign_in_manually" = "Увійти вручну";
@@ -1169,14 +1181,6 @@
 "screen_polls_history_filter_ongoing" = "Поточні";
 "screen_polls_history_filter_past" = "Минулі";
 "screen_polls_history_title" = "Опитування";
-"screen_ptt_settings_battery_optimization" = "Ігнорувати оптимізацію заряду акумулятора";
-"screen_ptt_settings_battery_optimization_description" = "Залишати активним у фоновому режимі";
-"screen_ptt_settings_covert_mode" = "Прихований режим";
-"screen_ptt_settings_covert_mode_description" = "Вимкнути звук усіх каналів";
-"screen_ptt_settings_lock_screen" = "Показувати на екрані блокування";
-"screen_ptt_settings_lock_screen_description" = "Доступ з екрана блокування";
-"screen_ptt_settings_system_overlay" = "Увімкнути системне накладання";
-"screen_ptt_settings_system_overlay_description" = "Доступ до рухомої кнопки дій";
 "screen_push_history_title" = "Історія push-сповіщень";
 "screen_qr_code_login_connecting_subtitle" = "Встановлення безпечного з'єднання";
 "screen_qr_code_login_connection_note_secure_state_description" = "Не вдалося встановити безпечне з'єднання з новим пристроєм. Ваші наявні пристрої досі в безпеці, і вам не потрібно про них турбуватися.";
@@ -1354,9 +1358,6 @@
 "screen_room_details_profile_row_title" = "Профіль";
 "screen_room_details_requests_to_join_title" = "Запити на приєднання";
 "screen_room_details_roles_and_permissions" = "Ролі та дозволи";
-"screen_room_details_room_audio_ptt" = "Натисніть, щоб говорити";
-"screen_room_details_room_audio_title" = "Аудіо в кімнаті";
-"screen_room_details_room_audio_video_calls" = "Відеовиклики";
 "screen_room_details_room_name_label" = "Назва";
 "screen_room_details_security_and_privacy_title" = "Безпека й приватність";
 "screen_room_details_security_title" = "Безпека";

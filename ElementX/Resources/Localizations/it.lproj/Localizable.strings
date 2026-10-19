@@ -217,6 +217,8 @@
 "banner_set_up_recovery_content" = "Le tue conversazioni vengono automaticamente salvate con crittografia end-to-end. Per ripristinare questo backup e conservare la tua identità digitale quando perdi l'accesso a tutti i tuoi dispositivi, avrai bisogno della tua chiave di recupero.";
 "banner_set_up_recovery_submit" = "Ottieni la chiave di recupero";
 "banner_set_up_recovery_title" = "Esegui il backup delle tue conversazioni";
+"banner_swipe_avatar_content" = "Swipe up or down on your avatar to switch between your accounts without going to the app settings.";
+"banner_swipe_avatar_title" = "Swipe your avatar to switch accounts";
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call non supporta l'uso di dispositivi audio Bluetooth in questa versione di Android. Seleziona un dispositivo audio diverso.";
 "common_about" = "Informazioni";
 "common_acceptable_use_policy" = "Regole sull'utilizzo consentito";
@@ -499,6 +501,7 @@
 "emoji_picker_category_recent" = "Emoji recenti";
 "emoji_picker_category_symbols" = "Simboli";
 "emoji_picker_search_placeholder" = "Cerca emoji";
+"error_account_already_logged_in_title" = "Duplicate sign-in";
 "error_account_creation_not_possible" = "Il tuo gestore dell'account deve essere aggiornato per supportare il servizio di autenticazione Matrix e la creazione di account.";
 "error_failed_creating_the_permalink" = "Impossibile creare il collegamento permanente";
 "error_failed_loading_map" = "%1$@ non è riuscito a caricare la mappa. Riprova più tardi.";
@@ -869,12 +872,18 @@
 "screen_encryption_reset_bullet_1" = "I dettagli del tuo account, i contatti, le preferenze e l'elenco delle conversazioni verranno conservati";
 "screen_encryption_reset_bullet_2" = "Perderai la cronologia dei messaggi esistente";
 "screen_encryption_reset_bullet_3" = "Dovrai verificare nuovamente tutti i dispositivi e i contatti esistenti";
+"screen_encryption_reset_bullet_4" = "Any devices you’re signed in to will need to be reconfirmed";
 "screen_encryption_reset_footer" = "Reimposta la tua identità digitale solo se non hai accesso a un altro dispositivo verificato e non disponi della tua chiave di recupero.";
+"screen_encryption_reset_no_chats_message" = "It looks like you don’t have any chats yet. If this is correct, you can safely proceed with resetting your digital identity";
+"screen_encryption_reset_no_options_subtitle" = "You don’t have access to any other verified devices or a recovery key, so you’ll need to reset your digital identity to continue using the app.";
+"screen_encryption_reset_no_options_title" = "You need to reset your digital identity";
+"screen_encryption_reset_subtitle" = "If you don’t have access to any other verified devices and you don’t have your recovery key, then you’ll need to reset your digital identity to continue using the app.";
 "screen_encryption_reset_title" = "Non riesci a confermare? Dovrai reimpostare la tua identità digitale.";
 "screen_home_tab_chats" = "Conversazioni";
 "screen_home_tab_spaces" = "Spazi";
 "screen_identity_confirmation_cannot_confirm" = "Non puoi confermare?";
 "screen_identity_confirmation_create_new_recovery_key" = "Crea una nuova chiave di recupero";
+"screen_identity_confirmation_sign_out" = "Sign out";
 "screen_identity_confirmation_subtitle" = "Scegli come effettuare la verifica per configurare la messaggistica sicura.";
 "screen_identity_confirmation_title" = "Conferma la tua identità digitale";
 "screen_identity_confirmation_use_another_device" = "Usa un altro dispositivo";
@@ -1081,6 +1090,7 @@
 "screen_multi_account_announcement_title" = "You can now add multiple accounts";
 "screen_notification_optin_subtitle" = "Potrai modificare le tue impostazioni in seguito.";
 "screen_notification_optin_title" = "Consenti le notifiche e non perdere mai un messaggio";
+"screen_notification_settings_activity_section_title" = "Activity";
 "screen_notification_settings_additional_settings_section_title" = "Impostazioni aggiuntive";
 "screen_notification_settings_call_ringtone_label" = "Suoneria di chiamata";
 "screen_notification_settings_calls_label" = "Chiamate audio e video";
@@ -1151,6 +1161,8 @@
 "screen_notification_settings_system_notifications_action_required_content_link" = "impostazioni di sistema";
 "screen_notification_settings_system_notifications_turned_off" = "Notifiche di sistema disattivate";
 "screen_notification_settings_title" = "Notifiche";
+"screen_onboarding_add_account_subtitle" = "You can add multiple accounts to the app and switch between them easily.";
+"screen_onboarding_add_account_title" = "Sign in to another account";
 "screen_onboarding_app_version" = "Versione %1$@";
 "screen_onboarding_checking_account" = "Verifica dell'account";
 "screen_onboarding_sign_in_manually" = "Accedi manualmente";
@@ -1169,14 +1181,6 @@
 "screen_polls_history_filter_ongoing" = "In corso";
 "screen_polls_history_filter_past" = "Passato";
 "screen_polls_history_title" = "Sondaggi";
-"screen_ptt_settings_battery_optimization" = "Ignore battery optimisation";
-"screen_ptt_settings_battery_optimization_description" = "Stay active in background";
-"screen_ptt_settings_covert_mode" = "Covert mode";
-"screen_ptt_settings_covert_mode_description" = "Mute all channels";
-"screen_ptt_settings_lock_screen" = "Show on lock screen";
-"screen_ptt_settings_lock_screen_description" = "Access from the lock screen";
-"screen_ptt_settings_system_overlay" = "Enable system overlay";
-"screen_ptt_settings_system_overlay_description" = "Access a floating action button";
 "screen_push_history_title" = "Cronologia push";
 "screen_qr_code_login_connecting_subtitle" = "Stabilendo la connessione";
 "screen_qr_code_login_connection_note_secure_state_description" = "Non è stato possibile stabilire una connessione sicura con il nuovo dispositivo. I tuoi dispositivi esistenti sono ancora al sicuro e non devi preoccuparti di loro.";
@@ -1354,9 +1358,6 @@
 "screen_room_details_profile_row_title" = "Profilo";
 "screen_room_details_requests_to_join_title" = "Richieste di accesso";
 "screen_room_details_roles_and_permissions" = "Ruoli e autorizzazioni";
-"screen_room_details_room_audio_ptt" = "Push to talk";
-"screen_room_details_room_audio_title" = "Room Audio";
-"screen_room_details_room_audio_video_calls" = "Video calls";
 "screen_room_details_room_name_label" = "Nome";
 "screen_room_details_security_and_privacy_title" = "Sicurezza e privacy";
 "screen_room_details_security_title" = "Sicurezza";

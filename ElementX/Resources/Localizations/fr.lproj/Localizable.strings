@@ -217,6 +217,8 @@
 "banner_set_up_recovery_content" = "Vos discussions sont automatiquement sauvegardées grâce à un chiffrement de bout en bout. Pour restaurer cette sauvegarde et conserver votre identité numérique en cas de perte d'accès à tous vos appareils, vous aurez besoin de votre clé de récupération.";
 "banner_set_up_recovery_submit" = "Obtenir une clé de récupération";
 "banner_set_up_recovery_title" = "Sauvegarder vos discussions";
+"banner_swipe_avatar_content" = "Swipe up or down on your avatar to switch between your accounts without going to the app settings.";
+"banner_swipe_avatar_title" = "Swipe your avatar to switch accounts";
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call ne prend pas en charge l'utilisation d'accessoires Bluetooth dans cette version d'Android. Sélectionnez une autre sortie audio.";
 "common_about" = "À propos";
 "common_acceptable_use_policy" = "Politique d’utilisation acceptable";
@@ -499,6 +501,7 @@
 "emoji_picker_category_recent" = "Emojis récents";
 "emoji_picker_category_symbols" = "Symboles";
 "emoji_picker_search_placeholder" = "Chercher des emojis";
+"error_account_already_logged_in_title" = "Duplicate sign-in";
 "error_account_creation_not_possible" = "Votre fournisseur de compte doit être mis à jour pour prendre en charge le protocole MAS (Matrix Authentication Service) et la création de compte.";
 "error_failed_creating_the_permalink" = "Échec de la création du permalien";
 "error_failed_loading_map" = "%1$@ n’a pas pu charger la carte. Veuillez réessayer ultérieurement.";
@@ -869,12 +872,18 @@
 "screen_encryption_reset_bullet_1" = "Les détails de votre compte, vos contacts, vos préférences et votre liste de discussions seront conservés";
 "screen_encryption_reset_bullet_2" = "Vous perdrez l’historique de vos messages";
 "screen_encryption_reset_bullet_3" = "Vous devrez vérifier à nouveau tous vos appareils et tous vos contacts";
+"screen_encryption_reset_bullet_4" = "Any devices you’re signed in to will need to be reconfirmed";
 "screen_encryption_reset_footer" = "Ne réinitialisez votre identité numérique que si vous n'avez plus accès à aucun autre appareil et que vous avez perdu votre clé de récupération.";
+"screen_encryption_reset_no_chats_message" = "It looks like you don’t have any chats yet. If this is correct, you can safely proceed with resetting your digital identity";
+"screen_encryption_reset_no_options_subtitle" = "You don’t have access to any other verified devices or a recovery key, so you’ll need to reset your digital identity to continue using the app.";
+"screen_encryption_reset_no_options_title" = "You need to reset your digital identity";
+"screen_encryption_reset_subtitle" = "If you don’t have access to any other verified devices and you don’t have your recovery key, then you’ll need to reset your digital identity to continue using the app.";
 "screen_encryption_reset_title" = "Vous ne pouvez pas confirmer ? Vous devez réinitialiser votre identité numérique.";
 "screen_home_tab_chats" = "Conversations";
 "screen_home_tab_spaces" = "Espaces";
 "screen_identity_confirmation_cannot_confirm" = "Confirmation impossible ?";
 "screen_identity_confirmation_create_new_recovery_key" = "Créer une nouvelle clé de récupération";
+"screen_identity_confirmation_sign_out" = "Sign out";
 "screen_identity_confirmation_subtitle" = "Choisissez comment vérifier afin de configurer votre messagerie sécurisée.";
 "screen_identity_confirmation_title" = "Confirmez votre identité numérique";
 "screen_identity_confirmation_use_another_device" = "Utiliser une autre session";
@@ -1081,6 +1090,7 @@
 "screen_multi_account_announcement_title" = "Vous pouvez désormais ajouter plusieurs comptes";
 "screen_notification_optin_subtitle" = "Vous pourrez modifier vos paramètres ultérieurement.";
 "screen_notification_optin_title" = "Autorisez les notifications et ne manquez aucun message";
+"screen_notification_settings_activity_section_title" = "Activity";
 "screen_notification_settings_additional_settings_section_title" = "Réglages supplémentaires";
 "screen_notification_settings_call_ringtone_label" = "Sonnerie d'appel";
 "screen_notification_settings_calls_label" = "Appels audio et vidéo";
@@ -1151,6 +1161,8 @@
 "screen_notification_settings_system_notifications_action_required_content_link" = "paramètres du système";
 "screen_notification_settings_system_notifications_turned_off" = "Les notifications du système sont désactivées";
 "screen_notification_settings_title" = "Notifications";
+"screen_onboarding_add_account_subtitle" = "You can add multiple accounts to the app and switch between them easily.";
+"screen_onboarding_add_account_title" = "Sign in to another account";
 "screen_onboarding_app_version" = "Version %1$@";
 "screen_onboarding_checking_account" = "Vérification du compte";
 "screen_onboarding_sign_in_manually" = "Se connecter manuellement";
@@ -1169,14 +1181,6 @@
 "screen_polls_history_filter_ongoing" = "En cours";
 "screen_polls_history_filter_past" = "Terminés";
 "screen_polls_history_title" = "Sondages";
-"screen_ptt_settings_battery_optimization" = "Ignore battery optimisation";
-"screen_ptt_settings_battery_optimization_description" = "Stay active in background";
-"screen_ptt_settings_covert_mode" = "Covert mode";
-"screen_ptt_settings_covert_mode_description" = "Mute all channels";
-"screen_ptt_settings_lock_screen" = "Show on lock screen";
-"screen_ptt_settings_lock_screen_description" = "Access from the lock screen";
-"screen_ptt_settings_system_overlay" = "Enable system overlay";
-"screen_ptt_settings_system_overlay_description" = "Access a floating action button";
 "screen_push_history_title" = "Historique des Push";
 "screen_qr_code_login_connecting_subtitle" = "Établissement d'une connexion sécurisée";
 "screen_qr_code_login_connection_note_secure_state_description" = "Aucune connexion sécurisée n'a pu être établie avec la nouvelle session. Vos sessions existantes sont toujours en sécurité et vous n'avez pas à vous en soucier.";
@@ -1354,9 +1358,6 @@
 "screen_room_details_profile_row_title" = "Profil";
 "screen_room_details_requests_to_join_title" = "Demandes en attente";
 "screen_room_details_roles_and_permissions" = "Rôles & autorisations";
-"screen_room_details_room_audio_ptt" = "Appuyer pour parler";
-"screen_room_details_room_audio_title" = "Audio du salon";
-"screen_room_details_room_audio_video_calls" = "Appels vidéo";
 "screen_room_details_room_name_label" = "Nom";
 "screen_room_details_security_and_privacy_title" = "Sécurité & confidentialité";
 "screen_room_details_security_title" = "Sécurité";
