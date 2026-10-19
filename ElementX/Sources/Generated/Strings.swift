@@ -490,6 +490,10 @@ internal nonisolated enum L10n {
   internal static var bannerSetUpRecoverySubmit: String { return L10n.tr("Localizable", "banner_set_up_recovery_submit") }
   /// Back up your chats
   internal static var bannerSetUpRecoveryTitle: String { return L10n.tr("Localizable", "banner_set_up_recovery_title") }
+  /// Swipe up or down on your avatar to switch between your accounts without going to the app settings.
+  internal static var bannerSwipeAvatarContent: String { return L10n.tr("Localizable", "banner_swipe_avatar_content") }
+  /// Swipe your avatar to switch accounts
+  internal static var bannerSwipeAvatarTitle: String { return L10n.tr("Localizable", "banner_swipe_avatar_title") }
   /// Element Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.
   internal static var callInvalidAudioDeviceBluetoothDevicesDisabled: String { return L10n.tr("Localizable", "call_invalid_audio_device_bluetooth_devices_disabled") }
   /// About
@@ -1148,6 +1152,8 @@ internal nonisolated enum L10n {
   internal static var emojiPickerCategorySymbols: String { return L10n.tr("Localizable", "emoji_picker_category_symbols") }
   /// Search emojis
   internal static var emojiPickerSearchPlaceholder: String { return L10n.tr("Localizable", "emoji_picker_search_placeholder") }
+  /// Duplicate sign-in
+  internal static var errorAccountAlreadyLoggedInTitle: String { return L10n.tr("Localizable", "error_account_already_logged_in_title") }
   /// Your account provider needs to be upgraded to support Matrix Authentication Service and account creation.
   internal static var errorAccountCreationNotPossible: String { return L10n.tr("Localizable", "error_account_creation_not_possible") }
   /// Failed creating the permalink
@@ -2044,18 +2050,32 @@ internal nonisolated enum L10n {
   internal static var screenEncryptionResetBullet2: String { return L10n.tr("Localizable", "screen_encryption_reset_bullet_2") }
   /// Other users will see that your digital identity has been reset
   internal static var screenEncryptionResetBullet3: String { return L10n.tr("Localizable", "screen_encryption_reset_bullet_3") }
+  /// Any devices you’re signed in to will need to be reconfirmed
+  internal static var screenEncryptionResetBullet4: String { return L10n.tr("Localizable", "screen_encryption_reset_bullet_4") }
   /// Only reset your digital identity if you don't have access to another verified device and you don't have your recovery key.
   internal static var screenEncryptionResetFooter: String { return L10n.tr("Localizable", "screen_encryption_reset_footer") }
+  /// It looks like you don’t have any chats yet. If this is correct, you can safely proceed with resetting your digital identity
+  internal static var screenEncryptionResetNoChatsMessage: String { return L10n.tr("Localizable", "screen_encryption_reset_no_chats_message") }
+  /// You don’t have access to any other verified devices or a recovery key, so you’ll need to reset your digital identity to continue using the app.
+  internal static var screenEncryptionResetNoOptionsSubtitle: String { return L10n.tr("Localizable", "screen_encryption_reset_no_options_subtitle") }
+  /// You need to reset your digital identity
+  internal static var screenEncryptionResetNoOptionsTitle: String { return L10n.tr("Localizable", "screen_encryption_reset_no_options_title") }
+  /// If you don’t have access to any other verified devices and you don’t have your recovery key, then you’ll need to reset your digital identity to continue using the app.
+  internal static var screenEncryptionResetSubtitle: String { return L10n.tr("Localizable", "screen_encryption_reset_subtitle") }
   /// Can't confirm? You’ll need to reset your digital identity.
   internal static var screenEncryptionResetTitle: String { return L10n.tr("Localizable", "screen_encryption_reset_title") }
   /// Chats
   internal static var screenHomeTabChats: String { return L10n.tr("Localizable", "screen_home_tab_chats") }
+  /// Search
+  internal static var screenHomeTabSearch: String { return L10n.tr("Localizable", "screen_home_tab_search") }
   /// Spaces
   internal static var screenHomeTabSpaces: String { return L10n.tr("Localizable", "screen_home_tab_spaces") }
   /// Can't confirm?
   internal static var screenIdentityConfirmationCannotConfirm: String { return L10n.tr("Localizable", "screen_identity_confirmation_cannot_confirm") }
   /// Create a new recovery key
   internal static var screenIdentityConfirmationCreateNewRecoveryKey: String { return L10n.tr("Localizable", "screen_identity_confirmation_create_new_recovery_key") }
+  /// Sign out
+  internal static var screenIdentityConfirmationSignOut: String { return L10n.tr("Localizable", "screen_identity_confirmation_sign_out") }
   /// Choose how to verify to set up secure messaging.
   internal static var screenIdentityConfirmationSubtitle: String { return L10n.tr("Localizable", "screen_identity_confirmation_subtitle") }
   /// Confirm your digital identity
@@ -2538,6 +2558,8 @@ internal nonisolated enum L10n {
   internal static var screenNotificationOptinSubtitle: String { return L10n.tr("Localizable", "screen_notification_optin_subtitle") }
   /// Allow notifications and never miss a message
   internal static var screenNotificationOptinTitle: String { return L10n.tr("Localizable", "screen_notification_optin_title") }
+  /// Activity
+  internal static var screenNotificationSettingsActivitySectionTitle: String { return L10n.tr("Localizable", "screen_notification_settings_activity_section_title") }
   /// Additional settings
   internal static var screenNotificationSettingsAdditionalSettingsSectionTitle: String { return L10n.tr("Localizable", "screen_notification_settings_additional_settings_section_title") }
   /// Call ringtone
@@ -2684,6 +2706,10 @@ internal nonisolated enum L10n {
   internal static var screenNotificationSettingsSystemNotificationsTurnedOff: String { return L10n.tr("Localizable", "screen_notification_settings_system_notifications_turned_off") }
   /// Notifications
   internal static var screenNotificationSettingsTitle: String { return L10n.tr("Localizable", "screen_notification_settings_title") }
+  /// You can add multiple accounts to the app and switch between them easily.
+  internal static var screenOnboardingAddAccountSubtitle: String { return L10n.tr("Localizable", "screen_onboarding_add_account_subtitle") }
+  /// Sign in to another account
+  internal static var screenOnboardingAddAccountTitle: String { return L10n.tr("Localizable", "screen_onboarding_add_account_title") }
   /// Version %1$@
   internal static func screenOnboardingAppVersion(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_onboarding_app_version", String(describing: p1))
@@ -2734,22 +2760,6 @@ internal nonisolated enum L10n {
   internal static var screenPollsHistoryFilterPast: String { return L10n.tr("Localizable", "screen_polls_history_filter_past") }
   /// Polls
   internal static var screenPollsHistoryTitle: String { return L10n.tr("Localizable", "screen_polls_history_title") }
-  /// Ignore battery optimisation
-  internal static var screenPttSettingsBatteryOptimization: String { return L10n.tr("Localizable", "screen_ptt_settings_battery_optimization") }
-  /// Stay active in background
-  internal static var screenPttSettingsBatteryOptimizationDescription: String { return L10n.tr("Localizable", "screen_ptt_settings_battery_optimization_description") }
-  /// Covert mode
-  internal static var screenPttSettingsCovertMode: String { return L10n.tr("Localizable", "screen_ptt_settings_covert_mode") }
-  /// Mute all channels
-  internal static var screenPttSettingsCovertModeDescription: String { return L10n.tr("Localizable", "screen_ptt_settings_covert_mode_description") }
-  /// Show on lock screen
-  internal static var screenPttSettingsLockScreen: String { return L10n.tr("Localizable", "screen_ptt_settings_lock_screen") }
-  /// Access from the lock screen
-  internal static var screenPttSettingsLockScreenDescription: String { return L10n.tr("Localizable", "screen_ptt_settings_lock_screen_description") }
-  /// Enable system overlay
-  internal static var screenPttSettingsSystemOverlay: String { return L10n.tr("Localizable", "screen_ptt_settings_system_overlay") }
-  /// Access a floating action button
-  internal static var screenPttSettingsSystemOverlayDescription: String { return L10n.tr("Localizable", "screen_ptt_settings_system_overlay_description") }
   /// Push history
   internal static var screenPushHistoryTitle: String { return L10n.tr("Localizable", "screen_push_history_title") }
   /// Establishing a secure connection
@@ -3132,12 +3142,6 @@ internal nonisolated enum L10n {
   internal static var screenRoomDetailsRequestsToJoinTitle: String { return L10n.tr("Localizable", "screen_room_details_requests_to_join_title") }
   /// Roles & permissions
   internal static var screenRoomDetailsRolesAndPermissions: String { return L10n.tr("Localizable", "screen_room_details_roles_and_permissions") }
-  /// Push to talk
-  internal static var screenRoomDetailsRoomAudioPtt: String { return L10n.tr("Localizable", "screen_room_details_room_audio_ptt") }
-  /// Room Audio
-  internal static var screenRoomDetailsRoomAudioTitle: String { return L10n.tr("Localizable", "screen_room_details_room_audio_title") }
-  /// Video calls
-  internal static var screenRoomDetailsRoomAudioVideoCalls: String { return L10n.tr("Localizable", "screen_room_details_room_audio_video_calls") }
   /// Name
   internal static var screenRoomDetailsRoomNameLabel: String { return L10n.tr("Localizable", "screen_room_details_room_name_label") }
   /// Security & privacy
@@ -3486,6 +3490,20 @@ internal nonisolated enum L10n {
   internal static var screenRoomlistTombstonedRoomDescription: String { return L10n.tr("Localizable", "screen_roomlist_tombstoned_room_description") }
   /// Your spaces
   internal static var screenRoomlistYourSpaces: String { return L10n.tr("Localizable", "screen_roomlist_your_spaces") }
+  /// Search for chats and messages
+  internal static var screenSearchEmptyStateMessage: String { return L10n.tr("Localizable", "screen_search_empty_state_message") }
+  /// Start searching
+  internal static var screenSearchEmptyStateTitle: String { return L10n.tr("Localizable", "screen_search_empty_state_title") }
+  /// There are no results for “%1$@.” Try a new search term.
+  internal static func screenSearchNoResultsMessage(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_search_no_results_message", String(describing: p1))
+  }
+  /// Recent searches
+  internal static var screenSearchRecentSearches: String { return L10n.tr("Localizable", "screen_search_recent_searches") }
+  /// Chats
+  internal static var screenSearchTabChats: String { return L10n.tr("Localizable", "screen_search_tab_chats") }
+  /// Messages
+  internal static var screenSearchTabMessages: String { return L10n.tr("Localizable", "screen_search_tab_messages") }
   /// Add address
   internal static var screenSecurityAndPrivacyAddRoomAddressAction: String { return L10n.tr("Localizable", "screen_security_and_privacy_add_room_address_action") }
   /// Anyone in authorised spaces can join, but everyone else must request access.
@@ -4280,7 +4298,7 @@ internal nonisolated enum L10n {
   }
 
   internal enum Error {
-    /// You're already logged in on this device as %1$@.
+    /// You’re already signed in as %1$@.
     internal static func accountAlreadyLoggedIn(_ p1: Any) -> String {
       return L10n.tr("Localizable", "error.account_already_logged_in", String(describing: p1))
     }
