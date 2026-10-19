@@ -24,7 +24,7 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
         actionsSubject.eraseToAnyPublisher()
     }
     
-    private var currentTask: AnyCancellable?
+    private var currentOperation: CurrentOperation?
     private var oAuthResultTask: AnyCancellable?
     private var expirationTask: AnyCancellable?
     
@@ -52,7 +52,7 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
         case .linkDesktop:
             scheduleLinkDesktopExpiration()
         case .linkMobile(let operation):
-            listenToDisplayQRProgress(linkMobileOperation: operation)
+            listenToDisplayQRProgress(operation: operation)
         case .login:
             break
         }
@@ -62,7 +62,10 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
     
     override func process(viewAction: QRCodeLoginScreenViewAction) {
         switch viewAction {
-        case .cancel, .errorAction(.cancel):
+        case .cancel:
+            currentOperation?.cancel() // Cancel the Rust task.
+            actionsSubject.send(.cancel)
+        case .errorAction(.cancel):
             actionsSubject.send(.cancel)
         case .startScan:
             Task { await startScanIfPossible() }
@@ -116,19 +119,19 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
     }
     
     private func handleScan(qrData: Data, loginService: QRCodeLoginServiceProtocol) {
-        guard currentTask == nil else { return }
+        guard currentOperation == nil else { return }
         
         state.state = .scan(.connecting)
         
         MXLog.info("Login scanning QR code")
-        let progressPublisher = loginService.loginWithQRCode(data: qrData).progressPublisher
+        let operation = loginService.loginWithQRCode(data: qrData)
         
-        currentTask = progressPublisher
+        let progressCancellable = operation.progressPublisher
             .removeDuplicates()
             .receive(on: DispatchQueue.main)
             .sink { [weak self] completion in
                 guard let self else { return }
-                currentTask = nil
+                currentOperation = nil
                 
                 switch completion {
                 case .finished: break
@@ -160,22 +163,24 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
                     actionsSubject.send(.signedIn(userSession: session))
                 }
             }
+        
+        currentOperation = .init(progressCancellable: progressCancellable, taskCancellable: operation)
     }
     
     private func handleScan(qrData: Data, linkService: LinkNewDeviceServiceProtocol) {
-        guard currentTask == nil else { return }
+        guard currentOperation == nil else { return }
         
         state.state = .scan(.connecting)
         
         MXLog.info("Link scanning QR code")
-        let progressPublisher = linkService.linkDesktopDevice(with: qrData).progressPublisher
+        let operation = linkService.linkDesktopDevice(with: qrData)
         
-        currentTask = progressPublisher
+        let progressCancellable = operation.progressPublisher
             .removeDuplicates()
             .receive(on: DispatchQueue.main)
             .sink { [weak self] completion in
                 guard let self else { return }
-                currentTask = nil
+                currentOperation = nil
                 
                 if case .failure(let error) = completion {
                     handleError(error)
@@ -204,19 +209,21 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
                     actionsSubject.send(.linkedDevice)
                 }
             }
+        
+        currentOperation = .init(progressCancellable: progressCancellable, taskCancellable: operation)
     }
     
-    private func listenToDisplayQRProgress(linkMobileOperation: LinkNewDeviceService.LinkMobileOperation) {
+    private func listenToDisplayQRProgress(operation: LinkNewDeviceService.LinkMobileOperation) {
         state.bindings.qrResult = nil
         
         MXLog.info("Link showing QR code.")
         
-        currentTask = linkMobileOperation.progressPublisher
+        let progressCancellable = operation.progressPublisher
             .removeDuplicates()
             .receive(on: DispatchQueue.main)
             .sink { [weak self] completion in
                 guard let self else { return }
-                currentTask = nil
+                currentOperation = nil
                 
                 if case .failure(let error) = completion {
                     handleError(error)
@@ -244,6 +251,8 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
                     actionsSubject.send(.linkedDevice)
                 }
             }
+        
+        currentOperation = .init(progressCancellable: progressCancellable, taskCancellable: operation)
     }
     
     /// Starts the timeout for scanning a desktop's QR code. The flow will expire (cancelling the scan)
@@ -262,12 +271,13 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
     private func handleExpiration() {
         // Don't override an error that's already being shown.
         if case .error = state.state {
-            currentTask = nil // Cancel the scan (just in case).
+            currentOperation = nil // Cancel the scan (just in case).
             return
         }
         
         MXLog.info("Timed out establishing a secure channel, expiring.")
-        currentTask = nil // Cancel the scan.
+        currentOperation?.cancel() // Cancel the rust task.
+        currentOperation = nil // Cancel the scan.
         handleError(.expired)
     }
     
@@ -353,6 +363,20 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
                                            mode: mode,
                                            canSignInManually: canSignInManually,
                                            bindings: .init(checkCodeInput: checkCodeInput)))
+    }
+}
+
+/// The screen's currently running operation. This includes a subscription to its progress and the underlying SDK task.
+/// Releasing it only stops listening to the progress. The SDK task can be cancelled mid-operation by calling ``cancel()``.
+private struct CurrentOperation {
+    let progressCancellable: AnyCancellable
+    let taskCancellable: Cancellable
+    
+    /// Cancels the underlying SDK task and stops listening to its progress.
+    func cancel() {
+        // Must come first so the resulting `.cancelled` failure isn't handled.
+        progressCancellable.cancel()
+        taskCancellable.cancel()
     }
 }
 
