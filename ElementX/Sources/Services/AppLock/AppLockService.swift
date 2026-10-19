@@ -232,7 +232,8 @@ class AppLockService: AppLockServiceProtocol {
 
 nonisolated extension LAContext {
     /// A hash of the enrolled biometric data that changes whenever biometrics are added or removed.
-    /// Only available once `canEvaluatePolicy` or `evaluatePolicy` has been called for a biometric policy.
+    /// Unlike `evaluatedPolicyDomainState`, this doesn't need `canEvaluatePolicy` to be called first,
+    /// so the `updateBiometrics()` calls made before reading it are now redundant.
     @objc var biometricStateHash: Data? {
         domainState.biometry.stateHash
     }
