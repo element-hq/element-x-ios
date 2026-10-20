@@ -37,13 +37,13 @@ struct BugReportScreen: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
         .interactiveDismissDisabled()
-        .onChange(of: selectedScreenshot) { _, newItem in
-            Task {
-                guard let data = try? await newItem?.loadTransferable(type: Data.self),
-                      let image = UIImage(data: data)
-                else {
-                    return
-                }
+        .task(id: selectedScreenshot) {
+            guard let selectedScreenshot else { return }
+            let data = try? await selectedScreenshot.loadTransferable(type: Data.self)
+            guard !Task.isCancelled else { return }
+            // Clear the selection so that picking the same item again triggers a new load.
+            self.selectedScreenshot = nil
+            if let data, let image = UIImage(data: data) {
                 context.send(viewAction: .attachScreenshot(image))
             }
         }
@@ -154,7 +154,7 @@ struct BugReportScreen: View {
     }
     
     private func removeScreenshot() {
-        // Otherwise the picker keeps the item checked and re-picking it doesn't trigger onChange.
+        // Cancels any in-flight load so it can't re-attach the screenshot.
         selectedScreenshot = nil
         context.send(viewAction: .removeScreenshot)
     }
