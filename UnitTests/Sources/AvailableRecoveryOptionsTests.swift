@@ -8,19 +8,19 @@
 @testable import ElementX
 import Testing
 
-struct LogoutScenarioTests {
+struct AvailableRecoveryOptionsTests {
     @Test(arguments: [SecureBackupRecoveryState.enabled, .incomplete, .disabled, .unknown, .settingUp])
     func otherVerifiedDeviceWinsRegardlessOfRecovery(recoveryState: SecureBackupRecoveryState) {
-        #expect(LogoutScenario(hasOtherDevice: true, recoveryState: recoveryState) == .hasOtherVerifiedDevice)
+        #expect(AvailableRecoveryOptions(hasOtherDevice: true, recoveryState: recoveryState) == .otherVerifiedDevice)
     }
     
     @Test
     func recoveryKeyOnlyWhenRecoveryIsEnabled() {
-        #expect(LogoutScenario(hasOtherDevice: false, recoveryState: .enabled) == .hasRecoveryKeyOnly)
+        #expect(AvailableRecoveryOptions(hasOtherDevice: false, recoveryState: .enabled) == .recoveryKeyOnly)
     }
     
     @Test(arguments: [SecureBackupRecoveryState.incomplete, .disabled, .unknown, .settingUp])
     func noRecoveryUnlessRecoveryIsEnabled(recoveryState: SecureBackupRecoveryState) {
-        #expect(LogoutScenario(hasOtherDevice: false, recoveryState: recoveryState) == .hasNoRecovery)
+        #expect(AvailableRecoveryOptions(hasOtherDevice: false, recoveryState: recoveryState) == .noOptions)
     }
 }

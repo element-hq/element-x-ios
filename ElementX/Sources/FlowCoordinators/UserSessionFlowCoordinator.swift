@@ -636,15 +636,15 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             return
         }
         
-        switch LogoutScenario(hasOtherDevice: !isLastDevice, recoveryState: secureBackupController.recoveryState.value) {
-        case .hasOtherVerifiedDevice:
+        switch AvailableRecoveryOptions(hasOtherDevice: !isLastDevice, recoveryState: secureBackupController.recoveryState.value) {
+        case .otherVerifiedDevice:
             navigationRootCoordinator.alertInfo = .init(id: .init(),
                                                         title: UntranslatedL10n.screenSignoutOtherVerifiedDeviceDialogTitle,
                                                         message: UntranslatedL10n.screenSignoutOtherVerifiedDeviceDialogContent,
                                                         primaryButton: .init(title: L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) { [weak self] in
                                                             self?.actionsSubject.send(.logout)
                                                         })
-        case .hasRecoveryKeyOnly:
+        case .recoveryKeyOnly:
             guard secureBackupController.keyBackupState.value == .enabled else {
                 navigationRootCoordinator.alertInfo = .init(id: .init(),
                                                             title: L10n.screenSignoutKeyBackupDisabledTitle,
@@ -658,7 +658,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             }
             
             presentSecureBackupLogoutConfirmationScreen(mode: .saveRecoveryKey)
-        case .hasNoRecovery:
+        case .noOptions:
             presentSecureBackupLogoutConfirmationScreen(mode: .noRecovery)
         }
     }
