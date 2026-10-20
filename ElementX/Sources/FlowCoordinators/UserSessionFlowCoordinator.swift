@@ -638,8 +638,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         switch AvailableRecoveryOptions(hasOtherDevice: !isLastDevice, recoveryState: secureBackupController.recoveryState.value) {
         case .otherVerifiedDevice:
             navigationRootCoordinator.alertInfo = .init(id: .init(),
-                                                        title: UntranslatedL10n.screenSignoutOtherVerifiedDeviceDialogTitle,
-                                                        message: UntranslatedL10n.screenSignoutOtherVerifiedDeviceDialogContent,
+                                                        title: L10n.screenSignoutOtherVerifiedDeviceDialogTitle,
+                                                        message: L10n.screenSignoutOtherVerifiedDeviceDialogContent,
                                                         primaryButton: .init(title: L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) { [weak self] in
                                                             self?.actionsSubject.send(.logout)
                                                         })
