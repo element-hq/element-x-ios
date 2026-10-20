@@ -400,8 +400,8 @@ nonisolated struct MediaUploadingPreprocessor {
         
         for index in 0..<count {
             CGImageDestinationAddImageFromSource(destination, imageSource, index, metadataKeysToRemove as NSDictionary)
+            copyGainMap(from: imageSource, at: index, to: destination)
         }
-        copyGainMap(from: imageSource, to: destination)
         
         guard CGImageDestinationFinalize(destination) else {
             throw .failedStrippingLocationData
@@ -414,10 +414,11 @@ nonisolated struct MediaUploadingPreprocessor {
         }
     }
     
-    /// Copies the HDR gain map, which is stored as auxiliary data and isn't copied along with the image.
-    private func copyGainMap(from imageSource: CGImageSource, to destination: CGImageDestination) {
+    /// Copies the HDR gain map of the image at the given index, which is stored as auxiliary data and isn't copied along with the image.
+    /// ImageIO attaches it to the most recently added image, so call this right after adding the image at that index.
+    private func copyGainMap(from imageSource: CGImageSource, at index: Int, to destination: CGImageDestination) {
         for auxiliaryDataType in [kCGImageAuxiliaryDataTypeHDRGainMap, kCGImageAuxiliaryDataTypeISOGainMap] {
-            guard var auxiliaryDataInfo = CGImageSourceCopyAuxiliaryDataInfoAtIndex(imageSource, 0, auxiliaryDataType) as? [CFString: Any] else {
+            guard var auxiliaryDataInfo = CGImageSourceCopyAuxiliaryDataInfoAtIndex(imageSource, index, auxiliaryDataType) as? [CFString: Any] else {
                 continue
             }
             

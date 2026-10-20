@@ -368,6 +368,15 @@ final class MediaUploadingPreprocessorTests {
     }
     
     @Test
+    func multiImageHDRProcessingKeepsGainMapOnItsImage() async throws {
+        let imageSource = try await processedImageSource(at: makeHDRImageWithLocation(imageCount: 3))
+        
+        #expect(CGImageSourceGetCount(imageSource) == 3)
+        #expect(CGImageSourceCopyAuxiliaryDataInfoAtIndex(imageSource, 0, kCGImageAuxiliaryDataTypeHDRGainMap) != nil)
+        #expect(CGImageSourceCopyAuxiliaryDataInfoAtIndex(imageSource, 2, kCGImageAuxiliaryDataTypeHDRGainMap) == nil)
+    }
+    
+    @Test
     func optimisedImageProcessingSkipsStrippingLocation() async throws {
         // A read-only image can't be rewritten in place, so it can only be processed when the strip is skipped.
         let url = try copyResourceToTemporaryDirectory("landscape_test_image.jpg")
@@ -582,8 +591,8 @@ final class MediaUploadingPreprocessorTests {
         return gainMapMetadata as! CGImageMetadata
     }
     
-    /// Generates a HEIC with an HDR gain map and GPS metadata (on both the image and the gain map) in a unique temporary directory.
-    private func makeHDRImageWithLocation() throws -> URL {
+    /// Generates a HEIC with an HDR gain map on its first image and GPS metadata (on both the images and the gain map) in a unique temporary directory.
+    private func makeHDRImageWithLocation(imageCount: Int = 1) throws -> URL {
         let image = CIImage(color: .gray).cropped(to: CGRect(x: 0, y: 0, width: 64, height: 64))
         let gainMap = CIImage(color: .white).cropped(to: CGRect(x: 0, y: 0, width: 32, height: 32))
         let colorSpace = try #require(CGColorSpace(name: CGColorSpace.displayP3))
@@ -599,10 +608,13 @@ final class MediaUploadingPreprocessorTests {
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         let url = directory.appendingPathComponent("hdr_test_image.heic")
         
-        let destination = try #require(CGImageDestinationCreateWithURL(url as NSURL, UTType.heic.identifier as CFString, 1, nil))
+        let destination = try #require(CGImageDestinationCreateWithURL(url as NSURL, UTType.heic.identifier as CFString, imageCount, nil))
         let location = [kCGImagePropertyGPSDictionary: [kCGImagePropertyGPSLatitude: 51.5, kCGImagePropertyGPSLongitude: 0.1]]
         CGImageDestinationAddImageFromSource(destination, hdrSource, 0, location as NSDictionary)
         CGImageDestinationAddAuxiliaryDataInfo(destination, kCGImageAuxiliaryDataTypeHDRGainMap, gainMapInfo as NSDictionary)
+        for _ in 1..<imageCount {
+            CGImageDestinationAddImageFromSource(destination, hdrSource, 0, location as NSDictionary)
+        }
         try #require(CGImageDestinationFinalize(destination))
         
         // Without location data the preprocessor leaves the image untouched.
