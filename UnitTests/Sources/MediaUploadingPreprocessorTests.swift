@@ -441,6 +441,24 @@ final class MediaUploadingPreprocessorTests {
     }
     
     @Test
+    func animatedGIFWithLocationProcessingKeepsAllFrames() async throws {
+        let url = try makeAnimatedGIFWithLocation(loopCount: 3)
+        let originalSource = try #require(CGImageSourceCreateWithURL(url as NSURL, nil))
+        
+        let imageSource = try await processedImageSource(at: url)
+        
+        #expect(CGImageSourceGetCount(imageSource) == CGImageSourceGetCount(originalSource))
+        #expect(gifProperties(of: imageSource)?[kCGImagePropertyGIFLoopCount] as? Int == 3)
+        
+        for index in 0..<CGImageSourceGetCount(imageSource) {
+            let metadata = try #require(CGImageSourceCopyPropertiesAtIndex(imageSource, index, nil) as NSDictionary?)
+            #expect(metadata.value(forKeyPath: "\(kCGImagePropertyGPSDictionary)") == nil)
+            #expect(gifProperties(of: imageSource, at: index)?[kCGImagePropertyGIFDelayTime] as? Double ==
+                gifProperties(of: originalSource, at: index)?[kCGImagePropertyGIFDelayTime] as? Double)
+        }
+    }
+    
+    @Test
     func rotatedImageProcessing() async throws {
         let url = try #require(Bundle(for: Self.self).url(forResource: "test_rotated_image.jpg", withExtension: nil), "Failed retrieving test asset")
         
@@ -594,6 +612,42 @@ final class MediaUploadingPreprocessorTests {
         try #require(CGImageMetadataCopyTagWithPath(gainMapMetadata(from: imageSource), nil, "exif:GPSLatitude" as CFString) != nil)
         
         return url
+    }
+    
+    /// Generates a copy of the animated test GIF with GPS metadata on every frame in a unique temporary directory.
+    private func makeAnimatedGIFWithLocation(loopCount: Int) throws -> URL {
+        let assetURL = try #require(Bundle(for: Self.self).url(forResource: "test_animated_image.gif", withExtension: nil))
+        let gifSource = try #require(CGImageSourceCreateWithURL(assetURL as NSURL, nil))
+        let frameCount = CGImageSourceGetCount(gifSource)
+        try #require(frameCount > 1)
+        
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("\(Self.self)-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        let url = directory.appendingPathComponent("gif_test_image.gif")
+        
+        let destination = try #require(CGImageDestinationCreateWithURL(url as NSURL, UTType.gif.identifier as CFString, frameCount, nil))
+        CGImageDestinationSetProperties(destination, [kCGImagePropertyGIFDictionary: [kCGImagePropertyGIFLoopCount: loopCount]] as NSDictionary)
+        let location = [kCGImagePropertyGPSDictionary: [kCGImagePropertyGPSLatitude: 51.5, kCGImagePropertyGPSLongitude: 0.1]]
+        for index in 0..<frameCount {
+            CGImageDestinationAddImageFromSource(destination, gifSource, index, location as NSDictionary)
+        }
+        try #require(CGImageDestinationFinalize(destination))
+        
+        // Without location data the preprocessor leaves the image untouched.
+        let metadata = try metadata(from: Data(contentsOf: url))
+        try #require(metadata.value(forKeyPath: "\(kCGImagePropertyGPSDictionary)") != nil)
+        
+        return url
+    }
+    
+    /// The GIF properties of the whole image, or of the frame at the given index.
+    private func gifProperties(of imageSource: CGImageSource, at index: Int? = nil) -> [CFString: Any]? {
+        let properties = if let index {
+            CGImageSourceCopyPropertiesAtIndex(imageSource, index, nil)
+        } else {
+            CGImageSourceCopyProperties(imageSource, nil)
+        }
+        return (properties as? [CFString: Any])?[kCGImagePropertyGIFDictionary] as? [CFString: Any]
     }
     
     /// The unique folders created by the preprocessor for the given file that still exist.

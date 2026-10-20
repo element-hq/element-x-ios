@@ -363,7 +363,7 @@ nonisolated struct MediaUploadingPreprocessor {
     
     // MARK: Image Helpers
     
-    /// Removes the GPS dictionary from an image's metadata
+    /// Removes the GPS dictionary from the metadata of every frame in an image
     /// - Parameters:
     ///   - url: the URL for the original image
     ///   - type: its UTType
@@ -393,7 +393,14 @@ nonisolated struct MediaUploadingPreprocessor {
             throw .failedStrippingLocationData
         }
         
-        CGImageDestinationAddImageFromSource(destination, imageSource, 0, metadataKeysToRemove as NSDictionary)
+        // The container properties hold an animation's loop count.
+        if let properties = CGImageSourceCopyProperties(imageSource, nil) {
+            CGImageDestinationSetProperties(destination, properties)
+        }
+        
+        for index in 0..<count {
+            CGImageDestinationAddImageFromSource(destination, imageSource, index, metadataKeysToRemove as NSDictionary)
+        }
         copyGainMap(from: imageSource, to: destination)
         
         guard CGImageDestinationFinalize(destination) else {
