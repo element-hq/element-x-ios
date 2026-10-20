@@ -8061,14 +8061,14 @@ nonisolated class LinkNewDeviceServiceMock: LinkNewDeviceServiceProtocol, @unche
     }
 
     private let linkMobileDeviceReturnValueLock = NSLock()
-    private nonisolated(unsafe) var linkMobileDeviceUnderlyingReturnValue: LinkNewDeviceService.LinkMobileProgressPublisher!
-    var linkMobileDeviceReturnValue: LinkNewDeviceService.LinkMobileProgressPublisher! {
+    private nonisolated(unsafe) var linkMobileDeviceUnderlyingReturnValue: LinkNewDeviceService.LinkMobileOperation!
+    var linkMobileDeviceReturnValue: LinkNewDeviceService.LinkMobileOperation! {
         get { linkMobileDeviceReturnValueLock.withLock { linkMobileDeviceUnderlyingReturnValue } }
         set { linkMobileDeviceReturnValueLock.withLock { linkMobileDeviceUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var linkMobileDeviceClosure: (() -> LinkNewDeviceService.LinkMobileProgressPublisher)?
+    nonisolated(unsafe) var linkMobileDeviceClosure: (() -> LinkNewDeviceService.LinkMobileOperation)?
 
-    func linkMobileDevice() -> LinkNewDeviceService.LinkMobileProgressPublisher {
+    func linkMobileDevice() -> LinkNewDeviceService.LinkMobileOperation {
         linkMobileDeviceCallsCountLock.withLock { linkMobileDeviceUnderlyingCallsCount += 1 }
         if let linkMobileDeviceClosure = linkMobileDeviceClosure {
             return linkMobileDeviceClosure()
@@ -8101,14 +8101,14 @@ nonisolated class LinkNewDeviceServiceMock: LinkNewDeviceServiceProtocol, @unche
     }
 
     private let linkDesktopDeviceWithReturnValueLock = NSLock()
-    private nonisolated(unsafe) var linkDesktopDeviceWithUnderlyingReturnValue: LinkNewDeviceService.LinkDesktopProgressPublisher!
-    var linkDesktopDeviceWithReturnValue: LinkNewDeviceService.LinkDesktopProgressPublisher! {
+    private nonisolated(unsafe) var linkDesktopDeviceWithUnderlyingReturnValue: LinkNewDeviceService.LinkDesktopOperation!
+    var linkDesktopDeviceWithReturnValue: LinkNewDeviceService.LinkDesktopOperation! {
         get { linkDesktopDeviceWithReturnValueLock.withLock { linkDesktopDeviceWithUnderlyingReturnValue } }
         set { linkDesktopDeviceWithReturnValueLock.withLock { linkDesktopDeviceWithUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var linkDesktopDeviceWithClosure: ((Data) -> LinkNewDeviceService.LinkDesktopProgressPublisher)?
+    nonisolated(unsafe) var linkDesktopDeviceWithClosure: ((Data) -> LinkNewDeviceService.LinkDesktopOperation)?
 
-    func linkDesktopDevice(with scannedQRData: Data) -> LinkNewDeviceService.LinkDesktopProgressPublisher {
+    func linkDesktopDevice(with scannedQRData: Data) -> LinkNewDeviceService.LinkDesktopOperation {
         linkDesktopDeviceWithCallsCountLock.withLock { linkDesktopDeviceWithUnderlyingCallsCount += 1 }
         linkDesktopDeviceWithReceivedScannedQRData = scannedQRData
         linkDesktopDeviceWithReceivedInvocationsLock.withLock { linkDesktopDeviceWithUnderlyingReceivedInvocations.append(scannedQRData) }
@@ -10380,14 +10380,14 @@ nonisolated class QRCodeLoginServiceMock: QRCodeLoginServiceProtocol, @unchecked
     }
 
     private let loginWithQRCodeDataReturnValueLock = NSLock()
-    private nonisolated(unsafe) var loginWithQRCodeDataUnderlyingReturnValue: QRLoginProgressPublisher!
-    var loginWithQRCodeDataReturnValue: QRLoginProgressPublisher! {
+    private nonisolated(unsafe) var loginWithQRCodeDataUnderlyingReturnValue: QRLoginOperation!
+    var loginWithQRCodeDataReturnValue: QRLoginOperation! {
         get { loginWithQRCodeDataReturnValueLock.withLock { loginWithQRCodeDataUnderlyingReturnValue } }
         set { loginWithQRCodeDataReturnValueLock.withLock { loginWithQRCodeDataUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var loginWithQRCodeDataClosure: ((Data) -> QRLoginProgressPublisher)?
+    nonisolated(unsafe) var loginWithQRCodeDataClosure: ((Data) -> QRLoginOperation)?
 
-    func loginWithQRCode(data: Data) -> QRLoginProgressPublisher {
+    func loginWithQRCode(data: Data) -> QRLoginOperation {
         loginWithQRCodeDataCallsCountLock.withLock { loginWithQRCodeDataUnderlyingCallsCount += 1 }
         loginWithQRCodeDataReceivedData = data
         loginWithQRCodeDataReceivedInvocationsLock.withLock { loginWithQRCodeDataUnderlyingReceivedInvocations.append(data) }

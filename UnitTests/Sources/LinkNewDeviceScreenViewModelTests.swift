@@ -48,7 +48,7 @@ class LinkNewDeviceScreenViewModelTests {
     func linkingMobileDeviceVerifiesThenGeneratesQRCode() async throws {
         // Given a ready screen whose QR code isn't immediately available.
         let progressSubject = CurrentValueSubject<LinkNewDeviceService.LinkMobileProgress, QRCodeLoginError>(.starting)
-        setupViewModel(linkMobileProgressPublisher: progressSubject.asCurrentValuePublisher(),
+        setupViewModel(linkMobileOperation: .init(progressPublisher: progressSubject.asCurrentValuePublisher()),
                        mode: .loading)
         
         // When linking a mobile device.
@@ -94,7 +94,7 @@ class LinkNewDeviceScreenViewModelTests {
     func linkingWithoutDevicePasscodeOrAppLockPIN() async throws {
         // Given a device with neither a passcode nor an App Lock PIN set (device owner verification is unavailable).
         let progressSubject = CurrentValueSubject<LinkNewDeviceService.LinkMobileProgress, QRCodeLoginError>(.starting)
-        setupViewModel(linkMobileProgressPublisher: progressSubject.asCurrentValuePublisher(),
+        setupViewModel(linkMobileOperation: .init(progressPublisher: progressSubject.asCurrentValuePublisher()),
                        deviceOwnerResult: .unavailable,
                        mode: .loading)
         
@@ -140,7 +140,7 @@ class LinkNewDeviceScreenViewModelTests {
     func appLockPINVerifiedContinuesLinking() async throws {
         // Given a device that requires App Lock PIN verification.
         let progressSubject = CurrentValueSubject<LinkNewDeviceService.LinkMobileProgress, QRCodeLoginError>(.starting)
-        setupViewModel(linkMobileProgressPublisher: progressSubject.asCurrentValuePublisher(),
+        setupViewModel(linkMobileOperation: .init(progressPublisher: progressSubject.asCurrentValuePublisher()),
                        deviceOwnerResult: .appLockPINRequired,
                        mode: .loading)
         
@@ -254,13 +254,13 @@ class LinkNewDeviceScreenViewModelTests {
     // MARK: - Helpers
     
     private func setupViewModel(isLoginWithQRCodeSupported: Bool = true,
-                                linkMobileProgressPublisher: LinkNewDeviceService.LinkMobileProgressPublisher = .init(.qrReady(LinkNewDeviceServiceMock.mockQRCodeImage)),
+                                linkMobileOperation: LinkNewDeviceService.LinkMobileOperation = .init(progressPublisher: .init(.qrReady(LinkNewDeviceServiceMock.mockQRCodeImage))),
                                 deviceOwnerResult: AppLockDeviceOwnerResult = .verified,
                                 mode: LinkNewDeviceScreenViewState.Mode? = nil) {
         let clientProxy = ClientProxyMock(.init())
         clientProxy.underlyingIsLoginWithQRCodeSupported = isLoginWithQRCodeSupported
         
-        linkNewDeviceService = LinkNewDeviceServiceMock(.init(linkMobileProgressPublisher: linkMobileProgressPublisher))
+        linkNewDeviceService = LinkNewDeviceServiceMock(.init(linkMobileOperation: linkMobileOperation))
         clientProxy.linkNewDeviceServiceReturnValue = linkNewDeviceService
         
         appLockService = AppLockServiceMock.mock()

@@ -24,7 +24,7 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
         actionsSubject.eraseToAnyPublisher()
     }
     
-    private var currentTask: AnyCancellable?
+    private var currentOperation: CurrentOperation?
     private var oAuthResultTask: AnyCancellable?
     private var expirationTask: AnyCancellable?
     
@@ -38,8 +38,8 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
         let initialViewState: QRCodeLoginState = switch mode {
         case .login: .loginInstructions
         case .linkDesktop: .linkDesktopInstructions
-        case .linkMobile(let progressPublisher):
-            switch progressPublisher.value {
+        case .linkMobile(let operation):
+            switch operation.progressPublisher.value {
             case .qrReady(let image): .displayQR(image)
             default: .error(.unknown)
             }
@@ -51,8 +51,8 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
         switch mode {
         case .linkDesktop:
             scheduleLinkDesktopExpiration()
-        case .linkMobile(let progressPublisher):
-            listenToDisplayQRProgress(progressPublisher: progressPublisher)
+        case .linkMobile(let operation):
+            listenToDisplayQRProgress(operation: operation)
         case .login:
             break
         }
@@ -62,7 +62,10 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
     
     override func process(viewAction: QRCodeLoginScreenViewAction) {
         switch viewAction {
-        case .cancel, .errorAction(.cancel):
+        case .cancel:
+            currentOperation?.closeRendezvousChannel()
+            actionsSubject.send(.cancel)
+        case .errorAction(.cancel):
             actionsSubject.send(.cancel)
         case .startScan:
             Task { await startScanIfPossible() }
@@ -116,19 +119,19 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
     }
     
     private func handleScan(qrData: Data, loginService: QRCodeLoginServiceProtocol) {
-        guard currentTask == nil else { return }
+        guard currentOperation == nil else { return }
         
         state.state = .scan(.connecting)
         
         MXLog.info("Login scanning QR code")
-        let progressPublisher = loginService.loginWithQRCode(data: qrData)
+        let operation = loginService.loginWithQRCode(data: qrData)
         
-        currentTask = progressPublisher
+        let progressCancellable = operation.progressPublisher
             .removeDuplicates()
             .receive(on: DispatchQueue.main)
             .sink { [weak self] completion in
                 guard let self else { return }
-                currentTask = nil
+                currentOperation = nil
                 
                 switch completion {
                 case .finished: break
@@ -160,22 +163,24 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
                     actionsSubject.send(.signedIn(userSession: session))
                 }
             }
+        
+        currentOperation = .init(progressCancellable: progressCancellable, closeRendezvousChannelAction: operation.closeRendezvousChannel)
     }
     
     private func handleScan(qrData: Data, linkService: LinkNewDeviceServiceProtocol) {
-        guard currentTask == nil else { return }
+        guard currentOperation == nil else { return }
         
         state.state = .scan(.connecting)
         
         MXLog.info("Link scanning QR code")
-        let progressPublisher = linkService.linkDesktopDevice(with: qrData)
+        let operation = linkService.linkDesktopDevice(with: qrData)
         
-        currentTask = progressPublisher
+        let progressCancellable = operation.progressPublisher
             .removeDuplicates()
             .receive(on: DispatchQueue.main)
             .sink { [weak self] completion in
                 guard let self else { return }
-                currentTask = nil
+                currentOperation = nil
                 
                 if case .failure(let error) = completion {
                     handleError(error)
@@ -204,19 +209,21 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
                     actionsSubject.send(.linkedDevice)
                 }
             }
+        
+        currentOperation = .init(progressCancellable: progressCancellable, closeRendezvousChannelAction: operation.closeRendezvousChannel)
     }
     
-    private func listenToDisplayQRProgress(progressPublisher: LinkNewDeviceService.LinkMobileProgressPublisher) {
+    private func listenToDisplayQRProgress(operation: LinkNewDeviceService.LinkMobileOperation) {
         state.bindings.qrResult = nil
         
         MXLog.info("Link showing QR code.")
         
-        currentTask = progressPublisher
+        let progressCancellable = operation.progressPublisher
             .removeDuplicates()
             .receive(on: DispatchQueue.main)
             .sink { [weak self] completion in
                 guard let self else { return }
-                currentTask = nil
+                currentOperation = nil
                 
                 if case .failure(let error) = completion {
                     handleError(error)
@@ -244,9 +251,11 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
                     actionsSubject.send(.linkedDevice)
                 }
             }
+        
+        currentOperation = .init(progressCancellable: progressCancellable, closeRendezvousChannelAction: operation.closeRendezvousChannel)
     }
     
-    /// Starts the timeout for scanning a desktop's QR code. The flow will expire (cancelling the scan)
+    /// Starts the timeout for scanning a desktop's QR code. The flow will expire (closing the rendezvous channel)
     /// if the secure channel isn't established within the timeout period.
     private func scheduleLinkDesktopExpiration() {
         guard case .linkDesktop = state.mode else { fatalError("Expiration requested on an unexpected flow") }
@@ -262,12 +271,13 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
     private func handleExpiration() {
         // Don't override an error that's already being shown.
         if case .error = state.state {
-            currentTask = nil // Cancel the scan (just in case).
+            currentOperation = nil // Stop listening for updates (just in case).
             return
         }
         
         MXLog.info("Timed out establishing a secure channel, expiring.")
-        currentTask = nil // Cancel the scan.
+        currentOperation?.closeRendezvousChannel()
+        currentOperation = nil // Stop listening for updates.
         handleError(.expired)
     }
     
@@ -353,6 +363,21 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
                                            mode: mode,
                                            canSignInManually: canSignInManually,
                                            bindings: .init(checkCodeInput: checkCodeInput)))
+    }
+}
+
+/// The screen's currently running operation. This includes a subscription to its progress and a way to close
+/// its rendezvous channel early. Releasing it only stops listening to the progress. The rendezvous channel
+/// can be closed mid-operation by calling ``closeRendezvousChannel()``.
+private struct CurrentOperation {
+    let progressCancellable: AnyCancellable
+    let closeRendezvousChannelAction: () -> Void
+    
+    /// Closes the operation's rendezvous channel and stops listening to its progress.
+    func closeRendezvousChannel() {
+        // Must come first so the resulting `.cancelled` failure isn't handled.
+        progressCancellable.cancel()
+        closeRendezvousChannelAction()
     }
 }
 

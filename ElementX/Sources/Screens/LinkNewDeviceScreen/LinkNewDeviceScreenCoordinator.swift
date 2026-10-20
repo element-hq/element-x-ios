@@ -9,7 +9,7 @@ import Combine
 import SwiftUI
 
 enum LinkNewDeviceScreenCoordinatorAction {
-    case linkMobileDevice(LinkNewDeviceService.LinkMobileProgressPublisher)
+    case linkMobileDevice(LinkNewDeviceService.LinkMobileOperation)
     case linkDesktopComputer
     case verifyWithAppLockPIN(CheckedContinuation<Bool, Never>)
     case dismiss
@@ -44,8 +44,8 @@ final class LinkNewDeviceScreenCoordinator: CoordinatorProtocol {
             
             guard let self else { return }
             switch action {
-            case .linkMobileDevice(let progressPublisher):
-                actionsSubject.send(.linkMobileDevice(progressPublisher))
+            case .linkMobileDevice(let operation):
+                actionsSubject.send(.linkMobileDevice(operation))
             case .linkDesktopComputer:
                 actionsSubject.send(.linkDesktopComputer)
             case .verifyWithAppLockPIN(let continuation):
