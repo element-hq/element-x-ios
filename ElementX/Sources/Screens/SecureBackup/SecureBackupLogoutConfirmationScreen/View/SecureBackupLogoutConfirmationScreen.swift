@@ -13,61 +13,64 @@ import SwiftUI
 struct SecureBackupLogoutConfirmationScreen: View {
     @Bindable var context: SecureBackupLogoutConfirmationScreenViewModel.Context
     
+    @State private var navigationBarHeight: CGFloat = .zero
     @State private var contentHeight: CGFloat = .zero
     @State private var buttonsHeight: CGFloat = .zero
+    
+    private let topPadding = UIConstants.titleTopPaddingToNavigationBar
+    private let spacing = 16.0
     
     private var mode: SecureBackupLogoutConfirmationScreenViewMode {
         context.viewState.mode
     }
     
+    /// The height of the sheet when it is only as tall as its content, which is how the question is shown.
+    private var fittedSheetHeight: CGFloat {
+        navigationBarHeight + topPadding + contentHeight + spacing + buttonsHeight + UIConstants.actionButtonBottomPadding
+    }
+    
     var body: some View {
-        // The container stays the same when moving from the question to the progress, as replacing the root
-        // of the screen makes the navigation stack lay it out differently on iPad.
-        ZStack {
+        FullscreenDialog(topPadding: topPadding, spacing: spacing) {
             if mode.isInitial {
-                initialBody
+                initialContent
             } else {
-                progressBody
+                progressContent
+            }
+        } bottomContent: {
+            if mode.isInitial {
+                initialButtons
+            } else {
+                progressButtons
             }
         }
         .toolbar { toolbar }
         .background()
         .backgroundStyle(.compound.bgCanvasDefault)
+        .onGeometryChange(for: CGFloat.self) { $0.safeAreaInsets.top } action: { navigationBarHeight = $0 }
+        .presentationDetents(mode.isInitial ? [.height(fittedSheetHeight)] : [.large])
         .alert(item: $context.alertInfo)
     }
     
     // MARK: - Initial
     
-    /// The question shown first, in a sheet that is as tall as its content.
-    private var initialBody: some View {
-        ScrollView {
-            initialHeader
-                .padding(.horizontal, 24)
-                .padding(.vertical, 16)
-                .readHeight($contentHeight)
+    private var initialContent: some View {
+        Group {
+            switch mode {
+            case .noRecovery:
+                TitleAndIcon(title: L10n.screenSignoutRecoveryDisabledTitle,
+                             subtitle: L10n.screenSignoutRecoveryDisabledSubtitle,
+                             icon: \.errorSolid,
+                             iconStyle: .alertSolid,
+                             button: .init(title: L10n.actionLearnMore) { UIApplication.shared.open(context.viewState.learnMoreURL) })
+            default:
+                TitleAndIcon(title: L10n.screenSignoutSaveRecoveryKeyTitle,
+                             subtitle: L10n.screenSignoutSaveRecoveryKeySubtitle,
+                             icon: \.info,
+                             iconStyle: .defaultSolid)
+            }
         }
-        .backportSafeAreaBar(edge: .bottom, spacing: 0) {
-            initialButtons
-                .readHeight($buttonsHeight)
-        }
-        .scrollBounceBehavior(.basedOnSize)
-        .presentationDetents([.height(contentHeight + buttonsHeight + Self.navigationBarHeight)])
-    }
-    
-    private var initialHeader: some View {
-        switch mode {
-        case .noRecovery:
-            TitleAndIcon(title: L10n.screenSignoutRecoveryDisabledTitle,
-                         subtitle: L10n.screenSignoutRecoveryDisabledSubtitle,
-                         icon: \.errorSolid,
-                         iconStyle: .alertSolid,
-                         button: .init(title: L10n.actionLearnMore) { UIApplication.shared.open(context.viewState.learnMoreURL) })
-        default:
-            TitleAndIcon(title: L10n.screenSignoutSaveRecoveryKeyTitle,
-                         subtitle: L10n.screenSignoutSaveRecoveryKeySubtitle,
-                         icon: \.info,
-                         iconStyle: .defaultSolid)
-        }
+        .padding(.horizontal, 8)
+        .readHeight($contentHeight)
     }
     
     private var initialButtons: some View {
@@ -85,28 +88,22 @@ struct SecureBackupLogoutConfirmationScreen: View {
                 .buttonStyle(.compound(.primary))
             }
         }
-        .padding(.horizontal, 16)
-        .padding(.top, 16)
-        .padding(.bottom, 8)
+        .readHeight($buttonsHeight)
     }
     
     // MARK: - Progress
     
-    /// The screen shown while waiting for the keys to be backed up before removing the device.
-    private var progressBody: some View {
-        FullscreenDialog {
-            VStack(spacing: 16) {
-                BigIcon(icon: \.keyOffSolid)
-                progressContent
-            }
-            .padding()
-        } bottomContent: {
-            progressFooter.padding()
+    /// What is shown while waiting for the keys to be backed up before removing the device.
+    private var progressContent: some View {
+        VStack(spacing: 16) {
+            BigIcon(icon: \.keyOffSolid)
+            progressDetails
         }
+        .padding()
     }
     
     @ViewBuilder
-    private var progressContent: some View {
+    private var progressDetails: some View {
         Text(progressTitle)
             .foregroundColor(.compound.textPrimary)
             .font(.compound.headingMDBold)
@@ -132,7 +129,7 @@ struct SecureBackupLogoutConfirmationScreen: View {
         }
     }
     
-    private var progressFooter: some View {
+    private var progressButtons: some View {
         VStack(spacing: 16.0) {
             Button(role: .destructive) {
                 context.send(viewAction: .logout)
@@ -141,6 +138,7 @@ struct SecureBackupLogoutConfirmationScreen: View {
             }
             .buttonStyle(.compound(.primary))
         }
+        .padding()
     }
     
     private var progressTitle: String {
@@ -173,9 +171,6 @@ struct SecureBackupLogoutConfirmationScreen: View {
             }
         }
     }
-    
-    /// The height of the navigation bar the sheet's content is shown below.
-    private static let navigationBarHeight = 56.0
 }
 
 // MARK: - Previews
