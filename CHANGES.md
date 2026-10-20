@@ -1,3 +1,37 @@
+## Changes in 26.10.5 (2026-10-20)
+
+### What's Changed
+
+🙌 Improvements
+* Remove the redundant biometric refresh calls from AppLockService by @Velin92 in https://github.com/element-hq/element-x-ios/pull/6364
+* Add an eye button to show the recovery key while entering it by @Velin92 in https://github.com/element-hq/element-x-ios/pull/6365
+
+🐛 Bugfixes
+* Start the SAS verification when the other device accepts our request by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/6344
+* Stop live location shares on time when the phone stays still, and keep them through brief GPS gaps by @Velin92 in https://github.com/element-hq/element-x-ios/pull/6368
+* Open the sign-up page when creating an account by @Velin92 in https://github.com/element-hq/element-x-ios/pull/6374
+* Add support for QR code task cancellation. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/6373
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/6361
+
+🧱 Build
+* Fix the space exploration UI test on iPad by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/6352
+
+🚧 In development 🚧
+* Search translations and results formatting by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/6363
+* Share live location per account by @Velin92 in https://github.com/element-hq/element-x-ios/pull/6346
+* Finish splitting the App/User hooks. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/6348
+
+Others
+* Adopt latest SwiftFormat rules by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/6362
+* Replace the deprecated biometric domain state in AppLockService by @Velin92 in https://github.com/element-hq/element-x-ios/pull/6243
+* Bump the RustSDK to v26.10.19 by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/6369
+* Bump the RustSDK to v26.10.20 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/6375
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/26.10.4...release/26.10.5
+
 ## Changes in 26.10.4 (2026-10-16)
 
 ### What's Changed
