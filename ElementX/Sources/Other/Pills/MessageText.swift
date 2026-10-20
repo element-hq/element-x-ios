@@ -70,6 +70,22 @@ private final nonisolated class TransparentTextAttachment: NSTextAttachment {
     }
 }
 
+/// Stops TextKit from hyphenating code when a word doesn't fit on a line, wrapping it by
+/// character instead. Code is meant to be verbatim, so an inserted hyphen would corrupt it.
+final nonisolated class CodeHyphenationLayoutManagerDelegate: NSObject, NSLayoutManagerDelegate, Sendable {
+    static let shared = CodeHyphenationLayoutManagerDelegate()
+    
+    func layoutManager(_ layoutManager: NSLayoutManager, shouldBreakLineByHyphenatingBeforeCharacterAt charIndex: Int) -> Bool {
+        guard let textStorage = layoutManager.textStorage, charIndex < textStorage.length else {
+            return true
+        }
+        
+        let isCode = textStorage.attribute(.InlineCode, at: charIndex, effectiveRange: nil) != nil
+            || textStorage.attribute(.CodeBlock, at: charIndex, effectiveRange: nil) != nil
+        return !isCode
+    }
+}
+
 struct MessageText: UIViewRepresentable {
     @Environment(\.openURL) private var openURLAction
     @Environment(\.timelineContext) private var viewModel
@@ -194,6 +210,8 @@ struct MessageText: UIViewRepresentable {
         textView.textContainerInset = .zero
         textView.textContainer.lineFragmentPadding = 0
         textView.layoutManager.usesFontLeading = false
+        // A shared instance as the layout manager only keeps a weak reference to its delegate.
+        textView.layoutManager.delegate = CodeHyphenationLayoutManagerDelegate.shared
         textView.backgroundColor = .clear
         if let attributedText = makeAttributedText() {
             textView.attributedText = attributedText
