@@ -377,6 +377,17 @@ final class MediaUploadingPreprocessorTests {
     }
     
     @Test
+    func multiImageProcessingStripsLocationFoundOnlyOnLaterImage() async throws {
+        let imageSource = try await processedImageSource(at: makeImageWithLocationOnSecondImage())
+        
+        #expect(CGImageSourceGetCount(imageSource) == 2)
+        for index in 0..<CGImageSourceGetCount(imageSource) {
+            let metadata = try #require(CGImageSourceCopyPropertiesAtIndex(imageSource, index, nil) as NSDictionary?)
+            #expect(metadata.value(forKeyPath: "\(kCGImagePropertyGPSDictionary)") == nil)
+        }
+    }
+    
+    @Test
     func spatialImageProcessingKeepsStereoPair() async throws {
         let imageSource = try await processedImageSource(at: makeSpatialImageWithLocation())
         
@@ -669,6 +680,29 @@ final class MediaUploadingPreprocessorTests {
         let metadata = try #require(CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) as NSDictionary?)
         try #require(metadata.value(forKeyPath: "\(kCGImagePropertyGPSDictionary)") != nil)
         try #require(CGImageMetadataCopyTagWithPath(gainMapMetadata(from: imageSource), nil, "exif:GPSLatitude" as CFString) != nil)
+        
+        return url
+    }
+    
+    /// Generates a two image HEIC with GPS metadata on its second image only in a unique temporary directory.
+    private func makeImageWithLocationOnSecondImage() throws -> URL {
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("\(Self.self)-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        let url = directory.appendingPathComponent("second_image_location_test_image.heic")
+        
+        let extent = CGRect(x: 0, y: 0, width: 64, height: 64)
+        let image = try #require(CIContext().createCGImage(CIImage(color: .gray).cropped(to: extent), from: extent))
+        let destination = try #require(CGImageDestinationCreateWithURL(url as NSURL, UTType.heic.identifier as CFString, 2, nil))
+        CGImageDestinationAddImage(destination, image, nil)
+        let location = [kCGImagePropertyGPSDictionary: [kCGImagePropertyGPSLatitude: 51.5, kCGImagePropertyGPSLongitude: 0.1]]
+        CGImageDestinationAddImage(destination, image, location as NSDictionary)
+        try #require(CGImageDestinationFinalize(destination))
+        
+        let imageSource = try #require(CGImageSourceCreateWithURL(url as NSURL, nil))
+        let firstMetadata = try #require(CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) as NSDictionary?)
+        let secondMetadata = try #require(CGImageSourceCopyPropertiesAtIndex(imageSource, 1, nil) as NSDictionary?)
+        try #require(firstMetadata.value(forKeyPath: "\(kCGImagePropertyGPSDictionary)") == nil)
+        try #require(secondMetadata.value(forKeyPath: "\(kCGImagePropertyGPSDictionary)") != nil)
         
         return url
     }
