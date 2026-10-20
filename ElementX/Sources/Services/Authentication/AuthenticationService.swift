@@ -116,10 +116,10 @@ class AuthenticationService: AuthenticationServiceProtocol {
     func urlForOAuthLogin(loginHint: String?) async -> Result<OAuthAuthorizationDataProxy, AuthenticationServiceError> {
         guard let client else { return .failure(.oAuthError(.urlFailure)) }
         do {
-            // The create prompt is broken: https://github.com/element-hq/matrix-authentication-service/issues/3429
-            // let prompt: OAuthPrompt = flow == .register ? .create : .consent
+            let supportsCreatePrompt = homeserverSubject.value.loginMode == .oAuth(supportsCreatePrompt: true)
+            let prompt: OAuthPrompt = flow == .register && supportsCreatePrompt ? .create : .consent
             let oAuthData = try await client.urlForOauth(oauthConfiguration: appSettings.oAuthConfiguration.rustValue,
-                                                         prompt: .consent,
+                                                         prompt: prompt,
                                                          loginHint: loginHint,
                                                          deviceId: nil,
                                                          additionalScopes: nil)
