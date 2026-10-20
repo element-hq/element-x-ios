@@ -8,6 +8,7 @@
 
 @testable import ElementX
 import Foundation
+import MatrixRustSDK
 import MatrixRustSDKMocks
 import Testing
 
@@ -75,6 +76,18 @@ struct AuthenticationServiceTests {
         #expect(service.flow == .login)
         #expect(service.homeserver.value == .init(accountProvider: .managed(serverName: "matrix.org", baseURL: "https://matrix-client.matrix.org"),
                                                   loginMode: .unknown))
+    }
+    
+    @Test(arguments: [("matrix.org", AuthenticationFlow.login, OAuthPrompt.consent),
+                      ("matrix.org", .register, .create),
+                      ("company.com", .register, .consent)])
+    mutating func oAuthPrompt(serverName: String, flow: AuthenticationFlow, expectedPrompt: OAuthPrompt) async throws {
+        try await setup(serverNameOrBaseURL: serverName)
+        try await service.configure(for: serverName, flow: flow).get()
+        
+        _ = try await service.urlForOAuthLogin(loginHint: nil).get()
+        
+        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedArguments?.prompt == expectedPrompt)
     }
     
     @Test
