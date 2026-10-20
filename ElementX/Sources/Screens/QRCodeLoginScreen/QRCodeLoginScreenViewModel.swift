@@ -271,13 +271,13 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
     private func handleExpiration() {
         // Don't override an error that's already being shown.
         if case .error = state.state {
-            currentOperation = nil // Cancel the scan (just in case).
+            currentOperation = nil // Stop listening for updates (just in case).
             return
         }
         
         MXLog.info("Timed out establishing a secure channel, expiring.")
         currentOperation?.cancel() // Cancel the rust task.
-        currentOperation = nil // Cancel the scan.
+        currentOperation = nil // Stop listening for updates.
         handleError(.expired)
     }
     
