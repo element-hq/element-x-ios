@@ -129,8 +129,8 @@ protocol QRCodeLoginServiceProtocol {
     func loginWithQRCode(data: Data) -> QRLoginOperation
 }
 
-/// An ongoing QR code login or link operation that publishes its progress and can be cancelled.
-final class QRCodeOperation<Progress, Failure: Error>: Cancellable {
+/// An ongoing QR code login or link operation that publishes its progress with to ability to close the rendezvous channel early.
+final class QRCodeOperation<Progress, Failure: Error> {
     let progressPublisher: CurrentValuePublisher<Progress, Failure>
     private let task: Task<Void, Never>?
     
@@ -139,8 +139,8 @@ final class QRCodeOperation<Progress, Failure: Error>: Cancellable {
         self.task = task
     }
     
-    /// Cancels the operation. The publisher will then fail with its cancelled error.
-    func cancel() {
+    /// Closes the operation's rendezvous channel. The publisher will then fail with its cancelled error.
+    func closeRendezvousChannel() {
         task?.cancel()
     }
 }

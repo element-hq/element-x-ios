@@ -63,7 +63,7 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
     override func process(viewAction: QRCodeLoginScreenViewAction) {
         switch viewAction {
         case .cancel:
-            currentOperation?.cancel() // Cancel the Rust task.
+            currentOperation?.closeRendezvousChannel()
             actionsSubject.send(.cancel)
         case .errorAction(.cancel):
             actionsSubject.send(.cancel)
@@ -164,7 +164,7 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
                 }
             }
         
-        currentOperation = .init(progressCancellable: progressCancellable, taskCancellable: operation)
+        currentOperation = .init(progressCancellable: progressCancellable, closeRendezvousChannelAction: operation.closeRendezvousChannel)
     }
     
     private func handleScan(qrData: Data, linkService: LinkNewDeviceServiceProtocol) {
@@ -210,7 +210,7 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
                 }
             }
         
-        currentOperation = .init(progressCancellable: progressCancellable, taskCancellable: operation)
+        currentOperation = .init(progressCancellable: progressCancellable, closeRendezvousChannelAction: operation.closeRendezvousChannel)
     }
     
     private func listenToDisplayQRProgress(operation: LinkNewDeviceService.LinkMobileOperation) {
@@ -252,10 +252,10 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
                 }
             }
         
-        currentOperation = .init(progressCancellable: progressCancellable, taskCancellable: operation)
+        currentOperation = .init(progressCancellable: progressCancellable, closeRendezvousChannelAction: operation.closeRendezvousChannel)
     }
     
-    /// Starts the timeout for scanning a desktop's QR code. The flow will expire (cancelling the scan)
+    /// Starts the timeout for scanning a desktop's QR code. The flow will expire (closing the rendezvous channel)
     /// if the secure channel isn't established within the timeout period.
     private func scheduleLinkDesktopExpiration() {
         guard case .linkDesktop = state.mode else { fatalError("Expiration requested on an unexpected flow") }
@@ -276,7 +276,7 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
         }
         
         MXLog.info("Timed out establishing a secure channel, expiring.")
-        currentOperation?.cancel() // Cancel the rust task.
+        currentOperation?.closeRendezvousChannel()
         currentOperation = nil // Stop listening for updates.
         handleError(.expired)
     }
@@ -366,17 +366,18 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
     }
 }
 
-/// The screen's currently running operation. This includes a subscription to its progress and the underlying SDK task.
-/// Releasing it only stops listening to the progress. The SDK task can be cancelled mid-operation by calling ``cancel()``.
+/// The screen's currently running operation. This includes a subscription to its progress and a way to close
+/// its rendezvous channel early. Releasing it only stops listening to the progress. The rendezvous channel
+/// can be closed mid-operation by calling ``closeRendezvousChannel()``.
 private struct CurrentOperation {
     let progressCancellable: AnyCancellable
-    let taskCancellable: Cancellable
+    let closeRendezvousChannelAction: () -> Void
     
-    /// Cancels the underlying SDK task and stops listening to its progress.
-    func cancel() {
+    /// Closes the operation's rendezvous channel and stops listening to its progress.
+    func closeRendezvousChannel() {
         // Must come first so the resulting `.cancelled` failure isn't handled.
         progressCancellable.cancel()
-        taskCancellable.cancel()
+        closeRendezvousChannelAction()
     }
 }
 

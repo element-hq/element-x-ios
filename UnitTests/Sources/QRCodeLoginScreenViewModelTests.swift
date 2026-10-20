@@ -226,7 +226,7 @@ struct QRCodeLoginScreenViewModelTests {
     // MARK: - Cancellation
     
     @Test
-    mutating func cancelLoginCancelsOperation() async throws {
+    mutating func cancelLoginClosesRendezvousChannel() async throws {
         // Given a screen that has scanned a QR code to log in.
         let operationTask = Task { _ = try? await Task.sleep(for: .seconds(3600)) }
         setup(mode: .login, operationTask: operationTask)
@@ -237,12 +237,12 @@ struct QRCodeLoginScreenViewModelTests {
         context.send(viewAction: .cancel)
         try await deferredAction.fulfill()
         
-        // Then Rust's ongoing login should be cancelled.
+        // Then the login's rendezvous channel should be closed.
         #expect(operationTask.isCancelled)
     }
     
     @Test
-    mutating func cancelLinkDesktopCancelsOperation() async throws {
+    mutating func cancelLinkDesktopClosesRendezvousChannel() async throws {
         // Given a screen that has scanned a desktop's QR code.
         let operationTask = Task { _ = try? await Task.sleep(for: .seconds(3600)) }
         setup(mode: .linkDesktop, operationTask: operationTask)
@@ -253,12 +253,12 @@ struct QRCodeLoginScreenViewModelTests {
         context.send(viewAction: .cancel)
         try await deferredAction.fulfill()
         
-        // Then Rust's ongoing link should be cancelled.
+        // Then the link's rendezvous channel should be closed.
         #expect(operationTask.isCancelled)
     }
     
     @Test
-    mutating func cancelLinkMobileCancelsOperation() async throws {
+    mutating func cancelLinkMobileClosesRendezvousChannel() async throws {
         // Given a screen showing a QR code for a mobile device to scan.
         let operationTask = Task { _ = try? await Task.sleep(for: .seconds(3600)) }
         setup(mode: .linkMobile, operationTask: operationTask)
@@ -269,12 +269,12 @@ struct QRCodeLoginScreenViewModelTests {
         context.send(viewAction: .cancel)
         try await deferredAction.fulfill()
         
-        // Then Rust's ongoing link should be cancelled.
+        // Then the link's rendezvous channel should be closed.
         #expect(operationTask.isCancelled)
     }
     
     @Test
-    mutating func linkDesktopExpiryCancelsOperation() async throws {
+    mutating func linkDesktopExpiryClosesRendezvousChannel() async throws {
         // Given a screen linking a desktop with a short timeout.
         let operationTask = Task { _ = try? await Task.sleep(for: .seconds(3600)) }
         setup(mode: .linkDesktop, linkDesktopTimeout: .seconds(1), operationTask: operationTask)
@@ -284,7 +284,7 @@ struct QRCodeLoginScreenViewModelTests {
         try await scanQRCode()
         try await deferredExpiry.fulfill()
         
-        // Then Rust's ongoing link should be cancelled.
+        // Then the link's rendezvous channel should be closed.
         #expect(operationTask.isCancelled)
     }
     
@@ -306,7 +306,7 @@ struct QRCodeLoginScreenViewModelTests {
     }
     
     @Test
-    mutating func cancelFromErrorDoesNotCancelOperation() async throws {
+    mutating func cancelFromErrorDoesNotCloseRendezvousChannel() async throws {
         // Given a screen showing an error because the Rust SDK's link has failed.
         let operationTask = Task { _ = try? await Task.sleep(for: .seconds(3600)) }
         setup(mode: .linkDesktop, operationTask: operationTask)
@@ -321,7 +321,7 @@ struct QRCodeLoginScreenViewModelTests {
         context.send(viewAction: .errorAction(.cancel))
         try await deferredAction.fulfill()
         
-        // Then the flow should be dismissed without trying to cancel the finished link.
+        // Then the flow should be dismissed without trying to close the finished rendezvous channel.
         #expect(!operationTask.isCancelled)
     }
     
@@ -337,7 +337,6 @@ struct QRCodeLoginScreenViewModelTests {
         try await deferred.fulfill()
     }
     
-    /// - Parameter operationTask: A task to back the screen's operation, for tests that check whether it gets cancelled.
     private mutating func setup(mode: Mode, linkDesktopTimeout: Duration = .seconds(120), operationTask: Task<Void, Never>? = nil) {
         qrLoginProgressSubject = .init(.starting)
         qrCodeLoginService = QRCodeLoginServiceMock()
