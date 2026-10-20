@@ -374,13 +374,15 @@ nonisolated struct MediaUploadingPreprocessor {
             throw .failedStrippingLocationData
         }
         
-        guard let originalMetadata = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil),
-              (originalMetadata as NSDictionary).value(forKeyPath: "\(kCGImagePropertyGPSDictionary)") != nil else {
+        let count = CGImageSourceGetCount(imageSource)
+        let hasLocation = (0..<count).contains { index in
+            (CGImageSourceCopyPropertiesAtIndex(imageSource, index, nil) as? [CFString: Any])?[kCGImagePropertyGPSDictionary] != nil
+        }
+        guard hasLocation else {
             MXLog.info("No GPS metadata found. Nothing to do.")
             return
         }
         
-        let count = CGImageSourceGetCount(imageSource)
         let metadataKeysToRemove: [CFString: Any] = [kCGImagePropertyGPSDictionary: kCFNull as Any]
         
         let data = NSMutableData()
