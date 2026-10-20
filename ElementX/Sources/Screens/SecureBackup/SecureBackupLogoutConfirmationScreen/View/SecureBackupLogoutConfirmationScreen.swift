@@ -31,17 +31,9 @@ struct SecureBackupLogoutConfirmationScreen: View {
     
     var body: some View {
         FullscreenDialog(topPadding: topPadding, spacing: spacing) {
-            if mode.isInitial {
-                initialContent
-            } else {
-                progressContent
-            }
+            content
         } bottomContent: {
-            if mode.isInitial {
-                initialButtons
-            } else {
-                progressButtons
-            }
+            buttons
         }
         .toolbar { toolbar }
         .background()
@@ -51,69 +43,27 @@ struct SecureBackupLogoutConfirmationScreen: View {
         .alert(item: $context.alertInfo)
     }
     
-    // MARK: - Initial
-    
-    private var initialContent: some View {
-        Group {
-            switch mode {
-            case .noRecovery:
-                TitleAndIcon(title: L10n.screenSignoutRecoveryDisabledTitle,
-                             subtitle: L10n.screenSignoutRecoveryDisabledSubtitle,
-                             icon: \.errorSolid,
-                             iconStyle: .alertSolid,
-                             button: .init(title: L10n.actionLearnMore) { UIApplication.shared.open(context.viewState.learnMoreURL) })
-            default:
-                TitleAndIcon(title: L10n.screenSignoutSaveRecoveryKeyTitle,
-                             subtitle: L10n.screenSignoutSaveRecoveryKeySubtitle,
-                             icon: \.info,
-                             iconStyle: .defaultSolid)
-            }
+    private var content: some View {
+        VStack(spacing: 16) {
+            TitleAndIcon(title: context.viewState.title,
+                         subtitle: context.viewState.subtitle,
+                         icon: context.viewState.icon.keyPath,
+                         iconStyle: context.viewState.icon.style,
+                         button: learnMoreButton)
+                .padding(.horizontal, 8)
+                .readHeight($contentHeight)
+            
+            backupProgress
         }
-        .padding(.horizontal, 8)
-        .readHeight($contentHeight)
     }
     
-    private var initialButtons: some View {
-        VStack(spacing: 16) {
-            switch mode {
-            case .noRecovery:
-                Button(L10n.actionSignoutAnyway, role: .destructive) {
-                    context.send(viewAction: .logout)
-                }
-                .buttonStyle(.compound(.tertiary))
-            default:
-                Button(UntranslatedL10n.screenSignoutSaveRecoveryKeyActionContinue, role: .destructive) {
-                    context.send(viewAction: .logout)
-                }
-                .buttonStyle(.compound(.primary))
-            }
-        }
-        .readHeight($buttonsHeight)
-    }
-    
-    // MARK: - Progress
-    
-    /// What is shown while waiting for the keys to be backed up before removing the device.
-    private var progressContent: some View {
-        VStack(spacing: 16) {
-            BigIcon(icon: \.keyOffSolid)
-            progressDetails
-        }
-        .padding()
+    private var learnMoreButton: TitleAndIcon.ButtonDetails? {
+        guard mode == .noRecovery else { return nil }
+        return .init(title: L10n.actionLearnMore) { UIApplication.shared.open(context.viewState.learnMoreURL) }
     }
     
     @ViewBuilder
-    private var progressDetails: some View {
-        Text(progressTitle)
-            .foregroundColor(.compound.textPrimary)
-            .font(.compound.headingMDBold)
-            .multilineTextAlignment(.center)
-        
-        Text(progressSubtitle)
-            .foregroundColor(.compound.textSecondary)
-            .font(.compound.bodyMD)
-            .multilineTextAlignment(.center)
-        
+    private var backupProgress: some View {
         if case let .waitingToStart(hasStalled) = mode {
             Spacer()
             ProgressView()
@@ -129,46 +79,33 @@ struct SecureBackupLogoutConfirmationScreen: View {
         }
     }
     
-    private var progressButtons: some View {
-        VStack(spacing: 16.0) {
-            Button(role: .destructive) {
-                context.send(viewAction: .logout)
-            } label: {
-                Text(L10n.actionSignout)
+    private var buttons: some View {
+        VStack(spacing: 16) {
+            switch mode {
+            case .noRecovery:
+                Button(L10n.actionSignoutAnyway, role: .destructive) {
+                    context.send(viewAction: .logout)
+                }
+                .buttonStyle(.compound(.tertiary))
+            case .saveRecoveryKey:
+                Button(UntranslatedL10n.screenSignoutSaveRecoveryKeyActionContinue, role: .destructive) {
+                    context.send(viewAction: .logout)
+                }
+                .buttonStyle(.compound(.primary))
+            case .waitingToStart, .backupOngoing, .offline:
+                Button(L10n.actionSignout, role: .destructive) {
+                    context.send(viewAction: .logout)
+                }
+                .buttonStyle(.compound(.primary))
             }
-            .buttonStyle(.compound(.primary))
         }
-        .padding()
+        .readHeight($buttonsHeight)
     }
-    
-    private var progressTitle: String {
-        switch mode {
-        case .offline:
-            L10n.screenSignoutKeyBackupOfflineTitle
-        default:
-            L10n.screenSignoutKeyBackupOngoingTitle
-        }
-    }
-    
-    private var progressSubtitle: String {
-        switch mode {
-        case .offline:
-            L10n.screenSignoutKeyBackupOfflineSubtitle
-        default:
-            L10n.screenSignoutKeyBackupOngoingSubtitle
-        }
-    }
-    
-    // MARK: - Shared
     
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
         ToolbarItem(placement: .cancellationAction) {
-            if mode.isInitial {
-                ToolbarButton(role: .close) { context.send(viewAction: .cancel) }
-            } else {
-                Button(L10n.actionCancel) { context.send(viewAction: .cancel) }
-            }
+            ToolbarButton(role: .close) { context.send(viewAction: .cancel) }
         }
     }
 }
