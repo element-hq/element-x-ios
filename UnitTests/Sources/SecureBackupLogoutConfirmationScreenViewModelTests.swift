@@ -88,6 +88,27 @@ struct SecureBackupLogoutConfirmationScreenViewModelTests {
     }
     
     @Test
+    func titleSubtitleAndIconFollowTheMode() {
+        func state(_ mode: SecureBackupLogoutConfirmationScreenViewMode) -> SecureBackupLogoutConfirmationScreenViewState {
+            .init(learnMoreURL: "https://example.org/encryption", mode: mode)
+        }
+        
+        #expect(state(.saveRecoveryKey).title == L10n.screenSignoutSaveRecoveryKeyTitle)
+        #expect(state(.saveRecoveryKey).subtitle == L10n.screenSignoutSaveRecoveryKeySubtitle)
+        #expect(state(.saveRecoveryKey).icon.keyPath == \.info)
+        
+        #expect(state(.noRecovery).title == L10n.screenSignoutRecoveryDisabledTitle)
+        #expect(state(.noRecovery).subtitle == L10n.screenSignoutRecoveryDisabledSubtitle)
+        #expect(state(.noRecovery).icon.keyPath == \.errorSolid)
+        
+        #expect(state(.waitingToStart(hasStalled: false)).title == L10n.screenSignoutKeyBackupOngoingTitle)
+        #expect(state(.backupOngoing(progress: 0.5)).subtitle == L10n.screenSignoutKeyBackupOngoingSubtitle)
+        #expect(state(.offline).title == L10n.screenSignoutKeyBackupOfflineTitle)
+        #expect(state(.offline).subtitle == L10n.screenSignoutKeyBackupOfflineSubtitle)
+        #expect(state(.offline).icon.keyPath == \.keyOffSolid)
+    }
+    
+    @Test
     func noRecoveryLogsOutStraightAway() async throws {
         let viewModel = Self.makeViewModel(secureBackupController: secureBackupController,
                                            reachabilitySubject: reachabilitySubject,

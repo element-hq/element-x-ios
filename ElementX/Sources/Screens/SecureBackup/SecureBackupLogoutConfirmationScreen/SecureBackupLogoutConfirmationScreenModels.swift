@@ -6,7 +6,8 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import Foundation
+import Compound
+import SwiftUI
 
 enum SecureBackupLogoutConfirmationScreenViewModelAction {
     case cancel
@@ -32,6 +33,43 @@ struct SecureBackupLogoutConfirmationScreenViewState: BindableState {
     let learnMoreURL: URL
     var mode: SecureBackupLogoutConfirmationScreenViewMode
     var bindings = SecureBackupLogoutConfirmationScreenBindings()
+    
+    var icon: (keyPath: KeyPath<CompoundIcons, Image>, style: BigIcon.Style) {
+        switch mode {
+        case .saveRecoveryKey:
+            (\.info, .defaultSolid)
+        case .noRecovery:
+            (\.errorSolid, .alertSolid)
+        case .waitingToStart, .backupOngoing, .offline:
+            (\.keyOffSolid, .defaultSolid)
+        }
+    }
+    
+    var title: String {
+        switch mode {
+        case .saveRecoveryKey:
+            L10n.screenSignoutSaveRecoveryKeyTitle
+        case .noRecovery:
+            L10n.screenSignoutRecoveryDisabledTitle
+        case .waitingToStart, .backupOngoing:
+            L10n.screenSignoutKeyBackupOngoingTitle
+        case .offline:
+            L10n.screenSignoutKeyBackupOfflineTitle
+        }
+    }
+    
+    var subtitle: String {
+        switch mode {
+        case .saveRecoveryKey:
+            L10n.screenSignoutSaveRecoveryKeySubtitle
+        case .noRecovery:
+            L10n.screenSignoutRecoveryDisabledSubtitle
+        case .waitingToStart, .backupOngoing:
+            L10n.screenSignoutKeyBackupOngoingSubtitle
+        case .offline:
+            L10n.screenSignoutKeyBackupOfflineSubtitle
+        }
+    }
 }
 
 struct SecureBackupLogoutConfirmationScreenBindings {
