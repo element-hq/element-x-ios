@@ -377,6 +377,53 @@ final class MediaUploadingPreprocessorTests {
     }
     
     @Test
+    func spatialImageProcessingKeepsStereoPair() async throws {
+        let imageSource = try await processedImageSource(at: makeSpatialImageWithLocation())
+        
+        let group = try #require(stereoGroup(of: imageSource))
+        #expect(group[kCGImagePropertyGroupImageIndexMonoscopic] as? Int == 0)
+        #expect(group[kCGImagePropertyGroupImageIndexRight] as? Int == 1)
+        #expect(group[kCGImagePropertyGroupImageIndexLeft] as? Int == 2)
+        #expect(group[kCGImagePropertyGroupImageDisparityAdjustment] as? Int == 800)
+        #expect(group[kCGImagePropertyGroupMonoscopicImageLocation] as? String == kIIOMonoscopicImageLocation_Right as String)
+    }
+    
+    @Test
+    func spatialImageProcessingKeepsEyeCameras() async throws {
+        let imageSource = try await processedImageSource(at: makeSpatialImageWithLocation())
+        
+        for eyeIndex in [1, 2] {
+            let properties = try #require(CGImageSourceCopyPropertiesAtIndex(imageSource, eyeIndex, nil) as? [CFString: Any])
+            let camera = properties[kCGImagePropertyHEIFDictionary] as? [CFString: Any]
+            #expect(camera?[kIIOMetadata_CameraExtrinsicsKey] != nil)
+            #expect(camera?[kIIOMetadata_CameraModelKey] != nil)
+        }
+    }
+    
+    @Test
+    func spatialImageProcessingStripsLocationFromEveryImage() async throws {
+        let imageSource = try await processedImageSource(at: makeSpatialImageWithLocation())
+        
+        #expect(CGImageSourceGetCount(imageSource) == 3)
+        for index in 0..<CGImageSourceGetCount(imageSource) {
+            let metadata = try #require(CGImageSourceCopyPropertiesAtIndex(imageSource, index, nil) as NSDictionary?)
+            #expect(metadata.value(forKeyPath: "\(kCGImagePropertyGPSDictionary)") == nil)
+        }
+    }
+    
+    @Test
+    func spatialImageProcessingKeepsGainMapOnEachImage() async throws {
+        let url = try makeSpatialImageWithLocation()
+        let originalSource = try #require(CGImageSourceCreateWithURL(url as NSURL, nil))
+        
+        let imageSource = try await processedImageSource(at: url)
+        
+        for index in 0..<CGImageSourceGetCount(originalSource) {
+            #expect(gainMapWidth(of: imageSource, at: index) == gainMapWidth(of: originalSource, at: index))
+        }
+    }
+    
+    @Test
     func optimisedImageProcessingSkipsStrippingLocation() async throws {
         // A read-only image can't be rewritten in place, so it can only be processed when the strip is skipped.
         let url = try copyResourceToTemporaryDirectory("landscape_test_image.jpg")
@@ -624,6 +671,58 @@ final class MediaUploadingPreprocessorTests {
         try #require(CGImageMetadataCopyTagWithPath(gainMapMetadata(from: imageSource), nil, "exif:GPSLatitude" as CFString) != nil)
         
         return url
+    }
+    
+    /// Generates a HEIC laid out like an iPhone spatial photo in a unique temporary directory: a monoscopic primary image, then the right and
+    /// left eyes, all in one stereo pair group. Every image has GPS metadata and an HDR gain map of its own size, and each eye has its camera.
+    private func makeSpatialImageWithLocation() throws -> URL {
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("\(Self.self)-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        let url = directory.appendingPathComponent("spatial_test_image.heic")
+        
+        let roles = [kCGImagePropertyGroupImageIsMonoscopicImage, kCGImagePropertyGroupImageIsRightImage, kCGImagePropertyGroupImageIsLeftImage]
+        let destination = try #require(CGImageDestinationCreateWithURL(url as NSURL, UTType.heic.identifier as CFString, roles.count, nil))
+        let colorSpace = try #require(CGColorSpace(name: CGColorSpace.displayP3))
+        
+        for (index, role) in roles.enumerated() {
+            let image = CIImage(color: .gray).cropped(to: CGRect(x: 0, y: 0, width: 64, height: 64))
+            let gainMap = CIImage(color: .white).cropped(to: CGRect(x: 0, y: 0, width: 16 + 8 * index, height: 16 + 8 * index))
+            let hdrData = try #require(CIContext().heifRepresentation(of: image, format: .RGBA8, colorSpace: colorSpace, options: [.hdrGainMapImage: gainMap]))
+            let hdrSource = try #require(CGImageSourceCreateWithData(hdrData as NSData, nil))
+            let gainMapInfo = try #require(CGImageSourceCopyAuxiliaryDataInfoAtIndex(hdrSource, 0, kCGImageAuxiliaryDataTypeHDRGainMap))
+            
+            var properties: [CFString: Any] = [kCGImagePropertyGPSDictionary: [kCGImagePropertyGPSLatitude: 51.5, kCGImagePropertyGPSLongitude: 0.1],
+                                               kCGImagePropertyGroups: [kCGImagePropertyGroupIndex: 0,
+                                                                        kCGImagePropertyGroupType: kCGImagePropertyGroupTypeStereoPair,
+                                                                        kCGImagePropertyGroupImageDisparityAdjustment: 800,
+                                                                        kCGImagePropertyGroupMonoscopicImageLocation: kIIOMonoscopicImageLocation_Right,
+                                                                        role: true]]
+            if role != kCGImagePropertyGroupImageIsMonoscopicImage {
+                properties[kCGImagePropertyHEIFDictionary] = [kIIOMetadata_CameraExtrinsicsKey: [kIIOCameraExtrinsics_Position: [0.0, 0.0, 0.0],
+                                                                                                 kIIOCameraExtrinsics_Rotation: [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]],
+                                                              kIIOMetadata_CameraModelKey: [kIIOCameraModel_Intrinsics: [1000.0, 0.0, 32.0, 0.0, 1000.0, 32.0, 0.0, 0.0, 1.0]]]
+            }
+            CGImageDestinationAddImageFromSource(destination, hdrSource, 0, properties as NSDictionary)
+            CGImageDestinationAddAuxiliaryDataInfo(destination, kCGImageAuxiliaryDataTypeHDRGainMap, gainMapInfo)
+        }
+        try #require(CGImageDestinationFinalize(destination))
+        
+        let imageSource = try #require(CGImageSourceCreateWithURL(url as NSURL, nil))
+        try #require(stereoGroup(of: imageSource) != nil)
+        
+        return url
+    }
+    
+    /// The stereo pair group of a spatial photo, which ImageIO reports on the whole image rather than on each of its images.
+    private func stereoGroup(of imageSource: CGImageSource) -> [CFString: Any]? {
+        let groups = (CGImageSourceCopyProperties(imageSource, nil) as? [CFString: Any])?[kCGImagePropertyGroups] as? [[CFString: Any]]
+        return groups?.first { $0[kCGImagePropertyGroupType] as? String == kCGImagePropertyGroupTypeStereoPair as String }
+    }
+    
+    private func gainMapWidth(of imageSource: CGImageSource, at index: Int) -> Int? {
+        let gainMapInfo = CGImageSourceCopyAuxiliaryDataInfoAtIndex(imageSource, index, kCGImageAuxiliaryDataTypeHDRGainMap) as? [CFString: Any]
+        let description = gainMapInfo?[kCGImageAuxiliaryDataInfoDataDescription] as? [String: Any]
+        return description?["Width"] as? Int
     }
     
     /// Generates a copy of the animated test GIF with GPS metadata on every frame in a unique temporary directory.

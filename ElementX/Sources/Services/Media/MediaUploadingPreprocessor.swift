@@ -381,7 +381,7 @@ nonisolated struct MediaUploadingPreprocessor {
         }
         
         let count = CGImageSourceGetCount(imageSource)
-        let metadataKeysToRemove = [kCGImagePropertyGPSDictionary: kCFNull]
+        let metadataKeysToRemove: [CFString: Any] = [kCGImagePropertyGPSDictionary: kCFNull as Any]
         
         let data = NSMutableData()
         
@@ -394,12 +394,16 @@ nonisolated struct MediaUploadingPreprocessor {
         }
         
         // The container properties hold an animation's loop count.
-        if let properties = CGImageSourceCopyProperties(imageSource, nil) {
-            CGImageDestinationSetProperties(destination, properties)
+        let containerProperties = CGImageSourceCopyProperties(imageSource, nil) as? [CFString: Any]
+        if let containerProperties {
+            CGImageDestinationSetProperties(destination, containerProperties as NSDictionary)
         }
+        let groups = containerProperties?[kCGImagePropertyGroups] as? [[CFString: Any]] ?? []
         
         for index in 0..<count {
-            CGImageDestinationAddImageFromSource(destination, imageSource, index, metadataKeysToRemove as NSDictionary)
+            var properties = metadataKeysToRemove
+            properties[kCGImagePropertyGroups] = stereoGroupProperties(forImageAt: index, in: groups)
+            CGImageDestinationAddImageFromSource(destination, imageSource, index, properties as NSDictionary)
             copyGainMap(from: imageSource, at: index, to: destination)
         }
         
@@ -412,6 +416,21 @@ nonisolated struct MediaUploadingPreprocessor {
         } catch {
             throw .failedStrippingLocationData
         }
+    }
+    
+    /// The stereo group of a spatial photo for the image at the given index, which ImageIO drops unless each image is added with it.
+    private func stereoGroupProperties(forImageAt index: Int, in groups: [[CFString: Any]]) -> [CFString: Any]? {
+        let roles: KeyValuePairs = [kCGImagePropertyGroupImageIndexLeft: kCGImagePropertyGroupImageIsLeftImage,
+                                    kCGImagePropertyGroupImageIndexRight: kCGImagePropertyGroupImageIsRightImage,
+                                    kCGImagePropertyGroupImageIndexMonoscopic: kCGImagePropertyGroupImageIsMonoscopicImage]
+        
+        for group in groups {
+            if let role = roles.first(where: { group[$0.key] as? Int == index })?.value {
+                // ImageIO ignores the group's index keys and takes the image's role from this flag.
+                return group.merging([role: true]) { $1 }
+            }
+        }
+        return nil
     }
     
     /// Copies the HDR gain map of the image at the given index, which is stored as auxiliary data and isn't copied along with the image.
