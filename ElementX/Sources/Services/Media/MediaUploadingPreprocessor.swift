@@ -95,6 +95,8 @@ nonisolated struct MediaUploadingPreprocessor {
         static let jpegCompressionQuality = 0.78
         static let videoThumbnailTime = 5.0 // seconds
         static let maximumConcurrentProcessingCount = 2
+        /// The XMP namespaces of Apple's and ISO gain map HDR metadata.
+        static let hdrMetadataNamespaces: Set = ["http://ns.apple.com/HDRGainMap/1.0/", "http://ns.apple.com/HDRToneMap/1.0/"]
     }
     
     /// Processes media at the given URLs. It will generate thumbnails for images and videos, convert videos to 1080p mp4, strip GPS locations
@@ -219,7 +221,7 @@ nonisolated struct MediaUploadingPreprocessor {
         }
     }
     
-    /// Prepares an image for upload. Strips location data from it and generates a thumbnail
+    /// Prepares an image for upload. Resizes it when optimising (otherwise strips location data from it) and generates a thumbnail
     /// - Parameters:
     ///   - url: The image URL
     ///   - type: its UTType
@@ -229,11 +231,9 @@ nonisolated struct MediaUploadingPreprocessor {
     private func processImage(at url: URL, type: UTType, mimeType: String, maxUploadSize: UInt) async -> Result<MediaInfo, MediaUploadingPreprocessorError> {
         var url = url
         do {
-            try stripLocationFromImage(at: url, type: type)
-            guard !Task.isCancelled else { return .failure(.cancelled) }
-            
             var mimeType = mimeType
             if userSettings.app.optimizeMediaUploads, !type.conforms(to: .gif) {
+                // Resizing writes a new image without any metadata, so there's no location left to strip.
                 let outputType = type.conforms(to: .png) ? UTType.png : .jpeg
                 mimeType = outputType.preferredMIMEType ?? "application/octet-stream"
                 try resizeImage(at: url, maxPixelSize: Constants.optimizedMaxPixelSize, destination: url, type: outputType)
@@ -248,6 +248,8 @@ nonisolated struct MediaUploadingPreprocessor {
                     }
                     url = convertedURL
                 }
+            } else {
+                try stripLocationFromImage(at: url, type: type)
             }
             guard !Task.isCancelled else { return .failure(.cancelled) }
             
@@ -392,21 +394,53 @@ nonisolated struct MediaUploadingPreprocessor {
         }
         
         CGImageDestinationAddImageFromSource(destination, imageSource, 0, metadataKeysToRemove as NSDictionary)
+        copyGainMap(from: imageSource, to: destination)
         
-        // HDR gain maps are stored as auxiliary data which isn't copied along with the image.
-        for auxiliaryDataType in [kCGImageAuxiliaryDataTypeHDRGainMap, kCGImageAuxiliaryDataTypeISOGainMap] {
-            if let auxiliaryDataInfo = CGImageSourceCopyAuxiliaryDataInfoAtIndex(imageSource, 0, auxiliaryDataType) {
-                CGImageDestinationAddAuxiliaryDataInfo(destination, auxiliaryDataType, auxiliaryDataInfo)
-            }
+        guard CGImageDestinationFinalize(destination) else {
+            throw .failedStrippingLocationData
         }
-        
-        CGImageDestinationFinalize(destination)
         
         do {
             try data.write(to: url)
         } catch {
             throw .failedStrippingLocationData
         }
+    }
+    
+    /// Copies the HDR gain map, which is stored as auxiliary data and isn't copied along with the image.
+    private func copyGainMap(from imageSource: CGImageSource, to destination: CGImageDestination) {
+        for auxiliaryDataType in [kCGImageAuxiliaryDataTypeHDRGainMap, kCGImageAuxiliaryDataTypeISOGainMap] {
+            guard var auxiliaryDataInfo = CGImageSourceCopyAuxiliaryDataInfoAtIndex(imageSource, 0, auxiliaryDataType) as? [CFString: Any] else {
+                continue
+            }
+            
+            // The gain map's metadata can hold anything, a location included.
+            if let metadata = auxiliaryDataInfo[kCGImageAuxiliaryDataInfoMetadata] {
+                // swiftlint:disable:next force_cast
+                auxiliaryDataInfo[kCGImageAuxiliaryDataInfoMetadata] = hdrMetadata(from: metadata as! CGImageMetadata)
+            }
+            
+            CGImageDestinationAddAuxiliaryDataInfo(destination, auxiliaryDataType, auxiliaryDataInfo as NSDictionary)
+        }
+    }
+    
+    /// Filters the gain map's metadata down to its HDR tags. The gain map is dropped without them.
+    private func hdrMetadata(from metadata: CGImageMetadata) -> CGImageMetadata {
+        let hdrMetadata = CGImageMetadataCreateMutable()
+        
+        CGImageMetadataEnumerateTagsUsingBlock(metadata, nil, nil) { path, tag in
+            guard let namespace = CGImageMetadataTagCopyNamespace(tag),
+                  let prefix = CGImageMetadataTagCopyPrefix(tag),
+                  Constants.hdrMetadataNamespaces.contains(namespace as String) else {
+                return true
+            }
+            
+            CGImageMetadataRegisterNamespaceForPrefix(hdrMetadata, namespace, prefix, nil)
+            CGImageMetadataSetTagWithPath(hdrMetadata, nil, path, tag)
+            return true
+        }
+        
+        return hdrMetadata
     }
     
     /// Generates a thumbnail for an image
@@ -461,7 +495,10 @@ nonisolated struct MediaUploadingPreprocessor {
         let properties = [kCGImageDestinationLossyCompressionQuality: Constants.jpegCompressionQuality]
         
         CGImageDestinationAddImage(destination, scaledImage, properties as NSDictionary)
-        CGImageDestinationFinalize(destination)
+        
+        guard CGImageDestinationFinalize(destination) else {
+            throw .failedResizingImage
+        }
     }
     
     // MARK: Video Helpers
