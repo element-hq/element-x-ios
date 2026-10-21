@@ -197,7 +197,7 @@ final class MediaUploadingPreprocessorTests {
         // Check optimised image info
         #expect(optimizedImageInfo.mimetype == "image/jpeg")
         #expect(optimizedImageInfo.blurhash == "K%I#.NofkC_4ayaxxujsWB")
-        #expect(isEqual(optimizedImageInfo.size ?? 0, 524_226, within: 100))
+        #expect(isEqual(optimizedImageInfo.size ?? 0, 523_809, within: 100))
         #expect(optimizedImageInfo.width == 2048)
         #expect(optimizedImageInfo.height == 879)
     }
@@ -241,7 +241,7 @@ final class MediaUploadingPreprocessorTests {
         // Check optimised image info
         #expect(optimizedImageInfo.mimetype == "image/jpeg")
         #expect(optimizedImageInfo.blurhash == "KdE|0Ls+RP^-n*RP%OWAV@")
-        #expect(isEqual(optimizedImageInfo.size ?? 0, 1_462_937, within: 100))
+        #expect(isEqual(optimizedImageInfo.size ?? 0, 1_466_366, within: 100))
         #expect(optimizedImageInfo.width == 1536)
         #expect(optimizedImageInfo.height == 2048)
     }
@@ -341,10 +341,62 @@ final class MediaUploadingPreprocessorTests {
         
         // Check optimised image info
         #expect(optimizedImageInfo.mimetype == "image/jpeg")
-        #expect(optimizedImageInfo.blurhash == "KGD]3ns:T00#kWxFb^s:xv")
-        #expect(isEqual(optimizedImageInfo.size ?? 0, 1_049_393, within: 100))
+        #expect(optimizedImageInfo.blurhash == "KGD]3ns:T00#kWxFXms:xv")
+        #expect(isEqual(optimizedImageInfo.size ?? 0, 1_063_370, within: 100))
         #expect(optimizedImageInfo.width == 1536)
         #expect(optimizedImageInfo.height == 2048)
+    }
+    
+    @Test
+    func hdrImageProcessingStripsLocationFromImageAndGainMap() async throws {
+        let imageSource = try await processedImageSource(at: makeHDRImageWithLocation())
+        
+        let metadata = try #require(CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) as NSDictionary?)
+        #expect(metadata.value(forKeyPath: "\(kCGImagePropertyGPSDictionary)") == nil)
+        
+        let gainMapMetadata = try gainMapMetadata(from: imageSource)
+        #expect(CGImageMetadataCopyTagWithPath(gainMapMetadata, nil, "exif:GPSLatitude" as CFString) == nil)
+        #expect(CGImageMetadataCopyTagWithPath(gainMapMetadata, nil, "exif:GPSLongitude" as CFString) == nil)
+    }
+    
+    @Test
+    func hdrImageProcessingPreservesGainMap() async throws {
+        let imageSource = try await processedImageSource(at: makeHDRImageWithLocation())
+        
+        let gainMapMetadata = try gainMapMetadata(from: imageSource)
+        #expect(CGImageMetadataCopyTagWithPath(gainMapMetadata, nil, "HDRGainMap:HDRGainMapVersion" as CFString) != nil)
+    }
+    
+    @Test
+    func multiImageHDRProcessingKeepsGainMapOnItsImage() async throws {
+        let imageSource = try await processedImageSource(at: makeHDRImageWithLocation(imageCount: 3))
+        
+        #expect(CGImageSourceGetCount(imageSource) == 3)
+        #expect(CGImageSourceCopyAuxiliaryDataInfoAtIndex(imageSource, 0, kCGImageAuxiliaryDataTypeHDRGainMap) != nil)
+        #expect(CGImageSourceCopyAuxiliaryDataInfoAtIndex(imageSource, 2, kCGImageAuxiliaryDataTypeHDRGainMap) == nil)
+    }
+    
+    @Test
+    func optimisedImageProcessingSkipsStrippingLocation() async throws {
+        // A read-only image can't be rewritten in place, so it can only be processed when the strip is skipped.
+        let url = try copyResourceToTemporaryDirectory("landscape_test_image.jpg")
+        defer { try? FileManager.default.removeItem(at: url.deletingLastPathComponent()) }
+        try FileManager.default.setAttributes([.posixPermissions: 0o444], ofItemAtPath: url.path(percentEncoded: false))
+        
+        guard case .failure(.failedProcessingImage(.failedStrippingLocationData)) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize) else {
+            Issue.record("Expected stripping the location to fail")
+            return
+        }
+        
+        userSettings.app.optimizeMediaUploads = true
+        
+        guard case let .success(result) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize),
+              case let .image(optimizedImageURL, thumbnailURL, _) = result else {
+            Issue.record("Failed processing asset")
+            return
+        }
+        
+        try compare(originalImageAt: url, toConvertedImageAt: optimizedImageURL, withThumbnailAt: thumbnailURL)
     }
     
     @Test
@@ -395,6 +447,24 @@ final class MediaUploadingPreprocessorTests {
         #expect(isEqual(optimizedImageInfo.size ?? 0, originalSize, within: 100))
         #expect(optimizedImageInfo.width == 331)
         #expect(optimizedImageInfo.height == 472)
+    }
+    
+    @Test
+    func animatedGIFWithLocationProcessingKeepsAllFrames() async throws {
+        let url = try makeAnimatedGIFWithLocation(loopCount: 3)
+        let originalSource = try #require(CGImageSourceCreateWithURL(url as NSURL, nil))
+        
+        let imageSource = try await processedImageSource(at: url)
+        
+        #expect(CGImageSourceGetCount(imageSource) == CGImageSourceGetCount(originalSource))
+        #expect(gifProperties(of: imageSource)?[kCGImagePropertyGIFLoopCount] as? Int == 3)
+        
+        for index in 0..<CGImageSourceGetCount(imageSource) {
+            let metadata = try #require(CGImageSourceCopyPropertiesAtIndex(imageSource, index, nil) as NSDictionary?)
+            #expect(metadata.value(forKeyPath: "\(kCGImagePropertyGPSDictionary)") == nil)
+            #expect(gifProperties(of: imageSource, at: index)?[kCGImagePropertyGIFDelayTime] as? Double ==
+                gifProperties(of: originalSource, at: index)?[kCGImagePropertyGIFDelayTime] as? Double)
+        }
     }
     
     @Test
@@ -506,6 +576,90 @@ final class MediaUploadingPreprocessorTests {
         let url = directory.appendingPathComponent("\(UUID().uuidString).\(assetURL.pathExtension)")
         try FileManager.default.copyItem(at: assetURL, to: url)
         return url
+    }
+    
+    /// Processes the image at the given URL, returning a source for the resulting image.
+    private func processedImageSource(at url: URL) async throws -> CGImageSource {
+        let mediaInfo = try await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize).get()
+        return try #require(CGImageSourceCreateWithURL(mediaInfo.url as NSURL, nil))
+    }
+    
+    private func gainMapMetadata(from imageSource: CGImageSource) throws -> CGImageMetadata {
+        let gainMapInfo = try #require(CGImageSourceCopyAuxiliaryDataInfoAtIndex(imageSource, 0, kCGImageAuxiliaryDataTypeHDRGainMap) as? [CFString: Any])
+        let gainMapMetadata = try #require(gainMapInfo[kCGImageAuxiliaryDataInfoMetadata])
+        // swiftlint:disable:next force_cast
+        return gainMapMetadata as! CGImageMetadata
+    }
+    
+    /// Generates a HEIC with an HDR gain map on its first image and GPS metadata (on both the images and the gain map) in a unique temporary directory.
+    private func makeHDRImageWithLocation(imageCount: Int = 1) throws -> URL {
+        let image = CIImage(color: .gray).cropped(to: CGRect(x: 0, y: 0, width: 64, height: 64))
+        let gainMap = CIImage(color: .white).cropped(to: CGRect(x: 0, y: 0, width: 32, height: 32))
+        let colorSpace = try #require(CGColorSpace(name: CGColorSpace.displayP3))
+        let hdrData = try #require(CIContext().heifRepresentation(of: image, format: .RGBA8, colorSpace: colorSpace, options: [.hdrGainMapImage: gainMap]))
+        let hdrSource = try #require(CGImageSourceCreateWithData(hdrData as NSData, nil))
+        var gainMapInfo = try #require(CGImageSourceCopyAuxiliaryDataInfoAtIndex(hdrSource, 0, kCGImageAuxiliaryDataTypeHDRGainMap) as? [CFString: Any])
+        let gainMapMetadataWithLocation = try #require(CGImageMetadataCreateMutableCopy(gainMapMetadata(from: hdrSource)))
+        try #require(CGImageMetadataSetValueWithPath(gainMapMetadataWithLocation, nil, "exif:GPSLatitude" as CFString, "51,30.0N" as CFString))
+        try #require(CGImageMetadataSetValueWithPath(gainMapMetadataWithLocation, nil, "exif:GPSLongitude" as CFString, "0,6.0W" as CFString))
+        gainMapInfo[kCGImageAuxiliaryDataInfoMetadata] = gainMapMetadataWithLocation
+        
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("\(Self.self)-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        let url = directory.appendingPathComponent("hdr_test_image.heic")
+        
+        let destination = try #require(CGImageDestinationCreateWithURL(url as NSURL, UTType.heic.identifier as CFString, imageCount, nil))
+        let location = [kCGImagePropertyGPSDictionary: [kCGImagePropertyGPSLatitude: 51.5, kCGImagePropertyGPSLongitude: 0.1]]
+        CGImageDestinationAddImageFromSource(destination, hdrSource, 0, location as NSDictionary)
+        CGImageDestinationAddAuxiliaryDataInfo(destination, kCGImageAuxiliaryDataTypeHDRGainMap, gainMapInfo as NSDictionary)
+        for _ in 1..<imageCount {
+            CGImageDestinationAddImageFromSource(destination, hdrSource, 0, location as NSDictionary)
+        }
+        try #require(CGImageDestinationFinalize(destination))
+        
+        // Without location data the preprocessor leaves the image untouched.
+        let imageSource = try #require(CGImageSourceCreateWithURL(url as NSURL, nil))
+        let metadata = try #require(CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) as NSDictionary?)
+        try #require(metadata.value(forKeyPath: "\(kCGImagePropertyGPSDictionary)") != nil)
+        try #require(CGImageMetadataCopyTagWithPath(gainMapMetadata(from: imageSource), nil, "exif:GPSLatitude" as CFString) != nil)
+        
+        return url
+    }
+    
+    /// Generates a copy of the animated test GIF with GPS metadata on every frame in a unique temporary directory.
+    private func makeAnimatedGIFWithLocation(loopCount: Int) throws -> URL {
+        let assetURL = try #require(Bundle(for: Self.self).url(forResource: "test_animated_image.gif", withExtension: nil))
+        let gifSource = try #require(CGImageSourceCreateWithURL(assetURL as NSURL, nil))
+        let frameCount = CGImageSourceGetCount(gifSource)
+        try #require(frameCount > 1)
+        
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("\(Self.self)-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        let url = directory.appendingPathComponent("gif_test_image.gif")
+        
+        let destination = try #require(CGImageDestinationCreateWithURL(url as NSURL, UTType.gif.identifier as CFString, frameCount, nil))
+        CGImageDestinationSetProperties(destination, [kCGImagePropertyGIFDictionary: [kCGImagePropertyGIFLoopCount: loopCount]] as NSDictionary)
+        let location = [kCGImagePropertyGPSDictionary: [kCGImagePropertyGPSLatitude: 51.5, kCGImagePropertyGPSLongitude: 0.1]]
+        for index in 0..<frameCount {
+            CGImageDestinationAddImageFromSource(destination, gifSource, index, location as NSDictionary)
+        }
+        try #require(CGImageDestinationFinalize(destination))
+        
+        // Without location data the preprocessor leaves the image untouched.
+        let metadata = try metadata(from: Data(contentsOf: url))
+        try #require(metadata.value(forKeyPath: "\(kCGImagePropertyGPSDictionary)") != nil)
+        
+        return url
+    }
+    
+    /// The GIF properties of the whole image, or of the frame at the given index.
+    private func gifProperties(of imageSource: CGImageSource, at index: Int? = nil) -> [CFString: Any]? {
+        let properties = if let index {
+            CGImageSourceCopyPropertiesAtIndex(imageSource, index, nil)
+        } else {
+            CGImageSourceCopyProperties(imageSource, nil)
+        }
+        return (properties as? [CFString: Any])?[kCGImagePropertyGIFDictionary] as? [CFString: Any]
     }
     
     /// The unique folders created by the preprocessor for the given file that still exist.
