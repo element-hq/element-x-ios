@@ -746,6 +746,7 @@
 		73D4437A6A410FA2B94CFE0F /* ManualClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32435409710BF1A54C3BBD53 /* ManualClock.swift */; };
 		73F33E9776B7A50B65A031D2 /* AppLockSettingsScreenViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BA67B3E4EF9D29D14A78CE /* AppLockSettingsScreenViewModelTests.swift */; };
 		73F547BEB41D3DAFAAF6E0AF /* UserProfileScreenViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71E2E5103702D13361D09100 /* UserProfileScreenViewModelTests.swift */; };
+		7405ADFCC62940639B918997 /* RoomFlowCoordinatorHook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 628710C2104A681C94BCFCF0 /* RoomFlowCoordinatorHook.swift */; };
 		7405B4824D45BA7C3D943E76 /* Application.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D0CBC76C80E04345E11F2DB /* Application.swift */; };
 		7434A7F02D587A920B376A9A /* LoginScreenViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A43964330459965AF048A8C /* LoginScreenViewModelTests.swift */; };
 		743790BF6A5B0577EA74AF14 /* ReadMarkerRoomTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3D25B3EDB283B5807EADCF /* ReadMarkerRoomTimelineItem.swift */; };
@@ -2403,6 +2404,7 @@
 		622D09D4ECE759189009AEAF /* MapLibreMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapLibreMapView.swift; sourceTree = "<group>"; };
 		624244C398804ADC885239AA /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/Localizable.strings; sourceTree = "<group>"; };
 		627A8B5E798CC778C363655E /* KnockRequestsListEmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnockRequestsListEmptyStateView.swift; sourceTree = "<group>"; };
+		628710C2104A681C94BCFCF0 /* RoomFlowCoordinatorHook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomFlowCoordinatorHook.swift; sourceTree = "<group>"; };
 		62A81CCC2516D9CF9322DF01 /* MediaProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaProviderTests.swift; sourceTree = "<group>"; };
 		62B07B296D7A9D2F09120853 /* OrderedSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderedSet.swift; sourceTree = "<group>"; };
 		62EACAFB3F3E017060F9F1C5 /* TimelineProviderMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineProviderMock.swift; sourceTree = "<group>"; };
@@ -4083,6 +4085,7 @@
 				7AE97AD18893E2D8120F559D /* RecoveryKeyScreenHook.swift */,
 				D5D186A6DB8FAC5C9D0E4D61 /* RemoteSettingsHook.swift */,
 				3674212CAB6C5143DD437AC4 /* RoomDetailsScreenHook.swift */,
+				628710C2104A681C94BCFCF0 /* RoomFlowCoordinatorHook.swift */,
 				99EB08B2C8B01F3BFE4B0CEC /* RoomMemberDetailsScreenHook.swift */,
 				B343C5255FB408DDE853CFDF /* RoomScreenHook.swift */,
 				00C4628208584D251CCDAC0A /* SecurityAndPrivacyScreenHook.swift */,
@@ -9495,6 +9498,7 @@
 				1DC227816777A2F3A19657E5 /* RoomDirectorySearchScreenViewModel.swift in Sources */,
 				42F1C8731166633E35A6D7E6 /* RoomEventStringBuilder.swift in Sources */,
 				D55AF9B5B55FEED04771A461 /* RoomFlowCoordinator.swift in Sources */,
+				7405ADFCC62940639B918997 /* RoomFlowCoordinatorHook.swift in Sources */,
 				8DF0EBD97753033C715D716E /* RoomFlowCoordinatorStateMachine.swift in Sources */,
 				9C63171267E22FEB288EC860 /* RoomHeaderView.swift in Sources */,
 				38E0F9A4CB5237F039A2EEE6 /* RoomHistorySharingState.swift in Sources */,

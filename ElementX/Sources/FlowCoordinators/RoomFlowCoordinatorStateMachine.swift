@@ -71,6 +71,7 @@ extension RoomFlowCoordinator {
         case securityAndPrivacy(previousState: State)
         case manageAuthorizedSpacesScreen(previousState: State)
         case reportRoom(previousState: State)
+        case supplementaryFlow(previousState: State)
         case declineAndBlockScreen
         case transferOwnershipScreen(previousState: State)
         
@@ -175,6 +176,9 @@ extension RoomFlowCoordinator {
         
         case presentReportRoomScreen
         case dismissReportRoomScreen
+        
+        case startSupplementaryFlow(flowID: String)
+        case stopSupplementaryFlow
         
         case presentDeclineAndBlockScreen(userID: String)
         case dismissDeclineAndBlockScreen
@@ -339,6 +343,11 @@ extension RoomFlowCoordinator {
             case (.roomDetails, .presentReportRoomScreen):
                 return .reportRoom(previousState: fromState)
             case (.reportRoom(let previousState), .dismissReportRoomScreen):
+                return previousState
+                
+            case (.roomDetails, .startSupplementaryFlow):
+                return .supplementaryFlow(previousState: fromState)
+            case (.supplementaryFlow(let previousState), .stopSupplementaryFlow):
                 return previousState
                 
             // Join room
