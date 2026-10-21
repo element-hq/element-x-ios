@@ -137,7 +137,7 @@ struct TimelineViewState: BindableState {
     var linkPreviewsEnabled: Bool
     var jumpToReadMarkerEnabled: Bool
     
-    var messageSelection: TimelineMessageSelectionState
+    var messageSelection = TimelineMessageSelectionState()
     
     let hasPredecessor: Bool
     
@@ -209,7 +209,6 @@ struct TimelineViewStateBindings {
 struct TimelineMessageSelectionState: Equatable {
     static let limit = 10
     
-    var isEnabled = false
     /// Stays on when every message is unselected, it only ends when closed or once the messages are forwarded.
     var isActive = false
     var selectedEventIDs: Set<String> = []
@@ -357,8 +356,7 @@ enum ScrollDirection: Equatable {
 extension TimelineViewState {
     /// Multi-selection is offered everywhere but the media timelines.
     var canSelectMessages: Bool {
-        guard messageSelection.isEnabled else { return false }
-        return switch timelineKind {
+        switch timelineKind {
         case .live, .detached, .thread, .pinned: true
         case .media: false
         }

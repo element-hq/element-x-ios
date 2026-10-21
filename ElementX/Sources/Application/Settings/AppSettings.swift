@@ -381,9 +381,6 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: false)
     var threadsEnabled: Bool
     
-    @UserPreference(defaultValue: false)
-    var messageMultiSelectEnabled: Bool
-    
     @UserPreference(key: "globalSearchEnabledV2", defaultValue: true)
     var globalSearchEnabled: Bool
     
