@@ -1,3 +1,28 @@
+## Changes in 26.10.6 (2026-10-21)
+
+### What's Changed
+
+🙌 Improvements
+* Keep HDR gain maps when stripping location data from images by @rene-schakmann in https://github.com/element-hq/element-x-ios/pull/6371
+
+🐛 Bugfixes
+* Keep spatial photos spatial and check every image for a location when sending in original quality by @Velin92 in https://github.com/element-hq/element-x-ios/pull/6381
+
+🦻 Accessibility
+* Stop the timeline scroll buttons from growing too large at bigger text sizes by @Velin92 in https://github.com/element-hq/element-x-ios/pull/6379
+* Fix the settings button not being visible to VoiceOver. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/6385
+
+💼 Element Pro
+* Fix a potential crash when creating a new room. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/6378
+
+Others
+* Update dependency siteline/SwiftUI-Introspect to v27.1.0 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/6377
+
+### New Contributors
+* @rene-schakmann made their first contribution in https://github.com/element-hq/element-x-ios/pull/6371
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/26.10.5...release/26.10.6
+
 ## Changes in 26.10.5 (2026-10-20)
 
 ### What's Changed
