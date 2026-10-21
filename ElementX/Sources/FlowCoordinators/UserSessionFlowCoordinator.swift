@@ -465,7 +465,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             // An answered call is left up for the native stack, so it has to be ended here rather
             // than leaving the system with a call this room can no longer serve.
             MXLog.error("Cannot present the call screen, \(roomID) isn't a joined room")
-            flowParameters.elementCallManager.tearDownCallSession(roomID: roomID)
+            userSession.elementCallService.tearDownCallSession(roomID: roomID)
             return
         }
         
@@ -497,7 +497,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             return
         }
         
-        let callScreenCoordinator = CallScreenCoordinator(parameters: .init(elementCallService: flowParameters.elementCallManager,
+        let callScreenCoordinator = CallScreenCoordinator(parameters: .init(elementCallService: userSession.elementCallService,
                                                                             configuration: configuration,
                                                                             allowPictureInPicture: true,
                                                                             userSettings: userSession.userSettings,

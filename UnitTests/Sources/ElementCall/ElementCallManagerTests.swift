@@ -22,6 +22,8 @@ final class ElementCallManagerTests {
     private var pushRegistry: PKPushRegistry!
     private var service: ElementCallManager!
     private var userSession: UserSessionMock!
+    /// The active account's calls, which pushes ring for unless they say otherwise.
+    private var alice: ElementCallServiceMock!
     
     init() {
         appSettings = AppSettings.volatile()
@@ -38,6 +40,8 @@ final class ElementCallManagerTests {
                                      callController: callController,
                                      timeProvider: TimeProvider(clock: clock, now: dateProvider))
         service.activeUserID = "@alice:matrix.org"
+        alice = ElementCallServiceMock(.init(userID: "@alice:matrix.org"))
+        service.add(alice)
     }
     
     isolated deinit {
@@ -249,7 +253,7 @@ final class ElementCallManagerTests {
         let update = callProvider.reportNewIncomingCallWithUpdateCompletionReceivedArguments?.update
         #expect(update?.localizedCallerName == "welcome")
         
-        #expect(service.ongoingCallRoomIDPublisher.value == "!room:example.com")
+        #expect(alice.ongoingCallRoomIDPublisher.value == "!room:example.com")
     }
     
     @Test
@@ -259,7 +263,7 @@ final class ElementCallManagerTests {
         await service.setupCallSession(roomID: "!room:example.com", roomDisplayName: "welcome", isVideo: true)
         service.reportCallSessionConnected(roomID: "!room:example.com")
         
-        #expect(service.ongoingCallRoomIDPublisher.value == "!room:example.com")
+        #expect(alice.ongoingCallRoomIDPublisher.value == "!room:example.com")
         #expect(!callProvider.reportCallWithUpdatedCalled)
         #expect(!callProvider.reportOutgoingCallWithConnectedAtCalled)
     }
@@ -287,14 +291,14 @@ final class ElementCallManagerTests {
         service.endCall(withCallKitID: firstCallID)
         
         #expect(endedRooms.isEmpty, "The first call's end action must not hang up the second call")
-        #expect(service.ongoingCallRoomIDPublisher.value == "!second:example.com")
+        #expect(alice.ongoingCallRoomIDPublisher.value == "!second:example.com")
         
         // And the second call still ends when it's the one the system means.
         let secondCallID = try #require(callProvider.reportCallWithUpdatedReceivedArguments?.uuid)
         service.endCall(withCallKitID: secondCallID)
         
         #expect(endedRooms == ["!second:example.com"])
-        #expect(service.ongoingCallRoomIDPublisher.value == nil)
+        #expect(alice.ongoingCallRoomIDPublisher.value == nil)
     }
     
     /// A declined or unanswered call is the system's to log as such: reported with its reason, and
@@ -314,7 +318,7 @@ final class ElementCallManagerTests {
         #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.uuid == callID)
         #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.reason == .unanswered)
         #expect(callController.requestCompletionCallsCount == requestsBeforeTheEnd)
-        #expect(service.ongoingCallRoomIDPublisher.value == nil)
+        #expect(alice.ongoingCallRoomIDPublisher.value == nil)
     }
     
     @Test
@@ -324,10 +328,10 @@ final class ElementCallManagerTests {
         await service.setupCallSession(roomID: "!room:example.com", roomDisplayName: "welcome", isVideo: true)
         
         service.tearDownCallSession(roomID: "!other:example.com")
-        #expect(service.ongoingCallRoomIDPublisher.value == "!room:example.com")
+        #expect(alice.ongoingCallRoomIDPublisher.value == "!room:example.com")
         
         service.tearDownCallSession(roomID: "!room:example.com")
-        #expect(service.ongoingCallRoomIDPublisher.value == nil)
+        #expect(alice.ongoingCallRoomIDPublisher.value == nil)
     }
     
     // MARK: - Busy
@@ -671,7 +675,7 @@ final class ElementCallManagerTests {
         // Taking the answered call over means keeping its identifier rather than reporting a new
         // outgoing call, which is what the update below would be part of.
         #expect(!callProvider.reportCallWithUpdatedCalled)
-        #expect(service.ongoingCallRoomIDPublisher.value == "!room:example.com")
+        #expect(alice.ongoingCallRoomIDPublisher.value == "!room:example.com")
         
         // And the watchdog must be gone, otherwise it ends the call that was just taken over.
         #expect(!clock.hasPendingSleep, "The watchdog must not outlive the hand-over")
@@ -690,7 +694,7 @@ final class ElementCallManagerTests {
         let update = try #require(callProvider.reportCallWithUpdatedReceivedArguments)
         #expect(update.uuid != answeredUUID)
         #expect(update.update.localizedCallerName == "other")
-        #expect(service.ongoingCallRoomIDPublisher.value == "!other:example.com")
+        #expect(alice.ongoingCallRoomIDPublisher.value == "!other:example.com")
         
         // Unlike a web view call, a native one is tracked by CallKit, so it gets the connected report too.
         service.reportCallSessionConnected(roomID: "!other:example.com")

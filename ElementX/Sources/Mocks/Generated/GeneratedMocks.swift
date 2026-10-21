@@ -5109,11 +5109,6 @@ nonisolated class ElementCallManagerMock: ElementCallManagerProtocol, @unchecked
         set(value) { underlyingActions = value }
     }
     nonisolated(unsafe) var underlyingActions: AnyPublisher<ElementCallManagerAction, Never>!
-    var ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never> {
-        get { return underlyingOngoingCallRoomIDPublisher }
-        set(value) { underlyingOngoingCallRoomIDPublisher = value }
-    }
-    nonisolated(unsafe) var underlyingOngoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never>!
     nonisolated(unsafe) var activeUserID: String?
     nonisolated(unsafe) var nativeCallController: ElementCallController?
 
@@ -15756,6 +15751,11 @@ nonisolated class UserSessionMock: UserSessionProtocol, @unchecked Sendable {
         set(value) { underlyingNotificationService = value }
     }
     nonisolated(unsafe) var underlyingNotificationService: NotificationServiceProtocol!
+    var elementCallService: ElementCallServiceProtocol {
+        get { return underlyingElementCallService }
+        set(value) { underlyingElementCallService = value }
+    }
+    nonisolated(unsafe) var underlyingElementCallService: ElementCallServiceProtocol!
     var sessionSecurityStatePublisher: CurrentValuePublisher<SessionSecurityState, Never> {
         get { return underlyingSessionSecurityStatePublisher }
         set(value) { underlyingSessionSecurityStatePublisher = value }

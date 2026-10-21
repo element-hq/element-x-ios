@@ -129,7 +129,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                 appHooks: appHooks,
                                                 networkMonitor: networkMonitor)
         notificationManager = NotificationManager(notificationCenter: UNUserNotificationCenter.current(), appSettings: appSettings)
-        userSessionManager = UserSessionManager(userSessionStore: userSessionStore, appSettings: appSettings, notificationManager: notificationManager, liveLocationManager: LiveLocationManager(appSettings: appSettings))
+        let liveLocationManager = LiveLocationManager(appSettings: appSettings)
+        userSessionManager = UserSessionManager(userSessionStore: userSessionStore, appSettings: appSettings, notificationManager: notificationManager, liveLocationManager: liveLocationManager, elementCallManager: elementCallManager)
         
         let appLockService = AppLockService(keychainController: keychainController, appSettings: appSettings)
         let appLockNavigationCoordinator = NavigationRootCoordinator()
@@ -1012,7 +1013,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             fatalError("User session not setup")
         }
         
-        // TODO: Calls only follow the active account, ElementCallManager must change to hold every account's session.
+        // TODO: Native calls only follow the active account, left to the VoIP team.
         elementCallManager.setUserSession(userSession)
         Task {
             await resumeClientServices()

@@ -19,6 +19,7 @@ final class UserSessionManager: UserSessionManagerProtocol {
     private let appSettings: AppSettings
     private let notificationManager: NotificationManagerProtocol
     private let liveLocationManager: LiveLocationManagerProtocol
+    private let elementCallManager: ElementCallManagerProtocol
     
     private let sessionsSubject = CurrentValueSubject<[UserSessionProtocol], Never>([])
     /// Whether the services are running, so that the sessions restored meanwhile are resumed too.
@@ -29,7 +30,10 @@ final class UserSessionManager: UserSessionManagerProtocol {
     /// Every signed in account, most recently selected first, with its session once it's live.
     /// Assigning `nil` removes an account rather than clearing its session.
     private var accounts: OrderedDictionary<String, UserSessionProtocol?> = [:] {
-        didSet { sessionsSubject.send(accounts.values.compactMap { $0 }) }
+        didSet {
+            sessionsSubject.send(accounts.values.compactMap { $0 })
+            elementCallManager.activeUserID = accounts.keys.first
+        }
     }
     
     var userIDs: [String] {
@@ -73,11 +77,13 @@ final class UserSessionManager: UserSessionManagerProtocol {
     init(userSessionStore: UserSessionStoreProtocol,
          appSettings: AppSettings,
          notificationManager: NotificationManagerProtocol,
-         liveLocationManager: LiveLocationManagerProtocol) {
+         liveLocationManager: LiveLocationManagerProtocol,
+         elementCallManager: ElementCallManagerProtocol) {
         self.userSessionStore = userSessionStore
         self.appSettings = appSettings
         self.notificationManager = notificationManager
         self.liveLocationManager = liveLocationManager
+        self.elementCallManager = elementCallManager
         
         let userIDs = userSessionStore.userIDs
             .map { (userID: $0, lastSelectedDate: appSettings.userSettings(for: $0).account.lastSelectedDate) }
@@ -91,6 +97,8 @@ final class UserSessionManager: UserSessionManagerProtocol {
             }
             .map(\.userID)
         accounts = OrderedDictionary(uniqueKeysWithValues: userIDs.map { ($0, UserSessionProtocol?.none) })
+        // Observers don't run in an initialiser, and a VoIP push can arrive before any session is restored.
+        elementCallManager.activeUserID = accounts.keys.first
     }
     
     func session(for userID: String) -> UserSessionProtocol? {
@@ -148,6 +156,7 @@ final class UserSessionManager: UserSessionManagerProtocol {
         
         notificationManager.add(userSession.notificationService)
         liveLocationManager.add(userSession.liveLocationService)
+        elementCallManager.add(userSession.elementCallService)
     }
     
     func remove(userID: String) {
@@ -161,12 +170,14 @@ final class UserSessionManager: UserSessionManagerProtocol {
         accounts.removeValue(forKey: userID)
         notificationManager.remove(userID: userID)
         liveLocationManager.remove(userID: userID)
+        elementCallManager.remove(userID: userID)
     }
     
     func reset() {
         for userID in accounts.keys {
             notificationManager.remove(userID: userID)
             liveLocationManager.remove(userID: userID)
+            elementCallManager.remove(userID: userID)
         }
         userSessionStore.reset()
         clearedUserIDs.removeAll()
@@ -220,6 +231,7 @@ final class UserSessionManager: UserSessionManagerProtocol {
             accounts.removeValue(forKey: userID)
             notificationManager.remove(userID: userID)
             liveLocationManager.remove(userID: userID)
+            elementCallManager.remove(userID: userID)
             return nil
         }
     }

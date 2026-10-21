@@ -9,16 +9,13 @@
 import Combine
 import Foundation
 
-struct ElementCallManagerMockConfiguration {
-    var ongoingCallRoomID: String?
-}
+struct ElementCallManagerMockConfiguration { }
 
 extension ElementCallManagerMock {
     convenience init(_ configuration: ElementCallManagerMockConfiguration) {
         self.init()
         
         actions = PassthroughSubject().eraseToAnyPublisher()
-        ongoingCallRoomIDPublisher = .init(.init(configuration.ongoingCallRoomID))
         handleNativeCallRequestRoomProxyIsVoiceCallReturnValue = false
     }
 }

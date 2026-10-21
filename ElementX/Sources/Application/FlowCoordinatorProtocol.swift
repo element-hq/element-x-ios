@@ -43,6 +43,6 @@ struct CommonFlowParameters {
     }
     
     var ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never> {
-        elementCallManager.ongoingCallRoomIDPublisher
+        userSession.elementCallService.ongoingCallRoomIDPublisher
     }
 }

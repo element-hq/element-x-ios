@@ -34,8 +34,6 @@ enum ElementCallManagerAction {
 protocol ElementCallManagerProtocol: AnyObject {
     var actions: AnyPublisher<ElementCallManagerAction, Never> { get }
     
-    var ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never> { get }
-    
     /// The account the app shows. A VoIP push without a receiver belongs to it. Set by the `UserSessionManager`.
     var activeUserID: String? { get set }
     

@@ -78,8 +78,6 @@ class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegistryDe
     
     private var ongoingCallID: CallID? {
         didSet {
-            ongoingCallRoomIDSubject.send(ongoingCallID?.roomID)
-            
             if let oldValue, oldValue.userID != ongoingCallID?.userID {
                 services[oldValue.userID]?.ongoingCallChanged(roomID: nil)
             }
@@ -87,11 +85,6 @@ class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegistryDe
                 services[ongoingCallID.userID]?.ongoingCallChanged(roomID: ongoingCallID.roomID)
             }
         }
-    }
-    
-    let ongoingCallRoomIDSubject = CurrentValueSubject<String?, Never>(nil)
-    var ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never> {
-        ongoingCallRoomIDSubject.asCurrentValuePublisher()
     }
     
     private let actionsSubject: PassthroughSubject<ElementCallManagerAction, Never> = .init()

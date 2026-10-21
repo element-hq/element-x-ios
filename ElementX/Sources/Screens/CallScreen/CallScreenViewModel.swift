@@ -14,7 +14,7 @@ import SwiftUI
 typealias CallScreenViewModelType = StateStoreViewModel<CallScreenViewState, CallScreenViewAction>
 
 class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol {
-    private let elementCallService: ElementCallManagerProtocol
+    private let elementCallService: ElementCallServiceProtocol
     private let configuration: ElementCallConfiguration
     private let isPictureInPictureAllowed: Bool
     private let userSettings: UserSettings
@@ -36,7 +36,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     ///   - roomProxy: The room in which the call should be created
     ///   - callBaseURL: Which Element Call instance should be used
     ///   - clientID: Something to identify the current client on the Element Call side
-    init(elementCallService: ElementCallManagerProtocol,
+    init(elementCallService: ElementCallServiceProtocol,
          configuration: ElementCallConfiguration,
          allowPictureInPicture: Bool,
          userSettings: UserSettings,
@@ -53,27 +53,6 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         super.init(initialViewState: CallScreenViewState(script: CallScreenJavaScriptMessageName.allCasesInjectionScript))
         
         state.swiftUICallViewCoordinator = .init(viewModelContext: context)
-        
-        elementCallService.actions
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] action in
-                guard let self else { return }
-                
-                switch action {
-                case let .setAudioEnabled(enabled, roomID):
-                    guard roomID == configuration.callRoomID else {
-                        MXLog.error("Received mute request for a different room: \(roomID) != \(configuration.callRoomID)")
-                        return
-                    }
-                    
-                    Task {
-                        await self.setAudioEnabled(enabled)
-                    }
-                default:
-                    break
-                }
-            }
-            .store(in: &cancellables)
         
         widgetDriver.messagePublisher
             .receive(on: DispatchQueue.main)
@@ -195,9 +174,9 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
                 return
             }
             
-            await elementCallService.setupCallSession(roomID: configuration.roomProxy.id,
-                                                      roomDisplayName: configuration.roomProxy.infoPublisher.value.displayNameOrID,
-                                                      isVideo: !configuration.voiceOnly)
+            elementCallService.setupCallSession(roomID: configuration.roomProxy.id,
+                                                roomDisplayName: configuration.roomProxy.infoPublisher.value.displayNameOrID,
+                                                isVideo: !configuration.voiceOnly)
         }
         
         timeoutTask = Task { [weak self] in
@@ -235,14 +214,6 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         case .failure:
             actionsSubject.send(.dismiss)
         }
-    }
-    
-    private func setAudioEnabled(_ enabled: Bool) async {
-        let message = ElementCallWidgetMessage(direction: .toWidget,
-                                               action: .mediaState,
-                                               data: .init(audioEnabled: enabled),
-                                               widgetId: widgetDriver.widgetID)
-        await postMessageToWidget(message)
     }
     
     func hangup() async {
