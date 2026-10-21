@@ -93,7 +93,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
         case .displayCameraPicker:
             guard appMediator.isCameraAvailable else {
                 MXLog.info("Camera unavailable, not presenting the picker.")
-                userIndicatorController.submitIndicator(UserIndicator(title: UntranslatedL10n.screenMediaPickerErrorCameraUnavailable))
+                userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorCameraUnavailable))
                 return
             }
             actionsSubject.send(.displayCameraPicker)

@@ -374,7 +374,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         case .camera:
             guard appMediator.isCameraAvailable else {
                 MXLog.info("Camera unavailable, not presenting the picker.")
-                displayErrorToast(UntranslatedL10n.screenMediaPickerErrorCameraUnavailable)
+                displayErrorToast(L10n.errorCameraUnavailable)
                 return
             }
             actionsSubject.send(.displayCameraPicker)

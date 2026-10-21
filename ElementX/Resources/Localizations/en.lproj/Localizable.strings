@@ -503,6 +503,7 @@
 "emoji_picker_search_placeholder" = "Search emojis";
 "error_account_already_logged_in_title" = "Duplicate sign-in";
 "error_account_creation_not_possible" = "Your account provider needs to be upgraded to support Matrix Authentication Service and account creation.";
+"error_camera_unavailable" = "The camera is not available";
 "error_failed_creating_the_permalink" = "Failed creating the permalink";
 "error_failed_loading_map" = "%1$@ could not load the map. Please try again later.";
 "error_failed_loading_messages" = "Failed loading messages";

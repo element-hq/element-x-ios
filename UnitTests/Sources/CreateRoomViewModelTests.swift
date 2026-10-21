@@ -355,7 +355,7 @@ final class CreateRoomScreenViewModelTests {
         context.send(viewAction: .displayCameraPicker)
         try await deferredFailure.fulfill()
         
-        #expect(userIndicatorController.submitIndicatorDelayReceivedArguments?.indicator.title == UntranslatedL10n.screenMediaPickerErrorCameraUnavailable)
+        #expect(userIndicatorController.submitIndicatorDelayReceivedArguments?.indicator.title == L10n.errorCameraUnavailable)
     }
     
     private func setup(isSpace: Bool = false, spacesSelectionMode: CreateRoomScreenSpaceSelectionMode = .editableSpacesList(preSelectedSpace: nil)) {

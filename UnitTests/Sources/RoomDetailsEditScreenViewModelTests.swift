@@ -180,7 +180,7 @@ struct RoomDetailsEditScreenViewModelTests {
         context.send(viewAction: .displayCameraPicker)
         try await deferredFailure.fulfill()
         
-        #expect(userIndicatorController.submitIndicatorDelayReceivedArguments?.indicator.title == UntranslatedL10n.screenMediaPickerErrorCameraUnavailable)
+        #expect(userIndicatorController.submitIndicatorDelayReceivedArguments?.indicator.title == L10n.errorCameraUnavailable)
     }
     
     // MARK: - Private
