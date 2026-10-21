@@ -29,15 +29,18 @@ struct AvatarSettingsButton: View {
                                     avatarSize: .user(on: isCompact ? .chatsCompact : .chats),
                                     mediaProvider: mediaProvider)
             }
+            .accessibilityLabel(L10n.commonSettings)
+            .accessibilityIdentifier(A11yIdentifiers.homeScreen.userAvatar)
             
             if let statusEmoji = userProfile.status.displayed?.emoji {
                 Text(String(statusEmoji))
                     .font(isCompact ? .compound.bodyXSSemibold : .compound.bodyLGSemibold)
                     .foregroundStyle(.compound.textPrimary)
+                    .accessibilityLabel(L10n.a11yStatus)
+                    .accessibilityValue(String(statusEmoji))
             }
         }
         .geometryGroup()
-        .accessibilityHidden(true) // Decorative, the enclosing button provides the description.
     }
 }
 

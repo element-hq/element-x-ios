@@ -107,8 +107,6 @@ struct HomeScreen: View {
                              mediaProvider: context.mediaProvider) {
             context.send(viewAction: .showSettings)
         }
-        .accessibilityLabel(L10n.commonSettings)
-        .accessibilityIdentifier(A11yIdentifiers.homeScreen.userAvatar)
     }
     
     @ViewBuilder

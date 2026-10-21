@@ -100,8 +100,6 @@ struct SpacesScreen: View {
                 context.send(viewAction: .showSettings)
             }
             .buttonStyle(.borderless)
-            .accessibilityLabel(L10n.commonSettings)
-            .accessibilityIdentifier(A11yIdentifiers.homeScreen.userAvatar)
         }
         .backportSharedBackgroundVisibility(.hidden)
         
