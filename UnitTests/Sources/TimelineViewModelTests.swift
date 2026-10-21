@@ -671,7 +671,7 @@ final class TimelineViewModelTests {
     @Test
     func forwardMenuActionStartsSelection() async throws {
         let items = [TextRoomTimelineItem(eventID: "$1"), TextRoomTimelineItem(eventID: "$2")]
-        let viewModel = makeSelectionViewModel(items: items)
+        let viewModel = makeViewModel(items: items)
         
         let deferred = deferFulfillment(viewModel.actions) { action in
             if case .composer(action: .removeFocus) = action {
@@ -687,26 +687,9 @@ final class TimelineViewModelTests {
     }
     
     @Test
-    func forwardMenuActionForwardsTheMessageWhenFlagIsOff() async throws {
-        let items = [TextRoomTimelineItem(eventID: "$1")]
-        let viewModel = makeViewModel(timelineController: TimelineControllerMock(.init(timelineItems: items)))
-        
-        let deferred = deferFulfillment(viewModel.actions) { action in
-            if case .displayMessageForwarding(let forwardingPayload) = action {
-                return forwardingPayload.ids == [items[0].id] && forwardingPayload.contents.count == 1
-            }
-            return false
-        }
-        viewModel.process(viewAction: .handleTimelineItemMenuAction(itemID: items[0].id, action: .forward(itemID: items[0].id)))
-        try await deferred.fulfill()
-        
-        #expect(!viewModel.state.messageSelection.isActive)
-    }
-    
-    @Test
     func forwardMenuActionStartsSelectionInThePinnedTimeline() {
         let items = [TextRoomTimelineItem(eventID: "$1")]
-        let viewModel = makeSelectionViewModel(timelineController: TimelineControllerMock(.init(timelineKind: .pinned, timelineItems: items)))
+        let viewModel = makeViewModel(timelineController: TimelineControllerMock(.init(timelineKind: .pinned, timelineItems: items)))
         
         viewModel.process(viewAction: .handleTimelineItemMenuAction(itemID: items[0].id, action: .forward(itemID: items[0].id)))
         
@@ -716,7 +699,7 @@ final class TimelineViewModelTests {
     @Test
     func forwardMenuActionForwardsTheMessageInTheMediaTimeline() async throws {
         let items = [TextRoomTimelineItem(eventID: "$1")]
-        let viewModel = makeSelectionViewModel(timelineController: TimelineControllerMock(.init(timelineKind: .media(.mediaFilesScreen), timelineItems: items)))
+        let viewModel = makeViewModel(timelineController: TimelineControllerMock(.init(timelineKind: .media(.mediaFilesScreen), timelineItems: items)))
         
         let deferred = deferFulfillment(viewModel.actions) { action in
             if case .displayMessageForwarding(let forwardingPayload) = action {
@@ -733,7 +716,7 @@ final class TimelineViewModelTests {
     @Test
     func forwardSelectionUsesTimelineOrder() async throws {
         let items = (1...4).map { TextRoomTimelineItem(eventID: "$\($0)") }
-        let viewModel = makeSelectionViewModel(items: items)
+        let viewModel = makeViewModel(items: items)
         
         // Select the last message first, then the second one.
         startSelection(items[3].id, in: viewModel)
@@ -755,7 +738,7 @@ final class TimelineViewModelTests {
     @Test
     func forwardingCompletionClearsTheSelection() {
         let items = [TextRoomTimelineItem(eventID: "$1"), TextRoomTimelineItem(eventID: "$2")]
-        let viewModel = makeSelectionViewModel(items: items)
+        let viewModel = makeViewModel(items: items)
         
         startSelection(items[0].id, in: viewModel)
         viewModel.process(viewAction: .toggleMessageSelection(itemID: items[1].id))
@@ -767,7 +750,7 @@ final class TimelineViewModelTests {
     @Test
     func toggleSelectionAddsAndRemovesItems() {
         let items = [TextRoomTimelineItem(eventID: "$1"), TextRoomTimelineItem(eventID: "$2")]
-        let viewModel = makeSelectionViewModel(items: items)
+        let viewModel = makeViewModel(items: items)
         
         // Toggling before entering the selection does nothing.
         viewModel.process(viewAction: .toggleMessageSelection(itemID: items[0].id))
@@ -794,7 +777,7 @@ final class TimelineViewModelTests {
     @Test
     func clearMessageSelectionEndsTheSelection() {
         let items = [TextRoomTimelineItem(eventID: "$1"), TextRoomTimelineItem(eventID: "$2")]
-        let viewModel = makeSelectionViewModel(items: items)
+        let viewModel = makeViewModel(items: items)
         
         startSelection(items[0].id, in: viewModel)
         viewModel.process(viewAction: .toggleMessageSelection(itemID: items[1].id))
@@ -830,7 +813,7 @@ final class TimelineViewModelTests {
                                              content: .init(body: "Sending"))
         let poll = PollRoomTimelineItem.mock(poll: .emptyDisclosed)
         let nonSelectableItems: [RoomTimelineItemProtocol] = [state, redacted, localEcho, poll]
-        let viewModel = makeSelectionViewModel(items: [text] + nonSelectableItems)
+        let viewModel = makeViewModel(items: [text] + nonSelectableItems)
         
         startSelection(state.id, in: viewModel)
         #expect(!viewModel.state.messageSelection.isActive)
@@ -846,7 +829,7 @@ final class TimelineViewModelTests {
     func selectionIsLimited() {
         let items = (0...TimelineMessageSelectionState.limit).map { TextRoomTimelineItem(eventID: "$\($0)") }
         let userIndicatorController = UserIndicatorControllerMock()
-        let viewModel = makeSelectionViewModel(items: items, userIndicatorController: userIndicatorController)
+        let viewModel = makeViewModel(items: items, userIndicatorController: userIndicatorController)
         
         startSelection(items[0].id, in: viewModel)
         for item in items.dropFirst() {
@@ -863,7 +846,7 @@ final class TimelineViewModelTests {
     func selectionIsPrunedWhenItemsBecomeUnselectable() async throws {
         let items = [TextRoomTimelineItem(eventID: "$1"), TextRoomTimelineItem(eventID: "$2")]
         let timelineController = TimelineControllerMock(.init(timelineItems: items))
-        let viewModel = makeSelectionViewModel(timelineController: timelineController)
+        let viewModel = makeViewModel(timelineController: timelineController)
         
         startSelection(items[0].id, in: viewModel)
         viewModel.process(viewAction: .toggleMessageSelection(itemID: items[1].id))
@@ -886,7 +869,7 @@ final class TimelineViewModelTests {
     func selectionIsClearedWhenSwitchingTimelines() async throws {
         let items = [TextRoomTimelineItem(eventID: "$1")]
         let timelineController = TimelineControllerMock(.init(timelineItems: items))
-        let viewModel = makeSelectionViewModel(timelineController: timelineController)
+        let viewModel = makeViewModel(timelineController: timelineController)
         
         startSelection(items[0].id, in: viewModel)
         #expect(viewModel.state.messageSelection.isActive)
@@ -896,32 +879,22 @@ final class TimelineViewModelTests {
         try await deferred.fulfill()
     }
     
-    @Test
-    func disablingTheFlagClearsTheSelection() async throws {
-        let items = [TextRoomTimelineItem(eventID: "$1")]
-        let userSettings = UserSettings.mock()
-        userSettings.app.messageMultiSelectEnabled = true
-        let viewModel = makeViewModel(timelineController: TimelineControllerMock(.init(timelineItems: items)), userSettings: userSettings)
-        
-        startSelection(items[0].id, in: viewModel)
-        #expect(viewModel.state.messageSelection.isActive)
-        
-        let deferred = deferFulfillment(viewModel.context.$viewState) { !$0.messageSelection.isEnabled && !$0.messageSelection.isActive }
-        userSettings.app.messageMultiSelectEnabled = false
-        try await deferred.fulfill()
-    }
-    
     // MARK: - Helpers
+    
+    private func makeViewModel(items: [RoomTimelineItemProtocol],
+                               userIndicatorController: UserIndicatorControllerProtocol = UserIndicatorControllerMock()) -> TimelineViewModel {
+        makeViewModel(timelineController: TimelineControllerMock(.init(timelineItems: items)),
+                      userIndicatorController: userIndicatorController)
+    }
     
     private func makeViewModel(roomProxy: JoinedRoomProxyProtocol? = nil,
                                focussedEventID: String? = nil,
                                timelineController: TimelineControllerProtocol,
-                               userIndicatorController: UserIndicatorControllerProtocol = UserIndicatorControllerMock(),
-                               userSettings: UserSettings = .mock()) -> TimelineViewModel {
+                               userIndicatorController: UserIndicatorControllerProtocol = UserIndicatorControllerMock()) -> TimelineViewModel {
         TimelineViewModel(roomProxy: roomProxy ?? JoinedRoomProxyMock(.init(name: "")),
                           focussedEventID: focussedEventID,
                           timelineController: timelineController,
-                          userSession: UserSessionMock(.init(userSettings: userSettings)),
+                          userSession: UserSessionMock(.init()),
                           mediaPlayerProvider: MediaPlayerProviderMock(),
                           userIndicatorController: userIndicatorController,
                           appMediator: AppMediatorMock(.init()),
@@ -934,21 +907,6 @@ final class TimelineViewModelTests {
     /// Starts a selection the way the app does, by choosing Forward on the item.
     private func startSelection(_ itemID: TimelineItemIdentifier, in viewModel: TimelineViewModel) {
         viewModel.process(viewAction: .handleTimelineItemMenuAction(itemID: itemID, action: .forward(itemID: itemID)))
-    }
-    
-    private func makeSelectionViewModel(items: [RoomTimelineItemProtocol],
-                                        userIndicatorController: UserIndicatorControllerProtocol = UserIndicatorControllerMock()) -> TimelineViewModel {
-        makeSelectionViewModel(timelineController: TimelineControllerMock(.init(timelineItems: items)),
-                               userIndicatorController: userIndicatorController)
-    }
-    
-    private func makeSelectionViewModel(timelineController: TimelineControllerProtocol,
-                                        userIndicatorController: UserIndicatorControllerProtocol = UserIndicatorControllerMock()) -> TimelineViewModel {
-        let userSettings = UserSettings.mock()
-        userSettings.app.messageMultiSelectEnabled = true
-        return makeViewModel(timelineController: timelineController,
-                             userIndicatorController: userIndicatorController,
-                             userSettings: userSettings)
     }
 }
 

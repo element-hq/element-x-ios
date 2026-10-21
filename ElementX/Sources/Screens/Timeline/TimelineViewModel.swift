@@ -101,7 +101,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                        areThreadsEnabled: userSettings.app.threadsEnabled,
                                                        linkPreviewsEnabled: userSettings.app.linkPreviewsEnabled,
                                                        jumpToReadMarkerEnabled: userSettings.app.jumpToReadMarkerEnabled,
-                                                       messageSelection: .init(isEnabled: userSettings.app.messageMultiSelectEnabled),
                                                        hasPredecessor: roomProxy.predecessorRoom != nil,
                                                        pinnedEventIDs: roomProxy.infoPublisher.value.pinnedEventIDs,
                                                        emojiProvider: emojiProvider,
@@ -587,8 +586,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         userSettings.app.jumpToReadMarkerEnabledPublisher
             .weakAssign(to: \.state.jumpToReadMarkerEnabled, on: self)
             .store(in: &cancellables)
-        
-        setupSelectionSubscriptions()
         
         userSession.clientProxy.timelineMediaVisibilityPublisher
             .removeDuplicates()
@@ -1195,17 +1192,6 @@ extension TimelineViewModel {
 // MARK: - Selection
 
 extension TimelineViewModel {
-    private func setupSelectionSubscriptions() {
-        userSettings.app.messageMultiSelectEnabledPublisher
-            .sink { [weak self] isEnabled in
-                self?.state.messageSelection.isEnabled = isEnabled
-                if !isEnabled {
-                    self?.state.messageSelection.end()
-                }
-            }
-            .store(in: &cancellables)
-    }
-    
     private func startSelection(itemID: TimelineItemIdentifier) {
         guard let eventID = selectableEventID(for: itemID) else { return }
         

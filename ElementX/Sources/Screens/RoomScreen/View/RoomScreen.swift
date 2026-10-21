@@ -395,19 +395,15 @@ struct RoomScreen_Previews: PreviewProvider, TestablePreview {
                                                       powerLevelsConfiguration: .init(canUserSendMessage: canSendMessage)))
         let roomViewModel = RoomScreenViewModel.mock(roomProxyMock: roomProxyMock)
         
-        let userSettings = UserSettings.mock()
-        userSettings.app.messageMultiSelectEnabled = isSelecting
-        let userSession = UserSessionMock(.init(userSettings: userSettings))
-        
         let timelineController = TimelineControllerMock(.init())
         let timelineViewModel = TimelineViewModel(roomProxy: roomProxyMock,
                                                   timelineController: timelineController,
-                                                  userSession: userSession,
+                                                  userSession: UserSessionMock(.init()),
                                                   mediaPlayerProvider: MediaPlayerProviderMock(),
                                                   userIndicatorController: UserIndicatorControllerMock(),
                                                   appMediator: AppMediatorMock(.init()),
                                                   analyticsService: AnalyticsServiceMock(.init()),
-                                                  emojiProvider: EmojiProvider(userSettings: userSettings),
+                                                  emojiProvider: EmojiProvider(userSettings: .mock()),
                                                   linkMetadataProvider: LinkMetadataProvider(),
                                                   timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         

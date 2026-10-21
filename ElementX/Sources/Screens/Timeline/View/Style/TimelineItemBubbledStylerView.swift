@@ -466,19 +466,15 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
     static let unsafeViewModel = TimelineViewModel.mock(contentScannerService: ContentScannerServiceMock(.init(scanResult: false)))
     
     static let selectingViewModel: TimelineViewModel = {
-        let userSettings = UserSettings.mock()
-        userSettings.app.messageMultiSelectEnabled = true
-        let userSession = UserSessionMock(.init(userSettings: userSettings))
-        
         let viewModel = TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init()),
                                           focussedEventID: nil,
                                           timelineController: TimelineControllerMock(.init()),
-                                          userSession: userSession,
+                                          userSession: UserSessionMock(.init()),
                                           mediaPlayerProvider: MediaPlayerProviderMock(),
                                           userIndicatorController: UserIndicatorControllerMock(),
                                           appMediator: AppMediatorMock(.init()),
                                           analyticsService: AnalyticsServiceMock(.init()),
-                                          emojiProvider: EmojiProvider(userSettings: userSettings),
+                                          emojiProvider: EmojiProvider(userSettings: .mock()),
                                           linkMetadataProvider: LinkMetadataProvider(),
                                           timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         viewModel.state.messageSelection.isActive = true
