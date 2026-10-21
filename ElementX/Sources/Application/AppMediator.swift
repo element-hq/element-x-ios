@@ -36,6 +36,10 @@ class AppMediator: AppMediatorProtocol {
         }
     }
     
+    var isCameraAvailable: Bool {
+        UIImagePickerController.isSourceTypeAvailable(.camera)
+    }
+    
     func beginBackgroundTask(expirationHandler handler: (@MainActor @Sendable () -> Void)?) -> UIBackgroundTaskIdentifier {
         application.beginBackgroundTask(expirationHandler: handler)
     }

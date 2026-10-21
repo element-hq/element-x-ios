@@ -13,15 +13,20 @@ import Testing
 @MainActor
 struct UserDetailsEditScreenViewModelTests {
     private var viewModel: UserDetailsEditScreenViewModel!
+    private var userIndicatorController: UserIndicatorControllerMock!
+    private var appMediator: AppMediatorMock!
     
     private var context: UserDetailsEditScreenViewModelType.Context {
         viewModel.context
     }
     
     init() {
+        userIndicatorController = UserIndicatorControllerMock()
+        appMediator = AppMediatorMock(.init())
         viewModel = .init(userSession: UserSessionMock(.init()),
                           mediaUploadingPreprocessor: MediaUploadingPreprocessor(userSettings: .mock()),
-                          userIndicatorController: UserIndicatorControllerMock())
+                          userIndicatorController: userIndicatorController,
+                          appMediator: appMediator)
     }
     
     @Test
@@ -88,5 +93,23 @@ struct UserDetailsEditScreenViewModelTests {
         let deferred = deferFulfillment(viewModel.actions) { $0 == .dismiss }
         context.alertInfo?.primaryButton.action?() // Save
         try await deferred.fulfill()
+    }
+    
+    @Test
+    func cameraPickerOpensWhenTheCameraIsAvailable() async throws {
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .displayCameraPicker }
+        context.send(viewAction: .displayCameraPicker)
+        try await deferred.fulfill()
+    }
+    
+    @Test
+    func cameraPickerShowsAnErrorWhenTheCameraIsUnavailable() async throws {
+        appMediator.isCameraAvailable = false
+        
+        let deferredFailure = deferFailure(viewModel.actions, timeout: .seconds(1)) { $0 == .displayCameraPicker }
+        context.send(viewAction: .displayCameraPicker)
+        try await deferredFailure.fulfill()
+        
+        #expect(userIndicatorController.submitIndicatorDelayReceivedArguments?.indicator.title == UntranslatedL10n.screenMediaPickerErrorCameraUnavailable)
     }
 }

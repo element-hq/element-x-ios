@@ -70,7 +70,8 @@ struct CreateRoomSpaceSelectionSheet_Previews: PreviewProvider, TestablePreview 
                                          shouldShowCancelButton: false,
                                          userSession: userSession,
                                          analytics: AnalyticsServiceMock(.init()),
-                                         userIndicatorController: UserIndicatorControllerMock())
+                                         userIndicatorController: UserIndicatorControllerMock(),
+                                         appMediator: AppMediatorMock(.init()))
     }()
     
     static var previews: some View {

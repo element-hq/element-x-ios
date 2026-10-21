@@ -253,7 +253,7 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
                                                                     mediaUploadingPreprocessor: MediaUploadingPreprocessor(userSettings: flowParameters.userSession.userSettings),
                                                                     navigationStackCoordinator: stackCoordinator,
                                                                     userIndicatorController: flowParameters.userIndicatorController,
-                                                                    orientationManager: flowParameters.appMediator.windowManager)
+                                                                    appMediator: flowParameters.appMediator)
         
         let coordinator = RoomDetailsEditScreenCoordinator(parameters: parameters)
         

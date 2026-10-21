@@ -12,6 +12,7 @@ extension AppMediatorMock {
     struct Configuration {
         var appState = UIApplication.State.active
         var isCameraAuthorized = true
+        var isCameraAvailable = true
         var networkMonitor = NetworkMonitorMock(.init())
     }
     
@@ -20,6 +21,7 @@ extension AppMediatorMock {
         
         appState = configuration.appState
         requestAuthorizationIfNeededReturnValue = configuration.isCameraAuthorized
+        isCameraAvailable = configuration.isCameraAvailable
         networkMonitor = configuration.networkMonitor
         
         let windowManagerMock = WindowManagerMock()

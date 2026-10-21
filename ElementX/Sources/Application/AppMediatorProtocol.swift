@@ -16,6 +16,9 @@ protocol AppMediatorProtocol {
     
     var appState: UIApplication.State { get }
     
+    /// Changes at runtime (e.g. while the camera is in use), so check it before each use.
+    var isCameraAvailable: Bool { get }
+    
     func open(_ url: URL)
     
     func openAppSettings()

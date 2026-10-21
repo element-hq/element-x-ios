@@ -16,6 +16,8 @@ final class CreateRoomScreenViewModelTests {
     var clientProxy: ClientProxyMock!
     var spaceService: SpaceServiceProxyMock!
     var userSession: UserSessionMock!
+    var userIndicatorController: UserIndicatorControllerMock!
+    var appMediator: AppMediatorMock!
     
     private let userSettings: UserSettings
     
@@ -32,6 +34,8 @@ final class CreateRoomScreenViewModelTests {
         clientProxy = nil
         spaceService = nil
         userSession = nil
+        userIndicatorController = nil
+        appMediator = nil
     }
     
     @Test
@@ -91,7 +95,8 @@ final class CreateRoomScreenViewModelTests {
                                                   shouldShowCancelButton: false,
                                                   userSession: userSession,
                                                   analytics: AnalyticsServiceMock(.init()),
-                                                  userIndicatorController: UserIndicatorControllerMock())
+                                                  userIndicatorController: UserIndicatorControllerMock(),
+                                                  appMediator: AppMediatorMock(.init()))
         self.viewModel = viewModel
         
         // Given a form with a blank topic.
@@ -326,6 +331,33 @@ final class CreateRoomScreenViewModelTests {
         #expect(context.viewState.canSelectSpace)
     }
     
+    @Test
+    func cameraPickerOpensWhenTheCameraIsAvailable() async throws {
+        setup()
+        
+        let deferred = deferFulfillment(viewModel.actions) { action in
+            guard case .displayCameraPicker = action else { return false }
+            return true
+        }
+        context.send(viewAction: .displayCameraPicker)
+        try await deferred.fulfill()
+    }
+    
+    @Test
+    func cameraPickerShowsAnErrorWhenTheCameraIsUnavailable() async throws {
+        setup()
+        appMediator.isCameraAvailable = false
+        
+        let deferredFailure = deferFailure(viewModel.actions, timeout: .seconds(1)) { action in
+            guard case .displayCameraPicker = action else { return false }
+            return true
+        }
+        context.send(viewAction: .displayCameraPicker)
+        try await deferredFailure.fulfill()
+        
+        #expect(userIndicatorController.submitIndicatorDelayReceivedArguments?.indicator.title == UntranslatedL10n.screenMediaPickerErrorCameraUnavailable)
+    }
+    
     private func setup(isSpace: Bool = false, spacesSelectionMode: CreateRoomScreenSpaceSelectionMode = .editableSpacesList(preSelectedSpace: nil)) {
         spaceService = SpaceServiceProxyMock(.init(editableSpaces: .mockJoinedSpaces2,
                                                    spaceRoomLists: ["1": .init()]))
@@ -335,12 +367,15 @@ final class CreateRoomScreenViewModelTests {
         clientProxy.roomForIdentifierClosure = { roomID in .joined(JoinedRoomProxyMock(.init(id: roomID))) }
         userSession = UserSessionMock(.init(clientProxy: clientProxy, userSettings: userSettings))
         userSettings.app.knockingEnabled = true
+        userIndicatorController = UserIndicatorControllerMock()
+        appMediator = AppMediatorMock(.init())
         let viewModel = CreateRoomScreenViewModel(isSpace: isSpace,
                                                   spaceSelectionMode: spacesSelectionMode,
                                                   shouldShowCancelButton: false,
                                                   userSession: userSession,
                                                   analytics: AnalyticsServiceMock(.init()),
-                                                  userIndicatorController: UserIndicatorControllerMock())
+                                                  userIndicatorController: userIndicatorController,
+                                                  appMediator: appMediator)
         self.viewModel = viewModel
     }
 }

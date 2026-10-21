@@ -466,6 +466,7 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
                                          shouldShowCancelButton: isSpace,
                                          userSession: userSession,
                                          analytics: AnalyticsServiceMock(.init()),
-                                         userIndicatorController: UserIndicatorControllerMock())
+                                         userIndicatorController: UserIndicatorControllerMock(),
+                                         appMediator: AppMediatorMock(.init()))
     }
 }

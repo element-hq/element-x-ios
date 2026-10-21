@@ -15,6 +15,7 @@ struct RoomDetailsEditScreenViewModelTests {
     var viewModel: RoomDetailsEditScreenViewModel!
     
     var userIndicatorController: UserIndicatorControllerMock!
+    var appMediator: AppMediatorMock!
     
     var context: RoomDetailsEditScreenViewModelType.Context {
         viewModel.context
@@ -161,13 +162,36 @@ struct RoomDetailsEditScreenViewModelTests {
         #expect(context.viewState.avatarURL == nil)
     }
     
+    @Test
+    mutating func cameraPickerOpensWhenTheCameraIsAvailable() async throws {
+        setupViewModel(roomProxyConfiguration: .init(name: "Some room", members: [.mockMeAdmin]))
+        
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .displayCameraPicker }
+        context.send(viewAction: .displayCameraPicker)
+        try await deferred.fulfill()
+    }
+    
+    @Test
+    mutating func cameraPickerShowsAnErrorWhenTheCameraIsUnavailable() async throws {
+        setupViewModel(roomProxyConfiguration: .init(name: "Some room", members: [.mockMeAdmin]))
+        appMediator.isCameraAvailable = false
+        
+        let deferredFailure = deferFailure(viewModel.actions, timeout: .seconds(1)) { $0 == .displayCameraPicker }
+        context.send(viewAction: .displayCameraPicker)
+        try await deferredFailure.fulfill()
+        
+        #expect(userIndicatorController.submitIndicatorDelayReceivedArguments?.indicator.title == UntranslatedL10n.screenMediaPickerErrorCameraUnavailable)
+    }
+    
     // MARK: - Private
     
     private mutating func setupViewModel(roomProxyConfiguration: JoinedRoomProxyMockConfiguration) {
         userIndicatorController = UserIndicatorControllerMock()
+        appMediator = AppMediatorMock(.init())
         viewModel = .init(roomProxy: JoinedRoomProxyMock(roomProxyConfiguration),
                           userSession: UserSessionMock(.init()),
                           mediaUploadingPreprocessor: MediaUploadingPreprocessor(userSettings: .mock()),
-                          userIndicatorController: userIndicatorController)
+                          userIndicatorController: userIndicatorController,
+                          appMediator: appMediator)
     }
 }
