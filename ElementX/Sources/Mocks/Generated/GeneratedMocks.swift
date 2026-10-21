@@ -5103,12 +5103,12 @@ nonisolated class ContentScannerServiceMock: ContentScannerServiceProtocol, @unc
         }
     }
 }
-nonisolated class ElementCallServiceMock: ElementCallServiceProtocol, @unchecked Sendable {
-    var actions: AnyPublisher<ElementCallServiceAction, Never> {
+nonisolated class ElementCallManagerMock: ElementCallManagerProtocol, @unchecked Sendable {
+    var actions: AnyPublisher<ElementCallManagerAction, Never> {
         get { return underlyingActions }
         set(value) { underlyingActions = value }
     }
-    nonisolated(unsafe) var underlyingActions: AnyPublisher<ElementCallServiceAction, Never>!
+    nonisolated(unsafe) var underlyingActions: AnyPublisher<ElementCallManagerAction, Never>!
     var ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never> {
         get { return underlyingOngoingCallRoomIDPublisher }
         set(value) { underlyingOngoingCallRoomIDPublisher = value }

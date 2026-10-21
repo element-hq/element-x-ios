@@ -21,7 +21,7 @@ struct TimeProvider {
     var now: () -> Date
 }
 
-class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDelegate, CXProviderDelegate {
+class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegistryDelegate, CXProviderDelegate {
     private struct CallID: Equatable {
         let callKitID: UUID
         let roomID: String
@@ -69,8 +69,8 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         ongoingCallRoomIDSubject.asCurrentValuePublisher()
     }
     
-    private let actionsSubject: PassthroughSubject<ElementCallServiceAction, Never> = .init()
-    var actions: AnyPublisher<ElementCallServiceAction, Never> {
+    private let actionsSubject: PassthroughSubject<ElementCallManagerAction, Never> = .init()
+    var actions: AnyPublisher<ElementCallManagerAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     

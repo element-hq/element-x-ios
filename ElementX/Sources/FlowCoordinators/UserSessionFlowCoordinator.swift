@@ -465,7 +465,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             // An answered call is left up for the native stack, so it has to be ended here rather
             // than leaving the system with a call this room can no longer serve.
             MXLog.error("Cannot present the call screen, \(roomID) isn't a joined room")
-            flowParameters.elementCallService.tearDownCallSession(roomID: roomID)
+            flowParameters.elementCallManager.tearDownCallSession(roomID: roomID)
             return
         }
         
@@ -486,7 +486,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private var callScreenPictureInPictureController: AVPictureInPictureController?
     private func presentCallScreen(configuration: ElementCallConfiguration) {
         // The service runs native calls and drives their screen through its own actions.
-        if flowParameters.elementCallService.handleNativeCallRequest(roomProxy: configuration.roomProxy,
+        if flowParameters.elementCallManager.handleNativeCallRequest(roomProxy: configuration.roomProxy,
                                                                      isVoiceCall: configuration.voiceOnly) {
             return
         }
@@ -497,7 +497,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             return
         }
         
-        let callScreenCoordinator = CallScreenCoordinator(parameters: .init(elementCallService: flowParameters.elementCallService,
+        let callScreenCoordinator = CallScreenCoordinator(parameters: .init(elementCallService: flowParameters.elementCallManager,
                                                                             configuration: configuration,
                                                                             allowPictureInPicture: true,
                                                                             userSettings: userSession.userSettings,
@@ -529,7 +529,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     private func hideCallScreenOverlay() {
         if navigationTabCoordinator.overlayCoordinator is NativeCallScreenCoordinator {
-            flowParameters.elementCallService.minimizeNativeCall()
+            flowParameters.elementCallManager.minimizeNativeCall()
             return
         }
         
@@ -553,7 +553,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: - Native calls
     
     private func setupCallObservers() {
-        flowParameters.elementCallService.actions
+        flowParameters.elementCallManager.actions
             .receive(on: DispatchQueue.main)
             .sink { [weak self] action in
                 guard let self else { return }
@@ -587,7 +587,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentNativeCallScreen() {
-        guard let controller = flowParameters.elementCallService.nativeCallController else {
+        guard let controller = flowParameters.elementCallManager.nativeCallController else {
             MXLog.error("Cannot present a native call without a call stack")
             return
         }
@@ -608,7 +608,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func restoreNativeCallScreen() {
-        flowParameters.elementCallService.restoreNativeCall()
+        flowParameters.elementCallManager.restoreNativeCall()
         navigationTabCoordinator.setOverlayPresentationMode(.fullScreen)
     }
     

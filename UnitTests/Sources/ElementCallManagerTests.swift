@@ -12,14 +12,14 @@ import PushKit
 import Testing
 
 @MainActor
-final class ElementCallServiceTests {
+final class ElementCallManagerTests {
     private var appSettings: AppSettings!
     private var callProvider: CXProviderMock!
     private var callController: CXCallControllerMock!
     private var currentDate: Date!
     private var clock: ManualClock!
     private var pushRegistry: PKPushRegistry!
-    private var service: ElementCallService!
+    private var service: ElementCallManager!
     private var userSession: UserSessionMock!
     
     init() {
@@ -32,7 +32,7 @@ final class ElementCallServiceTests {
         let dateProvider: () -> Date = {
             self.currentDate
         }
-        service = ElementCallService(appSettings: appSettings,
+        service = ElementCallManager(appSettings: appSettings,
                                      callProvider: callProvider,
                                      callController: callController,
                                      timeProvider: TimeProvider(clock: clock, now: dateProvider))

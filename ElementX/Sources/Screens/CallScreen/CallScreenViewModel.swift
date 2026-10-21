@@ -14,7 +14,7 @@ import SwiftUI
 typealias CallScreenViewModelType = StateStoreViewModel<CallScreenViewState, CallScreenViewAction>
 
 class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol {
-    private let elementCallService: ElementCallServiceProtocol
+    private let elementCallService: ElementCallManagerProtocol
     private let configuration: ElementCallConfiguration
     private let isPictureInPictureAllowed: Bool
     private let userSettings: UserSettings
@@ -36,7 +36,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     ///   - roomProxy: The room in which the call should be created
     ///   - callBaseURL: Which Element Call instance should be used
     ///   - clientID: Something to identify the current client on the Element Call side
-    init(elementCallService: ElementCallServiceProtocol,
+    init(elementCallService: ElementCallManagerProtocol,
          configuration: ElementCallConfiguration,
          allowPictureInPicture: Bool,
          userSettings: UserSettings,

@@ -11,7 +11,7 @@ import Combine
 import SwiftUI
 
 struct CallScreenCoordinatorParameters {
-    let elementCallService: ElementCallServiceProtocol
+    let elementCallService: ElementCallManagerProtocol
     let configuration: ElementCallConfiguration
     let allowPictureInPicture: Bool
     let userSettings: UserSettings

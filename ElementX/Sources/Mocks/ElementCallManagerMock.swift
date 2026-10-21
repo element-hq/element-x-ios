@@ -9,12 +9,12 @@
 import Combine
 import Foundation
 
-struct ElementCallServiceMockConfiguration {
+struct ElementCallManagerMockConfiguration {
     var ongoingCallRoomID: String?
 }
 
-extension ElementCallServiceMock {
-    convenience init(_ configuration: ElementCallServiceMockConfiguration) {
+extension ElementCallManagerMock {
+    convenience init(_ configuration: ElementCallManagerMockConfiguration) {
         self.init()
         
         actions = PassthroughSubject().eraseToAnyPublisher()
