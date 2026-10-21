@@ -18,6 +18,12 @@ protocol PillAttachmentViewProviderDelegate: AnyObject {
     func invalidateTextAttachmentsDisplay()
 }
 
+extension PillAttachmentViewProviderDelegate {
+    /// Only the rich text composer needs this: it leaves its old pill views behind when its text is
+    /// replaced, so it flushes them itself. UIKit removes them from the other text views.
+    func registerPillView(_ pillView: UIView) { }
+}
+
 final class PillAttachmentViewProvider: NSTextAttachmentViewProvider, NSSecureCoding {
     private weak var delegate: PillAttachmentViewProviderDelegate?
     

@@ -12,7 +12,6 @@ import SwiftUI
 final class MessageTextView: UITextView, PillAttachmentViewProviderDelegate, UIGestureRecognizerDelegate, NSLayoutManagerDelegate {
     var timelineContext: TimelineViewModel.Context?
     var updateClosure: (() -> Void)?
-    private var pillViews = NSHashTable<UIView>.weakObjects()
     
     override func addGestureRecognizer(_ gestureRecognizer: UIGestureRecognizer) {
         // We don't need to change the behaviour on MacOS
@@ -52,18 +51,6 @@ final class MessageTextView: UITextView, PillAttachmentViewProviderDelegate, UIG
         let isCode = textStorage.attribute(.InlineCode, at: charIndex, effectiveRange: nil) != nil
             || textStorage.attribute(.CodeBlock, at: charIndex, effectiveRange: nil) != nil
         return !isCode
-    }
-    
-    func registerPillView(_ pillView: UIView) {
-        pillViews.add(pillView)
-    }
-    
-    func flushPills() {
-        for view in pillViews.allObjects {
-            view.alpha = 0.0
-            view.removeFromSuperview()
-        }
-        pillViews.removeAllObjects()
     }
 }
 
@@ -218,7 +205,6 @@ struct MessageText: UIViewRepresentable {
     func updateUIView(_ uiView: MessageTextView, context: Context) {
         if let newAttributedText = makeAttributedText(),
            uiView.attributedText != newAttributedText {
-            uiView.flushPills()
             uiView.attributedText = newAttributedText
             computedSizes.removeAll()
         }
