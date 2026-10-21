@@ -12,7 +12,6 @@ import SwiftUI
 final class MessageTextView: UITextView, PillAttachmentViewProviderDelegate, UIGestureRecognizerDelegate, NSLayoutManagerDelegate {
     var timelineContext: TimelineViewModel.Context?
     var updateClosure: (() -> Void)?
-    private var pillViews = NSHashTable<UIView>.weakObjects()
     
     override func addGestureRecognizer(_ gestureRecognizer: UIGestureRecognizer) {
         // We don't need to change the behaviour on MacOS
@@ -42,6 +41,9 @@ final class MessageTextView: UITextView, PillAttachmentViewProviderDelegate, UIG
         }
     }
     
+    /// UIKit removes old pill views from this text view when its text changes, so there's nothing to track.
+    func registerPillView(_ pillView: UIView) { }
+    
     /// Stops TextKit from hyphenating code when a word doesn't fit on a line, wrapping it by
     /// character instead. Code is meant to be verbatim, so an inserted hyphen would corrupt it.
     nonisolated func layoutManager(_ layoutManager: NSLayoutManager, shouldBreakLineByHyphenatingBeforeCharacterAt charIndex: Int) -> Bool {
@@ -52,18 +54,6 @@ final class MessageTextView: UITextView, PillAttachmentViewProviderDelegate, UIG
         let isCode = textStorage.attribute(.InlineCode, at: charIndex, effectiveRange: nil) != nil
             || textStorage.attribute(.CodeBlock, at: charIndex, effectiveRange: nil) != nil
         return !isCode
-    }
-    
-    func registerPillView(_ pillView: UIView) {
-        pillViews.add(pillView)
-    }
-    
-    func flushPills() {
-        for view in pillViews.allObjects {
-            view.alpha = 0.0
-            view.removeFromSuperview()
-        }
-        pillViews.removeAllObjects()
     }
 }
 
@@ -218,7 +208,6 @@ struct MessageText: UIViewRepresentable {
     func updateUIView(_ uiView: MessageTextView, context: Context) {
         if let newAttributedText = makeAttributedText(),
            uiView.attributedText != newAttributedText {
-            uiView.flushPills()
             uiView.attributedText = newAttributedText
             computedSizes.removeAll()
         }
