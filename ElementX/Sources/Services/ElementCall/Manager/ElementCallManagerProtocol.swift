@@ -20,7 +20,7 @@ enum NativeCallPresentation: Equatable {
 
 enum ElementCallManagerAction {
     case receivedIncomingCallRequest
-    case startCall(roomID: String, isVoiceCall: Bool)
+    case startCall(userID: String, roomID: String, isVoiceCall: Bool)
     case endCall(roomID: String)
     case setAudioEnabled(_ enabled: Bool, roomID: String)
     /// CallKit activated the audio session: a native call may start its audio engine now.
@@ -35,6 +35,14 @@ protocol ElementCallManagerProtocol: AnyObject {
     var actions: AnyPublisher<ElementCallManagerAction, Never> { get }
     
     var ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never> { get }
+    
+    /// The account the app shows. A VoIP push without a receiver belongs to it. Set by the `UserSessionManager`.
+    var activeUserID: String? { get set }
+    
+    /// Hands the account's calls to its service, replacing any previous service for that account.
+    func add(_ service: ElementCallServiceProtocol)
+    /// Ends the account's ringing and ongoing calls, and lets go of its service.
+    func remove(userID: String)
     
     /// The controller for this session's native call stack, `nil` when native calls are unavailable.
     var nativeCallController: ElementCallController? { get }

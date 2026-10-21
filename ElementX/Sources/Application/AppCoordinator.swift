@@ -182,7 +182,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             .receive(on: DispatchQueue.main)
             .sink { [weak self] action in
                 switch action {
-                case .startCall(let roomID, let isVoiceCall):
+                // TODO: Another account's call still opens with the active account's session.
+                case .startCall(_, let roomID, let isVoiceCall):
                     self?.handleAppRoute(.call(roomID: roomID, isVoiceCall: isVoiceCall), windowType: nil)
                 case .receivedIncomingCallRequest:
                     // When reporting a VoIP call through the CXProvider's `reportNewIncomingVoIPPushPayload`

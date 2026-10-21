@@ -5114,8 +5114,71 @@ nonisolated class ElementCallManagerMock: ElementCallManagerProtocol, @unchecked
         set(value) { underlyingOngoingCallRoomIDPublisher = value }
     }
     nonisolated(unsafe) var underlyingOngoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never>!
+    nonisolated(unsafe) var activeUserID: String?
     nonisolated(unsafe) var nativeCallController: ElementCallController?
 
+    //MARK: - add
+
+    private let addCallsCountLock = NSLock()
+    private nonisolated(unsafe) var addUnderlyingCallsCount = 0
+    var addCallsCount: Int {
+        get { addCallsCountLock.withLock { addUnderlyingCallsCount } }
+        set { addCallsCountLock.withLock { addUnderlyingCallsCount = newValue } }
+    }
+    var addCalled: Bool {
+        return addCallsCount > 0
+    }
+    private let addReceivedServiceLock = NSLock()
+    private nonisolated(unsafe) var addUnderlyingReceivedService: ElementCallServiceProtocol?
+    var addReceivedService: ElementCallServiceProtocol? {
+        get { addReceivedServiceLock.withLock { addUnderlyingReceivedService } }
+        set { addReceivedServiceLock.withLock { addUnderlyingReceivedService = newValue } }
+    }
+    private let addReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var addUnderlyingReceivedInvocations: [ElementCallServiceProtocol] = []
+    var addReceivedInvocations: [ElementCallServiceProtocol] {
+        get { addReceivedInvocationsLock.withLock { addUnderlyingReceivedInvocations } }
+        set { addReceivedInvocationsLock.withLock { addUnderlyingReceivedInvocations = newValue } }
+    }
+    nonisolated(unsafe) var addClosure: ((ElementCallServiceProtocol) -> Void)?
+
+    func add(_ service: ElementCallServiceProtocol) {
+        addCallsCountLock.withLock { addUnderlyingCallsCount += 1 }
+        addReceivedService = service
+        addReceivedInvocationsLock.withLock { addUnderlyingReceivedInvocations.append(service) }
+        addClosure?(service)
+    }
+    //MARK: - remove
+
+    private let removeUserIDCallsCountLock = NSLock()
+    private nonisolated(unsafe) var removeUserIDUnderlyingCallsCount = 0
+    var removeUserIDCallsCount: Int {
+        get { removeUserIDCallsCountLock.withLock { removeUserIDUnderlyingCallsCount } }
+        set { removeUserIDCallsCountLock.withLock { removeUserIDUnderlyingCallsCount = newValue } }
+    }
+    var removeUserIDCalled: Bool {
+        return removeUserIDCallsCount > 0
+    }
+    private let removeUserIDReceivedUserIDLock = NSLock()
+    private nonisolated(unsafe) var removeUserIDUnderlyingReceivedUserID: String?
+    var removeUserIDReceivedUserID: String? {
+        get { removeUserIDReceivedUserIDLock.withLock { removeUserIDUnderlyingReceivedUserID } }
+        set { removeUserIDReceivedUserIDLock.withLock { removeUserIDUnderlyingReceivedUserID = newValue } }
+    }
+    private let removeUserIDReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var removeUserIDUnderlyingReceivedInvocations: [String] = []
+    var removeUserIDReceivedInvocations: [String] {
+        get { removeUserIDReceivedInvocationsLock.withLock { removeUserIDUnderlyingReceivedInvocations } }
+        set { removeUserIDReceivedInvocationsLock.withLock { removeUserIDUnderlyingReceivedInvocations = newValue } }
+    }
+    nonisolated(unsafe) var removeUserIDClosure: ((String) -> Void)?
+
+    func remove(userID: String) {
+        removeUserIDCallsCountLock.withLock { removeUserIDUnderlyingCallsCount += 1 }
+        removeUserIDReceivedUserID = userID
+        removeUserIDReceivedInvocationsLock.withLock { removeUserIDUnderlyingReceivedInvocations.append(userID) }
+        removeUserIDClosure?(userID)
+    }
     //MARK: - setUserSession
 
     private let setUserSessionCallsCountLock = NSLock()
