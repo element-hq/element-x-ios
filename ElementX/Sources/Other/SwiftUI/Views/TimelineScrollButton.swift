@@ -23,8 +23,7 @@ struct TimelineScrollButton: View {
     let onLongPress: (() -> Void)?
     let callback: () -> Void
     
-    @ScaledMetric(relativeTo: .compound.bodyLG) private var iconSize: CGFloat = 24
-    @ScaledMetric(relativeTo: .compound.bodyLG) private var badgeDotSize: CGFloat = 12
+    @ScaledMetric(relativeTo: .compound.headingLG) private var badgeDotSize: CGFloat = 12
     @GestureState private var isPressing = false
     /// Set when a long-press is recognized so the trailing touch-up doesn't also fire `callback()`.
     @State private var consumedByLongPress = false
@@ -103,10 +102,10 @@ struct TimelineScrollButton: View {
     @ViewBuilder
     private var icon: some View {
         let chevron = CompoundIcon(direction == .down ? \.chevronDown : \.chevronUp,
-                                   size: .custom(iconSize),
-                                   relativeTo: .compound.bodyLG)
+                                   size: .medium,
+                                   relativeTo: .compound.headingLG)
             .foregroundStyle(.compound.iconPrimary)
-            .padding(iconPadding)
+            .scaledPadding(iconPadding, relativeTo: .compound.headingLG)
         if #available(iOS 26, *) {
             chevron
                 .glassEffect(.regular, in: Circle())
