@@ -9,7 +9,7 @@
 import MatrixRustSDK
 import SwiftUI
 
-final class MessageTextView: UITextView, PillAttachmentViewProviderDelegate, UIGestureRecognizerDelegate {
+final class MessageTextView: UITextView, PillAttachmentViewProviderDelegate, UIGestureRecognizerDelegate, NSLayoutManagerDelegate {
     var timelineContext: TimelineViewModel.Context?
     var updateClosure: (() -> Void)?
     private var pillViews = NSHashTable<UIView>.weakObjects()
@@ -42,6 +42,18 @@ final class MessageTextView: UITextView, PillAttachmentViewProviderDelegate, UIG
         }
     }
     
+    /// Stops TextKit from hyphenating code when a word doesn't fit on a line, wrapping it by
+    /// character instead. Code is meant to be verbatim, so an inserted hyphen would corrupt it.
+    nonisolated func layoutManager(_ layoutManager: NSLayoutManager, shouldBreakLineByHyphenatingBeforeCharacterAt charIndex: Int) -> Bool {
+        guard let textStorage = layoutManager.textStorage, charIndex < textStorage.length else {
+            return true
+        }
+        
+        let isCode = textStorage.attribute(.InlineCode, at: charIndex, effectiveRange: nil) != nil
+            || textStorage.attribute(.CodeBlock, at: charIndex, effectiveRange: nil) != nil
+        return !isCode
+    }
+    
     func registerPillView(_ pillView: UIView) {
         pillViews.add(pillView)
     }
@@ -67,22 +79,6 @@ private final nonisolated class TransparentTextAttachment: NSTextAttachment {
         format.opaque = false
         let size = CGSize(width: max(imageBounds.width, 1), height: max(imageBounds.height, 1))
         return UIGraphicsImageRenderer(size: size, format: format).image { _ in }
-    }
-}
-
-/// Stops TextKit from hyphenating code when a word doesn't fit on a line, wrapping it by
-/// character instead. Code is meant to be verbatim, so an inserted hyphen would corrupt it.
-final nonisolated class CodeHyphenationLayoutManagerDelegate: NSObject, NSLayoutManagerDelegate, Sendable {
-    static let shared = CodeHyphenationLayoutManagerDelegate()
-    
-    func layoutManager(_ layoutManager: NSLayoutManager, shouldBreakLineByHyphenatingBeforeCharacterAt charIndex: Int) -> Bool {
-        guard let textStorage = layoutManager.textStorage, charIndex < textStorage.length else {
-            return true
-        }
-        
-        let isCode = textStorage.attribute(.InlineCode, at: charIndex, effectiveRange: nil) != nil
-            || textStorage.attribute(.CodeBlock, at: charIndex, effectiveRange: nil) != nil
-        return !isCode
     }
 }
 
@@ -210,8 +206,7 @@ struct MessageText: UIViewRepresentable {
         textView.textContainerInset = .zero
         textView.textContainer.lineFragmentPadding = 0
         textView.layoutManager.usesFontLeading = false
-        // A shared instance as the layout manager only keeps a weak reference to its delegate.
-        textView.layoutManager.delegate = CodeHyphenationLayoutManagerDelegate.shared
+        textView.layoutManager.delegate = textView
         textView.backgroundColor = .clear
         if let attributedText = makeAttributedText() {
             textView.attributedText = attributedText
