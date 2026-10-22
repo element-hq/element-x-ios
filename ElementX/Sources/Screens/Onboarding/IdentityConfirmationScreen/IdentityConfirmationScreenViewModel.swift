@@ -13,16 +13,14 @@ typealias IdentityConfirmationScreenViewModelType = StateStoreViewModelV2<Identi
 
 class IdentityConfirmationScreenViewModel: IdentityConfirmationScreenViewModelType, IdentityConfirmationScreenViewModelProtocol {
     private let userSession: UserSessionProtocol
-    private let userIndicatorController: UserIndicatorControllerProtocol
     
     private let actionsSubject: PassthroughSubject<IdentityConfirmationScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<IdentityConfirmationScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(userSession: UserSessionProtocol, userSettings: UserSettings, userIndicatorController: UserIndicatorControllerProtocol) {
+    init(userSession: UserSessionProtocol, userSettings: UserSettings) {
         self.userSession = userSession
-        self.userIndicatorController = userIndicatorController
         
         super.init(initialViewState: IdentityConfirmationScreenViewState(learnMoreURL: userSettings.app.deviceVerificationURL))
         
@@ -56,12 +54,6 @@ class IdentityConfirmationScreenViewModel: IdentityConfirmationScreenViewModelTy
     // MARK: - Private
     
     private func updateWithSessionSecurityState(_ sessionSecurityState: SessionSecurityState) async {
-        if sessionSecurityState.verificationState == .unknown {
-            showLoadingIndicator()
-        } else {
-            hideLoadingIndicator()
-        }
-        
         // Note: Until the actions are unset, there's a disabled action button with a loading spinner.
         
         guard sessionSecurityState.verificationState == .unverified else {
@@ -99,18 +91,5 @@ class IdentityConfirmationScreenViewModel: IdentityConfirmationScreenViewModelTy
                                          primaryButton: .init(title: L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) { [weak self] in
                                              self?.actionsSubject.send(.logoutConfirmed)
                                          })
-    }
-    
-    private static let loadingIndicatorIdentifier = "\(IdentityConfirmationScreenViewModel.self)-Loading"
-    
-    private func showLoadingIndicator() {
-        userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
-                                                              type: .modal,
-                                                              title: L10n.commonLoading,
-                                                              persistent: true))
-    }
-    
-    private func hideLoadingIndicator() {
-        userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
     }
 }

@@ -297,9 +297,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentIdentityConfirmationScreen() {
-        let parameters = IdentityConfirmationScreenCoordinatorParameters(userSession: userSession,
-                                                                         userSettings: userSettings,
-                                                                         userIndicatorController: userIndicatorController)
+        let parameters = IdentityConfirmationScreenCoordinatorParameters(userSession: userSession, userSettings: userSettings)
         
         let coordinator = IdentityConfirmationScreenCoordinator(parameters: parameters)
         coordinator.actionsPublisher.sink { [weak self] action in

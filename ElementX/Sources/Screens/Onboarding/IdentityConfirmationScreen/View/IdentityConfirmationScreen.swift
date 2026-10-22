@@ -141,8 +141,6 @@ struct IdentityConfirmationScreen_Previews: PreviewProvider, TestablePreview {
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
         userSession.sessionSecurityStatePublisher = CurrentValuePublisher<SessionSecurityState, Never>(.init(verificationState: .unverified, recoveryState: recoveryState))
         
-        return IdentityConfirmationScreenViewModel(userSession: userSession,
-                                                   userSettings: .mock(),
-                                                   userIndicatorController: UserIndicatorControllerMock())
+        return IdentityConfirmationScreenViewModel(userSession: userSession, userSettings: .mock())
     }
 }
