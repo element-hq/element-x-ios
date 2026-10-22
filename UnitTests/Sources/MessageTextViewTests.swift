@@ -9,9 +9,9 @@
 import Testing
 import UIKit
 
-struct CodeHyphenationLayoutManagerDelegateTests {
+struct MessageTextViewTests {
     private let attributedStringBuilder = AttributedStringBuilder(mentionBuilder: MentionBuilder())
-    private let delegate = CodeHyphenationLayoutManagerDelegate()
+    private let textView = MessageTextView(usingTextLayoutManager: false)
     
     @Test
     func inlineCodeIsNotHyphenated() throws {
@@ -20,18 +20,18 @@ struct CodeHyphenationLayoutManagerDelegateTests {
         
         let codeRange = (textStorage.string as NSString).range(of: "d097cc7a2720e8a6e0714d291aa27a034bd20a0b")
         for index in codeRange.location..<NSMaxRange(codeRange) {
-            #expect(!delegate.layoutManager(layoutManager, shouldBreakLineByHyphenatingBeforeCharacterAt: index))
+            #expect(!textView.layoutManager(layoutManager, shouldBreakLineByHyphenatingBeforeCharacterAt: index))
         }
     }
     
     @Test
     func codeBlockIsNotHyphenated() throws {
-        let textStorage = try makeTextStorage(html: "<pre><code>configurationmanagementinitialization</code></pre>")
+        let textStorage = try makeTextStorage(html: "<pre>configurationmanagementinitialization</pre>")
         let layoutManager = try #require(textStorage.layoutManagers.first)
         
         let codeRange = (textStorage.string as NSString).range(of: "configurationmanagementinitialization")
         for index in codeRange.location..<NSMaxRange(codeRange) {
-            #expect(!delegate.layoutManager(layoutManager, shouldBreakLineByHyphenatingBeforeCharacterAt: index))
+            #expect(!textView.layoutManager(layoutManager, shouldBreakLineByHyphenatingBeforeCharacterAt: index))
         }
     }
     
@@ -41,8 +41,8 @@ struct CodeHyphenationLayoutManagerDelegateTests {
         let layoutManager = try #require(textStorage.layoutManagers.first)
         let string = textStorage.string as NSString
         
-        #expect(delegate.layoutManager(layoutManager, shouldBreakLineByHyphenatingBeforeCharacterAt: string.range(of: "Internationalization").location + 5))
-        #expect(delegate.layoutManager(layoutManager, shouldBreakLineByHyphenatingBeforeCharacterAt: string.range(of: "incomprehensibilities").location + 5))
+        #expect(textView.layoutManager(layoutManager, shouldBreakLineByHyphenatingBeforeCharacterAt: string.range(of: "Internationalization").location + 5))
+        #expect(textView.layoutManager(layoutManager, shouldBreakLineByHyphenatingBeforeCharacterAt: string.range(of: "incomprehensibilities").location + 5))
     }
     
     @Test
@@ -50,7 +50,7 @@ struct CodeHyphenationLayoutManagerDelegateTests {
         let textStorage = try makeTextStorage(html: "<code>code</code>")
         let layoutManager = try #require(textStorage.layoutManagers.first)
         
-        #expect(delegate.layoutManager(layoutManager, shouldBreakLineByHyphenatingBeforeCharacterAt: textStorage.length))
+        #expect(textView.layoutManager(layoutManager, shouldBreakLineByHyphenatingBeforeCharacterAt: textStorage.length))
     }
     
     // MARK: - Helpers
