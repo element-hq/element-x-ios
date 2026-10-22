@@ -108,8 +108,6 @@ struct IdentityConfirmationScreenViewModelTests {
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
         userSession.sessionSecurityStatePublisher = securityStateSubject.asCurrentValuePublisher()
         
-        viewModel = IdentityConfirmationScreenViewModel(userSession: userSession,
-                                                        userSettings: .mock(),
-                                                        userIndicatorController: UserIndicatorControllerMock())
+        viewModel = IdentityConfirmationScreenViewModel(userSession: userSession, userSettings: .mock())
     }
 }
