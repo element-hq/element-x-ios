@@ -25,6 +25,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let windowManager: WindowManagerProtocol
     private var isNewLogin: Bool
+    private let clock: any Clock<Duration>
     
     private var navigationStackCoordinator: NavigationStackCoordinator!
     
@@ -58,12 +59,15 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     
     private var verificationStateCancellable: AnyCancellable?
     private var initialVerificationStateCancellable: AnyCancellable?
+    @CancellableTask private var initialVerificationStateTimeoutTask: Task<Void, Never>?
     
     init(isNewLogin: Bool,
          appLockService: AppLockServiceProtocol,
          navigationStackCoordinator: NavigationStackCoordinator,
-         flowParameters: CommonFlowParameters) {
+         flowParameters: CommonFlowParameters,
+         clock: any Clock<Duration> = ContinuousClock()) {
         self.isNewLogin = isNewLogin
+        self.clock = clock
         userSession = flowParameters.userSession
         self.appLockService = appLockService
         analyticsService = flowParameters.analytics
@@ -87,13 +91,21 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
             .map(\.verificationState)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] value in
-                guard let self,
-                      value == .verified,
-                      stateMachine.state == .identityConfirmation else { return }
+                guard let self, value == .verified else { return }
                 
                 userSettings.account.hasRunIdentityConfirmationOnboarding = true
+                
+                guard stateMachine.state == .identityConfirmation else { return }
                 stateMachine.tryEvent(.nextSkippingIdentityConfirmed)
             }
+    }
+    
+    isolated deinit {
+        // Don't leave the loading indicator up if the flow goes away while waiting.
+        if initialVerificationStateCancellable != nil {
+            initialVerificationStateTimeoutTask?.cancel()
+            hideLoadingIndicator()
+        }
     }
     
     var shouldStart: Bool {
@@ -123,14 +135,16 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
             .first { $0.verificationState != .unknown }
             .receive(on: DispatchQueue.main)
             .sink { [weak self] securityState in
-                guard let self else { return }
-                initialVerificationStateCancellable = nil
-                hideLoadingIndicator()
-                if securityState.verificationState == .verified {
-                    userSettings.account.hasRunIdentityConfirmationOnboarding = true
-                }
-                stateMachine.tryEvent(.next)
+                self?.stopWaitingForVerificationState(securityState.verificationState)
             }
+        
+        // The state stays unknown when the SDK can't tell, e.g. if it couldn't set up cross-signing.
+        initialVerificationStateTimeoutTask = Task { [weak self, clock] in
+            try? await clock.sleep(for: .seconds(10))
+            guard !Task.isCancelled else { return }
+            MXLog.warning("Timed out waiting for the verification state.")
+            self?.stopWaitingForVerificationState(.unknown)
+        }
     }
     
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
@@ -144,8 +158,28 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: - Private
     
     private var requiresVerification: Bool {
-        // We want to make sure onboarding finishes but also every time the user becomes unverified (e.g. account reset)
-        !userSettings.account.hasRunIdentityConfirmationOnboarding || userSession.sessionSecurityStatePublisher.value.verificationState == .unverified
+        switch userSession.sessionSecurityStatePublisher.value.verificationState {
+        case .verified:
+            false
+        case .unverified:
+            // Every time the user becomes unverified (e.g. account reset), not just to finish onboarding.
+            true
+        case .unknown:
+            !userSettings.account.hasRunIdentityConfirmationOnboarding
+        }
+    }
+    
+    private func stopWaitingForVerificationState(_ verificationState: SessionVerificationState) {
+        guard initialVerificationStateCancellable != nil else { return }
+        
+        initialVerificationStateCancellable = nil
+        initialVerificationStateTimeoutTask = nil
+        hideLoadingIndicator()
+        
+        if verificationState == .verified {
+            userSettings.account.hasRunIdentityConfirmationOnboarding = true
+        }
+        stateMachine.tryEvent(.next)
     }
     
     private var requiresAppLockSetup: Bool {

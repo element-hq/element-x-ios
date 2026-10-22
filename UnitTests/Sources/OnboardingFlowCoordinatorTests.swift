@@ -14,28 +14,31 @@ struct OnboardingFlowCoordinatorTests {
     private let sessionSecurityStateSubject = CurrentValueSubject<SessionSecurityState, Never>(.init(verificationState: .unknown, recoveryState: .unknown))
     private let navigationStackCoordinator = NavigationStackCoordinator()
     private let userIndicatorController = UserIndicatorControllerMock()
+    private let clock = ManualClock()
+    private let flowParameters: CommonFlowParameters
     private let onboardingFlowCoordinator: OnboardingFlowCoordinator
     
     init() {
         let userSession = UserSessionMock(.init())
         userSession.sessionSecurityStatePublisher = sessionSecurityStateSubject.asCurrentValuePublisher()
         
-        let flowParameters = CommonFlowParameters(userSession: userSession,
-                                                  availableSessionsPublisher: .init([.init(userSession: userSession)]),
-                                                  bugReportService: BugReportServiceMock(.init()),
-                                                  elementCallService: ElementCallServiceMock(.init()),
-                                                  timelineControllerFactory: TimelineControllerFactoryMock(.init()),
-                                                  emojiProvider: EmojiProvider(userSettings: userSession.userSettings),
-                                                  linkMetadataProvider: LinkMetadataProvider(),
-                                                  appMediator: AppMediatorMock(.init()),
-                                                  analytics: AnalyticsServiceMock(.init()),
-                                                  userIndicatorController: userIndicatorController,
-                                                  stateMachineFactory: PublishedStateMachineFactory())
+        flowParameters = CommonFlowParameters(userSession: userSession,
+                                              availableSessionsPublisher: .init([.init(userSession: userSession)]),
+                                              bugReportService: BugReportServiceMock(.init()),
+                                              elementCallService: ElementCallServiceMock(.init()),
+                                              timelineControllerFactory: TimelineControllerFactoryMock(.init()),
+                                              emojiProvider: EmojiProvider(userSettings: userSession.userSettings),
+                                              linkMetadataProvider: LinkMetadataProvider(),
+                                              appMediator: AppMediatorMock(.init()),
+                                              analytics: AnalyticsServiceMock(.init()),
+                                              userIndicatorController: userIndicatorController,
+                                              stateMachineFactory: PublishedStateMachineFactory())
         
         onboardingFlowCoordinator = OnboardingFlowCoordinator(isNewLogin: true,
                                                               appLockService: AppLockServiceMock(),
                                                               navigationStackCoordinator: navigationStackCoordinator,
-                                                              flowParameters: flowParameters)
+                                                              flowParameters: flowParameters,
+                                                              clock: clock)
     }
     
     @Test
@@ -48,6 +51,43 @@ struct OnboardingFlowCoordinatorTests {
     func newLoginBecomingUnverifiedShowsIdentityConfirmation() async {
         await start(resolvingTo: .unverified)
         #expect(navigationStackCoordinator.rootCoordinator is IdentityConfirmationScreenCoordinator)
+    }
+    
+    @Test
+    func alreadyVerifiedSessionSkipsIdentityConfirmation() {
+        sessionSecurityStateSubject.send(.init(verificationState: .verified, recoveryState: .enabled))
+        onboardingFlowCoordinator.start()
+        #expect(navigationStackCoordinator.rootCoordinator is NotificationPermissionsScreenCoordinator)
+    }
+    
+    @Test
+    func unknownStateShowsIdentityConfirmationAfterTimingOut() async throws {
+        let (loadingRetracted, continuation) = AsyncStream<Void>.makeStream()
+        userIndicatorController.retractIndicatorWithIdClosure = { _ in continuation.yield() }
+        
+        onboardingFlowCoordinator.start()
+        #expect(await clock.waitForScheduledSleep() == .seconds(10))
+        #expect(navigationStackCoordinator.rootCoordinator == nil)
+        
+        let deferred = deferFulfillment(loadingRetracted) { _ in true }
+        clock.advance(by: .seconds(10))
+        try await deferred.fulfill()
+        
+        #expect(navigationStackCoordinator.rootCoordinator is IdentityConfirmationScreenCoordinator)
+    }
+    
+    @Test
+    func loadingIndicatorIsRetractedWhenTornDownWhileWaiting() {
+        var coordinator: OnboardingFlowCoordinator? = OnboardingFlowCoordinator(isNewLogin: true,
+                                                                                appLockService: AppLockServiceMock(),
+                                                                                navigationStackCoordinator: NavigationStackCoordinator(),
+                                                                                flowParameters: flowParameters,
+                                                                                clock: clock)
+        coordinator?.start()
+        #expect(userIndicatorController.retractIndicatorWithIdCallsCount == 0)
+        
+        coordinator = nil
+        #expect(userIndicatorController.retractIndicatorWithIdCallsCount == 1)
     }
     
     // MARK: - Helpers
