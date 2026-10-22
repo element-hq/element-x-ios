@@ -24,7 +24,8 @@ class IdentityConfirmationScreenViewModel: IdentityConfirmationScreenViewModelTy
         self.userSession = userSession
         self.userIndicatorController = userIndicatorController
         
-        super.init(initialViewState: IdentityConfirmationScreenViewState(learnMoreURL: userSettings.app.deviceVerificationURL))
+        super.init(initialViewState: IdentityConfirmationScreenViewState(isVerificationStateKnown: userSession.sessionSecurityStatePublisher.value.verificationState != .unknown,
+                                                                         learnMoreURL: userSettings.app.deviceVerificationURL))
         
         Task { [weak self] in
             for await state in userSession.sessionSecurityStatePublisher.values {
@@ -56,6 +57,8 @@ class IdentityConfirmationScreenViewModel: IdentityConfirmationScreenViewModelTy
     // MARK: - Private
     
     private func updateWithSessionSecurityState(_ sessionSecurityState: SessionSecurityState) async {
+        state.isVerificationStateKnown = sessionSecurityState.verificationState != .unknown
+        
         if sessionSecurityState.verificationState == .unknown {
             showLoadingIndicator()
         } else {

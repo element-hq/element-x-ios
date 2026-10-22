@@ -286,8 +286,12 @@ class AuthenticationService: AuthenticationServiceProtocol {
     
     private func userSession(for client: ClientProtocol) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
         switch await userSessionManager.userSession(for: client, sessionDirectories: sessionDirectories, passphrase: passphrase) {
-        case .success(let clientProxy):
-            return .success(clientProxy)
+        case .success(let userSession):
+            // Onboarding decides from the verification state whether to ask to confirm the identity. It only settles with
+            // the sync running, so start that here and wait behind the sign-in's loading indicator.
+            await userSession.clientProxy.resumeServices()
+            await userSession.waitForSettledVerificationState()
+            return .success(userSession)
         case .failure:
             return .failure(.failedLoggingIn)
         }

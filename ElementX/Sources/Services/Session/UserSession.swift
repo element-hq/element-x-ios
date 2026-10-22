@@ -14,6 +14,10 @@ class UserSession: UserSessionProtocol {
     
     private var authErrorCancellable: AnyCancellable?
     
+    /// Whether the SDK's verification state can be relied upon yet, see ``settleVerificationState(clock:)``.
+    private let isVerificationStateSettledSubject = CurrentValueSubject<Bool, Never>(false)
+    @CancellableTask private var verificationStateTimeoutTask: Task<Void, Never>?
+    
     let clientProxy: ClientProxyProtocol
     let userSettings: UserSettings
     let userHooks: UserHooks
@@ -38,7 +42,8 @@ class UserSession: UserSessionProtocol {
          mediaProvider: MediaProviderProtocol,
          voiceMessageMediaManager: VoiceMessageMediaManagerProtocol,
          liveLocationService: LiveLocationServiceProtocol,
-         notificationService: NotificationServiceProtocol) {
+         notificationService: NotificationServiceProtocol,
+         clock: any Clock<Duration> = ContinuousClock()) {
         self.clientProxy = clientProxy
         self.userSettings = userSettings
         self.userHooks = userHooks
@@ -62,15 +67,68 @@ class UserSession: UserSessionProtocol {
                 }
             }
         
-        Publishers.CombineLatest(clientProxy.verificationStatePublisher, clientProxy.secureBackupController.recoveryState)
-            .map {
-                MXLog.info("Session security state changed, verificationState: \($0), recoveryState: \($1)")
-                return SessionSecurityState(verificationState: $0, recoveryState: $1)
+        Publishers.CombineLatest3(clientProxy.verificationStatePublisher, clientProxy.secureBackupController.recoveryState, isVerificationStateSettledSubject)
+            .map { verificationState, recoveryState, isVerificationStateSettled in
+                let publishedVerificationState = isVerificationStateSettled || verificationState == .verified ? verificationState : .unknown
+                MXLog.info("Session security state changed, verificationState: \(publishedVerificationState) (SDK: \(verificationState)), recoveryState: \(recoveryState)")
+                return SessionSecurityState(verificationState: publishedVerificationState, recoveryState: recoveryState)
             }
+            .removeDuplicates()
             .receive(on: DispatchQueue.main)
             .sink { [weak self] value in
                 self?.sessionSecurityStateSubject.send(value)
             }
             .store(in: &cancellables)
+        
+        settleVerificationState(clock: clock)
+    }
+    
+    func waitForSettledVerificationState() async {
+        for await isSettled in isVerificationStateSettledSubject.values where isSettled {
+            return
+        }
+    }
+    
+    // MARK: - Private
+    
+    /// The SDK reports this session as unverified until it has set up encryption, and a new account's session
+    /// until a sync brings back the keys it was just signed with. Anything but verified is held back until then
+    /// (for 10 seconds at most), so that onboarding doesn't briefly ask to verify a session that is verified.
+    private func settleVerificationState(clock: any Clock<Duration>) {
+        clientProxy.verificationStatePublisher
+            .first { $0 == .verified }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.markVerificationStateAsSettled()
+            }
+            .store(in: &cancellables)
+        
+        verificationStateTimeoutTask = Task { [weak self] in
+            try? await clock.sleep(for: .seconds(10))
+            guard let self, !Task.isCancelled else { return }
+            MXLog.warning("Timed out waiting for the verification state to settle.")
+            markVerificationStateAsSettled()
+        }
+        
+        let clientProxy = clientProxy
+        Task { [weak self] in
+            await clientProxy.waitForE2EEInitializationTasks()
+            
+            // A new identity is trusted straight away, so it is about to verify this session.
+            if clientProxy.verificationStatePublisher.value == .unverified,
+               case .success(let identity) = await clientProxy.userIdentity(for: clientProxy.userID, fallBackToServer: false),
+               identity?.verificationState == .verified {
+                MXLog.info("Waiting for a sync to verify this session with its new identity.")
+                return
+            }
+            
+            self?.markVerificationStateAsSettled()
+        }
+    }
+    
+    private func markVerificationStateAsSettled() {
+        guard !isVerificationStateSettledSubject.value else { return }
+        verificationStateTimeoutTask = nil
+        isVerificationStateSettledSubject.send(true)
     }
 }

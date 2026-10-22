@@ -4554,6 +4554,23 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return userIdentityForFallBackToServerReturnValue
         }
     }
+    //MARK: - waitForE2EEInitializationTasks
+
+    private let waitForE2EEInitializationTasksCallsCountLock = NSLock()
+    private nonisolated(unsafe) var waitForE2EEInitializationTasksUnderlyingCallsCount = 0
+    var waitForE2EEInitializationTasksCallsCount: Int {
+        get { waitForE2EEInitializationTasksCallsCountLock.withLock { waitForE2EEInitializationTasksUnderlyingCallsCount } }
+        set { waitForE2EEInitializationTasksCallsCountLock.withLock { waitForE2EEInitializationTasksUnderlyingCallsCount = newValue } }
+    }
+    var waitForE2EEInitializationTasksCalled: Bool {
+        return waitForE2EEInitializationTasksCallsCount > 0
+    }
+    nonisolated(unsafe) var waitForE2EEInitializationTasksClosure: (() async -> Void)?
+
+    @concurrent func waitForE2EEInitializationTasks() async {
+        waitForE2EEInitializationTasksCallsCountLock.withLock { waitForE2EEInitializationTasksUnderlyingCallsCount += 1 }
+        await waitForE2EEInitializationTasksClosure?()
+    }
     //MARK: - setTimelineMediaVisibility
 
     private let setTimelineMediaVisibilityCallsCountLock = NSLock()
@@ -15483,6 +15500,23 @@ nonisolated class UserSessionMock: UserSessionProtocol, @unchecked Sendable {
     }
     nonisolated(unsafe) var underlyingCallbacks: PassthroughSubject<UserSessionCallback, Never>!
 
+    //MARK: - waitForSettledVerificationState
+
+    private let waitForSettledVerificationStateCallsCountLock = NSLock()
+    private nonisolated(unsafe) var waitForSettledVerificationStateUnderlyingCallsCount = 0
+    var waitForSettledVerificationStateCallsCount: Int {
+        get { waitForSettledVerificationStateCallsCountLock.withLock { waitForSettledVerificationStateUnderlyingCallsCount } }
+        set { waitForSettledVerificationStateCallsCountLock.withLock { waitForSettledVerificationStateUnderlyingCallsCount = newValue } }
+    }
+    var waitForSettledVerificationStateCalled: Bool {
+        return waitForSettledVerificationStateCallsCount > 0
+    }
+    nonisolated(unsafe) var waitForSettledVerificationStateClosure: (() async -> Void)?
+
+    @concurrent func waitForSettledVerificationState() async {
+        waitForSettledVerificationStateCallsCountLock.withLock { waitForSettledVerificationStateUnderlyingCallsCount += 1 }
+        await waitForSettledVerificationStateClosure?()
+    }
 }
 nonisolated class UserSessionStoreMock: UserSessionStoreProtocol, @unchecked Sendable {
     var hasSessions: Bool {

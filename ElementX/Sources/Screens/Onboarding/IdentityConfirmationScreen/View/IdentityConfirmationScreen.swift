@@ -22,9 +22,13 @@ struct IdentityConfirmationScreen: View {
     
     var body: some View {
         FullscreenDialog(topPadding: UIConstants.startScreenBreakerScreenTopPadding) {
-            screenHeader
+            if context.viewState.isVerificationStateKnown {
+                screenHeader
+            }
         } bottomContent: {
-            actionButtons
+            if context.viewState.isVerificationStateKnown {
+                actionButtons
+            }
         }
         .toolbar { toolbar }
         .background()
@@ -106,9 +110,11 @@ struct IdentityConfirmationScreen: View {
     
     @ToolbarContentBuilder
     var toolbar: some ToolbarContent {
-        ToolbarItem(placement: .destructiveAction) {
-            Button(L10n.actionSignout) {
-                context.send(viewAction: .logout)
+        if context.viewState.isVerificationStateKnown {
+            ToolbarItem(placement: .destructiveAction) {
+                Button(L10n.actionSignout) {
+                    context.send(viewAction: .logout)
+                }
             }
         }
     }

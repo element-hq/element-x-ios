@@ -32,6 +32,8 @@ protocol UserSessionProtocol: Sendable {
     var notificationService: NotificationServiceProtocol { get }
     
     var sessionSecurityStatePublisher: CurrentValuePublisher<SessionSecurityState, Never> { get }
+    /// Waits until the verification state in ``sessionSecurityStatePublisher`` won't flip straight away, 10 seconds at most.
+    func waitForSettledVerificationState() async
     
     var callbacks: PassthroughSubject<UserSessionCallback, Never> { get }
 }

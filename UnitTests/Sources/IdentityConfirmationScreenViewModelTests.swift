@@ -33,6 +33,16 @@ struct IdentityConfirmationScreenViewModelTests {
         try await deferred.fulfill()
     }
     
+    @Test
+    mutating func contentIsShownOnceTheVerificationStateIsKnown() async throws {
+        setupViewModel(verificationState: .unknown)
+        #expect(!context.viewState.isVerificationStateKnown)
+        
+        let deferred = deferFulfillment(context.observe(\.viewState.isVerificationStateKnown)) { $0 }
+        securityStateSubject.send(.init(verificationState: .unverified, recoveryState: .enabled))
+        try await deferred.fulfill()
+    }
+    
     // MARK: - Available Actions
     
     @Test
@@ -99,8 +109,8 @@ struct IdentityConfirmationScreenViewModelTests {
     
     // MARK: - Private
     
-    mutating func setupViewModel(hasDevicesToVerifyAgainst: Bool = true) {
-        let initialState = SessionSecurityState(verificationState: .unverified, recoveryState: .unknown)
+    mutating func setupViewModel(hasDevicesToVerifyAgainst: Bool = true, verificationState: SessionVerificationState = .unverified) {
+        let initialState = SessionSecurityState(verificationState: verificationState, recoveryState: .unknown)
         securityStateSubject = CurrentValueSubject<SessionSecurityState, Never>(initialState)
         
         let clientProxy = ClientProxyMock(.init())

@@ -303,6 +303,9 @@ protocol ClientProxyProtocol: AnyObject {
     
     func userIdentity(for userID: String, fallBackToServer: Bool) async -> Result<UserIdentityProxyProtocol?, ClientProxyError>
     
+    /// Waits for the SDK to finish setting up encryption, e.g. bootstrapping cross-signing on a new account.
+    func waitForE2EEInitializationTasks() async
+    
     // MARK: - Live Location
     
     /// Publishes updates about the current user's own live location beacon info state changes (start/stop) as echoed by the server.

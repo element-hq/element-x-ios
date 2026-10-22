@@ -24,6 +24,8 @@ struct IdentityConfirmationScreenViewState: BindableState {
     }
     
     var availableActions: [AvailableActions]?
+    /// Until it is known, nothing but a loading indicator is shown, as the session might turn out to be verified.
+    var isVerificationStateKnown: Bool
     let learnMoreURL: URL
     
     var bindings = IdentityConfirmationScreenBindings()

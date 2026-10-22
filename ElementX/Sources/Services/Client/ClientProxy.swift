@@ -1498,6 +1498,12 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func waitForE2EEInitializationTasks() async {
+        await client.encryption().waitForE2eeInitializationTasks()
+        // Listener updates hop through a task, so refresh to publish the current state before returning.
+        await updateVerificationState(client.encryption().verificationState())
+    }
+    
     func userIdentity(for userID: String, fallBackToServer: Bool) async -> Result<UserIdentityProxyProtocol?, ClientProxyError> {
         do {
             return try await .success(client.encryption().userIdentity(userId: userID, fallbackToServer: fallBackToServer).map(UserIdentityProxy.init))

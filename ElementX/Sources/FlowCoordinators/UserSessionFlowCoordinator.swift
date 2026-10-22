@@ -68,6 +68,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     private let stateMachine: StateMachine<State, Event>
     private var cancellables: Set<AnyCancellable> = []
+    private var sessionVerificationRequestsCancellable: AnyCancellable?
     
     private let actionsSubject: PassthroughSubject<UserSessionFlowCoordinatorAction, Never> = .init()
     var actionsPublisher: AnyPublisher<UserSessionFlowCoordinatorAction, Never> {
@@ -284,12 +285,11 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             .filter { $0 != .unknown }
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
-                guard let self else { return }
-                
-                attemptStartingOnboarding()
-                setupSessionVerificationRequestsObserver()
+                self?.attemptStartingOnboarding()
             }
             .store(in: &cancellables)
+        
+        setupSessionVerificationRequestsObserver()
         
         let reachabilityNotificationID = "io.element.elementx.reachability.notification"
         userSession.clientProxy.homeserverReachabilityPublisher.removeDuplicates()
@@ -413,7 +413,24 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: - Session Verification
     
     private func setupSessionVerificationRequestsObserver() {
-        userSession.clientProxy.sessionVerificationController?.actions
+        // The session security state holds the SDK's state back for a while, but requests can arrive as soon as there's a controller.
+        userSession.clientProxy.verificationStatePublisher
+            .filter { $0 != .unknown }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.observeSessionVerificationRequestsIfPossible()
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func observeSessionVerificationRequestsIfPossible() {
+        // Each extra subscription would present the verification screen again for the same request.
+        guard sessionVerificationRequestsCancellable == nil,
+              let sessionVerificationController = userSession.clientProxy.sessionVerificationController else {
+            return
+        }
+        
+        sessionVerificationRequestsCancellable = sessionVerificationController.actions
             .receive(on: DispatchQueue.main)
             .sink { [weak self] action in
                 guard let self, case .receivedVerificationRequest(let details) = action else {
@@ -428,7 +445,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     presentSessionVerificationScreen(flow: .userResponder(requestDetails: details))
                 }
             }
-            .store(in: &cancellables)
     }
     
     private func presentSessionVerificationScreen(flow: SessionVerificationScreenFlow) {
