@@ -404,6 +404,7 @@
 		3E2EE5782688054B3026EF8E /* ChatsSpaceFilterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 847C893CF354BCBDF1351C13 /* ChatsSpaceFilterCell.swift */; };
 		3E3CC3D17908A3BB9F224CC5 /* DeactivateAccountScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67638D34FB6A9110BE481A6F /* DeactivateAccountScreenCoordinator.swift */; };
 		3E7B65C2C97748D5D65AAA8B /* NotificationPermissionsScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DB2FC2AA9A07EE792DF65CF /* NotificationPermissionsScreenModels.swift */; };
+		3EB6E47C076141680089AD79 /* OnboardingFlowCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C786B7D675285985DF10DB84 /* OnboardingFlowCoordinatorTests.swift */; };
 		3EC5A41F9FB7DD63A4DC6144 /* RoomChangeRolesScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B14B1DE3E2D5D26732C49036 /* RoomChangeRolesScreenViewModel.swift */; };
 		3EC698F80DDEEFA273857841 /* ArrayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893777A4997BBDB68079D4F5 /* ArrayTests.swift */; };
 		3ED2725734568F6B8CC87544 /* AttributedStringBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5C6FBF97B6EED3D4FA5EFF /* AttributedStringBuilder.swift */; };
@@ -3024,6 +3025,7 @@
 		C75EF87651B00A176AB08E97 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C75FE3F524B575D53787868C /* TimelineMediaPreviewRedactConfirmationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineMediaPreviewRedactConfirmationView.swift; sourceTree = "<group>"; };
 		C7661EFFCAA307A97D71132A /* HomeScreenRoomList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenRoomList.swift; sourceTree = "<group>"; };
+		C786B7D675285985DF10DB84 /* OnboardingFlowCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFlowCoordinatorTests.swift; sourceTree = "<group>"; };
 		C79C2C6E7F66646D1D254927 /* RoomLiveLocationServiceMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomLiveLocationServiceMock.swift; sourceTree = "<group>"; };
 		C830A64609CBD152F06E0457 /* NotificationConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationConstants.swift; sourceTree = "<group>"; };
 		C8794B3D86D7D444B9B6FF7B /* ContentScanningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentScanningView.swift; sourceTree = "<group>"; };
@@ -5403,6 +5405,7 @@
 				514363244AE7D68080D44C6F /* NotificationSettingsScreenViewModelTests.swift */,
 				D148332A613AD27E9A2896C9 /* NotificationToneManagerTests.swift */,
 				B4ED859C6363DAB2E8CFF2CE /* NSItemProviderTests.swift */,
+				C786B7D675285985DF10DB84 /* OnboardingFlowCoordinatorTests.swift */,
 				FA3EB5B1848CF4F64E63C6B7 /* PermalinkTests.swift */,
 				31A6314FDC51DA25712D9A81 /* PillContextTests.swift */,
 				6FA38E813BE14149F173F461 /* PinnedEventsBannerStateTests.swift */,
@@ -8584,6 +8587,7 @@
 				C11939FDC40716C4387275A4 /* NotificationSettingsEditScreenViewModelTests.swift in Sources */,
 				E3AC72E3E58F364EF15C1CC7 /* NotificationSettingsScreenViewModelTests.swift in Sources */,
 				E593841CEBFDDC5387A75EBA /* NotificationToneManagerTests.swift in Sources */,
+				3EB6E47C076141680089AD79 /* OnboardingFlowCoordinatorTests.swift in Sources */,
 				50381244BA280451771BE3ED /* PINTextFieldTests.swift in Sources */,
 				1583E2D766E4485FF91662FC /* PermalinkTests.swift in Sources */,
 				3982E60F9C126437D5E488A3 /* PillContextTests.swift in Sources */,

@@ -57,6 +57,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private var verificationStateCancellable: AnyCancellable?
+    private var initialVerificationStateCancellable: AnyCancellable?
     
     init(isNewLogin: Bool,
          appLockService: AppLockServiceProtocol,
@@ -96,7 +97,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     var shouldStart: Bool {
-        guard stateMachine.state == .initial, !ProcessInfo.isRunningIntegrationTests else {
+        guard stateMachine.state == .initial, initialVerificationStateCancellable == nil, !ProcessInfo.isRunningIntegrationTests else {
             return false
         }
         
@@ -110,7 +111,26 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         
         actionsSubject.send(.requestPresentation(animated: !isNewLogin))
         
-        stateMachine.tryEvent(.next)
+        guard userSession.sessionSecurityStatePublisher.value.verificationState == .unknown else {
+            stateMachine.tryEvent(.next)
+            return
+        }
+        
+        // New accounts bootstrap cross-signing in the background, wait for it
+        // so identity confirmation isn't briefly shown before becoming verified.
+        showLoadingIndicator()
+        initialVerificationStateCancellable = userSession.sessionSecurityStatePublisher
+            .first { $0.verificationState != .unknown }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] securityState in
+                guard let self else { return }
+                initialVerificationStateCancellable = nil
+                hideLoadingIndicator()
+                if securityState.verificationState == .verified {
+                    userSettings.account.hasRunIdentityConfirmationOnboarding = true
+                }
+                stateMachine.tryEvent(.next)
+            }
     }
     
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
@@ -407,6 +427,19 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
             .store(in: &cancellables)
         
         presentCoordinator(coordinator)
+    }
+    
+    private static let loadingIndicatorIdentifier = "\(OnboardingFlowCoordinator.self)-Loading"
+    
+    private func showLoadingIndicator() {
+        userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
+                                                              type: .modal,
+                                                              title: L10n.commonLoading,
+                                                              persistent: true))
+    }
+    
+    private func hideLoadingIndicator() {
+        userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
     }
     
     private func presentCoordinator(_ coordinator: CoordinatorProtocol, dismissalCallback: (() -> Void)? = nil) {
