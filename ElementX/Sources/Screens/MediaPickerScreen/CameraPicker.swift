@@ -87,5 +87,9 @@ struct CameraPicker: UIViewControllerRepresentable {
                 cameraPicker.callback(.error(.invalidOriginalImage))
             }
         }
+        
+        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+            cameraPicker.callback(.cancel)
+        }
     }
 }

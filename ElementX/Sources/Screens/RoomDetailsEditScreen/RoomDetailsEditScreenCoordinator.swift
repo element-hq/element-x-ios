@@ -14,8 +14,8 @@ struct RoomDetailsEditScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
     let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     weak var navigationStackCoordinator: NavigationStackCoordinator?
+    let appMediator: AppMediatorProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
-    let orientationManager: OrientationManagerProtocol
 }
 
 enum RoomDetailsEditScreenCoordinatorAction {
@@ -38,6 +38,7 @@ final class RoomDetailsEditScreenCoordinator: CoordinatorProtocol {
         viewModel = RoomDetailsEditScreenViewModel(roomProxy: parameters.roomProxy,
                                                    userSession: parameters.userSession,
                                                    mediaUploadingPreprocessor: parameters.mediaUploadingPreprocessor,
+                                                   appMediator: parameters.appMediator,
                                                    userIndicatorController: parameters.userIndicatorController)
     }
     
@@ -69,7 +70,7 @@ final class RoomDetailsEditScreenCoordinator: CoordinatorProtocol {
         
         let mediaPickerCoordinator = MediaPickerScreenCoordinator(mode: mode,
                                                                   userIndicatorController: parameters.userIndicatorController,
-                                                                  orientationManager: parameters.orientationManager) { [weak self] action in
+                                                                  orientationManager: parameters.appMediator.windowManager) { [weak self] action in
             guard let self else { return }
             switch action {
             case .cancel:

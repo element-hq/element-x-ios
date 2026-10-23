@@ -14,6 +14,7 @@ typealias UserDetailsEditScreenViewModelType = StateStoreViewModelV2<UserDetails
 class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDetailsEditScreenViewModelProtocol {
     private let actionsSubject: PassthroughSubject<UserDetailsEditScreenViewModelAction, Never> = .init()
     private let clientProxy: ClientProxyProtocol
+    private let appMediator: AppMediatorProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     
@@ -23,10 +24,12 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
     
     init(userSession: UserSessionProtocol,
          mediaUploadingPreprocessor: MediaUploadingPreprocessor,
+         appMediator: AppMediatorProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         clientProxy = userSession.clientProxy
         self.mediaUploadingPreprocessor = mediaUploadingPreprocessor
         self.userIndicatorController = userIndicatorController
+        self.appMediator = appMediator
         
         let profile = clientProxy.userProfilePublisher.value
         super.init(initialViewState: UserDetailsEditScreenViewState(currentUserProfile: profile,
@@ -63,6 +66,11 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
         case .presentMediaSource:
             state.bindings.showMediaSheet = true
         case .displayCameraPicker:
+            guard appMediator.isCameraAvailable else {
+                MXLog.info("Camera unavailable, not presenting the picker.")
+                userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorCameraUnavailable))
+                return
+            }
             actionsSubject.send(.displayCameraPicker)
         case .displayMediaPicker:
             actionsSubject.send(.displayMediaPicker)

@@ -10,10 +10,10 @@ import Combine
 import SwiftUI
 
 struct UserDetailsEditScreenCoordinatorParameters {
-    let orientationManager: OrientationManagerProtocol
     let userSession: UserSessionProtocol
     let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     weak var navigationStackCoordinator: NavigationStackCoordinator?
+    let appMediator: AppMediatorProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
 }
 
@@ -36,6 +36,7 @@ final class UserDetailsEditScreenCoordinator: CoordinatorProtocol {
         
         viewModel = UserDetailsEditScreenViewModel(userSession: parameters.userSession,
                                                    mediaUploadingPreprocessor: parameters.mediaUploadingPreprocessor,
+                                                   appMediator: parameters.appMediator,
                                                    userIndicatorController: parameters.userIndicatorController)
     }
     
@@ -69,7 +70,7 @@ final class UserDetailsEditScreenCoordinator: CoordinatorProtocol {
         
         let mediaPickerCoordinator = MediaPickerScreenCoordinator(mode: mode,
                                                                   userIndicatorController: parameters.userIndicatorController,
-                                                                  orientationManager: parameters.orientationManager) { [weak self] action in
+                                                                  orientationManager: parameters.appMediator.windowManager) { [weak self] action in
             guard let self else { return }
             switch action {
             case .cancel:

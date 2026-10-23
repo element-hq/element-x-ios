@@ -69,6 +69,7 @@ struct CreateRoomSpaceSelectionSheet_Previews: PreviewProvider, TestablePreview 
                                          spaceSelectionMode: .editableSpacesList(preSelectedSpace: nil),
                                          shouldShowCancelButton: false,
                                          userSession: userSession,
+                                         appMediator: AppMediatorMock(.init()),
                                          analytics: AnalyticsServiceMock(.init()),
                                          userIndicatorController: UserIndicatorControllerMock())
     }()
