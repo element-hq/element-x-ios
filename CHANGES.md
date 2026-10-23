@@ -1,3 +1,27 @@
+## Changes in 26.10.7 (2026-10-23)
+
+### What's Changed
+
+✨ Features
+* Select several messages to forward at once by @Velin92 in https://github.com/element-hq/element-x-ios/pull/6383
+
+🙌 Improvements
+* Show calls as missed while another call is ringing or ongoing by @Velin92 in https://github.com/element-hq/element-x-ios/pull/6380
+* Stop hyphenating code when it wraps in the timeline by @rene-schakmann in https://github.com/element-hq/element-x-ios/pull/6376
+
+🐛 Bugfixes
+* Fix search tab search field layout on iPadOS 18 by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/6400
+* Fix a crash when opening the camera while it's unavailable. by @Velin92 in https://github.com/element-hq/element-x-ios/pull/6388
+
+Others
+* Update zizmorcore/zizmor-action action to v0.7.0 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/6391
+* Update zizmorcore/zizmor-action action to v0.7.1 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/6395
+* Upload dSYMs files both to the app Sentry project as well as the SDK one. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/6349
+* Bump the RustSDK to v26.10.24 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/6401
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/26.10.6...release/26.10.7
+
 ## Changes in 26.10.6 (2026-10-21)
 
 ### What's Changed
