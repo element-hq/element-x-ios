@@ -25,7 +25,6 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let windowManager: WindowManagerProtocol
     private var isNewLogin: Bool
-    private let clock: any Clock<Duration>
     
     private var navigationStackCoordinator: NavigationStackCoordinator!
     
@@ -58,16 +57,12 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private var verificationStateCancellable: AnyCancellable?
-    private var initialVerificationStateCancellable: AnyCancellable?
-    @CancellableTask private var initialVerificationStateTimeoutTask: Task<Void, Never>?
     
     init(isNewLogin: Bool,
          appLockService: AppLockServiceProtocol,
          navigationStackCoordinator: NavigationStackCoordinator,
-         flowParameters: CommonFlowParameters,
-         clock: any Clock<Duration> = ContinuousClock()) {
+         flowParameters: CommonFlowParameters) {
         self.isNewLogin = isNewLogin
-        self.clock = clock
         userSession = flowParameters.userSession
         self.appLockService = appLockService
         analyticsService = flowParameters.analytics
@@ -100,16 +95,8 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
             }
     }
     
-    isolated deinit {
-        // Don't leave the loading indicator up if the flow goes away while waiting.
-        if initialVerificationStateCancellable != nil {
-            initialVerificationStateTimeoutTask?.cancel()
-            hideLoadingIndicator()
-        }
-    }
-    
     var shouldStart: Bool {
-        guard stateMachine.state == .initial, initialVerificationStateCancellable == nil, !ProcessInfo.isRunningIntegrationTests else {
+        guard stateMachine.state == .initial, !ProcessInfo.isRunningIntegrationTests else {
             return false
         }
         
@@ -123,28 +110,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         
         actionsSubject.send(.requestPresentation(animated: !isNewLogin))
         
-        guard userSession.sessionSecurityStatePublisher.value.verificationState == .unknown else {
-            stateMachine.tryEvent(.next)
-            return
-        }
-        
-        // New accounts bootstrap cross-signing in the background, wait for it
-        // so identity confirmation isn't briefly shown before becoming verified.
-        showLoadingIndicator()
-        initialVerificationStateCancellable = userSession.sessionSecurityStatePublisher
-            .first { $0.verificationState != .unknown }
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] securityState in
-                self?.stopWaitingForVerificationState(securityState.verificationState)
-            }
-        
-        // The state stays unknown when the SDK can't tell, e.g. if it couldn't set up cross-signing.
-        initialVerificationStateTimeoutTask = Task { [weak self, clock] in
-            try? await clock.sleep(for: .seconds(10))
-            guard !Task.isCancelled else { return }
-            MXLog.warning("Timed out waiting for the verification state.")
-            self?.stopWaitingForVerificationState(.unknown)
-        }
+        stateMachine.tryEvent(.next)
     }
     
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
@@ -167,19 +133,6 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         case .unknown:
             !userSettings.account.hasRunIdentityConfirmationOnboarding
         }
-    }
-    
-    private func stopWaitingForVerificationState(_ verificationState: SessionVerificationState) {
-        guard initialVerificationStateCancellable != nil else { return }
-        
-        initialVerificationStateCancellable = nil
-        initialVerificationStateTimeoutTask = nil
-        hideLoadingIndicator()
-        
-        if verificationState == .verified {
-            userSettings.account.hasRunIdentityConfirmationOnboarding = true
-        }
-        stateMachine.tryEvent(.next)
     }
     
     private var requiresAppLockSetup: Bool {
@@ -459,19 +412,6 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
             .store(in: &cancellables)
         
         presentCoordinator(coordinator)
-    }
-    
-    private static let loadingIndicatorIdentifier = "\(OnboardingFlowCoordinator.self)-Loading"
-    
-    private func showLoadingIndicator() {
-        userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
-                                                              type: .modal,
-                                                              title: L10n.commonLoading,
-                                                              persistent: true))
-    }
-    
-    private func hideLoadingIndicator() {
-        userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
     }
     
     private func presentCoordinator(_ coordinator: CoordinatorProtocol, dismissalCallback: (() -> Void)? = nil) {
