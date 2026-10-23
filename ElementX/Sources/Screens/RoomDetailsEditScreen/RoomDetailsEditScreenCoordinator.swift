@@ -14,8 +14,8 @@ struct RoomDetailsEditScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
     let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     weak var navigationStackCoordinator: NavigationStackCoordinator?
-    let userIndicatorController: UserIndicatorControllerProtocol
     let appMediator: AppMediatorProtocol
+    let userIndicatorController: UserIndicatorControllerProtocol
 }
 
 enum RoomDetailsEditScreenCoordinatorAction {
@@ -38,8 +38,8 @@ final class RoomDetailsEditScreenCoordinator: CoordinatorProtocol {
         viewModel = RoomDetailsEditScreenViewModel(roomProxy: parameters.roomProxy,
                                                    userSession: parameters.userSession,
                                                    mediaUploadingPreprocessor: parameters.mediaUploadingPreprocessor,
-                                                   userIndicatorController: parameters.userIndicatorController,
-                                                   appMediator: parameters.appMediator)
+                                                   appMediator: parameters.appMediator,
+                                                   userIndicatorController: parameters.userIndicatorController)
     }
     
     func start() {

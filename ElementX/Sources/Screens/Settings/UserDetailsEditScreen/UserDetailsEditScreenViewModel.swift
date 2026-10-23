@@ -14,8 +14,8 @@ typealias UserDetailsEditScreenViewModelType = StateStoreViewModelV2<UserDetails
 class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDetailsEditScreenViewModelProtocol {
     private let actionsSubject: PassthroughSubject<UserDetailsEditScreenViewModelAction, Never> = .init()
     private let clientProxy: ClientProxyProtocol
-    private let userIndicatorController: UserIndicatorControllerProtocol
     private let appMediator: AppMediatorProtocol
+    private let userIndicatorController: UserIndicatorControllerProtocol
     private let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     
     var actions: AnyPublisher<UserDetailsEditScreenViewModelAction, Never> {
@@ -24,8 +24,8 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
     
     init(userSession: UserSessionProtocol,
          mediaUploadingPreprocessor: MediaUploadingPreprocessor,
-         userIndicatorController: UserIndicatorControllerProtocol,
-         appMediator: AppMediatorProtocol) {
+         appMediator: AppMediatorProtocol,
+         userIndicatorController: UserIndicatorControllerProtocol) {
         clientProxy = userSession.clientProxy
         self.mediaUploadingPreprocessor = mediaUploadingPreprocessor
         self.userIndicatorController = userIndicatorController

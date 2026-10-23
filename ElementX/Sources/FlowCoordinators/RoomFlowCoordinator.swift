@@ -1016,8 +1016,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                                    userSession: userSession,
                                                                                    mediaUploadingPreprocessor: MediaUploadingPreprocessor(userSettings: userSession.userSettings),
                                                                                    navigationStackCoordinator: stackCoordinator,
-                                                                                   userIndicatorController: flowParameters.userIndicatorController,
-                                                                                   appMediator: flowParameters.appMediator)
+                                                                                   appMediator: flowParameters.appMediator,
+                                                                                   userIndicatorController: flowParameters.userIndicatorController)
         let roomDetailsEditCoordinator = RoomDetailsEditScreenCoordinator(parameters: roomDetailsEditParameters)
         
         roomDetailsEditCoordinator.actions.sink { [weak self] action in

@@ -16,8 +16,8 @@ final class CreateRoomScreenViewModelTests {
     var clientProxy: ClientProxyMock!
     var spaceService: SpaceServiceProxyMock!
     var userSession: UserSessionMock!
-    var userIndicatorController: UserIndicatorControllerMock!
     var appMediator: AppMediatorMock!
+    var userIndicatorController: UserIndicatorControllerMock!
     
     private let userSettings: UserSettings
     
@@ -94,9 +94,9 @@ final class CreateRoomScreenViewModelTests {
                                                   spaceSelectionMode: .none,
                                                   shouldShowCancelButton: false,
                                                   userSession: userSession,
+                                                  appMediator: AppMediatorMock(.init()),
                                                   analytics: AnalyticsServiceMock(.init()),
-                                                  userIndicatorController: UserIndicatorControllerMock(),
-                                                  appMediator: AppMediatorMock(.init()))
+                                                  userIndicatorController: UserIndicatorControllerMock())
         self.viewModel = viewModel
         
         // Given a form with a blank topic.
@@ -373,9 +373,9 @@ final class CreateRoomScreenViewModelTests {
                                                   spaceSelectionMode: spacesSelectionMode,
                                                   shouldShowCancelButton: false,
                                                   userSession: userSession,
+                                                  appMediator: appMediator,
                                                   analytics: AnalyticsServiceMock(.init()),
-                                                  userIndicatorController: userIndicatorController,
-                                                  appMediator: appMediator)
+                                                  userIndicatorController: userIndicatorController)
         self.viewModel = viewModel
     }
 }

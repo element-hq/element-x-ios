@@ -10,10 +10,10 @@ import Combine
 import SwiftUI
 
 struct UserDetailsEditScreenCoordinatorParameters {
-    let appMediator: AppMediatorProtocol
     let userSession: UserSessionProtocol
     let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     weak var navigationStackCoordinator: NavigationStackCoordinator?
+    let appMediator: AppMediatorProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
 }
 
@@ -36,8 +36,8 @@ final class UserDetailsEditScreenCoordinator: CoordinatorProtocol {
         
         viewModel = UserDetailsEditScreenViewModel(userSession: parameters.userSession,
                                                    mediaUploadingPreprocessor: parameters.mediaUploadingPreprocessor,
-                                                   userIndicatorController: parameters.userIndicatorController,
-                                                   appMediator: parameters.appMediator)
+                                                   appMediator: parameters.appMediator,
+                                                   userIndicatorController: parameters.userIndicatorController)
     }
     
     func start() {

@@ -15,9 +15,9 @@ typealias CreateRoomScreenViewModelType = StateStoreViewModel<CreateRoomScreenVi
 class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreenViewModelProtocol {
     private let userSession: UserSessionProtocol
     private let mediaUploadingPreprocessor: MediaUploadingPreprocessor
+    private let appMediator: AppMediatorProtocol
     private let analytics: AnalyticsServiceProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
-    private let appMediator: AppMediatorProtocol
     
     private var syncNameAndAlias = true
     @CancellableTask private var checkAliasAvailabilityTask: Task<Void, Never>?
@@ -32,9 +32,9 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
          spaceSelectionMode: CreateRoomScreenSpaceSelectionMode,
          shouldShowCancelButton: Bool,
          userSession: UserSessionProtocol,
+         appMediator: AppMediatorProtocol,
          analytics: AnalyticsServiceProtocol,
-         userIndicatorController: UserIndicatorControllerProtocol,
-         appMediator: AppMediatorProtocol) {
+         userIndicatorController: UserIndicatorControllerProtocol) {
         self.userSession = userSession
         mediaUploadingPreprocessor = MediaUploadingPreprocessor(userSettings: userSession.userSettings)
         self.analytics = analytics
