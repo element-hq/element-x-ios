@@ -81,7 +81,10 @@ struct SearchScreen: View {
             }
             
             // Dismissing the search field (the tab bar's close button) leaves the tab.
-            SearchDismissalObserver { context.send(viewAction: .cancel) }
+            // Not on iOS 18: there's no close button and switching tabs mid-dismissal hides the tab bar.
+            if #available(iOS 26, *) {
+                SearchDismissalObserver { context.send(viewAction: .cancel) }
+            }
         }
         .frame(maxHeight: .infinity, alignment: .top)
         .background(Color.compound.bgCanvasDefault)
@@ -283,10 +286,11 @@ struct SearchScreen: View {
 private extension View {
     /// Searchable makes the preview contents randomly appear lower
     @ViewBuilder func conditionalSearchable(searchQuery: Binding<String>) -> some View {
-        if !ProcessInfo.isXcodePreview, !ProcessInfo.isRunningTests || ProcessInfo.isRunningIntegrationTests {
-            searchable(text: searchQuery, placement: .toolbarPrincipal)
-        } else {
+        if ProcessInfo.isXcodePreview || (ProcessInfo.isRunningTests && !ProcessInfo.isRunningIntegrationTests) {
             self
+        } else {
+            // On iPadOS 18 the floating tab bar takes the principal slot, hiding the field.
+            searchable(text: searchQuery, placement: Compound.supportsGlass ? .toolbarPrincipal : .navigationBarDrawer(displayMode: .always))
         }
     }
 }
