@@ -22,7 +22,8 @@ class IdentityConfirmationScreenViewModel: IdentityConfirmationScreenViewModelTy
     init(userSession: UserSessionProtocol, userSettings: UserSettings) {
         self.userSession = userSession
         
-        super.init(initialViewState: IdentityConfirmationScreenViewState(learnMoreURL: userSettings.app.deviceVerificationURL))
+        super.init(initialViewState: IdentityConfirmationScreenViewState(isUnverified: userSession.sessionSecurityStatePublisher.value.verificationState == .unverified,
+                                                                         learnMoreURL: userSettings.app.deviceVerificationURL))
         
         Task { [weak self] in
             for await state in userSession.sessionSecurityStatePublisher.values {
@@ -54,6 +55,8 @@ class IdentityConfirmationScreenViewModel: IdentityConfirmationScreenViewModelTy
     // MARK: - Private
     
     private func updateWithSessionSecurityState(_ sessionSecurityState: SessionSecurityState) async {
+        state.isUnverified = sessionSecurityState.verificationState == .unverified
+        
         // Note: Until the actions are unset, there's a disabled action button with a loading spinner.
         
         guard sessionSecurityState.verificationState == .unverified else {
