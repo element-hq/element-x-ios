@@ -55,9 +55,15 @@ final nonisolated class AccountSettings: @unchecked Sendable {
     @UserPreference(defaultValue: true)
     var sharePresence: Bool
     
-    init(userID: String, store: UserDefaultsProtocol) {
+    // MARK: Configuration
+    
+    /// The MapTiler configuration used to build map URLs, which the homeserver can configure remotely.
+    let mapTilerConfiguration: RemotePreference<MapTilerConfiguration>
+    
+    init(userID: String, store: UserDefaultsProtocol, bundledMapTilerConfiguration: MapTilerConfiguration) {
         self.store = .init(userID: userID, store: store)
         self.userID = userID
+        mapTilerConfiguration = .init(bundledMapTilerConfiguration)
     }
     
     func migrateAppSettingsValue(_ keyPath: KeyPath<AccountSettings, UserPreferenceKey>) {
