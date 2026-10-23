@@ -26,6 +26,7 @@ struct ThreadTimelineScreen: View {
         TimelineView(timelineContext: timelineContext)
             .background(.compound.bgCanvasDefault)
             .toolbarRole(RoomHeaderView.toolbarRole)
+            .fixesTitleViewOnCancelledPop()
             .navigationTitle(L10n.commonThread)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { toolbar }
