@@ -14,6 +14,7 @@ struct UserSessionManagerTests {
     let appSettings = AppSettings.volatile()
     let notificationManager = NotificationManagerMock()
     let liveLocationManager = LiveLocationManagerMock()
+    let elementCallManager = ElementCallManagerMock()
     
     @Test
     func ordersAccountsByWhenTheyWereLastSelected() {
@@ -244,6 +245,7 @@ struct UserSessionManagerTests {
         
         #expect(notificationManager.addReceivedService === alice.notificationService)
         #expect(liveLocationManager.addReceivedService === alice.liveLocationService)
+        #expect(elementCallManager.addReceivedService === alice.elementCallService)
     }
     
     @Test
@@ -255,6 +257,7 @@ struct UserSessionManagerTests {
         
         #expect(notificationManager.removeUserIDReceivedInvocations == ["@alice:matrix.org"])
         #expect(liveLocationManager.removeUserIDReceivedInvocations == ["@alice:matrix.org"])
+        #expect(elementCallManager.removeUserIDReceivedInvocations == ["@alice:matrix.org"])
     }
     
     @Test
@@ -266,6 +269,7 @@ struct UserSessionManagerTests {
         
         #expect(Set(notificationManager.removeUserIDReceivedInvocations) == ["@alice:matrix.org", "@bob:matrix.org"])
         #expect(Set(liveLocationManager.removeUserIDReceivedInvocations) == ["@alice:matrix.org", "@bob:matrix.org"])
+        #expect(Set(elementCallManager.removeUserIDReceivedInvocations) == ["@alice:matrix.org", "@bob:matrix.org"])
     }
     
     @Test
@@ -277,6 +281,20 @@ struct UserSessionManagerTests {
         
         #expect(notificationManager.removeUserIDReceivedInvocations == ["@alice:matrix.org"])
         #expect(liveLocationManager.removeUserIDReceivedInvocations == ["@alice:matrix.org"])
+        #expect(elementCallManager.removeUserIDReceivedInvocations == ["@alice:matrix.org"])
+    }
+    
+    @Test
+    func theCallManagerFollowsTheActiveAccount() {
+        let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org"])
+        #expect(elementCallManager.activeUserID == "@alice:matrix.org", "Known before any session is restored, for a VoIP push that wakes the app")
+        
+        // A new account becomes the active one.
+        manager.add(makeUserSession(userID: "@carol:matrix.org"))
+        #expect(elementCallManager.activeUserID == "@carol:matrix.org")
+        
+        manager.remove(userID: "@carol:matrix.org")
+        #expect(elementCallManager.activeUserID == "@alice:matrix.org")
     }
     
     @Test
@@ -321,7 +339,8 @@ struct UserSessionManagerTests {
         return UserSessionManager(userSessionStore: userSessionStore,
                                   appSettings: appSettings,
                                   notificationManager: notificationManager,
-                                  liveLocationManager: liveLocationManager)
+                                  liveLocationManager: liveLocationManager,
+                                  elementCallManager: elementCallManager)
     }
     
     private func makeUserSession(userID: String) -> UserSessionMock {

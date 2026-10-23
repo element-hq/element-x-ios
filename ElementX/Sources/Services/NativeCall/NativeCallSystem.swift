@@ -9,19 +9,19 @@ import CallKit
 import Combine
 import ElementCall
 
-/// Serves the call package's system-call port from `ElementCallService`.
+/// Serves the call package's system-call port from `ElementCallManager`.
 ///
 /// Stays app-side because the same `CXProvider` and VoIP push registry serve the web-view call path
 /// too, so ownership can't be handed to the package.
 final class NativeCallSystem: ElementCallSystemProvidingProtocol {
     /// Weak because the service owns the call stack, which owns the controller holding this port.
-    private weak var service: ElementCallServiceProtocol?
+    private weak var service: ElementCallManagerProtocol?
     
     /// Stored so the events keep flowing off the subject itself, without reaching back through the
     /// weak reference on every subscription.
-    private let serviceActions: AnyPublisher<ElementCallServiceAction, Never>
+    private let serviceActions: AnyPublisher<ElementCallManagerAction, Never>
     
-    init(service: ElementCallServiceProtocol) {
+    init(service: ElementCallManagerProtocol) {
         self.service = service
         serviceActions = service.actions
     }

@@ -30,7 +30,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private let appDelegate: AppDelegate
     private let appHooks: AppHooks
     private let bugReportService: BugReportServiceProtocol
-    private let elementCallService: ElementCallServiceProtocol
+    private let elementCallManager: ElementCallManagerProtocol
     
     /// Common background task to continue long-running tasks in the background.
     private var backgroundTask: UIBackgroundTaskIdentifier?
@@ -113,7 +113,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         userIndicatorController = UserIndicatorController()
         
-        elementCallService = ElementCallService(appSettings: appSettings)
+        elementCallManager = ElementCallManager(appSettings: appSettings)
         
         navigationRootCoordinator = NavigationRootCoordinator()
         
@@ -129,7 +129,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                 appHooks: appHooks,
                                                 networkMonitor: networkMonitor)
         notificationManager = NotificationManager(notificationCenter: UNUserNotificationCenter.current(), appSettings: appSettings)
-        userSessionManager = UserSessionManager(userSessionStore: userSessionStore, appSettings: appSettings, notificationManager: notificationManager, liveLocationManager: LiveLocationManager(appSettings: appSettings))
+        let liveLocationManager = LiveLocationManager(appSettings: appSettings)
+        userSessionManager = UserSessionManager(userSessionStore: userSessionStore, appSettings: appSettings, notificationManager: notificationManager, liveLocationManager: liveLocationManager, elementCallManager: elementCallManager)
         
         let appLockService = AppLockService(keychainController: keychainController, appSettings: appSettings)
         let appLockNavigationCoordinator = NavigationRootCoordinator()
@@ -178,11 +179,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             }
             .store(in: &cancellables)
         
-        elementCallService.actions
+        elementCallManager.actions
             .receive(on: DispatchQueue.main)
             .sink { [weak self] action in
                 switch action {
-                case .startCall(let roomID, let isVoiceCall):
+                // TODO: Another account's call still opens with the active account's session.
+                case .startCall(_, let roomID, let isVoiceCall):
                     self?.handleAppRoute(.call(roomID: roomID, isVoiceCall: isVoiceCall), windowType: nil)
                 case .receivedIncomingCallRequest:
                     // When reporting a VoIP call through the CXProvider's `reportNewIncomingVoIPPushPayload`
@@ -889,7 +891,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         let flowParameters = CommonFlowParameters(userSession: userSession,
                                                   availableSessionsPublisher: userSessionManager.sessionsPublisher.map { $0.map(UserSessionDetails.init) },
                                                   bugReportService: bugReportService,
-                                                  elementCallService: elementCallService,
+                                                  elementCallManager: elementCallManager,
                                                   timelineControllerFactory: TimelineControllerFactory(userSettings: userSession.userSettings),
                                                   emojiProvider: EmojiProvider(userSettings: userSession.userSettings),
                                                   linkMetadataProvider: LinkMetadataProvider(),
@@ -942,7 +944,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         userSessionFlowCoordinator?.stop()
         // Leaves any ongoing call and releases the native call stack, which a soft logout would
         // otherwise leave running against a session that can no longer reach the server.
-        elementCallService.setUserSession(nil)
+        elementCallManager.setUserSession(nil)
         
         guard !isSoft else {
             stateMachine.processEvent(.showSoftLogout)
@@ -1011,8 +1013,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             fatalError("User session not setup")
         }
         
-        // TODO: Calls only follow the active account, ElementCallService must change to hold every account's session.
-        elementCallService.setUserSession(userSession)
+        // TODO: Native calls only follow the active account, left to the VoIP team.
+        elementCallManager.setUserSession(userSession)
         Task {
             await resumeClientServices()
         }

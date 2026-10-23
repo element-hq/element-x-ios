@@ -1,24 +1,27 @@
 //
-// Copyright 2025 Element Creations Ltd.
-// Copyright 2024-2025 New Vector Ltd.
+// Copyright 2026 Element Creations Ltd.
 //
 // SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
 // Please see LICENSE files in the repository root for full details.
 //
 
 import Combine
-import Foundation
-
-struct ElementCallServiceMockConfiguration {
-    var ongoingCallRoomID: String?
-}
 
 extension ElementCallServiceMock {
-    convenience init(_ configuration: ElementCallServiceMockConfiguration) {
+    struct Configuration {
+        var userID = "@alice:matrix.org"
+        var ongoingCallRoomID: String?
+    }
+    
+    /// The ongoing call room it's told about is published back, as the real service does.
+    convenience init(_ configuration: Configuration) {
         self.init()
         
-        actions = PassthroughSubject().eraseToAnyPublisher()
-        ongoingCallRoomIDPublisher = .init(.init(configuration.ongoingCallRoomID))
-        handleNativeCallRequestRoomProxyIsVoiceCallReturnValue = false
+        userID = configuration.userID
+        actionsPublisher = PassthroughSubject<ElementCallServiceAction, Never>().eraseToAnyPublisher()
+        
+        let ongoingCallRoomIDSubject = CurrentValueSubject<String?, Never>(configuration.ongoingCallRoomID)
+        ongoingCallRoomIDPublisher = ongoingCallRoomIDSubject.asCurrentValuePublisher()
+        ongoingCallChangedRoomIDClosure = { ongoingCallRoomIDSubject.send($0) }
     }
 }

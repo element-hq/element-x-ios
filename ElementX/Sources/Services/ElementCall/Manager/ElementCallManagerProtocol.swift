@@ -18,9 +18,9 @@ enum NativeCallPresentation: Equatable {
     case dismiss
 }
 
-enum ElementCallServiceAction {
+enum ElementCallManagerAction {
     case receivedIncomingCallRequest
-    case startCall(roomID: String, isVoiceCall: Bool)
+    case startCall(userID: String, roomID: String, isVoiceCall: Bool)
     case endCall(roomID: String)
     case setAudioEnabled(_ enabled: Bool, roomID: String)
     /// CallKit activated the audio session: a native call may start its audio engine now.
@@ -31,10 +31,16 @@ enum ElementCallServiceAction {
 }
 
 // sourcery: AutoMockable
-protocol ElementCallServiceProtocol: AnyObject {
-    var actions: AnyPublisher<ElementCallServiceAction, Never> { get }
+protocol ElementCallManagerProtocol: AnyObject {
+    var actions: AnyPublisher<ElementCallManagerAction, Never> { get }
     
-    var ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never> { get }
+    /// The account the app shows. A VoIP push without a receiver belongs to it. Set by the `UserSessionManager`.
+    var activeUserID: String? { get set }
+    
+    /// Hands the account's calls to its service, replacing any previous service for that account.
+    func add(_ service: ElementCallServiceProtocol)
+    /// Ends the account's ringing and ongoing calls, and lets go of its service.
+    func remove(userID: String)
     
     /// The controller for this session's native call stack, `nil` when native calls are unavailable.
     var nativeCallController: ElementCallController? { get }
@@ -44,7 +50,7 @@ protocol ElementCallServiceProtocol: AnyObject {
     func setUserSession(_ userSession: UserSessionProtocol?)
     
     /// Starts, or returns to, a native call in the room, driving its screen through
-    /// ``ElementCallServiceAction/nativeCall(_:)``.
+    /// ``ElementCallManagerAction/nativeCall(_:)``.
     ///
     /// Returns `false` when there's no native call stack and the caller should present the Element
     /// Call web view instead.
@@ -52,7 +58,7 @@ protocol ElementCallServiceProtocol: AnyObject {
     func handleNativeCallRequest(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool) -> Bool
     
     /// Asks the native call to minimize. The screen only comes down once a system window has
-    /// started, which arrives as ``ElementCallServiceAction/nativeCall(_:)``.
+    /// started, which arrives as ``ElementCallManagerAction/nativeCall(_:)``.
     func minimizeNativeCall()
     
     /// Brings the native call back out of its system window.
