@@ -119,6 +119,7 @@ struct RoomScreen: View {
             }
             .navigationBarBackButtonHidden(isMessageSelectionActive)
             .toolbarRole(RoomHeaderView.toolbarRole)
+            .fixesTitleViewOnCancelledPop()
             .navigationTitle(L10n.screenRoomTitle) // Hidden but used for back button text.
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { toolbar }

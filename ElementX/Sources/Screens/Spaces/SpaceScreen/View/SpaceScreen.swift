@@ -34,6 +34,7 @@ struct SpaceScreen: View {
         .environment(\.editMode, .constant(context.viewState.editMode))
         .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
         .toolbarRole(RoomHeaderView.toolbarRole)
+        .fixesTitleViewOnCancelledPop()
         .navigationTitle(context.viewState.space.name)
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(isEditModeActive)

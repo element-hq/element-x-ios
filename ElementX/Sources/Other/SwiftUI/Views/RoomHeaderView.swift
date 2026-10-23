@@ -9,6 +9,7 @@
 import Combine
 import Compound
 import SwiftUI
+import SwiftUIIntrospect
 
 struct RoomHeaderView: View {
     struct DMRecipientDetails {
@@ -123,6 +124,70 @@ private extension View {
         contentShape(.rect)
             .onTapGesture(perform: action)
             .accessibilityAddTraits(.isButton)
+    }
+}
+
+extension View {
+    // TODO: Remove this workaround once Apple fixes the bug.
+    /// Works around an iOS 26+ bug where cancelling the interactive pop gesture leaves the `RoomHeaderView`
+    /// at its full width, covering the trailing toolbar items. Apply it to every screen using the header as its title.
+    @ViewBuilder
+    func fixesTitleViewOnCancelledPop() -> some View {
+        if #available(iOS 26, *) {
+            modifier(CancelledPopTitleViewFixModifier())
+        } else {
+            self
+        }
+    }
+}
+
+@available(iOS 26, *)
+private struct CancelledPopTitleViewFixModifier: ViewModifier {
+    // Gesture recognizers don't retain their targets, so the view keeps the fix alive.
+    @State private var fix = CancelledPopTitleViewFix()
+    
+    func body(content: Content) -> some View {
+        content
+            .introspect(.navigationStack, on: .supportedVersions, scope: .ancestor) { [fix] navigationController in
+                fix.observe(navigationController)
+            }
+    }
+}
+
+@available(iOS 26, *)
+private final class CancelledPopTitleViewFix: NSObject {
+    private weak var navigationController: UINavigationController?
+    
+    isolated deinit {
+        stopObserving()
+    }
+    
+    func observe(_ navigationController: UINavigationController) {
+        guard navigationController !== self.navigationController else { return }
+        
+        stopObserving()
+        self.navigationController = navigationController
+        navigationController.interactivePopGestureRecognizer?.addTarget(self, action: #selector(popGestureChanged))
+        navigationController.interactiveContentPopGestureRecognizer?.addTarget(self, action: #selector(popGestureChanged))
+    }
+    
+    @objc private func popGestureChanged(_ gesture: UIGestureRecognizer) {
+        guard gesture.state == .began,
+              let navigationController,
+              let transitionCoordinator = navigationController.transitionCoordinator else {
+            return
+        }
+        
+        transitionCoordinator.animate(alongsideTransition: nil) { context in
+            guard context.isCancelled else { return }
+            // UIKit restores the title view's container but never lays the title view out inside it again.
+            navigationController.navigationBar.topItem?.titleView?.superview?.setNeedsLayout()
+        }
+    }
+    
+    private func stopObserving() {
+        navigationController?.interactivePopGestureRecognizer?.removeTarget(self, action: #selector(popGestureChanged))
+        navigationController?.interactiveContentPopGestureRecognizer?.removeTarget(self, action: #selector(popGestureChanged))
     }
 }
 

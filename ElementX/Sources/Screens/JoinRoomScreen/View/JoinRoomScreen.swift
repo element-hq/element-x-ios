@@ -41,6 +41,7 @@ struct JoinRoomScreen: View {
         .background()
         .backgroundStyle(.compound.bgCanvasDefault)
         .toolbarRole(RoomHeaderView.toolbarRole)
+        .fixesTitleViewOnCancelledPop()
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
         .shouldScrollOnKeyboardDidShow(focus == .knockMessage, to: Focus.knockMessage)
