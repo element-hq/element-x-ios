@@ -13,6 +13,8 @@ struct SecureBackupRecoveryKeyScreenCoordinatorParameters {
     let secureBackupController: SecureBackupControllerProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
     let isModallyPresented: Bool
+    /// The mode to use instead of the one that follows from the recovery state.
+    var mode: SecureBackupRecoveryKeyScreenViewMode?
     var completionButtonTitle = L10n.actionDone
 }
 
@@ -36,6 +38,7 @@ final class SecureBackupRecoveryKeyScreenCoordinator: SecureBackupRecoveryKeyCoo
         viewModel = SecureBackupRecoveryKeyScreenViewModel(secureBackupController: parameters.secureBackupController,
                                                            userIndicatorController: parameters.userIndicatorController,
                                                            isModallyPresented: parameters.isModallyPresented,
+                                                           mode: parameters.mode,
                                                            completionButtonTitle: parameters.completionButtonTitle)
     }
     
@@ -49,8 +52,8 @@ final class SecureBackupRecoveryKeyScreenCoordinator: SecureBackupRecoveryKeyCoo
                 self.actionsSubject.send(.complete)
             case .done(let mode):
                 switch mode {
-                case .setupRecovery, .changeRecovery:
-                    break // The screen has already shown that the new key is active.
+                case .setupRecovery, .changeRecovery, .checkRecovery:
+                    break // The screen has already shown that the key is active.
                 case .fixRecovery:
                     showSuccessIndicator(title: L10n.screenRecoveryKeyConfirmSuccess)
                 case .unknown:

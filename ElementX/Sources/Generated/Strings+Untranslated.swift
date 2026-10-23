@@ -10,8 +10,18 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 internal nonisolated enum UntranslatedL10n {
+  /// Enter recovery key
+  internal static var screenRecoveryKeyCheckKeyTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_recovery_key_check_key_title") }
+  /// Enter the recovery key you’ve saved to make sure that it’s correct and active.
+  internal static var screenRecoveryKeyCheckSubtitle: String { return UntranslatedL10n.tr("Untranslated", "screen_recovery_key_check_subtitle") }
+  /// Your recovery key is active
+  internal static var screenRecoveryKeyCheckSuccessTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_recovery_key_check_success_title") }
+  /// Check your recovery key
+  internal static var screenRecoveryKeyCheckTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_recovery_key_check_title") }
   /// Your new recovery key is now active
   internal static var screenRecoveryKeySuccessTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_recovery_key_success_title") }
+  /// Check your recovery key
+  internal static var screenSignoutSaveRecoveryKeyActionCheck: String { return UntranslatedL10n.tr("Untranslated", "screen_signout_save_recovery_key_action_check") }
   /// Generate new recovery key
   internal static var screenSignoutSaveRecoveryKeyActionGenerate: String { return UntranslatedL10n.tr("Untranslated", "screen_signout_save_recovery_key_action_generate") }
   /// Clear all data currently stored on this device?
