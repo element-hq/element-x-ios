@@ -169,15 +169,11 @@ struct RoomDetailsScreenViewModelTests {
         
         #expect(context.viewState.dmRecipientInfo?.member == RoomMemberDetails(withProxy: recipient))
         
-        #expect(!context.viewState.isProcessingIgnoreRequest)
-        let deferredProcessing = deferFulfillment(viewModel.context.observe(\.viewState.isProcessingIgnoreRequest),
-                                                  transitionValues: [true, false])
+        let deferredIgnored = deferFulfillment(viewModel.context.observe(\.viewState.dmRecipientInfo)) { $0?.member.isIgnored == true }
         
         context.send(viewAction: .ignoreConfirmed)
         
-        try await deferredProcessing.fulfill()
-        
-        #expect(context.viewState.dmRecipientInfo?.member.isIgnored == true)
+        try await deferredIgnored.fulfill()
     }
     
     @Test
@@ -200,13 +196,11 @@ struct RoomDetailsScreenViewModelTests {
         
         #expect(context.viewState.dmRecipientInfo?.member == RoomMemberDetails(withProxy: recipient))
         
-        #expect(!context.viewState.isProcessingIgnoreRequest)
-        let deferredProcessing = deferFulfillment(viewModel.context.observe(\.viewState.isProcessingIgnoreRequest),
-                                                  transitionValues: [true, false])
+        let deferredAlert = deferFulfillment(context.observe(\.alertInfo)) { $0 != nil }
         
         context.send(viewAction: .ignoreConfirmed)
         
-        try await deferredProcessing.fulfill()
+        try await deferredAlert.fulfill()
         
         #expect(context.viewState.dmRecipientInfo?.member.isIgnored == false)
         #expect(context.alertInfo != nil)
@@ -230,15 +224,11 @@ struct RoomDetailsScreenViewModelTests {
         
         #expect(context.viewState.dmRecipientInfo?.member == RoomMemberDetails(withProxy: recipient))
         
-        #expect(!context.viewState.isProcessingIgnoreRequest)
-        let deferredProcessing = deferFulfillment(viewModel.context.observe(\.viewState.isProcessingIgnoreRequest),
-                                                  transitionValues: [true, false])
+        let deferredUnignored = deferFulfillment(viewModel.context.observe(\.viewState.dmRecipientInfo)) { $0?.member.isIgnored == false }
         
         context.send(viewAction: .unignoreConfirmed)
         
-        try await deferredProcessing.fulfill()
-        
-        #expect(context.viewState.dmRecipientInfo?.member.isIgnored == false)
+        try await deferredUnignored.fulfill()
     }
     
     @Test
@@ -261,14 +251,12 @@ struct RoomDetailsScreenViewModelTests {
         
         #expect(context.viewState.dmRecipientInfo?.member == RoomMemberDetails(withProxy: recipient))
         
-        #expect(!context.viewState.isProcessingIgnoreRequest)
         let deferredAlert = deferFulfillment(context.observe(\.alertInfo)) { $0 != nil }
         
         context.send(viewAction: .unignoreConfirmed)
         
         try await deferredAlert.fulfill()
         
-        #expect(!context.viewState.isProcessingIgnoreRequest)
         #expect(context.viewState.dmRecipientInfo?.member.isIgnored == true)
         #expect(context.alertInfo != nil)
     }
