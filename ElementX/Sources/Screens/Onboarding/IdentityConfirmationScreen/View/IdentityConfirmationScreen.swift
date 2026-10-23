@@ -22,9 +22,18 @@ struct IdentityConfirmationScreen: View {
     
     var body: some View {
         FullscreenDialog(topPadding: UIConstants.startScreenBreakerScreenTopPadding) {
-            screenHeader
+            if context.viewState.isUnverified {
+                screenHeader
+            }
         } bottomContent: {
-            actionButtons
+            if context.viewState.isUnverified {
+                actionButtons
+            }
+        }
+        .overlay {
+            if !context.viewState.isUnverified {
+                ProgressView()
+            }
         }
         .toolbar { toolbar }
         .background()
@@ -120,6 +129,7 @@ struct IdentityConfirmationScreen: View {
 struct IdentityConfirmationScreen_Previews: PreviewProvider, TestablePreview {
     static var viewModel = makeViewModel()
     static var loadingViewModel = makeViewModel(recoveryState: .unknown)
+    static var waitingViewModel = makeViewModel(verificationState: .unknown, recoveryState: .unknown)
     
     static var previews: some View {
         ElementNavigationStack {
@@ -134,15 +144,19 @@ struct IdentityConfirmationScreen_Previews: PreviewProvider, TestablePreview {
             IdentityConfirmationScreen(context: loadingViewModel.context)
         }
         .previewDisplayName("Loading")
+        
+        ElementNavigationStack {
+            IdentityConfirmationScreen(context: waitingViewModel.context)
+        }
+        .previewDisplayName("Waiting")
     }
     
-    static func makeViewModel(recoveryState: SecureBackupRecoveryState = .enabled) -> IdentityConfirmationScreenViewModel {
+    static func makeViewModel(verificationState: SessionVerificationState = .unverified,
+                              recoveryState: SecureBackupRecoveryState = .enabled) -> IdentityConfirmationScreenViewModel {
         let clientProxy = ClientProxyMock(.init())
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
-        userSession.sessionSecurityStatePublisher = CurrentValuePublisher<SessionSecurityState, Never>(.init(verificationState: .unverified, recoveryState: recoveryState))
+        userSession.sessionSecurityStatePublisher = CurrentValuePublisher<SessionSecurityState, Never>(.init(verificationState: verificationState, recoveryState: recoveryState))
         
-        return IdentityConfirmationScreenViewModel(userSession: userSession,
-                                                   userSettings: .mock(),
-                                                   userIndicatorController: UserIndicatorControllerMock())
+        return IdentityConfirmationScreenViewModel(userSession: userSession, userSettings: .mock())
     }
 }

@@ -86,11 +86,11 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
             .map(\.verificationState)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] value in
-                guard let self,
-                      value == .verified,
-                      stateMachine.state == .identityConfirmation else { return }
+                guard let self, value == .verified else { return }
                 
                 userSettings.account.hasRunIdentityConfirmationOnboarding = true
+                
+                guard stateMachine.state == .identityConfirmation else { return }
                 stateMachine.tryEvent(.nextSkippingIdentityConfirmed)
             }
     }
@@ -124,8 +124,15 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: - Private
     
     private var requiresVerification: Bool {
-        // We want to make sure onboarding finishes but also every time the user becomes unverified (e.g. account reset)
-        !userSettings.account.hasRunIdentityConfirmationOnboarding || userSession.sessionSecurityStatePublisher.value.verificationState == .unverified
+        switch userSession.sessionSecurityStatePublisher.value.verificationState {
+        case .verified:
+            false
+        case .unverified:
+            // Every time the user becomes unverified (e.g. account reset), not just to finish onboarding.
+            true
+        case .unknown:
+            !userSettings.account.hasRunIdentityConfirmationOnboarding
+        }
     }
     
     private var requiresAppLockSetup: Bool {
@@ -243,9 +250,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentIdentityConfirmationScreen() {
-        let parameters = IdentityConfirmationScreenCoordinatorParameters(userSession: userSession,
-                                                                         userSettings: userSettings,
-                                                                         userIndicatorController: userIndicatorController)
+        let parameters = IdentityConfirmationScreenCoordinatorParameters(userSession: userSession, userSettings: userSettings)
         
         let coordinator = IdentityConfirmationScreenCoordinator(parameters: parameters)
         coordinator.actionsPublisher.sink { [weak self] action in
