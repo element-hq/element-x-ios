@@ -1659,6 +1659,53 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         }
     }
 
+    //MARK: - hasEncryptedRooms
+
+    open var hasEncryptedRoomsTimeoutThrowableError: Error?
+    private let hasEncryptedRoomsTimeoutCallsCountLock = NSLock()
+    private var hasEncryptedRoomsTimeoutUnderlyingCallsCount = 0
+    open var hasEncryptedRoomsTimeoutCallsCount: Int {
+        get { hasEncryptedRoomsTimeoutCallsCountLock.withLock { hasEncryptedRoomsTimeoutUnderlyingCallsCount } }
+        set { hasEncryptedRoomsTimeoutCallsCountLock.withLock { hasEncryptedRoomsTimeoutUnderlyingCallsCount = newValue } }
+    }
+    open var hasEncryptedRoomsTimeoutCalled: Bool {
+        return hasEncryptedRoomsTimeoutCallsCount > 0
+    }
+    private let hasEncryptedRoomsTimeoutReceivedTimeoutLock = NSLock()
+    private var hasEncryptedRoomsTimeoutUnderlyingReceivedTimeout: TimeInterval?
+    open var hasEncryptedRoomsTimeoutReceivedTimeout: TimeInterval? {
+        get { hasEncryptedRoomsTimeoutReceivedTimeoutLock.withLock { hasEncryptedRoomsTimeoutUnderlyingReceivedTimeout } }
+        set { hasEncryptedRoomsTimeoutReceivedTimeoutLock.withLock { hasEncryptedRoomsTimeoutUnderlyingReceivedTimeout = newValue } }
+    }
+    private let hasEncryptedRoomsTimeoutReceivedInvocationsLock = NSLock()
+    private var hasEncryptedRoomsTimeoutUnderlyingReceivedInvocations: [TimeInterval] = []
+    open var hasEncryptedRoomsTimeoutReceivedInvocations: [TimeInterval] {
+        get { hasEncryptedRoomsTimeoutReceivedInvocationsLock.withLock { hasEncryptedRoomsTimeoutUnderlyingReceivedInvocations } }
+        set { hasEncryptedRoomsTimeoutReceivedInvocationsLock.withLock { hasEncryptedRoomsTimeoutUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let hasEncryptedRoomsTimeoutReturnValueLock = NSLock()
+    open var hasEncryptedRoomsTimeoutUnderlyingReturnValue: Bool!
+    open var hasEncryptedRoomsTimeoutReturnValue: Bool! {
+        get { hasEncryptedRoomsTimeoutReturnValueLock.withLock { hasEncryptedRoomsTimeoutUnderlyingReturnValue } }
+        set { hasEncryptedRoomsTimeoutReturnValueLock.withLock { hasEncryptedRoomsTimeoutUnderlyingReturnValue = newValue } }
+    }
+    open var hasEncryptedRoomsTimeoutClosure: ((TimeInterval) async throws -> Bool)?
+
+    open override func hasEncryptedRooms(timeout: TimeInterval) async throws -> Bool {
+        if let error = hasEncryptedRoomsTimeoutThrowableError {
+            throw error
+        }
+        hasEncryptedRoomsTimeoutCallsCountLock.withLock { hasEncryptedRoomsTimeoutUnderlyingCallsCount += 1 }
+        hasEncryptedRoomsTimeoutReceivedTimeout = timeout
+        hasEncryptedRoomsTimeoutReceivedInvocationsLock.withLock { hasEncryptedRoomsTimeoutUnderlyingReceivedInvocations.append(timeout) }
+        if let hasEncryptedRoomsTimeoutClosure = hasEncryptedRoomsTimeoutClosure {
+            return try await hasEncryptedRoomsTimeoutClosure(timeout)
+        } else {
+            return hasEncryptedRoomsTimeoutReturnValue
+        }
+    }
+
     //MARK: - homeserver
 
     private let homeserverCallsCountLock = NSLock()
@@ -12432,48 +12479,48 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
 
     //MARK: - sendRaw
 
-    open var sendRawEventTypeContentThrowableError: Error?
-    private let sendRawEventTypeContentCallsCountLock = NSLock()
-    private var sendRawEventTypeContentUnderlyingCallsCount = 0
-    open var sendRawEventTypeContentCallsCount: Int {
-        get { sendRawEventTypeContentCallsCountLock.withLock { sendRawEventTypeContentUnderlyingCallsCount } }
-        set { sendRawEventTypeContentCallsCountLock.withLock { sendRawEventTypeContentUnderlyingCallsCount = newValue } }
+    open var sendRawEventTypeContentRequestConfigOverrideThrowableError: Error?
+    private let sendRawEventTypeContentRequestConfigOverrideCallsCountLock = NSLock()
+    private var sendRawEventTypeContentRequestConfigOverrideUnderlyingCallsCount = 0
+    open var sendRawEventTypeContentRequestConfigOverrideCallsCount: Int {
+        get { sendRawEventTypeContentRequestConfigOverrideCallsCountLock.withLock { sendRawEventTypeContentRequestConfigOverrideUnderlyingCallsCount } }
+        set { sendRawEventTypeContentRequestConfigOverrideCallsCountLock.withLock { sendRawEventTypeContentRequestConfigOverrideUnderlyingCallsCount = newValue } }
     }
-    open var sendRawEventTypeContentCalled: Bool {
-        return sendRawEventTypeContentCallsCount > 0
+    open var sendRawEventTypeContentRequestConfigOverrideCalled: Bool {
+        return sendRawEventTypeContentRequestConfigOverrideCallsCount > 0
     }
-    private let sendRawEventTypeContentReceivedArgumentsLock = NSLock()
-    private var sendRawEventTypeContentUnderlyingReceivedArguments: (eventType: String, content: String)?
-    open var sendRawEventTypeContentReceivedArguments: (eventType: String, content: String)? {
-        get { sendRawEventTypeContentReceivedArgumentsLock.withLock { sendRawEventTypeContentUnderlyingReceivedArguments } }
-        set { sendRawEventTypeContentReceivedArgumentsLock.withLock { sendRawEventTypeContentUnderlyingReceivedArguments = newValue } }
+    private let sendRawEventTypeContentRequestConfigOverrideReceivedArgumentsLock = NSLock()
+    private var sendRawEventTypeContentRequestConfigOverrideUnderlyingReceivedArguments: (eventType: String, content: String, requestConfigOverride: RequestConfigOverride?)?
+    open var sendRawEventTypeContentRequestConfigOverrideReceivedArguments: (eventType: String, content: String, requestConfigOverride: RequestConfigOverride?)? {
+        get { sendRawEventTypeContentRequestConfigOverrideReceivedArgumentsLock.withLock { sendRawEventTypeContentRequestConfigOverrideUnderlyingReceivedArguments } }
+        set { sendRawEventTypeContentRequestConfigOverrideReceivedArgumentsLock.withLock { sendRawEventTypeContentRequestConfigOverrideUnderlyingReceivedArguments = newValue } }
     }
-    private let sendRawEventTypeContentReceivedInvocationsLock = NSLock()
-    private var sendRawEventTypeContentUnderlyingReceivedInvocations: [(eventType: String, content: String)] = []
-    open var sendRawEventTypeContentReceivedInvocations: [(eventType: String, content: String)] {
-        get { sendRawEventTypeContentReceivedInvocationsLock.withLock { sendRawEventTypeContentUnderlyingReceivedInvocations } }
-        set { sendRawEventTypeContentReceivedInvocationsLock.withLock { sendRawEventTypeContentUnderlyingReceivedInvocations = newValue } }
+    private let sendRawEventTypeContentRequestConfigOverrideReceivedInvocationsLock = NSLock()
+    private var sendRawEventTypeContentRequestConfigOverrideUnderlyingReceivedInvocations: [(eventType: String, content: String, requestConfigOverride: RequestConfigOverride?)] = []
+    open var sendRawEventTypeContentRequestConfigOverrideReceivedInvocations: [(eventType: String, content: String, requestConfigOverride: RequestConfigOverride?)] {
+        get { sendRawEventTypeContentRequestConfigOverrideReceivedInvocationsLock.withLock { sendRawEventTypeContentRequestConfigOverrideUnderlyingReceivedInvocations } }
+        set { sendRawEventTypeContentRequestConfigOverrideReceivedInvocationsLock.withLock { sendRawEventTypeContentRequestConfigOverrideUnderlyingReceivedInvocations = newValue } }
     }
 
-    private let sendRawEventTypeContentReturnValueLock = NSLock()
-    open var sendRawEventTypeContentUnderlyingReturnValue: String!
-    open var sendRawEventTypeContentReturnValue: String! {
-        get { sendRawEventTypeContentReturnValueLock.withLock { sendRawEventTypeContentUnderlyingReturnValue } }
-        set { sendRawEventTypeContentReturnValueLock.withLock { sendRawEventTypeContentUnderlyingReturnValue = newValue } }
+    private let sendRawEventTypeContentRequestConfigOverrideReturnValueLock = NSLock()
+    open var sendRawEventTypeContentRequestConfigOverrideUnderlyingReturnValue: String!
+    open var sendRawEventTypeContentRequestConfigOverrideReturnValue: String! {
+        get { sendRawEventTypeContentRequestConfigOverrideReturnValueLock.withLock { sendRawEventTypeContentRequestConfigOverrideUnderlyingReturnValue } }
+        set { sendRawEventTypeContentRequestConfigOverrideReturnValueLock.withLock { sendRawEventTypeContentRequestConfigOverrideUnderlyingReturnValue = newValue } }
     }
-    open var sendRawEventTypeContentClosure: ((String, String) async throws -> String)?
+    open var sendRawEventTypeContentRequestConfigOverrideClosure: ((String, String, RequestConfigOverride?) async throws -> String)?
 
-    open override func sendRaw(eventType: String, content: String) async throws -> String {
-        if let error = sendRawEventTypeContentThrowableError {
+    open override func sendRaw(eventType: String, content: String, requestConfigOverride: RequestConfigOverride? = nil) async throws -> String {
+        if let error = sendRawEventTypeContentRequestConfigOverrideThrowableError {
             throw error
         }
-        sendRawEventTypeContentCallsCountLock.withLock { sendRawEventTypeContentUnderlyingCallsCount += 1 }
-        sendRawEventTypeContentReceivedArguments = (eventType: eventType, content: content)
-        sendRawEventTypeContentReceivedInvocationsLock.withLock { sendRawEventTypeContentUnderlyingReceivedInvocations.append((eventType: eventType, content: content)) }
-        if let sendRawEventTypeContentClosure = sendRawEventTypeContentClosure {
-            return try await sendRawEventTypeContentClosure(eventType, content)
+        sendRawEventTypeContentRequestConfigOverrideCallsCountLock.withLock { sendRawEventTypeContentRequestConfigOverrideUnderlyingCallsCount += 1 }
+        sendRawEventTypeContentRequestConfigOverrideReceivedArguments = (eventType: eventType, content: content, requestConfigOverride: requestConfigOverride)
+        sendRawEventTypeContentRequestConfigOverrideReceivedInvocationsLock.withLock { sendRawEventTypeContentRequestConfigOverrideUnderlyingReceivedInvocations.append((eventType: eventType, content: content, requestConfigOverride: requestConfigOverride)) }
+        if let sendRawEventTypeContentRequestConfigOverrideClosure = sendRawEventTypeContentRequestConfigOverrideClosure {
+            return try await sendRawEventTypeContentRequestConfigOverrideClosure(eventType, content, requestConfigOverride)
         } else {
-            return sendRawEventTypeContentReturnValue
+            return sendRawEventTypeContentRequestConfigOverrideReturnValue
         }
     }
 
@@ -12515,48 +12562,48 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
 
     //MARK: - sendStateEventRaw
 
-    open var sendStateEventRawEventTypeStateKeyContentThrowableError: Error?
-    private let sendStateEventRawEventTypeStateKeyContentCallsCountLock = NSLock()
-    private var sendStateEventRawEventTypeStateKeyContentUnderlyingCallsCount = 0
-    open var sendStateEventRawEventTypeStateKeyContentCallsCount: Int {
-        get { sendStateEventRawEventTypeStateKeyContentCallsCountLock.withLock { sendStateEventRawEventTypeStateKeyContentUnderlyingCallsCount } }
-        set { sendStateEventRawEventTypeStateKeyContentCallsCountLock.withLock { sendStateEventRawEventTypeStateKeyContentUnderlyingCallsCount = newValue } }
+    open var sendStateEventRawEventTypeStateKeyContentRequestConfigOverrideThrowableError: Error?
+    private let sendStateEventRawEventTypeStateKeyContentRequestConfigOverrideCallsCountLock = NSLock()
+    private var sendStateEventRawEventTypeStateKeyContentRequestConfigOverrideUnderlyingCallsCount = 0
+    open var sendStateEventRawEventTypeStateKeyContentRequestConfigOverrideCallsCount: Int {
+        get { sendStateEventRawEventTypeStateKeyContentRequestConfigOverrideCallsCountLock.withLock { sendStateEventRawEventTypeStateKeyContentRequestConfigOverrideUnderlyingCallsCount } }
+        set { sendStateEventRawEventTypeStateKeyContentRequestConfigOverrideCallsCountLock.withLock { sendStateEventRawEventTypeStateKeyContentRequestConfigOverrideUnderlyingCallsCount = newValue } }
     }
-    open var sendStateEventRawEventTypeStateKeyContentCalled: Bool {
-        return sendStateEventRawEventTypeStateKeyContentCallsCount > 0
+    open var sendStateEventRawEventTypeStateKeyContentRequestConfigOverrideCalled: Bool {
+        return sendStateEventRawEventTypeStateKeyContentRequestConfigOverrideCallsCount > 0
     }
-    private let sendStateEventRawEventTypeStateKeyContentReceivedArgumentsLock = NSLock()
-    private var sendStateEventRawEventTypeStateKeyContentUnderlyingReceivedArguments: (eventType: String, stateKey: String, content: String)?
-    open var sendStateEventRawEventTypeStateKeyContentReceivedArguments: (eventType: String, stateKey: String, content: String)? {
-        get { sendStateEventRawEventTypeStateKeyContentReceivedArgumentsLock.withLock { sendStateEventRawEventTypeStateKeyContentUnderlyingReceivedArguments } }
-        set { sendStateEventRawEventTypeStateKeyContentReceivedArgumentsLock.withLock { sendStateEventRawEventTypeStateKeyContentUnderlyingReceivedArguments = newValue } }
+    private let sendStateEventRawEventTypeStateKeyContentRequestConfigOverrideReceivedArgumentsLock = NSLock()
+    private var sendStateEventRawEventTypeStateKeyContentRequestConfigOverrideUnderlyingReceivedArguments: (eventType: String, stateKey: String, content: String, requestConfigOverride: RequestConfigOverride?)?
+    open var sendStateEventRawEventTypeStateKeyContentRequestConfigOverrideReceivedArguments: (eventType: String, stateKey: String, content: String, requestConfigOverride: RequestConfigOverride?)? {
+        get { sendStateEventRawEventTypeStateKeyContentRequestConfigOverrideReceivedArgumentsLock.withLock { sendStateEventRawEventTypeStateKeyContentRequestConfigOverrideUnderlyingReceivedArguments } }
+        set { sendStateEventRawEventTypeStateKeyContentRequestConfigOverrideReceivedArgumentsLock.withLock { sendStateEventRawEventTypeStateKeyContentRequestConfigOverrideUnderlyingReceivedArguments = newValue } }
     }
-    private let sendStateEventRawEventTypeStateKeyContentReceivedInvocationsLock = NSLock()
-    private var sendStateEventRawEventTypeStateKeyContentUnderlyingReceivedInvocations: [(eventType: String, stateKey: String, content: String)] = []
-    open var sendStateEventRawEventTypeStateKeyContentReceivedInvocations: [(eventType: String, stateKey: String, content: String)] {
-        get { sendStateEventRawEventTypeStateKeyContentReceivedInvocationsLock.withLock { sendStateEventRawEventTypeStateKeyContentUnderlyingReceivedInvocations } }
-        set { sendStateEventRawEventTypeStateKeyContentReceivedInvocationsLock.withLock { sendStateEventRawEventTypeStateKeyContentUnderlyingReceivedInvocations = newValue } }
+    private let sendStateEventRawEventTypeStateKeyContentRequestConfigOverrideReceivedInvocationsLock = NSLock()
+    private var sendStateEventRawEventTypeStateKeyContentRequestConfigOverrideUnderlyingReceivedInvocations: [(eventType: String, stateKey: String, content: String, requestConfigOverride: RequestConfigOverride?)] = []
+    open var sendStateEventRawEventTypeStateKeyContentRequestConfigOverrideReceivedInvocations: [(eventType: String, stateKey: String, content: String, requestConfigOverride: RequestConfigOverride?)] {
+        get { sendStateEventRawEventTypeStateKeyContentRequestConfigOverrideReceivedInvocationsLock.withLock { sendStateEventRawEventTypeStateKeyContentRequestConfigOverrideUnderlyingReceivedInvocations } }
+        set { sendStateEventRawEventTypeStateKeyContentRequestConfigOverrideReceivedInvocationsLock.withLock { sendStateEventRawEventTypeStateKeyContentRequestConfigOverrideUnderlyingReceivedInvocations = newValue } }
     }
 
-    private let sendStateEventRawEventTypeStateKeyContentReturnValueLock = NSLock()
-    open var sendStateEventRawEventTypeStateKeyContentUnderlyingReturnValue: String!
-    open var sendStateEventRawEventTypeStateKeyContentReturnValue: String! {
-        get { sendStateEventRawEventTypeStateKeyContentReturnValueLock.withLock { sendStateEventRawEventTypeStateKeyContentUnderlyingReturnValue } }
-        set { sendStateEventRawEventTypeStateKeyContentReturnValueLock.withLock { sendStateEventRawEventTypeStateKeyContentUnderlyingReturnValue = newValue } }
+    private let sendStateEventRawEventTypeStateKeyContentRequestConfigOverrideReturnValueLock = NSLock()
+    open var sendStateEventRawEventTypeStateKeyContentRequestConfigOverrideUnderlyingReturnValue: String!
+    open var sendStateEventRawEventTypeStateKeyContentRequestConfigOverrideReturnValue: String! {
+        get { sendStateEventRawEventTypeStateKeyContentRequestConfigOverrideReturnValueLock.withLock { sendStateEventRawEventTypeStateKeyContentRequestConfigOverrideUnderlyingReturnValue } }
+        set { sendStateEventRawEventTypeStateKeyContentRequestConfigOverrideReturnValueLock.withLock { sendStateEventRawEventTypeStateKeyContentRequestConfigOverrideUnderlyingReturnValue = newValue } }
     }
-    open var sendStateEventRawEventTypeStateKeyContentClosure: ((String, String, String) async throws -> String)?
+    open var sendStateEventRawEventTypeStateKeyContentRequestConfigOverrideClosure: ((String, String, String, RequestConfigOverride?) async throws -> String)?
 
-    open override func sendStateEventRaw(eventType: String, stateKey: String, content: String) async throws -> String {
-        if let error = sendStateEventRawEventTypeStateKeyContentThrowableError {
+    open override func sendStateEventRaw(eventType: String, stateKey: String, content: String, requestConfigOverride: RequestConfigOverride? = nil) async throws -> String {
+        if let error = sendStateEventRawEventTypeStateKeyContentRequestConfigOverrideThrowableError {
             throw error
         }
-        sendStateEventRawEventTypeStateKeyContentCallsCountLock.withLock { sendStateEventRawEventTypeStateKeyContentUnderlyingCallsCount += 1 }
-        sendStateEventRawEventTypeStateKeyContentReceivedArguments = (eventType: eventType, stateKey: stateKey, content: content)
-        sendStateEventRawEventTypeStateKeyContentReceivedInvocationsLock.withLock { sendStateEventRawEventTypeStateKeyContentUnderlyingReceivedInvocations.append((eventType: eventType, stateKey: stateKey, content: content)) }
-        if let sendStateEventRawEventTypeStateKeyContentClosure = sendStateEventRawEventTypeStateKeyContentClosure {
-            return try await sendStateEventRawEventTypeStateKeyContentClosure(eventType, stateKey, content)
+        sendStateEventRawEventTypeStateKeyContentRequestConfigOverrideCallsCountLock.withLock { sendStateEventRawEventTypeStateKeyContentRequestConfigOverrideUnderlyingCallsCount += 1 }
+        sendStateEventRawEventTypeStateKeyContentRequestConfigOverrideReceivedArguments = (eventType: eventType, stateKey: stateKey, content: content, requestConfigOverride: requestConfigOverride)
+        sendStateEventRawEventTypeStateKeyContentRequestConfigOverrideReceivedInvocationsLock.withLock { sendStateEventRawEventTypeStateKeyContentRequestConfigOverrideUnderlyingReceivedInvocations.append((eventType: eventType, stateKey: stateKey, content: content, requestConfigOverride: requestConfigOverride)) }
+        if let sendStateEventRawEventTypeStateKeyContentRequestConfigOverrideClosure = sendStateEventRawEventTypeStateKeyContentRequestConfigOverrideClosure {
+            return try await sendStateEventRawEventTypeStateKeyContentRequestConfigOverrideClosure(eventType, stateKey, content, requestConfigOverride)
         } else {
-            return sendStateEventRawEventTypeStateKeyContentReturnValue
+            return sendStateEventRawEventTypeStateKeyContentRequestConfigOverrideReturnValue
         }
     }
 
@@ -13828,48 +13875,48 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
 
     //MARK: - sendStickyRaw
 
-    open var sendStickyRawEventTypeContentDurationMsThrowableError: Error?
-    private let sendStickyRawEventTypeContentDurationMsCallsCountLock = NSLock()
-    private var sendStickyRawEventTypeContentDurationMsUnderlyingCallsCount = 0
-    open var sendStickyRawEventTypeContentDurationMsCallsCount: Int {
-        get { sendStickyRawEventTypeContentDurationMsCallsCountLock.withLock { sendStickyRawEventTypeContentDurationMsUnderlyingCallsCount } }
-        set { sendStickyRawEventTypeContentDurationMsCallsCountLock.withLock { sendStickyRawEventTypeContentDurationMsUnderlyingCallsCount = newValue } }
+    open var sendStickyRawEventTypeContentDurationMsRequestConfigOverrideThrowableError: Error?
+    private let sendStickyRawEventTypeContentDurationMsRequestConfigOverrideCallsCountLock = NSLock()
+    private var sendStickyRawEventTypeContentDurationMsRequestConfigOverrideUnderlyingCallsCount = 0
+    open var sendStickyRawEventTypeContentDurationMsRequestConfigOverrideCallsCount: Int {
+        get { sendStickyRawEventTypeContentDurationMsRequestConfigOverrideCallsCountLock.withLock { sendStickyRawEventTypeContentDurationMsRequestConfigOverrideUnderlyingCallsCount } }
+        set { sendStickyRawEventTypeContentDurationMsRequestConfigOverrideCallsCountLock.withLock { sendStickyRawEventTypeContentDurationMsRequestConfigOverrideUnderlyingCallsCount = newValue } }
     }
-    open var sendStickyRawEventTypeContentDurationMsCalled: Bool {
-        return sendStickyRawEventTypeContentDurationMsCallsCount > 0
+    open var sendStickyRawEventTypeContentDurationMsRequestConfigOverrideCalled: Bool {
+        return sendStickyRawEventTypeContentDurationMsRequestConfigOverrideCallsCount > 0
     }
-    private let sendStickyRawEventTypeContentDurationMsReceivedArgumentsLock = NSLock()
-    private var sendStickyRawEventTypeContentDurationMsUnderlyingReceivedArguments: (eventType: String, content: String, durationMs: UInt64)?
-    open var sendStickyRawEventTypeContentDurationMsReceivedArguments: (eventType: String, content: String, durationMs: UInt64)? {
-        get { sendStickyRawEventTypeContentDurationMsReceivedArgumentsLock.withLock { sendStickyRawEventTypeContentDurationMsUnderlyingReceivedArguments } }
-        set { sendStickyRawEventTypeContentDurationMsReceivedArgumentsLock.withLock { sendStickyRawEventTypeContentDurationMsUnderlyingReceivedArguments = newValue } }
+    private let sendStickyRawEventTypeContentDurationMsRequestConfigOverrideReceivedArgumentsLock = NSLock()
+    private var sendStickyRawEventTypeContentDurationMsRequestConfigOverrideUnderlyingReceivedArguments: (eventType: String, content: String, durationMs: UInt64, requestConfigOverride: RequestConfigOverride?)?
+    open var sendStickyRawEventTypeContentDurationMsRequestConfigOverrideReceivedArguments: (eventType: String, content: String, durationMs: UInt64, requestConfigOverride: RequestConfigOverride?)? {
+        get { sendStickyRawEventTypeContentDurationMsRequestConfigOverrideReceivedArgumentsLock.withLock { sendStickyRawEventTypeContentDurationMsRequestConfigOverrideUnderlyingReceivedArguments } }
+        set { sendStickyRawEventTypeContentDurationMsRequestConfigOverrideReceivedArgumentsLock.withLock { sendStickyRawEventTypeContentDurationMsRequestConfigOverrideUnderlyingReceivedArguments = newValue } }
     }
-    private let sendStickyRawEventTypeContentDurationMsReceivedInvocationsLock = NSLock()
-    private var sendStickyRawEventTypeContentDurationMsUnderlyingReceivedInvocations: [(eventType: String, content: String, durationMs: UInt64)] = []
-    open var sendStickyRawEventTypeContentDurationMsReceivedInvocations: [(eventType: String, content: String, durationMs: UInt64)] {
-        get { sendStickyRawEventTypeContentDurationMsReceivedInvocationsLock.withLock { sendStickyRawEventTypeContentDurationMsUnderlyingReceivedInvocations } }
-        set { sendStickyRawEventTypeContentDurationMsReceivedInvocationsLock.withLock { sendStickyRawEventTypeContentDurationMsUnderlyingReceivedInvocations = newValue } }
+    private let sendStickyRawEventTypeContentDurationMsRequestConfigOverrideReceivedInvocationsLock = NSLock()
+    private var sendStickyRawEventTypeContentDurationMsRequestConfigOverrideUnderlyingReceivedInvocations: [(eventType: String, content: String, durationMs: UInt64, requestConfigOverride: RequestConfigOverride?)] = []
+    open var sendStickyRawEventTypeContentDurationMsRequestConfigOverrideReceivedInvocations: [(eventType: String, content: String, durationMs: UInt64, requestConfigOverride: RequestConfigOverride?)] {
+        get { sendStickyRawEventTypeContentDurationMsRequestConfigOverrideReceivedInvocationsLock.withLock { sendStickyRawEventTypeContentDurationMsRequestConfigOverrideUnderlyingReceivedInvocations } }
+        set { sendStickyRawEventTypeContentDurationMsRequestConfigOverrideReceivedInvocationsLock.withLock { sendStickyRawEventTypeContentDurationMsRequestConfigOverrideUnderlyingReceivedInvocations = newValue } }
     }
 
-    private let sendStickyRawEventTypeContentDurationMsReturnValueLock = NSLock()
-    open var sendStickyRawEventTypeContentDurationMsUnderlyingReturnValue: String!
-    open var sendStickyRawEventTypeContentDurationMsReturnValue: String! {
-        get { sendStickyRawEventTypeContentDurationMsReturnValueLock.withLock { sendStickyRawEventTypeContentDurationMsUnderlyingReturnValue } }
-        set { sendStickyRawEventTypeContentDurationMsReturnValueLock.withLock { sendStickyRawEventTypeContentDurationMsUnderlyingReturnValue = newValue } }
+    private let sendStickyRawEventTypeContentDurationMsRequestConfigOverrideReturnValueLock = NSLock()
+    open var sendStickyRawEventTypeContentDurationMsRequestConfigOverrideUnderlyingReturnValue: String!
+    open var sendStickyRawEventTypeContentDurationMsRequestConfigOverrideReturnValue: String! {
+        get { sendStickyRawEventTypeContentDurationMsRequestConfigOverrideReturnValueLock.withLock { sendStickyRawEventTypeContentDurationMsRequestConfigOverrideUnderlyingReturnValue } }
+        set { sendStickyRawEventTypeContentDurationMsRequestConfigOverrideReturnValueLock.withLock { sendStickyRawEventTypeContentDurationMsRequestConfigOverrideUnderlyingReturnValue = newValue } }
     }
-    open var sendStickyRawEventTypeContentDurationMsClosure: ((String, String, UInt64) async throws -> String)?
+    open var sendStickyRawEventTypeContentDurationMsRequestConfigOverrideClosure: ((String, String, UInt64, RequestConfigOverride?) async throws -> String)?
 
-    open override func sendStickyRaw(eventType: String, content: String, durationMs: UInt64) async throws -> String {
-        if let error = sendStickyRawEventTypeContentDurationMsThrowableError {
+    open override func sendStickyRaw(eventType: String, content: String, durationMs: UInt64, requestConfigOverride: RequestConfigOverride? = nil) async throws -> String {
+        if let error = sendStickyRawEventTypeContentDurationMsRequestConfigOverrideThrowableError {
             throw error
         }
-        sendStickyRawEventTypeContentDurationMsCallsCountLock.withLock { sendStickyRawEventTypeContentDurationMsUnderlyingCallsCount += 1 }
-        sendStickyRawEventTypeContentDurationMsReceivedArguments = (eventType: eventType, content: content, durationMs: durationMs)
-        sendStickyRawEventTypeContentDurationMsReceivedInvocationsLock.withLock { sendStickyRawEventTypeContentDurationMsUnderlyingReceivedInvocations.append((eventType: eventType, content: content, durationMs: durationMs)) }
-        if let sendStickyRawEventTypeContentDurationMsClosure = sendStickyRawEventTypeContentDurationMsClosure {
-            return try await sendStickyRawEventTypeContentDurationMsClosure(eventType, content, durationMs)
+        sendStickyRawEventTypeContentDurationMsRequestConfigOverrideCallsCountLock.withLock { sendStickyRawEventTypeContentDurationMsRequestConfigOverrideUnderlyingCallsCount += 1 }
+        sendStickyRawEventTypeContentDurationMsRequestConfigOverrideReceivedArguments = (eventType: eventType, content: content, durationMs: durationMs, requestConfigOverride: requestConfigOverride)
+        sendStickyRawEventTypeContentDurationMsRequestConfigOverrideReceivedInvocationsLock.withLock { sendStickyRawEventTypeContentDurationMsRequestConfigOverrideUnderlyingReceivedInvocations.append((eventType: eventType, content: content, durationMs: durationMs, requestConfigOverride: requestConfigOverride)) }
+        if let sendStickyRawEventTypeContentDurationMsRequestConfigOverrideClosure = sendStickyRawEventTypeContentDurationMsRequestConfigOverrideClosure {
+            return try await sendStickyRawEventTypeContentDurationMsRequestConfigOverrideClosure(eventType, content, durationMs, requestConfigOverride)
         } else {
-            return sendStickyRawEventTypeContentDurationMsReturnValue
+            return sendStickyRawEventTypeContentDurationMsRequestConfigOverrideReturnValue
         }
     }
 
