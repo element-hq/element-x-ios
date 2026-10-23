@@ -1626,9 +1626,12 @@
 "screen_signout_key_backup_offline_title" = "Your keys are still being backed up";
 "screen_signout_key_backup_ongoing_subtitle" = "Please wait for this to complete before removing this device.";
 "screen_signout_key_backup_ongoing_title" = "Your keys are still being backed up";
+"screen_signout_other_verified_device_dialog_content" = "Make sure you always have access to another verified device or your recovery key to avoid losing your encrypted chat history.";
+"screen_signout_other_verified_device_dialog_title" = "Are you sure you want to remove this device?";
 "screen_signout_preference_item" = "Remove this device";
 "screen_signout_recovery_disabled_subtitle" = "This is your only device. If you remove it you’ll need a recovery key in order to confirm your digital identity and restore your encrypted chats the next time you sign in.";
 "screen_signout_recovery_disabled_title" = "You’re about to lose access to your encrypted chats";
+"screen_signout_save_recovery_key_action_continue" = "Continue to remove this device";
 "screen_signout_save_recovery_key_subtitle" = "This is your only device. If you remove it you’ll need a recovery key in order to confirm your digital identity and restore your encrypted chats the next time you sign in.";
 "screen_signout_save_recovery_key_title" = "Make sure you have access to your recovery key before removing this device";
 "screen_space_add_room_action" = "Room";
