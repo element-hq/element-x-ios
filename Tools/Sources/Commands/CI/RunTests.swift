@@ -147,12 +147,11 @@ struct RunTests: AsyncParsableCommand {
         
         // Use xcodebuild's native retry support to re-run only failing tests
         // instead of re-running the entire suite. retries=0 means no retries (single run).
+        // No -test-repetition-relaunch-enabled: it re-runs the whole selection after any failure.
         if retries > 0 {
             // -test-iterations is the total number of attempts (initial + retries)
             command += " -retry-tests-on-failure"
             command += " -test-iterations \(retries + 1)"
-            // Ensure retries still happen when a runner exits early.
-            command += " -test-repetition-relaunch-enabled YES"
         }
         
         if let testName {

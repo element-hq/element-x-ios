@@ -27,6 +27,7 @@
   ],
   "defaultOptions" : {
     "defaultTestExecutionTimeAllowance" : 60,
+    "diagnosticCollectionPolicy" : "Never",
     "environmentVariableEntries" : [
       {
         "key" : "IS_RUNNING_UNIT_TESTS",
