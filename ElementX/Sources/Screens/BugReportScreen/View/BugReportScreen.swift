@@ -37,13 +37,13 @@ struct BugReportScreen: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
         .interactiveDismissDisabled()
-        .onChange(of: selectedScreenshot) { _, newItem in
-            Task {
-                guard let data = try? await newItem?.loadTransferable(type: Data.self),
-                      let image = UIImage(data: data)
-                else {
-                    return
-                }
+        .task(id: selectedScreenshot) {
+            guard let selectedScreenshot else { return }
+            let data = try? await selectedScreenshot.loadTransferable(type: Data.self)
+            guard !Task.isCancelled else { return }
+            // Clear the selection so that picking the same item again triggers a new load.
+            self.selectedScreenshot = nil
+            if let data, let image = UIImage(data: data) {
                 context.send(viewAction: .attachScreenshot(image))
             }
         }
@@ -117,7 +117,7 @@ struct BugReportScreen: View {
                     .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.screenshot)
                     .accessibilityLabel(L10n.screenBugReportA11yScreenshot)
                     .overlay(alignment: .topTrailing) {
-                        Button { context.send(viewAction: .removeScreenshot) } label: {
+                        Button(action: removeScreenshot) {
                             CompoundIcon(\.close, size: .small, relativeTo: .compound.bodyMD)
                                 .foregroundStyle(.compound.iconSecondary)
                                 .background {
@@ -151,6 +151,12 @@ struct BugReportScreen: View {
             .disabled(context.reportText.count < 5)
             .disabled(context.viewState.shouldDisableInteraction)
         }
+    }
+    
+    private func removeScreenshot() {
+        // Cancels any in-flight load so it can't re-attach the screenshot.
+        selectedScreenshot = nil
+        context.send(viewAction: .removeScreenshot)
     }
 }
 
