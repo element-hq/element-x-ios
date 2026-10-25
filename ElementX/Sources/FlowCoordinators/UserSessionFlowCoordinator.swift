@@ -546,6 +546,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     private func setupUnreadNotificationsObserver() {
         userSession.notificationService.badgeCountPublisher
+            .removeDuplicates()
             .weakAssign(to: \.badgeCount, on: chatsTabDetails)
             .store(in: &cancellables)
     }

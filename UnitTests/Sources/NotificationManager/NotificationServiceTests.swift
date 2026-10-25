@@ -165,6 +165,21 @@ final class NotificationServiceTests {
         try await deferred.fulfill()
     }
     
+    @Test
+    func roomListChangesRepublishAnUnchangedBadgeCount() async throws {
+        let roomListSubject = CurrentValueSubject<[RoomSummary], Never>([])
+        let roomSummaryProvider = RoomSummaryProviderMock(.init())
+        roomSummaryProvider.roomListPublisher = roomListSubject.asCurrentValuePublisher()
+        clientProxy.staticRoomSummaryProvider = roomSummaryProvider
+        clientProxy.totalUnreadNotifications = 3
+        let service = makeService()
+        
+        // The extension bumps the app badge without the app knowing, so it needs resetting even when the count is the same.
+        let deferred = deferFulfillment(service.badgeCountPublisher.dropFirst()) { $0 == 3 }
+        roomListSubject.send([])
+        try await deferred.fulfill()
+    }
+    
     // MARK: - Delivered notifications
     
     @Test
