@@ -95,7 +95,8 @@ final class NotificationService: NotificationServiceProtocol {
             for await roomSummaries in roomListPublisher.values {
                 guard let self else { return }
                 
-                updateBadgeCount(Int(clientProxy.totalUnreadNotifications))
+                // Sent even when unchanged as the extension may have moved the app badge since.
+                badgeCountSubject.send(Int(clientProxy.totalUnreadNotifications))
                 removeDeliveredNotificationsForFullyReadRooms(roomSummaries)
             }
         }
@@ -118,11 +119,6 @@ final class NotificationService: NotificationServiceProtocol {
         if isEnabled {
             requestAuthorization()
         }
-    }
-    
-    private func updateBadgeCount(_ badgeCount: Int) {
-        guard badgeCount != badgeCountSubject.value else { return }
-        badgeCountSubject.send(badgeCount)
     }
     
     /// Sets the pusher when enabled and deletes it otherwise. Nothing to update until the device token is known.
