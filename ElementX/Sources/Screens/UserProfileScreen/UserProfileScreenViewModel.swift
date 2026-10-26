@@ -152,7 +152,7 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
         showLoadingIndicator(allowsInteraction: false)
         defer { hideLoadingIndicator() }
         
-        switch await userSession.clientProxy.createDirectRoom(with: userProfile.id, expectedRoomName: userProfile.displayName) {
+        switch await userSession.clientProxy.createRoom(.directRoom(userID: userProfile.id)) {
         case .success(let roomID):
             analytics.trackCreatedRoom(isDM: true)
             actionsSubject.send(.openDirectChat(roomID: roomID))

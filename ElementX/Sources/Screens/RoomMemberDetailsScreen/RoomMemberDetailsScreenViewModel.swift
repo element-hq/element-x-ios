@@ -223,7 +223,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
                                                 delay: .milliseconds(200))
         defer { userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier) }
         
-        switch await userSession.clientProxy.createDirectRoom(with: roomMemberProxy.userID, expectedRoomName: roomMemberProxy.displayName) {
+        switch await userSession.clientProxy.createRoom(.directRoom(userID: roomMemberProxy.userID)) {
         case .success(let roomID):
             analytics.trackCreatedRoom(isDM: true)
             actionsSubject.send(.openDirectChat(roomID: roomID))

@@ -124,13 +124,14 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
         Task {
             defer { hideLoadingIndicator() }
             
-            switch await clientProxy.createRoom(name: nil,
-                                                topic: nil,
-                                                accessType: .private,
-                                                isSpace: false,
-                                                userIDs: mandatoryUserIDs,
-                                                avatarURL: nil,
-                                                aliasLocalPart: nil) {
+            let parameters = CreateRoomParameters.room(name: nil,
+                                                       topic: nil,
+                                                       accessType: .private,
+                                                       userIDs: mandatoryUserIDs,
+                                                       avatarURL: nil,
+                                                       aliasLocalPart: nil)
+            
+            switch await clientProxy.createRoom(parameters) {
             case .success(let roomID):
                 actionsSubject.send(.openRoom(roomID: roomID))
             case .failure:

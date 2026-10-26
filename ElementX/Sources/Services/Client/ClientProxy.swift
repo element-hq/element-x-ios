@@ -78,64 +78,6 @@ class ClientProxy: ClientProxyProtocol {
     
     let eventStringBuilder: RoomEventStringBuilder
     
-    private static var roomCreationPowerLevelOverrides: PowerLevels {
-        .init(usersDefault: nil,
-              eventsDefault: nil,
-              stateDefault: nil,
-              ban: nil,
-              kick: nil,
-              redact: nil,
-              invite: Int32(0),
-              notifications: nil,
-              users: [:],
-              events: [
-                  "m.call.member": Int32(0),
-                  "org.matrix.msc3401.call.member": Int32(0)
-              ])
-    }
-    
-    private static var knockingRoomCreationPowerLevelOverrides: PowerLevels {
-        .init(usersDefault: nil,
-              eventsDefault: nil,
-              stateDefault: nil,
-              ban: nil,
-              kick: nil,
-              redact: nil,
-              invite: Int32(50),
-              notifications: nil,
-              users: [:],
-              events: [
-                  "m.call.member": Int32(0),
-                  "org.matrix.msc3401.call.member": Int32(0)
-              ])
-    }
-    
-    private static var standardSpaceCreationPowerLevelOverrides: PowerLevels {
-        .init(usersDefault: nil,
-              eventsDefault: Int32(100),
-              stateDefault: nil,
-              ban: nil,
-              kick: nil,
-              redact: nil,
-              invite: Int32(50),
-              notifications: nil,
-              users: [:],
-              events: [:])
-    }
-    
-    private static var publicSpaceCreationPowerLevelOverrides: PowerLevels {
-        .init(usersDefault: nil,
-              eventsDefault: Int32(100),
-              stateDefault: nil,
-              ban: nil,
-              kick: nil,
-              redact: nil,
-              invite: Int32(0),
-              notifications: nil,
-              users: [:],
-              events: [:])
-    }
-    
     private var loadCachedAvatarURLTask: Task<Void, Never>?
     private let userProfileSubject: CurrentValueSubject<UserProfile, Never>
     var userProfilePublisher: CurrentValuePublisher<UserProfile, Never> {
@@ -512,72 +454,26 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func createDirectRoom(with userID: String, expectedRoomName: String?) async -> Result<String, ClientProxyError> {
+    func createRoom(_ parameters: CreateRoomParameters) async -> Result<String, ClientProxyError> {
         do {
-            let parameters = CreateRoomParameters(name: nil,
-                                                  topic: nil,
-                                                  isEncrypted: !userSettings.app.forceDisableE2EE.publisher.value,
-                                                  isDirect: true,
-                                                  visibility: .private,
-                                                  preset: .trustedPrivateChat,
-                                                  invite: [userID],
-                                                  avatar: nil,
-                                                  powerLevelContentOverride: Self.roomCreationPowerLevelOverrides,
-                                                  historyVisibilityOverride: .invited)
-            let roomID = try await client.createRoom(request: parameters)
-            
-            await waitForRoomToSync(roomID: roomID)
-            
-            return .success(roomID)
-        } catch {
-            MXLog.error("Failed creating direct room for userID: \(userID) with error: \(error)")
-            return .failure(.sdkError(error))
-        }
-    }
-    
-    func createRoom(name: String?,
-                    topic: String?,
-                    accessType: CreateRoomAccessType,
-                    isSpace: Bool,
-                    userIDs: [String],
-                    avatarURL: URL?,
-                    aliasLocalPart: String?) async -> Result<String, ClientProxyError> {
-        do {
-            let powerLevelContentOverride = if isSpace {
-                if accessType == .public {
-                    Self.publicSpaceCreationPowerLevelOverrides
-                } else {
-                    Self.standardSpaceCreationPowerLevelOverrides
-                }
-            } else {
-                if accessType.isAskToJoin {
-                    Self.knockingRoomCreationPowerLevelOverrides
-                } else {
-                    Self.roomCreationPowerLevelOverrides
-                }
+            var parameters = parameters
+            if userSettings.app.forceDisableE2EE.publisher.value {
+                parameters.isEncrypted = false
             }
             
-            let parameters = CreateRoomParameters(name: name,
-                                                  topic: topic,
-                                                  isEncrypted: !userSettings.app.forceDisableE2EE.publisher.value && accessType.isEncrypted,
-                                                  isDirect: false,
-                                                  visibility: accessType.visibility,
-                                                  preset: accessType.preset,
-                                                  invite: userIDs,
-                                                  avatar: avatarURL?.absoluteString,
-                                                  powerLevelContentOverride: powerLevelContentOverride,
-                                                  joinRuleOverride: accessType.joinRuleOverride?.rustValue,
-                                                  historyVisibilityOverride: accessType.historyVisibilityOverride,
-                                                  // This is an FFI naming mistake, what is required is the `aliasLocalPart` not the whole alias
-                                                  canonicalAlias: aliasLocalPart,
-                                                  isSpace: isSpace)
-            let roomID = try await client.createRoom(request: parameters)
+            let roomID = try await client.createRoom(request: parameters.rustValue)
             
             await waitForRoomToSync(roomID: roomID)
             
             return .success(roomID)
         } catch {
-            MXLog.error("Failed creating room with error: \(error)")
+            if parameters.isDirect {
+                MXLog.error("Failed creating direct room for userID: \(parameters.userIDs.joined(separator: ", ")) with error: \(error)")
+            } else if parameters.isSpace {
+                MXLog.error("Failed creating space with error: \(error)")
+            } else {
+                MXLog.error("Failed creating room with error: \(error)")
+            }
             return .failure(.sdkError(error))
         }
     }
@@ -1672,51 +1568,6 @@ private extension ClientProxyPresence {
             .unavailable
         case .offline:
             .offline
-        }
-    }
-}
-
-private extension CreateRoomAccessType {
-    var isEncrypted: Bool {
-        switch self {
-        case .public:
-            false
-        default:
-            true
-        }
-    }
-    
-    var visibility: RoomVisibility {
-        isVisibilityPrivate ? .private : .public
-    }
-    
-    var preset: RoomPreset {
-        isVisibilityPrivate ? .privateChat : .publicChat
-    }
-    
-    var historyVisibilityOverride: RoomHistoryVisibility? {
-        isVisibilityPrivate ? .invited : nil
-    }
-    
-    var joinRuleOverride: JoinRule? {
-        switch self {
-        case .askToJoin:
-            .knock
-        case .spaceMembers(let spaceID):
-            .restricted(rules: [.roomMembership(roomID: spaceID)])
-        case .askToJoinWithSpaceMembers(let spaceID):
-            .knockRestricted(rules: [.roomMembership(roomID: spaceID)])
-        case .private, .public:
-            nil
-        }
-    }
-    
-    var isAskToJoin: Bool {
-        switch self {
-        case .askToJoin, .askToJoinWithSpaceMembers:
-            true
-        default:
-            false
         }
     }
 }

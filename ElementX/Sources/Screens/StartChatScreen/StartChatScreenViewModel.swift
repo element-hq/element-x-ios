@@ -186,7 +186,7 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
             hideLoadingIndicator()
         }
         showLoadingIndicator()
-        switch await userSession.clientProxy.createDirectRoom(with: user.id, expectedRoomName: user.displayName) {
+        switch await userSession.clientProxy.createRoom(.directRoom(userID: user.id)) {
         case .success(let roomId):
             analytics.trackCreatedRoom(isDM: true)
             actionsSubject.send(.showRoom(roomID: roomId))
