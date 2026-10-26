@@ -503,6 +503,7 @@
 "emoji_picker_search_placeholder" = "Search emojis";
 "error_account_already_logged_in_title" = "Duplicate sign-in";
 "error_account_creation_not_possible" = "Je homeserver moet worden geüpgraded om de Matrix Authentication Service en het aanmaken van accounts te ondersteunen.";
+"error_camera_unavailable" = "The camera is not available";
 "error_failed_creating_the_permalink" = "Het aanmaken van de permanente link is mislukt";
 "error_failed_loading_map" = "%1$@ kon de kaart niet laden. Probeer het later opnieuw.";
 "error_failed_loading_messages" = "Het laden van berichten is mislukt";
@@ -880,6 +881,7 @@
 "screen_encryption_reset_subtitle" = "If you don’t have access to any other verified devices and you don’t have your recovery key, then you’ll need to reset your digital identity to continue using the app.";
 "screen_encryption_reset_title" = "Kun je dit niet bevestigen? Je zult je identiteit opnieuw moeten instellen.";
 "screen_home_tab_chats" = "Chats";
+"screen_home_tab_search" = "Search";
 "screen_home_tab_spaces" = "Spaces";
 "screen_identity_confirmation_cannot_confirm" = "Kan ik dit niet bevestigen?";
 "screen_identity_confirmation_create_new_recovery_key" = "Maak een nieuwe herstelsleutel";
@@ -1497,6 +1499,12 @@
 "screen_roomlist_mark_as_unread" = "Markeren als ongelezen";
 "screen_roomlist_tombstoned_room_description" = "This room has been upgraded";
 "screen_roomlist_your_spaces" = "Your spaces";
+"screen_search_empty_state_message" = "Search for chats and messages";
+"screen_search_empty_state_title" = "Start searching";
+"screen_search_no_results_message" = "There are no results for “%1$@.” Try a new search term.";
+"screen_search_recent_searches" = "Recent searches";
+"screen_search_tab_chats" = "Chats";
+"screen_search_tab_messages" = "Messages";
 "screen_security_and_privacy_add_room_address_action" = "Add address";
 "screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description" = "Anyone in authorised spaces can join, but everyone else must request access.";
 "screen_security_and_privacy_ask_to_join_option_description" = "Everyone must request access.";
@@ -1619,9 +1627,12 @@
 "screen_signout_key_backup_offline_title" = "De backup van je sleutels is nog bezig";
 "screen_signout_key_backup_ongoing_subtitle" = "Wacht tot dit voltooid is voordat je uitlogt.";
 "screen_signout_key_backup_ongoing_title" = "De backup van je sleutels is nog bezig";
+"screen_signout_other_verified_device_dialog_content" = "Make sure you always have access to another verified device or your recovery key to avoid losing your encrypted chat history.";
+"screen_signout_other_verified_device_dialog_title" = "Are you sure you want to remove this device?";
 "screen_signout_preference_item" = "Uitloggen";
 "screen_signout_recovery_disabled_subtitle" = "Je staat op het punt uit te loggen bij je laatste sessie. Als je je nu uitlogt, verlies je de toegang tot je versleutelde berichten.";
 "screen_signout_recovery_disabled_title" = "Herstelmogelijkheid niet ingesteld";
+"screen_signout_save_recovery_key_action_continue" = "Continue to remove this device";
 "screen_signout_save_recovery_key_subtitle" = "Je staat op het punt uit te loggen bij je laatste sessie. Als je je nu uitlogt, kan het dat je de toegang tot je versleutelde berichten verliest.";
 "screen_signout_save_recovery_key_title" = "Heb je je herstelsleutel opgeslagen?";
 "screen_space_add_room_action" = "Room";

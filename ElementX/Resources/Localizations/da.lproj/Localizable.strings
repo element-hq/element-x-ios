@@ -503,6 +503,7 @@
 "emoji_picker_search_placeholder" = "Søg emojis";
 "error_account_already_logged_in_title" = "Duplicate sign-in";
 "error_account_creation_not_possible" = "Din hjemmeserver skal opgraderes for at understøtte Matrix Authentication Service og kontooprettelse.";
+"error_camera_unavailable" = "The camera is not available";
 "error_failed_creating_the_permalink" = "Oprettelse af permalink mislykkedes";
 "error_failed_loading_map" = "%1$@ kunne ikke indlæse kortet. Prøv igen senere.";
 "error_failed_loading_messages" = "Fejl under indlæsning af beskeder";
@@ -880,6 +881,7 @@
 "screen_encryption_reset_subtitle" = "If you don’t have access to any other verified devices and you don’t have your recovery key, then you’ll need to reset your digital identity to continue using the app.";
 "screen_encryption_reset_title" = "Kan du ikke bekræfte? Du er nødt til at nulstille din digitale identitet.";
 "screen_home_tab_chats" = "Samtaler";
+"screen_home_tab_search" = "Search";
 "screen_home_tab_spaces" = "Klynger";
 "screen_identity_confirmation_cannot_confirm" = "Kan ikke bekræfte?";
 "screen_identity_confirmation_create_new_recovery_key" = "Opret en ny gendannelsesnøgle";
@@ -1497,6 +1499,12 @@
 "screen_roomlist_mark_as_unread" = "Marker som ulæst";
 "screen_roomlist_tombstoned_room_description" = "Dette rum er blevet opgraderet";
 "screen_roomlist_your_spaces" = "Dine klynger";
+"screen_search_empty_state_message" = "Search for chats and messages";
+"screen_search_empty_state_title" = "Start searching";
+"screen_search_no_results_message" = "There are no results for “%1$@.” Try a new search term.";
+"screen_search_recent_searches" = "Recent searches";
+"screen_search_tab_chats" = "Chats";
+"screen_search_tab_messages" = "Messages";
 "screen_security_and_privacy_add_room_address_action" = "Tilføj adresse";
 "screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description" = "Alle i autoriserede klynger kan deltage, men alle andre skal anmode om adgang.";
 "screen_security_and_privacy_ask_to_join_option_description" = "Alle skal anmode om adgang.";
@@ -1619,9 +1627,12 @@
 "screen_signout_key_backup_offline_title" = "Dine nøgler bliver stadig sikkerhedskopieret";
 "screen_signout_key_backup_ongoing_subtitle" = "Vent venligst, indtil dette er færdigt, før du fjerner denne enhed.";
 "screen_signout_key_backup_ongoing_title" = "Dine nøgler bliver stadig sikkerhedskopieret";
+"screen_signout_other_verified_device_dialog_content" = "Make sure you always have access to another verified device or your recovery key to avoid losing your encrypted chat history.";
+"screen_signout_other_verified_device_dialog_title" = "Are you sure you want to remove this device?";
 "screen_signout_preference_item" = "Fjern denne enhed";
 "screen_signout_recovery_disabled_subtitle" = "Dette er din eneste enhed. Hvis du fjerner den, skal du bruge en gendannelsesnøgle for at bekræfte din digitale identitet og gendanne dine krypterede chats, næste gang du logger ind.";
 "screen_signout_recovery_disabled_title" = "Du er ved at miste adgangen til dine krypterede chats";
+"screen_signout_save_recovery_key_action_continue" = "Continue to remove this device";
 "screen_signout_save_recovery_key_subtitle" = "Dette er din eneste enhed. Hvis du fjerner den, skal du bruge en gendannelsesnøgle for at bekræfte din digitale identitet og gendanne dine krypterede chats, næste gang du logger ind.";
 "screen_signout_save_recovery_key_title" = "Sørg for, at du har adgang til din gendannelsesnøgle, før du fjerner denne enhed.";
 "screen_space_add_room_action" = "Rum";

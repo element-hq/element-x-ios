@@ -503,6 +503,7 @@
 "emoji_picker_search_placeholder" = "Emodzsik keresése";
 "error_account_already_logged_in_title" = "Duplicate sign-in";
 "error_account_creation_not_possible" = "A Matrix-kiszolgálót frissíteni kell a Matrix Authentication Service és a fióklétrehozás támogatásához.";
+"error_camera_unavailable" = "The camera is not available";
 "error_failed_creating_the_permalink" = "Nem sikerült létrehozni az állandó hivatkozást";
 "error_failed_loading_map" = "Az %1$@ nem tudta betölteni a térképet. Próbálja meg újra később.";
 "error_failed_loading_messages" = "Nem sikerült betölteni az üzeneteket";
@@ -880,6 +881,7 @@
 "screen_encryption_reset_subtitle" = "If you don’t have access to any other verified devices and you don’t have your recovery key, then you’ll need to reset your digital identity to continue using the app.";
 "screen_encryption_reset_title" = "Nem tudja megerősíteni? Alaphelyzetbe kell állítania a digitális személyazonosságát.";
 "screen_home_tab_chats" = "Csevegések";
+"screen_home_tab_search" = "Search";
 "screen_home_tab_spaces" = "Terek";
 "screen_identity_confirmation_cannot_confirm" = "Nem tudja megerősíteni?";
 "screen_identity_confirmation_create_new_recovery_key" = "Új helyreállítási kulcs létrehozása";
@@ -1497,6 +1499,12 @@
 "screen_roomlist_mark_as_unread" = "Megjelölés olvasatlanként";
 "screen_roomlist_tombstoned_room_description" = "A szoba verzióját frissítették";
 "screen_roomlist_your_spaces" = "Saját terek";
+"screen_search_empty_state_message" = "Search for chats and messages";
+"screen_search_empty_state_title" = "Start searching";
+"screen_search_no_results_message" = "There are no results for “%1$@.” Try a new search term.";
+"screen_search_recent_searches" = "Recent searches";
+"screen_search_tab_chats" = "Chats";
+"screen_search_tab_messages" = "Messages";
 "screen_security_and_privacy_add_room_address_action" = "Cím hozzáadása";
 "screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description" = "Bárki csatlakozhat, az engedélyezett terekből, és mindenki másnak hozzáférést kell kérnie.";
 "screen_security_and_privacy_ask_to_join_option_description" = "Mindenkinek hozzáférést kell kérnie.";
@@ -1619,9 +1627,12 @@
 "screen_signout_key_backup_offline_title" = "A kulcsai mentése még folyamatban van";
 "screen_signout_key_backup_ongoing_subtitle" = "Várja meg, amíg ez befejeződik, mielőtt eltávolítja ezt az eszközt.";
 "screen_signout_key_backup_ongoing_title" = "A kulcsai mentése még folyamatban van";
+"screen_signout_other_verified_device_dialog_content" = "Make sure you always have access to another verified device or your recovery key to avoid losing your encrypted chat history.";
+"screen_signout_other_verified_device_dialog_title" = "Are you sure you want to remove this device?";
 "screen_signout_preference_item" = "Eszköz eltávolítása";
 "screen_signout_recovery_disabled_subtitle" = "Ez az egyetlen eszköze. Ha eltávolítja,  a következő bejelentkezéskor szüksége lesz egy helyreállítási kulcsra a digitális személyazonossága megerősítéséhez és a titkosított csevegések helyreállításához.";
 "screen_signout_recovery_disabled_title" = "Hamarosan elveszíti a hozzáférését a titkosított csevegéseihez";
+"screen_signout_save_recovery_key_action_continue" = "Continue to remove this device";
 "screen_signout_save_recovery_key_subtitle" = "Ez az egyetlen eszköze. Ha eltávolítja, a következő bejelentkezéskor szüksége lesz egy helyreállítási kulcsra a digitális személyazonossága megerősítéséhez és a titkosított csevegések helyreállításához.";
 "screen_signout_save_recovery_key_title" = "Az eszköz eltávolítása előtt győződjön meg arról, hogy hozzáfér a helyreállítási kulcshoz";
 "screen_space_add_room_action" = "Szoba";

@@ -503,6 +503,7 @@
 "emoji_picker_search_placeholder" = "Cerca emoji";
 "error_account_already_logged_in_title" = "Duplicate sign-in";
 "error_account_creation_not_possible" = "Il tuo gestore dell'account deve essere aggiornato per supportare il servizio di autenticazione Matrix e la creazione di account.";
+"error_camera_unavailable" = "The camera is not available";
 "error_failed_creating_the_permalink" = "Impossibile creare il collegamento permanente";
 "error_failed_loading_map" = "%1$@ non è riuscito a caricare la mappa. Riprova più tardi.";
 "error_failed_loading_messages" = "Caricamento dei messaggi non riuscito";
@@ -880,6 +881,7 @@
 "screen_encryption_reset_subtitle" = "If you don’t have access to any other verified devices and you don’t have your recovery key, then you’ll need to reset your digital identity to continue using the app.";
 "screen_encryption_reset_title" = "Non riesci a confermare? Dovrai reimpostare la tua identità digitale.";
 "screen_home_tab_chats" = "Conversazioni";
+"screen_home_tab_search" = "Search";
 "screen_home_tab_spaces" = "Spazi";
 "screen_identity_confirmation_cannot_confirm" = "Non puoi confermare?";
 "screen_identity_confirmation_create_new_recovery_key" = "Crea una nuova chiave di recupero";
@@ -1497,6 +1499,12 @@
 "screen_roomlist_mark_as_unread" = "Segna come non letto";
 "screen_roomlist_tombstoned_room_description" = "Questa stanza è stata aggiornata";
 "screen_roomlist_your_spaces" = "I tuoi spazi";
+"screen_search_empty_state_message" = "Search for chats and messages";
+"screen_search_empty_state_title" = "Start searching";
+"screen_search_no_results_message" = "There are no results for “%1$@.” Try a new search term.";
+"screen_search_recent_searches" = "Recent searches";
+"screen_search_tab_chats" = "Chats";
+"screen_search_tab_messages" = "Messages";
 "screen_security_and_privacy_add_room_address_action" = "Aggiungi indirizzo";
 "screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description" = "Chiunque si trovi in spazi autorizzati può partecipare, ma tutti gli altri devono richiedere l'accesso.";
 "screen_security_and_privacy_ask_to_join_option_description" = "Chiunque deve richiedere l'accesso.";
@@ -1619,9 +1627,12 @@
 "screen_signout_key_backup_offline_title" = "Il backup delle chiavi è ancora in corso";
 "screen_signout_key_backup_ongoing_subtitle" = "Attendi il completamento dell'operazione prima di rimuovere questo dispositivo.";
 "screen_signout_key_backup_ongoing_title" = "Il backup delle chiavi è ancora in corso";
+"screen_signout_other_verified_device_dialog_content" = "Make sure you always have access to another verified device or your recovery key to avoid losing your encrypted chat history.";
+"screen_signout_other_verified_device_dialog_title" = "Are you sure you want to remove this device?";
 "screen_signout_preference_item" = "Rimuovi questo dispositivo";
 "screen_signout_recovery_disabled_subtitle" = "Questo è il tuo unico dispositivo. Se lo rimuovi, avrai bisogno di una chiave di recupero per confermare la tua identità digitale e ripristinare le tue conversazioni cifrate al prossimo accesso.";
 "screen_signout_recovery_disabled_title" = "Stai per perdere l'accesso alle tue conversazioni cifrate";
+"screen_signout_save_recovery_key_action_continue" = "Continue to remove this device";
 "screen_signout_save_recovery_key_subtitle" = "Questo è il tuo unico dispositivo. Se lo rimuovi, avrai bisogno di una chiave di recupero per confermare la tua identità digitale e ripristinare le tue conversazioni cifrate al prossimo accesso.";
 "screen_signout_save_recovery_key_title" = "Assicurati di avere accesso alla tua chiave di recupero prima di rimuovere questo dispositivo";
 "screen_space_add_room_action" = "Stanza";

@@ -503,6 +503,7 @@
 "emoji_picker_search_placeholder" = "Otsi emojisid";
 "error_account_already_logged_in_title" = "Duplicate sign-in";
 "error_account_creation_not_possible" = "Selleks et koos kasutajakonto loomisega toimiks Matrix Authentication Service'i tugi, vajab sinu koduserver uuendamist.";
+"error_camera_unavailable" = "The camera is not available";
 "error_failed_creating_the_permalink" = "Püsilingi loomine ei õnnestumud";
 "error_failed_loading_map" = "%1$@ kaardi laadimine ei õnnestunud. Palun proovi hiljem uuesti.";
 "error_failed_loading_messages" = "Sõnumite laadimine ei õnnestunud";
@@ -880,6 +881,7 @@
 "screen_encryption_reset_subtitle" = "If you don’t have access to any other verified devices and you don’t have your recovery key, then you’ll need to reset your digital identity to continue using the app.";
 "screen_encryption_reset_title" = "Kui sa ühtegi muud võimalust ei leia, siis lähtesta oma digitaalne identiteet.";
 "screen_home_tab_chats" = "Vestlused";
+"screen_home_tab_search" = "Search";
 "screen_home_tab_spaces" = "Kogukonnad";
 "screen_identity_confirmation_cannot_confirm" = "Kas kinnitamine pole võimalik?";
 "screen_identity_confirmation_create_new_recovery_key" = "Loo uus taastevõti";
@@ -1497,6 +1499,12 @@
 "screen_roomlist_mark_as_unread" = "Märgi mitteloetuks";
 "screen_roomlist_tombstoned_room_description" = "See jututuba on uuendatud";
 "screen_roomlist_your_spaces" = "Sinu kogukonnad";
+"screen_search_empty_state_message" = "Search for chats and messages";
+"screen_search_empty_state_title" = "Start searching";
+"screen_search_no_results_message" = "There are no results for “%1$@.” Try a new search term.";
+"screen_search_recent_searches" = "Recent searches";
+"screen_search_tab_chats" = "Chats";
+"screen_search_tab_messages" = "Messages";
 "screen_security_and_privacy_add_room_address_action" = "Lisa aadress";
 "screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description" = "Liituda saavad kõik volitatud kogukondade liikmed, kuid kõik teised peavad küsima võimalust ligipääsuks.";
 "screen_security_and_privacy_ask_to_join_option_description" = "Kõik võivad paluda jututoaga liitumist.";
@@ -1619,9 +1627,12 @@
 "screen_signout_key_backup_offline_title" = "Sinu krüptovõtmed on veel varundamisel";
 "screen_signout_key_backup_ongoing_subtitle" = "Enne selle seadme eemaldamist palun oota, et pooleliolev toiming lõppeb.";
 "screen_signout_key_backup_ongoing_title" = "Sinu krüptovõtmed on veel varundamisel";
+"screen_signout_other_verified_device_dialog_content" = "Make sure you always have access to another verified device or your recovery key to avoid losing your encrypted chat history.";
+"screen_signout_other_verified_device_dialog_title" = "Are you sure you want to remove this device?";
 "screen_signout_preference_item" = "Eemalda see seade";
 "screen_signout_recovery_disabled_subtitle" = "See on sinu ainus seade. Kui sa selle eemaldad, vajad taastamisvõtit, et kinnitada oma digitaalset identiteeti ja taastada järgmisel sisselogimisel oma krüptitud vestlused.";
 "screen_signout_recovery_disabled_title" = "Andmete taastamine on seadistamata";
+"screen_signout_save_recovery_key_action_continue" = "Continue to remove this device";
 "screen_signout_save_recovery_key_subtitle" = "Sa oled logimas välja oma viimasest sessioonist. Kui teed seda nüüd, siis ilmselt kaotad ligipääsu oma krüptitud sõnumitele.";
 "screen_signout_save_recovery_key_title" = "Enne selle seadme eemaldamist veendu, et sul on juurdepääs taastevõtmele";
 "screen_space_add_room_action" = "Jututuba";

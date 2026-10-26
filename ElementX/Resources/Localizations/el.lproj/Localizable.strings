@@ -503,6 +503,7 @@
 "emoji_picker_search_placeholder" = "Αναζήτηση emoji";
 "error_account_already_logged_in_title" = "Duplicate sign-in";
 "error_account_creation_not_possible" = "Ο πάροχος του λογαριασμού σας πρέπει να πραγματοποιήσει αναβάθμιση ώστε να υποστηρίζει την υπηρεσία Matrix Authentication Service και τη δημιουργία λογαριασμού.";
+"error_camera_unavailable" = "The camera is not available";
 "error_failed_creating_the_permalink" = "Αποτυχία δημιουργίας του μόνιμου συνδέσμου";
 "error_failed_loading_map" = "%1$@ δεν ήταν δυνατή η φόρτωση του χάρτη. Παρακαλώ δοκίμασε ξανά αργότερα.";
 "error_failed_loading_messages" = "Αποτυχία φόρτωσης μηνυμάτων";
@@ -880,6 +881,7 @@
 "screen_encryption_reset_subtitle" = "If you don’t have access to any other verified devices and you don’t have your recovery key, then you’ll need to reset your digital identity to continue using the app.";
 "screen_encryption_reset_title" = "Δεν μπορείτε να επιβεβαιώσετε; Θα χρειαστεί να επαναφέρετε την ψηφιακή σας ταυτότητα.";
 "screen_home_tab_chats" = "Συνομιλίες";
+"screen_home_tab_search" = "Search";
 "screen_home_tab_spaces" = "Χώροι";
 "screen_identity_confirmation_cannot_confirm" = "Δεν μπορείς να επιβεβαιώσεις;";
 "screen_identity_confirmation_create_new_recovery_key" = "Δημιουργία νέου κλειδιού ανάκτησης";
@@ -1497,6 +1499,12 @@
 "screen_roomlist_mark_as_unread" = "Επισήμανση ως μη αναγνωσμένου";
 "screen_roomlist_tombstoned_room_description" = "Αυτή η αίθουσα έχει αναβαθμιστεί";
 "screen_roomlist_your_spaces" = "Οι χώροι σας";
+"screen_search_empty_state_message" = "Search for chats and messages";
+"screen_search_empty_state_title" = "Start searching";
+"screen_search_no_results_message" = "There are no results for “%1$@.” Try a new search term.";
+"screen_search_recent_searches" = "Recent searches";
+"screen_search_tab_chats" = "Chats";
+"screen_search_tab_messages" = "Messages";
 "screen_security_and_privacy_add_room_address_action" = "Προσθήκη διεύθυνσης";
 "screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description" = "Οποιοσδήποτε σε εξουσιοδοτημένους χώρους μπορεί να συμμετάσχει, αλλά όλοι οι άλλοι πρέπει να ζητήσουν πρόσβαση.";
 "screen_security_and_privacy_ask_to_join_option_description" = "Όλοι πρέπει να αιτούνται πρόσβαση.";
@@ -1619,9 +1627,12 @@
 "screen_signout_key_backup_offline_title" = "Εξακολουθούν να δημιουργούνται αντίγραφα ασφαλείας των κλειδιών σου";
 "screen_signout_key_backup_ongoing_subtitle" = "Περιμένετε να ολοκληρωθεί αυτή η διαδικασία πριν αφαιρέσετε αυτήν τη συσκευή.";
 "screen_signout_key_backup_ongoing_title" = "Εξακολουθούν να δημιουργούνται αντίγραφα ασφαλείας των κλειδιών σου";
+"screen_signout_other_verified_device_dialog_content" = "Make sure you always have access to another verified device or your recovery key to avoid losing your encrypted chat history.";
+"screen_signout_other_verified_device_dialog_title" = "Are you sure you want to remove this device?";
 "screen_signout_preference_item" = "Κατάργηση αυτής της συσκευής";
 "screen_signout_recovery_disabled_subtitle" = "Αυτή είναι η μόνη σας συσκευή. Εάν την αφαιρέσετε, θα χρειαστείτε ένα κλειδί ανάκτησης για να επιβεβαιώσετε την ψηφιακή σας ταυτότητα και να επαναφέρετε τις κρυπτογραφημένες συνομιλίες σας την επόμενη φορά που θα συνδεθείτε.";
 "screen_signout_recovery_disabled_title" = "Πρόκειται να χάσετε την πρόσβαση στις κρυπτογραφημένες συνομιλίες σας";
+"screen_signout_save_recovery_key_action_continue" = "Continue to remove this device";
 "screen_signout_save_recovery_key_subtitle" = "Αυτή είναι η μόνη σας συσκευή. Εάν την αφαιρέσετε, θα χρειαστείτε ένα κλειδί ανάκτησης για να επιβεβαιώσετε την ψηφιακή σας ταυτότητα και να επαναφέρετε τις κρυπτογραφημένες συνομιλίες σας την επόμενη φορά που θα συνδεθείτε.";
 "screen_signout_save_recovery_key_title" = "Βεβαιωθείτε ότι έχετε πρόσβαση στο κλειδί ανάκτησης πριν καταργήσετε αυτήν τη συσκευή";
 "screen_space_add_room_action" = "Αίθουσα";

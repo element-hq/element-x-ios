@@ -503,6 +503,7 @@
 "emoji_picker_search_placeholder" = "이모지 검색";
 "error_account_already_logged_in_title" = "Duplicate sign-in";
 "error_account_creation_not_possible" = "Matrix Authentication Service 및 계정 생성을 지원하려면 홈서버를 업그레이드해야 합니다.";
+"error_camera_unavailable" = "The camera is not available";
 "error_failed_creating_the_permalink" = "퍼머링크 생성 실패";
 "error_failed_loading_map" = "%1$@에서 맵을 로딩할 수 없습니다. 다시 시도해주세요.";
 "error_failed_loading_messages" = "메시지 로딩 실패";
@@ -880,6 +881,7 @@
 "screen_encryption_reset_subtitle" = "If you don’t have access to any other verified devices and you don’t have your recovery key, then you’ll need to reset your digital identity to continue using the app.";
 "screen_encryption_reset_title" = "확인할 수 없나요? 디지털 신원을 재설정해야 합니다.";
 "screen_home_tab_chats" = "채팅";
+"screen_home_tab_search" = "Search";
 "screen_home_tab_spaces" = "스페이스";
 "screen_identity_confirmation_cannot_confirm" = "확인할 수 없나요?";
 "screen_identity_confirmation_create_new_recovery_key" = "새로운 복구 키 만들기";
@@ -1497,6 +1499,12 @@
 "screen_roomlist_mark_as_unread" = "읽지 않음으로 표시";
 "screen_roomlist_tombstoned_room_description" = "이 방이 업그레이드되었습니다";
 "screen_roomlist_your_spaces" = "내 스페이스";
+"screen_search_empty_state_message" = "Search for chats and messages";
+"screen_search_empty_state_title" = "Start searching";
+"screen_search_no_results_message" = "There are no results for “%1$@.” Try a new search term.";
+"screen_search_recent_searches" = "Recent searches";
+"screen_search_tab_chats" = "Chats";
+"screen_search_tab_messages" = "Messages";
 "screen_security_and_privacy_add_room_address_action" = "주소 추가";
 "screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description" = "승인된 스페이스의 멤버는 누구나 참여할 수 있지만, 그 외의 인원은 액세스 요청을 해야 합니다.";
 "screen_security_and_privacy_ask_to_join_option_description" = "모든 사용자가 액세스 권한을 요청해야 합니다.";
@@ -1619,9 +1627,12 @@
 "screen_signout_key_backup_offline_title" = "귀하의 키는 아직 백업 중입니다.";
 "screen_signout_key_backup_ongoing_subtitle" = "이 기기를 제거하기 전에 해당 작업이 완료될 때까지 기다려 주세요.";
 "screen_signout_key_backup_ongoing_title" = "귀하의 키는 아직 백업 중입니다.";
+"screen_signout_other_verified_device_dialog_content" = "Make sure you always have access to another verified device or your recovery key to avoid losing your encrypted chat history.";
+"screen_signout_other_verified_device_dialog_title" = "Are you sure you want to remove this device?";
 "screen_signout_preference_item" = "이 기기 로그아웃";
 "screen_signout_recovery_disabled_subtitle" = "현재 유일하게 연결된 기기입니다. 이 기기를 제거하면 다음 로그인 시 디지털 신원을 확인하고 암호화된 대화 기록을 복구하기 위해 복구 키가 반드시 필요합니다.";
 "screen_signout_recovery_disabled_title" = "암호화된 대화 기록에 접근할 수 없게 됩니다";
+"screen_signout_save_recovery_key_action_continue" = "Continue to remove this device";
 "screen_signout_save_recovery_key_subtitle" = "현재 유일하게 연결된 기기입니다. 이 기기를 제거하면 다음 로그인 시 디지털 신원을 확인하고 암호화된 대화 기록을 복구하기 위해 복구 키가 반드시 필요합니다.";
 "screen_signout_save_recovery_key_title" = "이 기기를 제거하기 전에 복구 키를 사용할 수 있는지 확인해 주세요";
 "screen_space_add_room_action" = "방";

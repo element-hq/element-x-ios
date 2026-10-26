@@ -3769,12 +3769,18 @@ internal nonisolated enum L10n {
   internal static var screenSignoutKeyBackupOngoingSubtitle: String { return L10n.tr("Localizable", "screen_signout_key_backup_ongoing_subtitle") }
   /// Your keys are still being backed up
   internal static var screenSignoutKeyBackupOngoingTitle: String { return L10n.tr("Localizable", "screen_signout_key_backup_ongoing_title") }
+  /// Make sure you always have access to another verified device or your recovery key to avoid losing your encrypted chat history.
+  internal static var screenSignoutOtherVerifiedDeviceDialogContent: String { return L10n.tr("Localizable", "screen_signout_other_verified_device_dialog_content") }
+  /// Are you sure you want to remove this device?
+  internal static var screenSignoutOtherVerifiedDeviceDialogTitle: String { return L10n.tr("Localizable", "screen_signout_other_verified_device_dialog_title") }
   /// Remove this device
   internal static var screenSignoutPreferenceItem: String { return L10n.tr("Localizable", "screen_signout_preference_item") }
   /// This is your only device. If you remove it you’ll need a recovery key in order to confirm your digital identity and restore your encrypted chats the next time you sign in.
   internal static var screenSignoutRecoveryDisabledSubtitle: String { return L10n.tr("Localizable", "screen_signout_recovery_disabled_subtitle") }
   /// You’re about to lose access to your encrypted chats
   internal static var screenSignoutRecoveryDisabledTitle: String { return L10n.tr("Localizable", "screen_signout_recovery_disabled_title") }
+  /// Continue to remove this device
+  internal static var screenSignoutSaveRecoveryKeyActionContinue: String { return L10n.tr("Localizable", "screen_signout_save_recovery_key_action_continue") }
   /// This is your only device. If you remove it you’ll need a recovery key in order to confirm your digital identity and restore your encrypted chats the next time you sign in.
   internal static var screenSignoutSaveRecoveryKeySubtitle: String { return L10n.tr("Localizable", "screen_signout_save_recovery_key_subtitle") }
   /// Make sure you have access to your recovery key before removing this device
