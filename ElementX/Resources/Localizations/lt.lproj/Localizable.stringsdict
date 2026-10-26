@@ -222,10 +222,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>%1$d erdvės</string>
 			<key>one</key>
-			<string>%1$d Space</string>
+			<string>%1$d erdvė</string>
 			<key>other</key>
-			<string>%1$d Spaces</string>
+			<string>%1$d erdvių</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

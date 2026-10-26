@@ -503,6 +503,7 @@
 "emoji_picker_search_placeholder" = "Pretraživanje emotikona";
 "error_account_already_logged_in_title" = "Duplicate sign-in";
 "error_account_creation_not_possible" = "Vaš matični poslužitelj potrebno je nadograditi kako bi podržavao uslugu Matrix Authentication Service i stvaranje računa.";
+"error_camera_unavailable" = "The camera is not available";
 "error_failed_creating_the_permalink" = "Nije uspjelo stvaranje trajne poveznice";
 "error_failed_loading_map" = "%1$@ nije mogao učitati kartu. Pokušajte ponovno poslije.";
 "error_failed_loading_messages" = "Učitavanje poruka nije uspjelo";
@@ -880,6 +881,7 @@
 "screen_encryption_reset_subtitle" = "If you don’t have access to any other verified devices and you don’t have your recovery key, then you’ll need to reset your digital identity to continue using the app.";
 "screen_encryption_reset_title" = "Ne možete potvrditi? Morat ćete resetirati svoj digitalni identitet.";
 "screen_home_tab_chats" = "Razgovori";
+"screen_home_tab_search" = "Search";
 "screen_home_tab_spaces" = "Prostori";
 "screen_identity_confirmation_cannot_confirm" = "Ne možete potvrditi?";
 "screen_identity_confirmation_create_new_recovery_key" = "Izradi novi ključ za oporavak";
@@ -1497,6 +1499,12 @@
 "screen_roomlist_mark_as_unread" = "Označi kao nepročitano";
 "screen_roomlist_tombstoned_room_description" = "Ova je soba nadograđena";
 "screen_roomlist_your_spaces" = "Vaši prostori";
+"screen_search_empty_state_message" = "Search for chats and messages";
+"screen_search_empty_state_title" = "Start searching";
+"screen_search_no_results_message" = "There are no results for “%1$@.” Try a new search term.";
+"screen_search_recent_searches" = "Recent searches";
+"screen_search_tab_chats" = "Chats";
+"screen_search_tab_messages" = "Messages";
 "screen_security_and_privacy_add_room_address_action" = "Dodaj adresu";
 "screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description" = "Svatko tko se nalazi u ovlaštenim prostorima može se pridružiti, ali svi ostali moraju zatražiti pristup.";
 "screen_security_and_privacy_ask_to_join_option_description" = "Svi moraju zatražiti pristup.";
@@ -1619,9 +1627,12 @@
 "screen_signout_key_backup_offline_title" = "Vaši se ključevi još uvijek sigurnosno kopiraju";
 "screen_signout_key_backup_ongoing_subtitle" = "Pričekajte da se ovo završi prije uklanjanja ovog uređaja.";
 "screen_signout_key_backup_ongoing_title" = "Vaši se ključevi još uvijek sigurnosno kopiraju";
+"screen_signout_other_verified_device_dialog_content" = "Make sure you always have access to another verified device or your recovery key to avoid losing your encrypted chat history.";
+"screen_signout_other_verified_device_dialog_title" = "Are you sure you want to remove this device?";
 "screen_signout_preference_item" = "Ukloni ovaj uređaj";
 "screen_signout_recovery_disabled_subtitle" = "Ovo je vaš jedini uređaj. Ako ga uklonite, trebat će vam ključ za oporavak kako biste potvrdili svoj digitalni identitet i vratili šifrirane razgovore sljedeći put kada se prijavite.";
 "screen_signout_recovery_disabled_title" = "Izgubit ćete pristup svojim šifriranim chatovima";
+"screen_signout_save_recovery_key_action_continue" = "Continue to remove this device";
 "screen_signout_save_recovery_key_subtitle" = "Ovo je vaš jedini uređaj. Ako ga uklonite, trebat će vam ključ za oporavak kako biste potvrdili svoj digitalni identitet i vratili šifrirane razgovore sljedeći put kada se prijavite.";
 "screen_signout_save_recovery_key_title" = "Prije uklanjanja ovog uređaja provjerite imate li pristup ključu za oporavak";
 "screen_space_add_room_action" = "Soba";

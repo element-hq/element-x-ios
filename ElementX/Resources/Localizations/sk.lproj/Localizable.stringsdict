@@ -96,10 +96,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>%1$d prílohy…</string>
 			<key>one</key>
-			<string>%1$d attachment…</string>
+			<string>%1$d príloha …</string>
 			<key>other</key>
-			<string>%1$d attachments…</string>
+			<string>%1$d príloh…</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

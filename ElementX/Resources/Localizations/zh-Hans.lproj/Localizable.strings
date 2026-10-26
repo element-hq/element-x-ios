@@ -312,7 +312,7 @@
 "common_name" = "名称";
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "没有结果";
-"common_no_results_for" = "未找到与“%1$@”相关的搜索结果。尝试其它搜索条件。";
+"common_no_results_for" = "未找到与“%1$@”相关的搜索结果。尝试其它搜索关键词。";
 "common_no_room_name" = "无房间名称";
 "common_no_space_name" = "未命名空间";
 "common_not_encrypted" = "未加密";
@@ -503,6 +503,7 @@
 "emoji_picker_search_placeholder" = "搜索 Emoji";
 "error_account_already_logged_in_title" = "检测到重复登录";
 "error_account_creation_not_possible" = "你的账户提供者需要升级以支持 Matrix 认证服务和账户创建。";
+"error_camera_unavailable" = "摄像头不可用";
 "error_failed_creating_the_permalink" = "永久链接创建失败";
 "error_failed_loading_map" = "%1$@ 无法加载地图，请稍后再试。";
 "error_failed_loading_messages" = "消息加载失败";
@@ -601,7 +602,7 @@
 "rich_text_editor_url_placeholder" = "链接";
 "screen_account_provider_change" = "更改账户提供者";
 "screen_account_provider_form_hint" = "主服务器地址";
-"screen_account_provider_form_notice" = "输入搜索词或域名地址。";
+"screen_account_provider_form_notice" = "输入搜索关键词或域名地址。";
 "screen_account_provider_form_subtitle" = "搜索公司、社区或私有服务器。";
 "screen_account_provider_form_title" = "查找账户提供者";
 "screen_account_provider_signin_subtitle" = "这是你的对话将存在的地方，就像你使用邮件提供者来存储电子邮件那样。";
@@ -880,6 +881,7 @@
 "screen_encryption_reset_subtitle" = "如果你没有其它已验证的设备，也没有恢复密钥，那么你需要重置数字身份才能继续使用该 app。";
 "screen_encryption_reset_title" = "无法确认？你需要重置数字身份。";
 "screen_home_tab_chats" = "聊天";
+"screen_home_tab_search" = "搜索";
 "screen_home_tab_spaces" = "空间";
 "screen_identity_confirmation_cannot_confirm" = "无法确认？";
 "screen_identity_confirmation_create_new_recovery_key" = "创建新的恢复密钥";
@@ -1497,6 +1499,12 @@
 "screen_roomlist_mark_as_unread" = "设为未读";
 "screen_roomlist_tombstoned_room_description" = "此房间已升级";
 "screen_roomlist_your_spaces" = "你的空间";
+"screen_search_empty_state_message" = "在聊天与消息中搜索";
+"screen_search_empty_state_title" = "开始搜索";
+"screen_search_no_results_message" = "未找到与“%1$@”相关的搜索结果。尝试其它搜索关键词。";
+"screen_search_recent_searches" = "最近搜索";
+"screen_search_tab_chats" = "聊天";
+"screen_search_tab_messages" = "消息";
 "screen_security_and_privacy_add_room_address_action" = "添加地址";
 "screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description" = "已授权空间内的任何成员都可以加入，其他人必须申请访问。";
 "screen_security_and_privacy_ask_to_join_option_description" = "所有用户均需申请访问权限。";
@@ -1619,9 +1627,12 @@
 "screen_signout_key_backup_offline_title" = "你的密钥仍在备份中";
 "screen_signout_key_backup_ongoing_subtitle" = "请等待此操作完成再移除此设备。";
 "screen_signout_key_backup_ongoing_title" = "你的密钥仍在备份中";
+"screen_signout_other_verified_device_dialog_content" = "确保你始终可以访问另一台已验证的设备或恢复密钥以避免丢失加密聊天历史。";
+"screen_signout_other_verified_device_dialog_title" = "你确定要移除此设备？";
 "screen_signout_preference_item" = "移除此设备";
 "screen_signout_recovery_disabled_subtitle" = "这是你的唯一设备。一旦移除，下次登录时你需要使用恢复密钥验证数字身份并恢复加密聊天。";
 "screen_signout_recovery_disabled_title" = "你即将失去加密聊天的访问权";
+"screen_signout_save_recovery_key_action_continue" = "继续移除此设备";
 "screen_signout_save_recovery_key_subtitle" = "这是你的唯一设备。一旦移除，下次登录时你需要使用恢复密钥验证数字身份并恢复加密聊天。";
 "screen_signout_save_recovery_key_title" = "确保你移除此设备前拥有恢复密钥";
 "screen_space_add_room_action" = "房间";

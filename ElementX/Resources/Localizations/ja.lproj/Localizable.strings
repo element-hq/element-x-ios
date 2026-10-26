@@ -503,6 +503,7 @@
 "emoji_picker_search_placeholder" = "絵文字を検索";
 "error_account_already_logged_in_title" = "Duplicate sign-in";
 "error_account_creation_not_possible" = "Matrix Authentication Service とアカウント作成に対応させるため、アカウント提供元のアップグレードが必要です。";
+"error_camera_unavailable" = "The camera is not available";
 "error_failed_creating_the_permalink" = "固定リンクの作成に失敗しました";
 "error_failed_loading_map" = "%1$@ で地図を読み込めません。時間を置いて再度お試しください。";
 "error_failed_loading_messages" = "メッセージの読み込みに失敗しました";
@@ -880,6 +881,7 @@
 "screen_encryption_reset_subtitle" = "If you don’t have access to any other verified devices and you don’t have your recovery key, then you’ll need to reset your digital identity to continue using the app.";
 "screen_encryption_reset_title" = "認証できませんか？デジタルIDをリセットする必要があります。";
 "screen_home_tab_chats" = "チャット";
+"screen_home_tab_search" = "Search";
 "screen_home_tab_spaces" = "スペース";
 "screen_identity_confirmation_cannot_confirm" = "認証できませんか？";
 "screen_identity_confirmation_create_new_recovery_key" = "回復鍵を新規作成します";
@@ -1497,6 +1499,12 @@
 "screen_roomlist_mark_as_unread" = "未読にする";
 "screen_roomlist_tombstoned_room_description" = "このルームはアップグレードされました";
 "screen_roomlist_your_spaces" = "あなたのスペース";
+"screen_search_empty_state_message" = "Search for chats and messages";
+"screen_search_empty_state_title" = "Start searching";
+"screen_search_no_results_message" = "There are no results for “%1$@.” Try a new search term.";
+"screen_search_recent_searches" = "Recent searches";
+"screen_search_tab_chats" = "Chats";
+"screen_search_tab_messages" = "Messages";
 "screen_security_and_privacy_add_room_address_action" = "アドレスを追加";
 "screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description" = "認証済みのスペースに所属するユーザーのみが参加できます。それ以外のユーザーは参加へのリクエストが必要です。";
 "screen_security_and_privacy_ask_to_join_option_description" = "参加のリクエストが必須です。";
@@ -1619,9 +1627,12 @@
 "screen_signout_key_backup_offline_title" = "鍵のバックアップは継続しています";
 "screen_signout_key_backup_ongoing_subtitle" = "端末の削除の前に、処理の完了をお待ち下さい。";
 "screen_signout_key_backup_ongoing_title" = "鍵のバックアップは継続しています";
+"screen_signout_other_verified_device_dialog_content" = "Make sure you always have access to another verified device or your recovery key to avoid losing your encrypted chat history.";
+"screen_signout_other_verified_device_dialog_title" = "Are you sure you want to remove this device?";
 "screen_signout_preference_item" = "この端末を削除";
 "screen_signout_recovery_disabled_subtitle" = "この端末が唯一の端末です。削除を続行すると次回のログインの際に、デジタルIDと暗号化された会話を復元するために、回復鍵を入力する必要があります。";
 "screen_signout_recovery_disabled_title" = "暗号化された会話は見られなくなります";
+"screen_signout_save_recovery_key_action_continue" = "Continue to remove this device";
 "screen_signout_save_recovery_key_subtitle" = "この端末が唯一の端末です。削除を続行すると次回のログインの際に、デジタルIDと暗号化された会話を復元するために、回復鍵を入力する必要があります。";
 "screen_signout_save_recovery_key_title" = "この端末を削除する前に、回復鍵が手元にあることを確認してください。";
 "screen_space_add_room_action" = "ルーム";

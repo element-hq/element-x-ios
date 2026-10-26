@@ -503,6 +503,7 @@
 "emoji_picker_search_placeholder" = "Search emojis";
 "error_account_already_logged_in_title" = "Duplicate sign-in";
 "error_account_creation_not_possible" = "‏Matrix Authentication Service اور اکاؤنٹ بنانے میں معاونت کے لیے آپ کے ہوم سرور کو اپ گریڈ کرنے کی ضرورت ہے۔";
+"error_camera_unavailable" = "The camera is not available";
 "error_failed_creating_the_permalink" = "مستقل ربط تخلیق کرنا ناکام";
 "error_failed_loading_map" = "%1$@ نقشہ لاد نہیں سکا۔ برائے مہربانی بعد میں دوبارہ کوشش کریں۔";
 "error_failed_loading_messages" = "پیغامات لادنا ناکام";
@@ -880,6 +881,7 @@
 "screen_encryption_reset_subtitle" = "If you don’t have access to any other verified devices and you don’t have your recovery key, then you’ll need to reset your digital identity to continue using the app.";
 "screen_encryption_reset_title" = "تصدیق نہیں کر سکتے؟ آپ کو اپنی شناخت بحال کر دینے کی ضرورت ہوگی۔";
 "screen_home_tab_chats" = "گفتگوئیں";
+"screen_home_tab_search" = "Search";
 "screen_home_tab_spaces" = "Spaces";
 "screen_identity_confirmation_cannot_confirm" = "تصدیق نہیں کر سکتے؟";
 "screen_identity_confirmation_create_new_recovery_key" = "ایک نئی بازیابی کلید تخلیق کریں";
@@ -1497,6 +1499,12 @@
 "screen_roomlist_mark_as_unread" = "بطور غیر مقروءہ نشانزد کریں";
 "screen_roomlist_tombstoned_room_description" = "This room has been upgraded";
 "screen_roomlist_your_spaces" = "Your spaces";
+"screen_search_empty_state_message" = "Search for chats and messages";
+"screen_search_empty_state_title" = "Start searching";
+"screen_search_no_results_message" = "There are no results for “%1$@.” Try a new search term.";
+"screen_search_recent_searches" = "Recent searches";
+"screen_search_tab_chats" = "Chats";
+"screen_search_tab_messages" = "Messages";
 "screen_security_and_privacy_add_room_address_action" = "Add address";
 "screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description" = "Anyone in authorised spaces can join, but everyone else must request access.";
 "screen_security_and_privacy_ask_to_join_option_description" = "Everyone must request access.";
@@ -1619,9 +1627,12 @@
 "screen_signout_key_backup_offline_title" = "آپکی کلیدوں کا ابھی بھی پشتارہ کیا جا رہا ہے۔";
 "screen_signout_key_backup_ongoing_subtitle" = "برائے مہربانی خارج ہونے سے پہلے اسکے مکمل ہونے کا انتظار کریں";
 "screen_signout_key_backup_ongoing_title" = "آپکی کلیدوں کا ابھی بھی پشتارہ کیا جا رہا ہے۔";
+"screen_signout_other_verified_device_dialog_content" = "Make sure you always have access to another verified device or your recovery key to avoid losing your encrypted chat history.";
+"screen_signout_other_verified_device_dialog_title" = "Are you sure you want to remove this device?";
 "screen_signout_preference_item" = "خارج ہوں";
 "screen_signout_recovery_disabled_subtitle" = "آپ اپنے آخری جلسے سے خارج ہونے والے ہیں۔ اگر آپ ابھی خارج ہوجاتے ہیں تو آپ اپنے مرموز کردہ پیغامات تک رسائی سے محروم ہو جائیں گے۔";
 "screen_signout_recovery_disabled_title" = "بازیابی غیر مرتب";
+"screen_signout_save_recovery_key_action_continue" = "Continue to remove this device";
 "screen_signout_save_recovery_key_subtitle" = "آپ اپنے آخری جلسے سے خارج ہونے والے ہیں۔ اگر آپ ابھی خارج ہوجاتے ہیں تو ہوسکتا ہے کہ آپ اپنے مرموز کردہ پیغامات تک رسائی سے محروم ہو جائیں گے۔";
 "screen_signout_save_recovery_key_title" = "Make sure you have access to your recovery key before removing this device";
 "screen_space_add_room_action" = "Room";

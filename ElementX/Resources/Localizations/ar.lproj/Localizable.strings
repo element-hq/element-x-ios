@@ -502,6 +502,7 @@
 "emoji_picker_search_placeholder" = "البحث عن رموز تعبيرية";
 "error_account_already_logged_in_title" = "Duplicate sign-in";
 "error_account_creation_not_possible" = "يجب ترقية خادمك المنزلي لدعم Matrix Authentication Service وإنشاء الحسابات.";
+"error_camera_unavailable" = "The camera is not available";
 "error_failed_creating_the_permalink" = "فشِل إنشاء رابطٍ دائم (permalink)";
 "error_failed_loading_map" = "%1$@ لم يستطع تحميل الخريطة. يرجى المحاولة مجدداً لاحقاً.";
 "error_failed_loading_messages" = "فشِل تحميل الرسائل";
@@ -879,6 +880,7 @@
 "screen_encryption_reset_subtitle" = "If you don’t have access to any other verified devices and you don’t have your recovery key, then you’ll need to reset your digital identity to continue using the app.";
 "screen_encryption_reset_title" = "لا يمكنك التأكيد؟ ستحتاج إلى إعادة تعيين هويتك الرقمية.";
 "screen_home_tab_chats" = "المحادثات";
+"screen_home_tab_search" = "Search";
 "screen_home_tab_spaces" = "المساحات";
 "screen_identity_confirmation_cannot_confirm" = "لا يمكنك التأكيد؟";
 "screen_identity_confirmation_create_new_recovery_key" = "إنشاء مفتاح استرداد جديد";
@@ -1496,6 +1498,12 @@
 "screen_roomlist_mark_as_unread" = "وضع علامة كغير مقروء";
 "screen_roomlist_tombstoned_room_description" = "تمت ترقية هذه الغرفة";
 "screen_roomlist_your_spaces" = "مساحاتك";
+"screen_search_empty_state_message" = "Search for chats and messages";
+"screen_search_empty_state_title" = "Start searching";
+"screen_search_no_results_message" = "There are no results for “%1$@.” Try a new search term.";
+"screen_search_recent_searches" = "Recent searches";
+"screen_search_tab_chats" = "Chats";
+"screen_search_tab_messages" = "Messages";
 "screen_security_and_privacy_add_room_address_action" = "إضافة عنوان";
 "screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description" = "يمكن لأي شخص في المساحات المصرّح بها الانضمام، لكن يجب على الآخرين طلب الوصول.";
 "screen_security_and_privacy_ask_to_join_option_description" = "يجب على الجميع طلب الوصول.";
@@ -1618,9 +1626,12 @@
 "screen_signout_key_backup_offline_title" = "لا يزال النسخ الاحتياطي لمفاتيحك جاريًا";
 "screen_signout_key_backup_ongoing_subtitle" = "يُرجى الانتظار حتى تكتمل هذه العملية قبل إزالة هذا الجهاز.";
 "screen_signout_key_backup_ongoing_title" = "لا يزال النسخ الاحتياطي لمفاتيحك جاريًا";
+"screen_signout_other_verified_device_dialog_content" = "Make sure you always have access to another verified device or your recovery key to avoid losing your encrypted chat history.";
+"screen_signout_other_verified_device_dialog_title" = "Are you sure you want to remove this device?";
 "screen_signout_preference_item" = "إزالة هذا الجهاز";
 "screen_signout_recovery_disabled_subtitle" = "هذا هو جهازك الوحيد. إذا أزلته، فستحتاج إلى مفتاح استرداد لتأكيد هويتك الرقمية واستعادة محادثاتك المشفّرة في المرة التالية التي تسجّل فيها الدخول.";
 "screen_signout_recovery_disabled_title" = "أنت على وشك فقدان الوصول إلى محادثاتك المشفّرة";
+"screen_signout_save_recovery_key_action_continue" = "Continue to remove this device";
 "screen_signout_save_recovery_key_subtitle" = "هذا هو جهازك الوحيد. إذا أزلته، فستحتاج إلى مفتاح استرداد لتأكيد هويتك الرقمية واستعادة محادثاتك المشفّرة في المرة التالية التي تسجّل فيها الدخول.";
 "screen_signout_save_recovery_key_title" = "تأكد من أن لديك إمكانية الوصول إلى مفتاح الاسترداد الخاص بك قبل إزالة هذا الجهاز";
 "screen_space_add_room_action" = "غرفة";

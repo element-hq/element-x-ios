@@ -66,10 +66,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Forward %1$d message</string>
 			<key>other</key>
-			<string>Forward %1$d messages</string>
+			<string>Teruskan pesan %1$d</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -488,10 +486,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d message forwarded</string>
 			<key>other</key>
-			<string>%1$d messages forwarded</string>
+			<string>%1$d pesan diteruskan</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -518,10 +514,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d message selected</string>
 			<key>other</key>
-			<string>%1$d messages selected</string>
+			<string>%1$d pesan terpilih</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
