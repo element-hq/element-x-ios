@@ -1,3 +1,16 @@
+## Changes in 26.10.8 (2026-10-26)
+
+### What's Changed
+
+🐛 Bugfixes
+* Fix the app badge not resetting when the unread count is unchanged by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/6407
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/6408
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/26.10.7...release/26.10.8
+
 ## Changes in 26.10.7 (2026-10-23)
 
 ### What's Changed
