@@ -176,7 +176,7 @@ class MockScreen: Identifiable {
                                      accountProvisioningHost: appSettings.accountProvisioningHost,
                                      bugReportApplicationID: appSettings.bugReportApplicationID,
                                      analyticsTermsURL: appSettings.analyticsTermsURL,
-                                     mapTilerConfiguration: AppSettings.bundledMapTilerConfiguration)
+                                     bundledMapTilerConfiguration: appSettings.bundledMapTilerConfiguration)
             }
             
             let flowCoordinator = AuthenticationFlowCoordinator(authenticationService: AuthenticationService.mock,

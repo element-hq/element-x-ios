@@ -105,7 +105,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                        pinnedEventIDs: roomProxy.infoPublisher.value.pinnedEventIDs,
                                                        emojiProvider: emojiProvider,
                                                        linkMetadataProvider: hideTimelineMedia ? nil : linkMetadataProvider,
-                                                       mapTilerConfiguration: userSettings.app.mapTilerConfiguration.publisher.value,
+                                                       mapTilerConfiguration: userSettings.account.mapTilerConfiguration.publisher.value,
                                                        bindings: .init(reactionsCollapsed: [:])),
                    mediaProvider: userSession.mediaProvider,
                    contentScannerService: userSession.contentScannerService)

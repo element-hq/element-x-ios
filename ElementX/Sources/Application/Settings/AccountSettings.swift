@@ -45,9 +45,6 @@ final nonisolated class AccountSettings: @unchecked Sendable {
     @UserPreference(defaultValue: true)
     var enableNotifications: Bool
     
-    /// The tone played when the user hasn't selected one, which the homeserver can configure remotely.
-    let defaultNotificationTone: RemotePreference<NotificationTone> = .init(.default)
-    
     /// The sound played when delivering noisy notifications. If nil, use ``defaultNotificationTone``.
     @UserPreference
     var selectedNotificationTone: NotificationTone?
@@ -55,9 +52,18 @@ final nonisolated class AccountSettings: @unchecked Sendable {
     @UserPreference(defaultValue: true)
     var sharePresence: Bool
     
-    init(userID: String, store: UserDefaultsProtocol) {
+    // MARK: Configuration
+    
+    /// The tone played when the user hasn't selected one, which the homeserver can configure remotely.
+    let defaultNotificationTone: RemotePreference<NotificationTone> = .init(.default)
+    
+    /// The MapTiler configuration used to build map URLs, which the homeserver can configure remotely.
+    let mapTilerConfiguration: RemotePreference<MapTilerConfiguration>
+    
+    init(userID: String, store: UserDefaultsProtocol, bundledMapTilerConfiguration: MapTilerConfiguration) {
         self.store = .init(userID: userID, store: store)
         self.userID = userID
+        mapTilerConfiguration = .init(bundledMapTilerConfiguration)
     }
     
     func migrateAppSettingsValue(_ keyPath: KeyPath<AccountSettings, UserPreferenceKey>) {

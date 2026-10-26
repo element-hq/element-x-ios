@@ -433,7 +433,7 @@ extension LocationSharingScreenViewModel {
         let userSession = UserSessionMock(.init())
         
         return LocationSharingScreenViewModel(interactionMode: interactionMode,
-                                              mapURLBuilder: userSession.userSettings.app.mapTilerConfiguration.publisher.value,
+                                              mapURLBuilder: userSession.userSettings.account.mapTilerConfiguration.publisher.value,
                                               roomProxy: roomProxy,
                                               timelineController: TimelineControllerMock(.init()),
                                               userSession: userSession,

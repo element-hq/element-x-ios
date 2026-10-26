@@ -106,7 +106,7 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
         let stackCoordinator = NavigationStackCoordinator()
         
         let params = LocationSharingScreenCoordinatorParameters(interactionMode: interactionMode,
-                                                                mapURLBuilder: userSession.userSettings.app.mapTilerConfiguration.publisher.value,
+                                                                mapURLBuilder: userSession.userSettings.account.mapTilerConfiguration.publisher.value,
                                                                 roomProxy: roomProxy,
                                                                 timelineController: timelineController,
                                                                 userSession: userSession,

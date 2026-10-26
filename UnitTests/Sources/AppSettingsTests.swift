@@ -46,6 +46,6 @@ private extension AppSettings {
                  accountProvisioningHost: accountProvisioningHost,
                  bugReportApplicationID: bugReportApplicationID,
                  analyticsTermsURL: analyticsTermsURL,
-                 mapTilerConfiguration: mapTilerConfiguration.publisher.value)
+                 bundledMapTilerConfiguration: bundledMapTilerConfiguration)
     }
 }
