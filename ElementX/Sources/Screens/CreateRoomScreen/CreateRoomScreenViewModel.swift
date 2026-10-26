@@ -289,7 +289,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
                   aliasLocalPart: aliasLocalPart)
         }
         
-        switch await userSession.clientProxy.createRoom(parameters) {
+        switch await userSession.clientProxy.createRoom(userSession.userHooks.createRoomScreenHook.update(parameters)) {
         case .success(let roomID):
             guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
                 state.bindings.alertInfo = AlertInfo(id: .failedCreatingRoom,

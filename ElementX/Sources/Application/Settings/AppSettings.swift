@@ -264,12 +264,6 @@ final nonisolated class AppSettings: @unchecked Sendable {
     /// `nil` when content scanning is disabled.
     let contentScannerURL: RemotePreference<URL?> = .init(nil)
     
-    // MARK: - Encryption
-    
-    /// Whether the server forbids the use of E2EE: new rooms are created unencrypted and
-    /// enabling encryption on existing rooms is not offered.
-    let forceDisableE2EE: RemotePreference<Bool> = .init(false)
-    
     // MARK: - Analytics
     
     /// The configuration to use for analytics. Set to `nil` to disable analytics.

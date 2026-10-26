@@ -456,11 +456,6 @@ class ClientProxy: ClientProxyProtocol {
     
     func createRoom(_ parameters: CreateRoomParameters) async -> Result<String, ClientProxyError> {
         do {
-            var parameters = parameters
-            if userSettings.app.forceDisableE2EE.publisher.value {
-                parameters.isEncrypted = false
-            }
-            
             let roomID = try await client.createRoom(request: parameters.rustValue)
             
             await waitForRoomToSync(roomID: roomID)
