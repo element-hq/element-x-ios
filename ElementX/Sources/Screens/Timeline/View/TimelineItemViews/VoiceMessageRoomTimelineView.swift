@@ -69,11 +69,9 @@ struct VoiceMessageRoomTimelineContent: View {
                 resumePlaybackAfterScrubbing = true
                 context?.send(viewAction: .handleAudioPlayerAction(.playPause(itemID: timelineItem.id)))
             }
-        } else {
-            if resumePlaybackAfterScrubbing {
-                context?.send(viewAction: .handleAudioPlayerAction(.playPause(itemID: timelineItem.id)))
-                resumePlaybackAfterScrubbing = false
-            }
+        } else if resumePlaybackAfterScrubbing {
+            context?.send(viewAction: .handleAudioPlayerAction(.playPause(itemID: timelineItem.id)))
+            resumePlaybackAfterScrubbing = false
         }
     }
 }

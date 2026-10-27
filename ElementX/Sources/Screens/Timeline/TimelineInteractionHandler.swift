@@ -444,11 +444,9 @@ class TimelineInteractionHandler {
                 resumeVoiceMessagePlaybackAfterScrubbing = true
                 pausePlayingRecordedVoiceMessage()
             }
-        } else {
-            if resumeVoiceMessagePlaybackAfterScrubbing {
-                resumeVoiceMessagePlaybackAfterScrubbing = false
-                await startPlayingRecordedVoiceMessage()
-            }
+        } else if resumeVoiceMessagePlaybackAfterScrubbing {
+            resumeVoiceMessagePlaybackAfterScrubbing = false
+            await startPlayingRecordedVoiceMessage()
         }
     }
     
