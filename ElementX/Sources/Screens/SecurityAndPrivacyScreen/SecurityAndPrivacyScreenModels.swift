@@ -24,10 +24,7 @@ struct SecurityAndPrivacyScreenViewState: BindableState {
     var isPublicAccessAllowed = true
     var isSpace: Bool
     
-    var canEditAddress = false
-    var canEditJoinRule = false
-    var canEnableEncryption = false
-    var canEditHistoryVisibility = false
+    var permissions = SecurityAndPrivacyScreenPermissions()
     
     /// The union of joined parent spaces and the joined spaces in the current access type
     var selectableJoinedSpaces: [SpaceServiceRoom] = []
@@ -185,6 +182,13 @@ struct SecurityAndPrivacySettings: Equatable {
     var isEncryptionEnabled: Bool
     var historyVisibility: SecurityAndPrivacyHistoryVisibility
     var isVisibileInRoomDirectory: Bool?
+}
+
+struct SecurityAndPrivacyScreenPermissions: Equatable {
+    var canEditAddress = false
+    var canEditJoinRule = false
+    var canEnableEncryption = false
+    var canEditHistoryVisibility = false
 }
 
 enum SecurityAndPrivacyRoomAccessType: Equatable {

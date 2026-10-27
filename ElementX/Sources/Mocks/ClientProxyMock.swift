@@ -89,8 +89,7 @@ extension ClientProxyMock {
         accountURLActionReturnValue = "https://matrix.org/account"
         canDeactivateAccount = false
         directRoomForUserIDReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
-        createDirectRoomWithExpectedRoomNameReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
-        createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
+        createRoomReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         canJoinRoomWithReturnValue = true
         joinRoomViaClosure = { roomID, _ in
             configuration.overrides.joinedRoomIDs.insert(roomID)

@@ -17,6 +17,7 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
     private let clientProxy: ClientProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let userSettings: UserSettings
+    private let screenHook: SecurityAndPrivacyScreenHookProtocol
     
     private let actionsSubject: PassthroughSubject<SecurityAndPrivacyScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<SecurityAndPrivacyScreenViewModelAction, Never> {
@@ -30,6 +31,7 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
         clientProxy = userSession.clientProxy
         self.userIndicatorController = userIndicatorController
         userSettings = userSession.userSettings
+        screenHook = userSession.userHooks.securityAndPrivacyScreenHook
         
         let viewState = SecurityAndPrivacyScreenViewState(accessType: roomProxy.infoPublisher.value.joinRule.toSecurityAndPrivacyRoomAccessType,
                                                           isEncryptionEnabled: roomProxy.infoPublisher.value.isEncrypted,
@@ -86,7 +88,7 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
     
     private func setupSubscriptions() {
         context.$viewState
-            .drop { $0.isSpace || !$0.canEditHistoryVisibility }
+            .drop { $0.isSpace || !$0.permissions.canEditHistoryVisibility }
             .map(\.availableVisibilityOptions)
             .removeDuplicates()
             // To allow the view to update properly
@@ -102,7 +104,7 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
             .store(in: &cancellables)
         
         context.$viewState
-            .drop { !$0.canEditAddress }
+            .drop { !$0.permissions.canEditAddress }
             .map(\.bindings.desiredSettings.accessType)
             .removeDuplicates()
             // Only react to the user changing the access type, the room's initial
@@ -158,10 +160,11 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
     }
     
     private func setupPermissions(powerLevels: RoomPowerLevelsProxyProtocol) {
-        state.canEditAddress = powerLevels.canOwnUser(sendStateEvent: .roomCanonicalAlias)
-        state.canEditJoinRule = powerLevels.canOwnUser(sendStateEvent: .roomJoinRules)
-        state.canEditHistoryVisibility = powerLevels.canOwnUser(sendStateEvent: .roomHistoryVisibility)
-        state.canEnableEncryption = powerLevels.canOwnUser(sendStateEvent: .roomEncryption) && !userSettings.app.forceDisableE2EE.publisher.value
+        let permissions = SecurityAndPrivacyScreenPermissions(canEditAddress: powerLevels.canOwnUser(sendStateEvent: .roomCanonicalAlias),
+                                                              canEditJoinRule: powerLevels.canOwnUser(sendStateEvent: .roomJoinRules),
+                                                              canEnableEncryption: powerLevels.canOwnUser(sendStateEvent: .roomEncryption),
+                                                              canEditHistoryVisibility: powerLevels.canOwnUser(sendStateEvent: .roomHistoryVisibility))
+        state.permissions = screenHook.update(permissions)
     }
     
     private func setupRoomDirectoryVisibility() {

@@ -14,11 +14,11 @@ struct SecurityAndPrivacyScreen: View {
     
     var body: some View {
         Form {
-            if context.viewState.canEditJoinRule {
+            if context.viewState.permissions.canEditJoinRule {
                 roomAccessSection
             }
             
-            if context.desiredSettings.accessType.isAddressRequired, context.viewState.canEditAddress {
+            if context.desiredSettings.accessType.isAddressRequired, context.viewState.permissions.canEditAddress {
                 visibilitySection
                 if let canonicalAlias = context.viewState.canonicalAlias {
                     addressSection(canonicalAlias: canonicalAlias)
@@ -28,10 +28,10 @@ struct SecurityAndPrivacyScreen: View {
             }
             
             if !context.viewState.isSpace {
-                if context.viewState.canEnableEncryption {
+                if context.viewState.permissions.canEnableEncryption {
                     encryptionSection
                 }
-                if context.viewState.canEditHistoryVisibility {
+                if context.viewState.permissions.canEditHistoryVisibility {
                     historySection
                 }
             }

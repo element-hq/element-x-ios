@@ -17,6 +17,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     private let roomType: InviteUsersScreenRoomType
     private let userDiscoveryService: UserDiscoveryServiceProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
+    private let screenHook: InviteUsersScreenHookProtocol
     
     private var suggestedUsers = [UserProfile]()
     
@@ -34,6 +35,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
         self.roomType = roomType
         self.userDiscoveryService = userDiscoveryService
         self.userIndicatorController = userIndicatorController
+        screenHook = userSession.userHooks.inviteUsersScreenHook
         
         let mandatoryInvitees: [UserProfile] = if case .draft(let invitees) = roomType {
             invitees
@@ -124,13 +126,14 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
         Task {
             defer { hideLoadingIndicator() }
             
-            switch await clientProxy.createRoom(name: nil,
-                                                topic: nil,
-                                                accessType: .private,
-                                                isSpace: false,
-                                                userIDs: mandatoryUserIDs,
-                                                avatarURL: nil,
-                                                aliasLocalPart: nil) {
+            let parameters = CreateRoomParameters.room(name: nil,
+                                                       topic: nil,
+                                                       accessType: .private,
+                                                       userIDs: mandatoryUserIDs,
+                                                       avatarURL: nil,
+                                                       aliasLocalPart: nil)
+            
+            switch await clientProxy.createRoom(screenHook.update(parameters)) {
             case .success(let roomID):
                 actionsSubject.send(.openRoom(roomID: roomID))
             case .failure:

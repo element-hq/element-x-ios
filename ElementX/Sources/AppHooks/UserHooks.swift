@@ -13,7 +13,9 @@ nonisolated struct UserHooks: Sendable {
     let roomMemberDetailsScreenHook: RoomMemberDetailsScreenHookProtocol
     let userProfileScreenHook: UserProfileScreenHookProtocol
     let recoveryKeyScreenHook: RecoveryKeyScreenHookProtocol
+    let startChatScreenHook: StartChatScreenHookProtocol
     let createRoomScreenHook: CreateRoomScreenHookProtocol
+    let inviteUsersScreenHook: InviteUsersScreenHookProtocol
     let securityAndPrivacyScreenHook: SecurityAndPrivacyScreenHookProtocol
     let oAuthAccountSettingsPresenterHook: OAuthAccountSettingsPresenterHookProtocol
     let developerOptionsScreenHook: DeveloperOptionsScreenHookProtocol
@@ -23,7 +25,9 @@ nonisolated struct UserHooks: Sendable {
          roomMemberDetailsScreenHook: RoomMemberDetailsScreenHookProtocol = DefaultRoomMemberDetailsScreenHook(),
          userProfileScreenHook: UserProfileScreenHookProtocol = DefaultUserProfileScreenHook(),
          recoveryKeyScreenHook: RecoveryKeyScreenHookProtocol = DefaultRecoveryKeyScreenHook(),
+         startChatScreenHook: StartChatScreenHookProtocol = DefaultStartChatScreenHook(),
          createRoomScreenHook: CreateRoomScreenHookProtocol = DefaultCreateRoomScreenHook(),
+         inviteUsersScreenHook: InviteUsersScreenHookProtocol = DefaultInviteUsersScreenHook(),
          securityAndPrivacyScreenHook: SecurityAndPrivacyScreenHookProtocol = DefaultSecurityAndPrivacyScreenHook(),
          oAuthAccountSettingsPresenterHook: OAuthAccountSettingsPresenterHookProtocol = DefaultOAuthAccountSettingsPresenterHook(),
          developerOptionsScreenHook: DeveloperOptionsScreenHookProtocol = DefaultDeveloperOptionsScreenHook()) {
@@ -32,7 +36,9 @@ nonisolated struct UserHooks: Sendable {
         self.roomMemberDetailsScreenHook = roomMemberDetailsScreenHook
         self.userProfileScreenHook = userProfileScreenHook
         self.recoveryKeyScreenHook = recoveryKeyScreenHook
+        self.startChatScreenHook = startChatScreenHook
         self.createRoomScreenHook = createRoomScreenHook
+        self.inviteUsersScreenHook = inviteUsersScreenHook
         self.securityAndPrivacyScreenHook = securityAndPrivacyScreenHook
         self.oAuthAccountSettingsPresenterHook = oAuthAccountSettingsPresenterHook
         self.developerOptionsScreenHook = developerOptionsScreenHook

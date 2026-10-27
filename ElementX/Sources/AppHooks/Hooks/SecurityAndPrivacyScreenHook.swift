@@ -9,10 +9,15 @@ import Foundation
 
 nonisolated protocol SecurityAndPrivacyScreenHookProtocol: Sendable {
     @MainActor func update(_ viewState: SecurityAndPrivacyScreenViewState) -> SecurityAndPrivacyScreenViewState
+    @MainActor func update(_ permissions: SecurityAndPrivacyScreenPermissions) -> SecurityAndPrivacyScreenPermissions
 }
 
 struct DefaultSecurityAndPrivacyScreenHook: SecurityAndPrivacyScreenHookProtocol {
     func update(_ viewState: SecurityAndPrivacyScreenViewState) -> SecurityAndPrivacyScreenViewState {
         viewState
+    }
+    
+    func update(_ permissions: SecurityAndPrivacyScreenPermissions) -> SecurityAndPrivacyScreenPermissions {
+        permissions
     }
 }

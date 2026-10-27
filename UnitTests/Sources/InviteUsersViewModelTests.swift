@@ -164,7 +164,7 @@ final class InviteUsersScreenViewModelTests {
         
         clientProxy = ClientProxyMock(.init(userID: "@mock:client.com"))
         let newRoomID = "!newroom:example.com"
-        clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReturnValue = .success(newRoomID)
+        clientProxy.createRoomReturnValue = .success(newRoomID)
         
         viewModel = InviteUsersScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                roomType: .draft(mandatoryInvitees: [.mockAlice]),
@@ -212,14 +212,15 @@ final class InviteUsersScreenViewModelTests {
         
         try await deferredAction.fulfill()
         
-        let args = try #require(clientProxy.createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArguments)
-        #expect(args.name == nil)
-        #expect(args.topic == nil)
-        #expect(args.accessType == .private)
-        #expect(args.isSpace == false)
-        #expect(args.userIDs == [UserProfile.mockAlice.id, UserProfile.mockBob.id])
-        #expect(args.avatarURL == nil)
-        #expect(args.aliasLocalPart == nil)
+        let parameters = try #require(clientProxy.createRoomReceivedParameters)
+        #expect(parameters.name == nil)
+        #expect(parameters.topic == nil)
+        #expect(parameters.preset == .privateChat)
+        #expect(parameters.joinRuleOverride == nil)
+        #expect(parameters.isSpace == false)
+        #expect(parameters.userIDs == [UserProfile.mockAlice.id, UserProfile.mockBob.id])
+        #expect(parameters.avatarURL == nil)
+        #expect(parameters.aliasLocalPart == nil)
     }
     
     // MARK: - Helpers

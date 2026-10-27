@@ -2858,88 +2858,46 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return directRoomForUserIDReturnValue
         }
     }
-    //MARK: - createDirectRoom
-
-    private let createDirectRoomWithExpectedRoomNameCallsCountLock = NSLock()
-    private nonisolated(unsafe) var createDirectRoomWithExpectedRoomNameUnderlyingCallsCount = 0
-    var createDirectRoomWithExpectedRoomNameCallsCount: Int {
-        get { createDirectRoomWithExpectedRoomNameCallsCountLock.withLock { createDirectRoomWithExpectedRoomNameUnderlyingCallsCount } }
-        set { createDirectRoomWithExpectedRoomNameCallsCountLock.withLock { createDirectRoomWithExpectedRoomNameUnderlyingCallsCount = newValue } }
-    }
-    var createDirectRoomWithExpectedRoomNameCalled: Bool {
-        return createDirectRoomWithExpectedRoomNameCallsCount > 0
-    }
-    private let createDirectRoomWithExpectedRoomNameReceivedArgumentsLock = NSLock()
-    private nonisolated(unsafe) var createDirectRoomWithExpectedRoomNameUnderlyingReceivedArguments: (userID: String, expectedRoomName: String?)?
-    var createDirectRoomWithExpectedRoomNameReceivedArguments: (userID: String, expectedRoomName: String?)? {
-        get { createDirectRoomWithExpectedRoomNameReceivedArgumentsLock.withLock { createDirectRoomWithExpectedRoomNameUnderlyingReceivedArguments } }
-        set { createDirectRoomWithExpectedRoomNameReceivedArgumentsLock.withLock { createDirectRoomWithExpectedRoomNameUnderlyingReceivedArguments = newValue } }
-    }
-    private let createDirectRoomWithExpectedRoomNameReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var createDirectRoomWithExpectedRoomNameUnderlyingReceivedInvocations: [(userID: String, expectedRoomName: String?)] = []
-    var createDirectRoomWithExpectedRoomNameReceivedInvocations: [(userID: String, expectedRoomName: String?)] {
-        get { createDirectRoomWithExpectedRoomNameReceivedInvocationsLock.withLock { createDirectRoomWithExpectedRoomNameUnderlyingReceivedInvocations } }
-        set { createDirectRoomWithExpectedRoomNameReceivedInvocationsLock.withLock { createDirectRoomWithExpectedRoomNameUnderlyingReceivedInvocations = newValue } }
-    }
-
-    private let createDirectRoomWithExpectedRoomNameReturnValueLock = NSLock()
-    private nonisolated(unsafe) var createDirectRoomWithExpectedRoomNameUnderlyingReturnValue: Result<String, ClientProxyError>!
-    var createDirectRoomWithExpectedRoomNameReturnValue: Result<String, ClientProxyError>! {
-        get { createDirectRoomWithExpectedRoomNameReturnValueLock.withLock { createDirectRoomWithExpectedRoomNameUnderlyingReturnValue } }
-        set { createDirectRoomWithExpectedRoomNameReturnValueLock.withLock { createDirectRoomWithExpectedRoomNameUnderlyingReturnValue = newValue } }
-    }
-    nonisolated(unsafe) var createDirectRoomWithExpectedRoomNameClosure: ((String, String?) async -> Result<String, ClientProxyError>)?
-
-    @concurrent func createDirectRoom(with userID: String, expectedRoomName: String?) async -> Result<String, ClientProxyError> {
-        createDirectRoomWithExpectedRoomNameCallsCountLock.withLock { createDirectRoomWithExpectedRoomNameUnderlyingCallsCount += 1 }
-        createDirectRoomWithExpectedRoomNameReceivedArguments = (userID: userID, expectedRoomName: expectedRoomName)
-        createDirectRoomWithExpectedRoomNameReceivedInvocationsLock.withLock { createDirectRoomWithExpectedRoomNameUnderlyingReceivedInvocations.append((userID: userID, expectedRoomName: expectedRoomName)) }
-        if let createDirectRoomWithExpectedRoomNameClosure = createDirectRoomWithExpectedRoomNameClosure {
-            return await createDirectRoomWithExpectedRoomNameClosure(userID, expectedRoomName)
-        } else {
-            return createDirectRoomWithExpectedRoomNameReturnValue
-        }
-    }
     //MARK: - createRoom
 
-    private let createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartCallsCountLock = NSLock()
-    private nonisolated(unsafe) var createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartUnderlyingCallsCount = 0
-    var createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartCallsCount: Int {
-        get { createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartCallsCountLock.withLock { createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartUnderlyingCallsCount } }
-        set { createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartCallsCountLock.withLock { createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartUnderlyingCallsCount = newValue } }
+    private let createRoomCallsCountLock = NSLock()
+    private nonisolated(unsafe) var createRoomUnderlyingCallsCount = 0
+    var createRoomCallsCount: Int {
+        get { createRoomCallsCountLock.withLock { createRoomUnderlyingCallsCount } }
+        set { createRoomCallsCountLock.withLock { createRoomUnderlyingCallsCount = newValue } }
     }
-    var createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartCalled: Bool {
-        return createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartCallsCount > 0
+    var createRoomCalled: Bool {
+        return createRoomCallsCount > 0
     }
-    private let createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArgumentsLock = NSLock()
-    private nonisolated(unsafe) var createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartUnderlyingReceivedArguments: (name: String?, topic: String?, accessType: CreateRoomAccessType, isSpace: Bool, userIDs: [String], avatarURL: URL?, aliasLocalPart: String?)?
-    var createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArguments: (name: String?, topic: String?, accessType: CreateRoomAccessType, isSpace: Bool, userIDs: [String], avatarURL: URL?, aliasLocalPart: String?)? {
-        get { createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArgumentsLock.withLock { createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartUnderlyingReceivedArguments } }
-        set { createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArgumentsLock.withLock { createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartUnderlyingReceivedArguments = newValue } }
+    private let createRoomReceivedParametersLock = NSLock()
+    private nonisolated(unsafe) var createRoomUnderlyingReceivedParameters: CreateRoomParameters?
+    var createRoomReceivedParameters: CreateRoomParameters? {
+        get { createRoomReceivedParametersLock.withLock { createRoomUnderlyingReceivedParameters } }
+        set { createRoomReceivedParametersLock.withLock { createRoomUnderlyingReceivedParameters = newValue } }
     }
-    private let createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartUnderlyingReceivedInvocations: [(name: String?, topic: String?, accessType: CreateRoomAccessType, isSpace: Bool, userIDs: [String], avatarURL: URL?, aliasLocalPart: String?)] = []
-    var createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedInvocations: [(name: String?, topic: String?, accessType: CreateRoomAccessType, isSpace: Bool, userIDs: [String], avatarURL: URL?, aliasLocalPart: String?)] {
-        get { createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedInvocationsLock.withLock { createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartUnderlyingReceivedInvocations } }
-        set { createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedInvocationsLock.withLock { createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartUnderlyingReceivedInvocations = newValue } }
+    private let createRoomReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var createRoomUnderlyingReceivedInvocations: [CreateRoomParameters] = []
+    var createRoomReceivedInvocations: [CreateRoomParameters] {
+        get { createRoomReceivedInvocationsLock.withLock { createRoomUnderlyingReceivedInvocations } }
+        set { createRoomReceivedInvocationsLock.withLock { createRoomUnderlyingReceivedInvocations = newValue } }
     }
 
-    private let createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReturnValueLock = NSLock()
-    private nonisolated(unsafe) var createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartUnderlyingReturnValue: Result<String, ClientProxyError>!
-    var createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReturnValue: Result<String, ClientProxyError>! {
-        get { createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReturnValueLock.withLock { createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartUnderlyingReturnValue } }
-        set { createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReturnValueLock.withLock { createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartUnderlyingReturnValue = newValue } }
+    private let createRoomReturnValueLock = NSLock()
+    private nonisolated(unsafe) var createRoomUnderlyingReturnValue: Result<String, ClientProxyError>!
+    var createRoomReturnValue: Result<String, ClientProxyError>! {
+        get { createRoomReturnValueLock.withLock { createRoomUnderlyingReturnValue } }
+        set { createRoomReturnValueLock.withLock { createRoomUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartClosure: ((String?, String?, CreateRoomAccessType, Bool, [String], URL?, String?) async -> Result<String, ClientProxyError>)?
+    nonisolated(unsafe) var createRoomClosure: ((CreateRoomParameters) async -> Result<String, ClientProxyError>)?
 
-    @concurrent func createRoom(name: String?, topic: String?, accessType: CreateRoomAccessType, isSpace: Bool, userIDs: [String], avatarURL: URL?, aliasLocalPart: String?) async -> Result<String, ClientProxyError> {
-        createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartCallsCountLock.withLock { createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartUnderlyingCallsCount += 1 }
-        createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedArguments = (name: name, topic: topic, accessType: accessType, isSpace: isSpace, userIDs: userIDs, avatarURL: avatarURL, aliasLocalPart: aliasLocalPart)
-        createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReceivedInvocationsLock.withLock { createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartUnderlyingReceivedInvocations.append((name: name, topic: topic, accessType: accessType, isSpace: isSpace, userIDs: userIDs, avatarURL: avatarURL, aliasLocalPart: aliasLocalPart)) }
-        if let createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartClosure = createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartClosure {
-            return await createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartClosure(name, topic, accessType, isSpace, userIDs, avatarURL, aliasLocalPart)
+    @concurrent func createRoom(_ parameters: CreateRoomParameters) async -> Result<String, ClientProxyError> {
+        createRoomCallsCountLock.withLock { createRoomUnderlyingCallsCount += 1 }
+        createRoomReceivedParameters = parameters
+        createRoomReceivedInvocationsLock.withLock { createRoomUnderlyingReceivedInvocations.append(parameters) }
+        if let createRoomClosure = createRoomClosure {
+            return await createRoomClosure(parameters)
         } else {
-            return createRoomNameTopicAccessTypeIsSpaceUserIDsAvatarURLAliasLocalPartReturnValue
+            return createRoomReturnValue
         }
     }
     //MARK: - joinRoom

@@ -9,10 +9,15 @@ import Foundation
 
 nonisolated protocol CreateRoomScreenHookProtocol: Sendable {
     @MainActor func update(_ viewState: CreateRoomScreenViewState) -> CreateRoomScreenViewState
+    @MainActor func update(_ createRoomParameters: CreateRoomParameters) -> CreateRoomParameters
 }
 
 struct DefaultCreateRoomScreenHook: CreateRoomScreenHookProtocol {
     func update(_ viewState: CreateRoomScreenViewState) -> CreateRoomScreenViewState {
         viewState
+    }
+    
+    func update(_ createRoomParameters: CreateRoomParameters) -> CreateRoomParameters {
+        createRoomParameters
     }
 }

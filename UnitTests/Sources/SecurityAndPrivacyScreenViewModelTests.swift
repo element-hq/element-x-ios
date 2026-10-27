@@ -433,15 +433,6 @@ final class SecurityAndPrivacyScreenViewModelTests {
         try await deferred.fulfill()
     }
     
-    @Test
-    func encryptionOptionAvailability() {
-        setupViewModel(joinedParentSpaces: [], joinRule: .public)
-        #expect(context.viewState.canEnableEncryption)
-        
-        setupViewModel(joinedParentSpaces: [], joinRule: .public, forceDisableE2EE: true)
-        #expect(!context.viewState.canEnableEncryption)
-    }
-    
     // MARK: - Helpers
     
     /// Waits for `condition` **and** for the screen to have finished loading.
@@ -455,11 +446,9 @@ final class SecurityAndPrivacyScreenViewModelTests {
     
     private func setupViewModel(joinedParentSpaces: [SpaceServiceRoom],
                                 topLevelSpaces: [SpaceServiceRoom] = [],
-                                joinRule: ElementX.JoinRule,
-                                forceDisableE2EE: Bool = false) {
+                                joinRule: ElementX.JoinRule) {
         let userSettings = UserSettings.mock()
         userSettings.app.knockingEnabled = true
-        userSettings.app.forceDisableE2EE.applyRemoteValue(forceDisableE2EE)
         roomProxy = JoinedRoomProxyMock(.init(isEncrypted: false,
                                               canonicalAlias: "#room:matrix.org",
                                               members: .allMembersAsCreator,
