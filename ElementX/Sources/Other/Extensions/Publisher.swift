@@ -26,6 +26,14 @@ extension Publisher where Output: Equatable, Failure == Never {
         .removeDuplicates()
         .eraseToAnyPublisher()
     }
+    
+    /// Debounce a loading state so that it doesn't flicker back to idle between chained requests.
+    /// Any state other than `idle` publishes the update immediately.
+    func debounceLoadingState(idle: Output) -> AnyPublisher<Output, Never> {
+        debounceAndRemoveDuplicates(on: DispatchQueue.main) { state in
+            state == idle ? .milliseconds(500) : .milliseconds(0)
+        }
+    }
 }
 
 extension Publisher where Output == String, Failure == Never {
@@ -42,9 +50,7 @@ extension Publisher where Output == Bool, Failure == Never {
     /// Debounce a loading indicator so that it doesn't flicker between chained requests.
     /// Starting to load publishes the update immediately.
     func debounceLoadingIndicator() -> AnyPublisher<Bool, Never> {
-        debounceAndRemoveDuplicates(on: DispatchQueue.main) { isLoading in
-            isLoading ? .milliseconds(0) : .milliseconds(500)
-        }
+        debounceLoadingState(idle: false)
     }
 }
 

@@ -73,7 +73,9 @@ struct SpaceScreenViewModelTests {
         #expect(!response2.isEmpty, "There should be more test rooms.")
         
         // When the pagination is triggered.
-        let deferredIsPaginating = deferFulfillment(context.observe(\.viewState.paginationState), transitionValues: [.paginating, .idle, .paginating, .endReached])
+        // The screen's state stays paginating through the idle gap between the two requests.
+        let deferredIsPaginating = deferFulfillment(context.observe(\.viewState.paginationState), transitionValues: [.paginating, .endReached])
+        let deferredFailure = deferFailure(context.observe(\.viewState.paginationState), timeout: .seconds(1)) { $0 == .idle }
         let deferredState = deferFulfillment(spaceRoomListProxy.paginationStatePublisher, keyPath: \.self, transitionValues: [.loading,
                                                                                                                               .idle(endReached: false),
                                                                                                                               .loading,
@@ -83,6 +85,7 @@ struct SpaceScreenViewModelTests {
         // Then the screen should show 2 distinct paginations and finish up with all of the rooms visible.
         try await deferredIsPaginating.fulfill()
         try await deferredState.fulfill()
+        try await deferredFailure.fulfill()
         
         #expect(context.viewState.paginationState == .endReached)
         #expect(spaceRoomListProxy.paginateCallsCount == 2)
