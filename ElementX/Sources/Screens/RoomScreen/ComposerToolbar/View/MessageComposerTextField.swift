@@ -206,7 +206,6 @@ private protocol ElementTextViewDelegate: AnyObject {
 
 private class ElementTextView: UITextView, PillAttachmentViewProviderDelegate {
     private(set) var timelineContext: TimelineViewModel.Context?
-    private var pillViews = NSHashTable<UIView>.weakObjects()
     
     weak var elementDelegate: ElementTextViewDelegate?
     
@@ -309,9 +308,8 @@ private class ElementTextView: UITextView, PillAttachmentViewProviderDelegate {
         }
     }
     
-    func registerPillView(_ pillView: UIView) {
-        pillViews.add(pillView)
-    }
+    /// UIKit removes old pill views from this text view when its text changes, so there's nothing to track.
+    func registerPillView(_ pillView: UIView) { }
     
     // MARK: - Private
     
