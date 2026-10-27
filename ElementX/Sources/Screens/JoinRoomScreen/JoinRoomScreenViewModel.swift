@@ -252,8 +252,10 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
                 switch spaceServiceRoom.joinRule {
                 case .invite:
                     state.mode = .inviteRequired
-                case .knock, .knockRestricted:
+                case .knock:
                     state.mode = .knockable
+                case .knockRestricted(let rules):
+                    state.mode = clientProxy.canJoinRoom(with: rules) ? .joinable : .knockable
                 case .restricted(let rules):
                     state.mode = clientProxy.canJoinRoom(with: rules) ? .joinable : .restricted
                 default:
@@ -275,8 +277,10 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
                 switch roomPreview.info.joinRule {
                 case .invite:
                     state.mode = .inviteRequired
-                case .knock, .knockRestricted:
+                case .knock:
                     state.mode = .knockable
+                case .knockRestricted(let rules):
+                    state.mode = clientProxy.canJoinRoom(with: rules) ? .joinable : .knockable
                 case .restricted(let rules):
                     state.mode = clientProxy.canJoinRoom(with: rules) ? .joinable : .restricted
                 default:
