@@ -26,8 +26,10 @@ struct SecureBackupLogoutConfirmationScreenViewModelTests {
         
         reachabilitySubject = CurrentValueSubject<HomeserverReachability, Never>(.reachable)
         
-        viewModel = Self.makeViewModel(secureBackupController: secureBackupController,
-                                       reachabilitySubject: reachabilitySubject)
+        viewModel = SecureBackupLogoutConfirmationScreenViewModel(secureBackupController: secureBackupController,
+                                                                  homeserverReachabilityPublisher: reachabilitySubject.asCurrentValuePublisher(),
+                                                                  learnMoreURL: "https://example.org/encryption",
+                                                                  mode: .saveRecoveryKey)
     }
     
     @Test
@@ -110,9 +112,10 @@ struct SecureBackupLogoutConfirmationScreenViewModelTests {
     
     @Test
     func noRecoveryLogsOutStraightAway() async throws {
-        let viewModel = Self.makeViewModel(secureBackupController: secureBackupController,
-                                           reachabilitySubject: reachabilitySubject,
-                                           mode: .noRecovery)
+        let viewModel = SecureBackupLogoutConfirmationScreenViewModel(secureBackupController: secureBackupController,
+                                                                      homeserverReachabilityPublisher: reachabilitySubject.asCurrentValuePublisher(),
+                                                                      learnMoreURL: "https://example.org/encryption",
+                                                                      mode: .noRecovery)
         #expect(viewModel.context.viewState.mode == .noRecovery)
         
         let deferred = deferFulfillment(viewModel.actions) { $0 == .logout }
@@ -129,16 +132,5 @@ struct SecureBackupLogoutConfirmationScreenViewModelTests {
         let deferred = deferFulfillment(viewModel.actions) { $0 == .cancel }
         context.send(viewAction: .cancel)
         try await deferred.fulfill()
-    }
-    
-    // MARK: - Helpers
-    
-    private static func makeViewModel(secureBackupController: SecureBackupControllerMock,
-                                      reachabilitySubject: CurrentValueSubject<HomeserverReachability, Never>,
-                                      mode: SecureBackupLogoutConfirmationScreenViewMode = .saveRecoveryKey) -> SecureBackupLogoutConfirmationScreenViewModel {
-        SecureBackupLogoutConfirmationScreenViewModel(secureBackupController: secureBackupController,
-                                                      homeserverReachabilityPublisher: reachabilitySubject.asCurrentValuePublisher(),
-                                                      learnMoreURL: "https://example.org/encryption",
-                                                      mode: mode)
     }
 }
