@@ -164,6 +164,27 @@ struct RoomChangeRolesScreenViewModelTests {
     }
     
     @Test
+    mutating func saveDemotionUsesUsersDefault() async throws {
+        // Given the change roles view model for moderators in a room where users_default isn't 0.
+        setup(mode: .moderator)
+        let powerLevels = try #require(roomProxy.infoPublisher.value.powerLevels as? RoomPowerLevelsProxyMock)
+        powerLevels.values.usersDefault = 10
+
+        let existingModerator = try #require(context.viewState.membersWithRole.first { $0.role == .moderator },
+                                             "There should be a moderator to begin with.")
+
+        // When demoting the moderator.
+        context.send(viewAction: .toggleMember(existingModerator))
+        context.send(viewAction: .save)
+
+        try await Task.sleep(for: .milliseconds(100))
+
+        // Then the moderator should be returned to the room's default power level.
+        #expect(roomProxy.updatePowerLevelsForUsersReceivedUpdates?.count == 1)
+        #expect(roomProxy.updatePowerLevelsForUsersReceivedUpdates?.contains { $0.userID == existingModerator.id && $0.powerLevel == 10 } == true)
+    }
+
+    @Test
     mutating func savePromotedAdministrator() async throws {
         // Given the change roles view model for administrators.
         setup(mode: .administrator)

@@ -161,7 +161,9 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
         }
         
         let promotingUpdates = state.membersToPromote.map { ($0.id, state.mode.powerLevelValue) }
-        let demotingUpdates = state.membersToDemote.map { ($0.id, Int64(0)) }
+        // The SDK removes entries that match users_default, returning demoted members to the room's default.
+        let usersDefault = roomProxy.infoPublisher.value.powerLevels?.values.usersDefault ?? 0
+        let demotingUpdates = state.membersToDemote.map { ($0.id, usersDefault) }
         
         // A task we can await until the room's info gets modified with the new power levels.
         // Note: Ignore the first value as the publisher is backed by a current value subject.
