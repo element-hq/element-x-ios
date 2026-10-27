@@ -19,6 +19,7 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
     private let appMediator: AppMediatorProtocol
     
     private var isOldestItemVisible = false
+    private let isBackPaginatingSubject = PassthroughSubject<Bool, Never>()
     
     /// The gallery item that a listed item was built from, so that interactions can be forwarded
     /// using the gallery's identifier rather than the listed item's.
@@ -59,6 +60,11 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
                                            activeTimelineContext: activeTimelineContext,
                                            bindings: .init()),
                    mediaProvider: mediaProvider)
+        
+        isBackPaginatingSubject
+            .debounceLoadingIndicator()
+            .weakAssign(to: \.state.isBackPaginating, on: self)
+            .store(in: &cancellables)
         
         mediaTimelineViewModel.context.$viewState.sink { [weak self] timelineViewState in
             guard let self, state.screenMode == .media else {
@@ -231,7 +237,7 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         state.groups = newGroups
         galleryItemIDs = newGalleryItemIDs
         
-        state.isBackPaginating = timelineViewState.timelineState.paginationState.backward == .paginating
+        isBackPaginatingSubject.send(timelineViewState.timelineState.paginationState.backward == .paginating)
         state.shouldShowEmptyState = newGroups.isEmpty && timelineViewState.timelineState.paginationState.backward == .endReached
         backPaginateIfNecessary(backPaginationState: timelineViewState.timelineState.paginationState.backward)
     }

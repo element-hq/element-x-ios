@@ -43,15 +43,46 @@ struct MediaEventsTimelineScreenViewModelTests {
         #expect(allItemsMatchScreenMode(.media, groups: context.viewState.groups))
     }
     
+    @Test
+    func backPaginationIndicatorStaysVisibleBetweenRequests() async throws {
+        let mediaTimelineController = makeTimelineController(allowedGalleryItemTypes: [.image, .video])
+        let viewModel = MediaEventsTimelineScreenViewModel(mediaTimelineViewModel: TimelineViewModel.mock(timelineKind: .media(.mediaFilesScreen),
+                                                                                                          timelineController: mediaTimelineController),
+                                                           filesTimelineViewModel: makeTimelineViewModel(allowedGalleryItemTypes: [.file, .audio]),
+                                                           mediaProvider: MediaProviderMock(.init()),
+                                                           userIndicatorController: UserIndicatorControllerMock(),
+                                                           appMediator: AppMediatorMock(.init()))
+        let context = viewModel.context
+        
+        var deferred = deferFulfillment(context.observe(\.viewState.isBackPaginating)) { $0 }
+        mediaTimelineController.update(paginationState: .init(backward: .paginating, forward: .endReached))
+        try await deferred.fulfill()
+        
+        // The idle gap before the next request in the chain shouldn't hide the indicator.
+        let deferredFailure = deferFailure(context.observe(\.viewState.isBackPaginating), timeout: .seconds(1)) { !$0 }
+        mediaTimelineController.update(paginationState: .init(backward: .idle, forward: .endReached))
+        mediaTimelineController.update(paginationState: .init(backward: .paginating, forward: .endReached))
+        try await deferredFailure.fulfill()
+        
+        // But once the requests stop (e.g. after a failure), the indicator is hidden.
+        deferred = deferFulfillment(context.observe(\.viewState.isBackPaginating)) { !$0 }
+        mediaTimelineController.update(paginationState: .init(backward: .idle, forward: .endReached))
+        try await deferred.fulfill()
+    }
+    
     // MARK: - Helpers
     
     // Both timelines are given the same mixed chunk of items, filtered as they are in the app, so that
     // the filtering of the items is what's under test.
     private func makeTimelineViewModel(allowedGalleryItemTypes: [TimelineAllowedGalleryItemType]) -> TimelineViewModel {
-        let timelineController = TimelineControllerMock(.init(timelineKind: .media(.mediaFilesScreen),
-                                                              timelineItems: [TimelineFixtures.separator] + TimelineFixtures.mediaChunk,
-                                                              allowedGalleryItemTypes: allowedGalleryItemTypes))
-        return TimelineViewModel.mock(timelineKind: .media(.mediaFilesScreen), timelineController: timelineController)
+        TimelineViewModel.mock(timelineKind: .media(.mediaFilesScreen),
+                               timelineController: makeTimelineController(allowedGalleryItemTypes: allowedGalleryItemTypes))
+    }
+    
+    private func makeTimelineController(allowedGalleryItemTypes: [TimelineAllowedGalleryItemType]) -> TimelineControllerMock {
+        TimelineControllerMock(.init(timelineKind: .media(.mediaFilesScreen),
+                                     timelineItems: [TimelineFixtures.separator] + TimelineFixtures.mediaChunk,
+                                     allowedGalleryItemTypes: allowedGalleryItemTypes))
     }
     
     private func allItemsMatchScreenMode(_ screenMode: MediaEventsTimelineScreenMode, groups: [MediaEventsTimelineGroup]) -> Bool {

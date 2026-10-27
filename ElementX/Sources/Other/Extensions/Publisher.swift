@@ -38,6 +38,16 @@ extension Publisher where Output == String, Failure == Never {
     }
 }
 
+extension Publisher where Output == Bool, Failure == Never {
+    /// Debounce a loading indicator so that it doesn't flicker between chained requests.
+    /// Starting to load publishes the update immediately.
+    func debounceLoadingIndicator() -> AnyPublisher<Bool, Never> {
+        debounceAndRemoveDuplicates(on: DispatchQueue.main) { isLoading in
+            isLoading ? .milliseconds(0) : .milliseconds(500)
+        }
+    }
+}
+
 extension Published.Publisher {
     /// Returns the next output from the publisher skipping the current value stored into it (which is readable from the @Published property itself).
     /// - Returns: the next output from the publisher
