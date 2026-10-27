@@ -24,6 +24,8 @@ struct IdentityConfirmationScreenViewState: BindableState {
     }
     
     var availableActions: [AvailableActions]?
+    /// Until then only a loading indicator is shown, so the screen doesn't flash for sessions that turn out to be verified.
+    var isUnverified: Bool
     let learnMoreURL: URL
     
     var bindings = IdentityConfirmationScreenBindings()

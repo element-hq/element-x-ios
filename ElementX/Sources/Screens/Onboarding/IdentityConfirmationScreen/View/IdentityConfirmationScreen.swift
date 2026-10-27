@@ -22,9 +22,18 @@ struct IdentityConfirmationScreen: View {
     
     var body: some View {
         FullscreenDialog(topPadding: UIConstants.startScreenBreakerScreenTopPadding) {
-            screenHeader
+            if context.viewState.isUnverified {
+                screenHeader
+            }
         } bottomContent: {
-            actionButtons
+            if context.viewState.isUnverified {
+                actionButtons
+            }
+        }
+        .overlay {
+            if !context.viewState.isUnverified {
+                ProgressView()
+            }
         }
         .toolbar { toolbar }
         .background()
@@ -141,8 +150,6 @@ struct IdentityConfirmationScreen_Previews: PreviewProvider, TestablePreview {
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
         userSession.sessionSecurityStatePublisher = CurrentValuePublisher<SessionSecurityState, Never>(.init(verificationState: .unverified, recoveryState: recoveryState))
         
-        return IdentityConfirmationScreenViewModel(userSession: userSession,
-                                                   userSettings: .mock(),
-                                                   userIndicatorController: UserIndicatorControllerMock())
+        return IdentityConfirmationScreenViewModel(userSession: userSession, userSettings: .mock())
     }
 }

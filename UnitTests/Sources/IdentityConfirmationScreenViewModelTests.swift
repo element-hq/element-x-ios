@@ -33,6 +33,20 @@ struct IdentityConfirmationScreenViewModelTests {
         try await deferred.fulfill()
     }
     
+    @Test
+    mutating func isUnverifiedListensToSecurityState() async throws {
+        setupViewModel(verificationState: .unknown)
+        #expect(!context.viewState.isUnverified)
+        
+        let deferredFailure = deferFailure(context.observe(\.viewState.isUnverified), timeout: .seconds(1)) { $0 }
+        securityStateSubject.send(.init(verificationState: .verified, recoveryState: .unknown))
+        try await deferredFailure.fulfill()
+        
+        let deferred = deferFulfillment(context.observe(\.viewState.isUnverified)) { $0 }
+        securityStateSubject.send(.init(verificationState: .unverified, recoveryState: .disabled))
+        try await deferred.fulfill()
+    }
+    
     // MARK: - Available Actions
     
     @Test
@@ -99,8 +113,8 @@ struct IdentityConfirmationScreenViewModelTests {
     
     // MARK: - Private
     
-    mutating func setupViewModel(hasDevicesToVerifyAgainst: Bool = true) {
-        let initialState = SessionSecurityState(verificationState: .unverified, recoveryState: .unknown)
+    mutating func setupViewModel(verificationState: SessionVerificationState = .unverified, hasDevicesToVerifyAgainst: Bool = true) {
+        let initialState = SessionSecurityState(verificationState: verificationState, recoveryState: .unknown)
         securityStateSubject = CurrentValueSubject<SessionSecurityState, Never>(initialState)
         
         let clientProxy = ClientProxyMock(.init())
@@ -108,8 +122,6 @@ struct IdentityConfirmationScreenViewModelTests {
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
         userSession.sessionSecurityStatePublisher = securityStateSubject.asCurrentValuePublisher()
         
-        viewModel = IdentityConfirmationScreenViewModel(userSession: userSession,
-                                                        userSettings: .mock(),
-                                                        userIndicatorController: UserIndicatorControllerMock())
+        viewModel = IdentityConfirmationScreenViewModel(userSession: userSession, userSettings: .mock())
     }
 }
