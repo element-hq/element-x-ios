@@ -278,6 +278,7 @@ Services = where product-level opinions live (Rust SDK stays spec-faithful).
   - Need 2+ from it? Pass `userSession` down. Need 1? Pass that one direct.
   - Receiver may store only pieces it need (e.g. `clientProxy`, `userSettings`).
   - Never pass `userSession` plus value it already owns (e.g. `userSession` + `userSettings`).
+- Singletons (`static let shared`) last resort.
 
 ---
 
