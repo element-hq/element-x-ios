@@ -139,8 +139,9 @@ class SecureBackupLogoutFlowCoordinator: FlowCoordinatorProtocol {
             .sink { [weak self] action in
                 switch action {
                 case .complete:
-                    self?.navigationStackCoordinator.popToRoot(animated: true)
+                    // Yield first, popping the screen finishes the continuation and would drop the value.
                     continuation.yield()
+                    self?.navigationStackCoordinator.popToRoot(animated: true)
                 }
             }
             .store(in: &cancellables)
