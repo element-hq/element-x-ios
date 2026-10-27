@@ -118,7 +118,13 @@ struct SecureBackupLogoutConfirmationScreenViewModelTests {
                                                                       mode: .noRecovery)
         #expect(viewModel.context.viewState.mode == .noRecovery)
         
-        let deferred = deferFulfillment(viewModel.actions) { $0 == .logout }
+        let deferred = deferFulfillment(viewModel.actions) { action in
+            if case .logout = action {
+                true
+            } else {
+                false
+            }
+        }
         viewModel.context.send(viewAction: .logout)
         try await deferred.fulfill()
         
@@ -129,14 +135,26 @@ struct SecureBackupLogoutConfirmationScreenViewModelTests {
     
     @Test
     func cancelIsForwarded() async throws {
-        let deferred = deferFulfillment(viewModel.actions) { $0 == .cancel }
+        let deferred = deferFulfillment(viewModel.actions) { action in
+            if case .cancel = action {
+                true
+            } else {
+                false
+            }
+        }
         context.send(viewAction: .cancel)
         try await deferred.fulfill()
     }
     
     @Test
     func generatingARecoveryKeyIsForwarded() async throws {
-        let deferred = deferFulfillment(viewModel.actions) { $0 == .generateRecoveryKey }
+        let deferred = deferFulfillment(viewModel.actions) { action in
+            if case .generateRecoveryKey = action {
+                true
+            } else {
+                false
+            }
+        }
         context.send(viewAction: .generateRecoveryKey)
         try await deferred.fulfill()
     }
@@ -149,9 +167,23 @@ struct SecureBackupLogoutConfirmationScreenViewModelTests {
                                                                       mode: .noRecovery)
         secureBackupController.waitForKeyBackupUploadUploadStateSubjectClosure = { _ in .success(()) }
         
-        let deferred = deferFulfillment(viewModel.actions) { $0 == .logout }
-        viewModel.continueRemovalWithNewRecoveryKey()
-        try await deferred.fulfill()
+        let deferredLogout = deferFulfillment(viewModel.actions) { action in
+            if case .logout = action {
+                true
+            } else {
+                false
+            }
+        }
+        let deferredContinuation = deferFulfillment(viewModel.actions) { action in
+            if case let .generateRecoveryKey(continuation) = action {
+                continuation.yield()
+                return true
+            }
+            return false
+        }
+        viewModel.context.send(viewAction: .generateRecoveryKey)
+        try await deferredContinuation.fulfill()
+        try await deferredLogout.fulfill()
         
         // Unlike removing the device without a recovery key, the new keys have to be uploaded.
         #expect(secureBackupController.waitForKeyBackupUploadUploadStateSubjectCallsCount == 1)

@@ -39,35 +39,24 @@ struct SecureBackupRecoveryKeyScreen: View {
     
     private var mainContent: some View {
         VStack(spacing: 48) {
-            if context.viewState.isCompleted {
-                header
-            } else {
-                modeContent
+            header
+            
+            if !context.viewState.isCompleted {
+                switch context.viewState.mode {
+                case .setupRecovery, .changeRecovery:
+                    generateRecoveryKeySection
+                case .fixRecovery:
+                    confirmRecoveryKeySection
+                case .unknown:
+                    EmptyView()
+                }
             }
-        }
-    }
-    
-    @ViewBuilder
-    private var modeContent: some View {
-        switch context.viewState.mode {
-        case .setupRecovery, .changeRecovery:
-            header
-            generateRecoveryKeySection
-        case .fixRecovery:
-            header
-            confirmRecoveryKeySection
-        case .unknown:
-            header
         }
     }
     
     private var header: some View {
         VStack(spacing: 16) {
-            if context.viewState.isCompleted {
-                BigIcon(icon: \.checkCircleSolid, style: .successSolid)
-            } else {
-                BigIcon(icon: \.keySolid)
-            }
+            BigIcon(icon: context.viewState.icon, style: context.viewState.iconStyle)
             
             Text(context.viewState.title)
                 .foregroundColor(.compound.textPrimary)
@@ -112,7 +101,7 @@ struct SecureBackupRecoveryKeyScreen: View {
     
     private var completedActionButtons: some View {
         Button(context.viewState.completionButtonTitle) {
-            context.send(viewAction: .finish)
+            context.send(viewAction: .complete)
         }
         .buttonStyle(.compound(.primary))
         .accessibilityIdentifier(A11yIdentifiers.secureBackupRecoveryKeyScreen.finish)
@@ -131,7 +120,7 @@ struct SecureBackupRecoveryKeyScreen: View {
             }
             
             Button {
-                context.send(viewAction: .done)
+                context.send(viewAction: .confirmKeySaved)
             } label: {
                 Text(L10n.actionContinue)
             }
@@ -305,7 +294,7 @@ struct SecureBackupRecoveryKeyScreen_Previews: PreviewProvider, TestablePreview 
                                                                isModallyPresented: true)
         
         if isCompleted {
-            viewModel.context.send(viewAction: .done)
+            viewModel.context.send(viewAction: .confirmKeySaved)
             viewModel.context.alertInfo?.primaryButton.action?()
         }
         

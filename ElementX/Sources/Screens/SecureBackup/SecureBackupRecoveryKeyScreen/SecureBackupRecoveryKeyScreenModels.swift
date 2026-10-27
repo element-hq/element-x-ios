@@ -6,11 +6,18 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import Foundation
+import Compound
+import SwiftUI
 
 enum SecureBackupRecoveryKeyScreenViewModelAction {
-    case done(mode: SecureBackupRecoveryKeyScreenViewMode)
-    case cancel
+    case complete
+}
+
+/// Where the screen is being shown, which decides what its final button says.
+enum SecureBackupRecoveryKeyScreenPresentationContext {
+    case standard
+    /// The screen is part of removing the device, after which the removal carries on.
+    case deviceRemoval
 }
 
 enum SecureBackupRecoveryKeyScreenViewMode {
@@ -25,8 +32,7 @@ struct SecureBackupRecoveryKeyScreenViewState: BindableState {
     var isModallyPresented: Bool
     
     let mode: SecureBackupRecoveryKeyScreenViewMode
-    /// The title of the button that closes the screen once the new recovery key is active.
-    let completionButtonTitle: String
+    let presentationContext: SecureBackupRecoveryKeyScreenPresentationContext
     /// Whether the new recovery key is saved and the screen is showing that it is now active.
     var isCompleted = false
     
@@ -39,6 +45,24 @@ struct SecureBackupRecoveryKeyScreenViewState: BindableState {
     /// Setting up or changing the key goes straight to generating it, so the introduction is only seen if that failed.
     private var hasKeyOrIsGenerating: Bool {
         recoveryKey != nil || isGeneratingKey
+    }
+    
+    /// The title of the button that closes the screen once the new recovery key is active.
+    var completionButtonTitle: String {
+        switch presentationContext {
+        case .standard:
+            L10n.actionDone
+        case .deviceRemoval:
+            L10n.screenSignoutSaveRecoveryKeyActionContinue
+        }
+    }
+    
+    var icon: KeyPath<CompoundIcons, Image> {
+        isCompleted ? \.checkCircleSolid : \.keySolid
+    }
+    
+    var iconStyle: BigIcon.Style {
+        isCompleted ? .successSolid : .defaultSolid
     }
     
     var title: String {
@@ -95,7 +119,9 @@ enum SecureBackupRecoveryKeyScreenViewAction {
     case copyKey
     case keySaved
     case confirmKey
-    case done
-    case finish
+    /// The user has saved the key and wants to continue, which asks them to confirm that.
+    case confirmKeySaved
+    /// The user has seen that the new key is active.
+    case complete
     case cancel
 }

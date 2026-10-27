@@ -15,10 +15,12 @@ struct SecureBackupRecoveryKeyScreenViewModelTests {
     
     @Test
     func newKeyIsNotActiveUntilTheUserHasConfirmedSavingIt() async throws {
-        let viewModel = try await makeViewModelWithGeneratedKey()
+        let viewModel = try await makeViewModel(waitingForKey: true)
+        #expect(viewModel.context.alertInfo == nil)
+        #expect(!viewModel.context.viewState.isCompleted)
         
         viewModel.context.send(viewAction: .keySaved)
-        viewModel.context.send(viewAction: .done)
+        viewModel.context.send(viewAction: .confirmKeySaved)
         
         #expect(viewModel.context.alertInfo != nil)
         #expect(!viewModel.context.viewState.isCompleted)
@@ -26,10 +28,12 @@ struct SecureBackupRecoveryKeyScreenViewModelTests {
     
     @Test
     func confirmingTheKeyIsSavedShowsThatItIsActive() async throws {
-        let viewModel = try await makeViewModelWithGeneratedKey()
+        let viewModel = try await makeViewModel(waitingForKey: true)
+        #expect(!viewModel.context.viewState.isCompleted)
+        #expect(viewModel.context.viewState.title != UntranslatedL10n.screenRecoveryKeySuccessTitle)
         
         viewModel.context.send(viewAction: .keySaved)
-        viewModel.context.send(viewAction: .done)
+        viewModel.context.send(viewAction: .confirmKeySaved)
         viewModel.context.alertInfo?.primaryButton.action?()
         
         #expect(viewModel.context.viewState.isCompleted)
@@ -37,40 +41,36 @@ struct SecureBackupRecoveryKeyScreenViewModelTests {
     }
     
     @Test
-    func finishingReportsTheModeThatWasCompleted() async throws {
-        let viewModel = try await makeViewModelWithGeneratedKey()
+    func completingTheScreenIsReported() async throws {
+        let viewModel = try await makeViewModel(waitingForKey: true)
         viewModel.context.send(viewAction: .keySaved)
-        viewModel.context.send(viewAction: .done)
+        viewModel.context.send(viewAction: .confirmKeySaved)
         viewModel.context.alertInfo?.primaryButton.action?()
         
-        let deferred = deferFulfillment(viewModel.actions) { action in
-            if case .done(mode: .changeRecovery) = action {
-                true
-            } else {
-                false
-            }
-        }
-        viewModel.context.send(viewAction: .finish)
+        let deferred = deferFulfillment(viewModel.actions) { _ in true }
+        viewModel.context.send(viewAction: .complete)
         try await deferred.fulfill()
     }
     
     @Test
-    func completionButtonTitleIsConfigurable() {
-        let viewModel = makeViewModel(completionButtonTitle: "Continue to remove this device")
+    func completionButtonTitleDependsOnThePresentationContext() async throws {
+        let standard = try await makeViewModel(presentationContext: .standard)
+        let deviceRemoval = try await makeViewModel(presentationContext: .deviceRemoval)
         
-        #expect(viewModel.context.viewState.completionButtonTitle == "Continue to remove this device")
+        #expect(standard.context.viewState.completionButtonTitle == L10n.actionDone)
+        #expect(deviceRemoval.context.viewState.completionButtonTitle == L10n.screenSignoutSaveRecoveryKeyActionContinue)
     }
     
     @Test(arguments: [SecureBackupRecoveryState.disabled, .enabled])
     func keyIsGeneratedStraightAway(recoveryState: SecureBackupRecoveryState) async throws {
-        let viewModel = makeViewModel(recoveryState: recoveryState)
+        let viewModel = try await makeViewModel(recoveryState: recoveryState, waitingForKey: true)
         
-        try await deferFulfillment(viewModel.context.observe(\.viewState.recoveryKey)) { $0 == recoveryKey }.fulfill()
+        #expect(viewModel.context.viewState.recoveryKey == recoveryKey)
     }
     
     @Test
     func keyIsNotGeneratedWhenConfirmingAnExistingOne() async throws {
-        let viewModel = makeViewModel(recoveryState: .incomplete)
+        let viewModel = try await makeViewModel(recoveryState: .incomplete)
         
         let deferred = deferFailure(viewModel.context.observe(\.viewState.recoveryKey), timeout: .seconds(1)) { $0 != nil }
         try await deferred.fulfill()
@@ -80,23 +80,22 @@ struct SecureBackupRecoveryKeyScreenViewModelTests {
     
     // MARK: - Helpers
     
-    private func makeViewModelWithGeneratedKey() async throws -> SecureBackupRecoveryKeyScreenViewModel {
-        let viewModel = makeViewModel()
-        
-        try await deferFulfillment(viewModel.context.observe(\.viewState.recoveryKey)) { $0 == recoveryKey }.fulfill()
-        
-        return viewModel
-    }
-    
     private func makeViewModel(recoveryState: SecureBackupRecoveryState = .enabled,
-                               completionButtonTitle: String = L10n.actionDone) -> SecureBackupRecoveryKeyScreenViewModel {
+                               presentationContext: SecureBackupRecoveryKeyScreenPresentationContext = .standard,
+                               waitingForKey: Bool = false) async throws -> SecureBackupRecoveryKeyScreenViewModel {
         let secureBackupController = SecureBackupControllerMock()
         secureBackupController.recoveryState = CurrentValueSubject<SecureBackupRecoveryState, Never>(recoveryState).asCurrentValuePublisher()
         secureBackupController.generateRecoveryKeyWithPassphraseReturnValue = .success(recoveryKey)
         
-        return SecureBackupRecoveryKeyScreenViewModel(secureBackupController: secureBackupController,
-                                                      userIndicatorController: UserIndicatorControllerMock(),
-                                                      isModallyPresented: false,
-                                                      completionButtonTitle: completionButtonTitle)
+        let viewModel = SecureBackupRecoveryKeyScreenViewModel(secureBackupController: secureBackupController,
+                                                               userIndicatorController: UserIndicatorControllerMock(),
+                                                               isModallyPresented: false,
+                                                               presentationContext: presentationContext)
+        
+        if waitingForKey {
+            try await deferFulfillment(viewModel.context.observe(\.viewState.recoveryKey)) { $0 == recoveryKey }.fulfill()
+        }
+        
+        return viewModel
     }
 }

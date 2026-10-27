@@ -18,7 +18,7 @@ struct SecureBackupLogoutConfirmationScreenCoordinatorParameters {
 
 enum SecureBackupLogoutConfirmationScreenCoordinatorAction {
     case cancel
-    case generateRecoveryKey
+    case generateRecoveryKey(SecureBackupLogoutConfirmationScreenRecoveryKeyContinuation)
     case logout
 }
 
@@ -47,17 +47,13 @@ final class SecureBackupLogoutConfirmationScreenCoordinator: CoordinatorProtocol
             switch action {
             case .cancel:
                 actionsSubject.send(.cancel)
-            case .generateRecoveryKey:
-                actionsSubject.send(.generateRecoveryKey)
+            case .generateRecoveryKey(let continuation):
+                actionsSubject.send(.generateRecoveryKey(continuation))
             case .logout:
                 actionsSubject.send(.logout)
             }
         }
         .store(in: &cancellables)
-    }
-    
-    func continueRemovalWithNewRecoveryKey() {
-        viewModel.continueRemovalWithNewRecoveryKey()
     }
     
     func toPresentable() -> AnyView {
