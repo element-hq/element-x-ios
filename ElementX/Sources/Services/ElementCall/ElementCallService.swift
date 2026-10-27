@@ -194,8 +194,8 @@ final class ElementCallService: ElementCallServiceProtocol {
         
         guard nativeCallStack == nil else { return }
         
-        guard let transport = clientProxy.makeNativeCallTransport() else {
-            MXLog.error("Cannot start the native call stack without a transport")
+        guard let backend = clientProxy.makeNativeCallBackend() else {
+            MXLog.error("Cannot start the native call stack without a Matrix backend")
             return
         }
         
@@ -211,7 +211,7 @@ final class ElementCallService: ElementCallServiceProtocol {
         // surface. Screen sharing stays off until the broadcast extension that makes it work lands.
         let options = ElementCallOptions(isDeveloperModeEnabled: appSettings.developerOptionsEnabled)
         
-        let stack = NativeCallStack(transport: transport,
+        let stack = NativeCallStack(backend: backend,
                                     system: NativeCallSystem(service: self),
                                     options: options,
                                     style: style)

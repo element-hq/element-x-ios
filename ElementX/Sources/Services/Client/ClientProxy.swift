@@ -319,8 +319,8 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func makeNativeCallTransport() -> ElementCallMatrixTransportProtocol? {
-        (client as? Client).flatMap { ElementCallSDKTransport(client: $0) }
+    func makeNativeCallBackend() -> (any MatrixBackend)? {
+        (client as? Client).flatMap { SdkMatrixBackend(client: $0, logger: NativeCallStack.Logger()) }
     }
     
     var isLoginWithQRCodeSupported: Bool {

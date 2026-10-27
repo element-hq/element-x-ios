@@ -2591,32 +2591,32 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
     nonisolated(unsafe) var underlyingLiveLocationOwnInfoUpdatesPublisher: AnyPublisher<LiveLocationOwnInfoUpdate, Never>!
 
-    //MARK: - makeNativeCallTransport
+    //MARK: - makeNativeCallBackend
 
-    private let makeNativeCallTransportCallsCountLock = NSLock()
-    private nonisolated(unsafe) var makeNativeCallTransportUnderlyingCallsCount = 0
-    var makeNativeCallTransportCallsCount: Int {
-        get { makeNativeCallTransportCallsCountLock.withLock { makeNativeCallTransportUnderlyingCallsCount } }
-        set { makeNativeCallTransportCallsCountLock.withLock { makeNativeCallTransportUnderlyingCallsCount = newValue } }
+    private let makeNativeCallBackendCallsCountLock = NSLock()
+    private nonisolated(unsafe) var makeNativeCallBackendUnderlyingCallsCount = 0
+    var makeNativeCallBackendCallsCount: Int {
+        get { makeNativeCallBackendCallsCountLock.withLock { makeNativeCallBackendUnderlyingCallsCount } }
+        set { makeNativeCallBackendCallsCountLock.withLock { makeNativeCallBackendUnderlyingCallsCount = newValue } }
     }
-    var makeNativeCallTransportCalled: Bool {
-        return makeNativeCallTransportCallsCount > 0
+    var makeNativeCallBackendCalled: Bool {
+        return makeNativeCallBackendCallsCount > 0
     }
 
-    private let makeNativeCallTransportReturnValueLock = NSLock()
-    private nonisolated(unsafe) var makeNativeCallTransportUnderlyingReturnValue: ElementCallMatrixTransportProtocol?
-    var makeNativeCallTransportReturnValue: ElementCallMatrixTransportProtocol? {
-        get { makeNativeCallTransportReturnValueLock.withLock { makeNativeCallTransportUnderlyingReturnValue } }
-        set { makeNativeCallTransportReturnValueLock.withLock { makeNativeCallTransportUnderlyingReturnValue = newValue } }
+    private let makeNativeCallBackendReturnValueLock = NSLock()
+    private nonisolated(unsafe) var makeNativeCallBackendUnderlyingReturnValue: any MatrixBackend?
+    var makeNativeCallBackendReturnValue: any MatrixBackend? {
+        get { makeNativeCallBackendReturnValueLock.withLock { makeNativeCallBackendUnderlyingReturnValue } }
+        set { makeNativeCallBackendReturnValueLock.withLock { makeNativeCallBackendUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var makeNativeCallTransportClosure: (() -> ElementCallMatrixTransportProtocol?)?
+    nonisolated(unsafe) var makeNativeCallBackendClosure: (() -> any MatrixBackend?)?
 
-    func makeNativeCallTransport() -> ElementCallMatrixTransportProtocol? {
-        makeNativeCallTransportCallsCountLock.withLock { makeNativeCallTransportUnderlyingCallsCount += 1 }
-        if let makeNativeCallTransportClosure = makeNativeCallTransportClosure {
-            return makeNativeCallTransportClosure()
+    func makeNativeCallBackend() -> any MatrixBackend? {
+        makeNativeCallBackendCallsCountLock.withLock { makeNativeCallBackendUnderlyingCallsCount += 1 }
+        if let makeNativeCallBackendClosure = makeNativeCallBackendClosure {
+            return makeNativeCallBackendClosure()
         } else {
-            return makeNativeCallTransportReturnValue
+            return makeNativeCallBackendReturnValue
         }
     }
     //MARK: - isOnlyDeviceLeft

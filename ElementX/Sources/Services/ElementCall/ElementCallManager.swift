@@ -9,6 +9,7 @@
 import AVFoundation
 import CallKit
 import Combine
+import ElementCall
 import Foundation
 import PushKit
 import UIKit
@@ -404,8 +405,8 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
     }
     
     func provider(_ provider: CXProvider, perform action: CXStartCallAction) {
-        // The native controller configured the audio session already; CallKit activates it and
-        // reports back through `didActivate`.
+        // CallKit activates the session and reports back through `didActivate`.
+        configureNativeCallAudioSession()
         action.fulfill()
         callProvider.reportOutgoingCall(with: action.callUUID, startedConnectingAt: nil)
     }
@@ -436,6 +437,7 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
         // https://stackoverflow.com/questions/71483732/webrtc-running-from-wkwebview-avaudiosession-development-roadblock
         
         // First fullfill the action
+        configureNativeCallAudioSession()
         action.fulfill()
         
         if appSettings.nativeCallEnabled {
@@ -513,6 +515,18 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
     }
     
     // MARK: - Private
+    
+    /// Must run before a CallKit action is fulfilled: the system activates the session with whatever
+    /// category it has then, and an answered call reaches the controller only after that.
+    private func configureNativeCallAudioSession() {
+        guard appSettings.nativeCallEnabled else { return }
+        
+        do {
+            try CallAudioSessionConfigurator.configure()
+        } catch {
+            MXLog.error("Failed configuring the call audio session with error: \(error)")
+        }
+    }
     
     /// Bridges the controller's completion handler, which is all ``CXCallControllerProtocol`` can
     /// carry, back to an awaitable call.

@@ -18,9 +18,7 @@ import Foundation
 @MainActor
 final class NativeCallStack {
     /// The call itself, for the screen that is built from it. Everything else asks this type.
-    var controller: ElementCallController {
-        stack.controller
-    }
+    let controller: ElementCallController
     
     var actions: AnyPublisher<NativeCallPresentation, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -29,24 +27,23 @@ final class NativeCallStack {
     /// Prefix for native call related logs
     nonisolated static let logPrefix = "[NativeCall]"
     
-    private let stack: ElementCallStack
     private let actionsSubject = PassthroughSubject<NativeCallPresentation, Never>()
     private var cancellables = Set<AnyCancellable>()
     
     /// A call requested while another one was still running, started once that one has ended.
     private var pendingCallRequest: (roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool)?
     
-    init(transport: any ElementCallMatrixTransportProtocol,
+    init(backend: any MatrixBackend,
          system: any ElementCallSystemProvidingProtocol,
          options: ElementCallOptions,
          style: ElementCallStyle) {
-        stack = ElementCallStack(transport: transport,
-                                 system: system,
-                                 options: options,
-                                 style: style,
-                                 logger: Logger())
+        controller = ElementCallController(backend: backend,
+                                           system: system,
+                                           options: options,
+                                           style: style,
+                                           logger: Logger())
         
-        stack.controller.actions
+        controller.actions
             .receive(on: DispatchQueue.main)
             .sink { [weak self] action in
                 self?.handle(action)
@@ -135,8 +132,8 @@ final class NativeCallStack {
     }
     
     /// Sends the call package's log lines to `MXLog`, keeping the package's own file and line so
-    /// entries point at its source rather than at here.
-    private struct Logger: ElementCallLoggingProtocol {
+    /// entries point at its source rather than at here. Shared with the Matrix backend.
+    struct Logger: ElementCallLoggingProtocol {
         func log(_ record: ElementCallLogRecord) {
             let message = "\(NativeCallStack.logPrefix) \(record.message)"
             switch record.level {
