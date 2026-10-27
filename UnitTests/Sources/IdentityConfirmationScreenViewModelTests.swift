@@ -34,7 +34,7 @@ struct IdentityConfirmationScreenViewModelTests {
     }
     
     @Test
-    mutating func contentIsOnlyShownWhenUnverified() async throws {
+    mutating func isUnverifiedListensToSecurityState() async throws {
         setupViewModel(verificationState: .unknown)
         #expect(!context.viewState.isUnverified)
         

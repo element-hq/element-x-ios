@@ -9,6 +9,7 @@ import Combine
 @testable import ElementX
 import Testing
 
+// TODO: Rebuild as a UI test, unit tests can't interact with the presented screens.
 @MainActor
 struct OnboardingFlowCoordinatorTests {
     private let sessionSecurityStateSubject = CurrentValueSubject<SessionSecurityState, Never>(.init(verificationState: .unknown, recoveryState: .unknown))
@@ -47,12 +48,5 @@ struct OnboardingFlowCoordinatorTests {
         try await deferred.fulfill()
         
         #expect(navigationStackCoordinator.stackCoordinators.last is NotificationPermissionsScreenCoordinator)
-    }
-    
-    @Test
-    func alreadyVerifiedSessionSkipsIdentityConfirmation() {
-        sessionSecurityStateSubject.send(.init(verificationState: .verified, recoveryState: .enabled))
-        onboardingFlowCoordinator.start()
-        #expect(navigationStackCoordinator.rootCoordinator is NotificationPermissionsScreenCoordinator)
     }
 }
