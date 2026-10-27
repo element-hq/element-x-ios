@@ -79,10 +79,6 @@ packages:
     # path: ../matrix-rust-sdk
   Compound:
     path: compound-ios
-  ElementCall:
-    url: https://github.com/element-hq/element-call-ios
-    exactVersion: 0.1.0-rc.11
-    # path: ../element-call-ios
   BuildExtensions:
     path: Components/BuildExtensions
   AnalyticsEvents:
@@ -90,8 +86,12 @@ packages:
     exactVersion: 0.38.0
     # path: ../matrix-analytics-events
   EmbeddedElementCall:
-    url: https://github.com/element-hq/element-call-swift
-    exactVersion: 0.26.1
+    url: https://github.com/element-hq/element-call-swift # WebView implementation
+    exactVersion: 0.28.1-rc.1
+  ElementCall:
+    url: https://github.com/element-hq/element-call-ios # Native implementation
+    exactVersion: 0.1.0-rc.11
+    # path: ../element-call-ios
   Emojibase:
     url: https://github.com/matrix-org/emojibase-bindings
     revision: 60bc01f2e3b31445dc723f5af1a777b63d18e6c2 # pinned due to https://github.com/matrix-org/emojibase-bindings/issues/59
