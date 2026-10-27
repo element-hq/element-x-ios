@@ -8,7 +8,7 @@
 
 import Combine
 @testable import ElementX
-import Foundation
+import SwiftUI
 import Testing
 
 @MainActor
@@ -20,6 +20,7 @@ struct UserSessionFlowCoordinatorTests {
     
     private let networkReachabilitySubject: CurrentValueSubject<NetworkMonitorReachability, Never> = .init(.reachable)
     private let homeserverReachabilitySubject: CurrentValueSubject<HomeserverReachability, Never> = .init(.reachable)
+    private let elementCallService = ElementCallServiceMock(.init())
     private var tabCoordinator: NavigationTabCoordinator<UserSessionFlowCoordinator.HomeTab>? {
         rootCoordinator?.rootCoordinator as? NavigationTabCoordinator
     }
@@ -39,13 +40,14 @@ struct UserSessionFlowCoordinatorTests {
     init() async throws {
         rootCoordinator = NavigationRootCoordinator()
         
-        let clientProxy = ClientProxyMock(.init(userID: "hi@bob", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
+        let clientProxy = ClientProxyMock(.init(userID: "hi@bob", deviceID: "call-device-id", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
         clientProxy.homeserverReachabilityPublisher = homeserverReachabilitySubject.asCurrentValuePublisher()
         
         let networkMonitor = NetworkMonitorMock(.init())
         networkMonitor.reachabilityPublisher = networkReachabilitySubject.asCurrentValuePublisher()
         let appMediator = AppMediatorMock(.init())
         appMediator.networkMonitor = networkMonitor
+        (appMediator.windowManager as? WindowManagerMock)?.mainWindow = UIWindow()
         
         userIndicatorController = UserIndicatorControllerMock()
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
@@ -53,7 +55,7 @@ struct UserSessionFlowCoordinatorTests {
         let flowParameters = CommonFlowParameters(userSession: userSession,
                                                   availableSessionsPublisher: .init([.init(userSession: userSession)]),
                                                   bugReportService: BugReportServiceMock(.init()),
-                                                  elementCallService: ElementCallServiceMock(.init()),
+                                                  elementCallService: elementCallService,
                                                   timelineControllerFactory: TimelineControllerFactoryMock(.init()),
                                                   emojiProvider: EmojiProvider(userSettings: userSession.userSettings),
                                                   linkMetadataProvider: LinkMetadataProvider(),
@@ -82,6 +84,20 @@ struct UserSessionFlowCoordinatorTests {
     mutating func settingsPresentation() async throws {
         try await process(route: .settings, expectedUserSessionState: .settingsScreen)
         #expect((tabCoordinator?.sheetCoordinator as? NavigationStackCoordinator)?.rootCoordinator is SettingsScreenCoordinator)
+    }
+    
+    @Test
+    func replacingTheSessionScreensEndsTheWebViewCall() async {
+        // E.g. clearing the cache or signing out during a call: the call screen goes with the screens.
+        await waitForConfirmation { confirmation in
+            elementCallService.setupCallSessionRoomIDRoomDisplayNameIsVideoClosure = { _, _, _ in confirmation() }
+            userSessionFlowCoordinator.handleAppRoute(.call(roomID: "1", isVoiceCall: false), animated: false)
+        }
+        
+        rootCoordinator.setRootCoordinator(nil)
+        
+        #expect(elementCallService.tearDownCallSessionRoomIDReceivedRoomID == "1",
+                "A call left ongoing would make every later call count as busy")
     }
     
     @Test

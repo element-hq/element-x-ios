@@ -116,6 +116,7 @@ extension JoinedRoomProxyMock {
         unbanUserReturnValue = .success(())
         
         let widgetDriver = ElementCallWidgetDriverMock()
+        widgetDriver.widgetID = UUID().uuidString
         widgetDriver.messagePublisher = .init()
         widgetDriver.actions = PassthroughSubject().eraseToAnyPublisher()
         
