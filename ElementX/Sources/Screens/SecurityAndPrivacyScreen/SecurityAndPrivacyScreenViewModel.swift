@@ -215,7 +215,7 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
         if state.currentSettings.accessType != state.bindings.desiredSettings.accessType {
             // When a user changes join rules to something other than knock or public,
             // the room should be automatically made invisible (private) in the room directory.
-            if state.currentSettings.accessType != .askToJoin, state.currentSettings.accessType != .anyone {
+            if state.bindings.desiredSettings.accessType != .askToJoin, state.bindings.desiredSettings.accessType != .anyone {
                 state.bindings.desiredSettings.isVisibileInRoomDirectory = false
             }
             

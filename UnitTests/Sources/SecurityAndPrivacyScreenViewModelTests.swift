@@ -434,6 +434,45 @@ final class SecurityAndPrivacyScreenViewModelTests {
     }
     
     @Test
+    func changingToInviteOnlyHidesRoomFromDirectory() async throws {
+        setupViewModel(joinedParentSpaces: [], joinRule: .public, isVisibleInRoomDirectory: true)
+        
+        let deferred = deferScreenLoaded { $0.currentSettings.isVisibileInRoomDirectory == true }
+        try await deferred.fulfill()
+        
+        context.desiredSettings.accessType = .inviteOnly
+        
+        await waitForConfirmation("Room directory visibility has updated") { confirm in
+            roomProxy.updateRoomDirectoryVisibilityClosure = { visibility in
+                #expect(visibility == .private)
+                confirm()
+                return .success(())
+            }
+            context.send(viewAction: .save)
+        }
+    }
+    
+    @Test
+    func changingToPublicKeepsRoomDirectoryChoice() async throws {
+        setupViewModel(joinedParentSpaces: [], joinRule: .invite, isVisibleInRoomDirectory: false)
+        
+        let deferred = deferScreenLoaded { $0.currentSettings.isVisibileInRoomDirectory == false }
+        try await deferred.fulfill()
+        
+        context.desiredSettings.accessType = .anyone
+        context.desiredSettings.isVisibileInRoomDirectory = true
+        
+        await waitForConfirmation("Room directory visibility has updated") { confirm in
+            roomProxy.updateRoomDirectoryVisibilityClosure = { visibility in
+                #expect(visibility == .public)
+                confirm()
+                return .success(())
+            }
+            context.send(viewAction: .save)
+        }
+    }
+    
+    @Test
     func encryptionOptionAvailability() {
         setupViewModel(joinedParentSpaces: [], joinRule: .public)
         #expect(context.viewState.canEnableEncryption)
@@ -456,6 +495,7 @@ final class SecurityAndPrivacyScreenViewModelTests {
     private func setupViewModel(joinedParentSpaces: [SpaceServiceRoom],
                                 topLevelSpaces: [SpaceServiceRoom] = [],
                                 joinRule: ElementX.JoinRule,
+                                isVisibleInRoomDirectory: Bool = true,
                                 forceDisableE2EE: Bool = false) {
         let userSettings = UserSettings.mock()
         userSettings.app.knockingEnabled = true
@@ -464,7 +504,7 @@ final class SecurityAndPrivacyScreenViewModelTests {
                                               canonicalAlias: "#room:matrix.org",
                                               members: .allMembersAsCreator,
                                               joinRule: joinRule,
-                                              isVisibleInPublicDirectory: true))
+                                              isVisibleInPublicDirectory: isVisibleInRoomDirectory))
         roomProxy.updateJoinRuleReturnValue = .success(())
         roomProxy.updateRoomDirectoryVisibilityReturnValue = .success(())
         
