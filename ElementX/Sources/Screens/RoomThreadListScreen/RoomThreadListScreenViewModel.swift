@@ -38,9 +38,14 @@ class RoomThreadListScreenViewModel: RoomThreadListScreenViewModelType, RoomThre
             .receive(on: DispatchQueue.main)
             .sink { [weak self] paginationState in
                 guard let self else { return }
-                state.isPaginating = paginationState == .loading
                 Task { await self.paginateIfNecessary(paginationState: paginationState) }
             }
+            .store(in: &cancellables)
+        
+        threadListServiceProxy.paginationStatePublisher
+            .map { $0 == .loading }
+            .debounceLoadingIndicator()
+            .weakAssign(to: \.state.isPaginating, on: self)
             .store(in: &cancellables)
     }
     
