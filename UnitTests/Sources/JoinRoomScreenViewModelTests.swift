@@ -15,6 +15,7 @@ final class JoinRoomScreenViewModelTests {
     private enum TestMode {
         case joined
         case knocked
+        case knockRestricted(canJoinRoom: Bool)
         case invited
         case banned
         case alreadyJoined
@@ -100,6 +101,13 @@ final class JoinRoomScreenViewModelTests {
         try await deferFulfillment(viewModel.context.$viewState) { $0.mode == .knocked }.fulfill()
         
         #expect(userSettings.account.seenInvites.isEmpty, "Only an invited room should register the room ID as a seen invite.")
+    }
+    
+    @Test(arguments: [(true, JoinRoomScreenMode.joinable), (false, .knockable)])
+    func knockRestrictedMode(canJoinRoom: Bool, expectedMode: JoinRoomScreenMode) async throws {
+        setupViewModel(mode: .knockRestricted(canJoinRoom: canJoinRoom))
+        
+        try await deferFulfillment(viewModel.context.$viewState) { $0.mode == expectedMode }.fulfill()
     }
     
     @Test
@@ -213,6 +221,9 @@ final class JoinRoomScreenViewModelTests {
                 roomProxy.cancelKnockReturnValue = .success(())
                 return .knocked(roomProxy)
             }
+        case .knockRestricted(let canJoinRoom):
+            clientProxy.roomPreviewForIdentifierViaReturnValue = .success(RoomPreviewProxyMock.knockableRestricted)
+            clientProxy.canJoinRoomWithReturnValue = canJoinRoom
         case .joined:
             clientProxy.roomPreviewForIdentifierViaReturnValue = .success(RoomPreviewProxyMock.joinable)
         case .invited:
