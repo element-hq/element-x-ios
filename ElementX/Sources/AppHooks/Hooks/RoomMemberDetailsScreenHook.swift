@@ -9,7 +9,7 @@ import Foundation
 
 nonisolated protocol RoomMemberDetailsScreenHookProtocol: Sendable {
     @MainActor func update(_ viewState: RoomMemberDetailsScreenViewState) -> RoomMemberDetailsScreenViewState
-    @MainActor func update(_ parameters: CreateRoomParameters) -> CreateRoomParameters
+    @MainActor func update(_ createRoomParameters: CreateRoomParameters) -> CreateRoomParameters
 }
 
 struct DefaultRoomMemberDetailsScreenHook: RoomMemberDetailsScreenHookProtocol {
@@ -17,7 +17,7 @@ struct DefaultRoomMemberDetailsScreenHook: RoomMemberDetailsScreenHookProtocol {
         viewState
     }
     
-    func update(_ parameters: CreateRoomParameters) -> CreateRoomParameters {
-        parameters
+    func update(_ createRoomParameters: CreateRoomParameters) -> CreateRoomParameters {
+        createRoomParameters
     }
 }

@@ -8,11 +8,11 @@
 import Foundation
 
 nonisolated protocol StartChatScreenHookProtocol: Sendable {
-    @MainActor func update(_ parameters: CreateRoomParameters) -> CreateRoomParameters
+    @MainActor func update(_ createRoomParameters: CreateRoomParameters) -> CreateRoomParameters
 }
 
 struct DefaultStartChatScreenHook: StartChatScreenHookProtocol {
-    func update(_ parameters: CreateRoomParameters) -> CreateRoomParameters {
-        parameters
+    func update(_ createRoomParameters: CreateRoomParameters) -> CreateRoomParameters {
+        createRoomParameters
     }
 }

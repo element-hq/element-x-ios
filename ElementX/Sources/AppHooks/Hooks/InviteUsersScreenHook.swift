@@ -8,11 +8,11 @@
 import Foundation
 
 nonisolated protocol InviteUsersScreenHookProtocol: Sendable {
-    @MainActor func update(_ parameters: CreateRoomParameters) -> CreateRoomParameters
+    @MainActor func update(_ createRoomParameters: CreateRoomParameters) -> CreateRoomParameters
 }
 
 struct DefaultInviteUsersScreenHook: InviteUsersScreenHookProtocol {
-    func update(_ parameters: CreateRoomParameters) -> CreateRoomParameters {
-        parameters
+    func update(_ createRoomParameters: CreateRoomParameters) -> CreateRoomParameters {
+        createRoomParameters
     }
 }

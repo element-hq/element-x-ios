@@ -9,7 +9,7 @@ import Foundation
 
 nonisolated protocol UserProfileScreenHookProtocol: Sendable {
     @MainActor func update(_ viewState: UserProfileScreenViewState) -> UserProfileScreenViewState
-    @MainActor func update(_ parameters: CreateRoomParameters) -> CreateRoomParameters
+    @MainActor func update(_ createRoomParameters: CreateRoomParameters) -> CreateRoomParameters
 }
 
 struct DefaultUserProfileScreenHook: UserProfileScreenHookProtocol {
@@ -17,7 +17,7 @@ struct DefaultUserProfileScreenHook: UserProfileScreenHookProtocol {
         viewState
     }
     
-    func update(_ parameters: CreateRoomParameters) -> CreateRoomParameters {
-        parameters
+    func update(_ createRoomParameters: CreateRoomParameters) -> CreateRoomParameters {
+        createRoomParameters
     }
 }
