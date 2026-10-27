@@ -43,7 +43,7 @@ struct SessionVerificationEmoji: Hashable {
     let description: String
     
     var localizedDescription: String {
-        SASL10n.localizedDescription(for: description.lowercased())
+        SASL10n.localizedDescription(for: description.lowercased().replacingOccurrences(of: " ", with: "_"))
     }
 }
 

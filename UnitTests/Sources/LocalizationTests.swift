@@ -74,6 +74,16 @@ final class LocalizationTests {
         #expect(L10n.commonMemberCount(2) == "2 Members")
     }
     
+    /// Test SAS emoji descriptions are translated, including multi-word ones
+    @Test
+    func sasEmojiDescriptions() {
+        Bundle.overrideLocalizations = ["de"]
+        
+        #expect(SessionVerificationEmoji(symbol: "🐶", description: "Dog").localizedDescription == "Hund")
+        #expect(SessionVerificationEmoji(symbol: "👍", description: "Thumbs Up").localizedDescription == "Daumen Hoch")
+        #expect(SessionVerificationEmoji(symbol: "💡", description: "Light Bulb").localizedDescription == "Glühbirne")
+    }
+    
     /// Test untranslated strings
     @Test
     func untranslated() {
