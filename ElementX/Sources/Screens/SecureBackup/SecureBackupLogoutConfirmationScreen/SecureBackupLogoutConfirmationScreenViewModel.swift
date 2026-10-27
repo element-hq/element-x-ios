@@ -21,6 +21,8 @@ class SecureBackupLogoutConfirmationScreenViewModel: SecureBackupLogoutConfirmat
     private var keyUploadWaitingTask: Task<Void, Never>?
     @CancellableTask
     private var keyUploadStalledTask: Task<Void, Error>?
+    @CancellableTask
+    private var recoveryKeyTask: Task<Void, Never>?
     
     private var actionsSubject: PassthroughSubject<SecureBackupLogoutConfirmationScreenViewModelAction, Never> = .init()
     var actions: AnyPublisher<SecureBackupLogoutConfirmationScreenViewModelAction, Never> {
@@ -55,19 +57,26 @@ class SecureBackupLogoutConfirmationScreenViewModel: SecureBackupLogoutConfirmat
             keyUploadWaitingTask = nil
             actionsSubject.send(.cancel)
         case .generateRecoveryKey:
-            actionsSubject.send(.generateRecoveryKey)
+            generateRecoveryKey()
         case .logout:
             attemptLogout()
         }
     }
     
-    func continueRemovalWithNewRecoveryKey() {
-        // The keys now have to be backed up before the device can go.
-        state.mode = .saveRecoveryKey
-        attemptLogout()
-    }
-    
     // MARK: - Private
+    
+    private func generateRecoveryKey() {
+        let (stream, continuation) = AsyncStream<Void>.makeStream()
+        actionsSubject.send(.generateRecoveryKey(continuation))
+        
+        recoveryKeyTask = Task { [weak self] in
+            for await _ in stream {
+                // The keys now have to be backed up before the device can go.
+                self?.state.mode = .saveRecoveryKey
+                self?.attemptLogout()
+            }
+        }
+    }
     
     private func attemptLogout() {
         if case .saveRecoveryKey = state.mode {
