@@ -25,32 +25,26 @@ struct GenerateSAS: ParsableCommand {
         printIfVerbose("Json data:")
         printIfVerbose(json)
         
-        var defaultTranslations = [String: String]()
-        var cumulativeTranslations = [String: [String: String]]()
+        // Keyed by the emoji's index in the spec table, which the SDK sends alongside each emoji.
+        var cumulativeTranslations = [String: [Int: String]]()
         
-        cumulativeTranslations[Self.defaultLanguage] = [String: String]()
+        cumulativeTranslations[Self.defaultLanguage] = [Int: String]()
         for emoji in json {
-            let description = emoji.description
+            printIfVerbose("Index: \(emoji.index), description: \(emoji.description)")
             
-            printIfVerbose("Description: \(description)")
-            
-            defaultTranslations[description] = description
-            
-            let translations = emoji.translatedDescriptions
             // en is not included since is the default language so we need to add it ourselves
-            cumulativeTranslations[Self.defaultLanguage]![description] = description
-            for (lang, translation) in translations {
+            cumulativeTranslations[Self.defaultLanguage]![emoji.index] = emoji.description
+            for (lang, translation) in emoji.translatedDescriptions {
                 printIfVerbose("Lang: \(lang)")
                 
                 if cumulativeTranslations[lang] == nil {
-                    cumulativeTranslations[lang] = [String: String]()
+                    cumulativeTranslations[lang] = [Int: String]()
                 }
                 
-                cumulativeTranslations[lang]![description] = translation
+                cumulativeTranslations[lang]![emoji.index] = translation
             }
         }
         
-        printIfVerbose(defaultTranslations)
         printIfVerbose(cumulativeTranslations)
         
         for (lang, translations) in cumulativeTranslations {
@@ -64,7 +58,7 @@ struct GenerateSAS: ParsableCommand {
         print("Write completed")
     }
     
-    private func writeToFile(file: String, dict: [String: String], subdirectory: String) {
+    private func writeToFile(file: String, dict: [Int: String], subdirectory: String) {
         let fileDirectory = URL.projectDirectory.appendingPathComponent("ElementX/Resources/Localizations").appendingPathComponent(subdirectory)
         
         let filePath = fileDirectory.appendingPathComponent(file)
@@ -78,7 +72,7 @@ struct GenerateSAS: ParsableCommand {
             // This will fail if the .lproj dir does not exist already, which is fine since we don't want to add translations for unsupported languages.
             try dict
                 .sorted(by: { $0.key < $1.key })
-                .map { "\"\($0.key.lowercased().replacingOccurrences(of: " ", with: "_"))\" = \"\($0.value)\";" }
+                .map { "\"\($0.key)\" = \"\($0.value)\";" }
                 .joined(separator: "\n")
                 .write(to: filePath, atomically: true, encoding: .utf8)
         } catch {
@@ -87,12 +81,13 @@ struct GenerateSAS: ParsableCommand {
     }
     
     private struct SASEmoji: Codable {
-        let number: Int
+        let index: Int
         let emoji, description, unicode: String
         let translatedDescriptions: [String: String?]
         
         enum CodingKeys: String, CodingKey {
-            case number, emoji, description, unicode
+            case index = "number"
+            case emoji, description, unicode
             case translatedDescriptions = "translated_descriptions"
         }
     }

@@ -74,6 +74,36 @@ final class LocalizationTests {
         #expect(L10n.commonMemberCount(2) == "2 Members")
     }
     
+    /// Test SAS emoji descriptions are looked up by their index in the spec's emoji table
+    @Test
+    func sasEmojiDescriptions() {
+        Bundle.overrideLocalizations = ["de"]
+        
+        #expect(SessionVerificationEmoji(index: 0, symbol: "🐶", description: "Dog").localizedDescription == "Hund")
+        #expect(SessionVerificationEmoji(index: 36, symbol: "👍", description: "Thumbs Up").localizedDescription == "Daumen Hoch")
+        #expect(SessionVerificationEmoji(index: 41, symbol: "💡", description: "Light Bulb").localizedDescription == "Glühbirne")
+        
+        Bundle.overrideLocalizations = ["hr"]
+        
+        #expect(SessionVerificationEmoji(index: 23, symbol: "🍌", description: "Banana").localizedDescription == "banana")
+    }
+    
+    /// Test every emoji in the spec's SAS emoji table has a description
+    @Test
+    func sasEmojiTableIsComplete() {
+        Bundle.overrideLocalizations = ["en"]
+        
+        for index in 0..<64 {
+            #expect(SASL10n.localizedDescription(for: index) != nil)
+        }
+    }
+    
+    /// Test SAS emoji fall back to the SDK's description when they have no translation
+    @Test
+    func sasEmojiDescriptionFallback() {
+        #expect(SessionVerificationEmoji(index: 64, symbol: "❓", description: "Unknown").localizedDescription == "Unknown")
+    }
+    
     /// Test untranslated strings
     @Test
     func untranslated() {
