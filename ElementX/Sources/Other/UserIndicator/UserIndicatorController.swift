@@ -45,22 +45,20 @@ class UserIndicatorController: ObservableObject, UserIndicatorControllerProtocol
             indicatorQueue[index] = indicator
             displayTimes[indicator.id] = .now
             announceIfNeeded(indicator)
-        } else {
-            if let delay {
-                delayedIndicators.insert(indicator.id)
+        } else if let delay {
+            delayedIndicators.insert(indicator.id)
+            
+            Task {
+                try? await Task.sleep(for: .seconds(delay.seconds))
                 
-                Task {
-                    try? await Task.sleep(for: .seconds(delay.seconds))
-                    
-                    guard delayedIndicators.contains(indicator.id) else {
-                        return
-                    }
-                    
-                    enqueue(indicator: indicator)
+                guard delayedIndicators.contains(indicator.id) else {
+                    return
                 }
-            } else {
+                
                 enqueue(indicator: indicator)
             }
+        } else {
+            enqueue(indicator: indicator)
         }
     }
     

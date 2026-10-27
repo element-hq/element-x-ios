@@ -312,17 +312,13 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     private func updateFilter() {
         if state.shouldHideRoomList {
             roomSummaryProvider?.setFilter(.excludeAll)
+        } else if state.bindings.isSearchFieldFocused {
+            roomSummaryProvider?.setFilter(.search(query: state.bindings.searchQuery))
+        } else if let spaceFilter = spaceFilterSubject.value {
+            roomSummaryProvider?.setFilter(.rooms(roomsIDs: spaceFilter.descendants,
+                                                  filters: state.bindings.filtersState.activeFilters.set))
         } else {
-            if state.bindings.isSearchFieldFocused {
-                roomSummaryProvider?.setFilter(.search(query: state.bindings.searchQuery))
-            } else {
-                if let spaceFilter = spaceFilterSubject.value {
-                    roomSummaryProvider?.setFilter(.rooms(roomsIDs: spaceFilter.descendants,
-                                                          filters: state.bindings.filtersState.activeFilters.set))
-                } else {
-                    roomSummaryProvider?.setFilter(.all(filters: state.bindings.filtersState.activeFilters.set))
-                }
-            }
+            roomSummaryProvider?.setFilter(.all(filters: state.bindings.filtersState.activeFilters.set))
         }
     }
     

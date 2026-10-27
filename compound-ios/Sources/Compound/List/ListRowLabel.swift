@@ -103,12 +103,10 @@ public struct ListRowLabel<Icon: View>: View {
         }
         if hideIconBackground {
             return .compound.iconTertiaryAlpha
+        } else if #available(iOS 26, *) {
+            return .compound.iconSecondary
         } else {
-            if #available(iOS 26, *) {
-                return .compound.iconSecondary
-            } else {
-                return .compound.iconPrimary
-            }
+            return .compound.iconPrimary
         }
     }
     
