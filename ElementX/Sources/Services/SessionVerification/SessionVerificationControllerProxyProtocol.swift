@@ -39,11 +39,13 @@ struct SessionVerificationRequestDetails: Equatable {
 }
 
 struct SessionVerificationEmoji: Hashable {
+    /// The emoji's index in the spec's SAS emoji table.
+    let index: Int
     let symbol: String
     let description: String
     
     var localizedDescription: String {
-        SASL10n.localizedDescription(for: description.lowercased())
+        SASL10n.localizedDescription(for: index) ?? description
     }
 }
 
