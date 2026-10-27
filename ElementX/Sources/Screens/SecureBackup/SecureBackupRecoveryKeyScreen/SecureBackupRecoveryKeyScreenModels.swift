@@ -33,7 +33,6 @@ enum SecureBackupRecoveryKeyScreenViewMode {
 nonisolated enum SecureBackupRecoveryKeyValidity: Equatable {
     case unchecked
     case checking
-    case valid
     case invalid
 }
 
@@ -140,9 +139,7 @@ enum SecureBackupRecoveryKeyScreenViewAction {
     case complete
     /// The text in the field of the key that is being checked has changed.
     case checkedKeyChanged
-    /// The user is done typing the key that is being checked, so it doesn't need to wait for them to pause.
+    /// The user wants the key they have entered to be checked.
     case submitCheckedKey
-    /// The key that was checked is correct, and the user carries on.
-    case completeCheck
     case cancel
 }

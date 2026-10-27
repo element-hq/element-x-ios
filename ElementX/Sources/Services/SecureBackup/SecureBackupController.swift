@@ -154,6 +154,7 @@ class SecureBackupController: SecureBackupControllerProtocol {
     
     func checkRecoveryKey(_ key: String) async -> Result<Void, SecureBackupControllerError> {
         do {
+            // The SDK has no way to only verify a key, so this recovers (re-imports) the secrets with it, which is harmless as they're already known.
             try await encryption.recover(recoveryKey: key)
             return .success(())
         } catch {

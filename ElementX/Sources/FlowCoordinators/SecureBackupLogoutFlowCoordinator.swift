@@ -97,13 +97,13 @@ class SecureBackupLogoutFlowCoordinator: FlowCoordinatorProtocol {
             guard let continuation = context.userInfo as? SecureBackupLogoutConfirmationScreenRecoveryKeyContinuation else {
                 fatalError("Expected a continuation in the userInfo.")
             }
-            self?.presentRecoveryKeyScreen(mode: nil, continuation: continuation)
+            self?.presentRecoveryKeyScreen(isCheckingKey: false, continuation: continuation)
         }
         stateMachine.addRoutes(event: .checkRecoveryKey, transitions: [.confirmationScreen => .recoveryKeyScreen]) { [weak self] context in
             guard let continuation = context.userInfo as? SecureBackupLogoutConfirmationScreenRecoveryKeyContinuation else {
                 fatalError("Expected a continuation in the userInfo.")
             }
-            self?.presentRecoveryKeyScreen(mode: .checkRecovery, continuation: continuation)
+            self?.presentRecoveryKeyScreen(isCheckingKey: true, continuation: continuation)
         }
         stateMachine.addRoutes(event: .finishedRecoveryKey, transitions: [.recoveryKeyScreen => .confirmationScreen])
         
@@ -138,12 +138,12 @@ class SecureBackupLogoutFlowCoordinator: FlowCoordinatorProtocol {
         navigationStackCoordinator.setRootCoordinator(coordinator)
     }
     
-    private func presentRecoveryKeyScreen(mode: SecureBackupRecoveryKeyScreenViewMode?,
+    private func presentRecoveryKeyScreen(isCheckingKey: Bool,
                                           continuation: SecureBackupLogoutConfirmationScreenRecoveryKeyContinuation) {
         let parameters = SecureBackupRecoveryKeyScreenCoordinatorParameters(secureBackupController: userSession.clientProxy.secureBackupController,
                                                                             userIndicatorController: userIndicatorController,
                                                                             isModallyPresented: false,
-                                                                            mode: mode,
+                                                                            isCheckingKey: isCheckingKey,
                                                                             presentationContext: .deviceRemoval)
         let coordinator = userSession.userHooks.recoveryKeyScreenHook.makeCoordinator(parameters: parameters)
         

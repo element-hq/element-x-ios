@@ -26,13 +26,13 @@ class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewM
     init(secureBackupController: SecureBackupControllerProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          isModallyPresented: Bool,
-         mode: SecureBackupRecoveryKeyScreenViewMode? = nil,
+         isCheckingKey: Bool = false,
          presentationContext: SecureBackupRecoveryKeyScreenPresentationContext = .standard) {
         self.secureBackupController = secureBackupController
         self.userIndicatorController = userIndicatorController
         
         super.init(initialViewState: .init(isModallyPresented: isModallyPresented,
-                                           mode: mode ?? secureBackupController.recoveryState.value.viewMode,
+                                           mode: isCheckingKey ? .checkRecovery : secureBackupController.recoveryState.value.viewMode,
                                            presentationContext: presentationContext,
                                            bindings: .init()))
         
@@ -99,37 +99,30 @@ class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewM
         case .complete:
             actionsSubject.send(.complete)
         case .checkedKeyChanged:
-            checkKey(after: .milliseconds(750))
+            // Whatever was entered before is no longer what is being checked.
+            keyCheckTask = nil
+            state.keyValidity = .unchecked
         case .submitCheckedKey:
-            checkKey(after: .zero)
-        case .completeCheck:
-            guard state.keyValidity == .valid else { return }
-            state.isCompleted = true
+            checkKey()
         }
     }
     
-    /// Checks the key the user has entered, waiting a moment so that it isn't checked while they are still typing.
-    private func checkKey(after delay: Duration) {
+    private func checkKey() {
         let key = state.bindings.confirmationRecoveryKey
-        
-        guard !key.isEmpty else {
-            keyCheckTask = nil
-            state.keyValidity = .unchecked
-            return
-        }
+        guard !key.isEmpty else { return }
         
         state.keyValidity = .checking
         
         keyCheckTask = Task { [weak self] in
-            try? await Task.sleep(for: delay)
-            guard !Task.isCancelled, let self else { return }
+            guard let self else { return }
             
             let result = await secureBackupController.checkRecoveryKey(key)
             guard !Task.isCancelled else { return }
             
             switch result {
             case .success:
-                state.keyValidity = .valid
+                state.keyValidity = .unchecked
+                state.isCompleted = true
             case .failure:
                 state.keyValidity = .invalid
             }
