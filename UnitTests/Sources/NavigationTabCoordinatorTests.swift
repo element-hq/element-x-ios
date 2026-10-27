@@ -181,6 +181,28 @@ struct NavigationTabCoordinatorTests {
         }
     }
     
+    // MARK: - Stopping
+    
+    @Test
+    mutating func stoppingTearsDownTheTabsAndEverythingPresentedOverThem() {
+        let tabCoordinator = StopTrackingCoordinator()
+        let sheetCoordinator = StopTrackingCoordinator()
+        let fullScreenCoverCoordinator = StopTrackingCoordinator()
+        let overlayCoordinator = StopTrackingCoordinator()
+        
+        navigationTabCoordinator.setTabs([.init(coordinator: tabCoordinator, details: .init(tag: .tab, title: "Tab", icon: \.help, selectedIcon: \.helpSolid))])
+        navigationTabCoordinator.setSheetCoordinator(sheetCoordinator)
+        navigationTabCoordinator.setFullScreenCoverCoordinator(fullScreenCoverCoordinator)
+        navigationTabCoordinator.setOverlayCoordinator(overlayCoordinator)
+        
+        navigationTabCoordinator.stop()
+        
+        #expect(tabCoordinator.didStop)
+        #expect(sheetCoordinator.didStop)
+        #expect(fullScreenCoverCoordinator.didStop)
+        #expect(overlayCoordinator.didStop)
+    }
+    
     // MARK: - Private
     
     private func assertCoordinatorsEqual(_ lhs: CoordinatorProtocol?, _ rhs: CoordinatorProtocol?) {
@@ -207,4 +229,12 @@ struct NavigationTabCoordinatorTests {
 
 private class SomeTestCoordinator: CoordinatorProtocol {
     let id = UUID()
+}
+
+private class StopTrackingCoordinator: CoordinatorProtocol {
+    private(set) var didStop = false
+    
+    func stop() {
+        didStop = true
+    }
 }

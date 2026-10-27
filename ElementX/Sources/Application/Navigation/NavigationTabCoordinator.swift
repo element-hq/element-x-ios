@@ -273,9 +273,11 @@ import SwiftUI
     
     // MARK: - CoordinatorProtocol
     
-    /// No idea if this is particuarly needed for the TabView but we do this for the NavigationStackCoordinator and NavigationSplitCoordinator so it
-    /// doesn't seem to harm to also do it here.
     func stop() {
+        sheetModule?.tearDown()
+        fullScreenCoverModule?.tearDown()
+        overlayModule?.tearDown()
+        
         tabModules.forEach { $0.module.tearDown() }
     }
     

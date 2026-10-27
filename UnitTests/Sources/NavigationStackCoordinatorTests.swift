@@ -203,6 +203,28 @@ struct NavigationStackCoordinatorTests {
         }
     }
     
+    // MARK: - Stopping
+    
+    @Test
+    func stoppingTearsDownTheStackAndEverythingPresentedOverIt() {
+        let rootCoordinator = StopTrackingCoordinator()
+        let pushedCoordinator = StopTrackingCoordinator()
+        let sheetCoordinator = StopTrackingCoordinator()
+        let fullScreenCoverCoordinator = StopTrackingCoordinator()
+        
+        navigationStackCoordinator.setRootCoordinator(rootCoordinator)
+        navigationStackCoordinator.push(pushedCoordinator)
+        navigationStackCoordinator.setSheetCoordinator(sheetCoordinator)
+        navigationStackCoordinator.setFullScreenCoverCoordinator(fullScreenCoverCoordinator)
+        
+        navigationStackCoordinator.stop()
+        
+        #expect(rootCoordinator.didStop)
+        #expect(pushedCoordinator.didStop)
+        #expect(sheetCoordinator.didStop)
+        #expect(fullScreenCoverCoordinator.didStop)
+    }
+    
     // MARK: - Private
     
     private func assertCoordinatorsEqual(_ lhs: CoordinatorProtocol?, _ rhs: CoordinatorProtocol?) {
@@ -218,4 +240,12 @@ struct NavigationStackCoordinatorTests {
 
 private class SomeTestCoordinator: CoordinatorProtocol {
     let id = UUID()
+}
+
+private class StopTrackingCoordinator: CoordinatorProtocol {
+    private(set) var didStop = false
+    
+    func stop() {
+        didStop = true
+    }
 }
