@@ -117,7 +117,9 @@ struct CallView: UIViewRepresentable {
             configuration.userContentController = userContentController
             configuration.allowsInlineMediaPlayback = true
             configuration.allowsPictureInPictureMediaPlayback = true
-            configuration.applicationNameForUserAgent = InfoPlistReader.main.bundleDisplayName
+            
+            let appName = InfoPlistReader.main.bundleDisplayName
+            configuration.applicationNameForUserAgent = configuration.applicationNameForUserAgent.map { "\($0) \(appName)" } ?? appName
             
             if let script = viewModelContext.viewState.script {
                 let userScript = WKUserScript(source: script, injectionTime: .atDocumentEnd, forMainFrameOnly: false)
