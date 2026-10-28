@@ -629,7 +629,7 @@ class MockScreen: Identifiable {
                                                              flowParameters: CommonFlowParameters(userSession: userSession,
                                                                                                   availableSessionsPublisher: .init([.init(userSession: userSession)]),
                                                                                                   bugReportService: BugReportServiceMock(.init()),
-                                                                                                  elementCallService: ElementCallServiceMock(.init()),
+                                                                                                  ongoingCallRoomIDPublisher: .init(nil),
                                                                                                   timelineControllerFactory: timelineControllerFactory,
                                                                                                   emojiProvider: EmojiProvider(userSettings: userSession.userSettings),
                                                                                                   linkMetadataProvider: LinkMetadataProvider(),
@@ -638,9 +638,31 @@ class MockScreen: Identifiable {
                                                                                                   userIndicatorController: UserIndicatorControllerMock(),
                                                                                                   stateMachineFactory: StateMachineFactory()))
             
+            let callFlowCoordinator = CallFlowCoordinator(parameters: .init(navigationRootCoordinator: navigationRootCoordinator,
+                                                                            userSessionManager: UserSessionManagerMock(.init(userSessions: .init([userSession]))),
+                                                                            elementCallService: ElementCallServiceMock(.init()),
+                                                                            elementCallManager: ElementCallManagerMock(),
+                                                                            windowManager: windowManager,
+                                                                            analytics: analytics))
+            callFlowCoordinator.start()
+            
+            flowCoordinator.actionsPublisher
+                .sink { action in
+                    switch action {
+                    case .presentCall(let roomProxy, let isVoiceCall):
+                        callFlowCoordinator.presentCall(roomProxy: roomProxy, isVoiceCall: isVoiceCall, userSession: userSession)
+                    case .minimizeCall:
+                        callFlowCoordinator.minimizeCall()
+                    case .logout, .clearCache, .forceLogout:
+                        break
+                    }
+                }
+                .store(in: &cancellables)
+            
             flowCoordinator.start()
             
             retainedState.append(flowCoordinator)
+            retainedState.append(callFlowCoordinator)
             
             return nil
         case .roomMembersListScreenPendingInvites:
@@ -679,7 +701,7 @@ class MockScreen: Identifiable {
                                                            flowParameters: CommonFlowParameters(userSession: userSession,
                                                                                                 availableSessionsPublisher: .init([.init(userSession: userSession)]),
                                                                                                 bugReportService: BugReportServiceMock(.init()),
-                                                                                                elementCallService: ElementCallServiceMock(.init()),
+                                                                                                ongoingCallRoomIDPublisher: .init(nil),
                                                                                                 timelineControllerFactory: TimelineControllerFactoryMock(.init()),
                                                                                                 emojiProvider: EmojiProvider(userSettings: userSession.userSettings),
                                                                                                 linkMetadataProvider: LinkMetadataProvider(),
@@ -776,7 +798,7 @@ class MockScreen: Identifiable {
                                                                flowParameters: CommonFlowParameters(userSession: userSession,
                                                                                                     availableSessionsPublisher: .init([.init(userSession: userSession)]),
                                                                                                     bugReportService: BugReportServiceMock(.init()),
-                                                                                                    elementCallService: ElementCallServiceMock(.init()),
+                                                                                                    ongoingCallRoomIDPublisher: .init(nil),
                                                                                                     timelineControllerFactory: TimelineControllerFactoryMock(.init()),
                                                                                                     emojiProvider: EmojiProvider(userSettings: userSession.userSettings),
                                                                                                     linkMetadataProvider: LinkMetadataProvider(),
@@ -831,7 +853,7 @@ class MockScreen: Identifiable {
                                                           flowParameters: CommonFlowParameters(userSession: userSession,
                                                                                                availableSessionsPublisher: .init([.init(userSession: userSession)]),
                                                                                                bugReportService: BugReportServiceMock(.init()),
-                                                                                               elementCallService: ElementCallServiceMock(.init()),
+                                                                                               ongoingCallRoomIDPublisher: .init(nil),
                                                                                                timelineControllerFactory: TimelineControllerFactoryMock(.init(timelineController: timelineController)),
                                                                                                emojiProvider: EmojiProvider(userSettings: userSession.userSettings),
                                                                                                linkMetadataProvider: LinkMetadataProvider(),

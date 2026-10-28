@@ -33,6 +33,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     // TODO: Each account's UserSession gets its own ElementCallService, which removes this one.
     private let elementCallService: ElementCallServiceProtocol
     private let elementCallManager: ElementCallManagerProtocol
+    private let callFlowCoordinator: CallFlowCoordinator
     
     /// Common background task to continue long-running tasks in the background.
     private var backgroundTask: UIBackgroundTaskIdentifier?
@@ -132,7 +133,16 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                 appHooks: appHooks,
                                                 networkMonitor: networkMonitor)
         notificationManager = NotificationManager(notificationCenter: UNUserNotificationCenter.current(), appSettings: appSettings)
-        userSessionManager = UserSessionManager(userSessionStore: userSessionStore, appSettings: appSettings, notificationManager: notificationManager, liveLocationManager: LiveLocationManager(appSettings: appSettings))
+        userSessionManager = UserSessionManager(userSessionStore: userSessionStore,
+                                                appSettings: appSettings,
+                                                notificationManager: notificationManager,
+                                                liveLocationManager: LiveLocationManager(appSettings: appSettings))
+        callFlowCoordinator = CallFlowCoordinator(parameters: .init(navigationRootCoordinator: navigationRootCoordinator,
+                                                                    userSessionManager: userSessionManager,
+                                                                    elementCallService: elementCallService,
+                                                                    elementCallManager: elementCallManager,
+                                                                    windowManager: windowManager,
+                                                                    analytics: analyticsService))
         
         let appLockService = AppLockService(keychainController: keychainController, appSettings: appSettings)
         let appLockNavigationCoordinator = NavigationRootCoordinator()
@@ -353,7 +363,18 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
         
         MXLog.info("Starting call in room: \(roomIdentifier)")
-        handleAppRoute(AppRoute.call(roomID: roomIdentifier, isVoiceCall: intent.callCapability == .audioCall), windowType: nil)
+        let isVoiceCall = intent.callCapability == .audioCall
+        Task {
+            await resumeClientServices()
+            
+            guard let userID = userSessionManager.userIDs.first else {
+                // TODO: Call back once an account signs in again (element-hq/element-meta#3325).
+                MXLog.info("Dropping the call in \(roomIdentifier), no account is signed in.")
+                return
+            }
+            
+            callFlowCoordinator.presentCall(userID: userID, roomID: roomIdentifier, isVoiceCall: isVoiceCall, isAnswered: false)
+        }
     }
     
     // MARK: - AuthenticationFlowCoordinatorDelegate
@@ -874,7 +895,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         let flowParameters = CommonFlowParameters(userSession: userSession,
                                                   availableSessionsPublisher: userSessionManager.sessionsPublisher.map { $0.map(UserSessionDetails.init) },
                                                   bugReportService: bugReportService,
-                                                  elementCallService: elementCallService,
+                                                  ongoingCallRoomIDPublisher: elementCallService.ongoingCallRoomIDPublisher,
                                                   timelineControllerFactory: TimelineControllerFactory(userSettings: userSession.userSettings),
                                                   emojiProvider: EmojiProvider(userSettings: userSession.userSettings),
                                                   linkMetadataProvider: LinkMetadataProvider(),
@@ -888,6 +909,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                                     appLockService: appLockFlowCoordinator.appLockService,
                                                                     flowParameters: flowParameters)
         
+        let userID = userSession.clientProxy.userID
         userSessionFlowCoordinator.actionsPublisher
             .sink { [weak self] action in
                 guard let self else { return }
@@ -899,6 +921,15 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                     stateMachine.processEvent(.clearCache)
                 case .forceLogout:
                     stateMachine.processEvent(.signOut(isSoft: false, disableAppLock: true))
+                case .presentCall(let roomProxy, let isVoiceCall):
+                    // Looked up, not captured: this sink outlives the session.
+                    guard let userSession = userSessionManager.session(for: userID) else {
+                        MXLog.error("Cannot present the call, \(userID) has no session.")
+                        return
+                    }
+                    callFlowCoordinator.presentCall(roomProxy: roomProxy, isVoiceCall: isVoiceCall, userSession: userSession)
+                case .minimizeCall:
+                    callFlowCoordinator.minimizeCall()
                 }
             }
             .store(in: &cancellables)
@@ -930,12 +961,15 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         elementCallService.setUserSession(nil)
         
         guard !isSoft else {
+            Task { await callFlowCoordinator.endCalls(userID: userSession.clientProxy.userID) }
             stateMachine.processEvent(.showSoftLogout)
             hideLoadingIndicator()
             return
         }
         
         Task {
+            await callFlowCoordinator.endCalls(userID: userSession.clientProxy.userID)
+            
             // Delete the pusher and stop the live location shares while the session can still reach the server.
             await userSession.notificationService.tearDown()
             await userSession.liveLocationService.stopAllLiveLocations()
@@ -1032,10 +1066,27 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                         self?.scheduleDelayedPauseServices()
                     }
                 case .callAnswered(let roomID, let isVoiceCall):
-                    self?.handleAppRoute(.call(roomID: roomID, isVoiceCall: isVoiceCall), windowType: nil)
+                    self?.presentAnsweredCall(roomID: roomID, isVoiceCall: isVoiceCall)
                 }
             }
             .store(in: &cancellables)
+        
+        callFlowCoordinator.start()
+    }
+    
+    private func presentAnsweredCall(roomID: String, isVoiceCall: Bool) {
+        Task {
+            await resumeClientServices()
+            
+            // TODO: Open it for the push's receiver once pushes carry one.
+            guard let userID = userSessionManager.userIDs.first else {
+                MXLog.error("Dropping the call answered in \(roomID), no account is signed in.")
+                elementCallManager.dropAnsweredCall(roomID: roomID)
+                return
+            }
+            
+            callFlowCoordinator.presentCall(userID: userID, roomID: roomID, isVoiceCall: isVoiceCall, isAnswered: true)
+        }
     }
     
     private func observeUserSessionChanges() {
@@ -1086,6 +1137,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         // Allow for everything to deallocate properly
         Task {
+            await callFlowCoordinator.endCalls(userID: userSession.clientProxy.userID)
             await userSessionManager.clearCaches(userID: userSession.clientProxy.userID)
             stateMachine.processEvent(.startWithExistingSession)
             hideLoadingIndicator()

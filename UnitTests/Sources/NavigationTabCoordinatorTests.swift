@@ -88,29 +88,6 @@ struct NavigationTabCoordinatorTests {
         #expect(navigationTabCoordinator.fullScreenCoverCoordinator == nil)
     }
     
-    @Test
-    mutating func overlay() {
-        let tabCoordinator = SomeTestCoordinator()
-        navigationTabCoordinator.setTabs([.init(coordinator: tabCoordinator, details: .init(tag: .tab, title: "Tab", icon: \.help, selectedIcon: \.helpSolid))])
-        
-        let overlayCoordinator = SomeTestCoordinator()
-        navigationTabCoordinator.setOverlayCoordinator(overlayCoordinator)
-        
-        assertCoordinatorsEqual(navigationTabCoordinator.tabCoordinators, [tabCoordinator])
-        assertCoordinatorsEqual(overlayCoordinator, navigationTabCoordinator.overlayCoordinator)
-        
-        // The coordinator should still be retained when changing the presentation mode.
-        navigationTabCoordinator.setOverlayPresentationMode(.minimized)
-        assertCoordinatorsEqual(overlayCoordinator, navigationTabCoordinator.overlayCoordinator)
-        navigationTabCoordinator.setOverlayPresentationMode(.fullScreen)
-        assertCoordinatorsEqual(overlayCoordinator, navigationTabCoordinator.overlayCoordinator)
-        
-        navigationTabCoordinator.setOverlayCoordinator(nil)
-        
-        assertCoordinatorsEqual(navigationTabCoordinator.tabCoordinators, [tabCoordinator])
-        #expect(navigationTabCoordinator.overlayCoordinator == nil)
-    }
-    
     // MARK: - Dismissal Callbacks
     
     @Test
@@ -153,34 +130,6 @@ struct NavigationTabCoordinatorTests {
         }
     }
     
-    @Test
-    mutating func overlayDismissalCallback() async {
-        let overlayCoordinator = SomeTestCoordinator()
-        
-        await confirmation("Wait for callback") { confirm in
-            navigationTabCoordinator.setOverlayCoordinator(overlayCoordinator) {
-                confirm()
-            }
-            
-            navigationTabCoordinator.setOverlayCoordinator(nil)
-        }
-    }
-    
-    @Test
-    mutating func overlayDismissalCallbackWhenChangingMode() async {
-        let overlayCoordinator = SomeTestCoordinator()
-        
-        await waitForConfirmation("Callback should not be called when just changing mode",
-                                  expectedCount: 0,
-                                  timeout: .seconds(1)) { confirmation in
-            navigationTabCoordinator.setOverlayCoordinator(overlayCoordinator) {
-                confirmation()
-            }
-            
-            navigationTabCoordinator.setOverlayPresentationMode(.minimized)
-        }
-    }
-    
     // MARK: - Stopping
     
     @Test
@@ -188,19 +137,16 @@ struct NavigationTabCoordinatorTests {
         let tabCoordinator = StopTrackingCoordinator()
         let sheetCoordinator = StopTrackingCoordinator()
         let fullScreenCoverCoordinator = StopTrackingCoordinator()
-        let overlayCoordinator = StopTrackingCoordinator()
         
         navigationTabCoordinator.setTabs([.init(coordinator: tabCoordinator, details: .init(tag: .tab, title: "Tab", icon: \.help, selectedIcon: \.helpSolid))])
         navigationTabCoordinator.setSheetCoordinator(sheetCoordinator)
         navigationTabCoordinator.setFullScreenCoverCoordinator(fullScreenCoverCoordinator)
-        navigationTabCoordinator.setOverlayCoordinator(overlayCoordinator)
         
         navigationTabCoordinator.stop()
         
         #expect(tabCoordinator.didStop)
         #expect(sheetCoordinator.didStop)
         #expect(fullScreenCoverCoordinator.didStop)
-        #expect(overlayCoordinator.didStop)
     }
     
     // MARK: - Private

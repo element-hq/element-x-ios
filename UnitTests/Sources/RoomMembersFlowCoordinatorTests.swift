@@ -56,7 +56,7 @@ struct RoomMembersFlowCoordinatorTests {
         let flowParameters = CommonFlowParameters(userSession: userSession,
                                                   availableSessionsPublisher: .init([.init(userSession: userSession)]),
                                                   bugReportService: BugReportServiceMock(.init()),
-                                                  elementCallService: ElementCallServiceMock(.init()),
+                                                  ongoingCallRoomIDPublisher: .init(nil),
                                                   timelineControllerFactory: TimelineControllerFactoryMock(.init()),
                                                   emojiProvider: EmojiProvider(userSettings: userSession.userSettings),
                                                   linkMetadataProvider: LinkMetadataProvider(),
