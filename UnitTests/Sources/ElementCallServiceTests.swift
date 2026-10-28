@@ -36,7 +36,7 @@ final class ElementCallServiceTests {
     // MARK: - Ringing call
     
     @Test
-    func aRemoteHangUpEndsTheRingingCall() async throws {
+    func remoteHangUpEndsRinging() async throws {
         await service.observeIncomingCall(roomID: "!room:example.com", rtcNotificationID: "$000")
         
         let deferred = deferFulfillment(service.actionsPublisher) { $0 == .incomingCallEnded(roomID: "!room:example.com", reason: .remoteEnded) }
@@ -45,7 +45,7 @@ final class ElementCallServiceTests {
     }
     
     @Test
-    func joiningFromAnotherDeviceEndsTheRingingCall() async throws {
+    func joinElsewhereEndsRinging() async throws {
         await service.observeIncomingCall(roomID: "!room:example.com", rtcNotificationID: "$000")
         
         let deferred = deferFulfillment(service.actionsPublisher) { $0 == .incomingCallEnded(roomID: "!room:example.com", reason: .answeredElsewhere) }
@@ -54,7 +54,7 @@ final class ElementCallServiceTests {
     }
     
     @Test
-    func decliningOnAnotherDeviceEndsTheRingingCall() async throws {
+    func declineElsewhereEndsRinging() async throws {
         await service.observeIncomingCall(roomID: "!room:example.com", rtcNotificationID: "$000")
         let listener = try #require(roomProxy.subscribeToCallDeclineEventsRtcNotificationEventIDListenerReceivedArguments?.listener)
         #expect(roomProxy.subscribeToCallDeclineEventsRtcNotificationEventIDListenerReceivedArguments?.rtcNotificationEventID == "$000")
@@ -69,7 +69,7 @@ final class ElementCallServiceTests {
     }
     
     @Test
-    func stoppingIgnoresTheRoomFromThenOn() async throws {
+    func stoppedWatchIgnoresRoom() async throws {
         await service.observeIncomingCall(roomID: "!room:example.com", rtcNotificationID: "$000")
         service.stopObservingIncomingCall()
         
@@ -79,7 +79,7 @@ final class ElementCallServiceTests {
     }
     
     @Test
-    func decliningSendsTheDecline() async {
+    func declineCallSendsDecline() async {
         await service.declineCall(roomID: "!room:example.com", rtcNotificationID: "$000")
         
         #expect(clientProxy.roomForIdentifierReceivedIdentifier == "!room:example.com")
@@ -87,11 +87,13 @@ final class ElementCallServiceTests {
     }
     
     @Test
-    func aWatchRequestedBeforeTheSessionStartsWithIt() async throws {
+    func watchWaitsForSession() async throws {
+        // Given a watch requested before there is any session.
         let service = ElementCallService(appSettings: appSettings)
         await service.observeIncomingCall(roomID: "!room:example.com", rtcNotificationID: "$000")
         #expect(!clientProxy.roomForIdentifierCalled)
         
+        // When the session arrives, then the room is watched with it.
         await waitForConfirmation { confirmation in
             roomProxy.subscribeToCallDeclineEventsRtcNotificationEventIDListenerClosure = { _, _ in
                 confirmation()
@@ -106,11 +108,13 @@ final class ElementCallServiceTests {
     }
     
     @Test
-    func aWatchStoppedBeforeTheSessionNeverStarts() async {
+    func stoppedWatchSkipsLateSession() async {
+        // Given a watch requested and stopped before there is any session.
         let service = ElementCallService(appSettings: appSettings)
         await service.observeIncomingCall(roomID: "!room:example.com", rtcNotificationID: "$000")
         service.stopObservingIncomingCall()
         
+        // When the session arrives, then the room is never fetched.
         await waitForConfirmation(expectedCount: 0, timeout: .milliseconds(100)) { confirmation in
             clientProxy.roomForIdentifierClosure = { [roomProxy] _ in
                 confirmation()
@@ -121,7 +125,7 @@ final class ElementCallServiceTests {
     }
     
     @Test
-    func theWatchSurvivesTheSessionChanging() async throws {
+    func watchSurvivesSessionChange() async throws {
         await service.observeIncomingCall(roomID: "!room:example.com", rtcNotificationID: "$000")
         
         service.setUserSession(nil)
@@ -151,10 +155,10 @@ final class ElementCallServiceTests {
         withExtendedLifetime(otherUserSession) { }
     }
     
-    // MARK: - Call screens
+    // MARK: - Call sessions
     
     @Test(arguments: [false, true])
-    func settingUpACallWaitsForTheManager(repliesLater: Bool) async {
+    func callSetupWaitsForManager(repliesLater: Bool) async {
         var order: [String] = []
         let cancellable = service.actionsPublisher.sink { [service] action in
             guard case let .callSessionStarted(roomID, _, _, _) = action else { return }
@@ -179,7 +183,7 @@ final class ElementCallServiceTests {
     }
     
     @Test
-    func aSecondSetUpForTheSameRoomReleasesTheFirst() async throws {
+    func secondSetupReleasesFirst() async throws {
         var returned: [String] = []
         
         let firstStarted = deferFulfillment(service.actionsPublisher) { $0 == .callSessionStarted(roomID: "!room:example.com", roomDisplayName: "first", isVideo: true, kind: .native) }
@@ -205,7 +209,7 @@ final class ElementCallServiceTests {
     }
     
     @Test
-    func callScreenReportsGoUpToTheManager() {
+    func callScreenReportsReachManager() {
         var actions: [ElementCallServiceAction] = []
         let cancellable = service.actionsPublisher.sink { actions.append($0) }
         defer { cancellable.cancel() }
@@ -221,10 +225,8 @@ final class ElementCallServiceTests {
                             .audioEnabledChanged(false, roomID: "!room:example.com")])
     }
     
-    // MARK: - Manager
-    
     @Test
-    func theOngoingCallIsPublished() {
+    func ongoingCallIsPublished() {
         service.ongoingCallChanged(roomID: "!room:example.com")
         #expect(service.ongoingCallRoomIDPublisher.value == "!room:example.com")
         
@@ -232,14 +234,14 @@ final class ElementCallServiceTests {
         #expect(service.ongoingCallRoomIDPublisher.value == nil)
     }
     
+    // MARK: - Native calls
+    
     @Test
-    func systemEventsGoToTheNativeCall() async throws {
+    func systemEventsReachNativeCall() async throws {
         let deferred = deferFulfillment(service.nativeCallEventsPublisher) { $0 == .endCallRequested(roomID: "!room:example.com") }
         service.systemEventReceived(.endCallRequested(roomID: "!room:example.com"))
         try await deferred.fulfill()
     }
-    
-    // MARK: - Native calls
     
     @Test
     func nativeCallStackNeedsBothTheSettingAndASession() {
@@ -295,6 +297,8 @@ final class ElementCallServiceTests {
         
         #expect(service.handleNativeCallRequest(roomProxy: roomProxy, isVoiceCall: false))
     }
+    
+    // MARK: - Helpers
     
     /// Builds a session whose client proxy can serve the native call stack, and holds on to it: the
     /// service only keeps a weak reference, as the app owns the session.

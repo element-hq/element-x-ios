@@ -54,7 +54,7 @@ final class ManualClockTests {
     }
     
     @Test
-    func aTaskCancelledBeforeItSleepsLeavesAnotherTasksSleepAlone() async throws {
+    func earlyCancelSparesOtherSleep() async throws {
         let sleeper = Task { try await clock.sleep(for: .seconds(10)) }
         await clock.waitForScheduledSleep()
         

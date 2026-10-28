@@ -421,7 +421,7 @@ final class ElementCallManagerTests {
     }
     
     @Test
-    func anAnsweredCallThatNeverOpensIsDroppedAfterAWhile() async throws {
+    func unopenedAnsweredCallIsDropped() async throws {
         await reportIncomingPush(isVoiceCall: false)
         await clock.waitForScheduledSleep()
         try await answerReportedCall()
@@ -440,7 +440,7 @@ final class ElementCallManagerTests {
     }
     
     @Test
-    func droppingAnAnsweredCallStopsItBlockingNewCalls() async throws {
+    func droppedAnsweredCallUnblocksNewCalls() async throws {
         await reportIncomingPush(isVoiceCall: false)
         try await answerReportedCall()
         
@@ -511,7 +511,7 @@ final class ElementCallManagerTests {
     }
     
     @Test
-    func droppingAnAnsweredNativeCallEndsItAsFailed() async throws {
+    func droppedAnsweredNativeCallEndsAsFailed() async throws {
         appSettings.nativeCallEnabled = true
         await reportIncomingPush(isVoiceCall: false)
         let answeredUUID = try await answerReportedCall()
@@ -570,7 +570,7 @@ final class ElementCallManagerTests {
     // MARK: - Service
     
     @Test
-    func theRingingCallIsWatchedByTheService() async {
+    func ringingCallIsWatched() async {
         await waitForConfirmation { confirmation in
             service.observeIncomingCallRoomIDRtcNotificationIDClosure = { _, _ in confirmation() }
             let payload = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 60)
@@ -584,7 +584,7 @@ final class ElementCallManagerTests {
     @Test(arguments: [(CallEndReason.remoteEnded, CXCallEndedReason.remoteEnded),
                       (.answeredElsewhere, .answeredElsewhere),
                       (.declinedElsewhere, .declinedElsewhere)])
-    func theServiceEndingTheRingEndsTheCall(reason: CallEndReason, callKitReason: CXCallEndedReason) async throws {
+    func incomingCallEndReportsReason(reason: CallEndReason, callKitReason: CXCallEndedReason) async throws {
         await reportIncomingPush(isVoiceCall: false)
         let ringingUUID = try #require(callProvider.reportNewIncomingCallWithUpdateCompletionReceivedArguments?.uuid)
         
@@ -598,7 +598,7 @@ final class ElementCallManagerTests {
     }
     
     @Test
-    func decliningGoesThroughTheService() async throws {
+    func declineGoesThroughService() async throws {
         await reportIncomingPush(isVoiceCall: false)
         let callID = try #require(callProvider.reportNewIncomingCallWithUpdateCompletionReceivedArguments?.uuid)
         
@@ -612,7 +612,7 @@ final class ElementCallManagerTests {
     }
     
     @Test
-    func answeringAWebCallOpensItOnceCallKitLetsGo() async throws {
+    func answeredWebCallOpens() async throws {
         await reportIncomingPush(isVoiceCall: false)
         let uuid = try #require(callProvider.reportNewIncomingCallWithUpdateCompletionReceivedArguments?.uuid)
         let deferredAnswer = deferFulfillment(manager.actionsPublisher) { $0 == .callAnswered(roomID: "!room:example.com", isVoiceCall: false) }
@@ -623,7 +623,7 @@ final class ElementCallManagerTests {
     }
     
     @Test
-    func aWebCallIsSetUpAtOnce() {
+    func webCallSetupIsImmediate() {
         serviceActions.send(.callSessionStarted(roomID: "!room:example.com", roomDisplayName: "welcome", isVideo: true, kind: .webView))
         
         #expect(service.callSessionSetUpRoomIDIsAcceptedReceivedArguments?.roomID == "!room:example.com")
@@ -633,7 +633,7 @@ final class ElementCallManagerTests {
     }
     
     @Test
-    func aNativeCallIsSetUpOnceCallKitKnowsIt() async {
+    func nativeCallSetupWaitsForCallKit() async {
         await waitForConfirmation { confirmation in
             service.callSessionSetUpRoomIDIsAcceptedClosure = { [callProvider] _, _ in
                 #expect(callProvider?.reportCallWithUpdatedCalled == true)
@@ -646,7 +646,7 @@ final class ElementCallManagerTests {
     }
     
     @Test
-    func aNativeCallWhoseStartFailsIsStillSetUp() async {
+    func failedNativeCallStartIsStillSetUp() async {
         callController.requestCompletionClosure = { _, completion in
             completion(NSError(domain: "CallKit", code: 1))
         }
@@ -658,7 +658,7 @@ final class ElementCallManagerTests {
     }
     
     @Test
-    func callKitEventsReachTheService() async throws {
+    func callKitEventsReachService() async throws {
         await startCallSession(kind: .native)
         let callID = try #require(callProvider.reportCallWithUpdatedReceivedArguments?.uuid)
         let provider = CXProvider(configuration: CXProviderConfiguration())
@@ -670,13 +670,15 @@ final class ElementCallManagerTests {
     }
     
     @Test
-    func aNativeCallsMuteReachesCallKit() async {
+    func nativeCallMuteReachesCallKit() async {
         await startCallSession(kind: .native)
         
         serviceActions.send(.audioEnabledChanged(false, roomID: "!room:example.com"))
         
         #expect((callController.requestCompletionReceivedArguments?.transaction.actions.first as? CXSetMutedCallAction)?.isMuted == true)
     }
+    
+    // MARK: - Helpers
     
     /// Starts a call session the way a call screen does, returning once the manager has set it up.
     private func startCallSession(roomID: String = "!room:example.com", roomDisplayName: String = "welcome", kind: ElementCallSessionKind) async {

@@ -87,8 +87,6 @@ protocol ElementCallServiceProtocol: AnyObject {
     /// Brings the native call back out of its system window.
     func restoreNativeCall()
     
-    // MARK: Call screens
-    
     /// Registers the call with CallKit, adopting the ringing incoming call for the room if there is one.
     /// Returns once the manager has set the call up.
     func setupCallSession(roomID: String, roomDisplayName: String, isVideo: Bool, kind: ElementCallSessionKind) async
@@ -107,8 +105,6 @@ protocol ElementCallServiceProtocol: AnyObject {
     /// Mirrors the native call's mute into CallKit. Web view calls aren't tracked there, so they
     /// never call this.
     func setAudioEnabled(_ enabled: Bool, roomID: String)
-    
-    // MARK: Manager
     
     /// Watches the room of the ringing call, reporting when it stops ringing elsewhere.
     func observeIncomingCall(roomID: String, rtcNotificationID: String?) async

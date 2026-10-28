@@ -108,8 +108,6 @@ final class ElementCallService: ElementCallServiceProtocol {
         nativeCallStack?.restore()
     }
     
-    // MARK: Call screens
-    
     func setupCallSession(roomID: String, roomDisplayName: String, isVideo: Bool, kind: ElementCallSessionKind) async {
         await withCheckedContinuation { continuation in
             if let staleContinuation = callSessionSetUpContinuations.removeValue(forKey: roomID) {
@@ -138,8 +136,6 @@ final class ElementCallService: ElementCallServiceProtocol {
     func setAudioEnabled(_ enabled: Bool, roomID: String) {
         actionsSubject.send(.audioEnabledChanged(enabled, roomID: roomID))
     }
-    
-    // MARK: Manager
     
     func observeIncomingCall(roomID: String, rtcNotificationID: String?) async {
         stopObservingIncomingCall()

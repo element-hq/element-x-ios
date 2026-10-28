@@ -30,6 +30,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private let appDelegate: AppDelegate
     private let appHooks: AppHooks
     private let bugReportService: BugReportServiceProtocol
+    // TODO: Each account's UserSession gets its own ElementCallService, which removes this one.
     private let elementCallService: ElementCallServiceProtocol
     private let elementCallManager: ElementCallManagerProtocol
     

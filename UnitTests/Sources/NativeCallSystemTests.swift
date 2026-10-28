@@ -12,22 +12,23 @@ import Testing
 
 struct NativeCallSystemTests {
     private let service = ElementCallServiceMock(.init())
+    private let nativeCallEvents = PassthroughSubject<NativeCallEvent, Never>()
+    private let system: NativeCallSystem
+    
+    init() {
+        service.nativeCallEventsPublisher = nativeCallEvents.eraseToAnyPublisher()
+        system = NativeCallSystem(service: service)
+    }
     
     @Test
-    func startingACallSetsUpANativeSession() async {
-        let system = NativeCallSystem(service: service)
-        
+    func startCallSetsUpNativeSession() async {
         await system.startCall(roomID: "!room:example.com", displayName: "welcome", isVideo: true)
         
         #expect(service.setupCallSessionRoomIDRoomDisplayNameIsVideoKindReceivedArguments?.kind == .native)
     }
     
     @Test
-    func nativeCallEventsReachTheCallStack() {
-        let nativeCallEvents = PassthroughSubject<NativeCallEvent, Never>()
-        service.nativeCallEventsPublisher = nativeCallEvents.eraseToAnyPublisher()
-        let system = NativeCallSystem(service: service)
-        
+    func eventsReachCallStack() {
         var events: [ElementCallSystemEvent] = []
         let cancellable = system.events.sink { events.append($0) }
         defer { cancellable.cancel() }
@@ -44,9 +45,7 @@ struct NativeCallSystemTests {
     }
     
     @Test
-    func ourHangUpTearsTheCallDown() {
-        let system = NativeCallSystem(service: service)
-        
+    func localEndTearsDownCall() {
         system.endCall(roomID: "!room:example.com", reason: .local)
         
         #expect(service.tearDownCallSessionRoomIDReceivedRoomID == "!room:example.com")
@@ -56,9 +55,7 @@ struct NativeCallSystemTests {
     @Test(arguments: [(ElementCallEndReason.remoteEnded, CallEndReason.remoteEnded),
                       (.unanswered, .unanswered),
                       (.failed, .failed)])
-    func aCallThatEndedWithoutUsIsReportedWithItsReason(reason: ElementCallEndReason, expectedReason: CallEndReason) {
-        let system = NativeCallSystem(service: service)
-        
+    func otherEndIsReportedWithReason(reason: ElementCallEndReason, expectedReason: CallEndReason) {
         system.endCall(roomID: "!room:example.com", reason: reason)
         
         #expect(service.reportCallSessionEndedRoomIDReasonReceivedArguments?.roomID == "!room:example.com")
