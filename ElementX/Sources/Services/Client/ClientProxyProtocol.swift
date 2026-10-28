@@ -175,7 +175,7 @@ protocol ClientProxyProtocol: AnyObject {
     var isLiveKitRTCSupported: Bool { get async }
     
     /// Builds the call package's Matrix backend, `nil` when not backed by a real SDK client.
-    func makeNativeCallBackend() -> (any MatrixBackend)?
+    func makeNativeCallBackend() -> (any ElementCallMatrixBackendProtocol)?
     
     var isLoginWithQRCodeSupported: Bool { get async }
     

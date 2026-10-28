@@ -13,7 +13,7 @@ import Synchronization
 // The SDK's listener protocols, each over a closure, so a subscription can say what it delivers where
 // it subscribes.
 
-final nonisolated class SdkStateEventsListener: RoomStateEventsListener {
+final nonisolated class SDKStateEventsListener: RoomStateEventsListener {
     private let onUpdate: @Sendable ([RoomStateEvent]) -> Void
     
     init(onUpdate: @escaping @Sendable ([RoomStateEvent]) -> Void) {
@@ -25,7 +25,7 @@ final nonisolated class SdkStateEventsListener: RoomStateEventsListener {
     }
 }
 
-final nonisolated class SdkMessageLikeEventsListener: RoomMessageLikeEventsListener {
+final nonisolated class SDKMessageLikeEventsListener: RoomMessageLikeEventsListener {
     private let onEvent: @Sendable (RoomMessageLikeEvent) -> Void
     
     init(onEvent: @escaping @Sendable (RoomMessageLikeEvent) -> Void) {
@@ -37,7 +37,7 @@ final nonisolated class SdkMessageLikeEventsListener: RoomMessageLikeEventsListe
     }
 }
 
-final nonisolated class SdkToDeviceListener: ToDeviceMessageListener {
+final nonisolated class SDKToDeviceListener: ToDeviceMessageListener {
     private let onMessage: @Sendable (ToDeviceMessage) -> Void
     
     init(onMessage: @escaping @Sendable (ToDeviceMessage) -> Void) {
@@ -51,22 +51,22 @@ final nonisolated class SdkToDeviceListener: ToDeviceMessageListener {
 
 /// Folds the SDK's resets and changes into the whole set, which is what the core wants. The first
 /// update is the current set, an empty one included.
-final nonisolated class SdkStickyEventsListener: StickyEventsListener {
-    private let sink: RoomSink
-    private let set = Mutex(SdkStickyEventSet())
+final nonisolated class SDKStickyEventsListener: StickyEventsListener {
+    private let sink: ElementCallRoomSink
+    private let set = Mutex(SDKStickyEventSet())
     
-    init(sink: RoomSink) {
+    init(sink: ElementCallRoomSink) {
         self.sink = sink
     }
     
     func onUpdate(update: StickyEventsUpdate) {
-        sink.onStickyEvents(events: set.withLock { $0.apply(update) })
+        sink.deliverStickyEvents(set.withLock { $0.apply(update) })
     }
 }
 
 /// The room's encryption and joined members, both read off the room info, which is what changes when
 /// either does. One info subscription for the two, each subject following it in its own task.
-final nonisolated class SdkRoomInfoFeed: Sendable {
+final nonisolated class SDKRoomInfoFeed: Sendable {
     let handle: TaskHandle
     
     private let room: Room
@@ -81,7 +81,7 @@ final nonisolated class SdkRoomInfoFeed: Sendable {
         let (memberUpdates, members) = AsyncStream<Void>.makeStream(bufferingPolicy: .bufferingNewest(1))
         self.encryptionUpdates = encryptionUpdates
         self.memberUpdates = memberUpdates
-        handle = room.subscribeToRoomInfoUpdates(listener: SdkRoomInfoListener {
+        handle = room.subscribeToRoomInfoUpdates(listener: SDKRoomInfoListener {
             encryption.yield()
             members.yield()
         })
@@ -91,12 +91,12 @@ final nonisolated class SdkRoomInfoFeed: Sendable {
     /// core treats cleartext membership as valid in an unencrypted room, so an unknown state delivers
     /// nothing, which keeps the call from joining rather than letting it join an encrypted room
     /// believing it is not.
-    func deliverEncryption(into sink: RoomSink) async {
+    func deliverEncryption(into sink: ElementCallRoomSink) async {
         var lastDelivered: Bool?
         func deliver(_ state: EncryptionState) {
-            guard let isEncrypted = SdkMappings.isEncrypted(state), isEncrypted != lastDelivered else { return }
+            guard let isEncrypted = SDKMappings.isEncrypted(state), isEncrypted != lastDelivered else { return }
             lastDelivered = isEncrypted
-            sink.onEncryption(encrypted: isEncrypted)
+            sink.deliverEncryption(isEncrypted: isEncrypted)
         }
         
         do {
@@ -113,12 +113,12 @@ final nonisolated class SdkRoomInfoFeed: Sendable {
     /// Re-read on every room info update rather than when the joined count moves: one person leaving
     /// as another joins keeps the count while the membership differs, and the core would carry on
     /// encrypting media for whoever left.
-    func deliverJoinedMembers(into sink: RoomSink) async {
+    func deliverJoinedMembers(into sink: ElementCallRoomSink) async {
         var lastDelivered: [String]?
         func deliver() async {
-            guard let members = await joinedMembers(), SdkMappings.shouldDeliver(members, lastDelivered: lastDelivered) else { return }
+            guard let members = await joinedMembers(), SDKMappings.shouldDeliver(members, lastDelivered: lastDelivered) else { return }
             lastDelivered = members
-            sink.onJoinedMembers(userIds: members)
+            sink.deliverJoinedMembers(members)
         }
         
         await deliver()
@@ -144,7 +144,7 @@ final nonisolated class SdkRoomInfoFeed: Sendable {
     }
 }
 
-private final nonisolated class SdkRoomInfoListener: RoomInfoListener {
+private final nonisolated class SDKRoomInfoListener: RoomInfoListener {
     private let onUpdate: @Sendable () -> Void
     
     init(onUpdate: @escaping @Sendable () -> Void) {

@@ -90,7 +90,7 @@ packages:
     exactVersion: 0.28.1-rc.1
   ElementCall:
     url: https://github.com/element-hq/element-call-ios # Native implementation
-    exactVersion: 0.1.0-rc.12
+    exactVersion: 0.1.0-rc.13
     # path: ../element-call-ios
   Emojibase:
     url: https://github.com/matrix-org/emojibase-bindings

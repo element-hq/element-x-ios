@@ -33,7 +33,7 @@ final class NativeCallStack {
     /// A call requested while another one was still running, started once that one has ended.
     private var pendingCallRequest: (roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool)?
     
-    init(backend: any MatrixBackend,
+    init(backend: any ElementCallMatrixBackendProtocol,
          system: any ElementCallSystemProvidingProtocol,
          options: ElementCallOptions,
          style: ElementCallStyle) {

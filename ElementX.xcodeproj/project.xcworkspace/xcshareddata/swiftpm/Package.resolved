@@ -60,8 +60,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/element-call-ios",
       "state" : {
-        "revision" : "95cdd869ca0a54906000c0017f0eb34b3499d549",
-        "version" : "0.1.0-rc.12"
+        "revision" : "8e9ae6edc68667e1951d2b8ac8c83841e7f08447",
+        "version" : "0.1.0-rc.13"
       }
     },
     {
