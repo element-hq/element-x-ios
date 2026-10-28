@@ -17,4 +17,7 @@ enum ElementCallManagerAction: Equatable {
 /// The app's single owner of VoIP pushes and CallKit: decides what rings, and tracks the ringing and ongoing calls.
 protocol ElementCallManagerProtocol: AnyObject {
     var actionsPublisher: AnyPublisher<ElementCallManagerAction, Never> { get }
+    
+    /// Forgets a call that was answered but never opened, which would otherwise count as a call in progress.
+    func dropAnsweredCall(roomID: String)
 }

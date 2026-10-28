@@ -86,6 +86,8 @@ protocol ElementCallServiceProtocol: AnyObject {
     /// we hung up and ask the call stack to end a call it already has.
     func reportCallSessionEnded(roomID: String, reason: CXCallEndedReason)
     
+    /// Mirrors the native call's mute into CallKit. Web view calls aren't tracked there, so they
+    /// never call this.
     func setAudioEnabled(_ enabled: Bool, roomID: String)
     
     // MARK: Manager

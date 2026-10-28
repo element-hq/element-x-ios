@@ -30,12 +30,6 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     @CancellableTask
     private var timeoutTask: Task<Void, Never>?
     
-    /// Designated initialiser
-    /// - Parameters:
-    ///   - elementCallService: service responsible for setting up CallKit
-    ///   - roomProxy: The room in which the call should be created
-    ///   - callBaseURL: Which Element Call instance should be used
-    ///   - clientID: Something to identify the current client on the Element Call side
     init(elementCallService: ElementCallServiceProtocol,
          configuration: ElementCallConfiguration,
          allowPictureInPicture: Bool,
@@ -73,8 +67,9 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
                 switch action {
                 case .callEnded:
                     actionsSubject.send(.dismiss)
-                case .mediaStateChanged(let audioEnabled, _):
-                    elementCallService.setAudioEnabled(audioEnabled, roomID: configuration.callRoomID)
+                case .mediaStateChanged:
+                    // CallKit never tracks web calls, so their mute isn't relayed.
+                    break
                 }
             }
             .store(in: &cancellables)

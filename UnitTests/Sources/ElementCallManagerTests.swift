@@ -390,7 +390,7 @@ final class ElementCallManagerTests {
         // The call screen couldn't open, e.g. because the room isn't joined.
         serviceActions.send(.callSessionEnded(roomID: "!room:example.com", reason: nil))
         
-        await reportIncomingPush(isVoiceCall: false, roomID: "!other:example.com")
+        await reportIncomingPush(isVoiceCall: false, roomID: "!other:example.com", rtcNotificationID: "$111")
         
         #expect(callProvider.reportNewIncomingCallWithUpdateCompletionReceivedArguments?.update.remoteHandle?.value == "!other:example.com")
         #expect(!callProvider.reportCallWithEndedAtReasonReceivedInvocations.contains { $0.reason == .unanswered })
@@ -417,6 +417,37 @@ final class ElementCallManagerTests {
         clock.advance(by: .seconds(70))
         
         try await deferredTimeout.fulfill()
+    }
+    
+    @Test
+    func anAnsweredCallThatNeverOpensIsDroppedAfterAWhile() async throws {
+        await reportIncomingPush(isVoiceCall: false)
+        await clock.waitForScheduledSleep()
+        try await answerReportedCall()
+        
+        // Nothing opens the call, e.g. it was answered while signed out.
+        #expect(await clock.waitForScheduledSleep() == .seconds(30))
+        await waitForConfirmation("The dropped call stops being watched") { confirmation in
+            service.stopObservingIncomingCallClosure = { confirmation() }
+            clock.advance(by: .seconds(30))
+        }
+        service.stopObservingIncomingCallClosure = nil
+        
+        await reportIncomingPush(isVoiceCall: false, roomID: "!other:example.com", rtcNotificationID: "$111")
+        #expect(callProvider.reportNewIncomingCallWithUpdateCompletionReceivedArguments?.update.remoteHandle?.value == "!other:example.com")
+        #expect(!callProvider.reportCallWithEndedAtReasonReceivedInvocations.contains { $0.reason == .unanswered })
+    }
+    
+    @Test
+    func droppingAnAnsweredCallStopsItBlockingNewCalls() async throws {
+        await reportIncomingPush(isVoiceCall: false)
+        try await answerReportedCall()
+        
+        manager.dropAnsweredCall(roomID: "!room:example.com")
+        
+        await reportIncomingPush(isVoiceCall: false, roomID: "!other:example.com", rtcNotificationID: "$111")
+        #expect(callProvider.reportNewIncomingCallWithUpdateCompletionReceivedArguments?.update.remoteHandle?.value == "!other:example.com")
+        #expect(!callProvider.reportCallWithEndedAtReasonReceivedInvocations.contains { $0.reason == .unanswered })
     }
     
     // MARK: - Native calls
@@ -476,6 +507,20 @@ final class ElementCallManagerTests {
         let (uuid, reason) = try await deferredEndedCall.fulfill()
         #expect(uuid == answeredUUID)
         #expect(reason == .failed)
+    }
+    
+    @Test
+    func droppingAnAnsweredNativeCallEndsItAsFailed() async throws {
+        appSettings.nativeCallEnabled = true
+        await reportIncomingPush(isVoiceCall: false)
+        let answeredUUID = try await answerReportedCall()
+        
+        manager.dropAnsweredCall(roomID: "!other:example.com")
+        #expect(!callProvider.reportCallWithEndedAtReasonCalled)
+        
+        manager.dropAnsweredCall(roomID: "!room:example.com")
+        #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.uuid == answeredUUID)
+        #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.reason == .failed)
     }
     
     @Test
@@ -639,11 +684,12 @@ final class ElementCallManagerTests {
     }
     
     /// Delivers a VoIP push and waits for it to be reported, returning once the call is ringing.
-    private func reportIncomingPush(isVoiceCall: Bool, roomID: String = "!room:example.com") async {
+    private func reportIncomingPush(isVoiceCall: Bool, roomID: String = "!room:example.com", rtcNotificationID: String = "$000") async {
         await waitForConfirmation { confirmation in
             let payload = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 60)
                 .updateIsVoice(isVoiceCall)
                 .updatingRoomID(roomID)
+                .updatingRTCNotificationID(rtcNotificationID)
             
             manager.pushRegistry(pushRegistry, didReceiveIncomingPushWith: payload, for: .voIP) {
                 confirmation()

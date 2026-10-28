@@ -214,6 +214,10 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
             return
         }
         
+        dropAnsweredCall(roomID: roomID)
+    }
+    
+    func dropAnsweredCall(roomID: String) {
         // Answered and handed over, but the stack couldn't take it. Ending it here rather than
         // waiting for the watchdog takes the system call UI away straight away.
         if answeredNativeCallID?.roomID == roomID {
@@ -229,7 +233,7 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
             return
         }
         
-        MXLog.info("Not tearing down the call session, no call for room \(roomID)")
+        MXLog.info("Not dropping an answered call, none for room \(roomID)")
     }
     
     private func reportCallSessionEnded(roomID: String, reason: CXCallEndedReason) {
@@ -447,6 +451,7 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
         // Cancelled now rather than after the delay, by when it may belong to a call that rang since.
         endUnansweredCallTask?.cancel()
         isIncomingCallAnswered = true
+        dropAnsweredCallIfItNeverOpens(incomingCallID)
         
         // And delay ending the call so that the app has enough time
         // to get deeplinked into
@@ -585,6 +590,20 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
             
             MXLog.error("The native call stack never took over the answered call, ending it")
             endPendingCall()
+        }
+    }
+    
+    /// Drops a call answered for the web view that no call screen took over, e.g. one answered while signed out.
+    private func dropAnsweredCallIfItNeverOpens(_ callID: CallID) {
+        endPendingCallTask = Task { [weak self] in
+            try? await self?.timeProvider.clock.sleep(for: .seconds(30))
+            
+            guard let self, !Task.isCancelled, isIncomingCallAnswered, incomingCallID == callID else {
+                return
+            }
+            
+            MXLog.error("No call screen took over the answered call, dropping it")
+            clearIncomingCallState()
         }
     }
     

@@ -5073,6 +5073,37 @@ nonisolated class ElementCallManagerMock: ElementCallManagerProtocol, @unchecked
     }
     nonisolated(unsafe) var underlyingActionsPublisher: AnyPublisher<ElementCallManagerAction, Never>!
 
+    //MARK: - dropAnsweredCall
+
+    private let dropAnsweredCallRoomIDCallsCountLock = NSLock()
+    private nonisolated(unsafe) var dropAnsweredCallRoomIDUnderlyingCallsCount = 0
+    var dropAnsweredCallRoomIDCallsCount: Int {
+        get { dropAnsweredCallRoomIDCallsCountLock.withLock { dropAnsweredCallRoomIDUnderlyingCallsCount } }
+        set { dropAnsweredCallRoomIDCallsCountLock.withLock { dropAnsweredCallRoomIDUnderlyingCallsCount = newValue } }
+    }
+    var dropAnsweredCallRoomIDCalled: Bool {
+        return dropAnsweredCallRoomIDCallsCount > 0
+    }
+    private let dropAnsweredCallRoomIDReceivedRoomIDLock = NSLock()
+    private nonisolated(unsafe) var dropAnsweredCallRoomIDUnderlyingReceivedRoomID: String?
+    var dropAnsweredCallRoomIDReceivedRoomID: String? {
+        get { dropAnsweredCallRoomIDReceivedRoomIDLock.withLock { dropAnsweredCallRoomIDUnderlyingReceivedRoomID } }
+        set { dropAnsweredCallRoomIDReceivedRoomIDLock.withLock { dropAnsweredCallRoomIDUnderlyingReceivedRoomID = newValue } }
+    }
+    private let dropAnsweredCallRoomIDReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var dropAnsweredCallRoomIDUnderlyingReceivedInvocations: [String] = []
+    var dropAnsweredCallRoomIDReceivedInvocations: [String] {
+        get { dropAnsweredCallRoomIDReceivedInvocationsLock.withLock { dropAnsweredCallRoomIDUnderlyingReceivedInvocations } }
+        set { dropAnsweredCallRoomIDReceivedInvocationsLock.withLock { dropAnsweredCallRoomIDUnderlyingReceivedInvocations = newValue } }
+    }
+    nonisolated(unsafe) var dropAnsweredCallRoomIDClosure: ((String) -> Void)?
+
+    func dropAnsweredCall(roomID: String) {
+        dropAnsweredCallRoomIDCallsCountLock.withLock { dropAnsweredCallRoomIDUnderlyingCallsCount += 1 }
+        dropAnsweredCallRoomIDReceivedRoomID = roomID
+        dropAnsweredCallRoomIDReceivedInvocationsLock.withLock { dropAnsweredCallRoomIDUnderlyingReceivedInvocations.append(roomID) }
+        dropAnsweredCallRoomIDClosure?(roomID)
+    }
 }
 nonisolated class ElementCallServiceMock: ElementCallServiceProtocol, @unchecked Sendable {
     var actionsPublisher: AnyPublisher<ElementCallServiceAction, Never> {
