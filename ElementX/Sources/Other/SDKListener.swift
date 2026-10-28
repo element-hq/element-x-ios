@@ -276,6 +276,12 @@ nonisolated extension SDKListener: PaginationStatusListener where T == Paginatio
     }
 }
 
+nonisolated extension SDKListener: FullyReadEventIdListener where T == String? {
+    func onUpdate(eventId: String?) {
+        onUpdateClosure(eventId)
+    }
+}
+
 nonisolated extension SDKListener: ProgressWatcher where T == Double {
     func transmissionProgress(progress: TransmissionProgress) {
         DispatchQueue.main.async { [weak self] in

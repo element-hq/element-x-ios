@@ -31,6 +31,7 @@ extension TimelineProxyMock {
         sendReadReceiptForTypeReturnValue = .success(())
         createPollQuestionAnswersMaxSelectionsPollKindReturnValue = .success(())
         editPollOriginalQuestionAnswersMaxSelectionsPollKindReturnValue = .success(())
+        fullyReadEventIDPublisher = Empty().eraseToAnyPublisher()
         
         if let provider = configuration.timelineItemProvider {
             timelineItemProvider = provider

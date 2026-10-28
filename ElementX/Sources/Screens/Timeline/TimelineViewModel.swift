@@ -139,6 +139,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         }
         
         state.timelineState.paginationState = timelineController.paginationState
+        state.timelineState.fullyReadEventID = timelineController.fullyReadEventID
         buildTimelineViews(timelineItems: timelineController.timelineItems)
         
         updateRoomInfo(roomProxy.infoPublisher.value)
@@ -188,9 +189,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             Task {
                 _ = await roomProxy.markAsRead(receiptType: .fullyRead)
                 // Clear locally so the jump-to-unread button hides without waiting
-                // for the SDK to push a refreshed RoomInfo. Doing this after the
-                // await means any stale RoomInfo update racing the mark-as-read
-                // call has already landed and can't overwrite this clear.
+                // for the timeline to publish the new marker once it syncs back.
                 state.timelineState.fullyReadEventID = nil
             }
         case .displayTimelineItemMenu(let itemID):
@@ -451,7 +450,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     private func updateRoomInfo(_ roomInfo: RoomInfoProxyProtocol) {
         state.pinnedEventIDs = roomInfo.pinnedEventIDs
         state.isDM = roomInfo.isDM
-        state.timelineState.fullyReadEventID = roomInfo.fullyReadEventID
         
         if let powerLevels = roomInfo.powerLevels {
             state.canCurrentUserSendMessage = powerLevels.canOwnUser(sendMessage: .roomMessage)
@@ -492,6 +490,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                     }
                 case .messageSentOrEdited:
                     actionsSubject.send(.composer(action: .clear))
+                case .fullyReadEventID(let eventID):
+                    state.timelineState.fullyReadEventID = eventID
                 }
             }
             .store(in: &cancellables)

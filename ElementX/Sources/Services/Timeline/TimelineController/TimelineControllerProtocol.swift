@@ -15,6 +15,7 @@ enum TimelineControllerCallback {
     case paginationState(TimelinePaginationState)
     case isLive(Bool)
     case messageSentOrEdited
+    case fullyReadEventID(String?)
 }
 
 enum TimelineControllerAction {
@@ -69,6 +70,10 @@ protocol TimelineControllerProtocol: Sendable {
     func paginateForwards(requestSize: UInt16) async -> Result<Void, TimelineControllerError>
     
     func sendReadReceipt(for itemID: TimelineItemIdentifier) async
+    
+    /// The active timeline's ``TimelineProxyProtocol/fullyReadEventID``.
+    /// Changes are sent through the `fullyReadEventID` callback.
+    var fullyReadEventID: String? { get }
     
     func edit(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID,
               message: String,

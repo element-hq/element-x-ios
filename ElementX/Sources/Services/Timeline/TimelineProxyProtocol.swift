@@ -151,6 +151,12 @@ protocol TimelineProxyProtocol: Sendable {
     func sendReadReceipt(for eventID: String, type: ReceiptType) async -> Result<Void, TimelineProxyError>
     func markAsRead(receiptType: ReceiptType) async -> Result<Void, TimelineProxyError>
     
+    /// The closest visible event at or before the user's `m.fully_read` marker, which may point to an
+    /// event that isn't rendered. The marker's own event ID if neither is loaded.
+    var fullyReadEventID: String? { get }
+    /// Updates to ``fullyReadEventID``, delivered on the main actor.
+    var fullyReadEventIDPublisher: AnyPublisher<String?, Never> { get }
+    
     func sendMessageEventContent(_ messageContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, TimelineProxyError>
     
     func sendMessage(_ message: String,
