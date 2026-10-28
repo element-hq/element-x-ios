@@ -225,9 +225,12 @@ class TimelineMediaPreviewController: QLPreviewController {
     private func updateBarButtons() {
         guard let topItem = navigationBar?.topItem else { return }
         
-        if topItem.leftBarButtonItem?.customView == nil {
-            let button = UIBarButtonItem(customView: detailsButtonHostingController.view)
-            navigationBar?.topItem?.leftBarButtonItem = button
+        if #available(iOS 27, *) {
+            if topItem.rightBarButtonItem?.customView == nil {
+                topItem.rightBarButtonItem = UIBarButtonItem(customView: detailsButtonHostingController.view)
+            }
+        } else if topItem.leftBarButtonItem?.customView == nil {
+            topItem.leftBarButtonItem = UIBarButtonItem(customView: detailsButtonHostingController.view)
         }
     }
     
