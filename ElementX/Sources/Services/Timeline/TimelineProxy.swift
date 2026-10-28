@@ -14,6 +14,17 @@ final class TimelineProxy: TimelineProxyProtocol {
     private let timeline: Timeline
     
     private var backPaginationStateObservationToken: TaskHandle?
+    private var fullyReadEventIDObservationToken: TaskHandle?
+    
+    private let fullyReadEventIDSubject = PassthroughSubject<String?, Never>()
+    
+    var fullyReadEventID: String? {
+        timeline.fullyReadEventId()
+    }
+    
+    var fullyReadEventIDPublisher: AnyPublisher<String?, Never> {
+        fullyReadEventIDSubject.eraseToAnyPublisher()
+    }
     
     // The default values shouldn't matter here as they will be updated when calling subscribeToPagination
     // but empirically we randomly see the timeline start virtual item when we shouldn't.
@@ -33,6 +44,7 @@ final class TimelineProxy: TimelineProxyProtocol {
     deinit {
         backPaginationStatusContinuation.finish()
         backPaginationStateObservationToken?.cancel()
+        fullyReadEventIDObservationToken?.cancel()
     }
     
     /// Bridge from the SDK's synchronous callback into Swift Concurrency. Yielding is safe from any
@@ -71,6 +83,10 @@ final class TimelineProxy: TimelineProxyProtocol {
             .eraseToAnyPublisher()
         
         await subscribeToPagination()
+        
+        fullyReadEventIDObservationToken = timeline.subscribeToFullyReadEventId(listener: SDKListener.onMainActor { [weak self] eventID in
+            self?.fullyReadEventIDSubject.send(eventID)
+        })
         
         let provider = TimelineItemProvider(timeline: timeline, kind: kind, paginationStatePublisher: paginationStatePublisher)
         
