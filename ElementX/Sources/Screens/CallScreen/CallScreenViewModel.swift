@@ -30,12 +30,6 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     @CancellableTask
     private var timeoutTask: Task<Void, Never>?
     
-    /// Designated initialiser
-    /// - Parameters:
-    ///   - elementCallService: service responsible for setting up CallKit
-    ///   - roomProxy: The room in which the call should be created
-    ///   - callBaseURL: Which Element Call instance should be used
-    ///   - clientID: Something to identify the current client on the Element Call side
     init(elementCallService: ElementCallServiceProtocol,
          configuration: ElementCallConfiguration,
          allowPictureInPicture: Bool,
@@ -53,27 +47,6 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         super.init(initialViewState: CallScreenViewState(script: CallScreenJavaScriptMessageName.allCasesInjectionScript))
         
         state.swiftUICallViewCoordinator = .init(viewModelContext: context)
-        
-        elementCallService.actions
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] action in
-                guard let self else { return }
-                
-                switch action {
-                case let .setAudioEnabled(enabled, roomID):
-                    guard roomID == configuration.callRoomID else {
-                        MXLog.error("Received mute request for a different room: \(roomID) != \(configuration.callRoomID)")
-                        return
-                    }
-                    
-                    Task {
-                        await self.setAudioEnabled(enabled)
-                    }
-                default:
-                    break
-                }
-            }
-            .store(in: &cancellables)
         
         widgetDriver.messagePublisher
             .receive(on: DispatchQueue.main)
@@ -94,8 +67,9 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
                 switch action {
                 case .callEnded:
                     actionsSubject.send(.dismiss)
-                case .mediaStateChanged(let audioEnabled, _):
-                    elementCallService.setAudioEnabled(audioEnabled, roomID: configuration.callRoomID)
+                case .mediaStateChanged:
+                    // CallKit never tracks web calls, so their mute isn't relayed.
+                    break
                 }
             }
             .store(in: &cancellables)
@@ -197,7 +171,8 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
             
             await elementCallService.setupCallSession(roomID: configuration.roomProxy.id,
                                                       roomDisplayName: configuration.roomProxy.infoPublisher.value.displayNameOrID,
-                                                      isVideo: !configuration.voiceOnly)
+                                                      isVideo: !configuration.voiceOnly,
+                                                      kind: .webView)
         }
         
         timeoutTask = Task { [weak self] in
@@ -235,14 +210,6 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         case .failure:
             actionsSubject.send(.dismiss)
         }
-    }
-    
-    private func setAudioEnabled(_ enabled: Bool) async {
-        let message = ElementCallWidgetMessage(direction: .toWidget,
-                                               action: .mediaState,
-                                               data: .init(audioEnabled: enabled),
-                                               widgetId: widgetDriver.widgetID)
-        await postMessageToWidget(message)
     }
     
     func hangup() async {

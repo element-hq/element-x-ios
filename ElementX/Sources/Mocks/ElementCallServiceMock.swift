@@ -9,16 +9,24 @@
 import Combine
 import Foundation
 
-struct ElementCallServiceMockConfiguration {
-    var ongoingCallRoomID: String?
-}
-
 extension ElementCallServiceMock {
-    convenience init(_ configuration: ElementCallServiceMockConfiguration) {
+    struct Configuration {
+        var ongoingCallRoomID: String?
+    }
+    
+    convenience init(_ configuration: Configuration) {
         self.init()
         
-        actions = PassthroughSubject().eraseToAnyPublisher()
-        ongoingCallRoomIDPublisher = .init(.init(configuration.ongoingCallRoomID))
+        actionsPublisher = PassthroughSubject().eraseToAnyPublisher()
+        nativeCallEventsPublisher = PassthroughSubject().eraseToAnyPublisher()
+        nativeCallPresentationPublisher = PassthroughSubject().eraseToAnyPublisher()
+        
+        let ongoingCallRoomIDSubject = CurrentValueSubject<String?, Never>(configuration.ongoingCallRoomID)
+        ongoingCallRoomIDPublisher = ongoingCallRoomIDSubject.asCurrentValuePublisher()
+        ongoingCallChangedRoomIDClosure = { roomID in
+            ongoingCallRoomIDSubject.send(roomID)
+        }
+        
         handleNativeCallRequestRoomProxyIsVoiceCallReturnValue = false
     }
 }

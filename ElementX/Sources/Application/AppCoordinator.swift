@@ -30,7 +30,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private let appDelegate: AppDelegate
     private let appHooks: AppHooks
     private let bugReportService: BugReportServiceProtocol
+    // TODO: Each account's UserSession gets its own ElementCallService, which removes this one.
     private let elementCallService: ElementCallServiceProtocol
+    private let elementCallManager: ElementCallManagerProtocol
     
     /// Common background task to continue long-running tasks in the background.
     private var backgroundTask: UIBackgroundTaskIdentifier?
@@ -114,6 +116,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         userIndicatorController = UserIndicatorController()
         
         elementCallService = ElementCallService(appSettings: appSettings)
+        elementCallManager = ElementCallManager(service: elementCallService, appSettings: appSettings)
         
         navigationRootCoordinator = NavigationRootCoordinator()
         
@@ -178,25 +181,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             }
             .store(in: &cancellables)
         
-        elementCallService.actions
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] action in
-                switch action {
-                case .startCall(let roomID, let isVoiceCall):
-                    self?.handleAppRoute(.call(roomID: roomID, isVoiceCall: isVoiceCall), windowType: nil)
-                case .receivedIncomingCallRequest:
-                    // When reporting a VoIP call through the CXProvider's `reportNewIncomingVoIPPushPayload`
-                    // the UIApplication states don't change and services are neither started nor ran on
-                    // a background task. Handle both manually here.
-                    Task {
-                        await self?.resumeClientServices()
-                        self?.scheduleDelayedPauseServices()
-                    }
-                default:
-                    break
-                }
-            }
-            .store(in: &cancellables)
+        configureCalls()
         
         windowManager.secondaryWindowsEnabled = !appLockService.isEnabled
         appLockService.isEnabledPublisher.sink { [weak windowManager] appLockEnabled in
@@ -1032,6 +1017,25 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                     self?.notificationManager.registrationFailed(with: error)
                 }
             }
+    }
+    
+    private func configureCalls() {
+        elementCallManager.actionsPublisher
+            .sink { [weak self] action in
+                switch action {
+                case .incomingCallReported:
+                    // When reporting a VoIP call through the CXProvider's `reportNewIncomingVoIPPushPayload`
+                    // the UIApplication states don't change and services are neither started nor ran on
+                    // a background task. Handle both manually here.
+                    Task {
+                        await self?.resumeClientServices()
+                        self?.scheduleDelayedPauseServices()
+                    }
+                case .callAnswered(let roomID, let isVoiceCall):
+                    self?.handleAppRoute(.call(roomID: roomID, isVoiceCall: isVoiceCall), windowType: nil)
+                }
+            }
+            .store(in: &cancellables)
     }
     
     private func observeUserSessionChanges() {

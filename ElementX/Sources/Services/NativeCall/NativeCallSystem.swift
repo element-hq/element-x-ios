@@ -5,7 +5,6 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import CallKit
 import Combine
 import ElementCall
 
@@ -19,37 +18,17 @@ final class NativeCallSystem: ElementCallSystemProvidingProtocol {
     
     /// Stored so the events keep flowing off the subject itself, without reaching back through the
     /// weak reference on every subscription.
-    private let serviceActions: AnyPublisher<ElementCallServiceAction, Never>
+    let events: AnyPublisher<ElementCallSystemEvent, Never>
     
     init(service: ElementCallServiceProtocol) {
         self.service = service
-        serviceActions = service.actions
-    }
-    
-    var events: AnyPublisher<ElementCallSystemEvent, Never> {
-        serviceActions
-            .compactMap { action in
-                switch action {
-                case .audioSessionActivated:
-                    .audioSessionActivated
-                case .audioSessionDeactivated:
-                    .audioSessionDeactivated
-                case .setAudioEnabled(let enabled, _):
-                    // The system reports what the microphone should be; the port speaks in mutes.
-                    .microphoneMuteChanged(isMuted: !enabled)
-                case .endCall(let roomID):
-                    .endCallRequested(roomID: roomID)
-                // All navigation, handled by the flow coordinator. The call reaches this port later,
-                // as an ordinary start.
-                case .startCall, .receivedIncomingCallRequest, .nativeCall:
-                    nil
-                }
-            }
+        events = service.nativeCallEventsPublisher
+            .map { ElementCallSystemEvent($0) }
             .eraseToAnyPublisher()
     }
     
     func startCall(roomID: String, displayName: String, isVideo: Bool) async {
-        await service?.setupCallSession(roomID: roomID, roomDisplayName: displayName, isVideo: isVideo)
+        await service?.setupCallSession(roomID: roomID, roomDisplayName: displayName, isVideo: isVideo, kind: .native)
     }
     
     func reportConnected(roomID: String) {
@@ -73,5 +52,20 @@ final class NativeCallSystem: ElementCallSystemProvidingProtocol {
     
     func setMicrophoneEnabled(_ enabled: Bool, roomID: String) {
         service?.setAudioEnabled(enabled, roomID: roomID)
+    }
+}
+
+private extension ElementCallSystemEvent {
+    init(_ event: NativeCallEvent) {
+        self = switch event {
+        case .audioSessionActivated:
+            .audioSessionActivated
+        case .audioSessionDeactivated:
+            .audioSessionDeactivated
+        case .microphoneMuteChanged(let isMuted):
+            .microphoneMuteChanged(isMuted: isMuted)
+        case .endCallRequested(let roomID):
+            .endCallRequested(roomID: roomID)
+        }
     }
 }

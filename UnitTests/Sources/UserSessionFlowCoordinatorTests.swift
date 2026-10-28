@@ -90,7 +90,7 @@ struct UserSessionFlowCoordinatorTests {
     func replacingTheSessionScreensEndsTheWebViewCall() async {
         // E.g. clearing the cache or signing out during a call: the call screen goes with the screens.
         await waitForConfirmation { confirmation in
-            elementCallService.setupCallSessionRoomIDRoomDisplayNameIsVideoClosure = { _, _, _ in confirmation() }
+            elementCallService.setupCallSessionRoomIDRoomDisplayNameIsVideoKindClosure = { _, _, _, _ in confirmation() }
             userSessionFlowCoordinator.handleAppRoute(.call(roomID: "1", isVoiceCall: false), animated: false)
         }
         

@@ -54,6 +54,22 @@ final class ManualClockTests {
     }
     
     @Test
+    func earlyCancelSparesOtherSleep() async throws {
+        let sleeper = Task { try await clock.sleep(for: .seconds(10)) }
+        await clock.waitForScheduledSleep()
+        
+        // Cancelled before it starts, so it reaches the clock already cancelled.
+        let cancelledSleeper = Task { try await clock.sleep(for: .seconds(10)) }
+        cancelledSleeper.cancel()
+        await #expect(throws: CancellationError.self) {
+            try await cancelledSleeper.value
+        }
+        
+        clock.advance(by: .seconds(10))
+        try await sleeper.value
+    }
+    
+    @Test
     func sleepingUntilAPastDeadlineFinishesImmediately() async throws {
         clock.advance(by: .seconds(10))
         #expect(clock.now == ManualClock.Instant(offset: .seconds(10)))

@@ -554,19 +554,24 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: - Native calls
     
     private func setupCallObservers() {
-        flowParameters.elementCallService.actions
+        flowParameters.elementCallService.nativeCallPresentationPublisher
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] action in
+            .sink { [weak self] presentation in
+                self?.handleNativeCall(presentation)
+            }
+            .store(in: &cancellables)
+        
+        flowParameters.elementCallService.nativeCallEventsPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] event in
                 guard let self else { return }
-                switch action {
-                case .endCall:
-                    // A native call comes down on `.nativeCall(.dismiss)` instead, once it has
-                    // actually left the room.
+                
+                switch event {
+                case .endCallRequested:
+                    // A native call comes down on `.dismiss` instead, once it has actually left the room.
                     if navigationTabCoordinator.overlayCoordinator is CallScreenCoordinator {
                         dismissCallScreenIfNeeded()
                     }
-                case .nativeCall(let presentation):
-                    handleNativeCall(presentation)
                 default:
                     break
                 }
