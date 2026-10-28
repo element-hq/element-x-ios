@@ -71,6 +71,7 @@ enum RoomTimelineItemType: Equatable {
     case callInvite(CallInviteRoomTimelineItem)
     case callNotification(CallNotificationRoomTimelineItem)
     case liveLocation(LiveLocationRoomTimelineItem)
+    case a2ui(A2UIRoomTimelineItem)
     
     init(item: RoomTimelineItemProtocol) {
         switch item {
@@ -122,6 +123,8 @@ enum RoomTimelineItemType: Equatable {
             self = .callNotification(item)
         case let item as LiveLocationRoomTimelineItem:
             self = .liveLocation(item)
+        case let item as A2UIRoomTimelineItem:
+            self = .a2ui(item)
         default:
             fatalError("Unknown timeline item")
         }
@@ -152,7 +155,8 @@ enum RoomTimelineItemType: Equatable {
              .voice(let item as RoomTimelineItemProtocol),
              .callInvite(let item as RoomTimelineItemProtocol),
              .callNotification(let item as RoomTimelineItemProtocol),
-             .liveLocation(let item as RoomTimelineItemProtocol):
+             .liveLocation(let item as RoomTimelineItemProtocol),
+             .a2ui(let item as RoomTimelineItemProtocol):
             return item.id
         }
     }
@@ -202,6 +206,8 @@ enum RoomTimelineItemType: Equatable {
         case .callNotification(let item):
             return item.timestamp
         case .liveLocation(let item):
+            return item.timestamp
+        case .a2ui(let item):
             return item.timestamp
         case .group(let item):
             return (item.items.first { $0 is EventBasedTimelineItemProtocol } as? EventBasedTimelineItemProtocol)?.timestamp

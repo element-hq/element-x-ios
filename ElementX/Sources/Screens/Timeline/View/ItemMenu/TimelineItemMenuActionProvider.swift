@@ -74,7 +74,7 @@ struct TimelineItemMenuActionProvider {
                 }
             } else if item is PollRoomTimelineItem {
                 actions.append(.editPoll)
-            } else if !(item is VoiceMessageRoomTimelineItem) {
+            } else if !(item is VoiceMessageRoomTimelineItem || item is A2UIRoomTimelineItem) {
                 actions.append(.edit)
             }
         }

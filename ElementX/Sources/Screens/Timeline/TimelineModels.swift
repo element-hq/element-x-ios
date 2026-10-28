@@ -84,6 +84,12 @@ enum TimelineViewAction {
     case handlePasteOrDrop(providers: [NSItemProvider])
     case handlePollAction(TimelineViewPollAction)
     case handleAudioPlayerAction(TimelineAudioPlayerAction)
+    /// The user pressed a button in an A2UI surface, report it to the agent.
+    case triggerA2UIAction(itemID: TimelineItemIdentifier, surfaceID: String, key: A2UINodeKey)
+    /// The user tapped a video in an A2UI surface, play it full screen.
+    case playA2UIVideo(url: URL)
+    /// The user tapped an image in an A2UI surface, preview it full screen.
+    case previewA2UIImage(url: URL, title: String?)
     
     case stopLiveLocationSharing(TimelineItemIdentifier)
     
@@ -136,6 +142,8 @@ struct TimelineViewState: BindableState {
     var areThreadsEnabled: Bool
     var linkPreviewsEnabled: Bool
     var jumpToReadMarkerEnabled: Bool
+    /// Whether A2UI messages render their surfaces, or just their plain-text fallback.
+    var a2uiEnabled: Bool
     
     var messageSelection = TimelineMessageSelectionState()
     
@@ -147,6 +155,9 @@ struct TimelineViewState: BindableState {
     
     /// A closure providing the associated audio player state for an item in the timeline.
     var audioPlayerStateProvider: (@MainActor (_ itemId: TimelineItemIdentifier) -> AudioPlayerState?)?
+    
+    /// A closure providing the live A2UI surfaces for an item in the timeline.
+    var a2uiSurfacesProvider: (@MainActor (A2UIRoomTimelineItem) -> A2UIMessageSurfaces?)?
     
     /// A closure that updates the associated pill context
     var pillContextUpdater: (@MainActor (PillContext) -> Void)?
@@ -190,6 +201,9 @@ struct TimelineViewStateBindings {
     var alertInfo: AlertInfo<TimelineAlertInfoType>?
     
     var debugInfo: TimelineItemDebugInfo?
+    
+    var a2uiVideoPlayback: A2UIVideoPlayback?
+    var a2uiImagePreviewItem: MediaPreviewItem?
     
     var actionMenuInfo: TimelineItemActionMenuInfo?
     

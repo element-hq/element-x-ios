@@ -170,6 +170,11 @@ final nonisolated class EventTimelineItemProxy: Sendable {
         return TimelineItemDebugInfo(model: debugInfo.model, originalJSON: debugInfo.originalJson, latestEditJSON: debugInfo.latestEditJson)
     }
     
+    /// The full JSON of the latest version of the event. `nil` for local echoes the server hasn't echoed back yet.
+    var latestJSON: String? {
+        item.lazyProvider.latestJson()
+    }
+    
     var shieldState: ShieldState? {
         item.lazyProvider.getShields(strict: false)
     }

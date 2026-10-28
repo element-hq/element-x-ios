@@ -1,13 +1,10 @@
----
 name: ElementX
 attributes:
   ORGANIZATIONNAME: Element
   LastUpgradeCheck: "1620"
-  
 fileGroups:
 - project.yml
 - app.yml
-
 options:
   groupSortPosition: bottom
   createIntermediateGroups: true
@@ -43,9 +40,8 @@ options:
     - AccessibilityTests
   fileTypes:
     icon:
-      file: true # https://github.com/yonaskolb/XcodeGen/issues/1556
+      file: true
   postGenCommand: cd Tools/XcodeGen && sh postGenCommand.sh
-
 settings:
   CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED: true
   ENABLE_BITCODE: false
@@ -55,7 +51,6 @@ settings:
   CURRENT_PROJECT_VERSION: 1
   SUPPORTS_MACCATALYST: false
   ARCHS: arm64
-
 include:
 - path: app.yml
 - path: ElementX/SupportingFiles/target.yml
@@ -69,44 +64,31 @@ include:
 - path: Components/MapLibre/MapLibreInterface/SupportingFiles/target.yml
 - path: Components/MapLibre/MapLibreShim/SupportingFiles/target.yml
 - path: Components/SDKMocks/SupportingFiles/target.yml
-# - path: MyAppVariant/override.yml
-
 packages:
-  # Element/Matrix dependencies
   MatrixRustSDK:
-    url: https://github.com/element-hq/matrix-rust-components-swift
-    exactVersion: 26.10.20
-    # path: ../matrix-rust-sdk
+    path: matrix-rust-components-swift
   Compound:
     path: compound-ios
   ElementCall:
     url: https://github.com/element-hq/element-call-ios
     exactVersion: 0.1.0-rc.11
-    # path: ../element-call-ios
   BuildExtensions:
     path: Components/BuildExtensions
   AnalyticsEvents:
     url: https://github.com/matrix-org/matrix-analytics-events
     exactVersion: 0.38.0
-    # path: ../matrix-analytics-events
   EmbeddedElementCall:
     url: https://github.com/element-hq/element-call-swift
     exactVersion: 0.26.1
   Emojibase:
     url: https://github.com/matrix-org/emojibase-bindings
-    revision: 60bc01f2e3b31445dc723f5af1a777b63d18e6c2 # pinned due to https://github.com/matrix-org/emojibase-bindings/issues/59
-    # exactVersion: 1.5.0
-    # path: ../emojibase-bindings
+    revision: 60bc01f2e3b31445dc723f5af1a777b63d18e6c2
   SwiftOGG:
     url: https://github.com/element-hq/swift-ogg
     exactVersion: 0.0.4
-    # path: ../swift-ogg
   WysiwygComposer:
     url: https://github.com/element-hq/matrix-rich-text-editor-swift
     exactVersion: 2.42.1
-    # path: ../matrix-rich-text-editor/platforms/ios/lib/WysiwygComposer
-  
-  # External dependencies
   Algorithms:
     url: https://github.com/apple/swift-algorithms
     exactVersion: 1.2.1
@@ -170,7 +152,6 @@ packages:
   Version:
     url: https://github.com/mxcl/Version
     exactVersion: 2.2.1
-
 aggregateTargets:
   Periphery:
     buildScripts:
@@ -179,4 +160,3 @@ aggregateTargets:
         export PATH="$PATH:/opt/homebrew/bin"
         periphery scan --format xcode
       basedOnDependencyAnalysis: false
-

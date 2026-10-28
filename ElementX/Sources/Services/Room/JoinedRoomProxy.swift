@@ -210,6 +210,20 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         }
     }
     
+    func sendEvent(type: String, content: JSONValue) async -> Result<Void, RoomProxyError> {
+        guard let contentJSON = content.jsonString else {
+            return .failure(.invalidEventContent)
+        }
+        
+        do {
+            _ = try await room.sendRaw(eventType: type, content: contentJSON, requestConfigOverride: nil)
+            return .success(())
+        } catch {
+            MXLog.error("Failed sending \(type) event with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
     func messageFilteredTimeline(focus: TimelineFocus,
                                  allowedMessageTypes: [TimelineAllowedMessageType],
                                  presentation: TimelineKind.MediaPresentation) async -> Result<any TimelineProxyProtocol, RoomProxyError> {

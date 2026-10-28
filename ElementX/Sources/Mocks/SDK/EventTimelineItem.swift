@@ -24,6 +24,9 @@ nonisolated struct EventTimelineItemSDKMockConfiguration {
                                                                inReplyTo: nil,
                                                                threadRoot: nil,
                                                                threadSummary: nil))
+    var eventTypeRaw: String?
+    /// The full event JSON returned by the lazy provider.
+    var latestJSON: String?
 }
 
 nonisolated extension EventTimelineItem {
@@ -32,6 +35,7 @@ nonisolated extension EventTimelineItem {
         lazyProvider.containsOnlyEmojisReturnValue = false
         lazyProvider.getShieldsStrictReturnValue = ShieldState.none
         lazyProvider.debugInfoReturnValue = .init(model: "", originalJson: nil, latestEditJson: nil)
+        lazyProvider.latestJsonReturnValue = configuration.latestJSON
         self.init(isRemote: true,
                   eventOrTransactionId: .eventId(eventId: configuration.eventID),
                   sender: configuration.sender,
@@ -42,7 +46,7 @@ nonisolated extension EventTimelineItem {
                   isEditable: configuration.isEditable,
                   content: configuration.content,
                   reactions: [],
-                  eventTypeRaw: nil,
+                  eventTypeRaw: configuration.eventTypeRaw,
                   timestamp: UInt64(Date.mock.timeIntervalSince1970 * 1000),
                   localSendState: nil,
                   editSendState: nil,

@@ -1,4 +1,4 @@
-// Generated using Sourcery 2.3.0 — https://github.com/krzysztofzablocki/Sourcery
+// Generated using Sourcery 2.4.0 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
 // swiftlint:disable all
@@ -10,6 +10,7 @@ import SwiftUI
 enum TestablePreviewsDictionary {
     static let dictionary: [String: any PreviewProvider.Type] = {
         var dictionary: [String: any PreviewProvider.Type] = [
+            "A2UIRoomTimelineView_Previews" : A2UIRoomTimelineView_Previews.self,
             "ActiveCallTimelineItemView_Previews" : ActiveCallTimelineItemView_Previews.self,
             "AnalyticsPromptScreen_Previews" : AnalyticsPromptScreen_Previews.self,
             "AnalyticsSettingsScreen_Previews" : AnalyticsSettingsScreen_Previews.self,

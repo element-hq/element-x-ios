@@ -1,4 +1,4 @@
-// Generated using Sourcery 2.3.0 — https://github.com/krzysztofzablocki/Sourcery
+// Generated using Sourcery 2.4.0 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
 // swiftlint:disable all
@@ -6,6 +6,10 @@
 
 
 extension AccessibilityTests {
+
+    func testA2UIRoomTimelineView() async throws {
+        try await performAccessibilityAudit(named: "A2UIRoomTimelineView_Previews")
+    }
 
     func testActiveCallTimelineItemView() async throws {
         try await performAccessibilityAudit(named: "ActiveCallTimelineItemView_Previews")

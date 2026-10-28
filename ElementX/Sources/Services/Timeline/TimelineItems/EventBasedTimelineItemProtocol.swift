@@ -36,6 +36,7 @@ nonisolated extension EventBasedTimelineItemProtocol {
             && !(self is PollRoomTimelineItem)
             && !(self is LiveLocationRoomTimelineItem)
             && !(self is StickerRoomTimelineItem) // The SDK can only forward m.room.message content and stickers are m.sticker events.
+            && !(self is A2UIRoomTimelineItem) // The SDK drops the A2UI messages of custom msgtypes, so forwarding would only send the fallback.
     }
     
     var isRemoteMessage: Bool {

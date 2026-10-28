@@ -398,6 +398,10 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: false)
     var jumpToReadMarkerEnabled: Bool
     
+    /// Renders A2UI surfaces sent by agents as interactive forms in the timeline.
+    @UserPreference(defaultValue: false)
+    var a2uiEnabled: Bool
+    
     @UserPreference(defaultValue: false)
     var linkNewDeviceEnabled: Bool
     

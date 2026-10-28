@@ -90,6 +90,11 @@ struct DeveloperOptionsScreen: View {
                     Text("Jump to unread")
                     Text("Adds a button to jump to the read marker, plus a presence dot on the scroll-to-bottom button when new messages arrive while scrolled away.")
                 }
+                
+                Toggle(isOn: $context.a2uiEnabled) {
+                    Text("Interactive agent messages (A2UI)")
+                    Text("Renders A2UI surfaces sent by agents and bots as interactive forms, and reports your actions back to them.")
+                }
             }
             
             Section {

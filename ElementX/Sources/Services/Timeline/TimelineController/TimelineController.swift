@@ -531,6 +531,9 @@ class TimelineController: TimelineControllerProtocol {
         var newTimelineItems = await Task.detached { [timelineItemFactory, activeTimeline] in
             var newTimelineItems = [RoomTimelineItemProtocol]()
             
+            // A2UI updates are separate (hidden) events that need attaching to the message they update.
+            let a2uiUpdates = A2UIUpdate.updates(in: itemProxies)
+            
             let collapsibleChunks = itemProxies.groupBy { $0.isItemCollapsible }
             
             for (index, collapsibleChunk) in collapsibleChunks.enumerated() {
@@ -541,6 +544,7 @@ class TimelineController: TimelineControllerProtocol {
                                            isDM: isDM,
                                            hasPredecessor: hasPredecessor,
                                            roomDisplayName: displayName,
+                                           a2uiUpdates: a2uiUpdates,
                                            timelineItemFactory: timelineItemFactory,
                                            activeTimeline: activeTimeline)
                 }
@@ -590,11 +594,16 @@ class TimelineController: TimelineControllerProtocol {
                                                isDM: Bool,
                                                hasPredecessor: Bool,
                                                roomDisplayName: String?,
+                                               a2uiUpdates: [String: [A2UIUpdate]],
                                                timelineItemFactory: RoomTimelineItemFactoryProtocol,
                                                activeTimeline: TimelineProxyProtocol) -> RoomTimelineItemProtocol? {
         switch itemProxy {
         case .event(let eventTimelineItem):
             let timelineItem = timelineItemFactory.buildTimelineItem(for: eventTimelineItem, isDM: isDM)
+            
+            if let a2uiTimelineItem = timelineItem as? A2UIRoomTimelineItem, let eventID = a2uiTimelineItem.id.eventID {
+                return a2uiTimelineItem.applyingUpdates(a2uiUpdates[eventID] ?? [])
+            }
             
             if let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol {
                 // Avoid fetching this over and over again as it changes states if it keeps failing to load

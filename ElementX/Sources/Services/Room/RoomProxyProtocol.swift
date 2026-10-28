@@ -17,6 +17,7 @@ enum RoomProxyError: Error {
     case invalidURL
     case invalidMedia
     case eventNotFound
+    case invalidEventContent
     case failedCreatingPinnedTimeline
     case timelineError(TimelineProxyError)
     case liveLocationSessionIsNotActive
@@ -88,6 +89,9 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     func threadListService() -> RoomThreadListServiceProxyProtocol
     
     func loadOrFetchEventDetails(for eventID: String) async -> Result<TimelineEvent, RoomProxyError>
+    
+    /// Sends an event of any type, for events the SDK has no dedicated API for.
+    func sendEvent(type: String, content: JSONValue) async -> Result<Void, RoomProxyError>
     
     func messageFilteredTimeline(focus: TimelineFocus,
                                  allowedMessageTypes: [TimelineAllowedMessageType],

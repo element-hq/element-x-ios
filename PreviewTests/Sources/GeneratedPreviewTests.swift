@@ -1,4 +1,4 @@
-// Generated using Sourcery 2.3.0 — https://github.com/krzysztofzablocki/Sourcery
+// Generated using Sourcery 2.4.0 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
 // swiftlint:disable all
@@ -10,6 +10,13 @@ import Testing
 extension PreviewTests {
 
     // MARK: - PreviewProvider
+
+    @Test
+    func a2UIRoomTimelineView() async throws {
+        for (index, preview) in A2UIRoomTimelineView_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
 
     @Test
     func activeCallTimelineItemView() async throws {

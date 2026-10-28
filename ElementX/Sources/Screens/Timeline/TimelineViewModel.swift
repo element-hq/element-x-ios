@@ -101,6 +101,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                        areThreadsEnabled: userSettings.app.threadsEnabled,
                                                        linkPreviewsEnabled: userSettings.app.linkPreviewsEnabled,
                                                        jumpToReadMarkerEnabled: userSettings.app.jumpToReadMarkerEnabled,
+                                                       a2uiEnabled: userSettings.app.a2uiEnabled,
                                                        hasPredecessor: roomProxy.predecessorRoom != nil,
                                                        pinnedEventIDs: roomProxy.infoPublisher.value.pinnedEventIDs,
                                                        emojiProvider: emojiProvider,
@@ -124,6 +125,10 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             }
             
             return self.timelineInteractionHandler.audioPlayerState(for: itemID)
+        }
+        
+        state.a2uiSurfacesProvider = { [weak self] item in
+            self?.timelineInteractionHandler.a2uiSurfaces(for: item)
         }
         
         state.pillContextUpdater = { [weak self] pillContext in
@@ -225,6 +230,12 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             handlePollAction(pollAction)
         case .handleAudioPlayerAction(let audioPlayerAction):
             handleAudioPlayerAction(audioPlayerAction)
+        case .triggerA2UIAction(let itemID, let surfaceID, let key):
+            timelineInteractionHandler.triggerA2UIAction(itemID: itemID, surfaceID: surfaceID, key: key)
+        case .playA2UIVideo(let url):
+            timelineInteractionHandler.playA2UIVideo(url: url)
+        case .previewA2UIImage(let url, let title):
+            timelineInteractionHandler.previewA2UIImage(url: url, title: title)
         case .stopLiveLocationSharing(let id):
             state.stoppedLiveLocationIDs.insert(id)
             Task { await stopLiveLocationSharing() }
@@ -523,6 +534,10 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                     displayAlert(.audioRecodingPermissionError)
                 case .displayErrorToast(let title):
                     displayErrorToast(title)
+                case .displayA2UIVideo(let playback):
+                    state.bindings.a2uiVideoPlayback = playback
+                case .displayA2UIImagePreview(let previewItem):
+                    state.bindings.a2uiImagePreviewItem = previewItem
                 case .displayEmojiPicker(let selectedEmojis, let continuation):
                     actionsSubject.send(.displayEmojiPicker(selectedEmojis: selectedEmojis, continuation: continuation))
                 case .displayMessageForwarding(let itemID):
@@ -585,6 +600,10 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         
         userSettings.app.jumpToReadMarkerEnabledPublisher
             .weakAssign(to: \.state.jumpToReadMarkerEnabled, on: self)
+            .store(in: &cancellables)
+        
+        userSettings.app.a2uiEnabledPublisher
+            .weakAssign(to: \.state.a2uiEnabled, on: self)
             .store(in: &cancellables)
         
         userSession.clientProxy.timelineMediaVisibilityPublisher
@@ -887,6 +906,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     
     private func buildTimelineViews(timelineItems: [RoomTimelineItemProtocol], isSwitchingTimelines: Bool = false) {
         var timelineItemsDictionary = OrderedDictionary<TimelineItemIdentifier.UniqueID, RoomTimelineItemViewState>()
+        
+        timelineInteractionHandler.updateA2UISurfaces(with: timelineItems, isSwitchingTimelines: isSwitchingTimelines)
         
         timelineItems.filter { $0 is RedactedRoomTimelineItem }.forEach { timelineItem in
             // Stops the audio player when a voice message is redacted.
@@ -1278,7 +1299,8 @@ extension TimelineViewModel {
     static func mock(timelineKind: TimelineKind = .live,
                      timelineController: TimelineControllerMock? = nil,
                      hasPredecessor: Bool = false,
-                     contentScannerService: ContentScannerServiceProtocol? = nil) -> TimelineViewModel {
+                     contentScannerService: ContentScannerServiceProtocol? = nil,
+                     userSettings: UserSettings = .mock()) -> TimelineViewModel {
         let clientProxyMock = ClientProxyMock(.init())
         clientProxyMock.roomSummaryForAliasReturnValue = .mock(id: "!room:matrix.org", name: "Room")
         clientProxyMock.roomSummaryForIdentifierReturnValue = .mock(id: "!room:matrix.org", name: "Room", canonicalAlias: "#room:matrix.org")
@@ -1287,7 +1309,9 @@ extension TimelineViewModel {
         return TimelineViewModel(roomProxy: roomProxy,
                                  focussedEventID: nil,
                                  timelineController: timelineController ?? TimelineControllerMock(.init(timelineKind: timelineKind)),
-                                 userSession: UserSessionMock(.init(clientProxy: clientProxyMock, contentScannerService: contentScannerService)),
+                                 userSession: UserSessionMock(.init(clientProxy: clientProxyMock,
+                                                                    userSettings: userSettings,
+                                                                    contentScannerService: contentScannerService)),
                                  mediaPlayerProvider: MediaPlayerProviderMock(),
                                  userIndicatorController: UserIndicatorControllerMock(),
                                  appMediator: AppMediatorMock(.init()),

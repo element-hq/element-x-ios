@@ -202,6 +202,8 @@ private extension TimelineItemSendInfo {
                 .overlay(capsuleStyle: true)
             case is PollRoomTimelineItem:
                 .vertical(spacing: 16)
+            case is A2UIRoomTimelineItem:
+                .vertical(spacing: 8)
             default:
                 .horizontal()
             }

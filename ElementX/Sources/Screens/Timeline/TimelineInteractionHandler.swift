@@ -24,6 +24,8 @@ enum TimelineInteractionHandlerAction {
     
     case displayAudioRecorderPermissionError
     case displayErrorToast(String)
+    case displayA2UIVideo(A2UIVideoPlayback)
+    case displayA2UIImagePreview(MediaPreviewItem)
     
     case viewInRoomTimeline(eventID: String)
     case displayThread(itemID: TimelineItemIdentifier)
@@ -46,6 +48,7 @@ class TimelineInteractionHandler {
     private let linkMetadataProvider: LinkMetadataProviderProtocol
     private let timelineControllerFactory: TimelineControllerFactoryProtocol
     private let pollInteractionHandler: PollInteractionHandlerProtocol
+    private let a2uiSurfaceStore = A2UISurfaceStore()
     
     private let actionsSubject: PassthroughSubject<TimelineInteractionHandlerAction, Never> = .init()
     var actions: AnyPublisher<TimelineInteractionHandlerAction, Never> {
@@ -281,6 +284,109 @@ class TimelineInteractionHandler {
     
     // MARK: Polls
     
+    // MARK: - A2UI
+    
+    /// The live surfaces of an A2UI message, created on first use and brought up to date with the item.
+    func a2uiSurfaces(for item: A2UIRoomTimelineItem) -> A2UIMessageSurfaces? {
+        a2uiSurfaceStore.surfaces(for: item)
+    }
+    
+    /// Keeps the surfaces of every A2UI message in step with the latest items, ahead of the views reading them.
+    func updateA2UISurfaces(with timelineItems: [RoomTimelineItemProtocol], isSwitchingTimelines: Bool) {
+        if isSwitchingTimelines {
+            a2uiSurfaceStore.removeAll()
+        }
+        a2uiSurfaceStore.update(with: timelineItems)
+    }
+    
+    /// Reports a button press to the agent as an `io.element.a2ui.action` event related to the message.
+    func triggerA2UIAction(itemID: TimelineItemIdentifier, surfaceID: String, key: A2UINodeKey) {
+        guard let eventID = itemID.eventID,
+              let surfaces = a2uiSurfaceStore.surfaces(forEventID: eventID),
+              let resolved = surfaces.resolveAction(surfaceID: surfaceID, key: key) else {
+            MXLog.error("Unable to resolve the A2UI action for item: \(itemID)")
+            return
+        }
+        
+        let content = A2UIEvent.actionContent(referencing: eventID,
+                                              surfaceID: surfaceID,
+                                              action: resolved.action,
+                                              dataModel: resolved.dataModel)
+        surfaces.isSendingAction = true
+        surfaces.sendFailureMessage = nil
+        
+        Task {
+            if case .failure(let error) = await roomProxy.sendEvent(type: A2UIEvent.actionEventType, content: content) {
+                MXLog.error("Failed sending the A2UI action with error: \(error)")
+                surfaces.sendFailureMessage = UntranslatedL10n.screenRoomA2uiSendFailed
+            }
+            surfaces.isSendingAction = false
+        }
+    }
+    
+    /// Plays a video from an A2UI surface full screen. Web videos stream straight into the
+    /// player, Matrix media is downloaded through the media provider first.
+    func playA2UIVideo(url: URL) {
+        guard url.scheme?.lowercased() == "mxc" else {
+            actionsSubject.send(.displayA2UIVideo(.init(url: url, fileHandle: nil)))
+            return
+        }
+        
+        Task {
+            let indicatorID = "A2UIVideoLoadingIndicator"
+            userIndicatorController.submitIndicator(UserIndicator(id: indicatorID, type: .modal, title: L10n.commonLoading, persistent: true))
+            defer { userIndicatorController.retractIndicatorWithId(indicatorID) }
+            
+            guard let source = try? MediaSourceProxy(url: url, mimeType: nil),
+                  case .success(let fileHandle) = await userSession.mediaProvider.loadFileFromSource(source),
+                  let fileURL = fileHandle.url else {
+                actionsSubject.send(.displayErrorToast(L10n.errorUnknown))
+                return
+            }
+            
+            actionsSubject.send(.displayA2UIVideo(.init(url: fileURL, fileHandle: fileHandle)))
+        }
+    }
+    
+    /// Previews an image from an A2UI surface with Quick Look, like image attachments. Quick Look
+    /// needs a local file, so web images are downloaded to a temporary file first.
+    func previewA2UIImage(url: URL, title: String?) {
+        Task {
+            let indicatorID = "A2UIImageLoadingIndicator"
+            userIndicatorController.submitIndicator(UserIndicator(id: indicatorID, type: .modal, title: L10n.commonLoading, persistent: true))
+            defer { userIndicatorController.retractIndicatorWithId(indicatorID) }
+            
+            let previewItem = if url.scheme?.lowercased() == "mxc" {
+                await MediaPreviewItem.load(from: url, title: title, using: userSession.mediaProvider)
+            } else {
+                await downloadedPreviewItem(from: url, title: title)
+            }
+            
+            guard let previewItem else {
+                actionsSubject.send(.displayErrorToast(L10n.errorUnknown))
+                return
+            }
+            actionsSubject.send(.displayA2UIImagePreview(previewItem))
+        }
+    }
+    
+    private func downloadedPreviewItem(from url: URL, title: String?) async -> MediaPreviewItem? {
+        guard let (downloadURL, _) = try? await URLSession.shared.download(from: url) else { return nil }
+        
+        // The download is deleted as soon as this returns, so keep a copy that also has the original name for Quick Look to type it.
+        let fileURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString).appendingPathComponent(url.lastPathComponent)
+        do {
+            try FileManager.default.createDirectory(at: fileURL.deletingLastPathComponent(), withIntermediateDirectories: true)
+            try FileManager.default.moveItem(at: downloadURL, to: fileURL)
+        } catch {
+            MXLog.error("Failed storing the downloaded image: \(error)")
+            return nil
+        }
+        return MediaPreviewItem(file: .unmanaged(url: fileURL), title: title)
+    }
+    
+    // MARK: - Polls
+    
     func sendPollResponse(pollStartID: String, answerIDs: [String]) {
         Task {
             let sendPollResponseResult = await pollInteractionHandler.sendPollResponse(pollStartID: pollStartID, answerIDs: answerIDs)
@@ -444,11 +550,9 @@ class TimelineInteractionHandler {
                 resumeVoiceMessagePlaybackAfterScrubbing = true
                 pausePlayingRecordedVoiceMessage()
             }
-        } else {
-            if resumeVoiceMessagePlaybackAfterScrubbing {
-                resumeVoiceMessagePlaybackAfterScrubbing = false
-                await startPlayingRecordedVoiceMessage()
-            }
+        } else if resumeVoiceMessagePlaybackAfterScrubbing {
+            resumeVoiceMessagePlaybackAfterScrubbing = false
+            await startPlayingRecordedVoiceMessage()
         }
     }
     

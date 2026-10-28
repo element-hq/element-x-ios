@@ -79,6 +79,8 @@ struct RoomTimelineItemView: View {
             CallNotificationRoomTimelineView(timelineItem: item)
         case .liveLocation(let item):
             LiveLocationRoomTimelineView(timelineItem: item, isStopped: context?.viewState.stoppedLiveLocationIDs.contains(item.id) ?? false)
+        case .a2ui(let item):
+            A2UIRoomTimelineView(timelineItem: item)
         }
     }
     

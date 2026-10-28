@@ -10,6 +10,16 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 internal nonisolated enum UntranslatedL10n {
+  /// The agent hasn’t sent any content yet.
+  internal static var screenRoomA2uiNoContent: String { return UntranslatedL10n.tr("Untranslated", "screen_room_a2ui_no_content") }
+  /// Your response couldn’t be sent. Please try again.
+  internal static var screenRoomA2uiSendFailed: String { return UntranslatedL10n.tr("Untranslated", "screen_room_a2ui_send_failed") }
+  /// Unsupported component: %1$@
+  internal static func screenRoomA2uiUnsupportedComponent(_ p1: Any) -> String {
+    return UntranslatedL10n.tr("Untranslated", "screen_room_a2ui_unsupported_component", String(describing: p1))
+  }
+  /// Waiting for content…
+  internal static var screenRoomA2uiWaitingForContent: String { return UntranslatedL10n.tr("Untranslated", "screen_room_a2ui_waiting_for_content") }
   /// Clear all data currently stored on this device?
   /// Sign in again to access your account data and messages.
   internal static var softLogoutClearDataDialogContent: String { return UntranslatedL10n.tr("Untranslated", "soft_logout_clear_data_dialog_content") }

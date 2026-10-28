@@ -1,4 +1,4 @@
-// Generated using Sourcery 2.3.0 — https://github.com/krzysztofzablocki/Sourcery
+// Generated using Sourcery 2.4.0 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
 // swiftlint:disable all
@@ -5835,6 +5835,48 @@ nonisolated class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Senda
             return await loadOrFetchEventDetailsForClosure(eventID)
         } else {
             return loadOrFetchEventDetailsForReturnValue
+        }
+    }
+    //MARK: - sendEvent
+
+    private let sendEventTypeContentCallsCountLock = NSLock()
+    private nonisolated(unsafe) var sendEventTypeContentUnderlyingCallsCount = 0
+    var sendEventTypeContentCallsCount: Int {
+        get { sendEventTypeContentCallsCountLock.withLock { sendEventTypeContentUnderlyingCallsCount } }
+        set { sendEventTypeContentCallsCountLock.withLock { sendEventTypeContentUnderlyingCallsCount = newValue } }
+    }
+    var sendEventTypeContentCalled: Bool {
+        return sendEventTypeContentCallsCount > 0
+    }
+    private let sendEventTypeContentReceivedArgumentsLock = NSLock()
+    private nonisolated(unsafe) var sendEventTypeContentUnderlyingReceivedArguments: (type: String, content: JSONValue)?
+    var sendEventTypeContentReceivedArguments: (type: String, content: JSONValue)? {
+        get { sendEventTypeContentReceivedArgumentsLock.withLock { sendEventTypeContentUnderlyingReceivedArguments } }
+        set { sendEventTypeContentReceivedArgumentsLock.withLock { sendEventTypeContentUnderlyingReceivedArguments = newValue } }
+    }
+    private let sendEventTypeContentReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var sendEventTypeContentUnderlyingReceivedInvocations: [(type: String, content: JSONValue)] = []
+    var sendEventTypeContentReceivedInvocations: [(type: String, content: JSONValue)] {
+        get { sendEventTypeContentReceivedInvocationsLock.withLock { sendEventTypeContentUnderlyingReceivedInvocations } }
+        set { sendEventTypeContentReceivedInvocationsLock.withLock { sendEventTypeContentUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let sendEventTypeContentReturnValueLock = NSLock()
+    private nonisolated(unsafe) var sendEventTypeContentUnderlyingReturnValue: Result<Void, RoomProxyError>!
+    var sendEventTypeContentReturnValue: Result<Void, RoomProxyError>! {
+        get { sendEventTypeContentReturnValueLock.withLock { sendEventTypeContentUnderlyingReturnValue } }
+        set { sendEventTypeContentReturnValueLock.withLock { sendEventTypeContentUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var sendEventTypeContentClosure: ((String, JSONValue) async -> Result<Void, RoomProxyError>)?
+
+    @concurrent func sendEvent(type: String, content: JSONValue) async -> Result<Void, RoomProxyError> {
+        sendEventTypeContentCallsCountLock.withLock { sendEventTypeContentUnderlyingCallsCount += 1 }
+        sendEventTypeContentReceivedArguments = (type: type, content: content)
+        sendEventTypeContentReceivedInvocationsLock.withLock { sendEventTypeContentUnderlyingReceivedInvocations.append((type: type, content: content)) }
+        if let sendEventTypeContentClosure = sendEventTypeContentClosure {
+            return await sendEventTypeContentClosure(type, content)
+        } else {
+            return sendEventTypeContentReturnValue
         }
     }
     //MARK: - messageFilteredTimeline

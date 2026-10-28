@@ -45,8 +45,10 @@ nonisolated struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                 return buildEncryptedTimelineItem(eventItemProxy, messageLikeContent, encryptedMessage, isOutgoing)
             case .liveLocation(let content):
                 return buildLiveLocationTimelineItem(eventItemProxy, messageLikeContent, content, isOutgoing)
-            case .other:
-                return nil // We shouldn't receive these without asking for custom event types.
+            case .other(let eventType):
+                // Custom message-like events (e.g. A2UI updates) aren't shown, they're read by whoever needs them.
+                MXLog.verbose("Ignoring custom message-like event \(eventItemProxy.id) of type: \(eventItemProxy.item.eventTypeRaw ?? String(describing: eventType))")
+                return nil
             }
         case .failedToParseMessageLike(let eventType, let error):
             return buildUnsupportedTimelineItem(eventItemProxy, eventType, error, isOutgoing)
@@ -188,9 +190,44 @@ nonisolated struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             return buildLocationTimelineItem(for: eventItemProxy, messageLikeContent, messageContent, locationMessageContent, isOutgoing)
         case .gallery(let galleryMessageContent):
             return buildGalleryTimelineItem(for: eventItemProxy, messageLikeContent, messageContent, galleryMessageContent, isOutgoing)
-        case .other:
-            return nil
+        case .other(let msgtype, let body):
+            guard msgtype == A2UIEvent.messageType else {
+                MXLog.verbose("Ignoring message \(eventItemProxy.id) with unsupported msgtype: \(msgtype)")
+                return nil
+            }
+            return buildA2UITimelineItem(for: eventItemProxy, messageLikeContent, messageContent, body, isOutgoing)
         }
+    }
+    
+    /// The SDK only exposes the `msgtype` and `body` of custom messages, so the A2UI messages are read from the raw event.
+    private func buildA2UITimelineItem(for eventItemProxy: EventTimelineItemProxy,
+                                       _ messageLikeContent: MsgLikeContent,
+                                       _ messageContent: MessageContent,
+                                       _ body: String,
+                                       _ isOutgoing: Bool) -> RoomTimelineItemProtocol {
+        let eventJSON = eventItemProxy.latestJSON
+        let messages = eventJSON
+            .flatMap(A2UIEvent.content(ofEventJSON:))
+            .map(A2UIEvent.messages(in:)) ?? []
+        MXLog.verbose("Building A2UI item \(eventItemProxy.id) with \(messages.count) messages, raw JSON available: \(eventJSON != nil)")
+        
+        return A2UIRoomTimelineItem(id: eventItemProxy.id,
+                                    body: body,
+                                    timestamp: eventItemProxy.timestamp,
+                                    isOutgoing: isOutgoing,
+                                    isEditable: eventItemProxy.isEditable,
+                                    canBeRepliedTo: eventItemProxy.canBeRepliedTo,
+                                    sender: eventItemProxy.sender,
+                                    content: .init(messages: messages),
+                                    properties: .init(replyDetails: buildTimelineItemReplyDetails(messageLikeContent.inReplyTo),
+                                                      isThreaded: messageLikeContent.threadRoot != nil,
+                                                      threadSummary: buildTimelineItemThreadSummary(messageLikeContent.threadSummary),
+                                                      isEdited: messageContent.isEdited,
+                                                      reactions: buildAggregatedReactions(eventItemProxy.reactions),
+                                                      deliveryStatus: eventItemProxy.deliveryStatus,
+                                                      orderedReadReceipts: buildOrderedReadReceipts(eventItemProxy.readReceipts),
+                                                      encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState),
+                                                      encryptionForwarder: eventItemProxy.forwarder))
     }
     
     private func buildTextTimelineItem(for eventItemProxy: EventTimelineItemProxy,

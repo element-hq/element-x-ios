@@ -27,6 +27,8 @@ struct TimelineView: View {
                 ManageRoomMemberSheetView(context: $0.context)
             }
             .sheet(item: $timelineContext.debugInfo) { TimelineItemDebugView(info: $0) }
+            .fullScreenCover(item: $timelineContext.a2uiVideoPlayback) { A2UIVideoPlayerView(playback: $0) }
+            .interactiveQuickLook(item: $timelineContext.a2uiImagePreviewItem, allowEditing: false)
             .sheet(item: $timelineContext.redactConfirmationInfo) { info in
                 RedactConfirmationView { reason in
                     timelineContext.send(viewAction: .redactConfirmed(itemID: info.id, reason: reason))
