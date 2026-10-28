@@ -704,6 +704,12 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         switch await roomProxy.loadOrFetchEventDetails(for: fullyReadEventID) {
         case .success:
             await focusOnEvent(eventID: fullyReadEventID)
+            
+            // The marker may point to an event that isn't rendered (e.g. a reaction), so scroll
+            // to the closest visible event before it in the focused timeline instead.
+            if let visibleEventID = timelineController.fullyReadEventID, visibleEventID != fullyReadEventID {
+                state.timelineState.focussedEvent = .init(eventID: visibleEventID, appearance: .immediate)
+            }
         case .failure:
             displayErrorToast(L10n.errorMessageNotFound)
         }
