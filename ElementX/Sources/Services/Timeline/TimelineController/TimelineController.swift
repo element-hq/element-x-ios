@@ -139,6 +139,10 @@ class TimelineController: TimelineControllerProtocol {
         _ = await activeTimeline.sendReadReceipt(for: eventID, type: receiptType)
     }
     
+    var fullyReadEventID: String? {
+        activeTimeline.fullyReadEventID
+    }
+    
     func processItemAppearance(_ itemID: TimelineItemIdentifier) async {
         guard let timelineItem = timelineItems.firstUsingStableID(itemID) else {
             return
@@ -495,6 +499,7 @@ class TimelineController: TimelineControllerProtocol {
     
     /// The cancellable used to update the timeline items.
     private var updateTimelineItemsCancellable: AnyCancellable?
+    private var fullyReadEventIDCancellable: AnyCancellable?
     /// The controller is switching the `activeTimelineItemProvider`.
     private var isSwitchingTimelines = false
     
@@ -502,6 +507,13 @@ class TimelineController: TimelineControllerProtocol {
     /// - Parameter clearExistingItems: Whether or not to clear any existing items before loading the timeline's contents.
     private func configureActiveTimelineItemProvider() {
         updateTimelineItemsCancellable = nil
+        
+        fullyReadEventIDCancellable = activeTimeline.fullyReadEventIDPublisher
+            .prepend(activeTimeline.fullyReadEventID)
+            .removeDuplicates()
+            .sink { [weak self] eventID in
+                self?.callbacks.send(.fullyReadEventID(eventID))
+            }
         
         isSwitchingTimelines = true
         

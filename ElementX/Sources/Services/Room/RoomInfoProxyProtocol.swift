@@ -69,7 +69,6 @@ nonisolated protocol RoomInfoProxyProtocol: BaseRoomInfoProxyProtocol {
     var unreadNotificationsCount: UInt { get }
     // periphery:ignore - might be useful to have
     var unreadMentionsCount: UInt { get }
-    var fullyReadEventID: String? { get }
     var pinnedEventIDs: Set<String> { get }
     var joinRule: JoinRule? { get }
     var historyVisibility: RoomHistoryVisibility { get }

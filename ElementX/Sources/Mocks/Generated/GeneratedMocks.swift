@@ -11226,7 +11226,6 @@ nonisolated class RoomInfoProxyMock: RoomInfoProxyProtocol, @unchecked Sendable 
         set(value) { underlyingUnreadMentionsCount = value }
     }
     nonisolated(unsafe) var underlyingUnreadMentionsCount: UInt!
-    nonisolated(unsafe) var fullyReadEventID: String?
     var pinnedEventIDs: Set<String> {
         get { return underlyingPinnedEventIDs }
         set(value) { underlyingPinnedEventIDs = value }
@@ -13118,6 +13117,7 @@ nonisolated class TimelineControllerMock: TimelineControllerProtocol, @unchecked
         set(value) { underlyingCallbacks = value }
     }
     nonisolated(unsafe) var underlyingCallbacks: PassthroughSubject<TimelineControllerCallback, Never>!
+    nonisolated(unsafe) var fullyReadEventID: String?
 
     //MARK: - processItemAppearance
 
@@ -14293,6 +14293,12 @@ nonisolated class TimelineProxyMock: TimelineProxyProtocol, @unchecked Sendable 
         set(value) { underlyingTimelineItemProvider = value }
     }
     nonisolated(unsafe) var underlyingTimelineItemProvider: TimelineItemProviderProtocol!
+    nonisolated(unsafe) var fullyReadEventID: String?
+    var fullyReadEventIDPublisher: AnyPublisher<String?, Never> {
+        get { return underlyingFullyReadEventIDPublisher }
+        set(value) { underlyingFullyReadEventIDPublisher = value }
+    }
+    nonisolated(unsafe) var underlyingFullyReadEventIDPublisher: AnyPublisher<String?, Never>!
 
     //MARK: - subscribeForUpdates
 

@@ -121,6 +121,7 @@ struct JoinedRoomProxyTests {
         let timeline = TimelineSDKMock()
         timeline.subscribeToBackPaginationStatusListenerReturnValue = TaskHandleSDKMock()
         timeline.addListenerListenerReturnValue = TaskHandleSDKMock()
+        timeline.subscribeToFullyReadEventIdListenerReturnValue = TaskHandleSDKMock()
         return timeline
     }
     
