@@ -6,7 +6,6 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import CallKit
 import Combine
 import ElementCall
 import MatrixRustSDK
@@ -34,8 +33,8 @@ final class ElementCallService: ElementCallServiceProtocol {
         ongoingCallRoomIDSubject.asCurrentValuePublisher()
     }
     
-    private let nativeCallEventsSubject = PassthroughSubject<ElementCallSystemEvent, Never>()
-    var nativeCallEventsPublisher: AnyPublisher<ElementCallSystemEvent, Never> {
+    private let nativeCallEventsSubject = PassthroughSubject<NativeCallEvent, Never>()
+    var nativeCallEventsPublisher: AnyPublisher<NativeCallEvent, Never> {
         nativeCallEventsSubject.eraseToAnyPublisher()
     }
     
@@ -132,7 +131,7 @@ final class ElementCallService: ElementCallServiceProtocol {
         actionsSubject.send(.callSessionEnded(roomID: roomID, reason: nil))
     }
     
-    func reportCallSessionEnded(roomID: String, reason: CXCallEndedReason) {
+    func reportCallSessionEnded(roomID: String, reason: CallEndReason) {
         actionsSubject.send(.callSessionEnded(roomID: roomID, reason: reason))
     }
     
@@ -184,7 +183,7 @@ final class ElementCallService: ElementCallServiceProtocol {
         continuation.resume()
     }
     
-    func systemEventReceived(_ event: ElementCallSystemEvent) {
+    func systemEventReceived(_ event: NativeCallEvent) {
         nativeCallEventsSubject.send(event)
     }
     
@@ -322,7 +321,7 @@ final class ElementCallService: ElementCallServiceProtocol {
     }
     
     /// Reports the end once, as the room and the decline listener can both see it.
-    private func incomingCallEnded(_ call: ObservedCall, reason: CXCallEndedReason) {
+    private func incomingCallEnded(_ call: ObservedCall, reason: CallEndReason) {
         guard observedCall == call else { return }
         stopObservingIncomingCall()
         actionsSubject.send(.incomingCallEnded(roomID: call.roomID, reason: reason))

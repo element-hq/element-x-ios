@@ -5,7 +5,6 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import CallKit
 import Combine
 import ElementCall
 
@@ -24,6 +23,8 @@ final class NativeCallSystem: ElementCallSystemProvidingProtocol {
     init(service: ElementCallServiceProtocol) {
         self.service = service
         events = service.nativeCallEventsPublisher
+            .map { ElementCallSystemEvent($0) }
+            .eraseToAnyPublisher()
     }
     
     func startCall(roomID: String, displayName: String, isVideo: Bool) async {
@@ -51,5 +52,20 @@ final class NativeCallSystem: ElementCallSystemProvidingProtocol {
     
     func setMicrophoneEnabled(_ enabled: Bool, roomID: String) {
         service?.setAudioEnabled(enabled, roomID: roomID)
+    }
+}
+
+private extension ElementCallSystemEvent {
+    init(_ event: NativeCallEvent) {
+        self = switch event {
+        case .audioSessionActivated:
+            .audioSessionActivated
+        case .audioSessionDeactivated:
+            .audioSessionDeactivated
+        case .microphoneMuteChanged(let isMuted):
+            .microphoneMuteChanged(isMuted: isMuted)
+        case .endCallRequested(let roomID):
+            .endCallRequested(roomID: roomID)
+        }
     }
 }

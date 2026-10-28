@@ -9,7 +9,6 @@
 import AVFoundation
 import CallKit
 import Combine
-import ElementCall
 import Foundation
 import PushKit
 import UIKit
@@ -236,7 +235,7 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
         MXLog.info("Not dropping an answered call, none for room \(roomID)")
     }
     
-    private func reportCallSessionEnded(roomID: String, reason: CXCallEndedReason) {
+    private func reportCallSessionEnded(roomID: String, reason: CallEndReason) {
         guard let ongoingCallID, ongoingCallID.roomID == roomID else {
             MXLog.info("Not reporting the end of a call for \(roomID), it isn't the ongoing call")
             return
@@ -244,8 +243,8 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
         
         // A web view call is not tracked by CallKit, as in `reportCallSessionConnected`.
         if ongoingCallID.isNative {
-            MXLog.info("Reporting the call as ended without us: \(reason.rawValue)")
-            callProvider.reportCall(with: ongoingCallID.callKitID, endedAt: nil, reason: reason)
+            MXLog.info("Reporting the call as ended without us: \(reason)")
+            callProvider.reportCall(with: ongoingCallID.callKitID, endedAt: nil, reason: CXCallEndedReason(reason))
         }
         
         self.ongoingCallID = nil
@@ -271,13 +270,13 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
     }
     
     /// The service saw the ringing call end elsewhere: hung up, or answered or declined on another device.
-    private func incomingCallEnded(roomID: String, reason: CXCallEndedReason) {
+    private func incomingCallEnded(roomID: String, reason: CallEndReason) {
         guard let incomingCallID, incomingCallID.roomID == roomID else {
             MXLog.info("Not ending the incoming call, no call ringing for room \(roomID)")
             return
         }
         
-        reportEndedCall(incomingCallID: incomingCallID, reason: reason)
+        reportEndedCall(incomingCallID: incomingCallID, reason: CXCallEndedReason(reason))
     }
     
     // MARK: - PKPushRegistryDelegate
@@ -633,5 +632,22 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
         answeredNativeCallID = nil
         isIncomingCallAnswered = false
         incomingCallID = nil
+    }
+}
+
+private extension CXCallEndedReason {
+    init(_ reason: CallEndReason) {
+        self = switch reason {
+        case .remoteEnded:
+            .remoteEnded
+        case .answeredElsewhere:
+            .answeredElsewhere
+        case .declinedElsewhere:
+            .declinedElsewhere
+        case .unanswered:
+            .unanswered
+        case .failed:
+            .failed
+        }
     }
 }

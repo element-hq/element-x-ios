@@ -6,7 +6,6 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import CallKit
 import Combine
 import ElementCall
 
@@ -16,6 +15,25 @@ enum NativeCallPresentation: Equatable {
     case restore
     case minimize
     case dismiss
+}
+
+/// What CallKit asks of the native call.
+enum NativeCallEvent: Equatable {
+    case audioSessionActivated
+    case audioSessionDeactivated
+    /// The mute changed outside the call screen, from the lock screen or the system call UI.
+    case microphoneMuteChanged(isMuted: Bool)
+    /// The system ended the call, from the lock screen or because the user hung up elsewhere.
+    case endCallRequested(roomID: String)
+}
+
+/// Why a call ended without us, which the system shows in the call log.
+enum CallEndReason: Equatable {
+    case remoteEnded
+    case answeredElsewhere
+    case declinedElsewhere
+    case unanswered
+    case failed
 }
 
 enum ElementCallSessionKind: Equatable {
@@ -29,10 +47,10 @@ enum ElementCallServiceAction: Equatable {
     case callSessionStarted(roomID: String, roomDisplayName: String, isVideo: Bool, kind: ElementCallSessionKind)
     case callSessionConnected(roomID: String)
     /// A `nil` reason means the call ended here: our hang-up, or the call screen closing.
-    case callSessionEnded(roomID: String, reason: CXCallEndedReason?)
+    case callSessionEnded(roomID: String, reason: CallEndReason?)
     case audioEnabledChanged(_ enabled: Bool, roomID: String)
     /// The ringing call ended without the user: hung up, or answered or declined on another device.
-    case incomingCallEnded(roomID: String, reason: CXCallEndedReason)
+    case incomingCallEnded(roomID: String, reason: CallEndReason)
 }
 
 // sourcery: AutoMockable
@@ -42,7 +60,7 @@ protocol ElementCallServiceProtocol: AnyObject {
     var ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never> { get }
     
     /// What CallKit asks of the native call: audio session changes, mutes and hang-ups.
-    var nativeCallEventsPublisher: AnyPublisher<ElementCallSystemEvent, Never> { get }
+    var nativeCallEventsPublisher: AnyPublisher<NativeCallEvent, Never> { get }
     
     /// The native call's screen needs presenting, minimizing, restoring or dismissing.
     var nativeCallPresentationPublisher: AnyPublisher<NativeCallPresentation, Never> { get }
@@ -84,7 +102,7 @@ protocol ElementCallServiceProtocol: AnyObject {
     /// The call for the room ended without us: declined, unanswered, the other side gone, or failed.
     /// Reported to the system as such rather than as an end call action, which would log it as one
     /// we hung up and ask the call stack to end a call it already has.
-    func reportCallSessionEnded(roomID: String, reason: CXCallEndedReason)
+    func reportCallSessionEnded(roomID: String, reason: CallEndReason)
     
     /// Mirrors the native call's mute into CallKit. Web view calls aren't tracked there, so they
     /// never call this.
@@ -100,5 +118,5 @@ protocol ElementCallServiceProtocol: AnyObject {
     /// Completes the room's `setupCallSession`.
     func callSessionSetUp(roomID: String, isAccepted: Bool)
     /// CallKit's side of the native call: the audio session, mutes and hang-ups.
-    func systemEventReceived(_ event: ElementCallSystemEvent)
+    func systemEventReceived(_ event: NativeCallEvent)
 }

@@ -5116,11 +5116,11 @@ nonisolated class ElementCallServiceMock: ElementCallServiceProtocol, @unchecked
         set(value) { underlyingOngoingCallRoomIDPublisher = value }
     }
     nonisolated(unsafe) var underlyingOngoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never>!
-    var nativeCallEventsPublisher: AnyPublisher<ElementCallSystemEvent, Never> {
+    var nativeCallEventsPublisher: AnyPublisher<NativeCallEvent, Never> {
         get { return underlyingNativeCallEventsPublisher }
         set(value) { underlyingNativeCallEventsPublisher = value }
     }
-    nonisolated(unsafe) var underlyingNativeCallEventsPublisher: AnyPublisher<ElementCallSystemEvent, Never>!
+    nonisolated(unsafe) var underlyingNativeCallEventsPublisher: AnyPublisher<NativeCallEvent, Never>!
     var nativeCallPresentationPublisher: AnyPublisher<NativeCallPresentation, Never> {
         get { return underlyingNativeCallPresentationPublisher }
         set(value) { underlyingNativeCallPresentationPublisher = value }
@@ -5341,20 +5341,20 @@ nonisolated class ElementCallServiceMock: ElementCallServiceProtocol, @unchecked
         return reportCallSessionEndedRoomIDReasonCallsCount > 0
     }
     private let reportCallSessionEndedRoomIDReasonReceivedArgumentsLock = NSLock()
-    private nonisolated(unsafe) var reportCallSessionEndedRoomIDReasonUnderlyingReceivedArguments: (roomID: String, reason: CXCallEndedReason)?
-    var reportCallSessionEndedRoomIDReasonReceivedArguments: (roomID: String, reason: CXCallEndedReason)? {
+    private nonisolated(unsafe) var reportCallSessionEndedRoomIDReasonUnderlyingReceivedArguments: (roomID: String, reason: CallEndReason)?
+    var reportCallSessionEndedRoomIDReasonReceivedArguments: (roomID: String, reason: CallEndReason)? {
         get { reportCallSessionEndedRoomIDReasonReceivedArgumentsLock.withLock { reportCallSessionEndedRoomIDReasonUnderlyingReceivedArguments } }
         set { reportCallSessionEndedRoomIDReasonReceivedArgumentsLock.withLock { reportCallSessionEndedRoomIDReasonUnderlyingReceivedArguments = newValue } }
     }
     private let reportCallSessionEndedRoomIDReasonReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var reportCallSessionEndedRoomIDReasonUnderlyingReceivedInvocations: [(roomID: String, reason: CXCallEndedReason)] = []
-    var reportCallSessionEndedRoomIDReasonReceivedInvocations: [(roomID: String, reason: CXCallEndedReason)] {
+    private nonisolated(unsafe) var reportCallSessionEndedRoomIDReasonUnderlyingReceivedInvocations: [(roomID: String, reason: CallEndReason)] = []
+    var reportCallSessionEndedRoomIDReasonReceivedInvocations: [(roomID: String, reason: CallEndReason)] {
         get { reportCallSessionEndedRoomIDReasonReceivedInvocationsLock.withLock { reportCallSessionEndedRoomIDReasonUnderlyingReceivedInvocations } }
         set { reportCallSessionEndedRoomIDReasonReceivedInvocationsLock.withLock { reportCallSessionEndedRoomIDReasonUnderlyingReceivedInvocations = newValue } }
     }
-    nonisolated(unsafe) var reportCallSessionEndedRoomIDReasonClosure: ((String, CXCallEndedReason) -> Void)?
+    nonisolated(unsafe) var reportCallSessionEndedRoomIDReasonClosure: ((String, CallEndReason) -> Void)?
 
-    func reportCallSessionEnded(roomID: String, reason: CXCallEndedReason) {
+    func reportCallSessionEnded(roomID: String, reason: CallEndReason) {
         reportCallSessionEndedRoomIDReasonCallsCountLock.withLock { reportCallSessionEndedRoomIDReasonUnderlyingCallsCount += 1 }
         reportCallSessionEndedRoomIDReasonReceivedArguments = (roomID: roomID, reason: reason)
         reportCallSessionEndedRoomIDReasonReceivedInvocationsLock.withLock { reportCallSessionEndedRoomIDReasonUnderlyingReceivedInvocations.append((roomID: roomID, reason: reason)) }
@@ -5544,20 +5544,20 @@ nonisolated class ElementCallServiceMock: ElementCallServiceProtocol, @unchecked
         return systemEventReceivedCallsCount > 0
     }
     private let systemEventReceivedReceivedEventLock = NSLock()
-    private nonisolated(unsafe) var systemEventReceivedUnderlyingReceivedEvent: ElementCallSystemEvent?
-    var systemEventReceivedReceivedEvent: ElementCallSystemEvent? {
+    private nonisolated(unsafe) var systemEventReceivedUnderlyingReceivedEvent: NativeCallEvent?
+    var systemEventReceivedReceivedEvent: NativeCallEvent? {
         get { systemEventReceivedReceivedEventLock.withLock { systemEventReceivedUnderlyingReceivedEvent } }
         set { systemEventReceivedReceivedEventLock.withLock { systemEventReceivedUnderlyingReceivedEvent = newValue } }
     }
     private let systemEventReceivedReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var systemEventReceivedUnderlyingReceivedInvocations: [ElementCallSystemEvent] = []
-    var systemEventReceivedReceivedInvocations: [ElementCallSystemEvent] {
+    private nonisolated(unsafe) var systemEventReceivedUnderlyingReceivedInvocations: [NativeCallEvent] = []
+    var systemEventReceivedReceivedInvocations: [NativeCallEvent] {
         get { systemEventReceivedReceivedInvocationsLock.withLock { systemEventReceivedUnderlyingReceivedInvocations } }
         set { systemEventReceivedReceivedInvocationsLock.withLock { systemEventReceivedUnderlyingReceivedInvocations = newValue } }
     }
-    nonisolated(unsafe) var systemEventReceivedClosure: ((ElementCallSystemEvent) -> Void)?
+    nonisolated(unsafe) var systemEventReceivedClosure: ((NativeCallEvent) -> Void)?
 
-    func systemEventReceived(_ event: ElementCallSystemEvent) {
+    func systemEventReceived(_ event: NativeCallEvent) {
         systemEventReceivedCallsCountLock.withLock { systemEventReceivedUnderlyingCallsCount += 1 }
         systemEventReceivedReceivedEvent = event
         systemEventReceivedReceivedInvocationsLock.withLock { systemEventReceivedUnderlyingReceivedInvocations.append(event) }

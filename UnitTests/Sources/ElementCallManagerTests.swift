@@ -8,7 +8,6 @@
 import AVFoundation
 import CallKit
 import Combine
-import ElementCall
 @testable import ElementX
 import PushKit
 import Testing
@@ -303,20 +302,22 @@ final class ElementCallManagerTests {
     
     /// A declined or unanswered call is the system's to log as such: reported with its reason, and
     /// never as an end call action, which would log it as one we hung up.
-    @Test
-    func aCallThatEndedWithoutUsIsReportedRatherThanEnded() async throws {
+    @Test(arguments: [(CallEndReason.remoteEnded, CXCallEndedReason.remoteEnded),
+                      (.unanswered, .unanswered),
+                      (.failed, .failed)])
+    func aCallThatEndedWithoutUsIsReportedRatherThanEnded(reason: CallEndReason, callKitReason: CXCallEndedReason) async throws {
         appSettings.nativeCallEnabled = true
         await startCallSession(kind: .native)
         let callID = try #require(callProvider.reportCallWithUpdatedReceivedArguments?.uuid)
         let requestsBeforeTheEnd = callController.requestCompletionCallsCount
         
-        serviceActions.send(.callSessionEnded(roomID: "!other:example.com", reason: .unanswered))
+        serviceActions.send(.callSessionEnded(roomID: "!other:example.com", reason: reason))
         #expect(!callProvider.reportCallWithEndedAtReasonCalled, "Another room's end is not this call's")
         
-        serviceActions.send(.callSessionEnded(roomID: "!room:example.com", reason: .unanswered))
+        serviceActions.send(.callSessionEnded(roomID: "!room:example.com", reason: reason))
         
         #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.uuid == callID)
-        #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.reason == .unanswered)
+        #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.reason == callKitReason)
         #expect(callController.requestCompletionCallsCount == requestsBeforeTheEnd)
         #expect(service.ongoingCallRoomIDPublisher.value == nil)
     }
@@ -580,17 +581,19 @@ final class ElementCallManagerTests {
         #expect(service.observeIncomingCallRoomIDRtcNotificationIDReceivedArguments?.rtcNotificationID == "$000")
     }
     
-    @Test
-    func theServiceEndingTheRingEndsTheCall() async throws {
+    @Test(arguments: [(CallEndReason.remoteEnded, CXCallEndedReason.remoteEnded),
+                      (.answeredElsewhere, .answeredElsewhere),
+                      (.declinedElsewhere, .declinedElsewhere)])
+    func theServiceEndingTheRingEndsTheCall(reason: CallEndReason, callKitReason: CXCallEndedReason) async throws {
         await reportIncomingPush(isVoiceCall: false)
         let ringingUUID = try #require(callProvider.reportNewIncomingCallWithUpdateCompletionReceivedArguments?.uuid)
         
-        serviceActions.send(.incomingCallEnded(roomID: "!other:example.com", reason: .remoteEnded))
+        serviceActions.send(.incomingCallEnded(roomID: "!other:example.com", reason: reason))
         #expect(!callProvider.reportCallWithEndedAtReasonCalled)
         
-        serviceActions.send(.incomingCallEnded(roomID: "!room:example.com", reason: .remoteEnded))
+        serviceActions.send(.incomingCallEnded(roomID: "!room:example.com", reason: reason))
         #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.uuid == ringingUUID)
-        #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.reason == .remoteEnded)
+        #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.reason == callKitReason)
         #expect(service.stopObservingIncomingCallCalled)
     }
     
