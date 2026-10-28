@@ -54,27 +54,6 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         
         state.swiftUICallViewCoordinator = .init(viewModelContext: context)
         
-        elementCallService.actions
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] action in
-                guard let self else { return }
-                
-                switch action {
-                case let .setAudioEnabled(enabled, roomID):
-                    guard roomID == configuration.callRoomID else {
-                        MXLog.error("Received mute request for a different room: \(roomID) != \(configuration.callRoomID)")
-                        return
-                    }
-                    
-                    Task {
-                        await self.setAudioEnabled(enabled)
-                    }
-                default:
-                    break
-                }
-            }
-            .store(in: &cancellables)
-        
         widgetDriver.messagePublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] receivedMessage in
@@ -197,7 +176,8 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
             
             await elementCallService.setupCallSession(roomID: configuration.roomProxy.id,
                                                       roomDisplayName: configuration.roomProxy.infoPublisher.value.displayNameOrID,
-                                                      isVideo: !configuration.voiceOnly)
+                                                      isVideo: !configuration.voiceOnly,
+                                                      kind: .webView)
         }
         
         timeoutTask = Task { [weak self] in
@@ -235,14 +215,6 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         case .failure:
             actionsSubject.send(.dismiss)
         }
-    }
-    
-    private func setAudioEnabled(_ enabled: Bool) async {
-        let message = ElementCallWidgetMessage(direction: .toWidget,
-                                               action: .mediaState,
-                                               data: .init(audioEnabled: enabled),
-                                               widgetId: widgetDriver.widgetID)
-        await postMessageToWidget(message)
     }
     
     func hangup() async {
