@@ -377,6 +377,10 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: false)
     var galleryEnabled: Bool
     
+    /// Adds a pencil next to crop in the media upload preview, to draw on pictures before sending them.
+    @UserPreference(defaultValue: false)
+    var imageDrawingEnabled: Bool
+    
     @UserPreference(defaultValue: false)
     var jumpToReadMarkerEnabled: Bool
     
