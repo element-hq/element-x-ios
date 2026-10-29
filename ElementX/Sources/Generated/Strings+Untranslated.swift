@@ -10,6 +10,19 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 internal nonisolated enum UntranslatedL10n {
+  /// Got it
+  internal static var actionGotIt: String { return UntranslatedL10n.tr("Untranslated", "action_got_it") }
+  /// Search runs on your device, so your encrypted messages stay private.
+  /// Your device keeps the most recent 3 months of messages, so older messages can’t be searched yet.
+  internal static var screenSearchHistoryLimitMessage: String { return UntranslatedL10n.tr("Untranslated", "screen_search_history_limit_message") }
+  /// Search covers the last 3 months
+  internal static var screenSearchHistoryLimitTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_search_history_limit_title") }
+  /// There are no results for “%1$@” in your recent messages.
+  internal static func screenSearchMessagesNoResultsMessage(_ p1: Any) -> String {
+    return UntranslatedL10n.tr("Untranslated", "screen_search_messages_no_results_message", String(describing: p1))
+  }
+  /// No results in the last 3 months
+  internal static var screenSearchMessagesNoResultsTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_search_messages_no_results_title") }
   /// Clear all data currently stored on this device?
   /// Sign in again to access your account data and messages.
   internal static var softLogoutClearDataDialogContent: String { return UntranslatedL10n.tr("Untranslated", "soft_logout_clear_data_dialog_content") }

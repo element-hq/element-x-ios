@@ -643,6 +643,14 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "ScanStateMediaEventsTimelineViews_Previews")
     }
 
+    func testSearchScreenHistoryLimitSheet() async throws {
+        try await performAccessibilityAudit(named: "SearchScreenHistoryLimitSheet_Previews")
+    }
+
+    func testSearchScreenMessagesNoResultsView() async throws {
+        try await performAccessibilityAudit(named: "SearchScreenMessagesNoResultsView_Previews")
+    }
+
     func testSearchScreen() async throws {
         try await performAccessibilityAudit(named: "SearchScreen_Previews")
     }

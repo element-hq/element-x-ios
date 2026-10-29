@@ -21,6 +21,8 @@ struct SearchScreen: View {
     /// The selection is only meaningful with a hardware keyboard, so don't highlight anything otherwise.
     @State private var isHardwareKeyboardConnected = false
     
+    @State private var isPresentingHistoryLimitSheet = false
+    
     /// The ids of the rows the user can select, in display order. These are the breadcrumbs
     /// until a query is entered, after which they're the active tab's results.
     private var selectableIDs: [String] {
@@ -133,11 +135,16 @@ struct SearchScreen: View {
         .onChange(of: context.viewState.bindings.searchMode) {
             selectedID = selectableIDs.first
         }
+        .sheet(isPresented: $isPresentingHistoryLimitSheet) {
+            SearchScreenHistoryLimitSheet()
+        }
     }
     
     @ViewBuilder
     private var emptyState: some View {
-        if context.viewState.isSearching {
+        if context.viewState.isSearching, context.viewState.bindings.searchMode == .messages {
+            SearchScreenMessagesNoResultsView(query: context.searchQuery) { isPresentingHistoryLimitSheet = true }
+        } else if context.viewState.isSearching {
             TitleAndIcon(title: L10n.commonNoResults,
                          subtitle: L10n.screenSearchNoResultsMessage(context.searchQuery),
                          icon: \.search,
