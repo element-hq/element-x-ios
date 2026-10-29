@@ -76,12 +76,6 @@ final nonisolated class NSEUserSession: NSEUserSessionProtocol {
         }
         delegateHandle = try baseClient.setDelegate(delegate: ClientDelegateWrapper())
         
-        // Inject the content scanner so the SDK gates the media it downloads whilst building the notification.
-        if let contentScannerURL = userSettings.app.contentScannerURL.publisher.value {
-            let contentScanner = ContentScanner(scannerUrl: contentScannerURL.absoluteString)
-            await baseClient.setContentScanner(contentScanner: contentScanner)
-        }
-        
         notificationClient = try await baseClient.notificationClient(processSetup: .multipleProcesses)
     }
     

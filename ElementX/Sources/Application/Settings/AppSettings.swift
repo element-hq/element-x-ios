@@ -260,12 +260,6 @@ final nonisolated class AppSettings: @unchecked Sendable {
     /// The name allocated by the bug report server
     private(set) var bugReportApplicationID = "element-x-ios"
     
-    // MARK: - Content scanner
-    
-    /// The base URL of the content scanner server used to scan media before it is downloaded.
-    /// `nil` when content scanning is disabled.
-    let contentScannerURL: RemotePreference<URL?> = .init(nil)
-    
     // MARK: - Analytics
     
     /// The configuration to use for analytics. Set to `nil` to disable analytics.

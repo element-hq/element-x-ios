@@ -11,6 +11,12 @@ import MatrixRustSDK
 
 /// A wrapper around `ClientBuilder` to allow for mocked clients to be injected into tests.
 nonisolated struct ClientFactory: ClientFactoryProtocol {
+    private let clientBuilderFactory: ClientBuilderFactoryProtocol
+    
+    init(clientBuilderFactory: ClientBuilderFactoryProtocol = ClientBuilderFactory()) {
+        self.clientBuilderFactory = clientBuilderFactory
+    }
+    
     // MARK: Authentication
     
     #if IS_MAIN_APP
@@ -115,7 +121,7 @@ nonisolated struct ClientFactory: ClientFactoryProtocol {
                                  requestTimeout: UInt64? = 30000,
                                  maxRequestRetryTime: UInt64? = nil,
                                  threadsEnabled: Bool) -> ClientBuilder {
-        var builder = ClientBuilder()
+        var builder = clientBuilderFactory.makeBuilder()
             .crossProcessLockConfig(crossProcessLockConfig: .multiProcess(holderName: InfoPlistReader.main.bundleIdentifier))
             .setSessionDelegate(sessionDelegate: sessionDelegate)
             .userAgent(userAgent: UserAgentBuilder.makeASCIIUserAgent())
@@ -161,13 +167,15 @@ nonisolated struct ClientFactory: ClientFactoryProtocol {
     private func build(_ builder: ClientBuilder,
                        for mode: BuildMode,
                        appHooks: AppHooks) async throws -> ClientProtocol {
-        let client: ClientProtocol = try await appHooks.clientFactoryHook.configure(builder, toRestore: mode.session).build()
+        var client: ClientProtocol = try await appHooks.clientFactoryHook.configure(builder, toRestore: mode.session).build()
         
         switch mode {
         case .authentication:
+            // The hook is run in the authentication service.
             break
         case .restoration(let session, let roomLoadSettings):
             try await client.restoreSessionWith(session: session, roomLoadSettings: roomLoadSettings)
+            client = await appHooks.clientFactoryHook.updateRestoredClient(client)
         case .classicAppAccount:
             break
         }
