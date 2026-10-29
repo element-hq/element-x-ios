@@ -324,7 +324,7 @@ final class RoomFlowCoordinatorTests {
         #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         #expect(navigationStackCoordinator.stackCoordinators.isEmpty)
         
-        #expect((navigationStackCoordinator.sheetCoordinator as? NavigationStackCoordinator)?.rootCoordinator is MediaUploadPreviewScreenCoordinator)
+        #expect(navigationStackCoordinator.sheetCoordinator is MediaUploadPreviewScreenCoordinator)
         
         try await process(route: .childRoom(roomID: "2", via: []), expectedStackCount: 1)
         let deferredSheetDismissal = deferFulfillment(navigationStackCoordinator.observe(\.sheetCoordinatorID)) { $0 == nil }
@@ -334,7 +334,7 @@ final class RoomFlowCoordinatorTests {
         
         let deferredPop = deferFulfillment(navigationStackCoordinator.observe(\.stackCoordinators.count)) { $0 == 0 }
         try await deferredPop.fulfill()
-        #expect((navigationStackCoordinator.sheetCoordinator as? NavigationStackCoordinator)?.rootCoordinator is MediaUploadPreviewScreenCoordinator)
+        #expect(navigationStackCoordinator.sheetCoordinator is MediaUploadPreviewScreenCoordinator)
     }
     
     @Test

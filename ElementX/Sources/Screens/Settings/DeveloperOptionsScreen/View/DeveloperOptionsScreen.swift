@@ -104,6 +104,11 @@ struct DeveloperOptionsScreen: View {
                 Toggle(isOn: $context.reactionCelebrationsEnabled) {
                     Text("Reaction celebrations")
                 }
+                
+                Toggle(isOn: $context.imageDrawingEnabled) {
+                    Text("Draw on images")
+                    Text("Adds a pencil next to crop when sending a picture.")
+                }
             }
             
             Section {
