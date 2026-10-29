@@ -106,6 +106,12 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference
     var lastVersionLaunched: String?
     
+    /// Whether a user session has ever been set up on this device. Deliberately not cleared on
+    /// logout: it stops the Classic app migration prompt from reappearing when an Element X
+    /// user is signed out unexpectedly (invalidated token, corrupted storage, etc).
+    @UserPreference(defaultValue: false)
+    var hasSignedInBefore: Bool
+    
     /// Defaults to `true` for new users, and we use a migration to set it to `false` for existing users.
     @UserPreference(defaultValue: true)
     var hasSeenNewSoundBanner: Bool
@@ -228,11 +234,7 @@ final nonisolated class AppSettings: @unchecked Sendable {
     }
     
     @UserPreference(defaultValue: false)
-    var hideQuietNotificationAlerts: Bool
-    
-    /// Tag describing which set of device specific rules a pusher executes.
-    @UserPreference
-    var pusherProfileTag: String?
+    var hasRunNotificationPermissionsOnboarding: Bool
     
     /// The device's last boot time as recorded by the NSE.
     @UserPreference
@@ -281,23 +283,10 @@ final nonisolated class AppSettings: @unchecked Sendable {
     }
     
     /// Whether the user has opted in to send analytics.
+    ///
+    /// **Note:** Opt-in is app-wide, not per-session.
     @UserPreference(defaultValue: AnalyticsConsentState.unknown)
     var analyticsConsentState: AnalyticsConsentState
-    
-    /// Whether a user session has ever been set up on this device. Deliberately not cleared on
-    /// logout: it stops the Classic app migration prompt from reappearing when an Element X
-    /// user is signed out unexpectedly (invalidated token, corrupted storage, etc).
-    @UserPreference(defaultValue: false)
-    var hasSignedInBefore: Bool
-    
-    @UserPreference(defaultValue: false)
-    var hasRunNotificationPermissionsOnboarding: Bool
-    
-    @UserPreference(defaultValue: false)
-    var hasRequestedLocationAlwaysLocationAuthorization: Bool
-    
-    @UserPreference(defaultValue: [FrequentlyUsedEmoji]())
-    var frequentlyUsedSystemEmojis: [FrequentlyUsedEmoji]
     
     // MARK: - Live Location
     
@@ -306,6 +295,9 @@ final nonisolated class AppSettings: @unchecked Sendable {
     
     @UserPreference(defaultValue: false)
     var liveLocationDisclaimerDisplayed: Bool
+    
+    @UserPreference(defaultValue: false)
+    var hasRequestedLocationAlwaysLocationAuthorization: Bool
     
     // MARK: - Room Screen
     
@@ -317,6 +309,9 @@ final nonisolated class AppSettings: @unchecked Sendable {
     
     @UserPreference(defaultValue: AudioPlaybackSpeed.default)
     var voiceMessagePlaybackSpeed: AudioPlaybackSpeed
+    
+    @UserPreference(defaultValue: [FrequentlyUsedEmoji]())
+    var frequentlyUsedSystemEmojis: [FrequentlyUsedEmoji]
     
     /// Whether or not to show a warning on the media caption composer so the user knows
     /// that captions might not be visible to users who are using other Matrix clients.
@@ -352,7 +347,9 @@ final nonisolated class AppSettings: @unchecked Sendable {
     
     // MARK: - Feature Flags
     
-    /// Others
+    @UserPreference(defaultValue: AppBuildType.current != .release)
+    var developerOptionsEnabled: Bool
+    
     @UserPreference(defaultValue: false)
     var fuzzyRoomListSearchEnabled: Bool
     
@@ -395,8 +392,8 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(key: "clientPausingAndResumingEnabledV2", defaultValue: false, volatile: true)
     var clientPausingAndResumingEnabled: Bool
     
-    @UserPreference(defaultValue: AppBuildType.current != .release)
-    var developerOptionsEnabled: Bool
+    @UserPreference(defaultValue: false)
+    var hideQuietNotificationAlerts: Bool
     
     /// Runs calls through the native matrix-rust-rtc stack instead of the Element Call web view.
     @UserPreference(defaultValue: false)
