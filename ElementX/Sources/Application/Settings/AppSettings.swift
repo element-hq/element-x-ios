@@ -236,10 +236,6 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: false)
     var hasRunNotificationPermissionsOnboarding: Bool
     
-    /// Tag describing which set of device specific rules a pusher executes.
-    @UserPreference
-    var pusherProfileTag: String?
-    
     /// The device's last boot time as recorded by the NSE.
     @UserPreference
     var lastNotificationBootTime: TimeInterval?

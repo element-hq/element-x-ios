@@ -151,23 +151,9 @@ final class NotificationService: NotificationServiceProtocol {
                                                                defaultPayload: defaultPayload.toJsonString())),
                                        appDisplayName: "\(InfoPlistReader.main.bundleDisplayName) (iOS)",
                                        deviceDisplayName: UIDevice.current.name,
-                                       profileTag: pusherProfileTag(),
+                                       profileTag: nil,
                                        lang: Bundle.app.preferredLocalizations.first ?? "en",
                                        // Otherwise accounts on the same homeserver delete each other's pusher.
                                        append: userSettings.app.multiAccountEnabled)
-    }
-    
-    private func pusherProfileTag() -> String {
-        if let currentTag = userSettings.app.pusherProfileTag {
-            return currentTag
-        }
-        let chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-        let newTag = (0..<16).map { _ in
-            let offset = Int.random(in: 0..<chars.count)
-            return String(chars[chars.index(chars.startIndex, offsetBy: offset)])
-        }.joined()
-        
-        userSettings.app.pusherProfileTag = newTag
-        return newTag
     }
 }

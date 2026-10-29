@@ -43,7 +43,7 @@ final class NotificationServiceTests {
                                                                                     defaultPayload: defaultPayload.toJsonString())),
                                                             appDisplayName: "\(InfoPlistReader.main.bundleDisplayName) (iOS)",
                                                             deviceDisplayName: UIDevice.current.name,
-                                                            profileTag: appSettings.pusherProfileTag,
+                                                            profileTag: nil,
                                                             lang: Bundle.app.preferredLocalizations.first ?? "en",
                                                             append: false)
         #expect(clientProxy.setPusherWithReceivedInvocations == [expectedConfiguration])
@@ -58,24 +58,6 @@ final class NotificationServiceTests {
         
         let configuration = try #require(clientProxy.setPusherWithReceivedInvocations.first)
         #expect(configuration.append)
-    }
-    
-    @Test
-    func registeringGeneratesAndSavesTheProfileTag() async {
-        appSettings.pusherProfileTag = nil
-        
-        await makeService().register(deviceToken: Data())
-        
-        #expect(appSettings.pusherProfileTag != nil)
-    }
-    
-    @Test
-    func registeringKeepsTheSavedProfileTag() async {
-        appSettings.pusherProfileTag = "12345"
-        
-        await makeService().register(deviceToken: Data())
-        
-        #expect(appSettings.pusherProfileTag == "12345")
     }
     
     @Test
