@@ -13,21 +13,13 @@ struct SearchScreenMessagesNoResultsView: View {
     let onLearnMore: () -> Void
     
     var body: some View {
-        VStack(spacing: 8) {
-            TitleAndIcon(title: UntranslatedL10n.screenSearchMessagesNoResultsTitle,
-                         subtitle: UntranslatedL10n.screenSearchMessagesNoResultsMessage(query),
-                         icon: \.search,
-                         iconStyle: .defaultSolid)
-            
-            // The compound text link style has no accent colour variant.
-            Button(action: onLearnMore) {
-                Text(L10n.actionLearnMore)
-                    .font(.compound.bodyMDSemibold)
-                    .foregroundStyle(.compound.textActionAccent)
-            }
-        }
-        .frame(maxWidth: .infinity)
-        .padding(40)
+        TitleAndIcon(title: UntranslatedL10n.screenSearchMessagesNoResultsTitle,
+                     subtitle: UntranslatedL10n.screenSearchMessagesNoResultsMessage(query),
+                     icon: \.search,
+                     iconStyle: .defaultSolid,
+                     button: .init(title: L10n.actionLearnMore, action: onLearnMore))
+            .frame(maxWidth: .infinity)
+            .padding(40)
     }
 }
 
