@@ -125,6 +125,7 @@ targets:
     - path: ../../ElementX/Sources/Services/AlertTones/NotificationTone.swift
     - path: ../../ElementX/Sources/Services/AlertTones/NotificationToneManager.swift
     - path: ../../ElementX/Sources/Services/AlertTones/NotificationToneManagerProtocol.swift
+    - path: ../../ElementX/Sources/Services/Client/ClientBuilderFactory.swift
     - path: ../../ElementX/Sources/Services/Client/ClientFactory.swift
     - path: ../../ElementX/Sources/Services/Client/ClientFactoryProtocol.swift
     - path: ../../ElementX/Sources/Services/ElementCall/ElementCallServiceConstants.swift

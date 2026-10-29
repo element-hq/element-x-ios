@@ -2209,6 +2209,37 @@ nonisolated class ClassicAppManagerMock: ClassicAppManagerProtocol, @unchecked S
         }
     }
 }
+nonisolated class ClientBuilderFactoryMock: ClientBuilderFactoryProtocol, @unchecked Sendable {
+
+    //MARK: - makeBuilder
+
+    private let makeBuilderCallsCountLock = NSLock()
+    private nonisolated(unsafe) var makeBuilderUnderlyingCallsCount = 0
+    var makeBuilderCallsCount: Int {
+        get { makeBuilderCallsCountLock.withLock { makeBuilderUnderlyingCallsCount } }
+        set { makeBuilderCallsCountLock.withLock { makeBuilderUnderlyingCallsCount = newValue } }
+    }
+    var makeBuilderCalled: Bool {
+        return makeBuilderCallsCount > 0
+    }
+
+    private let makeBuilderReturnValueLock = NSLock()
+    private nonisolated(unsafe) var makeBuilderUnderlyingReturnValue: ClientBuilder!
+    var makeBuilderReturnValue: ClientBuilder! {
+        get { makeBuilderReturnValueLock.withLock { makeBuilderUnderlyingReturnValue } }
+        set { makeBuilderReturnValueLock.withLock { makeBuilderUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var makeBuilderClosure: (() -> ClientBuilder)?
+
+    func makeBuilder() -> ClientBuilder {
+        makeBuilderCallsCountLock.withLock { makeBuilderUnderlyingCallsCount += 1 }
+        if let makeBuilderClosure = makeBuilderClosure {
+            return makeBuilderClosure()
+        } else {
+            return makeBuilderReturnValue
+        }
+    }
+}
 nonisolated class ClientFactoryMock: ClientFactoryProtocol, @unchecked Sendable {
 
     //MARK: - makeAuthenticationClient

@@ -11,6 +11,12 @@ import MatrixRustSDK
 
 /// A wrapper around `ClientBuilder` to allow for mocked clients to be injected into tests.
 nonisolated struct ClientFactory: ClientFactoryProtocol {
+    private let clientBuilderFactory: ClientBuilderFactoryProtocol
+    
+    init(clientBuilderFactory: ClientBuilderFactoryProtocol = ClientBuilderFactory()) {
+        self.clientBuilderFactory = clientBuilderFactory
+    }
+    
     // MARK: Authentication
     
     #if IS_MAIN_APP
@@ -115,7 +121,7 @@ nonisolated struct ClientFactory: ClientFactoryProtocol {
                                  requestTimeout: UInt64? = 30000,
                                  maxRequestRetryTime: UInt64? = nil,
                                  threadsEnabled: Bool) -> ClientBuilder {
-        var builder = ClientBuilder()
+        var builder = clientBuilderFactory.makeBuilder()
             .crossProcessLockConfig(crossProcessLockConfig: .multiProcess(holderName: InfoPlistReader.main.bundleIdentifier))
             .setSessionDelegate(sessionDelegate: sessionDelegate)
             .userAgent(userAgent: UserAgentBuilder.makeASCIIUserAgent())
