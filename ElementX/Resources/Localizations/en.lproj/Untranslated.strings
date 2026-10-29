@@ -1,9 +1,3 @@
-"action_got_it" = "Got it";
-"screen_search_history_limit_message" = "Search runs on your device, so your encrypted messages stay private.\nYour device keeps the most recent 3 months of messages, so older messages can’t be searched yet.";
-"screen_search_history_limit_title" = "Search covers the last 3 months";
-/* Localazy: change %1$@ -> %1$s */
-"screen_search_messages_no_results_message" = "There are no results for “%1$@” in your recent messages.";
-"screen_search_messages_no_results_title" = "No results in the last 3 months";
 "soft_logout_clear_data_dialog_content" = "Clear all data currently stored on this device?\nSign in again to access your account data and messages.";
 "soft_logout_clear_data_dialog_title" = "Clear data";
 "soft_logout_clear_data_notice" = "Warning: Your personal data (including encryption keys) is still stored on this device.\n\nClear it if you’re finished using this device, or want to sign in to another account.";
