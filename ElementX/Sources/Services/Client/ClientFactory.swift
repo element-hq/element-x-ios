@@ -161,13 +161,15 @@ nonisolated struct ClientFactory: ClientFactoryProtocol {
     private func build(_ builder: ClientBuilder,
                        for mode: BuildMode,
                        appHooks: AppHooks) async throws -> ClientProtocol {
-        let client: ClientProtocol = try await appHooks.clientFactoryHook.configure(builder, toRestore: mode.session).build()
+        var client: ClientProtocol = try await appHooks.clientFactoryHook.configure(builder, toRestore: mode.session).build()
         
         switch mode {
         case .authentication:
+            // The hook is run in the authentication service.
             break
         case .restoration(let session, let roomLoadSettings):
             try await client.restoreSessionWith(session: session, roomLoadSettings: roomLoadSettings)
+            client = await appHooks.clientFactoryHook.updateRestoredClient(client)
         case .classicAppAccount:
             break
         }

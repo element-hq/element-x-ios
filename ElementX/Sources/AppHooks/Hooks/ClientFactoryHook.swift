@@ -11,7 +11,8 @@ import MatrixRustSDK
 nonisolated protocol ClientFactoryHookProtocol: Sendable {
     func configure(_ builder: ClientBuilder, toRestore session: Session?) -> ClientBuilder
     
-    func updateAuthenticationClient(_ client: ClientProtocol) -> ClientProtocol
+    func updateAuthenticationClient(_ client: ClientProtocol) async -> ClientProtocol
+    func updateRestoredClient(_ client: ClientProtocol) async -> ClientProtocol
 }
 
 nonisolated struct DefaultClientFactoryHook: ClientFactoryHookProtocol {
@@ -19,7 +20,11 @@ nonisolated struct DefaultClientFactoryHook: ClientFactoryHookProtocol {
         builder
     }
     
-    func updateAuthenticationClient(_ client: ClientProtocol) -> ClientProtocol {
+    func updateAuthenticationClient(_ client: ClientProtocol) async -> ClientProtocol {
+        client
+    }
+    
+    func updateRestoredClient(_ client: ClientProtocol) async -> ClientProtocol {
         client
     }
 }
