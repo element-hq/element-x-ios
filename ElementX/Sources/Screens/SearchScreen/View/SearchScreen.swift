@@ -72,7 +72,7 @@ struct SearchScreen: View {
                 }
             case .messages:
                 if context.viewState.messages.isEmpty {
-                    if context.viewState.isLoadingMessages || context.viewState.isActiveTabSearchPending {
+                    if context.viewState.isLoadingMessages || context.viewState.isSearchPending {
                         loadingState
                     } else {
                         emptyState

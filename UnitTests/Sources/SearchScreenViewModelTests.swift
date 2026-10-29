@@ -82,19 +82,19 @@ struct SearchScreenViewModelTests {
     }
     
     @Test
-    func switchingToMessagesTabIsPendingUntilSearched() async throws {
+    func switchingToMessagesModeIsPendingUntilSearched() async throws {
         let deferredRooms = deferFulfillment(context.observe(\.viewState.rooms)) { $0.count == 1 }
         context.searchQuery = "Second"
         try await deferredRooms.fulfill()
-        #expect(!context.viewState.isActiveTabSearchPending)
+        #expect(!context.viewState.isSearchPending)
         
         // The view model only reacts to the switch asynchronously, so the empty state mustn't flash in the meantime.
         let deferredSearch = deferFulfillment(setQuerySubject) { $0 == "Second" }
         context.searchMode = .messages
-        #expect(context.viewState.isActiveTabSearchPending)
+        #expect(context.viewState.isSearchPending)
         try await deferredSearch.fulfill()
         
-        #expect(!context.viewState.isActiveTabSearchPending)
+        #expect(!context.viewState.isSearchPending)
     }
     
     @Test
