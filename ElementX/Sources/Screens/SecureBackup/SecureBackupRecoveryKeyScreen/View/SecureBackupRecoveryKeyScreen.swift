@@ -204,7 +204,7 @@ struct SecureBackupRecoveryKeyScreen: View {
         SecureField(L10n.screenRecoveryKeyConfirmKeyPlaceholder, text: $context.confirmationRecoveryKey)
             .focused($focused)
             .textFieldStyle(.compound(.plain(.secure(hideLabel: L10n.a11yHidePassword, showLabel: L10n.a11yShowPassword)),
-                                      labelText: UntranslatedL10n.screenRecoveryKeyCheckKeyTitle,
+                                      labelText: L10n.screenRecoveryKeyCheckKeyTitle,
                                       footerText: context.viewState.keyValidity == .invalid ? L10n.screenRecoveryKeyConfirmErrorTitle : nil,
                                       state: context.viewState.keyValidity == .invalid ? .error : .default,
                                       accessibilityIdentifier: A11yIdentifiers.secureBackupRecoveryKeyScreen.recoveryKeyField))

@@ -2876,6 +2876,14 @@ internal nonisolated enum L10n {
   internal static var screenRecoveryKeyChangeSuccess: String { return L10n.tr("Localizable", "screen_recovery_key_change_success") }
   /// Change recovery key?
   internal static var screenRecoveryKeyChangeTitle: String { return L10n.tr("Localizable", "screen_recovery_key_change_title") }
+  /// Enter recovery key
+  internal static var screenRecoveryKeyCheckKeyTitle: String { return L10n.tr("Localizable", "screen_recovery_key_check_key_title") }
+  /// Enter the recovery key you’ve saved to make sure that it’s correct and active.
+  internal static var screenRecoveryKeyCheckSubtitle: String { return L10n.tr("Localizable", "screen_recovery_key_check_subtitle") }
+  /// Your recovery key is active
+  internal static var screenRecoveryKeyCheckSuccessTitle: String { return L10n.tr("Localizable", "screen_recovery_key_check_success_title") }
+  /// Check your recovery key
+  internal static var screenRecoveryKeyCheckTitle: String { return L10n.tr("Localizable", "screen_recovery_key_check_title") }
   /// Create new recovery key
   internal static var screenRecoveryKeyConfirmCreateNewRecoveryKey: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_create_new_recovery_key") }
   /// Make sure nobody can see this screen!
@@ -3781,6 +3789,8 @@ internal nonisolated enum L10n {
   internal static var screenSignoutRecoveryDisabledSubtitle: String { return L10n.tr("Localizable", "screen_signout_recovery_disabled_subtitle") }
   /// You’re about to lose access to your encrypted chats
   internal static var screenSignoutRecoveryDisabledTitle: String { return L10n.tr("Localizable", "screen_signout_recovery_disabled_title") }
+  /// Check your recovery key
+  internal static var screenSignoutSaveRecoveryKeyActionCheck: String { return L10n.tr("Localizable", "screen_signout_save_recovery_key_action_check") }
   /// Continue to remove this device
   internal static var screenSignoutSaveRecoveryKeyActionContinue: String { return L10n.tr("Localizable", "screen_signout_save_recovery_key_action_continue") }
   /// Generate new recovery key

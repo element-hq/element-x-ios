@@ -98,7 +98,7 @@ struct SecureBackupRecoveryKeyScreenViewModelTests {
         viewModel.context.send(viewAction: .submitCheckedKey)
         try await deferred.fulfill()
         
-        #expect(viewModel.context.viewState.title == UntranslatedL10n.screenRecoveryKeyCheckSuccessTitle)
+        #expect(viewModel.context.viewState.title == L10n.screenRecoveryKeyCheckSuccessTitle)
     }
     
     @Test

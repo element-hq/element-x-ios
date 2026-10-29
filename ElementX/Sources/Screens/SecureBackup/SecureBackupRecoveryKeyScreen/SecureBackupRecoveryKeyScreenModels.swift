@@ -76,7 +76,7 @@ struct SecureBackupRecoveryKeyScreenViewState: BindableState {
     }
     
     var title: String {
-        guard !isCompleted else { return mode == .checkRecovery ? UntranslatedL10n.screenRecoveryKeyCheckSuccessTitle : L10n.screenRecoveryKeySuccessTitle }
+        guard !isCompleted else { return mode == .checkRecovery ? L10n.screenRecoveryKeyCheckSuccessTitle : L10n.screenRecoveryKeySuccessTitle }
         
         switch mode {
         case .setupRecovery:
@@ -86,7 +86,7 @@ struct SecureBackupRecoveryKeyScreenViewState: BindableState {
         case .fixRecovery:
             return L10n.screenRecoveryKeyConfirmTitle
         case .checkRecovery:
-            return UntranslatedL10n.screenRecoveryKeyCheckTitle
+            return L10n.screenRecoveryKeyCheckTitle
         default:
             return L10n.errorUnknown
         }
@@ -103,7 +103,7 @@ struct SecureBackupRecoveryKeyScreenViewState: BindableState {
         case .fixRecovery:
             return L10n.screenRecoveryKeyConfirmDescription
         case .checkRecovery:
-            return UntranslatedL10n.screenRecoveryKeyCheckSubtitle
+            return L10n.screenRecoveryKeyCheckSubtitle
         default:
             return nil
         }

@@ -1232,6 +1232,10 @@
 "screen_recovery_key_change_generate_key_description" = "Do not share this with anyone!";
 "screen_recovery_key_change_success" = "Recovery key changed";
 "screen_recovery_key_change_title" = "Change recovery key?";
+"screen_recovery_key_check_key_title" = "Enter recovery key";
+"screen_recovery_key_check_subtitle" = "Enter the recovery key you’ve saved to make sure that it’s correct and active.";
+"screen_recovery_key_check_success_title" = "Your recovery key is active";
+"screen_recovery_key_check_title" = "Check your recovery key";
 "screen_recovery_key_confirm_create_new_recovery_key" = "Create new recovery key";
 "screen_recovery_key_confirm_description" = "Make sure nobody can see this screen!";
 "screen_recovery_key_confirm_error_content" = "Please try again to confirm access to your key storage.";
@@ -1633,6 +1637,7 @@
 "screen_signout_preference_item" = "Remove this device";
 "screen_signout_recovery_disabled_subtitle" = "This is your only device. If you remove it you’ll need a recovery key in order to confirm your digital identity and restore your encrypted chats the next time you sign in.";
 "screen_signout_recovery_disabled_title" = "You’re about to lose access to your encrypted chats";
+"screen_signout_save_recovery_key_action_check" = "Check your recovery key";
 "screen_signout_save_recovery_key_action_continue" = "Continue to remove this device";
 "screen_signout_save_recovery_key_action_generate" = "Generate new recovery key";
 "screen_signout_save_recovery_key_subtitle" = "This is your only device. If you remove it you’ll need a recovery key in order to confirm your digital identity and restore your encrypted chats the next time you sign in.";
