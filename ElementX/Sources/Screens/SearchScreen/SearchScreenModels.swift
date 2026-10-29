@@ -34,10 +34,17 @@ struct SearchScreenViewState: BindableState {
     var breadcrumbs = [SearchScreenBreadcrumb]()
     var isLoadingRooms = false
     var isLoadingMessages = false
+    /// The query each tab last searched, so switching tabs only re-searches when the query changed.
+    var searchedQueries: [SearchScreenMode: String] = [:]
     var bindings: SearchScreenViewStateBindings
     
     var isSearching: Bool {
         !bindings.searchQuery.isEmpty
+    }
+    
+    /// Whether the active tab is yet to search the current query, e.g. right after switching tabs.
+    var isActiveTabSearchPending: Bool {
+        isSearching && searchedQueries[bindings.searchMode] != bindings.searchQuery
     }
 }
 
