@@ -100,7 +100,7 @@ struct SecureBackupLogoutConfirmationScreen: View {
                 }
                 .buttonStyle(.compound(.primary))
                 
-                Button(UntranslatedL10n.screenSignoutSaveRecoveryKeyActionGenerate) {
+                Button(L10n.screenSignoutSaveRecoveryKeyActionGenerate) {
                     context.send(viewAction: .generateRecoveryKey)
                 }
                 .buttonStyle(.compound(.tertiary))

@@ -66,7 +66,7 @@ struct SecureBackupRecoveryKeyScreenViewState: BindableState {
     }
     
     var title: String {
-        guard !isCompleted else { return UntranslatedL10n.screenRecoveryKeySuccessTitle }
+        guard !isCompleted else { return L10n.screenRecoveryKeySuccessTitle }
         
         switch mode {
         case .setupRecovery:

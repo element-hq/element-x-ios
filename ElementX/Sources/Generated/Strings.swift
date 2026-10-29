@@ -2920,6 +2920,8 @@ internal nonisolated enum L10n {
   internal static var screenRecoveryKeySetupSuccess: String { return L10n.tr("Localizable", "screen_recovery_key_setup_success") }
   /// Get recovery key
   internal static var screenRecoveryKeySetupTitle: String { return L10n.tr("Localizable", "screen_recovery_key_setup_title") }
+  /// Your new recovery key is now active
+  internal static var screenRecoveryKeySuccessTitle: String { return L10n.tr("Localizable", "screen_recovery_key_success_title") }
   /// Block user
   internal static var screenReportContentBlockUser: String { return L10n.tr("Localizable", "screen_report_content_block_user") }
   /// Check if you want to hide all current and future messages from this user
@@ -3781,6 +3783,8 @@ internal nonisolated enum L10n {
   internal static var screenSignoutRecoveryDisabledTitle: String { return L10n.tr("Localizable", "screen_signout_recovery_disabled_title") }
   /// Continue to remove this device
   internal static var screenSignoutSaveRecoveryKeyActionContinue: String { return L10n.tr("Localizable", "screen_signout_save_recovery_key_action_continue") }
+  /// Generate new recovery key
+  internal static var screenSignoutSaveRecoveryKeyActionGenerate: String { return L10n.tr("Localizable", "screen_signout_save_recovery_key_action_generate") }
   /// This is your only device. If you remove it you’ll need a recovery key in order to confirm your digital identity and restore your encrypted chats the next time you sign in.
   internal static var screenSignoutSaveRecoveryKeySubtitle: String { return L10n.tr("Localizable", "screen_signout_save_recovery_key_subtitle") }
   /// Make sure you have access to your recovery key before removing this device

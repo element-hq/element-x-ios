@@ -30,14 +30,14 @@ struct SecureBackupRecoveryKeyScreenViewModelTests {
     func confirmingTheKeyIsSavedShowsThatItIsActive() async throws {
         let viewModel = try await makeViewModel(waitingForKey: true)
         #expect(!viewModel.context.viewState.isCompleted)
-        #expect(viewModel.context.viewState.title != UntranslatedL10n.screenRecoveryKeySuccessTitle)
+        #expect(viewModel.context.viewState.title != L10n.screenRecoveryKeySuccessTitle)
         
         viewModel.context.send(viewAction: .keySaved)
         viewModel.context.send(viewAction: .confirmKeySaved)
         viewModel.context.alertInfo?.primaryButton.action?()
         
         #expect(viewModel.context.viewState.isCompleted)
-        #expect(viewModel.context.viewState.title == UntranslatedL10n.screenRecoveryKeySuccessTitle)
+        #expect(viewModel.context.viewState.title == L10n.screenRecoveryKeySuccessTitle)
     }
     
     @Test
