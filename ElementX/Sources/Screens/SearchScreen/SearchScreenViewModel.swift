@@ -24,8 +24,6 @@ class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelPro
     private var searchModeObservationTask: Task<Void, Never>?
     private var loadingObservationTask: Task<Void, Never>?
     private var setQueryTask: Task<Void, Never>?
-    /// The query each tab last searched, so switching tabs only re-searches when the query changed.
-    private var searchedQueries: [SearchScreenMode: String] = [:]
     
     private let actionsSubject: PassthroughSubject<SearchScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<SearchScreenViewModelAction, Never> {
@@ -175,7 +173,7 @@ class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelPro
         guard !searchQuery.isEmpty else {
             // Supersede any in-flight query so its results can't land after a newer one's.
             setQueryTask?.cancel()
-            searchedQueries.removeAll()
+            state.searchedQueries.removeAll()
             roomSummaryProvider.setFilter(.excludeAll)
             state.messages = []
             return
@@ -185,20 +183,20 @@ class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelPro
         // avoid one blocking the other; the other tab is (re)searched when it becomes active.
         let mode = state.bindings.searchMode
         // Skip a tab that already ran this query (e.g. switching back and forth) unless forced.
-        guard forced || searchedQueries[mode] != searchQuery else { return }
+        guard forced || state.searchedQueries[mode] != searchQuery else { return }
         
         setQueryTask?.cancel()
         setActiveTabLoading(true)
         switch mode {
         case .rooms:
-            searchedQueries[mode] = searchQuery
+            state.searchedQueries[mode] = searchQuery
             roomSummaryProvider.setFilter(.search(query: searchQuery))
         case .messages:
             setQueryTask = Task { [weak self] in
                 // Debounce message queries; superseded keystrokes cancel this before it commits.
                 try? await Task.sleep(for: .milliseconds(250))
                 guard let self, !Task.isCancelled else { return }
-                searchedQueries[mode] = searchQuery
+                state.searchedQueries[mode] = searchQuery
                 if case .failure = await searchService.setQuery(searchQuery), !Task.isCancelled {
                     userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
                 }
