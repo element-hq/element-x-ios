@@ -14,6 +14,7 @@ struct MultiAccountAnnouncementView: View {
     @State private var navigationBarHeight: CGFloat = .zero
     @State private var contentHeight: CGFloat = .zero
     @State private var buttonHeight: CGFloat = .zero
+    @State private var hasBottomSafeAreaInset = true
     
     private var subtitle: AttributedString {
         let boldPlaceholder = "{bold}"
@@ -25,26 +26,24 @@ struct MultiAccountAnnouncementView: View {
     }
     
     var body: some View {
-        GeometryReader { geometry in
-            ElementNavigationStack {
-                ScrollView {
-                    content
-                        .readHeight($contentHeight)
-                }
-                .scrollBounceBehavior(.basedOnSize)
-                .backportSafeAreaBar(edge: .bottom, spacing: 0) {
-                    addAccountButton
-                        .padding(.bottom, geometry.safeAreaInsets.bottom > 0 ? 0 : 16)
-                        .readHeight($buttonHeight)
-                }
-                .onGeometryChange(for: CGFloat.self) { $0.safeAreaInsets.top } action: { navigationBarHeight = $0 }
-                .toolbar {
-                    ToolbarItem(placement: .primaryAction) {
-                        ToolbarButton(role: .close) { context.send(viewAction: .dismissMultiAccountAnnouncement) }
-                    }
+        ElementNavigationStack {
+            ScrollView {
+                content
+                    .readHeight($contentHeight)
+            }
+            .scrollBounceBehavior(.basedOnSize)
+            .backportSafeAreaBar(edge: .bottom, spacing: 0) {
+                addAccountButton
+                    .readHeight($buttonHeight)
+            }
+            .onGeometryChange(for: CGFloat.self) { $0.safeAreaInsets.top } action: { navigationBarHeight = $0 }
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    ToolbarButton(role: .close) { context.send(viewAction: .dismissMultiAccountAnnouncement) }
                 }
             }
         }
+        .onGeometryChange(for: Bool.self) { $0.safeAreaInsets.bottom > 0 } action: { hasBottomSafeAreaInset = $0 }
         .presentationDetents([.height(navigationBarHeight + contentHeight + buttonHeight)])
         .presentationDragIndicator(.hidden)
         .presentationBackground(.compound.bgCanvasDefault)
@@ -70,6 +69,7 @@ struct MultiAccountAnnouncementView: View {
         .buttonStyle(.compound(.primary))
         .padding(.horizontal, 16)
         .padding(.top, 16)
+        .padding(.bottom, hasBottomSafeAreaInset ? 0 : 16)
     }
 }
 
