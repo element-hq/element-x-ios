@@ -163,6 +163,8 @@ enum TestablePreviewsDictionary {
             "RoomThreadListScreen_Previews" : RoomThreadListScreen_Previews.self,
             "SFNumberedListView_Previews" : SFNumberedListView_Previews.self,
             "ScanStateMediaEventsTimelineViews_Previews" : ScanStateMediaEventsTimelineViews_Previews.self,
+            "SearchScreenHistoryLimitSheet_Previews" : SearchScreenHistoryLimitSheet_Previews.self,
+            "SearchScreenMessagesNoResultsView_Previews" : SearchScreenMessagesNoResultsView_Previews.self,
             "SearchScreen_Previews" : SearchScreen_Previews.self,
             "SecureBackupKeyBackupScreen_Previews" : SecureBackupKeyBackupScreen_Previews.self,
             "SecurityAndPrivacyScreen_Previews" : SecurityAndPrivacyScreen_Previews.self,

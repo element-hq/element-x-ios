@@ -1125,6 +1125,20 @@ extension PreviewTests {
     }
 
     @Test
+    func searchScreenHistoryLimitSheet() async throws {
+        for (index, preview) in SearchScreenHistoryLimitSheet_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    @Test
+    func searchScreenMessagesNoResultsView() async throws {
+        for (index, preview) in SearchScreenMessagesNoResultsView_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    @Test
     func searchScreen() async throws {
         for (index, preview) in SearchScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
