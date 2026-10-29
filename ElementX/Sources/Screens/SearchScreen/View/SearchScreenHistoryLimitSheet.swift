@@ -41,8 +41,8 @@ struct SearchScreenHistoryLimitSheet: View {
     }
     
     private var content: some View {
-        TitleAndIcon(title: UntranslatedL10n.screenSearchHistoryLimitTitle,
-                     subtitle: UntranslatedL10n.screenSearchHistoryLimitMessage,
+        TitleAndIcon(title: L10n.screenSearchHistoryLimitTitle,
+                     subtitle: L10n.screenSearchHistoryLimitMessage,
                      icon: \.info,
                      iconStyle: .defaultSolid)
             .frame(maxWidth: .infinity)
@@ -52,7 +52,7 @@ struct SearchScreenHistoryLimitSheet: View {
     }
     
     private var gotItButton: some View {
-        Button(UntranslatedL10n.actionGotIt) { dismiss() }
+        Button(L10n.actionGotIt) { dismiss() }
             .buttonStyle(.compound(.primary))
             .padding(.horizontal, 16)
             .padding(.top, 16)
