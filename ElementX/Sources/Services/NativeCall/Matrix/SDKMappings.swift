@@ -123,7 +123,7 @@ nonisolated enum SDKMappings {
     static func transportsJSON(_ transports: [RtcTransport]) -> String {
         let objects: [[String: Any]] = transports.map { transport in
             switch transport {
-            case .liveKit(let serviceURL):
+            case .liveKit(_, let serviceURL):
                 return ["type": "livekit", "livekit_service_url": serviceURL]
             case .custom(let type, let data):
                 var fields = jsonObject(data) ?? [:]
