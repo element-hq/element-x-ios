@@ -56,10 +56,6 @@ struct VoiceMessagePreviewComposer: View {
         .padding(.vertical, Compound.supportsGlass ? 7 : 4)
         .padding(.horizontal, Compound.supportsGlass ? 8 : 6)
         .padding(.trailing, Compound.supportsGlass ? 8 : 0)
-        .background {
-            RoundedRectangle(cornerRadius: Compound.supportsGlass ? 21 : 12)
-                .fill(.compound.bgSubtleSecondary)
-        }
     }
     
     @ViewBuilder
@@ -73,7 +69,8 @@ struct VoiceMessagePreviewComposer: View {
                 .progressMask(progress: playerState.progress)
         case .data(let array):
             WaveformLiveCanvas(samples: array,
-                               configuration: configuration)
+                               configuration: configuration,
+                               shouldDrawSilencePadding: true)
                 .progressMask(progress: playerState.progress)
         }
     }
@@ -108,6 +105,7 @@ struct VoiceMessagePreviewComposer_Previews: PreviewProvider, TestablePreview {
     
     static var previews: some View {
         VoiceMessagePreviewComposer(playerState: playerState, waveform: .data(waveformData), onPlay: { }, onPause: { }, onSeek: { _ in }, onScrubbing: { _ in })
+            .messageComposerStyle(padsContent: false)
             .fixedSize(horizontal: false, vertical: true)
     }
 }

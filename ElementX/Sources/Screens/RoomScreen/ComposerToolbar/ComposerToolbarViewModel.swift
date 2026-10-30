@@ -203,7 +203,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             
             switch state.composerMode {
             case .previewVoiceMessage:
-                actionsSubject.send(.voiceMessage(.send))
+                actionsSubject.send(.voiceMessage(.send(inReplyToEventID: state.voiceMessageReplyMode?.replyEventID)))
             case .recordVoiceMessage:
                 MXLog.warning("Ignoring send action while recording a voice message.")
             default:
@@ -225,7 +225,11 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         case .editLastMessage:
             actionsSubject.send(.editLastMessage)
         case .cancelReply:
-            set(mode: .default)
+            if state.isVoiceMessageModeActivated {
+                state.voiceMessageReplyMode = nil
+            } else {
+                set(mode: .default)
+            }
         case .cancelEdit:
             cancelEdit()
         case .attach(let attachment):
@@ -349,7 +353,13 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                     return
                 }
                 
-                set(mode: .reply(eventID: eventID, replyDetails: reply.details, isThread: reply.isThreaded))
+                let replyMode = ComposerMode.reply(eventID: eventID, replyDetails: reply.details, isThread: reply.isThreaded)
+                // A voice message may have been started while the reply was loading.
+                if state.voiceMessageReplyMode?.replyEventID == eventID {
+                    state.voiceMessageReplyMode = replyMode
+                } else if state.composerMode.replyEventID == eventID {
+                    set(mode: replyMode)
+                }
             }
         }
     }
@@ -358,9 +368,11 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         let plainText: String
         let htmlText: String?
         let type: ComposerDraftProxy.ComposerDraftType
+        // Keep the reply of a voice message being recorded.
+        let composerMode = state.voiceMessageReplyMode ?? state.composerMode
         
         if context.composerFormattingEnabled {
-            if wysiwygViewModel.isContentEmpty, state.composerMode == .default {
+            if wysiwygViewModel.isContentEmpty, composerMode == .default {
                 if isVolatile {
                     draftService.clearVolatileDraft()
                 } else {
@@ -373,7 +385,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             plainText = wysiwygViewModel.content.markdown
             htmlText = wysiwygViewModel.content.html
         } else {
-            if context.plainComposerText.string.isEmpty, state.composerMode == .default {
+            if context.plainComposerText.string.isEmpty, composerMode == .default {
                 if isVolatile {
                     draftService.clearVolatileDraft()
                 } else {
@@ -387,7 +399,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             htmlText = nil
         }
         
-        switch state.composerMode {
+        switch composerMode {
         case .default:
             type = .newMessage
         case .edit(.eventID(let originalEventID), .default):
@@ -598,11 +610,31 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     }
     
     private func set(mode: ComposerMode) {
-        if state.composerMode.isLoadingReply, state.composerMode.replyEventID != mode.replyEventID {
+        if state.composerMode.isLoadingReply, state.composerMode.replyEventID != mode.replyEventID, mode.isTextEditingEnabled {
             replyLoadingTask?.cancel()
         }
         
         guard mode != state.composerMode else { return }
+        
+        switch (state.composerMode, mode) {
+        case (.reply, .recordVoiceMessage):
+            state.voiceMessageReplyMode = state.composerMode
+        case (_, .recordVoiceMessage), (_, .previewVoiceMessage):
+            break
+        case (.recordVoiceMessage, .reply), (.previewVoiceMessage(_, _, isUploading: false), .reply):
+            // Replying to another message keeps the voice message and sends it as a reply to that one instead.
+            state.voiceMessageReplyMode = mode
+            return
+        case (.recordVoiceMessage, .default), (.previewVoiceMessage(_, _, isUploading: false), .default):
+            guard let voiceMessageReplyMode = state.voiceMessageReplyMode else { break }
+            // The voice message was discarded, go back to replying without popping the keyboard.
+            state.voiceMessageReplyMode = nil
+            state.composerMode = voiceMessageReplyMode
+            return
+        default:
+            // Any other mode (sent voice message or edit) drops the stored reply.
+            state.voiceMessageReplyMode = nil
+        }
         
         state.composerMode = mode
         originalEditContent = nil

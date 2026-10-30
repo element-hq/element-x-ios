@@ -134,7 +134,7 @@ struct MessageComposer: View {
     }
 }
 
-private struct MessageComposerReplyHeader: View {
+struct MessageComposerReplyHeader: View {
     let replyDetails: TimelineItemReplyDetails
     let action: () -> Void
     
@@ -195,8 +195,9 @@ private struct MessageComposerHeaderLabelStyle: LabelStyle {
 // MARK: - Style
 
 extension View {
-    func messageComposerStyle(header: some View = EmptyView()) -> some View {
-        modifier(MessageComposerStyleModifier(header: header))
+    /// - Parameter padsContent: Pass `false` for content that already insets itself within the composer shape.
+    func messageComposerStyle(header: some View = EmptyView(), padsContent: Bool = true) -> some View {
+        modifier(MessageComposerStyleModifier(header: header, padsContent: padsContent))
     }
 }
 
@@ -204,8 +205,10 @@ private struct MessageComposerStyleModifier<Header: View>: ViewModifier {
     @Environment(\.isEnabled) private var isEnabled
     
     let header: Header
+    let padsContent: Bool
     
     private let composerShape = RoundedRectangle(cornerRadius: 21, style: .circular)
+    private let horizontalPadding: CGFloat = Compound.supportsGlass ? 16 : 12
     
     func body(content: Content) -> some View {
         if #available(iOS 26, *) {
@@ -232,14 +235,15 @@ private struct MessageComposerStyleModifier<Header: View>: ViewModifier {
     }
     
     func mainContent(content: Content) -> some View {
-        VStack(alignment: .leading, spacing: -6) {
+        VStack(alignment: .leading, spacing: padsContent ? -6 : 0) {
             header
+                .padding(.horizontal, horizontalPadding)
             
             content
                 .tint(.compound.iconAccentTertiary)
-                .padding(.vertical, Compound.supportsGlass ? 11 : 10)
+                .padding(.vertical, padsContent ? (Compound.supportsGlass ? 11 : 10) : 0)
+                .padding(.horizontal, padsContent ? horizontalPadding : 0)
         }
-        .padding(.horizontal, Compound.supportsGlass ? 16 : 12)
         .clipShape(composerShape)
     }
 }

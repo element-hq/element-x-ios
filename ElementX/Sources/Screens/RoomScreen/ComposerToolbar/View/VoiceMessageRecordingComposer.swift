@@ -17,10 +17,6 @@ struct VoiceMessageRecordingComposer: View {
         VoiceMessageRecordingView(recorderState: recorderState)
             .padding(.vertical, Compound.supportsGlass ? 14 : 8)
             .padding(.horizontal, Compound.supportsGlass ? 16 : 12)
-            .background {
-                RoundedRectangle(cornerRadius: Compound.supportsGlass ? 21 : 12)
-                    .fill(.compound.bgSubtleSecondary)
-            }
     }
 }
 
@@ -31,6 +27,7 @@ struct VoiceMessageRecordingComposer_Previews: PreviewProvider, TestablePreview 
     
     static var previews: some View {
         VoiceMessageRecordingComposer(recorderState: recorderState)
+            .messageComposerStyle(padsContent: false)
             .fixedSize(horizontal: false, vertical: true)
     }
 }
