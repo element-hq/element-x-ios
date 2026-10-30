@@ -22,7 +22,6 @@ struct RoomScreenCoordinatorParameters {
     let emojiProvider: EmojiProviderProtocol
     let linkMetadataProvider: LinkMetadataProviderProtocol
     let completionSuggestionService: CompletionSuggestionServiceProtocol
-    let ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never>
     let appMediator: AppMediatorProtocol
     let analytics: AnalyticsServiceProtocol
     let composerDraftService: ComposerDraftServiceProtocol
@@ -75,7 +74,6 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
         roomViewModel = RoomScreenViewModel(userSession: parameters.userSession,
                                             roomProxy: parameters.roomProxy,
                                             initialSelectedPinnedEventID: selectedPinnedEventID,
-                                            ongoingCallRoomIDPublisher: parameters.ongoingCallRoomIDPublisher,
                                             analyticsService: parameters.analytics,
                                             userIndicatorController: parameters.userIndicatorController)
         

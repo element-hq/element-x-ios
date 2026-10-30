@@ -35,7 +35,6 @@ final class RoomScreenViewModelTests {
         let viewModel = RoomScreenViewModel(userSession: UserSessionMock(.init()),
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
-                                            ongoingCallRoomIDPublisher: .init(.init(nil)),
                                             analyticsService: AnalyticsServiceMock(.init()),
                                             userIndicatorController: UserIndicatorControllerMock())
         
@@ -113,7 +112,6 @@ final class RoomScreenViewModelTests {
         let viewModel = RoomScreenViewModel(userSession: UserSessionMock(.init()),
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: "test1",
-                                            ongoingCallRoomIDPublisher: .init(.init(nil)),
                                             analyticsService: AnalyticsServiceMock(.init()),
                                             userIndicatorController: UserIndicatorControllerMock())
         
@@ -173,7 +171,6 @@ final class RoomScreenViewModelTests {
         let viewModel = RoomScreenViewModel(userSession: userSession,
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: "test1",
-                                            ongoingCallRoomIDPublisher: .init(.init(nil)),
                                             analyticsService: AnalyticsServiceMock(.init()),
                                             userIndicatorController: UserIndicatorControllerMock())
         
@@ -227,7 +224,6 @@ final class RoomScreenViewModelTests {
         let viewModel = RoomScreenViewModel(userSession: UserSessionMock(.init()),
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
-                                            ongoingCallRoomIDPublisher: .init(.init(nil)),
                                             analyticsService: AnalyticsServiceMock(.init()),
                                             userIndicatorController: UserIndicatorControllerMock())
         
@@ -255,19 +251,18 @@ final class RoomScreenViewModelTests {
     @Test
     func callButtonVisibility() async throws {
         // Given a room screen with no ongoing call.
-        let ongoingCallRoomIDSubject = CurrentValueSubject<String?, Never>(nil)
+        let elementCallService = ElementCallServiceMock(.init())
         let roomProxyMock = JoinedRoomProxyMock(.init(id: "MyRoomID"))
-        let viewModel = RoomScreenViewModel(userSession: UserSessionMock(.init()),
+        let viewModel = RoomScreenViewModel(userSession: UserSessionMock(.init(elementCallService: elementCallService)),
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
-                                            ongoingCallRoomIDPublisher: ongoingCallRoomIDSubject.asCurrentValuePublisher(),
                                             analyticsService: AnalyticsServiceMock(.init()),
                                             userIndicatorController: UserIndicatorControllerMock())
         #expect(viewModel.state.shouldShowCallButton)
         
         // When a call starts in this room.
         var deferred = deferFulfillment(viewModel.context.$viewState) { !$0.shouldShowCallButton }
-        ongoingCallRoomIDSubject.send("MyRoomID")
+        elementCallService.ongoingCallChanged(roomID: "MyRoomID")
         try await deferred.fulfill()
         
         // Then the call button should be hidden.
@@ -275,7 +270,7 @@ final class RoomScreenViewModelTests {
         
         // When a call starts in a different room.
         deferred = deferFulfillment(viewModel.context.$viewState) { $0.shouldShowCallButton }
-        ongoingCallRoomIDSubject.send("OtherRoomID")
+        elementCallService.ongoingCallChanged(roomID: "OtherRoomID")
         try await deferred.fulfill()
         
         // Then the call button should be shown again.
@@ -283,7 +278,7 @@ final class RoomScreenViewModelTests {
         
         // When the call from the other room finishes.
         let deferredFailure = deferFailure(viewModel.context.$viewState, timeout: .seconds(1)) { !$0.shouldShowCallButton }
-        ongoingCallRoomIDSubject.send(nil)
+        elementCallService.ongoingCallChanged(roomID: nil)
         try await deferredFailure.fulfill()
         
         // Then the call button should remain visible shown.
@@ -305,7 +300,6 @@ final class RoomScreenViewModelTests {
             let viewModel = RoomScreenViewModel(userSession: UserSessionMock(.init()),
                                                 roomProxy: roomProxyMock,
                                                 initialSelectedPinnedEventID: nil,
-                                                ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                 analyticsService: AnalyticsServiceMock(.init()),
                                                 userIndicatorController: UserIndicatorControllerMock())
             viewModel.stop()
@@ -325,7 +319,6 @@ final class RoomScreenViewModelTests {
         let viewModel = RoomScreenViewModel(userSession: UserSessionMock(.init()),
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
-                                            ongoingCallRoomIDPublisher: .init(.init(nil)),
                                             analyticsService: AnalyticsServiceMock(.init()),
                                             userIndicatorController: UserIndicatorControllerMock())
         
@@ -356,7 +349,6 @@ final class RoomScreenViewModelTests {
         let viewModel = RoomScreenViewModel(userSession: UserSessionMock(.init()),
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
-                                            ongoingCallRoomIDPublisher: .init(.init(nil)),
                                             analyticsService: AnalyticsServiceMock(.init()),
                                             userIndicatorController: UserIndicatorControllerMock())
         
@@ -382,7 +374,6 @@ final class RoomScreenViewModelTests {
         let viewModel = RoomScreenViewModel(userSession: UserSessionMock(.init()),
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
-                                            ongoingCallRoomIDPublisher: .init(.init(nil)),
                                             analyticsService: AnalyticsServiceMock(.init()),
                                             userIndicatorController: UserIndicatorControllerMock())
         
@@ -399,7 +390,6 @@ final class RoomScreenViewModelTests {
         let viewModel = RoomScreenViewModel(userSession: UserSessionMock(.init()),
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
-                                            ongoingCallRoomIDPublisher: .init(.init(nil)),
                                             analyticsService: AnalyticsServiceMock(.init()),
                                             userIndicatorController: UserIndicatorControllerMock())
         
@@ -423,7 +413,6 @@ final class RoomScreenViewModelTests {
         let viewModel = RoomScreenViewModel(userSession: UserSessionMock(.init()),
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
-                                            ongoingCallRoomIDPublisher: .init(.init(nil)),
                                             analyticsService: AnalyticsServiceMock(.init()),
                                             userIndicatorController: UserIndicatorControllerMock())
         
