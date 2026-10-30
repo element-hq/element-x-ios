@@ -126,6 +126,8 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
     func add(_ service: ElementCallServiceProtocol) {
         let userID = service.userID
         if let replacedService = services[userID], replacedService !== service {
+            // While the old service is still registered, so it hears its call is gone.
+            endOngoingCall(userID: userID)
             replacedService.stopObservingIncomingCall()
         }
         
@@ -150,7 +152,23 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
         }
     }
     
+    /// Ends the account's calls before dropping its service, so the service hears about it.
     func remove(userID: String) {
+        if let incomingCallID, incomingCallID.userID == userID {
+            // An answered web view call is reported by its hand-over, which then finds nothing to open.
+            if !isIncomingCallAnswered {
+                callProvider.reportCall(with: incomingCallID.callKitID, endedAt: nil, reason: .failed)
+            }
+            
+            clearIncomingCallState()
+        }
+        
+        if pendingDecline?.userID == userID {
+            pendingDecline = nil
+        }
+        
+        endOngoingCall(userID: userID)
+        
         serviceCancellables[userID] = nil
         services[userID] = nil
     }
@@ -173,7 +191,7 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
     }
     
     /// Replies to the service exactly once, when the call is set up: at once, or for a new native
-    /// call once CallKit knows about it.
+    /// call once CallKit knows about it, refusing it if the call went in the meantime.
     private func setupCallSession(roomID: String, roomDisplayName: String, isVideo: Bool, kind: ElementCallSessionKind, service: ElementCallServiceProtocol) {
         let isNative = kind != .webView
         MXLog.info("Setting up a call session, native: \(isNative), video: \(isVideo), replacing an ongoing call: \(ongoingCallID != nil)")
@@ -215,12 +233,20 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
             // system knows about the call reads the call as answered elsewhere.
             await self?.requestTransaction(CXTransaction(action: startCallAction), describedAs: "start call")
             
+            guard let self, ongoingCallID?.callKitID == callID.callKitID else {
+                MXLog.warning("The call was removed, replaced or ended while starting, refusing its set-up")
+                // An end reported before the start landed was a no-op, so the system call UI would stay up.
+                self?.callProvider.reportCall(with: callID.callKitID, endedAt: nil, reason: .failed)
+                service.callSessionSetUp(roomID: roomID, isAccepted: false)
+                return
+            }
+            
             // Without this the system call UI shows the handle, i.e. the room ID.
             let update = CXCallUpdate()
             update.localizedCallerName = roomDisplayName
             update.remoteHandle = handle
             update.hasVideo = isVideo
-            self?.callProvider.reportCall(with: callID.callKitID, updated: update)
+            callProvider.reportCall(with: callID.callKitID, updated: update)
             
             service.callSessionSetUp(roomID: roomID, isAccepted: true)
         }
@@ -630,6 +656,21 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
         }
         
         ongoingCallID = nil
+    }
+    
+    /// Ends the account's ongoing call as its service goes or is replaced.
+    private func endOngoingCall(userID: String) {
+        guard let ongoingCallID, ongoingCallID.userID == userID else { return }
+        
+        // A backstop: the flow's `stop()` or the native stack's hang-up normally gets there first.
+        MXLog.warning("Ending the ongoing call of an account whose call service is going, native: \(ongoingCallID.isNative)")
+        
+        if ongoingCallID.isNative {
+            callProvider.reportCall(with: ongoingCallID.callKitID, endedAt: nil, reason: .failed)
+            services[userID]?.systemEventReceived(.endCallRequested(roomID: ongoingCallID.roomID))
+        }
+        
+        self.ongoingCallID = nil
     }
     
     /// Every VoIP push must be reported to CallKit via `reportNewIncomingCall`, otherwise iOS
