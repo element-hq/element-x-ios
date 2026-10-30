@@ -53,7 +53,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     init(userSession: UserSessionProtocol,
          roomProxy: JoinedRoomProxyProtocol,
          initialSelectedPinnedEventID: String?,
-         ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never>,
          analyticsService: AnalyticsServiceProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         clientProxy = userSession.clientProxy
@@ -76,7 +75,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                    mediaProvider: userSession.mediaProvider)
         
         updateRoomInfo(roomProxy.infoPublisher.value)
-        setupSubscriptions(ongoingCallRoomIDPublisher: ongoingCallRoomIDPublisher)
+        setupSubscriptions(ongoingCallRoomIDPublisher: userSession.elementCallService.ongoingCallRoomIDPublisher)
         
         Task {
             await updateVerificationBadge()
@@ -462,7 +461,6 @@ extension RoomScreenViewModel {
         RoomScreenViewModel(userSession: userSession,
                             roomProxy: roomProxyMock,
                             initialSelectedPinnedEventID: nil,
-                            ongoingCallRoomIDPublisher: .init(.init(nil)),
                             analyticsService: AnalyticsServiceMock(.init()),
                             userIndicatorController: UserIndicatorControllerMock())
     }
