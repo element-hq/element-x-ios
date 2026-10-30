@@ -410,6 +410,26 @@ final class RoomScreenViewModelTests {
         try await deferred.fulfill()
     }
     
+    @Test(arguments: [true, false])
+    func canSendMessageUsesEncryptedEventTypeInEncryptedRooms(isEncrypted: Bool) {
+        let roomProxyMock = JoinedRoomProxyMock(.init(isEncrypted: isEncrypted))
+        let powerLevelsMock = RoomPowerLevelsProxyMock(.init())
+        // Matches the issue: m.room.message restricted, m.room.encrypted allowed.
+        powerLevelsMock.canOwnUserSendMessageClosure = { $0 == .roomEncrypted }
+        let roomInfoMock = RoomInfoProxyMock(.init(isEncrypted: isEncrypted))
+        roomInfoMock.powerLevels = powerLevelsMock
+        roomProxyMock.infoPublisher = CurrentValueSubject(roomInfoMock).asCurrentValuePublisher()
+        
+        let viewModel = RoomScreenViewModel(userSession: UserSessionMock(.init()),
+                                            roomProxy: roomProxyMock,
+                                            initialSelectedPinnedEventID: nil,
+                                            ongoingCallRoomIDPublisher: .init(.init(nil)),
+                                            analyticsService: AnalyticsServiceMock(.init()),
+                                            userIndicatorController: UserIndicatorControllerMock())
+        
+        #expect(viewModel.context.viewState.canSendMessage == isEncrypted)
+    }
+    
     // MARK: - History Sharing
     
     @Test

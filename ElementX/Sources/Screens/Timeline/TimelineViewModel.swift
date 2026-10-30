@@ -454,7 +454,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         state.timelineState.fullyReadEventID = roomInfo.fullyReadEventID
         
         if let powerLevels = roomInfo.powerLevels {
-            state.canCurrentUserSendMessage = powerLevels.canOwnUser(sendMessage: .roomMessage)
+            state.canCurrentUserSendMessage = powerLevels.canOwnUserSendMessage(isEncrypted: roomInfo.isEncrypted)
             state.canCurrentUserRedactOthers = powerLevels.canOwnUserRedactOther()
             state.canCurrentUserRedactSelf = powerLevels.canOwnUserRedactOwn()
             state.canCurrentUserPin = powerLevels.canOwnUserPinOrUnpin()
