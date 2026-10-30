@@ -181,8 +181,6 @@ protocol ClientProxyProtocol: AnyObject {
     
     var maxMediaUploadSize: Result<UInt, ClientProxyError> { get async }
     
-    func isOnlyDeviceLeft() async -> Result<Bool, ClientProxyError>
-    
     func hasDevicesToVerifyAgainst() async -> Result<Bool, ClientProxyError>
     
     func resumeServices() async

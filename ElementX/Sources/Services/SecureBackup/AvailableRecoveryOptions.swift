@@ -14,10 +14,8 @@ enum AvailableRecoveryOptions: Equatable {
     /// This is the only verified device and the user doesn't have a recovery key.
     case noOptions
     
-    /// - Parameter hasOtherDevice: Whether the user has any other device. This isn't quite the same as another *verified* device
-    ///   as the SDK can't yet tell whether the other devices are verified, `hasDevicesToVerifyAgainst` would count this device.
-    init(hasOtherDevice: Bool, recoveryState: SecureBackupRecoveryState) {
-        self = if hasOtherDevice {
+    init(hasOtherVerifiedDevice: Bool, recoveryState: SecureBackupRecoveryState) {
+        self = if hasOtherVerifiedDevice {
             .otherVerifiedDevice
         } else if recoveryState == .enabled {
             .recoveryKeyOnly

@@ -2619,34 +2619,6 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return makeNativeCallTransportReturnValue
         }
     }
-    //MARK: - isOnlyDeviceLeft
-
-    private let isOnlyDeviceLeftCallsCountLock = NSLock()
-    private nonisolated(unsafe) var isOnlyDeviceLeftUnderlyingCallsCount = 0
-    var isOnlyDeviceLeftCallsCount: Int {
-        get { isOnlyDeviceLeftCallsCountLock.withLock { isOnlyDeviceLeftUnderlyingCallsCount } }
-        set { isOnlyDeviceLeftCallsCountLock.withLock { isOnlyDeviceLeftUnderlyingCallsCount = newValue } }
-    }
-    var isOnlyDeviceLeftCalled: Bool {
-        return isOnlyDeviceLeftCallsCount > 0
-    }
-
-    private let isOnlyDeviceLeftReturnValueLock = NSLock()
-    private nonisolated(unsafe) var isOnlyDeviceLeftUnderlyingReturnValue: Result<Bool, ClientProxyError>!
-    var isOnlyDeviceLeftReturnValue: Result<Bool, ClientProxyError>! {
-        get { isOnlyDeviceLeftReturnValueLock.withLock { isOnlyDeviceLeftUnderlyingReturnValue } }
-        set { isOnlyDeviceLeftReturnValueLock.withLock { isOnlyDeviceLeftUnderlyingReturnValue = newValue } }
-    }
-    nonisolated(unsafe) var isOnlyDeviceLeftClosure: (() async -> Result<Bool, ClientProxyError>)?
-
-    @concurrent func isOnlyDeviceLeft() async -> Result<Bool, ClientProxyError> {
-        isOnlyDeviceLeftCallsCountLock.withLock { isOnlyDeviceLeftUnderlyingCallsCount += 1 }
-        if let isOnlyDeviceLeftClosure = isOnlyDeviceLeftClosure {
-            return await isOnlyDeviceLeftClosure()
-        } else {
-            return isOnlyDeviceLeftReturnValue
-        }
-    }
     //MARK: - hasDevicesToVerifyAgainst
 
     private let hasDevicesToVerifyAgainstCallsCountLock = NSLock()

@@ -631,12 +631,12 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private func runLogoutFlow() async {
         let secureBackupController = userSession.clientProxy.secureBackupController
         
-        guard case let .success(isLastDevice) = await userSession.clientProxy.isOnlyDeviceLeft() else {
+        guard case let .success(hasOtherVerifiedDevice) = await userSession.clientProxy.hasDevicesToVerifyAgainst() else {
             navigationRootCoordinator.alertInfo = .init(id: .init())
             return
         }
         
-        switch AvailableRecoveryOptions(hasOtherDevice: !isLastDevice, recoveryState: secureBackupController.recoveryState.value) {
+        switch AvailableRecoveryOptions(hasOtherVerifiedDevice: hasOtherVerifiedDevice, recoveryState: secureBackupController.recoveryState.value) {
         case .otherVerifiedDevice:
             navigationRootCoordinator.alertInfo = .init(id: .init(),
                                                         title: L10n.screenSignoutOtherVerifiedDeviceDialogTitle,
