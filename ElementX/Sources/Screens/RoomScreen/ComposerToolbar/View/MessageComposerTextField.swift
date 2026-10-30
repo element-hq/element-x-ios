@@ -27,8 +27,10 @@ struct MessageComposerTextField: View {
                           keyHandler: keyHandler,
                           pasteHandler: pasteHandler)
             .accessibilityLabel(placeholder)
-            .background(placeholderView, alignment: .topLeading)
+            // The typing tween must not fade the placeholder out under the first letter.
+            .background(placeholderView.transaction { $0.animation = nil }, alignment: .topLeading)
             .background { keyboardShortcuts }
+            .geometryGroup()
     }
     
     @ViewBuilder
@@ -81,6 +83,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
         textView.textContainer.lineFragmentPadding = 0.0
         textView.textContainerInset = .zero
         textView.keyboardType = .default
+        textView.maxFittingHeight = maxHeight
         
         // AutoCorrection doesn't work properly when running on the Mac
         // https://github.com/element-hq/element-x-ios/issues/1786
@@ -151,6 +154,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
     func makeCoordinator() -> Coordinator {
         Coordinator(text: $text,
                     selectedRange: $selectedRange,
+                    maxHeight: maxHeight,
                     keyHandler: keyHandler,
                     pasteHandler: pasteHandler)
     }
@@ -159,21 +163,30 @@ private struct UITextViewWrapper: UIViewRepresentable {
         private var text: Binding<NSAttributedString>
         private var selectedRange: Binding<NSRange>
         
+        private let maxHeight: CGFloat
         private let keyHandler: GenericKeyHandler
         private let pasteHandler: PasteHandler
         
         init(text: Binding<NSAttributedString>,
              selectedRange: Binding<NSRange>,
+             maxHeight: CGFloat,
              keyHandler: @escaping GenericKeyHandler,
              pasteHandler: @escaping PasteHandler) {
             self.text = text
             self.selectedRange = selectedRange
+            self.maxHeight = maxHeight
             self.keyHandler = keyHandler
             self.pasteHandler = pasteHandler
         }
         
         func textViewDidChange(_ textView: UITextView) {
-            text.wrappedValue = textView.attributedText
+            if shouldTweenHeight(of: textView) {
+                withElementAnimation(.easeOut(duration: 0.1)) {
+                    text.wrappedValue = textView.attributedText
+                }
+            } else {
+                text.wrappedValue = textView.attributedText
+            }
         }
         
         func textViewDidReceiveKeyPress(_ textView: UITextView, key: UIKeyboardHIDUsage) {
@@ -195,6 +208,19 @@ private struct UITextViewWrapper: UIViewRepresentable {
                 }
             }
         }
+        
+        // MARK: - Private
+        
+        /// Only a height change is worth a tween: anything else reading the text in the same update (the mic/send swap) would animate with it.
+        private func shouldTweenHeight(of textView: UITextView) -> Bool {
+            // At the height cap nothing moves, and animating there has interfered with caret placement.
+            guard !UIAccessibility.isReduceMotionEnabled, textView.bounds.height < maxHeight - 0.5 else {
+                return false
+            }
+            
+            let fittingSize = textView.sizeThatFits(CGSize(width: textView.bounds.width, height: .greatestFiniteMagnitude))
+            return abs(min(maxHeight, fittingSize.height) - textView.bounds.height) > 0.5
+        }
     }
 }
 
@@ -208,6 +234,9 @@ private class ElementTextView: UITextView, PillAttachmentViewProviderDelegate {
     private(set) var timelineContext: TimelineViewModel.Context?
     
     weak var elementDelegate: ElementTextViewDelegate?
+    
+    /// The height the field grows to before it starts scrolling.
+    var maxFittingHeight: CGFloat = .greatestFiniteMagnitude
     
     init(timelineContext: TimelineViewModel.Context?,
          presendCallback: Binding<(() -> Void)?>) {
@@ -260,6 +289,12 @@ private class ElementTextView: UITextView, PillAttachmentViewProviderDelegate {
         }
         
         super.pressesBegan(presses, with: event)
+    }
+    
+    override func setContentOffset(_ contentOffset: CGPoint, animated: Bool) {
+        // While the content fits, the field is still growing to show it: auto-scrolling now makes the text jump ahead of the tween.
+        guard contentSize.height > maxFittingHeight || contentOffset == .zero else { return }
+        super.setContentOffset(contentOffset, animated: animated)
     }
     
     // Pasting support

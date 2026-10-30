@@ -31,9 +31,39 @@ struct TimelineControllerTests {
         #expect(roomProxy.timelineFocusedOnEventEventIDNumberOfEventsReceivedArguments?.eventID == "$event")
     }
     
+    @Test
+    func paginationStateSentWhileAnUpdateIsBuildingIsNotLost() async throws {
+        let newestItem = TimelineItemProxy.event(EventTimelineItemProxy(item: .init(configuration: .init(eventID: "$newest")), uniqueID: .init("0")))
+        let olderItem = TimelineItemProxy.event(EventTimelineItemProxy(item: .init(configuration: .init(eventID: "$older")), uniqueID: .init("1")))
+        // Combined the same way `TimelineItemProvider` does.
+        let items = CurrentValueSubject<[TimelineItemProxy], Never>([newestItem])
+        let paginationState = CurrentValueSubject<TimelinePaginationState, Never>(TimelinePaginationState(backward: .idle, forward: .endReached))
+        let controller = makeController(liveEventIDs: ["$newest"],
+                                        initialFocussedEventID: nil,
+                                        updatePublisher: items.combineLatest(paginationState).eraseToAnyPublisher())
+        try await waitForTimelineItems(controller)
+        
+        let paginationFinished = deferFulfillment(controller.callbacks) { callback in
+            if case .paginationState(let state) = callback {
+                state.backward == .idle
+            } else {
+                false
+            }
+        }
+        // A back pagination as the SDK reports it, back to back, so each update arrives while the previous one is building.
+        paginationState.send(TimelinePaginationState(backward: .paginating, forward: .endReached))
+        items.send([olderItem, newestItem])
+        paginationState.send(TimelinePaginationState(backward: .idle, forward: .endReached))
+        try await paginationFinished.fulfill()
+        
+        #expect(controller.paginationState.backward == .idle)
+    }
+    
     // MARK: - Helpers
     
-    private func makeController(liveEventIDs: [String], initialFocussedEventID: String) -> TimelineController {
+    private func makeController(liveEventIDs: [String],
+                                initialFocussedEventID: String?,
+                                updatePublisher: AnyPublisher<([TimelineItemProxy], TimelinePaginationState), Never>? = nil) -> TimelineController {
         let itemProxies = liveEventIDs.enumerated().map { index, eventID in
             TimelineItemProxy.event(EventTimelineItemProxy(item: .init(configuration: .init(eventID: eventID)), uniqueID: .init("\(index)")))
         }
@@ -44,7 +74,7 @@ struct TimelineControllerTests {
         provider.itemProxies = itemProxies
         provider.paginationState = paginationState
         provider.membershipChangePublisher = PassthroughSubject().eraseToAnyPublisher()
-        provider.updatePublisher = CurrentValueSubject((itemProxies, paginationState)).eraseToAnyPublisher()
+        provider.updatePublisher = updatePublisher ?? CurrentValueSubject((itemProxies, paginationState)).eraseToAnyPublisher()
         
         roomProxy.timelineFocusedOnEventEventIDNumberOfEventsReturnValue = .failure(.eventNotFound)
         

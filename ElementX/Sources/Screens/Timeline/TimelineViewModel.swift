@@ -47,6 +47,13 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     private var paginateBackwardsTask: Task<Void, Never>?
     private var paginateForwardsTask: Task<Void, Never>?
     
+    /// Sends that told the table to hold the timeline and haven't cleared the composer yet.
+    private var heldComposerSendCount = 0
+    /// Tracks when the table may still be holding the timeline for a send, as regroups mustn't animate inside a hold.
+    private var composerSendWindow = RegroupPolicy.SendWindow()
+    /// The latest update's regroup cause. Only tests read it: the animation transaction it decides can't be observed.
+    private(set) var latestRegroupCause = RegroupPolicy.Cause.other
+    
     init(roomProxy: JoinedRoomProxyProtocol,
          focussedEventID: String? = nil,
          timelineController: TimelineControllerProtocol,
@@ -252,6 +259,12 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     func process(composerAction: ComposerToolbarViewModelAction) {
         switch composerAction {
         case .sendMessage(let message, let html, let mode, let intentionalMentions):
+            // Before the send starts, so the table pins the timeline ahead of the composer clear and the echo.
+            if sendsNewTimelineItem(message: message, mode: mode) {
+                heldComposerSendCount += 1
+                composerSendWindow.sendBegan(at: ProcessInfo.processInfo.systemUptime)
+                state.timelineState.sendProgressPublisher.send(.sending)
+            }
             Task {
                 await sendCurrentMessage(message,
                                          html: html,
@@ -491,6 +504,12 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                         }
                     }
                 case .messageSentOrEdited:
+                    // Media, voice and edit sends report here too, without having held the timeline.
+                    if heldComposerSendCount > 0 {
+                        heldComposerSendCount -= 1
+                        composerSendWindow.composerCleared(at: ProcessInfo.processInfo.systemUptime)
+                        state.timelineState.sendProgressPublisher.send(.clearingComposer)
+                    }
                     actionsSubject.send(.composer(action: .clear))
                 }
             }
@@ -891,6 +910,9 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     // MARK: - Timeline Item Building
     
     private func buildTimelineViews(timelineItems: [RoomTimelineItemProtocol], isSwitchingTimelines: Bool = false) {
+        latestRegroupCause = regroupCauseCountingSendEchoes(in: timelineItems, isSwitchingTimelines: isSwitchingTimelines)
+        let animatesGroupStyle = RegroupPolicy.animatesGroupStyleChange(for: latestRegroupCause)
+        
         var timelineItemsDictionary = OrderedDictionary<TimelineItemIdentifier.UniqueID, RoomTimelineItemViewState>()
         
         timelineItems.filter { $0 is RedactedRoomTimelineItem }.forEach { timelineItem in
@@ -909,6 +931,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             canGroupItem(timelineItem: current, with: next)
         }
         
+        var groupedItems = [(item: RoomTimelineItemProtocol, groupStyle: TimelineGroupStyle)]()
         for itemGroup in itemsGroupedByTimelineDisplayStyle {
             guard !itemGroup.isEmpty else {
                 MXLog.error("Found empty item group")
@@ -917,23 +940,25 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             
             if itemGroup.count == 1 {
                 if let firstItem = itemGroup.first {
-                    timelineItemsDictionary.updateValue(updateViewState(item: firstItem, groupStyle: .single),
-                                                        forKey: firstItem.id.uniqueID)
+                    groupedItems.append((firstItem, .single))
                 }
             } else {
                 for (index, item) in itemGroup.enumerated() {
                     if index == 0 {
-                        timelineItemsDictionary.updateValue(updateViewState(item: item, groupStyle: state.timelineKind == .pinned ? .single : .first),
-                                                            forKey: item.id.uniqueID)
+                        groupedItems.append((item, state.timelineKind == .pinned ? .single : .first))
                     } else if index == itemGroup.count - 1 {
-                        timelineItemsDictionary.updateValue(updateViewState(item: item, groupStyle: state.timelineKind == .pinned ? .single : .last),
-                                                            forKey: item.id.uniqueID)
+                        groupedItems.append((item, state.timelineKind == .pinned ? .single : .last))
                     } else {
-                        timelineItemsDictionary.updateValue(updateViewState(item: item, groupStyle: state.timelineKind == .pinned ? .single : .middle),
-                                                            forKey: item.id.uniqueID)
+                        groupedItems.append((item, state.timelineKind == .pinned ? .single : .middle))
                     }
                 }
             }
+        }
+        
+        let animatesResizes = RegroupPolicy.animatesResizes(for: latestRegroupCause, togglesSenderDetails: togglesSenderDetails(groupedItems))
+        for (item, groupStyle) in groupedItems {
+            timelineItemsDictionary.updateValue(updateViewState(item: item, groupStyle: groupStyle, animatesGroupStyle: animatesGroupStyle, animatesResize: animatesResizes),
+                                                forKey: item.id.uniqueID)
         }
         
         if isSwitchingTimelines {
@@ -944,16 +969,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         
         state.timelineState.itemsDictionary = timelineItemsDictionary
         state.timelineState.recomputeReadMarkerUniqueID()
-    }
-    
-    private func updateViewState(item: RoomTimelineItemProtocol, groupStyle: TimelineGroupStyle) -> RoomTimelineItemViewState {
-        if let timelineItemViewState = state.timelineState.itemsDictionary[item.id.uniqueID] {
-            timelineItemViewState.groupStyle = groupStyle
-            timelineItemViewState.type = .init(item: item)
-            return timelineItemViewState
-        } else {
-            return RoomTimelineItemViewState(item: item, groupStyle: groupStyle)
-        }
     }
     
     private func canGroupItem(timelineItem: RoomTimelineItemProtocol, with otherTimelineItem: RoomTimelineItemProtocol) -> Bool {
@@ -1272,6 +1287,65 @@ extension TimelineViewModel {
                                                               type: .toast,
                                                               title: L10n.screenRoomMaximumMessagesSelected,
                                                               icon: \.info))
+    }
+}
+
+// MARK: - Sending
+
+extension TimelineViewModel {
+    private func sendsNewTimelineItem(message: String, mode: ComposerMode) -> Bool {
+        switch mode {
+        case .default: slashCommand(message: message) == nil
+        case .reply: true
+        case .edit, .recordVoiceMessage, .previewVoiceMessage: false
+        }
+    }
+}
+
+// MARK: - Regrouping
+
+extension TimelineViewModel {
+    /// Why the rows of this update may regroup. Also counts its echoes against the composer sends in flight,
+    /// so call it exactly once per update, before the items are replaced.
+    private func regroupCauseCountingSendEchoes(in timelineItems: [RoomTimelineItemProtocol], isSwitchingTimelines: Bool) -> RegroupPolicy.Cause {
+        let oldIDs = state.timelineState.uniqueIDs
+        let isSendInFlight = composerSendWindow.updateArrived(oldIDs: oldIDs,
+                                                              newIDs: timelineItems.map(\.id),
+                                                              at: ProcessInfo.processInfo.systemUptime)
+        guard !isSwitchingTimelines else { return .other }
+        return RegroupPolicy.cause(oldIDs: oldIDs, newIDs: timelineItems.map(\.id.uniqueID), isSendInFlight: isSendInFlight)
+    }
+    
+    /// Whether any existing row gains or loses its sender header or top padding.
+    private func togglesSenderDetails(_ groupedItems: [(item: RoomTimelineItemProtocol, groupStyle: TimelineGroupStyle)]) -> Bool {
+        groupedItems.contains { item, groupStyle in
+            guard let viewState = state.timelineState.itemsDictionary[item.id.uniqueID] else { return false }
+            return viewState.groupStyle.shouldShowSenderDetails != groupStyle.shouldShowSenderDetails
+        }
+    }
+    
+    private func updateViewState(item: RoomTimelineItemProtocol, groupStyle: TimelineGroupStyle, animatesGroupStyle: Bool, animatesResize: Bool) -> RoomTimelineItemViewState {
+        guard let timelineItemViewState = state.timelineState.itemsDictionary[item.id.uniqueID] else {
+            return RoomTimelineItemViewState(item: item, groupStyle: groupStyle)
+        }
+        
+        // `TimelineItemCell` reads it when the row announces its change, so it's set before any `@Published` write.
+        timelineItemViewState.animatesResize = animatesResize
+        
+        let regroups = timelineItemViewState.groupStyle != groupStyle
+        // The table resizes every row of this update without animation, so no content may tween either.
+        if (regroups && !animatesGroupStyle) || !animatesResize {
+            var transaction = Transaction()
+            transaction.disablesAnimations = true
+            withTransaction(transaction) {
+                timelineItemViewState.groupStyle = groupStyle
+                timelineItemViewState.type = .init(item: item)
+            }
+        } else {
+            timelineItemViewState.groupStyle = groupStyle
+            timelineItemViewState.type = .init(item: item)
+        }
+        return timelineItemViewState
     }
 }
 

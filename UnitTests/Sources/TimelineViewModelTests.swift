@@ -8,8 +8,8 @@
 
 import Combine
 @testable import ElementX
-import Foundation
 import MatrixRustSDK
+import SwiftUI
 import Testing
 
 @MainActor
@@ -142,6 +142,171 @@ final class TimelineViewModelTests {
         #expect(viewModel.state.timelineState.itemViewStates[0].groupStyle == .first, "Nothing should prevent the first message from being grouped.")
         #expect(viewModel.state.timelineState.itemViewStates[1].groupStyle == .middle, "Nothing should prevent the second message from being grouped.")
         #expect(viewModel.state.timelineState.itemViewStates[2].groupStyle == .last, "Reactions on the last message should not prevent it from being grouped.")
+    }
+    
+    @Test
+    func aNewestInsertRegroupsTheExistingRowInPlace() async throws {
+        let bobMessage = TextRoomTimelineItem(text: "Message 1", sender: "bob")
+        let aliceMessage = TextRoomTimelineItem(text: "Message 2", sender: "alice")
+        let timelineController = TimelineControllerMock(.init(timelineItems: [bobMessage, aliceMessage]))
+        let viewModel = makeViewModel(timelineController: timelineController)
+        let aliceViewState = try #require(viewModel.state.timelineState.itemsDictionary[aliceMessage.id.uniqueID])
+        #expect(aliceViewState.groupStyle == .single)
+        
+        let aliceReply = TextRoomTimelineItem(text: "Message 3", sender: "alice")
+        let deferred = deferFulfillment(viewModel.context.$viewState) { $0.timelineState.itemViewStates.count == 3 }
+        timelineController.callbacks.send(.updatedTimelineItems(timelineItems: [bobMessage, aliceMessage, aliceReply], isSwitchingTimelines: false))
+        try await deferred.fulfill()
+        
+        #expect(viewModel.latestRegroupCause == .newestInsert)
+        #expect(viewModel.state.timelineState.itemsDictionary[aliceMessage.id.uniqueID] === aliceViewState, "The row should keep its view state so the change can animate.")
+        #expect(aliceViewState.groupStyle == .first)
+        #expect(viewModel.state.timelineState.itemViewStates.map(\.groupStyle) == [.single, .first, .last])
+    }
+    
+    @Test
+    func anInPlaceChangeRegroupsTheExistingRowsInPlace() async throws {
+        let firstMessage = TextRoomTimelineItem(text: "Message 1", sender: "bob")
+        let secondMessage = TextRoomTimelineItem(text: "Message 2", sender: "bob")
+        let timelineController = TimelineControllerMock(.init(timelineItems: [firstMessage, secondMessage]))
+        let viewModel = makeViewModel(timelineController: timelineController)
+        let viewStates = viewModel.state.timelineState.itemViewStates
+        #expect(viewStates.map(\.groupStyle) == [.first, .last])
+        
+        // A reaction breaks the group without changing any ID.
+        let reactedMessage = TextRoomTimelineItem(id: firstMessage.id, text: "Message 1", sender: "bob", addReactions: true)
+        let deferred = deferFulfillment(viewModel.context.$viewState) { $0.timelineState.itemViewStates.first?.groupStyle == .single }
+        timelineController.callbacks.send(.updatedTimelineItems(timelineItems: [reactedMessage, secondMessage], isSwitchingTimelines: false))
+        try await deferred.fulfill()
+        
+        #expect(viewModel.latestRegroupCause == .other)
+        #expect(zip(viewModel.state.timelineState.itemViewStates, viewStates).allSatisfy { $0 === $1 })
+        #expect(viewStates.map(\.groupStyle) == [.single, .single])
+    }
+    
+    @Test
+    func rowsResizeWithoutAnimationOnlyInUpdatesThatToggleASenderHeaderWithoutAnimation() async throws {
+        // Given two grouped messages.
+        let firstMessage = TextRoomTimelineItem(text: "Message 1", sender: "bob")
+        let secondMessage = TextRoomTimelineItem(text: "Message 2", sender: "bob")
+        let timelineController = TimelineControllerMock(.init(timelineItems: [firstMessage, secondMessage]))
+        let viewModel = makeViewModel(timelineController: timelineController)
+        let viewStates = viewModel.state.timelineState.itemViewStates
+        // `TimelineItemCell` reads the flag as each row announces its change, not once the update is done.
+        var flagsAsTheRowsChange = [Bool]()
+        for viewState in viewStates {
+            viewState.objectWillChange
+                .sink { flagsAsTheRowsChange.append(viewState.animatesResize) }
+                .store(in: &cancellables)
+        }
+        
+        // When the second message gets a reaction, which keeps the group.
+        let reactedSecondMessage = TextRoomTimelineItem(id: secondMessage.id, text: "Message 2", sender: "bob", addReactions: true)
+        var deferred = deferFulfillment(viewModel.context.$viewState) { $0.timelineState.itemViewStates.last?.type == .text(reactedSecondMessage) }
+        timelineController.callbacks.send(.updatedTimelineItems(timelineItems: [firstMessage, reactedSecondMessage], isSwitchingTimelines: false))
+        try await deferred.fulfill()
+        
+        // Then no header comes or goes, so the rows keep their resize animations.
+        #expect(viewModel.latestRegroupCause == .other)
+        #expect(viewStates.map(\.groupStyle) == [.first, .last])
+        #expect(viewStates.map(\.animatesResize) == [true, true])
+        #expect(Set(flagsAsTheRowsChange) == [true])
+        
+        // When the first message gets a reaction, which splits the group in place.
+        flagsAsTheRowsChange.removeAll()
+        let reactedFirstMessage = TextRoomTimelineItem(id: firstMessage.id, text: "Message 1", sender: "bob", addReactions: true)
+        deferred = deferFulfillment(viewModel.context.$viewState) { $0.timelineState.itemViewStates.first?.groupStyle == .single }
+        timelineController.callbacks.send(.updatedTimelineItems(timelineItems: [reactedFirstMessage, reactedSecondMessage], isSwitchingTimelines: false))
+        try await deferred.fulfill()
+        
+        // Then the second message gains its top padding without animation, so neither row may animate its resize, from
+        // the moment either row changes.
+        #expect(viewStates.map(\.groupStyle) == [.single, .single])
+        #expect(viewStates.map(\.animatesResize) == [false, false])
+        #expect(Set(flagsAsTheRowsChange) == [false])
+        
+        // When the second message loses its reaction as a newest message lands and joins its group.
+        flagsAsTheRowsChange.removeAll()
+        let thirdMessage = TextRoomTimelineItem(text: "Message 3", sender: "bob")
+        try await update(timelineController, viewModel, with: [reactedFirstMessage, secondMessage, thirdMessage])
+        
+        // Then that update animates its regroups, and so the rows' resizes.
+        #expect(viewModel.latestRegroupCause == .newestInsert)
+        #expect(viewStates.map(\.groupStyle) == [.single, .first])
+        #expect(viewStates.map(\.animatesResize) == [true, true])
+        #expect(Set(flagsAsTheRowsChange) == [true])
+    }
+    
+    @Test
+    func everyRowChangesWithoutAnimationInAnUpdateThatTogglesASenderHeaderWithoutAnimation() async throws {
+        // Given two grouped messages from Bob, then one from Alice, on screen.
+        let firstMessage = TextRoomTimelineItem(text: "Message 1", sender: "bob")
+        let secondMessage = TextRoomTimelineItem(text: "Message 2", sender: "bob")
+        let aliceMessage = TextRoomTimelineItem(text: "Message 3", sender: "alice")
+        let timelineController = TimelineControllerMock(.init(timelineItems: [firstMessage, secondMessage, aliceMessage]))
+        let viewModel = makeViewModel(timelineController: timelineController)
+        let aliceViewState = try #require(viewModel.state.timelineState.itemsDictionary[aliceMessage.id.uniqueID])
+        let aliceRow = try ReactionsTransactionProbe(viewState: aliceViewState)
+        
+        // When Bob's first message gets a reaction, which splits Bob's group, and Alice's message gets one too.
+        let reactedFirstMessage = TextRoomTimelineItem(id: firstMessage.id, text: "Message 1", sender: "bob", addReactions: true)
+        let reactedAliceMessage = TextRoomTimelineItem(id: aliceMessage.id, text: "Message 3", sender: "alice", addReactions: true)
+        var shownChange = deferFulfillment(aliceRow.changes) { $0.reactionCount == 1 }
+        timelineController.callbacks.send(.updatedTimelineItems(timelineItems: [reactedFirstMessage, secondMessage, reactedAliceMessage], isSwitchingTimelines: false))
+        
+        // Then Alice's reaction appears without animation too, as the table resizes her row without animation.
+        #expect(try await shownChange.fulfill().disablesAnimations)
+        
+        // When Alice's message loses its reaction in an update that toggles no header.
+        shownChange = deferFulfillment(aliceRow.changes) { $0.reactionCount == 0 }
+        timelineController.callbacks.send(.updatedTimelineItems(timelineItems: [reactedFirstMessage, secondMessage, aliceMessage], isSwitchingTimelines: false))
+        
+        // Then the change may animate again.
+        #expect(try await !shownChange.fulfill().disablesAnimations)
+    }
+    
+    @Test
+    func regroupsSnapFromAComposerSendUntilItsEchoLands() async throws {
+        // Given a timeline and a composer send that doesn't reach the timeline yet.
+        let firstMessage = TextRoomTimelineItem(text: "Message 1", sender: "alice")
+        let timelineController = TimelineControllerMock(.init(timelineItems: [firstMessage]))
+        timelineController.sendMessageHtmlInReplyToEventIDIntentionalMentionsClosure = { _, _, _, _ in }
+        let viewModel = makeViewModel(timelineController: timelineController)
+        viewModel.process(composerAction: .sendMessage(plain: "Message 2", html: nil, mode: .default, intentionalMentions: .empty))
+        
+        // When someone else's message lands first.
+        let foreignMessage = TextRoomTimelineItem(text: "Message 3", sender: "alice")
+        try await update(timelineController, viewModel, with: [firstMessage, foreignMessage])
+        
+        // Then it lands during the send, so the regroup it causes snaps.
+        #expect(viewModel.latestRegroupCause == .insertDuringSend)
+        
+        // When the composer clears and the echo lands.
+        timelineController.callbacks.send(.messageSentOrEdited)
+        let echo = TextRoomTimelineItem(id: .event(uniqueID: .init("echo"), eventOrTransactionID: .transactionID("transaction")), text: "Message 2", sender: "bob")
+        try await update(timelineController, viewModel, with: [firstMessage, foreignMessage, echo])
+        
+        // Then the echo still lands during the send.
+        #expect(viewModel.latestRegroupCause == .insertDuringSend)
+        
+        // When the next message lands.
+        let nextMessage = TextRoomTimelineItem(text: "Message 4", sender: "alice")
+        try await update(timelineController, viewModel, with: [firstMessage, foreignMessage, echo, nextMessage])
+        
+        // Then the send is over, so regroups animate again.
+        #expect(viewModel.latestRegroupCause == .newestInsert)
+    }
+    
+    @Test
+    func regroupsSnapWhenSwitchingTimelines() async throws {
+        let firstMessage = TextRoomTimelineItem(text: "Message 1", sender: "alice")
+        let timelineController = TimelineControllerMock(.init(timelineItems: [firstMessage]))
+        let viewModel = makeViewModel(timelineController: timelineController)
+        
+        let newestMessage = TextRoomTimelineItem(text: "Message 2", sender: "alice")
+        try await update(timelineController, viewModel, with: [firstMessage, newestMessage], isSwitchingTimelines: true)
+        
+        #expect(viewModel.latestRegroupCause == .other, "A new newest item in another timeline isn't an insert.")
     }
     
     // MARK: - Focussing
@@ -910,6 +1075,82 @@ final class TimelineViewModelTests {
         #expect(userIndicatorController.submitIndicatorDelayReceivedArguments?.indicator.title == L10n.errorCameraUnavailable)
     }
     
+    // MARK: - Sending
+    
+    @Test(arguments: [TimelineKind.live, .thread(rootEventID: "$root")])
+    func aTextSendAnnouncesItselfBeforeTheComposerClears(kind: TimelineKind) async throws {
+        let timelineController = TimelineControllerMock(.init(timelineKind: kind, timelineItems: []))
+        let viewModel = makeViewModel(timelineController: timelineController)
+        var progress: [TimelineSendProgress] = []
+        let cancellable = viewModel.context.viewState.timelineState.sendProgressPublisher.sink { progress.append($0) }
+        defer { cancellable.cancel() }
+        
+        let cleared = deferFulfillment(viewModel.context.viewState.timelineState.sendProgressPublisher) { $0 == .clearingComposer }
+        viewModel.process(composerAction: .sendMessage(plain: "Hello", html: nil, mode: .default, intentionalMentions: .empty))
+        #expect(progress == [.sending])
+        try await cleared.fulfill()
+        #expect(progress == [.sending, .clearingComposer])
+    }
+    
+    @Test
+    func aReplyAnnouncesItselfBeforeTheComposerClears() async throws {
+        let timelineController = TimelineControllerMock(.init(timelineItems: []))
+        let viewModel = makeViewModel(timelineController: timelineController)
+        var progress: [TimelineSendProgress] = []
+        let cancellable = viewModel.context.viewState.timelineState.sendProgressPublisher.sink { progress.append($0) }
+        defer { cancellable.cancel() }
+        
+        let cleared = deferFulfillment(viewModel.context.viewState.timelineState.sendProgressPublisher) { $0 == .clearingComposer }
+        let mode = ComposerMode.reply(eventID: "$parent", replyDetails: .loading(eventID: "$parent"), isThread: false)
+        viewModel.process(composerAction: .sendMessage(plain: "Hello", html: nil, mode: mode, intentionalMentions: .empty))
+        #expect(progress == [.sending])
+        try await cleared.fulfill()
+        #expect(progress == [.sending, .clearingComposer])
+    }
+    
+    @Test(arguments: UnheldComposerSend.allCases)
+    func editsAndSlashCommandsDoNotHold(send: UnheldComposerSend) async throws {
+        let timelineController = TimelineControllerMock(.init(timelineItems: [TextRoomTimelineItem(eventID: "$1")]))
+        let clientProxy = ClientProxyMock(.init())
+        clientProxy.resolveRoomAliasReturnValue = .failure(.failedResolvingRoomAlias)
+        let viewModel = makeViewModel(timelineController: timelineController, clientProxy: clientProxy)
+        var progress: [TimelineSendProgress] = []
+        let cancellable = viewModel.context.viewState.timelineState.sendProgressPublisher.sink { progress.append($0) }
+        defer { cancellable.cancel() }
+        
+        let (message, mode): (String, ComposerMode) = switch send {
+        case .edit: ("Edited", .edit(originalEventOrTransactionID: .eventID("$1"), type: .default))
+        case .captionEdit: ("Caption", .edit(originalEventOrTransactionID: .eventID("$1"), type: .addCaption))
+        case .joinCommand: ("/join #room:matrix.org", .default)
+        }
+        // Every send ends by asking for the bottom: waiting for it keeps the send from running into the next test.
+        let finished = deferFulfillment(viewModel.context.viewState.timelineState.scrollToBottomPublisher) { _ in true }
+        viewModel.process(composerAction: .sendMessage(plain: message, html: nil, mode: mode, intentionalMentions: .empty))
+        #expect(progress.isEmpty)
+        try await finished.fulfill()
+        #expect(progress.isEmpty)
+    }
+    
+    @Test
+    func aSendThatDidNotHoldDoesNotAnnounceAComposerClear() async throws {
+        let timelineController = TimelineControllerMock(.init(timelineItems: []))
+        let viewModel = makeViewModel(timelineController: timelineController)
+        var progress: [TimelineSendProgress] = []
+        let cancellable = viewModel.context.viewState.timelineState.sendProgressPublisher.sink { progress.append($0) }
+        defer { cancellable.cancel() }
+        
+        // Media, voice, poll and location sends report here too, as do edits.
+        let cleared = deferFulfillment(viewModel.actions) { action in
+            if case .composer(action: .clear) = action {
+                return true
+            }
+            return false
+        }
+        timelineController.callbacks.send(.messageSentOrEdited)
+        try await cleared.fulfill()
+        #expect(progress.isEmpty)
+    }
+    
     // MARK: - Helpers
     
     private func makeViewModel(items: [RoomTimelineItemProtocol],
@@ -921,12 +1162,13 @@ final class TimelineViewModelTests {
     private func makeViewModel(roomProxy: JoinedRoomProxyProtocol? = nil,
                                focussedEventID: String? = nil,
                                timelineController: TimelineControllerProtocol,
+                               clientProxy: ClientProxyProtocol = ClientProxyMock(.init()),
                                userIndicatorController: UserIndicatorControllerProtocol = UserIndicatorControllerMock(),
                                appMediator: AppMediatorProtocol = AppMediatorMock(.init())) -> TimelineViewModel {
         TimelineViewModel(roomProxy: roomProxy ?? JoinedRoomProxyMock(.init(name: "")),
                           focussedEventID: focussedEventID,
                           timelineController: timelineController,
-                          userSession: UserSessionMock(.init()),
+                          userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                           mediaPlayerProvider: MediaPlayerProviderMock(),
                           userIndicatorController: userIndicatorController,
                           appMediator: appMediator,
@@ -936,16 +1178,33 @@ final class TimelineViewModelTests {
                           timelineControllerFactory: TimelineControllerFactoryMock(.init()))
     }
     
+    /// Sends the items to the view model and waits until it has built them.
+    private func update(_ timelineController: TimelineControllerMock,
+                        _ viewModel: TimelineViewModel,
+                        with items: [RoomTimelineItemProtocol],
+                        isSwitchingTimelines: Bool = false) async throws {
+        let deferred = deferFulfillment(viewModel.context.$viewState) { $0.timelineState.uniqueIDs == items.map(\.id.uniqueID) }
+        timelineController.callbacks.send(.updatedTimelineItems(timelineItems: items, isSwitchingTimelines: isSwitchingTimelines))
+        try await deferred.fulfill()
+    }
+    
     /// Starts a selection the way the app does, by choosing Forward on the item.
     private func startSelection(_ itemID: TimelineItemIdentifier, in viewModel: TimelineViewModel) {
         viewModel.process(viewAction: .handleTimelineItemMenuAction(itemID: itemID, action: .forward(itemID: itemID)))
     }
+    
+    /// Composer sends that don't add a new item at the newest end of the timeline.
+    nonisolated enum UnheldComposerSend: CaseIterable {
+        case edit
+        case captionEdit
+        case joinCommand
+    }
 }
 
 private extension TextRoomTimelineItem {
-    init(text: String, sender: String, addReactions: Bool = false, addReadReceipts: [ReadReceipt] = []) {
+    init(id: TimelineItemIdentifier = .randomEvent, text: String, sender: String, addReactions: Bool = false, addReadReceipts: [ReadReceipt] = []) {
         let reactions = addReactions ? [AggregatedReaction(accountOwnerID: "bob", key: "🦄", senders: [ReactionSender(id: sender, timestamp: Date())])] : []
-        self.init(id: .randomEvent,
+        self.init(id: id,
                   timestamp: .mock,
                   isOutgoing: sender == "bob",
                   isEditable: sender == "bob",
@@ -1025,5 +1284,44 @@ private extension TimelineItemSender {
 private extension TimelineItemKeyForwarder {
     static var test: TimelineItemKeyForwarder {
         TimelineItemKeyForwarder(id: "@alice:matrix.org", displayName: "alice")
+    }
+}
+
+/// Shows a row's reactions in a window, and publishes the transaction of each change to them.
+private final class ReactionsTransactionProbe {
+    struct Change {
+        let reactionCount: Int
+        let disablesAnimations: Bool
+    }
+    
+    let changes = PassthroughSubject<Change, Never>()
+    private let window: UIWindow
+    
+    init(viewState: RoomTimelineItemViewState) throws {
+        let scene = try #require(UIApplication.shared.connectedScenes.first as? UIWindowScene)
+        window = UIWindow(windowScene: scene)
+        window.frame = CGRect(x: 0, y: 0, width: 390, height: 844)
+        window.rootViewController = UIHostingController(rootView: ReactionsTransactionReporter(viewState: viewState, changes: changes))
+        window.isHidden = false
+        window.layoutIfNeeded()
+    }
+}
+
+private struct ReactionsTransactionReporter: View {
+    @ObservedObject var viewState: RoomTimelineItemViewState
+    let changes: PassthroughSubject<ReactionsTransactionProbe.Change, Never>
+    
+    var body: some View {
+        // The height makes each reaction change a layout change, which SwiftUI shows with the change's transaction.
+        Color.clear
+            .frame(height: CGFloat(10 * (1 + reactionCount)))
+            .transaction { [reactionCount] transaction in
+                changes.send(.init(reactionCount: reactionCount, disablesAnimations: transaction.disablesAnimations))
+            }
+    }
+    
+    private var reactionCount: Int {
+        guard case .text(let item) = viewState.type else { return 0 }
+        return item.properties.reactions.count
     }
 }

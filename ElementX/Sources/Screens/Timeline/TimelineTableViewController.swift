@@ -17,10 +17,115 @@ import SwiftUI
 class TimelineItemCell: UITableViewCell {
     static let reuseIdentifier = "TimelineItemCell"
     
-    var item: RoomTimelineItemViewState?
+    var item: RoomTimelineItemViewState? {
+        didSet {
+            guard item !== oldValue else { return }
+            unanimatedChanges.reset()
+            itemChanges = item.map(recordUnanimatedChanges)
+        }
+    }
+    
+    private let unanimatedChanges = UnanimatedChanges()
+    private var itemChanges: AnyCancellable?
+    
+    /// Whether this row, or another row of the same table, has an unanimated change to show.
+    private var tableHasUnshownUnanimatedChanges: Bool {
+        guard !unanimatedChanges.arePending else { return true }
+        
+        var tableView = superview
+        while let view = tableView, !(view is UITableView) {
+            tableView = view.superview
+        }
+        return tableView?.subviews.contains { view in
+            guard let cell = view as? TimelineItemCell, cell.window != nil, !cell.isHidden else { return false }
+            return cell.unanimatedChanges.arePending
+        } ?? false
+    }
     
     override func prepareForReuse() {
         item = nil
+    }
+    
+    override func invalidateIntrinsicContentSize() {
+        // UIKit animates a self-sizing resize even when SwiftUI changed the content without animation, and animates all
+        // of a layout pass's resizes when it animates one. A bubble, already in its new layout at the row's top, would
+        // then jump by a header's full height and glide back. So while any row has an unanimated change, none animates.
+        if tableHasUnshownUnanimatedChanges {
+            UIView.performWithoutAnimation { super.invalidateIntrinsicContentSize() }
+        } else {
+            super.invalidateIntrinsicContentSize()
+        }
+    }
+    
+    /// Shows the content at the row's visual top, also while the row's height lags behind the content's.
+    func setContent(@ViewBuilder _ content: () -> some View) {
+        contentConfiguration = UIHostingConfiguration { [unanimatedChanges] in
+            content()
+                // Without `minHeight: 0`, content taller than its row is centred.
+                .frame(maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
+                .background { UnanimatedChangesObserver(changes: unanimatedChanges) }
+        }
+        .margins(.all, 0) // Margins are handled in the stylers
+        .minSize(height: 1)
+        .background(Color.clear)
+        
+        // Flipping the cell can create some issues with cell resizing, so flip the content View
+        contentView.transform = CGAffineTransform(scaleX: 1, y: -1)
+    }
+    
+    /// Makes SwiftUI show the content's pending change now, so that the table's next update resizes the row for it,
+    /// instead of a layout pass of its own once SwiftUI gets to the row.
+    func layOutPendingContentChange() {
+        // Forced, in case SwiftUI hasn't asked for a layout yet.
+        contentView.setNeedsLayout()
+        contentView.layoutIfNeeded()
+    }
+    
+    /// Records each change as the view model makes it: several updates can land before the table shows them, and a
+    /// later, animated one mustn't make an earlier unanimated change animate.
+    private func recordUnanimatedChanges(of item: RoomTimelineItemViewState) -> AnyCancellable {
+        // `objectWillChange` fires after the view model has set `animatesResize` for the update.
+        item.objectWillChange.sink { [weak item, unanimatedChanges] in
+            if item?.animatesResize == false {
+                unanimatedChanges.record()
+            }
+        }
+    }
+}
+
+/// The changes a cell's item had without animation, until the cell's content has shown them.
+private final class UnanimatedChanges: ObservableObject {
+    /// Drives `UnanimatedChangesObserver`, so the content sees each change, also one that a later change reverts.
+    @Published private(set) var count = 0
+    private(set) var arePending = false
+    
+    func record() {
+        count += 1
+        arePending = true
+    }
+    
+    func reset() {
+        arePending = false
+    }
+    
+    func didShow(upTo shownCount: Int) {
+        // It runs before this row and the others resize for the change, so clearing now would let them animate.
+        DispatchQueue.main.async { [weak self] in
+            guard let self, count == shownCount else { return }
+            arePending = false
+        }
+    }
+}
+
+private struct UnanimatedChangesObserver: View {
+    @ObservedObject var changes: UnanimatedChanges
+    
+    var body: some View {
+        Color.clear
+            .accessibilityHidden(true)
+            .onChange(of: changes.count) { _, count in
+                changes.didShow(upTo: count)
+            }
     }
 }
 
@@ -38,6 +143,16 @@ class TypingMembersObservableObject: ObservableObject {
     }
 }
 
+/// A table view that reports its layout passes.
+private final class TimelineTableView: UITableView {
+    var didLayoutSubviews: (() -> Void)?
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        didLayoutSubviews?()
+    }
+}
+
 /// A table view controller that displays the timeline of a room.
 ///
 /// This class subclasses `UIViewController` as `UITableViewController` adds some
@@ -45,7 +160,7 @@ class TypingMembersObservableObject: ObservableObject {
 /// Also this TableViewController uses a **flipped tableview**
 class TimelineTableViewController: UIViewController {
     private let coordinator: TimelineViewRepresentable.Coordinator
-    private let tableView = UITableView(frame: .zero, style: .plain)
+    private let tableView = TimelineTableView(frame: .zero, style: .plain)
     
     var timelineItemsDictionary = OrderedDictionary<TimelineItemIdentifier.UniqueID, RoomTimelineItemViewState>() {
         didSet {
@@ -74,6 +189,9 @@ class TimelineTableViewController: UIViewController {
     /// There are pending items in `timelineItemsDictionary` that haven't been applied to the data source.
     private var hasPendingItems = false
     
+    /// An apply runs layout passes and scroll callbacks, and a diffable apply started from one of them crashes (A1).
+    private var isApplyingSnapshot = false
+    
     /// The scroll view is scrolling either directly with a drag or indirectly with inertia.
     private var scrollViewIsScrolling = false {
         didSet {
@@ -100,6 +218,8 @@ class TimelineTableViewController: UIViewController {
             // Update isScrolledToBottom when switching back to a live timeline.
             if isLive {
                 scrollViewDidScroll(tableView)
+            } else {
+                handleSendHold(.exit(scrollToBottom: false))
             }
         }
     }
@@ -175,6 +295,24 @@ class TimelineTableViewController: UIViewController {
     /// Whether or not the view has been shown on screen yet.
     private var hasAppearedOnce = false
     
+    private lazy var scroller = FlippedTableScroller(tableView: tableView)
+    /// Keeps the timeline still while a message sent from the bottom lands.
+    private var sendHold = SendHoldMachine()
+    /// The row the hold keeps still.
+    private var sendHoldAnchorID: TimelineItemIdentifier.UniqueID?
+    /// What the hold added to the table's insets, to take away again when it ends.
+    private var sendHoldAddedInsets = UIEdgeInsets.zero
+    /// The hold's next timeout or settle check.
+    private var sendHoldTick: DispatchWorkItem?
+    /// Where the view's bottom edge was at the hold's last resize, in window coordinates.
+    private var lastViewBottomWindowY: CGFloat = 0
+    /// What keeping the reader's place added to the table's insets, such as the spinner's space at the start of the room.
+    /// It stays until the reader scrolls out of that space.
+    private var pendingPaginationInsets = UIEdgeInsets.zero
+    /// Each row's group style as the table last applied it. The view model changes the view states in place, so they
+    /// no longer show what an update regrouped.
+    private var lastAppliedGroupStyles: [TimelineItemIdentifier.UniqueID: TimelineGroupStyle] = [:]
+    
     init(coordinator: TimelineViewRepresentable.Coordinator,
          isScrolledToBottom: Binding<Bool>,
          isReadMarkerVisible: Binding<Bool>,
@@ -182,7 +320,8 @@ class TimelineTableViewController: UIViewController {
          floatingDate: Binding<Date?>,
          scrollToBottomPublisher: PassthroughSubject<Void, Never>,
          scrollToFirstItemForDatePublisher: PassthroughSubject<Void, Never>,
-         scrollToReadMarkerPublisher: PassthroughSubject<TimelineItemIdentifier.UniqueID, Never>) {
+         scrollToReadMarkerPublisher: PassthroughSubject<TimelineItemIdentifier.UniqueID, Never>,
+         sendProgressPublisher: PassthroughSubject<TimelineSendProgress, Never>) {
         self.coordinator = coordinator
         _isScrolledToBottom = isScrolledToBottom
         _isReadMarkerVisible = isReadMarkerVisible
@@ -201,6 +340,10 @@ class TimelineTableViewController: UIViewController {
         // The tableview is flipped to display the newest items at the bottom.
         tableView.transform = CGAffineTransform(scaleX: 1, y: -1)
         view.addSubview(tableView)
+        
+        tableView.didLayoutSubviews = { [weak self] in
+            self?.pinSendHoldAnchor()
+        }
         
         // Prevents XCUITest from invoking the diffable dataSource's cellProvider
         // for each possible cell, causing layout issues
@@ -221,6 +364,15 @@ class TimelineTableViewController: UIViewController {
         scrollToReadMarkerPublisher
             .sink { [weak self] uniqueID in
                 self?.scrollToItem(uniqueID: uniqueID, animated: true)
+            }
+            .store(in: &cancellables)
+        
+        sendProgressPublisher
+            .sink { [weak self] progress in
+                switch progress {
+                case .sending: self?.beginSendHold()
+                case .clearingComposer: self?.handleSendHold(.composerWillClear)
+                }
             }
             .store(in: &cancellables)
         
@@ -264,11 +416,22 @@ class TimelineTableViewController: UIViewController {
         paginatePublisher.send()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        handleSendHold(.exit(scrollToBottom: sendHold.phase != .detached))
+    }
+    
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         
         guard tableView.frame.size != view.frame.size else {
             return
+        }
+        
+        if tableView.frame.width != view.frame.width {
+            handleSendHold(.widthChanged)
+        } else if sendHold.phase != .idle {
+            sendHoldViewWillResize()
         }
         
         tableView.frame = CGRect(origin: .zero, size: view.frame.size)
@@ -306,20 +469,13 @@ class TimelineTableViewController: UIViewController {
                     return cell
                 }
                 
-                cell.contentConfiguration = UIHostingConfiguration { [coordinator, hideTimelineMedia] in
+                cell.setContent { [coordinator, hideTimelineMedia] in
                     RoomTimelineItemView(viewState: viewState)
                         .id(id)
-                        .frame(maxWidth: .infinity, alignment: .leading)
                         .environmentObject(coordinator.context) // Attempted fix at a crash in TimelineItemContextMenu
                         .environment(\.timelineContext, coordinator.context)
                         .environment(\.shouldAutomaticallyLoadImages, !hideTimelineMedia)
                 }
-                .margins(.all, 0) // Margins are handled in the stylers
-                .minSize(height: 1)
-                .background(Color.clear)
-                
-                // Flipping the cell can create some issues with cell resizing, so flip the content View
-                cell.contentView.transform = CGAffineTransform(scaleX: 1, y: -1)
                 return cell
             }
         }
@@ -339,11 +495,13 @@ class TimelineTableViewController: UIViewController {
         dataSource?.defaultRowAnimation = (UIAccessibility.isReduceMotionEnabled ? .none : .top)
     }
     
-    /// Updates the table view with the latest items from the ``timelineItems`` array. After
-    /// updating the data, the table will be scrolled to the bottom if it was visible otherwise
-    /// the scroll position will be updated to maintain the position of the last visible item.
+    /// Updates the table view with the latest items from the ``timelineItems`` array. While pages of messages land, the
+    /// topmost message on screen stays put in a live timeline, and the bottom one in a detached timeline.
     private func applySnapshot() {
         guard let dataSource else { return }
+        assert(!isApplyingSnapshot, "An apply mustn't start from a layout pass or scroll callback of another one.")
+        isApplyingSnapshot = true
+        defer { isApplyingSnapshot = false }
         
         var snapshot = NSDiffableDataSourceSnapshot<TimelineSection, TimelineItemIdentifier.UniqueID>()
         
@@ -357,27 +515,52 @@ class TimelineTableViewController: UIViewController {
         
         let currentSnapshot = dataSource.snapshot()
         
-        // We only animate when new items come at the end of a live timeline, ignoring transitions through empty.
-        let newestItemIdentifier = snapshot.mainItemIdentifiers.first
-        let currentNewestItemIdentifier = currentSnapshot.mainItemIdentifiers.first
-        let newestItemIDChanged = snapshot.numberOfMainItems > 0 && currentSnapshot.numberOfMainItems > 0 && newestItemIdentifier != currentNewestItemIdentifier
-        let animated = isLive && !isSwitchingTimelines && newestItemIDChanged
+        let isFocussingEvent = focussedEvent.map { $0.appearance != .hasAppeared } ?? false
+        if !isLive || isSwitchingTimelines || isFocussingEvent {
+            handleSendHold(.exit(scrollToBottom: false))
+        }
+        if isSwitchingTimelines {
+            removePendingPaginationInsets()
+        }
         
-        let layout: Layout? = if !isLive, newestItemIDChanged {
-            snapshotLayout()
+        if sendHold.isPinning {
+            applySnapshotWhileHoldingSend(snapshot, currentSnapshot: currentSnapshot)
         } else {
-            nil
+            let oldIDs = currentSnapshot.mainItemIdentifiers
+            let newIDs = snapshot.mainItemIdentifiers
+            let plan = ApplyPlanner.plan(for: .init(oldIDs: oldIDs,
+                                                    newIDs: newIDs,
+                                                    localEchoIDs: localEchoIDs(in: snapshot),
+                                                    isLive: isLive,
+                                                    isSwitchingTimelines: isSwitchingTimelines,
+                                                    isHoldingSend: false,
+                                                    reduceMotion: UIAccessibility.isReduceMotionEnabled))
+            
+            // A detached timeline keeps the reader's place through any update, as the forward spinner can hide a newer page.
+            // A live one follows its newest items, so only its oldest end needs it, and only once scrolled up: at the bottom
+            // the flipped table already keeps the newest row still. A new timeline starts at its newest item or its focussed
+            // event instead.
+            let keepsPlace = !isLive || (oldIDs.last != newIDs.last && tableView.contentOffset.y > 0)
+            let anchors: [AnchorPolicy.Anchor] = if !plan.animated, !isSwitchingTimelines, keepsPlace {
+                AnchorPolicy.anchors(in: captureGeometry(), nearest: isLive ? .top : .bottom, excluding: regroupedIDs(in: snapshot))
+            } else {
+                []
+            }
+            
+            layOutPendingContentChanges(of: plan.resizedInSameBatchIDs)
+            dataSource.apply(snapshot, animatingDifferences: plan.animated)
+            fadeIn(plan.fadeInIDs)
+            
+            if let focussedEvent, focussedEvent.appearance != .hasAppeared {
+                scrollToItem(eventID: focussedEvent.eventID, animated: focussedEvent.appearance == .animated)
+            } else if !anchors.isEmpty {
+                tableView.layoutIfNeeded()
+                restore(anchors)
+            } else if isSwitchingTimelines {
+                scrollToNewestItem(animated: false)
+            }
         }
-        
-        dataSource.apply(snapshot, animatingDifferences: animated)
-        
-        if let focussedEvent, focussedEvent.appearance != .hasAppeared {
-            scrollToItem(eventID: focussedEvent.eventID, animated: focussedEvent.appearance == .animated)
-        } else if let layout {
-            restoreLayout(layout)
-        } else if isSwitchingTimelines {
-            scrollToNewestItem(animated: false)
-        }
+        lastAppliedGroupStyles = Dictionary(uniqueKeysWithValues: timelineItemsDictionary.map { ($0.key, $0.value.groupStyle) })
         
         if isSwitchingTimelines {
             coordinator.send(viewAction: .hasSwitchedTimeline)
@@ -392,11 +575,31 @@ class TimelineTableViewController: UIViewController {
         }
     }
     
+    /// Echoes only land at the newest end, so the first few items are all that need checking.
+    private func localEchoIDs(in snapshot: NSDiffableDataSourceSnapshot<TimelineSection, TimelineItemIdentifier.UniqueID>) -> Set<TimelineItemIdentifier.UniqueID> {
+        Set(snapshot.mainItemIdentifiers.prefix(5).filter { timelineItemsDictionary[$0]?.identifier.transactionID != nil })
+    }
+    
+    /// Lets the next apply resize the visible rows for their pending content changes in its own batch.
+    private func layOutPendingContentChanges(of ids: [TimelineItemIdentifier.UniqueID]) {
+        for id in ids {
+            guard let indexPath = dataSource?.indexPath(for: id), let cell = tableView.cellForRow(at: indexPath) as? TimelineItemCell else { continue }
+            cell.layOutPendingContentChange()
+        }
+    }
+    
+    /// Fades the rows' content in. Never touches the scroll offset.
+    private func fadeIn(_ ids: [TimelineItemIdentifier.UniqueID]) {
+        for id in ids {
+            guard let indexPath = dataSource?.indexPath(for: id), let cell = tableView.cellForRow(at: indexPath) else { continue }
+            cell.contentView.alpha = 0
+            UIView.animate(withDuration: 0.2) { cell.contentView.alpha = 1 }
+        }
+    }
+    
     /// Scrolls to the newest item in the timeline.
     private func scrollToNewestItem(animated: Bool) {
-        guard !timelineItemsIDs.isEmpty else {
-            return
-        }
+        guard !timelineItemsIDs.isEmpty, prepareForProgrammaticScroll(to: .newest) else { return }
         tableView.scrollToRow(at: IndexPath(item: 0, section: 0), at: .top, animated: animated)
         scrollDirectionPublisher.send(.bottom)
     }
@@ -406,9 +609,8 @@ class TimelineTableViewController: UIViewController {
         // The data source can lag behind timelineItemsIDs, so scroll against the table's actual
         // contents to avoid targeting a section or row that doesn't exist yet.
         guard tableView.numberOfSections > 1,
-              tableView.numberOfRows(inSection: 1) > 0 else {
-            return
-        }
+              tableView.numberOfRows(inSection: 1) > 0,
+              prepareForProgrammaticScroll(to: .other) else { return }
         tableView.scrollToRow(at: IndexPath(item: tableView.numberOfRows(inSection: 1) - 1, section: 1), at: .bottom, animated: animated)
         scrollDirectionPublisher.send(.top)
     }
@@ -418,7 +620,7 @@ class TimelineTableViewController: UIViewController {
     /// so the user can see what's above and below the marker.
     private func scrollToItem(uniqueID: TimelineItemIdentifier.UniqueID, animated: Bool) {
         DispatchQueue.main.async { [weak self] in
-            guard let self, let indexPath = dataSource?.indexPath(for: uniqueID) else { return }
+            guard let self, let indexPath = dataSource?.indexPath(for: uniqueID), prepareForProgrammaticScroll(to: .other) else { return }
             tableView.scrollToRow(at: indexPath, at: .middle, animated: animated)
         }
     }
@@ -429,6 +631,7 @@ class TimelineTableViewController: UIViewController {
             guard let self else { return }
             if let kvPair = timelineItemsDictionary.first(where: { $0.value.identifier.eventID == eventID }),
                let indexPath = dataSource?.indexPath(for: kvPair.key) {
+                guard prepareForProgrammaticScroll(to: .other) else { return }
                 // Scrolling to the middle created a small bump in the timeline
                 // Using top, which is bottom in the reversed timeline helps with rendering
                 // in full long messages and images
@@ -509,7 +712,8 @@ extension TimelineTableViewController: UITableViewDelegate {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
             
-            let isScrolledToBottom = scrollView.contentOffset.y <= 0
+            // A hold briefly offsets the rows while it keeps them still at the bottom.
+            let isScrolledToBottom = scrollView.contentOffset.y <= 0 || sendHold.keepsTimelineAtBottom
             
             // Only update the binding on changes to avoid needlessly recomputing the hierarchy when scrolling.
             if self.isScrolledToBottom != isScrolledToBottom {
@@ -524,10 +728,11 @@ extension TimelineTableViewController: UITableViewDelegate {
             }
             
             updateReadMarkerVisibility()
+            removePaginationInsetsNoLongerNeeded()
         }
         
         // We never want the table view to be fully at the bottom to allow the status bar tap to work properly
-        if scrollView.contentOffset.y == 0 {
+        if scrollView.contentOffset.y == 0, sendHold.phase == .idle {
             scrollView.contentOffset.y = -1
         }
         
@@ -547,6 +752,8 @@ extension TimelineTableViewController: UITableViewDelegate {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         isDraggingScrollView = true
         scrollViewIsScrolling = true
+        handleSendHold(.dragBegan)
+        removePaginationInsetsNoLongerNeeded()
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
@@ -555,16 +762,21 @@ extension TimelineTableViewController: UITableViewDelegate {
         isDraggingScrollView = false
         if !decelerate {
             scrollViewIsScrolling = false
+            settleDetachedSendHold()
         }
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         sendLastVisibleItemReadReceipt()
         scrollViewIsScrolling = false
+        settleDetachedSendHold()
     }
     
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         sendLastVisibleItemReadReceipt()
+        if sendHold.phase == .releasing, abs(scrollView.contentOffset.y - Self.bottomOffset) < 0.5 {
+            handleSendHold(.releaseReachedBottom)
+        }
     }
 }
 
@@ -607,6 +819,7 @@ extension TimelineTableViewController {
             if let timestamp = timelineItemsDictionary[uniqueID]?.timestamp,
                Calendar.current.isDate(timestamp, inSameDayAs: floatingDate),
                let indexPath = dataSource?.indexPath(for: uniqueID) {
+                guard prepareForProgrammaticScroll(to: .other) else { return }
                 // The table view is flipped, so .bottom aligns the cell to the visual top.
                 tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
                 return
@@ -639,6 +852,239 @@ extension TimelineTableViewController {
     }
 }
 
+// MARK: - Send Hold
+
+extension TimelineTableViewController {
+    private enum ScrollTarget {
+        case newest
+        case other
+    }
+    
+    /// The resting offset at the bottom, see `scrollViewDidScroll`.
+    private static let bottomOffset: CGFloat = -1
+    private static let detachedPollInterval: TimeInterval = 0.25
+    
+    private var viewBottomWindowY: CGFloat {
+        view.convert(CGPoint(x: 0, y: view.bounds.maxY), to: nil).y
+    }
+    
+    private func handleSendHold(_ event: SendHoldMachine.Event) {
+        perform(sendHold.handle(event, now: CACurrentMediaTime()))
+        scheduleSendHoldTick()
+    }
+    
+    private func beginSendHold() {
+        let canHold = isLive && !isSwitchingTimelines && view.window != nil
+            && !tableView.isTracking && !tableView.isDecelerating && tableView.contentOffset.y <= 0
+        lastViewBottomWindowY = viewBottomWindowY
+        handleSendHold(.sendBegan(canHold: canHold, anchorTop: newestRowAnchor()?.visualTop))
+    }
+    
+    private func perform(_ command: SendHoldMachine.Command) {
+        switch command {
+        case .none:
+            break
+        case .startHolding:
+            tableView.setContentOffset(tableView.contentOffset, animated: false) // Stops a running release.
+            sendHoldAnchorID = newestRowAnchor()?.id
+        case .release:
+            releaseSendHold()
+        case .stopRelease:
+            tableView.setContentOffset(tableView.contentOffset, animated: false)
+        case .finish(let scrollToBottom):
+            finishSendHold(scrollToBottom: scrollToBottom)
+        }
+    }
+    
+    /// Called after every layout pass of the table, when the cells have their real rects.
+    private func pinSendHoldAnchor() {
+        guard sendHold.isPinning, let anchorID = sendHoldAnchorID, let indexPath = dataSource?.indexPath(for: anchorID) else { return }
+        sendHoldAddedInsets += scroller.moveRowsVisually(by: sendHold.anchorTarget - scroller.visualTop(of: indexPath))
+    }
+    
+    /// Called before the table takes the view's new size: a frame change clamps an out-of-range offset.
+    private func sendHoldViewWillResize() {
+        let rise = lastViewBottomWindowY - viewBottomWindowY
+        lastViewBottomWindowY = viewBottomWindowY
+        handleSendHold(.viewHeightChanged(rise: rise, slot: max(0, Self.bottomOffset - tableView.contentOffset.y)))
+        sendHoldAddedInsets += scroller.widenInsets(toAllow: tableView.contentOffset.y, height: view.frame.height)
+    }
+    
+    /// Applies the update without any animation, leaving the pin to keep the rows still.
+    private func applySnapshotWhileHoldingSend(_ snapshot: NSDiffableDataSourceSnapshot<TimelineSection, TimelineItemIdentifier.UniqueID>,
+                                               currentSnapshot: NSDiffableDataSourceSnapshot<TimelineSection, TimelineItemIdentifier.UniqueID>) {
+        guard let dataSource else { return }
+        
+        let identifiers = Set(snapshot.itemIdentifiers)
+        if let anchorID = sendHoldAnchorID, !identifiers.contains(anchorID) {
+            guard let survivorID = currentSnapshot.mainItemIdentifiers.first(where: identifiers.contains),
+                  let indexPath = dataSource.indexPath(for: survivorID) else {
+                handleSendHold(.exit(scrollToBottom: true))
+                UIView.performWithoutAnimation { dataSource.apply(snapshot, animatingDifferences: false) }
+                return
+            }
+            sendHoldAnchorID = survivorID
+            handleSendHold(.anchorReplaced(top: scroller.visualTop(of: indexPath)))
+        }
+        
+        // Echoes land at the newest end, unlike any history that back-pagination brings in.
+        let currentIdentifiers = Set(currentSnapshot.itemIdentifiers)
+        let ownEchoes = snapshot.mainItemIdentifiers
+            .prefix { !currentIdentifiers.contains($0) }
+            .count { timelineItemsDictionary[$0]?.identifier.transactionID != nil }
+        let plan = ApplyPlanner.plan(for: .init(oldIDs: currentSnapshot.mainItemIdentifiers,
+                                                newIDs: snapshot.mainItemIdentifiers,
+                                                localEchoIDs: localEchoIDs(in: snapshot),
+                                                isLive: isLive,
+                                                isSwitchingTimelines: isSwitchingTimelines,
+                                                isHoldingSend: true,
+                                                reduceMotion: UIAccessibility.isReduceMotionEnabled))
+        
+        UIView.performWithoutAnimation {
+            layOutPendingContentChanges(of: plan.resizedInSameBatchIDs)
+            dataSource.apply(snapshot, animatingDifferences: false)
+            tableView.layoutIfNeeded()
+        }
+        fadeIn(plan.fadeInIDs)
+        handleSendHold(.applied(ownEchoes: ownEchoes))
+    }
+    
+    /// Called when a drag ends without decelerating, when a deceleration ends, and at the detached timeout.
+    private func settleDetachedSendHold() {
+        guard sendHold.phase == .detached else { return }
+        let offset = tableView.contentOffset.y
+        // The slot under the newest row, or, when the rows don't fill the table, the space past the oldest one.
+        let isInHoldSpace = offset < Self.bottomOffset - 0.5 || offset > scroller.offsetRange(without: sendHoldAddedInsets).upperBound + 0.5
+        handleSendHold(.dragEnded(isInHoldSpace: isInHoldSpace))
+    }
+    
+    /// Every programmatic scroll goes through here so a send hold never fights it.
+    /// - Returns: whether the caller should go on and scroll.
+    private func prepareForProgrammaticScroll(to target: ScrollTarget) -> Bool {
+        switch (target, sendHold.phase) {
+        case (.newest, .holding), (.newest, .releasing):
+            scrollDirectionPublisher.send(.bottom) // The hold is already taking the timeline to the bottom.
+            return false
+        case (.newest, .detached), (.other, .holding), (.other, .releasing), (.other, .detached):
+            handleSendHold(.exit(scrollToBottom: false))
+            return true
+        case (_, .idle):
+            return true
+        }
+    }
+    
+    private func releaseSendHold() {
+        let motion = OffsetMotionPolicy.motion(for: .init(travel: tableView.contentOffset.y - Self.bottomOffset,
+                                                          viewportHeight: tableView.bounds.height,
+                                                          reduceMotion: UIAccessibility.isReduceMotionEnabled,
+                                                          isVoiceOverRunning: UIAccessibility.isVoiceOverRunning))
+        switch motion {
+        case .systemAnimated:
+            sendHoldAddedInsets += scroller.widenInsets(toAllow: Self.bottomOffset)
+            tableView.setContentOffset(CGPoint(x: 0, y: Self.bottomOffset), animated: true)
+        case .snap:
+            handleSendHold(.releaseReachedBottom)
+        }
+    }
+    
+    private func finishSendHold(scrollToBottom: Bool) {
+        sendHoldTick?.cancel()
+        sendHoldTick = nil
+        sendHoldAnchorID = nil
+        UIView.performWithoutAnimation {
+            let offset = scrollToBottom ? CGPoint(x: 0, y: Self.bottomOffset) : tableView.contentOffset
+            tableView.setContentOffset(offset, animated: false) // Also stops a running release.
+        }
+        // Without scrolling, this clamps rows left in the hold's space. The settle releases those instead, and every other
+        // caller scrolls, swaps the content or goes away next.
+        scroller.removeInsets(sendHoldAddedInsets)
+        sendHoldAddedInsets = .zero
+        scrollViewDidScroll(tableView)
+        if scrollToBottom {
+            scrollDirectionPublisher.send(.bottom)
+        }
+        sendLastVisibleItemReadReceipt()
+    }
+    
+    private func scheduleSendHoldTick(minimumDelay: TimeInterval = 0) {
+        sendHoldTick?.cancel()
+        let now = CACurrentMediaTime()
+        guard let next = sendHold.nextTick(after: now) else {
+            sendHoldTick = nil
+            return
+        }
+        let tick = DispatchWorkItem { [weak self] in self?.sendHoldTickFired() }
+        sendHoldTick = tick
+        DispatchQueue.main.asyncAfter(deadline: .now() + max(minimumDelay, next - now), execute: tick)
+    }
+    
+    /// Forwards a tick to the machine. A detached hold's timeout settles as a drag end does, once no drag or fling runs:
+    /// settling then would stop the fling, as any offset write does.
+    private func sendHoldTickFired() {
+        guard sendHold.phase == .detached else {
+            handleSendHold(.tick)
+            return
+        }
+        if tableView.isTracking || tableView.isDecelerating {
+            scheduleSendHoldTick(minimumDelay: Self.detachedPollInterval)
+        } else {
+            settleDetachedSendHold()
+        }
+    }
+    
+    private func newestRowAnchor() -> AnchorPolicy.Anchor? {
+        guard let id = dataSource?.snapshot().mainItemIdentifiers.first, let indexPath = dataSource?.indexPath(for: id) else { return nil }
+        return AnchorPolicy.Anchor(id: id, visualTop: scroller.visualTop(of: indexPath))
+    }
+}
+
+// MARK: - Anchoring
+
+extension TimelineTableViewController {
+    /// The visible rows, top of the screen first.
+    private func captureGeometry() -> TimelineGeometry {
+        let mainSection = dataSource?.snapshot().indexOfSection(.main)
+        let rows = (tableView.indexPathsForVisibleRows ?? [])
+            .filter { $0.section == mainSection }
+            .compactMap { indexPath -> TimelineGeometry.Row? in
+                guard let id = dataSource?.itemIdentifier(for: indexPath), let item = timelineItemsDictionary[id] else { return nil }
+                let rect = tableView.convert(tableView.rectForRow(at: indexPath), to: nil)
+                return TimelineGeometry.Row(id: id, kind: .init(item.type), visualTop: rect.minY, visualBottom: rect.maxY)
+            }
+            .sorted { $0.visualTop < $1.visualTop }
+        return TimelineGeometry(rows: rows, viewportBottom: viewBottomWindowY, viewportHeight: tableView.bounds.height)
+    }
+    
+    /// Puts the first anchor that survived the update back where it was, without stopping a fling.
+    private func restore(_ anchors: [AnchorPolicy.Anchor]) {
+        for anchor in anchors {
+            guard let indexPath = dataSource?.indexPath(for: anchor.id) else { continue }
+            let correction = AnchorPolicy.correction(for: anchor, newVisualTop: scroller.visualTop(of: indexPath))
+            let added = scroller.moveRowsVisually(by: -correction)
+            pendingPaginationInsets += added
+            return
+        }
+    }
+    
+    /// Only for a new timeline: if the space is on screen, UIKit snaps the old rows over it, and the new rows hide that.
+    private func removePendingPaginationInsets() {
+        scroller.removeInsets(pendingPaginationInsets)
+        pendingPaginationInsets = .zero
+    }
+    
+    private func removePaginationInsetsNoLongerNeeded() {
+        guard pendingPaginationInsets != .zero else { return }
+        pendingPaginationInsets = scroller.removeInsetsNoLongerNeeded(from: pendingPaginationInsets)
+    }
+    
+    private func regroupedIDs(in snapshot: NSDiffableDataSourceSnapshot<TimelineSection, TimelineItemIdentifier.UniqueID>) -> Set<TimelineItemIdentifier.UniqueID> {
+        Set(snapshot.mainItemIdentifiers.filter { id in
+            guard let old = lastAppliedGroupStyles[id], let new = timelineItemsDictionary[id]?.groupStyle else { return false }
+            return old != new
+        })
+    }
+}
+
 // MARK: - Layout
 
 extension TimelineTableViewController {
@@ -647,65 +1093,9 @@ extension TimelineTableViewController {
         case main
         case typingIndicator
     }
-    
-    /// A representation of the table's layout based on a particular item.
-    private struct Layout {
-        let id: TimelineItemIdentifier
-        let frame: CGRect
-    }
-    
-    /// The current layout of the table, based on the newest timeline item.
-    private func snapshotLayout() -> Layout? {
-        guard let newestItemID = newestVisibleItemID(),
-              let newestCellFrame = cellFrame(for: newestItemID.uniqueID) else {
-            return nil
-        }
-        return Layout(id: newestItemID, frame: newestCellFrame)
-    }
-    
-    /// Restores the timeline's layout from an old snapshot.
-    private func restoreLayout(_ layout: Layout) {
-        if let indexPath = dataSource?.indexPath(for: layout.id.uniqueID) {
-            // Scroll the item into view.
-            tableView.scrollToRow(at: indexPath, at: .top, animated: false)
-            
-            // Remove any unwanted offset that was added by scrollToRow.
-            if let frame = cellFrame(for: layout.id.uniqueID) {
-                let deltaY = frame.maxY - layout.frame.maxY
-                if deltaY != 0 {
-                    tableView.contentOffset.y -= deltaY
-                }
-            }
-        }
-    }
-    
-    /// Returns the frame of the cell for a particular timeline item.
-    private func cellFrame(for uniqueID: TimelineItemIdentifier.UniqueID) -> CGRect? {
-        guard let timelineCell = tableView.visibleCells.first(where: { ($0 as? TimelineItemCell)?.item?.identifier.uniqueID == uniqueID }) else {
-            return nil
-        }
-        
-        return tableView.convert(timelineCell.frame, to: tableView.superview)
-    }
-    
-    /// The item ID of the newest visible item in the timeline.
-    private func newestVisibleItemID() -> TimelineItemIdentifier? {
-        guard let timelineCell = tableView.visibleCells.first(where: {
-            guard let cell = $0 as? TimelineItemCell else { return false }
-            return !(cell.item?.type is PaginationIndicatorRoomTimelineItem)
-        }) else {
-            return nil
-        }
-        return (timelineCell as? TimelineItemCell)?.item?.identifier
-    }
 }
 
 private extension NSDiffableDataSourceSnapshot<TimelineTableViewController.TimelineSection, TimelineItemIdentifier.UniqueID> {
-    var numberOfMainItems: Int {
-        guard sectionIdentifiers.contains(.main) else { return 0 }
-        return numberOfItems(inSection: .main)
-    }
-    
     var mainItemIdentifiers: [TimelineItemIdentifier.UniqueID] {
         guard sectionIdentifiers.contains(.main) else { return [] }
         return itemIdentifiers(inSection: .main)

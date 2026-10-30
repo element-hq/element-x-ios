@@ -12,6 +12,9 @@ import MatrixRustSDK
 final class RoomTimelineItemViewState: Identifiable, Equatable, ObservableObject {
     @Published var type: RoomTimelineItemType
     @Published var groupStyle: TimelineGroupStyle
+    /// Whether the latest update lets the table animate the rows' resizes. `TimelineItemCell` records a `false` as the
+    /// change lands, until the table has shown it.
+    var animatesResize = true
     
     /// Contains all the identification info of the item, `uniqueID`, `eventID` and `transactionID`
     var identifier: TimelineItemIdentifier {
@@ -128,6 +131,14 @@ enum RoomTimelineItemType: Equatable {
     }
     
     var id: TimelineItemIdentifier {
+        item.id
+    }
+    
+    var isOutgoing: Bool {
+        (item as? EventBasedTimelineItemProtocol)?.isOutgoing ?? false
+    }
+    
+    private var item: RoomTimelineItemProtocol {
         switch self {
         case .text(let item as RoomTimelineItemProtocol),
              .separator(let item as RoomTimelineItemProtocol),
@@ -153,7 +164,7 @@ enum RoomTimelineItemType: Equatable {
              .callInvite(let item as RoomTimelineItemProtocol),
              .callNotification(let item as RoomTimelineItemProtocol),
              .liveLocation(let item as RoomTimelineItemProtocol):
-            return item.id
+            return item
         }
     }
     
