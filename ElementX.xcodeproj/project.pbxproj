@@ -11144,8 +11144,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/element-hq/element-call-ios";
 			requirement = {
-				kind = exactVersion;
-				version = "0.1.0-rc.13";
+				kind = revision;
+				revision = e44c29172f4ed88dbf08ed2ba11c187cfff244ce;
 			};
 		};
 		395DE6AE429B7ACC7C7FE31D /* XCRemoteSwiftPackageReference "KZFileWatchers" */ = {

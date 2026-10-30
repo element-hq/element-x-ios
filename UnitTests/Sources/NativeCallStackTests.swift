@@ -17,7 +17,7 @@ final class NativeCallStackTests {
     private var cancellables = Set<AnyCancellable>()
     
     init() {
-        stack = NativeCallStack(backend: ElementCallFakeMatrixBackend(),
+        stack = NativeCallStack(backend: ElementCallFakeMatrixBackend(opensRooms: false),
                                 system: ElementCallFakeSystem(),
                                 options: ElementCallOptions(),
                                 style: .stock)
@@ -46,7 +46,7 @@ final class NativeCallStackTests {
         
         stack.stop()
         
-        let joining = NativeCallStack(backend: ElementCallFakeMatrixBackend(),
+        let joining = NativeCallStack(backend: ElementCallFakeMatrixBackend(opensRooms: false),
                                       system: ElementCallFakeSystem(),
                                       options: ElementCallOptions(),
                                       style: .stock)

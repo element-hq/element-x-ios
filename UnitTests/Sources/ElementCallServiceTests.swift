@@ -304,7 +304,7 @@ final class ElementCallServiceTests {
     /// service only keeps a weak reference, as the app owns the session.
     private func nativeUserSession() -> UserSessionMock {
         let clientProxy = ClientProxyMock(.init())
-        clientProxy.makeNativeCallBackendReturnValue = ElementCallFakeMatrixBackend()
+        clientProxy.makeNativeCallBackendReturnValue = ElementCallFakeMatrixBackend(opensRooms: false)
         let session = UserSessionMock(.init(clientProxy: clientProxy))
         nativeSession = session
         return session
