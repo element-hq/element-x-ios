@@ -141,7 +141,7 @@ struct SDKMappingsTests {
     
     @Test
     func transportsAreRebuiltAsTheMSC4143Array() throws {
-        let json = SDKMappings.transportsJSON([.liveKit(serviceUrl: "https://sfu.example.org"),
+        let json = SDKMappings.transportsJSON([.liveKit(url: nil, serviceUrl: "https://sfu.example.org"),
                                                .custom(transportType: "other", data: #"{"url":"https://other.example.org"}"#)])
         
         let array = try #require(JSONSerialization.jsonObject(with: Data(json.utf8)) as? [[String: String]])

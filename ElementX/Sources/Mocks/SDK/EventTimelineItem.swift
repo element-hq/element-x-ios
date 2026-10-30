@@ -47,6 +47,7 @@ nonisolated extension EventTimelineItem {
                   localSendState: nil,
                   editSendState: nil,
                   redactionSendState: nil,
+                  redactionReason: nil,
                   localCreatedAt: nil,
                   readReceipts: [:],
                   origin: nil,
