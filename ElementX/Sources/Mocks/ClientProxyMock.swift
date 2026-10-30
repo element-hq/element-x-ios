@@ -85,7 +85,6 @@ extension ClientProxyMock {
         notificationSettings = configuration.notificationSettings
         roomsToAwait = []
         
-        isOnlyDeviceLeftReturnValue = .success(false)
         hasDevicesToVerifyAgainstReturnValue = .success(true)
         accountURLActionReturnValue = "https://matrix.org/account"
         canDeactivateAccount = false

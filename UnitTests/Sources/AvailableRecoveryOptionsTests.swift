@@ -11,16 +11,16 @@ import Testing
 struct AvailableRecoveryOptionsTests {
     @Test(arguments: [SecureBackupRecoveryState.enabled, .incomplete, .disabled, .unknown, .settingUp])
     func otherVerifiedDeviceWinsRegardlessOfRecovery(recoveryState: SecureBackupRecoveryState) {
-        #expect(AvailableRecoveryOptions(hasOtherDevice: true, recoveryState: recoveryState) == .otherVerifiedDevice)
+        #expect(AvailableRecoveryOptions(hasOtherVerifiedDevice: true, recoveryState: recoveryState) == .otherVerifiedDevice)
     }
     
     @Test
     func recoveryKeyOnlyWhenRecoveryIsEnabled() {
-        #expect(AvailableRecoveryOptions(hasOtherDevice: false, recoveryState: .enabled) == .recoveryKeyOnly)
+        #expect(AvailableRecoveryOptions(hasOtherVerifiedDevice: false, recoveryState: .enabled) == .recoveryKeyOnly)
     }
     
     @Test(arguments: [SecureBackupRecoveryState.incomplete, .disabled, .unknown, .settingUp])
     func noRecoveryUnlessRecoveryIsEnabled(recoveryState: SecureBackupRecoveryState) {
-        #expect(AvailableRecoveryOptions(hasOtherDevice: false, recoveryState: recoveryState) == .noOptions)
+        #expect(AvailableRecoveryOptions(hasOtherVerifiedDevice: false, recoveryState: recoveryState) == .noOptions)
     }
 }
