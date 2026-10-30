@@ -260,7 +260,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
             try await notificationSettingsProxy.setInviteForMeEnabled(enabled: enable)
         } catch {
             state.bindings.alertInfo = AlertInfo(id: .alert)
-            state.bindings.callsEnabled = notificationSettings.invitationsEnabled ?? false
+            state.bindings.invitationsEnabled = notificationSettings.invitationsEnabled ?? false
         }
         state.applyingChange = false
     }
