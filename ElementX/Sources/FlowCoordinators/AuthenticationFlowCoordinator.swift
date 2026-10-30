@@ -10,14 +10,13 @@ import Combine
 import SwiftState
 import SwiftUI
 
-protocol AuthenticationFlowCoordinatorDelegate: AnyObject {
-    func authenticationFlowCoordinator(didLoginWithSession userSession: UserSessionProtocol)
+enum AuthenticationFlowCoordinatorAction {
+    case signInComplete(userSession: UserSessionProtocol)
 }
 
 class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     private let authenticationService: AuthenticationServiceProtocol
     private let bugReportService: BugReportServiceProtocol
-    private let navigationRootCoordinator: NavigationRootCoordinator
     private let navigationStackCoordinator: NavigationStackCoordinator
     private let appMediator: AppMediatorProtocol
     private let appSettings: AppSettings
@@ -94,25 +93,26 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     // periphery:ignore - retaining purpose
     private var bugReportFlowCoordinator: BugReportFlowCoordinator?
     
-    weak var delegate: AuthenticationFlowCoordinatorDelegate?
+    private let actionsSubject: PassthroughSubject<AuthenticationFlowCoordinatorAction, Never> = .init()
+    var actionsPublisher: AnyPublisher<AuthenticationFlowCoordinatorAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
     
     init(authenticationService: AuthenticationServiceProtocol,
          bugReportService: BugReportServiceProtocol,
-         navigationRootCoordinator: NavigationRootCoordinator,
+         navigationStackCoordinator: NavigationStackCoordinator,
          appMediator: AppMediatorProtocol,
          appSettings: AppSettings,
          appHooks: AppHooks,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.authenticationService = authenticationService
         self.bugReportService = bugReportService
-        self.navigationRootCoordinator = navigationRootCoordinator
+        self.navigationStackCoordinator = navigationStackCoordinator
         self.appMediator = appMediator
         self.appSettings = appSettings
         homeserverHistoryManager = HomeserverHistoryManager(appSettings: appSettings)
         self.appHooks = appHooks
         self.userIndicatorController = userIndicatorController
-        
-        navigationStackCoordinator = NavigationStackCoordinator()
         
         stateMachine = .init(state: .initial)
         configureStateMachine()
@@ -295,10 +295,6 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
             .store(in: &cancellables)
         
         navigationStackCoordinator.setRootCoordinator(coordinator)
-        
-        if fromState == .initial {
-            navigationRootCoordinator.setRootCoordinator(navigationStackCoordinator)
-        }
     }
     
     // MARK: - QR Code
@@ -463,7 +459,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: - Completion
     
     private func userHasSignedIn(userSession: UserSessionProtocol) {
-        delegate?.authenticationFlowCoordinator(didLoginWithSession: userSession)
+        actionsSubject.send(.signInComplete(userSession: userSession))
         
         let newAccountProvider = authenticationService.homeserver.value.accountProvider
         homeserverHistoryManager.addServerToList(newAccountProvider.serverNameOrBaseURL)

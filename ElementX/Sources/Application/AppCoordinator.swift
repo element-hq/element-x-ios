@@ -16,7 +16,7 @@ import SwiftUI
 import Version
 
 // swiftlint:disable:next type_body_length
-class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDelegate, NotificationManagerDelegate, SecureWindowManagerDelegate {
+class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, SecureWindowManagerDelegate {
     private let stateMachine: AppCoordinatorStateMachine
     private let navigationRootCoordinator: NavigationRootCoordinator
     private let userSessionManager: UserSessionManagerProtocol
@@ -355,17 +355,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         MXLog.info("Starting call in room: \(roomIdentifier)")
         handleAppRoute(AppRoute.call(roomID: roomIdentifier, isVoiceCall: intent.callCapability == .audioCall), windowType: nil)
-    }
-    
-    // MARK: - AuthenticationFlowCoordinatorDelegate
-    
-    func authenticationFlowCoordinator(didLoginWithSession userSession: UserSessionProtocol) {
-        // A new login has nothing to migrate.
-        migratedUserIDs.insert(userSession.clientProxy.userID)
-        userSessionManager.add(userSession)
-        Task { await resumeClientServices() }
-        authenticationFlowCoordinator = nil
-        stateMachine.processEvent(.createdUserSession)
     }
     
     // MARK: - WindowManagerDelegate
@@ -761,6 +750,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     }
     
     private func startAuthentication() {
+        let navigationStackCoordinator = NavigationStackCoordinator()
+        
         let encryptionKeyProvider = EncryptionKeyProvider()
         let classicAppManager = ClassicAppManager()
         let authenticationService = AuthenticationService(userSessionManager: userSessionManager,
@@ -772,20 +763,40 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         let coordinator = AuthenticationFlowCoordinator(authenticationService: authenticationService,
                                                         bugReportService: bugReportService,
-                                                        navigationRootCoordinator: navigationRootCoordinator,
+                                                        navigationStackCoordinator: navigationStackCoordinator,
                                                         appMediator: appMediator,
                                                         appSettings: appSettings,
                                                         appHooks: appHooks,
                                                         userIndicatorController: userIndicatorController)
-        coordinator.delegate = self
+        coordinator.actionsPublisher
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .signInComplete(let userSession):
+                    handleSignedInUserSession(userSession)
+                }
+            }
+            .store(in: &cancellables)
         
         authenticationFlowCoordinator = coordinator
         coordinator.start()
+        
+        navigationRootCoordinator.setRootCoordinator(navigationStackCoordinator)
         
         if storedAppRoute?.isAuthenticationRoute == true,
            let storedAppRoute = storedAppRoute.take() {
             coordinator.handleAppRoute(storedAppRoute, animated: false)
         }
+    }
+    
+    func handleSignedInUserSession(_ userSession: UserSessionProtocol) {
+        // A new login has nothing to migrate.
+        migratedUserIDs.insert(userSession.clientProxy.userID)
+        userSessionManager.add(userSession)
+        Task { await resumeClientServices() }
+        authenticationFlowCoordinator = nil
+        stateMachine.processEvent(.createdUserSession)
     }
     
     private func runPostSessionSetupTasks() async {

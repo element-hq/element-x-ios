@@ -147,6 +147,7 @@ class MockScreen: Identifiable {
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .authenticationFlow, .provisionedAuthenticationFlow, .singleProviderAuthenticationFlow, .multipleProvidersAuthenticationFlow:
+            let navigationStackCoordinator = NavigationStackCoordinator()
             let appSettings: AppSettings! = appSettings
             
             if id == .singleProviderAuthenticationFlow || id == .multipleProvidersAuthenticationFlow {
@@ -181,7 +182,7 @@ class MockScreen: Identifiable {
             
             let flowCoordinator = AuthenticationFlowCoordinator(authenticationService: AuthenticationService.mock,
                                                                 bugReportService: BugReportServiceMock(.init()),
-                                                                navigationRootCoordinator: navigationRootCoordinator,
+                                                                navigationStackCoordinator: navigationStackCoordinator,
                                                                 appMediator: AppMediatorMock(.init()),
                                                                 appSettings: appSettings,
                                                                 appHooks: AppHooks(),
@@ -193,7 +194,7 @@ class MockScreen: Identifiable {
                 flowCoordinator.handleAppRoute(.accountProvisioningLink(.init(accountProvider: "example.com", loginHint: nil)), animated: false)
             }
             
-            return nil
+            return navigationStackCoordinator
         case .appLockFlow, .appLockFlowDisabled:
             // The tested coordinator is setup below in the alternate window.
             // Here we just return a blank screen to snapshot as the unlocked app.
