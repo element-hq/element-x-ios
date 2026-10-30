@@ -1,4 +1,4 @@
-// Generated using Sourcery 2.3.0 — https://github.com/krzysztofzablocki/Sourcery
+// Generated using Sourcery 2.4.1 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
 // swiftlint:disable all
@@ -2653,6 +2653,49 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
             return try observeRoomAccountDataEventRoomIdEventTypeListenerClosure(roomId, eventType, listener)
         } else {
             return observeRoomAccountDataEventRoomIdEventTypeListenerReturnValue
+        }
+    }
+
+    //MARK: - observeTotalUnreadNotifications
+
+    private let observeTotalUnreadNotificationsListenerMinIntervalCallsCountLock = NSLock()
+    private var observeTotalUnreadNotificationsListenerMinIntervalUnderlyingCallsCount = 0
+    open var observeTotalUnreadNotificationsListenerMinIntervalCallsCount: Int {
+        get { observeTotalUnreadNotificationsListenerMinIntervalCallsCountLock.withLock { observeTotalUnreadNotificationsListenerMinIntervalUnderlyingCallsCount } }
+        set { observeTotalUnreadNotificationsListenerMinIntervalCallsCountLock.withLock { observeTotalUnreadNotificationsListenerMinIntervalUnderlyingCallsCount = newValue } }
+    }
+    open var observeTotalUnreadNotificationsListenerMinIntervalCalled: Bool {
+        return observeTotalUnreadNotificationsListenerMinIntervalCallsCount > 0
+    }
+    private let observeTotalUnreadNotificationsListenerMinIntervalReceivedArgumentsLock = NSLock()
+    private var observeTotalUnreadNotificationsListenerMinIntervalUnderlyingReceivedArguments: (listener: TotalUnreadNotificationsListener, minInterval: TimeInterval)?
+    open var observeTotalUnreadNotificationsListenerMinIntervalReceivedArguments: (listener: TotalUnreadNotificationsListener, minInterval: TimeInterval)? {
+        get { observeTotalUnreadNotificationsListenerMinIntervalReceivedArgumentsLock.withLock { observeTotalUnreadNotificationsListenerMinIntervalUnderlyingReceivedArguments } }
+        set { observeTotalUnreadNotificationsListenerMinIntervalReceivedArgumentsLock.withLock { observeTotalUnreadNotificationsListenerMinIntervalUnderlyingReceivedArguments = newValue } }
+    }
+    private let observeTotalUnreadNotificationsListenerMinIntervalReceivedInvocationsLock = NSLock()
+    private var observeTotalUnreadNotificationsListenerMinIntervalUnderlyingReceivedInvocations: [(listener: TotalUnreadNotificationsListener, minInterval: TimeInterval)] = []
+    open var observeTotalUnreadNotificationsListenerMinIntervalReceivedInvocations: [(listener: TotalUnreadNotificationsListener, minInterval: TimeInterval)] {
+        get { observeTotalUnreadNotificationsListenerMinIntervalReceivedInvocationsLock.withLock { observeTotalUnreadNotificationsListenerMinIntervalUnderlyingReceivedInvocations } }
+        set { observeTotalUnreadNotificationsListenerMinIntervalReceivedInvocationsLock.withLock { observeTotalUnreadNotificationsListenerMinIntervalUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let observeTotalUnreadNotificationsListenerMinIntervalReturnValueLock = NSLock()
+    open var observeTotalUnreadNotificationsListenerMinIntervalUnderlyingReturnValue: TaskHandle!
+    open var observeTotalUnreadNotificationsListenerMinIntervalReturnValue: TaskHandle! {
+        get { observeTotalUnreadNotificationsListenerMinIntervalReturnValueLock.withLock { observeTotalUnreadNotificationsListenerMinIntervalUnderlyingReturnValue } }
+        set { observeTotalUnreadNotificationsListenerMinIntervalReturnValueLock.withLock { observeTotalUnreadNotificationsListenerMinIntervalUnderlyingReturnValue = newValue } }
+    }
+    open var observeTotalUnreadNotificationsListenerMinIntervalClosure: ((TotalUnreadNotificationsListener, TimeInterval) -> TaskHandle)?
+
+    open override func observeTotalUnreadNotifications(listener: TotalUnreadNotificationsListener, minInterval: TimeInterval) -> TaskHandle {
+        observeTotalUnreadNotificationsListenerMinIntervalCallsCountLock.withLock { observeTotalUnreadNotificationsListenerMinIntervalUnderlyingCallsCount += 1 }
+        observeTotalUnreadNotificationsListenerMinIntervalReceivedArguments = (listener: listener, minInterval: minInterval)
+        observeTotalUnreadNotificationsListenerMinIntervalReceivedInvocationsLock.withLock { observeTotalUnreadNotificationsListenerMinIntervalUnderlyingReceivedInvocations.append((listener: listener, minInterval: minInterval)) }
+        if let observeTotalUnreadNotificationsListenerMinIntervalClosure = observeTotalUnreadNotificationsListenerMinIntervalClosure {
+            return observeTotalUnreadNotificationsListenerMinIntervalClosure(listener, minInterval)
+        } else {
+            return observeTotalUnreadNotificationsListenerMinIntervalReturnValue
         }
     }
 

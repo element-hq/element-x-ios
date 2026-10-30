@@ -75,7 +75,7 @@ packages:
   # Element/Matrix dependencies
   MatrixRustSDK:
     url: https://github.com/element-hq/matrix-rust-components-swift
-    exactVersion: 26.10.27
+    exactVersion: 26.10.30-2
     # path: ../matrix-rust-sdk
   Compound:
     path: compound-ios
@@ -87,7 +87,7 @@ packages:
     # path: ../matrix-analytics-events
   EmbeddedElementCall:
     url: https://github.com/element-hq/element-call-swift # WebView implementation
-    exactVersion: 0.28.1-rc.1
+    exactVersion: 0.28.1-rc.2
   ElementCall:
     url: https://github.com/element-hq/element-call-ios # Native implementation
     exactVersion: 0.1.0-rc.13
