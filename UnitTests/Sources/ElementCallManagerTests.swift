@@ -823,6 +823,80 @@ final class ElementCallManagerTests {
                                                  expectedReason: .answeredElsewhere)
     }
     
+    // MARK: - Late services
+    
+    @Test
+    func lateServiceWatchesRing() async {
+        let bob = makeCallService(userID: "@bob:matrix.org")
+        await reportIncomingPush(isVoiceCall: false, receiverID: "@bob:matrix.org")
+        
+        // Lets the ring's own watch run first, with no service to watch through.
+        await waitForConfirmation(expectedCount: 0, timeout: .milliseconds(100)) { watched in
+            bob.observeIncomingCallRoomIDRtcNotificationIDClosure = { _, _ in watched() }
+        }
+        
+        await waitForConfirmation(timeout: .seconds(1)) { watched in
+            bob.observeIncomingCallRoomIDRtcNotificationIDClosure = { _, _ in watched() }
+            manager.add(bob)
+        }
+        
+        #expect(bob.observeIncomingCallRoomIDRtcNotificationIDReceivedArguments?.roomID == "!room:example.com")
+        #expect(bob.observeIncomingCallRoomIDRtcNotificationIDReceivedArguments?.rtcNotificationID == "$000")
+    }
+    
+    @Test
+    func lateServiceSendsPendingDecline() async throws {
+        let bob = makeCallService(userID: "@bob:matrix.org")
+        await reportIncomingPush(isVoiceCall: false, receiverID: "@bob:matrix.org")
+        let callID = try #require(callProvider.reportNewIncomingCallWithUpdateCompletionReceivedArguments?.uuid)
+        manager.endCall(withCallKitID: callID)
+        
+        await waitForConfirmation(timeout: .seconds(1)) { declined in
+            bob.declineCallRoomIDRtcNotificationIDClosure = { _, _ in declined() }
+            manager.add(bob)
+        }
+        
+        #expect(bob.declineCallRoomIDRtcNotificationIDReceivedArguments?.roomID == "!room:example.com")
+        #expect(bob.declineCallRoomIDRtcNotificationIDReceivedArguments?.rtcNotificationID == "$000")
+        
+        // A declined call isn't ringing any more.
+        await waitForConfirmation(expectedCount: 0, timeout: .milliseconds(100)) { watched in
+            bob.observeIncomingCallRoomIDRtcNotificationIDClosure = { _, _ in watched() }
+        }
+        #expect(!bob.observeIncomingCallRoomIDRtcNotificationIDCalled)
+    }
+    
+    @Test
+    func replacedServiceHandsOverWatch() async throws {
+        let oldBobActions = PassthroughSubject<ElementCallServiceAction, Never>()
+        let oldBob = makeCallService(userID: "@bob:matrix.org", actions: oldBobActions)
+        manager.add(oldBob)
+        
+        await waitForConfirmation(timeout: .seconds(1)) { watched in
+            oldBob.observeIncomingCallRoomIDRtcNotificationIDClosure = { _, _ in watched() }
+            let payload = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 60).updatingReceiverID("@bob:matrix.org")
+            manager.pushRegistry(pushRegistry, didReceiveIncomingPushWith: payload, for: .voIP) { }
+        }
+        let callID = try #require(callProvider.reportNewIncomingCallWithUpdateCompletionReceivedArguments?.uuid)
+        
+        // E.g. a cache clear, which rebuilds the account's session.
+        let newBobActions = PassthroughSubject<ElementCallServiceAction, Never>()
+        let newBob = makeCallService(userID: "@bob:matrix.org", actions: newBobActions)
+        await waitForConfirmation(timeout: .seconds(1)) { watched in
+            newBob.observeIncomingCallRoomIDRtcNotificationIDClosure = { _, _ in watched() }
+            manager.add(newBob)
+        }
+        
+        #expect(oldBob.stopObservingIncomingCallCalled)
+        
+        oldBobActions.send(.incomingCallEnded(roomID: "!room:example.com", reason: .remoteEnded))
+        #expect(!callProvider.reportCallWithEndedAtReasonCalled, "The replaced service doesn't speak for the account any more")
+        
+        newBobActions.send(.incomingCallEnded(roomID: "!room:example.com", reason: .remoteEnded))
+        #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.uuid == callID)
+        #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.reason == .remoteEnded)
+    }
+    
     // MARK: - Helpers
     
     /// Builds an account's call service whose actions the test sends itself.
