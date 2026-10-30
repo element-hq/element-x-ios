@@ -153,10 +153,14 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     func start(animated: Bool) {
+        // TODO: Native calls run on the active account's service until each call builds its own stack.
+        userSession.elementCallService.setNativeCallStackEnabled(true)
         stateMachine.tryEvent(.start)
     }
     
     func stop() {
+        // Releases the native call stack before the session goes or another account's flow starts.
+        userSession.elementCallService.setNativeCallStackEnabled(false)
         chatsTabFlowCoordinator.stop()
     }
     

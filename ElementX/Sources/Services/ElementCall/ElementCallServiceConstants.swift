@@ -17,6 +17,8 @@ nonisolated enum ElementCallServiceNotificationKey: String {
     /// The Date at which the incoming call should stop ringing.
     case expirationDate
     case isVoiceCall
+    /// The user ID of the account the call is for.
+    case receiverID
 }
 
 nonisolated let ElementCallServiceNotificationDiscardDelta = 15.0
