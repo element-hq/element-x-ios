@@ -11,12 +11,14 @@ import Foundation
 
 extension ElementCallServiceMock {
     struct Configuration {
+        var userID = "@alice:matrix.org"
         var ongoingCallRoomID: String?
     }
     
     convenience init(_ configuration: Configuration) {
         self.init()
         
+        userID = configuration.userID
         actionsPublisher = PassthroughSubject().eraseToAnyPublisher()
         nativeCallEventsPublisher = PassthroughSubject().eraseToAnyPublisher()
         nativeCallPresentationPublisher = PassthroughSubject().eraseToAnyPublisher()

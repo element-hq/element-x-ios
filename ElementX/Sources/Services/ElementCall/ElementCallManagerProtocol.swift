@@ -10,7 +10,7 @@ import Combine
 enum ElementCallManagerAction: Equatable {
     /// A VoIP push rang, which iOS delivers without starting the app's services.
     case incomingCallReported
-    case callAnswered(roomID: String, isVoiceCall: Bool)
+    case callAnswered(userID: String, roomID: String, isVoiceCall: Bool)
 }
 
 // sourcery: AutoMockable
@@ -18,6 +18,11 @@ enum ElementCallManagerAction: Equatable {
 protocol ElementCallManagerProtocol: AnyObject {
     var actionsPublisher: AnyPublisher<ElementCallManagerAction, Never> { get }
     
+    /// Routes the account's calls through its service, replacing the one it had before.
+    func add(_ service: ElementCallServiceProtocol)
+    /// Stops routing the account's calls.
+    func remove(userID: String)
+    
     /// Forgets a call that was answered but never opened, which would otherwise count as a call in progress.
-    func dropAnsweredCall(roomID: String)
+    func dropAnsweredCall(userID: String, roomID: String)
 }

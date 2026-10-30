@@ -55,6 +55,9 @@ enum ElementCallServiceAction: Equatable {
 
 // sourcery: AutoMockable
 protocol ElementCallServiceProtocol: AnyObject {
+    /// The account whose calls this service runs.
+    var userID: String { get }
+    
     var actionsPublisher: AnyPublisher<ElementCallServiceAction, Never> { get }
     
     var ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never> { get }
@@ -65,12 +68,12 @@ protocol ElementCallServiceProtocol: AnyObject {
     /// The native call's screen needs presenting, minimizing, restoring or dismissing.
     var nativeCallPresentationPublisher: AnyPublisher<NativeCallPresentation, Never> { get }
     
-    /// The controller for this session's native call stack, `nil` when native calls are unavailable.
+    /// The controller for this account's native call stack, `nil` when native calls are unavailable.
     var nativeCallController: ElementCallController? { get }
     
-    /// Builds the native call stack for the session, or releases it along with the to-device
-    /// subscription it holds open. Pass `nil` when signing out.
-    func setUserSession(_ userSession: UserSessionProtocol?)
+    /// Builds the native call stack while enabled and the setting is on, or releases it, hanging up its call.
+    /// Enable it on one service at a time: idle stacks switch proximity monitoring off under the live call.
+    func setNativeCallStackEnabled(_ isEnabled: Bool)
     
     /// Starts, or returns to, a native call in the room, driving its screen through
     /// ``nativeCallPresentationPublisher``.

@@ -10,18 +10,22 @@ import Combine
 import ElementCall
 import MatrixRustSDK
 
-/// The account's side of its calls: the ringing call's room, its decline, the ongoing call and the
-/// native call stack. Relays what the call screens report up to the `ElementCallManager`.
+/// One account's side of its calls, on that account's client: the ringing call's room, its decline,
+/// the ongoing call and the native call stack. Relays what the call screens report up to the
+/// `ElementCallManager`.
 final class ElementCallService: ElementCallServiceProtocol {
     private struct ObservedCall: Equatable {
         let roomID: String
         let rtcNotificationID: String?
     }
     
+    private let clientProxy: ClientProxyProtocol
+    private let mediaProvider: MediaProviderProtocol
     private let appSettings: AppSettings
     
-    private weak var clientProxy: ClientProxyProtocol?
-    private var mediaProvider: MediaProviderProtocol?
+    var userID: String {
+        clientProxy.userID
+    }
     
     private let actionsSubject = PassthroughSubject<ElementCallServiceAction, Never>()
     var actionsPublisher: AnyPublisher<ElementCallServiceAction, Never> {
@@ -43,9 +47,10 @@ final class ElementCallService: ElementCallServiceProtocol {
         nativeCallPresentationSubject.eraseToAnyPublisher()
     }
     
-    /// The native call stack, for as long as there's a session running calls through it.
+    /// The native call stack, while enabled and the setting is on.
     private var nativeCallStack: NativeCallStack?
     private var nativeCallCancellable: AnyCancellable?
+    private var isNativeCallStackEnabled = false
     
     var nativeCallController: ElementCallController? {
         nativeCallStack?.controller
@@ -60,7 +65,9 @@ final class ElementCallService: ElementCallServiceProtocol {
     
     private var cancellables = Set<AnyCancellable>()
     
-    init(appSettings: AppSettings) {
+    init(clientProxy: ClientProxyProtocol, mediaProvider: MediaProviderProtocol, appSettings: AppSettings) {
+        self.clientProxy = clientProxy
+        self.mediaProvider = mediaProvider
         self.appSettings = appSettings
         
         appSettings.nativeCallEnabledPublisher
@@ -70,23 +77,8 @@ final class ElementCallService: ElementCallServiceProtocol {
             .store(in: &cancellables)
     }
     
-    func setUserSession(_ userSession: UserSessionProtocol?) {
-        let isNewClient = userSession?.clientProxy !== clientProxy
-        
-        // A stack is built against one client proxy and can't be handed to another, which is what a
-        // soft logout or a cache clear brings: a new session without the sign out that drops this one.
-        if isNewClient {
-            stopNativeCallStack()
-            stopWatchingRoom()
-        }
-        
-        clientProxy = userSession?.clientProxy
-        mediaProvider = userSession?.mediaProvider
-        
-        if isNewClient {
-            resumeObservingIncomingCall()
-        }
-        
+    func setNativeCallStackEnabled(_ isEnabled: Bool) {
+        isNativeCallStackEnabled = isEnabled
         updateNativeCallStack()
     }
     
@@ -140,7 +132,6 @@ final class ElementCallService: ElementCallServiceProtocol {
     func observeIncomingCall(roomID: String, rtcNotificationID: String?) async {
         stopObservingIncomingCall()
         
-        // Kept without a client too, as the push can come before the session does.
         let call = ObservedCall(roomID: roomID, rtcNotificationID: rtcNotificationID)
         observedCall = call
         
@@ -149,15 +140,12 @@ final class ElementCallService: ElementCallServiceProtocol {
     
     func stopObservingIncomingCall() {
         observedCall = nil
-        stopWatchingRoom()
+        incomingCallRoomInfoCancellable = nil
+        declineListenerHandle?.cancel()
+        declineListenerHandle = nil
     }
     
     func declineCall(roomID: String, rtcNotificationID: String) async {
-        guard let clientProxy else {
-            MXLog.warning("A ClientProxy is needed to fetch the room.")
-            return
-        }
-        
         guard case let .joined(roomProxy) = await clientProxy.roomForIdentifier(roomID) else {
             MXLog.warning("Failed to fetch a joined room to decline the incoming call.")
             return
@@ -185,9 +173,9 @@ final class ElementCallService: ElementCallServiceProtocol {
     
     // MARK: - Native calls
     
-    /// Builds or releases the call stack to match the session and the setting.
+    /// Builds or releases the call stack to match the toggle and the setting.
     private func updateNativeCallStack() {
-        guard appSettings.nativeCallEnabled, let clientProxy else {
+        guard appSettings.nativeCallEnabled, isNativeCallStackEnabled else {
             stopNativeCallStack()
             return
         }
@@ -236,29 +224,14 @@ final class ElementCallService: ElementCallServiceProtocol {
     
     // MARK: - Private
     
-    /// Watches the ringing call with the new client, which also covers a call requested before any session.
-    private func resumeObservingIncomingCall() {
-        guard let call = observedCall, clientProxy != nil else { return }
-        
-        Task { [weak self] in
-            guard let self, observedCall == call else { return }
-            await watch(call)
-        }
-    }
-    
     private func watch(_ call: ObservedCall) async {
-        guard let clientProxy else {
-            MXLog.info("No session yet to watch the incoming call with")
-            return
-        }
-        
         guard case let .joined(roomProxy) = await clientProxy.roomForIdentifier(call.roomID) else {
             MXLog.warning("Failed to fetch a joined room for the incoming call.")
             return
         }
         
-        // Stopped, another call started ringing, or the session changed while the room was being fetched.
-        guard observedCall == call, self.clientProxy === clientProxy else { return }
+        // Stopped, or another call started ringing while the room was being fetched.
+        guard observedCall == call else { return }
         
         roomProxy.subscribeToRoomInfoUpdates()
         
@@ -307,13 +280,6 @@ final class ElementCallService: ElementCallServiceProtocol {
         }
         
         declineListenerHandle = handle
-    }
-    
-    /// Drops the room subscriptions and keeps the ringing call, which a session can pick up again.
-    private func stopWatchingRoom() {
-        incomingCallRoomInfoCancellable = nil
-        declineListenerHandle?.cancel()
-        declineListenerHandle = nil
     }
     
     /// Reports the end once, as the room and the decline listener can both see it.

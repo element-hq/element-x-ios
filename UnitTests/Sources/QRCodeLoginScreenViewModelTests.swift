@@ -124,7 +124,7 @@ struct QRCodeLoginScreenViewModelTests {
             default: false
             }
         }
-        qrLoginProgressSubject.send(.signedIn(UserSessionMock(.init(clientProxy: ClientProxyMock()))))
+        qrLoginProgressSubject.send(.signedIn(UserSessionMock(.init(clientProxy: ClientProxyMock(.init())))))
         try await deferredAction.fulfill()
     }
     

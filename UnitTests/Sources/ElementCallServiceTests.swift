@@ -17,9 +17,6 @@ final class ElementCallServiceTests {
     private let clientProxy = ClientProxyMock(.init(userID: "@alice:matrix.org"))
     private let roomProxy = JoinedRoomProxyMock(.init(id: "!room:example.com", hasOngoingCall: true, ownUserID: "@alice:matrix.org"))
     private let roomInfoSubject = CurrentValueSubject<RoomInfoProxyProtocol, Never>(RoomInfoProxyMock(.init(id: "!room:example.com", hasOngoingCall: true)))
-    /// Held here because the service only keeps a weak reference to its client, as the app owns the session.
-    private let userSession: UserSessionMock
-    private var nativeSession: UserSessionMock?
     private let service: ElementCallService
     
     init() {
@@ -27,10 +24,8 @@ final class ElementCallServiceTests {
         roomProxy.subscribeToCallDeclineEventsRtcNotificationEventIDListenerReturnValue = .success(TaskHandleSDKMock())
         roomProxy.declineCallNotificationIDReturnValue = .success(())
         clientProxy.roomForIdentifierClosure = { [roomProxy] _ in .joined(roomProxy) }
-        userSession = UserSessionMock(.init(clientProxy: clientProxy))
         
-        service = ElementCallService(appSettings: appSettings)
-        service.setUserSession(userSession)
+        service = ElementCallService(clientProxy: clientProxy, mediaProvider: MediaProviderMock(.init()), appSettings: appSettings)
     }
     
     // MARK: - Ringing call
@@ -84,75 +79,6 @@ final class ElementCallServiceTests {
         
         #expect(clientProxy.roomForIdentifierReceivedIdentifier == "!room:example.com")
         #expect(roomProxy.declineCallNotificationIDReceivedNotificationID == "$000")
-    }
-    
-    @Test
-    func watchWaitsForSession() async throws {
-        // Given a watch requested before there is any session.
-        let service = ElementCallService(appSettings: appSettings)
-        await service.observeIncomingCall(roomID: "!room:example.com", rtcNotificationID: "$000")
-        #expect(!clientProxy.roomForIdentifierCalled)
-        
-        // When the session arrives, then the room is watched with it.
-        await waitForConfirmation { confirmation in
-            roomProxy.subscribeToCallDeclineEventsRtcNotificationEventIDListenerClosure = { _, _ in
-                confirmation()
-                return .success(TaskHandleSDKMock())
-            }
-            service.setUserSession(userSession)
-        }
-        
-        let deferred = deferFulfillment(service.actionsPublisher) { $0 == .incomingCallEnded(roomID: "!room:example.com", reason: .remoteEnded) }
-        roomInfoSubject.send(RoomInfoProxyMock(.init(id: "!room:example.com", hasOngoingCall: false)))
-        try await deferred.fulfill()
-    }
-    
-    @Test
-    func stoppedWatchSkipsLateSession() async {
-        // Given a watch requested and stopped before there is any session.
-        let service = ElementCallService(appSettings: appSettings)
-        await service.observeIncomingCall(roomID: "!room:example.com", rtcNotificationID: "$000")
-        service.stopObservingIncomingCall()
-        
-        // When the session arrives, then the room is never fetched.
-        await waitForConfirmation(expectedCount: 0, timeout: .milliseconds(100)) { confirmation in
-            clientProxy.roomForIdentifierClosure = { [roomProxy] _ in
-                confirmation()
-                return .joined(roomProxy)
-            }
-            service.setUserSession(userSession)
-        }
-    }
-    
-    @Test
-    func watchSurvivesSessionChange() async throws {
-        await service.observeIncomingCall(roomID: "!room:example.com", rtcNotificationID: "$000")
-        
-        service.setUserSession(nil)
-        let deferredFailure = deferFailure(service.actionsPublisher, timeout: .milliseconds(100)) { _ in true }
-        roomInfoSubject.send(RoomInfoProxyMock(.init(id: "!room:example.com", hasOngoingCall: false)))
-        try await deferredFailure.fulfill()
-        
-        let otherRoomProxy = JoinedRoomProxyMock(.init(id: "!room:example.com", hasOngoingCall: true, ownUserID: "@bob:matrix.org"))
-        let otherRoomInfoSubject = CurrentValueSubject<RoomInfoProxyProtocol, Never>(RoomInfoProxyMock(.init(id: "!room:example.com", hasOngoingCall: true)))
-        otherRoomProxy.infoPublisher = otherRoomInfoSubject.asCurrentValuePublisher()
-        let otherClientProxy = ClientProxyMock(.init(userID: "@bob:matrix.org"))
-        otherClientProxy.roomForIdentifierClosure = { _ in .joined(otherRoomProxy) }
-        let otherUserSession = UserSessionMock(.init(clientProxy: otherClientProxy))
-        
-        await waitForConfirmation { confirmation in
-            otherRoomProxy.subscribeToCallDeclineEventsRtcNotificationEventIDListenerClosure = { _, _ in
-                confirmation()
-                return .success(TaskHandleSDKMock())
-            }
-            service.setUserSession(otherUserSession)
-        }
-        
-        let deferred = deferFulfillment(service.actionsPublisher) { $0 == .incomingCallEnded(roomID: "!room:example.com", reason: .remoteEnded) }
-        otherRoomInfoSubject.send(RoomInfoProxyMock(.init(id: "!room:example.com", hasOngoingCall: false)))
-        try await deferred.fulfill()
-        
-        withExtendedLifetime(otherUserSession) { }
     }
     
     // MARK: - Call sessions
@@ -244,69 +170,57 @@ final class ElementCallServiceTests {
     }
     
     @Test
-    func nativeCallStackNeedsBothTheSettingAndASession() {
+    func nativeCallStackNeedsSettingAndEnabling() {
+        let service = makeNativeCallService()
         var presentations: [NativeCallPresentation] = []
         let cancellable = service.nativeCallPresentationPublisher.sink { presentations.append($0) }
         defer { cancellable.cancel() }
         
-        #expect(service.nativeCallController == nil, "A session alone doesn't build a stack")
+        service.setNativeCallStackEnabled(true)
+        #expect(service.nativeCallController == nil, "Enabling alone doesn't build a stack")
         
-        service.setUserSession(nil)
+        service.setNativeCallStackEnabled(false)
         appSettings.nativeCallEnabled = true
-        #expect(service.nativeCallController == nil, "The setting alone has no transport to run a call over")
+        #expect(service.nativeCallController == nil, "The setting alone doesn't build a stack")
         
-        service.setUserSession(nativeUserSession())
+        service.setNativeCallStackEnabled(true)
         #expect(service.nativeCallController != nil)
         
-        service.setUserSession(nil)
-        #expect(service.nativeCallController == nil, "Signing out has to release the stack's to-device subscription")
+        service.setNativeCallStackEnabled(false)
+        #expect(service.nativeCallController == nil, "Disabling has to release the stack's to-device subscription")
         #expect(presentations == [.dismiss])
     }
     
     @Test
-    func turningTheSettingOnMidSessionBuildsTheStack() {
-        service.setUserSession(nativeUserSession())
+    func settingTurnedOnBuildsEnabledStack() {
+        let service = makeNativeCallService()
+        service.setNativeCallStackEnabled(true)
         #expect(service.nativeCallController == nil)
         
-        // The transport is built on demand, so the setting takes effect without an app restart.
+        // The backend is built on demand, so the setting takes effect without an app restart.
         appSettings.nativeCallEnabled = true
         #expect(service.nativeCallController != nil)
     }
     
     @Test
-    func aNewSessionGetsANewStack() {
-        appSettings.nativeCallEnabled = true
-        service.setUserSession(nativeUserSession())
-        let firstController = service.nativeCallController
-        
-        // A soft logout or a cache clear brings a new session without the sign out that drops this
-        // one, and the stack is built against the client proxy it was given.
-        service.setUserSession(nativeUserSession())
-        
-        #expect(service.nativeCallController !== firstController)
-    }
-    
-    @Test
-    func callsFallBackToTheWebViewWithoutAStack() {
+    func callsFallBackToWebViewWithoutStack() {
+        let service = makeNativeCallService()
         let roomProxy = JoinedRoomProxyMock(.init(id: "!room:example.com"))
         
         #expect(!service.handleNativeCallRequest(roomProxy: roomProxy, isVoiceCall: false))
         
         appSettings.nativeCallEnabled = true
-        service.setUserSession(nativeUserSession())
+        service.setNativeCallStackEnabled(true)
         
         #expect(service.handleNativeCallRequest(roomProxy: roomProxy, isVoiceCall: false))
     }
     
     // MARK: - Helpers
     
-    /// Builds a session whose client proxy can serve the native call stack, and holds on to it: the
-    /// service only keeps a weak reference, as the app owns the session.
-    private func nativeUserSession() -> UserSessionMock {
+    /// Builds a service whose client can serve the native call stack.
+    private func makeNativeCallService() -> ElementCallService {
         let clientProxy = ClientProxyMock(.init())
         clientProxy.makeNativeCallBackendReturnValue = ElementCallFakeMatrixBackend()
-        let session = UserSessionMock(.init(clientProxy: clientProxy))
-        nativeSession = session
-        return session
+        return ElementCallService(clientProxy: clientProxy, mediaProvider: MediaProviderMock(.init()), appSettings: appSettings)
     }
 }
