@@ -357,7 +357,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         
         if let powerLevels = roomInfo.powerLevels {
-            state.canSendMessage = powerLevels.canOwnUser(sendMessage: .roomMessage)
+            state.canSendMessage = powerLevels.canOwnUserSendMessage(isEncrypted: roomInfo.isEncrypted)
             state.canJoinCall = powerLevels.canOwnUserJoinCall()
             state.canAcceptKnocks = powerLevels.canOwnUserInvite()
             state.canDeclineKnocks = powerLevels.canOwnUserKick()

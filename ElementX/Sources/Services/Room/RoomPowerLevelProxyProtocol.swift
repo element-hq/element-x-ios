@@ -29,6 +29,11 @@ protocol RoomPowerLevelsProxyProtocol: Sendable {
 // MARK: - Helpers
 
 extension RoomPowerLevelsProxyProtocol {
+    /// Can own user send messages. Encrypted rooms send them as `m.room.encrypted`, which is the only type the server sees.
+    func canOwnUserSendMessage(isEncrypted: Bool) -> Bool {
+        canOwnUser(sendMessage: isEncrypted ? .roomEncrypted : .roomMessage)
+    }
+    
     /// Can own user edit either the room name, avatar or topic.
     func canOwnUserEditBaseInfo() -> Bool {
         canOwnUser(sendStateEvent: .roomAvatar) || canOwnUser(sendStateEvent: .roomName) || canOwnUser(sendStateEvent: .roomTopic)
