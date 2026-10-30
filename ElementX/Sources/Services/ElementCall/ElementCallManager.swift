@@ -30,6 +30,12 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
         var isNative = false
     }
     
+    private struct PendingDecline {
+        let userID: String
+        let roomID: String
+        let rtcNotificationID: String
+    }
+    
     private let appSettings: AppSettings
     private let pushRegistry: PKPushRegistry
     private let callController: CXCallControllerProtocol
@@ -58,6 +64,9 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
             }
         }
     }
+    
+    /// A ringing call declined before its account's service was added, sent once it is.
+    private var pendingDecline: PendingDecline?
     
     private var endUnansweredCallTask: Task<Void, Never>?
     /// The ringing call was answered for the web view, which has yet to set its call session up.
@@ -116,6 +125,10 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
     
     func add(_ service: ElementCallServiceProtocol) {
         let userID = service.userID
+        if let replacedService = services[userID], replacedService !== service {
+            replacedService.stopObservingIncomingCall()
+        }
+        
         services[userID] = service
         
         // Synchronous: a call screen's set-up waits on the reply, which a web call gets straight away.
@@ -125,6 +138,16 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
                 guard let self, let service else { return }
                 process(action, from: service)
             }
+        
+        // A VoIP push can wake the app before the account's session is restored.
+        if let incomingCallID, incomingCallID.userID == userID {
+            watch(incomingCallID)
+        }
+        
+        if let pendingDecline, pendingDecline.userID == userID {
+            self.pendingDecline = nil
+            Task { await service.declineCall(roomID: pendingDecline.roomID, rtcNotificationID: pendingDecline.rtcNotificationID) }
+        }
     }
     
     func remove(userID: String) {
@@ -559,7 +582,8 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
         }
         
         guard let service = services[callID.userID] else {
-            MXLog.info("No call service for \(callID.userID) to decline the incoming call with")
+            MXLog.info("No call service for \(callID.userID) yet, declining the incoming call once it's added")
+            pendingDecline = PendingDecline(userID: callID.userID, roomID: callID.roomID, rtcNotificationID: rtcNotificationID)
             return
         }
         
