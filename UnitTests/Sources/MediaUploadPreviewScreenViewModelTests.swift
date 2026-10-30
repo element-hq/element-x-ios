@@ -290,6 +290,103 @@ final class MediaUploadPreviewScreenViewModelTests {
         #expect(timelineProxy.sendImageUrlThumbnailURLImageInfoCaptionRequestHandleCallsCount == 1)
     }
     
+    @Test
+    func onlyStillPicturesCanBeDrawnOn() {
+        // Given a still picture, an animated GIF, a video and a PDF.
+        let urls = [assertResourceURL(filename: "test_image.png"), imageURL, videoURL, fileURL]
+        
+        // When drawing is enabled, then only the still picture can be drawn on.
+        setUpViewModel(urls: urls, expectedCaption: nil, imageDrawingEnabled: true)
+        #expect(context.viewState.drawableMediaIndices == [0])
+        
+        // When drawing is disabled, then nothing can be drawn on.
+        setUpViewModel(urls: urls, expectedCaption: nil, imageDrawingEnabled: false)
+        #expect(context.viewState.drawableMediaIndices.isEmpty)
+    }
+    
+    @Test
+    func drawingReloadsThePreviewAndPreparesThePicturesAgain() async throws {
+        // Given a picture whose preparation has started once.
+        let (startsStream, startsContinuation) = AsyncStream<Int>.makeStream()
+        var preparationStarts = 0
+        setUpViewModel(urls: [assertResourceURL(filename: "test_image.png")], expectedCaption: nil, imageDrawingEnabled: true) {
+            preparationStarts += 1
+            startsContinuation.yield(preparationStarts)
+            return .success(100 * 1024 * 1024)
+        }
+        
+        // When QuickLook has saved a drawing into the picture.
+        let preparedAgain = deferFulfillment(startsStream) { $0 == 2 }
+        context.send(viewAction: .drewOnMedia(index: 0))
+        
+        // Then the preview reloads and the picture is prepared again.
+        #expect(context.viewState.mediaEditVersion == 1)
+        try await preparedAgain.fulfill()
+    }
+    
+    @Test
+    func sendWaitsForAPictureDrawnOnWhileItWasPreparing() async throws {
+        // Given a picture whose first preparation is still running.
+        let (startedStream, startedContinuation) = AsyncStream<Void>.makeStream()
+        let (resumeStream, resumeContinuation) = AsyncStream<Void>.makeStream()
+        defer { resumeContinuation.finish() }
+        
+        var preparations = 0
+        let preparationStarted = deferFulfillment(startedStream) { _ in true }
+        setUpViewModel(urls: [assertResourceURL(filename: "test_image.png")], expectedCaption: nil, imageDrawingEnabled: true) {
+            preparations += 1
+            if preparations == 1 {
+                startedContinuation.yield()
+                var iterator = resumeStream.makeAsyncIterator()
+                _ = await iterator.next() // Only returns once this preparation is cancelled.
+            }
+            return .success(100 * 1024 * 1024)
+        }
+        try await preparationStarted.fulfill()
+        
+        // When Send is tapped, and a drawing lands on the picture before its preparation finishes.
+        let dismissed = deferFulfillment(viewModel.actions) { $0 == .dismiss }
+        context.send(viewAction: .send)
+        context.send(viewAction: .drewOnMedia(index: 0))
+        
+        // Then the picture is sent once its new preparation finishes.
+        try await dismissed.fulfill()
+        #expect(timelineProxy.sendImageUrlThumbnailURLImageInfoCaptionRequestHandleCallsCount == 1)
+    }
+    
+    @Test
+    func savingADrawingBlocksSendingUntilItLands() {
+        // Given a picture that can be drawn on.
+        setUpViewModel(urls: [assertResourceURL(filename: "test_image.png")], expectedCaption: nil, imageDrawingEnabled: true)
+        
+        // When Save is tapped in the drawing editor, before QuickLook has written the drawing.
+        context.send(viewAction: .savingDrawing)
+        
+        // Then the screen is blocked and Send does nothing.
+        #expect(context.viewState.shouldDisableInteraction)
+        context.send(viewAction: .send)
+        #expect(userIndicatorController.submitIndicatorDelayCallsCount == 0)
+        
+        // When the drawing lands, then the screen is unblocked.
+        context.send(viewAction: .drewOnMedia(index: 0))
+        #expect(!context.viewState.shouldDisableInteraction)
+    }
+    
+    @Test
+    func savingWithoutADrawingUnblocksSendingShortly() async throws {
+        // Given a picture that can be drawn on.
+        setUpViewModel(urls: [assertResourceURL(filename: "test_image.png")], expectedCaption: nil, imageDrawingEnabled: true)
+        
+        // When Save is tapped in the drawing editor and no drawing follows.
+        context.send(viewAction: .savingDrawing)
+        #expect(context.viewState.shouldDisableInteraction)
+        
+        // Then the screen is unblocked after a short wait.
+        let unblocked = deferFulfillment(context.observe(\.viewState.shouldDisableInteraction)) { !$0 }
+        try await unblocked.fulfill()
+        #expect(context.viewState.mediaEditVersion == 0)
+    }
+    
     // MARK: - Helpers
     
     private var audioURL: URL {
@@ -323,6 +420,7 @@ final class MediaUploadPreviewScreenViewModelTests {
                                 maxUploadSizeResult: Result<UInt, ClientProxyError>? = nil,
                                 simulateGallerySendFailure: Bool = false,
                                 galleryEnabled: Bool = true,
+                                imageDrawingEnabled: Bool = false,
                                 maxUploadSizeClosure: (() async -> Result<UInt, ClientProxyError>)? = nil) {
         timelineProxy = TimelineProxyMock(.init())
         timelineProxy.sendAudioUrlAudioInfoCaptionRequestHandleClosure = { [weak self] _, _, caption, _ in
@@ -353,6 +451,7 @@ final class MediaUploadPreviewScreenViewModelTests {
                                                       title: "Some File",
                                                       shouldShowCaptionWarning: true,
                                                       galleryEnabled: galleryEnabled,
+                                                      imageDrawingEnabled: imageDrawingEnabled,
                                                       mediaUploadingPreprocessor: MediaUploadingPreprocessor(userSettings: userSettings),
                                                       timelineController: TimelineControllerMock(.init(timelineProxy: timelineProxy)),
                                                       clientProxy: clientProxy,

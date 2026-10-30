@@ -273,7 +273,7 @@ struct ChatsTabFlowCoordinatorTests {
         try await deferredSheet.fulfill()
         
         #expect(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
-        #expect((splitCoordinator.sheetCoordinator as? NavigationStackCoordinator)?.rootCoordinator is MediaUploadPreviewScreenCoordinator)
+        #expect(splitCoordinator.sheetCoordinator is MediaUploadPreviewScreenCoordinator)
     }
     
     @Test
