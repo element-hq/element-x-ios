@@ -1,5 +1,5 @@
 {
-  "originHash" : "1964864908944417b4a35a1c63d86d9c5801ed33b9ccea55fb0e6aa645bdc917",
+  "originHash" : "8f959f31c2b9b6a5465caa1df963457a874fc286a3cf25b71e2a839c82d73521",
   "pins" : [
     {
       "identity" : "compound-design-tokens",
@@ -60,8 +60,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/element-call-ios",
       "state" : {
-        "revision" : "8e9ae6edc68667e1951d2b8ac8c83841e7f08447",
-        "version" : "0.1.0-rc.13"
+        "revision" : "e44c29172f4ed88dbf08ed2ba11c187cfff244ce"
       }
     },
     {
