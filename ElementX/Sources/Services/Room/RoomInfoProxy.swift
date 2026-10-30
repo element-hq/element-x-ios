@@ -167,10 +167,6 @@ nonisolated struct RoomInfoProxy: RoomInfoProxyProtocol {
         UInt(roomInfo.numUnreadMentions)
     }
     
-    var fullyReadEventID: String? {
-        roomInfo.fullyReadEventId
-    }
-    
     var pinnedEventIDs: Set<String> {
         Set(roomInfo.pinnedEventIds)
     }

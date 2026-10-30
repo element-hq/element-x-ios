@@ -327,9 +327,9 @@ struct TimelineState {
     /// Recomputed by ``recomputeReadMarkerUniqueID()`` whenever ``itemsDictionary`` changes.
     private(set) var readMarkerUniqueID: TimelineItemIdentifier.UniqueID?
     
-    /// The user's `m.fully_read` event ID, pushed from `RoomInfo`. Used as a fallback
-    /// signal when ``readMarkerUniqueID`` is nil because the marker event isn't paginated
-    /// into the loaded timeline window.
+    /// The active timeline's ``TimelineProxyProtocol/fullyReadEventID``. Used as a fallback signal
+    /// when ``readMarkerUniqueID`` is nil because the marker event isn't paginated into the loaded
+    /// timeline window.
     var fullyReadEventID: String?
     
     /// Recomputes ``readMarkerUniqueID`` from ``itemsDictionary``. Call after assigning a new
