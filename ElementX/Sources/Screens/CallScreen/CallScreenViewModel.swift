@@ -30,14 +30,13 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     @CancellableTask
     private var timeoutTask: Task<Void, Never>?
     
-    init(elementCallService: ElementCallServiceProtocol,
+    init(userSession: UserSessionProtocol,
          configuration: ElementCallConfiguration,
          allowPictureInPicture: Bool,
-         userSettings: UserSettings,
          analyticsService: AnalyticsServiceProtocol) {
-        self.elementCallService = elementCallService
+        elementCallService = userSession.elementCallService
         self.configuration = configuration
-        self.userSettings = userSettings
+        userSettings = userSession.userSettings
         self.analyticsService = analyticsService
         isPictureInPictureAllowed = allowPictureInPicture
         

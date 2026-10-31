@@ -20,7 +20,8 @@ struct UserSessionFlowCoordinatorTests {
     
     private let networkReachabilitySubject: CurrentValueSubject<NetworkMonitorReachability, Never> = .init(.reachable)
     private let homeserverReachabilitySubject: CurrentValueSubject<HomeserverReachability, Never> = .init(.reachable)
-    private let elementCallService = ElementCallServiceMock(.init())
+    private let elementCallService = ElementCallServiceMock(.init(userID: "hi@bob"))
+    private let flowParameters: CommonFlowParameters
     private var tabCoordinator: NavigationTabCoordinator<UserSessionFlowCoordinator.HomeTab>? {
         rootCoordinator?.rootCoordinator as? NavigationTabCoordinator
     }
@@ -50,19 +51,18 @@ struct UserSessionFlowCoordinatorTests {
         (appMediator.windowManager as? WindowManagerMock)?.mainWindow = UIWindow()
         
         userIndicatorController = UserIndicatorControllerMock()
-        let userSession = UserSessionMock(.init(clientProxy: clientProxy))
+        let userSession = UserSessionMock(.init(clientProxy: clientProxy, elementCallService: elementCallService))
         
-        let flowParameters = CommonFlowParameters(userSession: userSession,
-                                                  availableSessionsPublisher: .init([.init(userSession: userSession)]),
-                                                  bugReportService: BugReportServiceMock(.init()),
-                                                  elementCallService: elementCallService,
-                                                  timelineControllerFactory: TimelineControllerFactoryMock(.init()),
-                                                  emojiProvider: EmojiProvider(userSettings: userSession.userSettings),
-                                                  linkMetadataProvider: LinkMetadataProvider(),
-                                                  appMediator: appMediator,
-                                                  analytics: AnalyticsServiceMock(.init()),
-                                                  userIndicatorController: userIndicatorController,
-                                                  stateMachineFactory: stateMachineFactory)
+        flowParameters = CommonFlowParameters(userSession: userSession,
+                                              availableSessionsPublisher: .init([.init(userSession: userSession)]),
+                                              bugReportService: BugReportServiceMock(.init()),
+                                              timelineControllerFactory: TimelineControllerFactoryMock(.init()),
+                                              emojiProvider: EmojiProvider(userSettings: userSession.userSettings),
+                                              linkMetadataProvider: LinkMetadataProvider(),
+                                              appMediator: appMediator,
+                                              analytics: AnalyticsServiceMock(.init()),
+                                              userIndicatorController: userIndicatorController,
+                                              stateMachineFactory: stateMachineFactory)
         
         userSessionFlowCoordinator = UserSessionFlowCoordinator(isNewLogin: false,
                                                                 navigationRootCoordinator: rootCoordinator,
@@ -256,7 +256,55 @@ struct UserSessionFlowCoordinatorTests {
         #expect(retractReachabilityIndicatorCallsCount == 3)
     }
     
+    // MARK: Native calls
+    
+    @Test
+    func startEnablesNativeCallStack() {
+        #expect(elementCallService.setNativeCallStackEnabledReceivedInvocations == [true])
+    }
+    
+    @Test
+    func stopDisablesNativeCallStack() {
+        userSessionFlowCoordinator.stop()
+        #expect(elementCallService.setNativeCallStackEnabledReceivedInvocations == [true, false])
+    }
+    
+    @Test
+    func onlyStartedFlowEnablesItsNativeCallStack() {
+        var toggles: [String] = []
+        elementCallService.setNativeCallStackEnabledClosure = { toggles.append("current \($0)") }
+        let nextService = ElementCallServiceMock(.init(userID: "@bob:matrix.org"))
+        nextService.setNativeCallStackEnabledClosure = { toggles.append("next \($0)") }
+        // Built while the current flow still runs: building one must leave the stack alone.
+        let nextFlow = makeFlowCoordinator(userSession: UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@bob:matrix.org")),
+                                                                              elementCallService: nextService)))
+        
+        userSessionFlowCoordinator.stop()
+        nextFlow.start()
+        
+        #expect(toggles == ["current false", "next true"])
+    }
+    
     // MARK: - Helpers
+    
+    /// Builds another account's flow on the same root, as the app does for the next active account.
+    private func makeFlowCoordinator(userSession: UserSessionProtocol) -> UserSessionFlowCoordinator {
+        let parameters = CommonFlowParameters(userSession: userSession,
+                                              availableSessionsPublisher: .init([.init(userSession: userSession)]),
+                                              bugReportService: flowParameters.bugReportService,
+                                              timelineControllerFactory: flowParameters.timelineControllerFactory,
+                                              emojiProvider: flowParameters.emojiProvider,
+                                              linkMetadataProvider: flowParameters.linkMetadataProvider,
+                                              appMediator: flowParameters.appMediator,
+                                              analytics: flowParameters.analytics,
+                                              userIndicatorController: flowParameters.userIndicatorController,
+                                              stateMachineFactory: PublishedStateMachineFactory())
+        
+        return UserSessionFlowCoordinator(isNewLogin: false,
+                                          navigationRootCoordinator: rootCoordinator,
+                                          appLockService: AppLockServiceMock(),
+                                          flowParameters: parameters)
+    }
     
     private func process(route: AppRoute,
                          expectedUserSessionState: UserSessionFlowCoordinator.State? = nil,

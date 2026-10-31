@@ -29,7 +29,6 @@ struct CommonFlowParameters {
     /// Every signed in account, most recently active first, so the first one is `userSession`'s.
     let availableSessionsPublisher: CurrentValuePublisher<[UserSessionDetails], Never>
     let bugReportService: BugReportServiceProtocol
-    let elementCallService: ElementCallServiceProtocol
     let timelineControllerFactory: TimelineControllerFactoryProtocol
     let emojiProvider: EmojiProviderProtocol
     let linkMetadataProvider: LinkMetadataProviderProtocol
@@ -40,9 +39,5 @@ struct CommonFlowParameters {
     
     var windowManager: WindowManagerProtocol {
         appMediator.windowManager
-    }
-    
-    var ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never> {
-        elementCallService.ongoingCallRoomIDPublisher
     }
 }

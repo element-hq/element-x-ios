@@ -34,14 +34,14 @@ final class ElementCallManagerTests {
         let dateProvider: () -> Date = {
             self.currentDate
         }
-        service = ElementCallServiceMock(.init())
         serviceActions = .init()
+        service = ElementCallServiceMock(.init(userID: "@alice:matrix.org"))
         service.actionsPublisher = serviceActions.eraseToAnyPublisher()
-        manager = ElementCallManager(service: service,
-                                     appSettings: appSettings,
+        manager = ElementCallManager(appSettings: appSettings,
                                      callProvider: callProvider,
                                      callController: callController,
                                      timeProvider: TimeProvider(clock: clock, now: dateProvider))
+        manager.add(service)
     }
     
     isolated deinit {
@@ -444,7 +444,7 @@ final class ElementCallManagerTests {
         await reportIncomingPush(isVoiceCall: false)
         try await answerReportedCall()
         
-        manager.dropAnsweredCall(roomID: "!room:example.com")
+        manager.dropAnsweredCall(userID: "@alice:matrix.org", roomID: "!room:example.com")
         
         await reportIncomingPush(isVoiceCall: false, roomID: "!other:example.com", rtcNotificationID: "$111")
         #expect(callProvider.reportNewIncomingCallWithUpdateCompletionReceivedArguments?.update.remoteHandle?.value == "!other:example.com")
@@ -476,7 +476,7 @@ final class ElementCallManagerTests {
         appSettings.nativeCallEnabled = true
         await reportIncomingPush(isVoiceCall: false)
         await clock.waitForScheduledSleep()
-        let deferredAnswer = deferFulfillment(manager.actionsPublisher) { $0 == .callAnswered(roomID: "!room:example.com", isVoiceCall: false) }
+        let deferredAnswer = deferFulfillment(manager.actionsPublisher) { $0 == .callAnswered(userID: "@alice:matrix.org", roomID: "!room:example.com", isVoiceCall: false) }
         
         try await answerReportedCall()
         try await deferredAnswer.fulfill()
@@ -516,10 +516,10 @@ final class ElementCallManagerTests {
         await reportIncomingPush(isVoiceCall: false)
         let answeredUUID = try await answerReportedCall()
         
-        manager.dropAnsweredCall(roomID: "!other:example.com")
+        manager.dropAnsweredCall(userID: "@alice:matrix.org", roomID: "!other:example.com")
         #expect(!callProvider.reportCallWithEndedAtReasonCalled)
         
-        manager.dropAnsweredCall(roomID: "!room:example.com")
+        manager.dropAnsweredCall(userID: "@alice:matrix.org", roomID: "!room:example.com")
         #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.uuid == answeredUUID)
         #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.reason == .failed)
     }
@@ -570,15 +570,26 @@ final class ElementCallManagerTests {
     // MARK: - Service
     
     @Test
-    func ringingCallIsWatched() async {
+    func ringIsWatchedByReceiver() async {
+        let bobActions = PassthroughSubject<ElementCallServiceAction, Never>()
+        let bob = makeCallService(userID: "@bob:matrix.org", actions: bobActions)
+        manager.add(bob)
+        
         await waitForConfirmation { confirmation in
-            service.observeIncomingCallRoomIDRtcNotificationIDClosure = { _, _ in confirmation() }
-            let payload = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 60)
+            bob.observeIncomingCallRoomIDRtcNotificationIDClosure = { _, _ in confirmation() }
+            let payload = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 60).updatingReceiverID("@bob:matrix.org")
             manager.pushRegistry(pushRegistry, didReceiveIncomingPushWith: payload, for: .voIP) { }
         }
         
-        #expect(service.observeIncomingCallRoomIDRtcNotificationIDReceivedArguments?.roomID == "!room:example.com")
-        #expect(service.observeIncomingCallRoomIDRtcNotificationIDReceivedArguments?.rtcNotificationID == "$000")
+        #expect(bob.observeIncomingCallRoomIDRtcNotificationIDReceivedArguments?.roomID == "!room:example.com")
+        #expect(bob.observeIncomingCallRoomIDRtcNotificationIDReceivedArguments?.rtcNotificationID == "$000")
+        #expect(!service.observeIncomingCallRoomIDRtcNotificationIDCalled)
+        
+        serviceActions.send(.incomingCallEnded(roomID: "!room:example.com", reason: .remoteEnded))
+        #expect(!callProvider.reportCallWithEndedAtReasonCalled, "Only the receiver speaks for its ring")
+        
+        bobActions.send(.incomingCallEnded(roomID: "!room:example.com", reason: .remoteEnded))
+        #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.reason == .remoteEnded)
     }
     
     @Test(arguments: [(CallEndReason.remoteEnded, CXCallEndedReason.remoteEnded),
@@ -598,24 +609,31 @@ final class ElementCallManagerTests {
     }
     
     @Test
-    func declineGoesThroughService() async throws {
-        await reportIncomingPush(isVoiceCall: false)
+    func declineGoesThroughReceiver() async throws {
+        let bob = makeCallService(userID: "@bob:matrix.org")
+        manager.add(bob)
+        await reportIncomingPush(isVoiceCall: false, receiverID: "@bob:matrix.org")
         let callID = try #require(callProvider.reportNewIncomingCallWithUpdateCompletionReceivedArguments?.uuid)
         
         await waitForConfirmation { confirmation in
-            service.declineCallRoomIDRtcNotificationIDClosure = { _, _ in confirmation() }
+            bob.declineCallRoomIDRtcNotificationIDClosure = { _, _ in confirmation() }
             manager.endCall(withCallKitID: callID)
         }
         
-        #expect(service.declineCallRoomIDRtcNotificationIDReceivedArguments?.roomID == "!room:example.com")
-        #expect(service.declineCallRoomIDRtcNotificationIDReceivedArguments?.rtcNotificationID == "$000")
+        #expect(bob.declineCallRoomIDRtcNotificationIDReceivedArguments?.roomID == "!room:example.com")
+        #expect(bob.declineCallRoomIDRtcNotificationIDReceivedArguments?.rtcNotificationID == "$000")
+        
+        await waitForConfirmation(expectedCount: 0, timeout: .milliseconds(100)) { aliceDeclined in
+            service.declineCallRoomIDRtcNotificationIDClosure = { _, _ in aliceDeclined() }
+        }
+        #expect(!service.declineCallRoomIDRtcNotificationIDCalled)
     }
     
     @Test
     func answeredWebCallOpens() async throws {
         await reportIncomingPush(isVoiceCall: false)
         let uuid = try #require(callProvider.reportNewIncomingCallWithUpdateCompletionReceivedArguments?.uuid)
-        let deferredAnswer = deferFulfillment(manager.actionsPublisher) { $0 == .callAnswered(roomID: "!room:example.com", isVoiceCall: false) }
+        let deferredAnswer = deferFulfillment(manager.actionsPublisher) { $0 == .callAnswered(userID: "@alice:matrix.org", roomID: "!room:example.com", isVoiceCall: false) }
         
         manager.provider(CXProvider(configuration: CXProviderConfiguration()), perform: CXAnswerCallAction(call: uuid))
         
@@ -678,23 +696,417 @@ final class ElementCallManagerTests {
         #expect((callController.requestCompletionReceivedArguments?.transaction.actions.first as? CXSetMutedCallAction)?.isMuted == true)
     }
     
+    // MARK: - Accounts
+    
+    @Test
+    func pushWithoutReceiverFails() async {
+        await expectImmediatelyEndedCallReported(forPayload: PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 60).removingReceiverID(),
+                                                 expectedReason: .failed)
+    }
+    
+    @Test
+    func ongoingCallHasOneOwner() async {
+        let bobActions = PassthroughSubject<ElementCallServiceAction, Never>()
+        let bob = makeCallService(userID: "@bob:matrix.org", actions: bobActions)
+        manager.add(bob)
+        
+        await startCallSession(kind: .webView, service: bob, actions: bobActions)
+        await startCallSession(kind: .webView)
+        
+        #expect(bob.ongoingCallRoomIDPublisher.value == nil)
+        #expect(service.ongoingCallRoomIDPublisher.value == "!room:example.com")
+        
+        bobActions.send(.callSessionEnded(roomID: "!room:example.com", reason: nil))
+        #expect(service.ongoingCallRoomIDPublisher.value == "!room:example.com", "Bob's late end leaves Alice's call")
+    }
+    
+    @Test
+    func ringOfOtherAccountIsNotAdopted() async throws {
+        appSettings.nativeCallEnabled = true
+        await reportIncomingPush(isVoiceCall: false, receiverID: "@bob:matrix.org")
+        let ringingUUID = try #require(callProvider.reportNewIncomingCallWithUpdateCompletionReceivedArguments?.uuid)
+        
+        await startCallSession(kind: .native)
+        
+        #expect(callProvider.reportCallWithUpdatedCalled, "Alice's call is a new CallKit call")
+        #expect(callProvider.reportCallWithUpdatedReceivedArguments?.uuid != ringingUUID)
+    }
+    
+    @Test
+    func otherAccountsReportsLeaveOngoingCall() async {
+        appSettings.nativeCallEnabled = true
+        let bobActions = PassthroughSubject<ElementCallServiceAction, Never>()
+        manager.add(makeCallService(userID: "@bob:matrix.org", actions: bobActions))
+        await startCallSession(kind: .native)
+        
+        bobActions.send(.callSessionConnected(roomID: "!room:example.com"))
+        bobActions.send(.audioEnabledChanged(false, roomID: "!room:example.com"))
+        bobActions.send(.callSessionEnded(roomID: "!room:example.com", reason: .remoteEnded))
+        
+        #expect(!callProvider.reportOutgoingCallWithConnectedAtCalled)
+        #expect(callController.requestCompletionCallsCount == 1, "Only the start transaction, no CXSetMutedCallAction")
+        #expect(!callProvider.reportCallWithEndedAtReasonCalled)
+        #expect(service.ongoingCallRoomIDPublisher.value == "!room:example.com")
+    }
+    
+    @Test(arguments: [true, false])
+    func answeredCallNamesReceiver(nativeCallEnabled: Bool) async throws {
+        appSettings.nativeCallEnabled = nativeCallEnabled
+        await reportIncomingPush(isVoiceCall: false, receiverID: "@bob:matrix.org")
+        await clock.waitForScheduledSleep()
+        let deferredAnswer = deferFulfillment(manager.actionsPublisher) { $0 == .callAnswered(userID: "@bob:matrix.org", roomID: "!room:example.com", isVoiceCall: false) }
+        
+        let answeredUUID = try await answerReportedCall()
+        try await deferredAnswer.fulfill()
+        
+        manager.dropAnsweredCall(userID: "@alice:matrix.org", roomID: "!room:example.com")
+        
+        if nativeCallEnabled {
+            #expect(!callProvider.reportCallWithEndedAtReasonCalled, "Alice's drop leaves Bob's call")
+        } else {
+            // Bob's answered call is kept, so it still counts as a call in progress.
+            let otherCall = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 60)
+                .updatingRoomID("!other:example.com")
+                .updatingRTCNotificationID("$111")
+            await expectImmediatelyEndedCallReported(forPayload: otherCall, expectedReason: .unanswered)
+        }
+        
+        manager.dropAnsweredCall(userID: "@bob:matrix.org", roomID: "!room:example.com")
+        
+        if nativeCallEnabled {
+            #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.uuid == answeredUUID)
+            #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.reason == .failed)
+        } else {
+            let endedCallsBeforePush = callProvider.reportCallWithEndedAtReasonCallsCount
+            await reportIncomingPush(isVoiceCall: false, roomID: "!other:example.com", rtcNotificationID: "$222")
+            
+            #expect(callProvider.reportNewIncomingCallWithUpdateCompletionReceivedArguments?.update.remoteHandle?.value == "!other:example.com")
+            #expect(callProvider.reportCallWithEndedAtReasonCallsCount == endedCallsBeforePush, "The new call rings")
+        }
+    }
+    
+    @Test
+    func callKitMuteAndEndReachOwnerOnly() async throws {
+        let bobActions = PassthroughSubject<ElementCallServiceAction, Never>()
+        let bob = makeCallService(userID: "@bob:matrix.org", actions: bobActions)
+        manager.add(bob)
+        await startCallSession(kind: .native, service: bob, actions: bobActions)
+        let callID = try #require(callProvider.reportCallWithUpdatedReceivedArguments?.uuid)
+        let provider = CXProvider(configuration: CXProviderConfiguration())
+        
+        manager.provider(provider, didActivate: AVAudioSession.sharedInstance())
+        manager.provider(provider, perform: CXSetMutedCallAction(call: callID, muted: true))
+        manager.endCall(withCallKitID: callID)
+        
+        #expect(service.systemEventReceivedReceivedInvocations == [.audioSessionActivated])
+        #expect(bob.systemEventReceivedReceivedInvocations == [.audioSessionActivated,
+                                                               .microphoneMuteChanged(isMuted: true),
+                                                               .endCallRequested(roomID: "!room:example.com")])
+    }
+    
+    @Test
+    func sameRingForTwoAccountsRingsOnce() async {
+        await reportIncomingPush(isVoiceCall: false, receiverID: "@bob:matrix.org")
+        
+        await expectImmediatelyEndedCallReported(forPayload: PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 60),
+                                                 expectedReason: .answeredElsewhere)
+    }
+    
+    @Test
+    func ringInRoomOfAnotherAccountsCallIsHandled() async {
+        let bobActions = PassthroughSubject<ElementCallServiceAction, Never>()
+        let bob = makeCallService(userID: "@bob:matrix.org", actions: bobActions)
+        manager.add(bob)
+        await startCallSession(kind: .webView, service: bob, actions: bobActions)
+        
+        await expectImmediatelyEndedCallReported(forPayload: PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 60).updatingRTCNotificationID("$111"),
+                                                 expectedReason: .answeredElsewhere)
+    }
+    
+    // MARK: - Late services
+    
+    @Test
+    func lateServiceWatchesRing() async {
+        let bob = makeCallService(userID: "@bob:matrix.org")
+        await reportIncomingPush(isVoiceCall: false, receiverID: "@bob:matrix.org")
+        
+        // Lets the ring's own watch run first, with no service to watch through.
+        await waitForConfirmation(expectedCount: 0, timeout: .milliseconds(100)) { watched in
+            bob.observeIncomingCallRoomIDRtcNotificationIDClosure = { _, _ in watched() }
+        }
+        
+        await waitForConfirmation(timeout: .seconds(1)) { watched in
+            bob.observeIncomingCallRoomIDRtcNotificationIDClosure = { _, _ in watched() }
+            manager.add(bob)
+        }
+        
+        #expect(bob.observeIncomingCallRoomIDRtcNotificationIDReceivedArguments?.roomID == "!room:example.com")
+        #expect(bob.observeIncomingCallRoomIDRtcNotificationIDReceivedArguments?.rtcNotificationID == "$000")
+    }
+    
+    @Test
+    func lateServiceSendsPendingDecline() async throws {
+        let bob = makeCallService(userID: "@bob:matrix.org")
+        await reportIncomingPush(isVoiceCall: false, receiverID: "@bob:matrix.org")
+        let callID = try #require(callProvider.reportNewIncomingCallWithUpdateCompletionReceivedArguments?.uuid)
+        manager.endCall(withCallKitID: callID)
+        
+        await waitForConfirmation(timeout: .seconds(1)) { declined in
+            bob.declineCallRoomIDRtcNotificationIDClosure = { _, _ in declined() }
+            manager.add(bob)
+        }
+        
+        #expect(bob.declineCallRoomIDRtcNotificationIDReceivedArguments?.roomID == "!room:example.com")
+        #expect(bob.declineCallRoomIDRtcNotificationIDReceivedArguments?.rtcNotificationID == "$000")
+        
+        // A declined call isn't ringing any more.
+        await waitForConfirmation(expectedCount: 0, timeout: .milliseconds(100)) { watched in
+            bob.observeIncomingCallRoomIDRtcNotificationIDClosure = { _, _ in watched() }
+        }
+        #expect(!bob.observeIncomingCallRoomIDRtcNotificationIDCalled)
+    }
+    
+    @Test
+    func replacedServiceHandsOverWatch() async throws {
+        let oldBobActions = PassthroughSubject<ElementCallServiceAction, Never>()
+        let oldBob = makeCallService(userID: "@bob:matrix.org", actions: oldBobActions)
+        manager.add(oldBob)
+        
+        await waitForConfirmation(timeout: .seconds(1)) { watched in
+            oldBob.observeIncomingCallRoomIDRtcNotificationIDClosure = { _, _ in watched() }
+            let payload = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 60).updatingReceiverID("@bob:matrix.org")
+            manager.pushRegistry(pushRegistry, didReceiveIncomingPushWith: payload, for: .voIP) { }
+        }
+        let callID = try #require(callProvider.reportNewIncomingCallWithUpdateCompletionReceivedArguments?.uuid)
+        
+        // E.g. a cache clear, which rebuilds the account's session.
+        let newBobActions = PassthroughSubject<ElementCallServiceAction, Never>()
+        let newBob = makeCallService(userID: "@bob:matrix.org", actions: newBobActions)
+        await waitForConfirmation(timeout: .seconds(1)) { watched in
+            newBob.observeIncomingCallRoomIDRtcNotificationIDClosure = { _, _ in watched() }
+            manager.add(newBob)
+        }
+        
+        #expect(oldBob.stopObservingIncomingCallCalled)
+        
+        oldBobActions.send(.incomingCallEnded(roomID: "!room:example.com", reason: .remoteEnded))
+        #expect(!callProvider.reportCallWithEndedAtReasonCalled, "The replaced service doesn't speak for the account any more")
+        
+        newBobActions.send(.incomingCallEnded(roomID: "!room:example.com", reason: .remoteEnded))
+        #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.uuid == callID)
+        #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.reason == .remoteEnded)
+    }
+    
+    // MARK: - Removed and replaced services
+    
+    @Test
+    func removingAccountEndsRing() async throws {
+        let bob = makeCallService(userID: "@bob:matrix.org")
+        manager.add(bob)
+        await reportIncomingPush(isVoiceCall: false, receiverID: "@bob:matrix.org")
+        let ringingUUID = try #require(callProvider.reportNewIncomingCallWithUpdateCompletionReceivedArguments?.uuid)
+        
+        manager.remove(userID: "@bob:matrix.org")
+        
+        #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.uuid == ringingUUID)
+        #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.reason == .failed)
+        #expect(bob.stopObservingIncomingCallCalled, "Cleared while its service is still there")
+    }
+    
+    @Test
+    func removingUnaddedAccountEndsRing() async throws {
+        // E.g. a session that failed to restore, so its service was never added.
+        await reportIncomingPush(isVoiceCall: false, receiverID: "@bob:matrix.org")
+        let ringingUUID = try #require(callProvider.reportNewIncomingCallWithUpdateCompletionReceivedArguments?.uuid)
+        
+        manager.remove(userID: "@bob:matrix.org")
+        
+        #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.uuid == ringingUUID)
+        #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.reason == .failed)
+    }
+    
+    @Test
+    func removingAccountLeavesAnsweredWebCallToHandOver() async throws {
+        let bob = makeCallService(userID: "@bob:matrix.org")
+        manager.add(bob)
+        await reportIncomingPush(isVoiceCall: false, receiverID: "@bob:matrix.org")
+        try await answerReportedCall()
+        
+        manager.remove(userID: "@bob:matrix.org")
+        
+        #expect(!callProvider.reportCallWithEndedAtReasonCalled, "The hand-over a second after answering reports it")
+        #expect(bob.stopObservingIncomingCallCalled)
+    }
+    
+    @Test
+    func removingOtherAccountKeepsRing() async {
+        await reportIncomingPush(isVoiceCall: false)
+        manager.add(makeCallService(userID: "@bob:matrix.org"))
+        
+        manager.remove(userID: "@bob:matrix.org")
+        
+        #expect(!callProvider.reportCallWithEndedAtReasonCalled)
+        #expect(!service.stopObservingIncomingCallCalled)
+    }
+    
+    @Test
+    func removingAccountDropsPendingDecline() async throws {
+        let bob = makeCallService(userID: "@bob:matrix.org")
+        await reportIncomingPush(isVoiceCall: false, receiverID: "@bob:matrix.org")
+        let callID = try #require(callProvider.reportNewIncomingCallWithUpdateCompletionReceivedArguments?.uuid)
+        manager.endCall(withCallKitID: callID)
+        
+        manager.remove(userID: "@bob:matrix.org")
+        
+        await waitForConfirmation(expectedCount: 0, timeout: .milliseconds(500)) { declined in
+            bob.declineCallRoomIDRtcNotificationIDClosure = { _, _ in declined() }
+            manager.add(bob)
+        }
+        #expect(!bob.declineCallRoomIDRtcNotificationIDCalled)
+    }
+    
+    @Test(arguments: [ElementCallSessionKind.webView, .native])
+    func removingAccountEndsOngoingCall(kind: ElementCallSessionKind) async {
+        let bobActions = PassthroughSubject<ElementCallServiceAction, Never>()
+        let bob = makeCallService(userID: "@bob:matrix.org", actions: bobActions)
+        manager.add(bob)
+        await startCallSession(kind: kind, service: bob, actions: bobActions)
+        
+        manager.remove(userID: "@bob:matrix.org")
+        
+        #expect(bob.ongoingCallRoomIDPublisher.value == nil, "Bob hears the call is gone before its service is dropped")
+        #expect(callProvider.reportCallWithEndedAtReasonReceivedInvocations.contains { $0.reason == .failed } == (kind == .native))
+        #expect(bob.systemEventReceivedReceivedInvocations.contains(.endCallRequested(roomID: "!room:example.com")) == (kind == .native))
+        
+        await reportIncomingPush(isVoiceCall: false, roomID: "!other:example.com", rtcNotificationID: "$111")
+        #expect(!callProvider.reportCallWithEndedAtReasonReceivedInvocations.contains { $0.reason == .unanswered })
+    }
+    
+    @Test
+    func removingAccountEndsAnsweredNativeCall() async throws {
+        appSettings.nativeCallEnabled = true
+        manager.add(makeCallService(userID: "@bob:matrix.org"))
+        await reportIncomingPush(isVoiceCall: false, receiverID: "@bob:matrix.org")
+        let answeredUUID = try await answerReportedCall()
+        
+        manager.remove(userID: "@bob:matrix.org")
+        
+        #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.uuid == answeredUUID)
+        #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.reason == .failed)
+        
+        // C1's busy rule lets a ring through here anyway, so a ringing next push proves nothing.
+        manager.dropAnsweredCall(userID: "@bob:matrix.org", roomID: "!room:example.com")
+        #expect(callProvider.reportCallWithEndedAtReasonCallsCount == 1, "Nothing answered is left")
+    }
+    
+    @Test
+    func removalDuringSetUpStillReplies() async throws {
+        appSettings.nativeCallEnabled = true
+        let bobActions = PassthroughSubject<ElementCallServiceAction, Never>()
+        let bob = makeCallService(userID: "@bob:matrix.org", actions: bobActions)
+        manager.add(bob)
+        
+        // Holds the start transaction open, as the system does until it has performed it.
+        await waitForConfirmation(timeout: .seconds(1)) { requested in
+            callController.requestCompletionClosure = { _, _ in requested() }
+            bobActions.send(.callSessionStarted(roomID: "!room:example.com", roomDisplayName: "welcome", isVideo: true, kind: .native))
+        }
+        let completeStart = try #require(callController.requestCompletionReceivedArguments?.completion)
+        let startedCall = try #require(callController.requestCompletionReceivedArguments?.transaction.actions.first as? CXStartCallAction)
+        
+        manager.remove(userID: "@bob:matrix.org")
+        
+        await waitForConfirmation(timeout: .seconds(1)) { replied in
+            bob.callSessionSetUpRoomIDIsAcceptedClosure = { _, _ in replied() }
+            completeStart(nil)
+        }
+        
+        #expect(bob.callSessionSetUpRoomIDIsAcceptedReceivedArguments?.isAccepted == false)
+        #expect(bob.callSessionSetUpRoomIDIsAcceptedCallsCount == 1)
+        #expect(!callProvider.reportCallWithUpdatedCalled)
+        #expect(callProvider.reportCallWithEndedAtReasonReceivedInvocations.last?.uuid == startedCall.callUUID)
+        #expect(callProvider.reportCallWithEndedAtReasonReceivedInvocations.count == 2, "Once at removal, again once the start has landed")
+    }
+    
+    @Test
+    func removingOtherAccountKeepsCall() async {
+        await startCallSession(kind: .webView)
+        manager.add(makeCallService(userID: "@bob:matrix.org"))
+        
+        manager.remove(userID: "@bob:matrix.org")
+        
+        #expect(service.ongoingCallRoomIDPublisher.value == "!room:example.com")
+        #expect(!callProvider.reportCallWithEndedAtReasonCalled)
+    }
+    
+    @Test(arguments: [ElementCallSessionKind.webView, .native])
+    func replacingServiceEndsLeftoverCall(kind: ElementCallSessionKind) async {
+        let oldBobActions = PassthroughSubject<ElementCallServiceAction, Never>()
+        let oldBob = makeCallService(userID: "@bob:matrix.org", actions: oldBobActions)
+        manager.add(oldBob)
+        await startCallSession(kind: kind, service: oldBob, actions: oldBobActions)
+        
+        // E.g. a cache clear, which rebuilds the account's session.
+        manager.add(makeCallService(userID: "@bob:matrix.org"))
+        
+        #expect(oldBob.ongoingCallRoomIDPublisher.value == nil, "The old service hears nil before it's swapped out")
+        #expect(callProvider.reportCallWithEndedAtReasonReceivedInvocations.contains { $0.reason == .failed } == (kind == .native))
+        #expect(oldBob.systemEventReceivedReceivedInvocations.contains(.endCallRequested(roomID: "!room:example.com")) == (kind == .native))
+        
+        await reportIncomingPush(isVoiceCall: false, roomID: "!other:example.com", rtcNotificationID: "$111")
+        #expect(!callProvider.reportCallWithEndedAtReasonReceivedInvocations.contains { $0.reason == .unanswered })
+    }
+    
+    @Test
+    func replacingServiceKeepsOtherAccountsCall() async {
+        await startCallSession(kind: .webView)
+        manager.add(makeCallService(userID: "@bob:matrix.org"))
+        
+        manager.add(makeCallService(userID: "@bob:matrix.org"))
+        
+        #expect(service.ongoingCallRoomIDPublisher.value == "!room:example.com")
+        #expect(!callProvider.reportCallWithEndedAtReasonCalled)
+    }
+    
     // MARK: - Helpers
     
+    /// Builds an account's call service whose actions the test sends itself.
+    private func makeCallService(userID: String,
+                                 actions: PassthroughSubject<ElementCallServiceAction, Never> = .init()) -> ElementCallServiceMock {
+        let callService = ElementCallServiceMock(.init(userID: userID))
+        callService.actionsPublisher = actions.eraseToAnyPublisher()
+        return callService
+    }
+    
     /// Starts a call session the way a call screen does, returning once the manager has set it up.
-    private func startCallSession(roomID: String = "!room:example.com", roomDisplayName: String = "welcome", kind: ElementCallSessionKind) async {
+    /// Defaults to Alice's service and actions.
+    private func startCallSession(roomID: String = "!room:example.com",
+                                  roomDisplayName: String = "welcome",
+                                  kind: ElementCallSessionKind,
+                                  service: ElementCallServiceMock? = nil,
+                                  actions: PassthroughSubject<ElementCallServiceAction, Never>? = nil) async {
+        guard let callService = service ?? self.service, let callActions = actions ?? serviceActions else {
+            Issue.record("Missing a service to start the call session with")
+            return
+        }
+        
         await waitForConfirmation { confirmation in
-            service.callSessionSetUpRoomIDIsAcceptedClosure = { _, _ in confirmation() }
-            serviceActions.send(.callSessionStarted(roomID: roomID, roomDisplayName: roomDisplayName, isVideo: true, kind: kind))
+            callService.callSessionSetUpRoomIDIsAcceptedClosure = { _, _ in confirmation() }
+            callActions.send(.callSessionStarted(roomID: roomID, roomDisplayName: roomDisplayName, isVideo: true, kind: kind))
         }
     }
     
     /// Delivers a VoIP push and waits for it to be reported, returning once the call is ringing.
-    private func reportIncomingPush(isVoiceCall: Bool, roomID: String = "!room:example.com", rtcNotificationID: String = "$000") async {
+    private func reportIncomingPush(isVoiceCall: Bool,
+                                    roomID: String = "!room:example.com",
+                                    rtcNotificationID: String = "$000",
+                                    receiverID: String = "@alice:matrix.org") async {
         await waitForConfirmation { confirmation in
             let payload = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 60)
                 .updateIsVoice(isVoiceCall)
                 .updatingRoomID(roomID)
                 .updatingRTCNotificationID(rtcNotificationID)
+                .updatingReceiverID(receiverID)
             
             manager.pushRegistry(pushRegistry, didReceiveIncomingPushWith: payload, for: .voIP) {
                 confirmation()
@@ -742,6 +1154,7 @@ private nonisolated class PKPushPayloadMock: PKPushPayload {
         dict[ElementCallServiceNotificationKey.roomDisplayName.rawValue] = "welcome"
         dict[ElementCallServiceNotificationKey.rtcNotifyEventID.rawValue] = "$000"
         dict[ElementCallServiceNotificationKey.expirationDate.rawValue] = Date(timeIntervalSince1970: 10)
+        dict[ElementCallServiceNotificationKey.receiverID.rawValue] = "@alice:matrix.org"
     }
     
     override var dictionaryPayload: [AnyHashable: Any] {
@@ -765,6 +1178,16 @@ private nonisolated class PKPushPayloadMock: PKPushPayload {
     
     func updatingRTCNotificationID(_ rtcNotificationID: String) -> Self {
         dict[ElementCallServiceNotificationKey.rtcNotifyEventID.rawValue] = rtcNotificationID
+        return self
+    }
+    
+    func updatingReceiverID(_ receiverID: String) -> Self {
+        dict[ElementCallServiceNotificationKey.receiverID.rawValue] = receiverID
+        return self
+    }
+    
+    func removingReceiverID() -> Self {
+        dict[ElementCallServiceNotificationKey.receiverID.rawValue] = nil
         return self
     }
 }
