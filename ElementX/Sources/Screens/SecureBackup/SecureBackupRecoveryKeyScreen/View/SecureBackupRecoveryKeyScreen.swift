@@ -31,28 +31,32 @@ struct SecureBackupRecoveryKeyScreen: View {
         .toolbar(.visible, for: .navigationBar)
         .background()
         .backgroundStyle(.compound.bgCanvasDefault)
+        .navigationBarBackButtonHidden(context.viewState.isCompleted)
+        .presentationDetents([.large]) // When pushed on to a smaller sheet.
         .interactiveDismissDisabled()
         .alert(item: $context.alertInfo)
     }
     
     private var mainContent: some View {
         VStack(spacing: 48) {
-            switch context.viewState.mode {
-            case .setupRecovery, .changeRecovery:
-                header
-                generateRecoveryKeySection
-            case .fixRecovery:
-                header
-                confirmRecoveryKeySection
-            case .unknown:
-                header
+            header
+            
+            if !context.viewState.isCompleted {
+                switch context.viewState.mode {
+                case .setupRecovery, .changeRecovery:
+                    generateRecoveryKeySection
+                case .fixRecovery:
+                    confirmRecoveryKeySection
+                case .unknown:
+                    EmptyView()
+                }
             }
         }
     }
     
     private var header: some View {
         VStack(spacing: 16) {
-            BigIcon(icon: \.keySolid)
+            BigIcon(icon: context.viewState.icon, style: context.viewState.iconStyle)
             
             Text(context.viewState.title)
                 .foregroundColor(.compound.textPrimary)
@@ -71,6 +75,8 @@ struct SecureBackupRecoveryKeyScreen: View {
     @ViewBuilder
     private var footer: some View {
         switch context.viewState.mode {
+        case _ where context.viewState.isCompleted:
+            completedActionButtons
         case .setupRecovery, .changeRecovery:
             recoveryCreatedActionButtons
         case .fixRecovery:
@@ -93,6 +99,14 @@ struct SecureBackupRecoveryKeyScreen: View {
         }
     }
     
+    private var completedActionButtons: some View {
+        Button(context.viewState.completionButtonTitle) {
+            context.send(viewAction: .complete)
+        }
+        .buttonStyle(.compound(.primary))
+        .accessibilityIdentifier(A11yIdentifiers.secureBackupRecoveryKeyScreen.finish)
+    }
+    
     private var recoveryCreatedActionButtons: some View {
         VStack(spacing: 16) {
             if let recoveryKey = context.viewState.recoveryKey {
@@ -106,9 +120,9 @@ struct SecureBackupRecoveryKeyScreen: View {
             }
             
             Button {
-                context.send(viewAction: .done)
+                context.send(viewAction: .confirmKeySaved)
             } label: {
-                Text(L10n.actionDone)
+                Text(L10n.actionContinue)
             }
             .buttonStyle(.compound(.primary))
             .disabled(context.viewState.recoveryKey == nil || context.viewState.doneButtonEnabled == false)
@@ -118,7 +132,7 @@ struct SecureBackupRecoveryKeyScreen: View {
     
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
-        if context.viewState.isModallyPresented == true, context.viewState.recoveryKey == nil {
+        if context.viewState.isModallyPresented == true, context.viewState.recoveryKey == nil, !context.viewState.isCompleted {
             ToolbarItem(placement: .cancellationAction) {
                 Button(L10n.actionCancel) {
                     context.send(viewAction: .cancel)
@@ -228,18 +242,13 @@ private struct RecoveryKeyView: View {
 @available(iOS 26.0, *)
 struct SecureBackupRecoveryKeyScreen_Previews: PreviewProvider, TestablePreview {
     static let key = "EsTM njec uHYA yHmh dQdW Nj4o bNRU 9jMN XGMc KUNM UFr5 R8GY"
-    static let notSetUpViewModel = viewModel(recoveryState: .disabled)
-    static let generatingViewModel = viewModel(recoveryState: .disabled, generateKey: true, key: key)
-    static let setupViewModel = viewModel(recoveryState: .enabled, generateKey: true, key: key)
+    static let generatingViewModel = viewModel(recoveryState: .disabled, key: key)
+    static let setupViewModel = viewModel(recoveryState: .enabled, key: key)
     static let incompleteViewModel = viewModel(recoveryState: .incomplete)
     static let unknownViewModel = viewModel(recoveryState: .unknown)
+    static let completedViewModel = viewModel(recoveryState: .enabled, key: key, isCompleted: true)
     
     static var previews: some View {
-        ElementNavigationStack {
-            SecureBackupRecoveryKeyScreen(context: notSetUpViewModel.context)
-        }
-        .previewDisplayName("Not set up")
-        
         ElementNavigationStack {
             SecureBackupRecoveryKeyScreen(context: generatingViewModel.context)
         }
@@ -260,9 +269,14 @@ struct SecureBackupRecoveryKeyScreen_Previews: PreviewProvider, TestablePreview 
             SecureBackupRecoveryKeyScreen(context: unknownViewModel.context)
         }
         .previewDisplayName("Unknown")
+        
+        ElementNavigationStack {
+            SecureBackupRecoveryKeyScreen(context: completedViewModel.context)
+        }
+        .previewDisplayName("Completed")
     }
     
-    static func viewModel(recoveryState: SecureBackupRecoveryState, generateKey: Bool = false, key: String? = nil) -> SecureBackupRecoveryKeyScreenViewModelType {
+    static func viewModel(recoveryState: SecureBackupRecoveryState, key: String? = nil, isCompleted: Bool = false) -> SecureBackupRecoveryKeyScreenViewModelType {
         let backupController = SecureBackupControllerMock()
         backupController.recoveryState = CurrentValueSubject<SecureBackupRecoveryState, Never>(recoveryState).asCurrentValuePublisher()
         
@@ -279,8 +293,9 @@ struct SecureBackupRecoveryKeyScreen_Previews: PreviewProvider, TestablePreview 
                                                                userIndicatorController: UserIndicatorControllerMock(),
                                                                isModallyPresented: true)
         
-        if generateKey {
-            viewModel.context.send(viewAction: .generateKey)
+        if isCompleted {
+            viewModel.context.send(viewAction: .confirmKeySaved)
+            viewModel.context.alertInfo?.primaryButton.action?()
         }
         
         return viewModel

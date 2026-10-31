@@ -22,13 +22,21 @@ class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewM
     
     init(secureBackupController: SecureBackupControllerProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
-         isModallyPresented: Bool) {
+         isModallyPresented: Bool,
+         presentationContext: SecureBackupRecoveryKeyScreenPresentationContext = .standard) {
         self.secureBackupController = secureBackupController
         self.userIndicatorController = userIndicatorController
         
         super.init(initialViewState: .init(isModallyPresented: isModallyPresented,
                                            mode: secureBackupController.recoveryState.value.viewMode,
+                                           presentationContext: presentationContext,
                                            bindings: .init()))
+        
+        // The user is taken straight to their new key. The SDK can't yet generate it without it also becoming active, so a
+        // changed key replaces the existing one as soon as this screen opens.
+        if state.mode == .setupRecovery || state.mode == .changeRecovery {
+            process(viewAction: .generateKey)
+        }
     }
     
     // MARK: - Public
@@ -63,7 +71,8 @@ class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewM
                 
                 switch await secureBackupController.confirmRecoveryKey(state.bindings.confirmationRecoveryKey) {
                 case .success:
-                    actionsSubject.send(.done(mode: state.mode))
+                    showSuccessIndicator(title: L10n.screenRecoveryKeyConfirmSuccess)
+                    actionsSubject.send(.complete)
                 case .failure(let error):
                     MXLog.error("Failed confirming recovery key with error: \(error)")
                     state.bindings.alertInfo = .init(id: .init(),
@@ -74,16 +83,17 @@ class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewM
                 hideLoadingIndicator()
             }
         case .cancel:
-            actionsSubject.send(.cancel)
-        case .done:
+            actionsSubject.send(.complete)
+        case .confirmKeySaved:
             state.bindings.alertInfo = .init(id: .init(),
                                              title: L10n.screenRecoveryKeySetupConfirmationTitle,
                                              message: L10n.screenRecoveryKeySetupConfirmationDescription,
                                              primaryButton: .init(title: L10n.actionContinue) { [weak self] in
-                                                 guard let self else { return }
-                                                 actionsSubject.send(.done(mode: state.mode))
+                                                 self?.state.isCompleted = true
                                              },
                                              secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
+        case .complete:
+            actionsSubject.send(.complete)
         }
     }
     
@@ -98,6 +108,14 @@ class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewM
     
     private func hideLoadingIndicator() {
         userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
+    }
+    
+    private func showSuccessIndicator(title: String) {
+        userIndicatorController.submitIndicator(.init(id: .init(),
+                                                      type: .toast(progress: nil),
+                                                      title: title,
+                                                      icon: \.check,
+                                                      persistent: false))
     }
 }
 

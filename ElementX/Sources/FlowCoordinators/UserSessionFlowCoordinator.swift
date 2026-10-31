@@ -46,6 +46,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private let searchTabDetails: NavigationTabCoordinator<HomeTab>.TabDetails?
     
     private var settingsFlowCoordinator: SettingsFlowCoordinator?
+    private var secureBackupLogoutFlowCoordinator: SecureBackupLogoutFlowCoordinator?
     
     enum State: StateType {
         /// The state machine hasn't started.
@@ -669,12 +670,13 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentSecureBackupLogoutConfirmationScreen(mode: SecureBackupLogoutConfirmationScreenViewMode) {
-        let coordinator = SecureBackupLogoutConfirmationScreenCoordinator(parameters: .init(secureBackupController: userSession.clientProxy.secureBackupController,
-                                                                                            homeserverReachabilityPublisher: userSession.clientProxy.homeserverReachabilityPublisher,
-                                                                                            learnMoreURL: userSession.userSettings.app.encryptionURL,
-                                                                                            mode: mode))
+        let sheetNavigationStackCoordinator = NavigationStackCoordinator()
+        let coordinator = SecureBackupLogoutFlowCoordinator(parameters: .init(userSession: userSession,
+                                                                              userIndicatorController: flowParameters.userIndicatorController,
+                                                                              navigationStackCoordinator: sheetNavigationStackCoordinator,
+                                                                              mode: mode))
         
-        coordinator.actions
+        coordinator.actionsPublisher
             .sink { [weak self] action in
                 guard let self else { return }
                 
@@ -687,6 +689,10 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             }
             .store(in: &cancellables)
         
-        navigationTabCoordinator.setSheetCoordinator(coordinator, animated: true)
+        secureBackupLogoutFlowCoordinator = coordinator
+        coordinator.start()
+        navigationTabCoordinator.setSheetCoordinator(sheetNavigationStackCoordinator, animated: true) { [weak self] in
+            self?.secureBackupLogoutFlowCoordinator = nil
+        }
     }
 }
