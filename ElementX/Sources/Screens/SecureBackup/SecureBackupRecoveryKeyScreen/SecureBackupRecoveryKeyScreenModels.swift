@@ -24,7 +24,16 @@ enum SecureBackupRecoveryKeyScreenViewMode {
     case setupRecovery
     case changeRecovery
     case fixRecovery
+    /// The user already has a recovery key and wants to make sure that it is correct.
+    case checkRecovery
     case unknown
+}
+
+/// What is known about the recovery key the user has entered to check it.
+nonisolated enum SecureBackupRecoveryKeyValidity: Equatable {
+    case unchecked
+    case checking
+    case invalid
 }
 
 struct SecureBackupRecoveryKeyScreenViewState: BindableState {
@@ -35,6 +44,7 @@ struct SecureBackupRecoveryKeyScreenViewState: BindableState {
     let presentationContext: SecureBackupRecoveryKeyScreenPresentationContext
     /// Whether the new recovery key is saved and the screen is showing that it is now active.
     var isCompleted = false
+    var keyValidity = SecureBackupRecoveryKeyValidity.unchecked
     
     var recoveryKey: String?
     var isGeneratingKey = false
@@ -66,7 +76,7 @@ struct SecureBackupRecoveryKeyScreenViewState: BindableState {
     }
     
     var title: String {
-        guard !isCompleted else { return L10n.screenRecoveryKeySuccessTitle }
+        guard !isCompleted else { return mode == .checkRecovery ? L10n.screenRecoveryKeyCheckSuccessTitle : L10n.screenRecoveryKeySuccessTitle }
         
         switch mode {
         case .setupRecovery:
@@ -75,6 +85,8 @@ struct SecureBackupRecoveryKeyScreenViewState: BindableState {
             return hasKeyOrIsGenerating ? L10n.screenRecoveryKeySaveTitle : L10n.screenRecoveryKeyChangeTitle
         case .fixRecovery:
             return L10n.screenRecoveryKeyConfirmTitle
+        case .checkRecovery:
+            return L10n.screenRecoveryKeyCheckTitle
         default:
             return L10n.errorUnknown
         }
@@ -90,6 +102,8 @@ struct SecureBackupRecoveryKeyScreenViewState: BindableState {
             return hasKeyOrIsGenerating ? L10n.screenRecoveryKeySaveDescription : L10n.screenRecoveryKeyChangeDescription
         case .fixRecovery:
             return L10n.screenRecoveryKeyConfirmDescription
+        case .checkRecovery:
+            return L10n.screenRecoveryKeyCheckSubtitle
         default:
             return nil
         }
@@ -123,5 +137,9 @@ enum SecureBackupRecoveryKeyScreenViewAction {
     case confirmKeySaved
     /// The user has seen that the new key is active.
     case complete
+    /// The text in the field of the key that is being checked has changed.
+    case checkedKeyChanged
+    /// The user wants the key they have entered to be checked.
+    case submitCheckedKey
     case cancel
 }

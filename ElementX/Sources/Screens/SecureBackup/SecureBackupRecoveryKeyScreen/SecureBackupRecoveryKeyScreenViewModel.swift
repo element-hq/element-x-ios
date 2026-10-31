@@ -15,6 +15,9 @@ class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewM
     private let secureBackupController: SecureBackupControllerProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     
+    @CancellableTask
+    private var keyCheckTask: Task<Void, Never>?
+    
     private var actionsSubject: PassthroughSubject<SecureBackupRecoveryKeyScreenViewModelAction, Never> = .init()
     var actions: AnyPublisher<SecureBackupRecoveryKeyScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -23,12 +26,13 @@ class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewM
     init(secureBackupController: SecureBackupControllerProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          isModallyPresented: Bool,
+         isCheckingKey: Bool = false,
          presentationContext: SecureBackupRecoveryKeyScreenPresentationContext = .standard) {
         self.secureBackupController = secureBackupController
         self.userIndicatorController = userIndicatorController
         
         super.init(initialViewState: .init(isModallyPresented: isModallyPresented,
-                                           mode: secureBackupController.recoveryState.value.viewMode,
+                                           mode: isCheckingKey ? .checkRecovery : secureBackupController.recoveryState.value.viewMode,
                                            presentationContext: presentationContext,
                                            bindings: .init()))
         
@@ -94,6 +98,34 @@ class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewM
                                              secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
         case .complete:
             actionsSubject.send(.complete)
+        case .checkedKeyChanged:
+            // Whatever was entered before is no longer what is being checked.
+            keyCheckTask = nil
+            state.keyValidity = .unchecked
+        case .submitCheckedKey:
+            checkKey()
+        }
+    }
+    
+    private func checkKey() {
+        let key = state.bindings.confirmationRecoveryKey
+        guard !key.isEmpty else { return }
+        
+        state.keyValidity = .checking
+        
+        keyCheckTask = Task { [weak self] in
+            guard let self else { return }
+            
+            let result = await secureBackupController.checkRecoveryKey(key)
+            guard !Task.isCancelled else { return }
+            
+            switch result {
+            case .success:
+                state.keyValidity = .unchecked
+                state.isCompleted = true
+            case .failure:
+                state.keyValidity = .invalid
+            }
         }
     }
     

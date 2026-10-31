@@ -47,6 +47,8 @@ struct SecureBackupRecoveryKeyScreen: View {
                     generateRecoveryKeySection
                 case .fixRecovery:
                     confirmRecoveryKeySection
+                case .checkRecovery:
+                    checkRecoveryKeySection
                 case .unknown:
                     EmptyView()
                 }
@@ -81,6 +83,8 @@ struct SecureBackupRecoveryKeyScreen: View {
             recoveryCreatedActionButtons
         case .fixRecovery:
             incompleteVerificationActionButtons
+        case .checkRecovery:
+            checkActionButtons
         case .unknown:
             EmptyView()
         }
@@ -97,6 +101,15 @@ struct SecureBackupRecoveryKeyScreen: View {
             .disabled(context.confirmationRecoveryKey.isEmpty)
             .accessibilityIdentifier(A11yIdentifiers.secureBackupRecoveryKeyScreen.confirm)
         }
+    }
+    
+    private var checkActionButtons: some View {
+        Button(L10n.actionConfirm) {
+            context.send(viewAction: .submitCheckedKey)
+        }
+        .buttonStyle(.compound(.primary))
+        .disabled(context.confirmationRecoveryKey.isEmpty || context.viewState.keyValidity == .checking)
+        .accessibilityIdentifier(A11yIdentifiers.secureBackupRecoveryKeyScreen.confirm)
     }
     
     private var completedActionButtons: some View {
@@ -187,6 +200,24 @@ struct SecureBackupRecoveryKeyScreen: View {
         }
     }
     
+    private var checkRecoveryKeySection: some View {
+        SecureField(L10n.screenRecoveryKeyConfirmKeyPlaceholder, text: $context.confirmationRecoveryKey)
+            .focused($focused)
+            .textFieldStyle(.compound(.plain(.secure(hideLabel: L10n.a11yHidePassword, showLabel: L10n.a11yShowPassword)),
+                                      labelText: L10n.screenRecoveryKeyCheckKeyTitle,
+                                      footerText: context.viewState.keyValidity == .invalid ? L10n.screenRecoveryKeyConfirmErrorTitle : nil,
+                                      state: context.viewState.keyValidity == .invalid ? .error : .default,
+                                      accessibilityIdentifier: A11yIdentifiers.secureBackupRecoveryKeyScreen.recoveryKeyField))
+            .textInputAutocapitalization(.never)
+            .autocorrectionDisabled()
+            .submitLabel(.done)
+            .onSubmit { context.send(viewAction: .submitCheckedKey) }
+            .onChange(of: context.confirmationRecoveryKey) { _, _ in
+                context.send(viewAction: .checkedKeyChanged)
+            }
+            .onAppear { focused = true }
+    }
+    
     private var generateButtonTitle: String {
         context.viewState.mode == .setupRecovery ? L10n.screenRecoveryKeySetupGenerateKey : L10n.screenRecoveryKeyChangeGenerateKey
     }
@@ -247,6 +278,9 @@ struct SecureBackupRecoveryKeyScreen_Previews: PreviewProvider, TestablePreview 
     static let incompleteViewModel = viewModel(recoveryState: .incomplete)
     static let unknownViewModel = viewModel(recoveryState: .unknown)
     static let completedViewModel = viewModel(recoveryState: .enabled, key: key, isCompleted: true)
+    static let checkViewModel = viewModel(recoveryState: .enabled, isCheckingKey: true)
+    static let checkInvalidViewModel = viewModel(recoveryState: .enabled, isCheckingKey: true, enteredKey: "Not the key", checkResult: .failure(.failedConfirmingRecoveryKey))
+    static let checkCompletedViewModel = viewModel(recoveryState: .enabled, isCheckingKey: true, enteredKey: key)
     
     static var previews: some View {
         ElementNavigationStack {
@@ -274,9 +308,31 @@ struct SecureBackupRecoveryKeyScreen_Previews: PreviewProvider, TestablePreview 
             SecureBackupRecoveryKeyScreen(context: completedViewModel.context)
         }
         .previewDisplayName("Completed")
+        
+        ElementNavigationStack {
+            SecureBackupRecoveryKeyScreen(context: checkViewModel.context)
+        }
+        .previewDisplayName("Check")
+        
+        ElementNavigationStack {
+            SecureBackupRecoveryKeyScreen(context: checkInvalidViewModel.context)
+        }
+        .snapshotPreferences(expect: checkInvalidViewModel.context.observe(\.viewState.keyValidity).map { $0 == .invalid })
+        .previewDisplayName("Check incorrect")
+        
+        ElementNavigationStack {
+            SecureBackupRecoveryKeyScreen(context: checkCompletedViewModel.context)
+        }
+        .snapshotPreferences(expect: checkCompletedViewModel.context.observe(\.viewState.isCompleted))
+        .previewDisplayName("Check completed")
     }
     
-    static func viewModel(recoveryState: SecureBackupRecoveryState, key: String? = nil, isCompleted: Bool = false) -> SecureBackupRecoveryKeyScreenViewModelType {
+    static func viewModel(recoveryState: SecureBackupRecoveryState,
+                          key: String? = nil,
+                          isCompleted: Bool = false,
+                          isCheckingKey: Bool = false,
+                          enteredKey: String? = nil,
+                          checkResult: Result<Void, SecureBackupControllerError> = .success(())) -> SecureBackupRecoveryKeyScreenViewModelType {
         let backupController = SecureBackupControllerMock()
         backupController.recoveryState = CurrentValueSubject<SecureBackupRecoveryState, Never>(recoveryState).asCurrentValuePublisher()
         
@@ -289,11 +345,19 @@ struct SecureBackupRecoveryKeyScreen_Previews: PreviewProvider, TestablePreview 
             }
         }
         
+        backupController.checkRecoveryKeyReturnValue = checkResult
+        
         let viewModel = SecureBackupRecoveryKeyScreenViewModel(secureBackupController: backupController,
                                                                userIndicatorController: UserIndicatorControllerMock(),
-                                                               isModallyPresented: true)
+                                                               isModallyPresented: true,
+                                                               isCheckingKey: isCheckingKey)
         
-        if isCompleted {
+        if let enteredKey {
+            viewModel.context.confirmationRecoveryKey = enteredKey
+            viewModel.context.send(viewAction: .submitCheckedKey)
+        }
+        
+        if isCompleted, !isCheckingKey {
             viewModel.context.send(viewAction: .confirmKeySaved)
             viewModel.context.alertInfo?.primaryButton.action?()
         }

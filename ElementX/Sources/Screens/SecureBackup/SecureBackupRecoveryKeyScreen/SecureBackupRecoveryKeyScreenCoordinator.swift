@@ -13,6 +13,8 @@ struct SecureBackupRecoveryKeyScreenCoordinatorParameters {
     let secureBackupController: SecureBackupControllerProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
     let isModallyPresented: Bool
+    /// Whether the screen is for checking the existing recovery key, rather than following the recovery state.
+    var isCheckingKey = false
     var presentationContext = SecureBackupRecoveryKeyScreenPresentationContext.standard
 }
 
@@ -34,6 +36,7 @@ final class SecureBackupRecoveryKeyScreenCoordinator: SecureBackupRecoveryKeyCoo
         viewModel = SecureBackupRecoveryKeyScreenViewModel(secureBackupController: parameters.secureBackupController,
                                                            userIndicatorController: parameters.userIndicatorController,
                                                            isModallyPresented: parameters.isModallyPresented,
+                                                           isCheckingKey: parameters.isCheckingKey,
                                                            presentationContext: parameters.presentationContext)
     }
     

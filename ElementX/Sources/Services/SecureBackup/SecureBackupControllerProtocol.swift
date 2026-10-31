@@ -58,5 +58,8 @@ protocol SecureBackupControllerProtocol {
     func generateRecoveryKey(withPassphrase passphrase: String?) async -> Result<String, SecureBackupControllerError>
     func confirmRecoveryKey(_ key: String) async -> Result<Void, SecureBackupControllerError>
     
+    /// Checks that the key unlocks the key storage, without otherwise changing the backup the way `confirmRecoveryKey` does.
+    func checkRecoveryKey(_ key: String) async -> Result<Void, SecureBackupControllerError>
+    
     func waitForKeyBackupUpload(uploadStateSubject: CurrentValueSubject<SecureBackupSteadyState, Never>) async -> Result<Void, SecureBackupControllerError>
 }

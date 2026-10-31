@@ -11598,6 +11598,48 @@ nonisolated class SecureBackupControllerMock: SecureBackupControllerProtocol, @u
             return confirmRecoveryKeyReturnValue
         }
     }
+    //MARK: - checkRecoveryKey
+
+    private let checkRecoveryKeyCallsCountLock = NSLock()
+    private nonisolated(unsafe) var checkRecoveryKeyUnderlyingCallsCount = 0
+    var checkRecoveryKeyCallsCount: Int {
+        get { checkRecoveryKeyCallsCountLock.withLock { checkRecoveryKeyUnderlyingCallsCount } }
+        set { checkRecoveryKeyCallsCountLock.withLock { checkRecoveryKeyUnderlyingCallsCount = newValue } }
+    }
+    var checkRecoveryKeyCalled: Bool {
+        return checkRecoveryKeyCallsCount > 0
+    }
+    private let checkRecoveryKeyReceivedKeyLock = NSLock()
+    private nonisolated(unsafe) var checkRecoveryKeyUnderlyingReceivedKey: String?
+    var checkRecoveryKeyReceivedKey: String? {
+        get { checkRecoveryKeyReceivedKeyLock.withLock { checkRecoveryKeyUnderlyingReceivedKey } }
+        set { checkRecoveryKeyReceivedKeyLock.withLock { checkRecoveryKeyUnderlyingReceivedKey = newValue } }
+    }
+    private let checkRecoveryKeyReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var checkRecoveryKeyUnderlyingReceivedInvocations: [String] = []
+    var checkRecoveryKeyReceivedInvocations: [String] {
+        get { checkRecoveryKeyReceivedInvocationsLock.withLock { checkRecoveryKeyUnderlyingReceivedInvocations } }
+        set { checkRecoveryKeyReceivedInvocationsLock.withLock { checkRecoveryKeyUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let checkRecoveryKeyReturnValueLock = NSLock()
+    private nonisolated(unsafe) var checkRecoveryKeyUnderlyingReturnValue: Result<Void, SecureBackupControllerError>!
+    var checkRecoveryKeyReturnValue: Result<Void, SecureBackupControllerError>! {
+        get { checkRecoveryKeyReturnValueLock.withLock { checkRecoveryKeyUnderlyingReturnValue } }
+        set { checkRecoveryKeyReturnValueLock.withLock { checkRecoveryKeyUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var checkRecoveryKeyClosure: ((String) async -> Result<Void, SecureBackupControllerError>)?
+
+    @concurrent func checkRecoveryKey(_ key: String) async -> Result<Void, SecureBackupControllerError> {
+        checkRecoveryKeyCallsCountLock.withLock { checkRecoveryKeyUnderlyingCallsCount += 1 }
+        checkRecoveryKeyReceivedKey = key
+        checkRecoveryKeyReceivedInvocationsLock.withLock { checkRecoveryKeyUnderlyingReceivedInvocations.append(key) }
+        if let checkRecoveryKeyClosure = checkRecoveryKeyClosure {
+            return await checkRecoveryKeyClosure(key)
+        } else {
+            return checkRecoveryKeyReturnValue
+        }
+    }
     //MARK: - waitForKeyBackupUpload
 
     private let waitForKeyBackupUploadUploadStateSubjectCallsCountLock = NSLock()
