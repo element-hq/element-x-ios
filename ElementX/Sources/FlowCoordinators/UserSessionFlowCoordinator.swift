@@ -636,51 +636,43 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private func runLogoutFlow() async {
         let secureBackupController = userSession.clientProxy.secureBackupController
         
-        guard case let .success(isLastDevice) = await userSession.clientProxy.isOnlyDeviceLeft() else {
+        guard case let .success(hasOtherVerifiedDevice) = await userSession.clientProxy.hasDevicesToVerifyAgainst() else {
             navigationRootCoordinator.alertInfo = .init(id: .init())
             return
         }
         
-        guard isLastDevice else {
+        switch AvailableRecoveryOptions(hasOtherVerifiedDevice: hasOtherVerifiedDevice, recoveryState: secureBackupController.recoveryState.value) {
+        case .otherVerifiedDevice:
             navigationRootCoordinator.alertInfo = .init(id: .init(),
-                                                        title: L10n.screenSignoutConfirmationDialogTitle,
-                                                        message: L10n.screenSignoutConfirmationDialogContent,
+                                                        title: L10n.screenSignoutOtherVerifiedDeviceDialogTitle,
+                                                        message: L10n.screenSignoutOtherVerifiedDeviceDialogContent,
                                                         primaryButton: .init(title: L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) { [weak self] in
                                                             self?.actionsSubject.send(.logout)
                                                         })
-            return
+        case .recoveryKeyOnly:
+            guard secureBackupController.keyBackupState.value == .enabled else {
+                navigationRootCoordinator.alertInfo = .init(id: .init(),
+                                                            title: L10n.screenSignoutKeyBackupDisabledTitle,
+                                                            message: L10n.screenSignoutKeyBackupDisabledSubtitle,
+                                                            primaryButton: .init(title: L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) { [weak self] in
+                                                                self?.actionsSubject.send(.logout)
+                                                            }, secondaryButton: .init(title: L10n.commonSettings, role: .cancel) { [weak self] in
+                                                                self?.chatsTabFlowCoordinator.handleAppRoute(.chatBackupSettings, animated: true)
+                                                            })
+                return
+            }
+            
+            presentSecureBackupLogoutConfirmationScreen(mode: .saveRecoveryKey)
+        case .noOptions:
+            presentSecureBackupLogoutConfirmationScreen(mode: .noRecovery)
         }
-        
-        guard secureBackupController.recoveryState.value == .enabled else {
-            navigationRootCoordinator.alertInfo = .init(id: .init(),
-                                                        title: L10n.screenSignoutRecoveryDisabledTitle,
-                                                        message: L10n.screenSignoutRecoveryDisabledSubtitle,
-                                                        primaryButton: .init(title: L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) { [weak self] in
-                                                            self?.actionsSubject.send(.logout)
-                                                        }, secondaryButton: .init(title: L10n.commonSettings, role: .cancel) { [weak self] in
-                                                            self?.chatsTabFlowCoordinator.handleAppRoute(.chatBackupSettings, animated: true)
-                                                        })
-            return
-        }
-        
-        guard secureBackupController.keyBackupState.value == .enabled else {
-            navigationRootCoordinator.alertInfo = .init(id: .init(),
-                                                        title: L10n.screenSignoutKeyBackupDisabledTitle,
-                                                        message: L10n.screenSignoutKeyBackupDisabledSubtitle,
-                                                        primaryButton: .init(title: L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) { [weak self] in
-                                                            self?.actionsSubject.send(.logout)
-                                                        }, secondaryButton: .init(title: L10n.commonSettings, role: .cancel) { [weak self] in
-                                                            self?.chatsTabFlowCoordinator.handleAppRoute(.chatBackupSettings, animated: true)
-                                                        })
-            return
-        }
-        
-        presentSecureBackupLogoutConfirmationScreen()
     }
     
-    private func presentSecureBackupLogoutConfirmationScreen() {
+    private func presentSecureBackupLogoutConfirmationScreen(mode: SecureBackupLogoutConfirmationScreenViewMode) {
         let coordinator = SecureBackupLogoutConfirmationScreenCoordinator(parameters: .init(secureBackupController: userSession.clientProxy.secureBackupController,
-                                                                                            homeserverReachabilityPublisher: userSession.clientProxy.homeserverReachabilityPublisher))
+                                                                                            homeserverReachabilityPublisher: userSession.clientProxy.homeserverReachabilityPublisher,
+                                                                                            learnMoreURL: userSession.userSettings.app.encryptionURL,
+                                                                                            mode: mode))
         
         coordinator.actions
             .sink { [weak self] action in
@@ -688,9 +680,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 
                 switch action {
                 case .cancel:
-                    navigationTabCoordinator.setSheetCoordinator(nil)
-                case .settings:
-                    chatsTabFlowCoordinator.handleAppRoute(.chatBackupSettings, animated: true)
                     navigationTabCoordinator.setSheetCoordinator(nil)
                 case .logout:
                     actionsSubject.send(.logout)
