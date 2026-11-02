@@ -181,8 +181,8 @@ class MockScreen: Identifiable {
             }
             
             let flowCoordinator = AuthenticationFlowCoordinator(authenticationService: AuthenticationService.mock,
-                                                                bugReportService: BugReportServiceMock(.init()),
                                                                 navigationStackCoordinator: navigationStackCoordinator,
+                                                                bugReportService: BugReportServiceMock(.init()),
                                                                 appMediator: AppMediatorMock(.init()),
                                                                 appSettings: appSettings,
                                                                 appHooks: AppHooks(),

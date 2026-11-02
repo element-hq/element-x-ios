@@ -16,11 +16,12 @@ enum AuthenticationFlowCoordinatorAction {
 
 class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     private let authenticationService: AuthenticationServiceProtocol
-    private let bugReportService: BugReportServiceProtocol
+    private let isAddingAccount: Bool
+    private let homeserverHistoryManager: HomeserverHistoryManager
     private let navigationStackCoordinator: NavigationStackCoordinator
+    private let bugReportService: BugReportServiceProtocol
     private let appMediator: AppMediatorProtocol
     private let appSettings: AppSettings
-    private let homeserverHistoryManager: HomeserverHistoryManager
     private let appHooks: AppHooks
     private let userIndicatorController: UserIndicatorControllerProtocol
     
@@ -99,18 +100,20 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     init(authenticationService: AuthenticationServiceProtocol,
-         bugReportService: BugReportServiceProtocol,
+         isAddingAccount: Bool = false,
          navigationStackCoordinator: NavigationStackCoordinator,
+         bugReportService: BugReportServiceProtocol,
          appMediator: AppMediatorProtocol,
          appSettings: AppSettings,
          appHooks: AppHooks,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.authenticationService = authenticationService
-        self.bugReportService = bugReportService
+        self.isAddingAccount = isAddingAccount
+        homeserverHistoryManager = HomeserverHistoryManager(appSettings: appSettings)
         self.navigationStackCoordinator = navigationStackCoordinator
+        self.bugReportService = bugReportService
         self.appMediator = appMediator
         self.appSettings = appSettings
-        homeserverHistoryManager = HomeserverHistoryManager(appSettings: appSettings)
         self.appHooks = appHooks
         self.userIndicatorController = userIndicatorController
         
@@ -262,7 +265,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         
         let parameters = AuthenticationStartScreenParameters(authenticationService: authenticationService,
                                                              provisioningParameters: provisioningParameters,
-                                                             isAddingAccount: false,
+                                                             isAddingAccount: isAddingAccount,
                                                              isBugReportServiceEnabled: bugReportService.isEnabled,
                                                              appMediator: appMediator,
                                                              appSettings: appSettings,

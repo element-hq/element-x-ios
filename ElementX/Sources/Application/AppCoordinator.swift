@@ -762,8 +762,8 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
         Task { await authenticationService.setupClassicAppAccountState() }
         
         let coordinator = AuthenticationFlowCoordinator(authenticationService: authenticationService,
-                                                        bugReportService: bugReportService,
                                                         navigationStackCoordinator: navigationStackCoordinator,
+                                                        bugReportService: bugReportService,
                                                         appMediator: appMediator,
                                                         appSettings: appSettings,
                                                         appHooks: appHooks,
