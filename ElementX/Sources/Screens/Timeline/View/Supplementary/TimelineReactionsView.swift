@@ -83,8 +83,7 @@ struct TimelineReactionsView: View {
     @ViewBuilder
     private func reactionEffectTrigger(for reaction: AggregatedReaction) -> some View {
         // The unique ID survives the local echo being replaced by the remote one.
-        if reaction.isHighlighted,
-           let pendingReactionEffect = context.viewState.pendingReactionEffect,
+        if let pendingReactionEffect = context.viewState.pendingReactionEffect,
            pendingReactionEffect.itemID.uniqueID == itemID.uniqueID,
            pendingReactionEffect.key == reaction.key {
             ReactionEffectTrigger(context: context)
