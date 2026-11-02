@@ -338,7 +338,12 @@ See `compound-ios/Sources/Compound/` for full component set.
 ## Testing
 
 Coverage target: **80%** (includes SDK, Compound, Rich Text Editor).
-Project migrating from XCTest to **Swift Testing** (see PR #5119).
+
+Tests use **Swift Testing**. XCUI targets (UITests, AccessibilityTests, IntegrationTests) stay XCTest.
+- `@Test` display name = sentence, says what test check.
+- Function name = short title
+- Touch test file? Update existing tests to match: add missing display names, shorten function names to titles.
+- e.g. `@Test("A thing with foo doesn’t call bar or baz when starting") func startThingWithFoo()`.
 
 ### Test Types
 
