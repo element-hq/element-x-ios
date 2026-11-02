@@ -16,6 +16,7 @@ struct UserSessionMockConfiguration {
     var contentScannerService: ContentScannerServiceProtocol?
     var liveLocationService: LiveLocationServiceProtocol = LiveLocationServiceMock(.init())
     var notificationService: NotificationServiceProtocol = NotificationServiceMock(.init())
+    var elementCallService: ElementCallServiceProtocol?
 }
 
 @MainActor extension UserSessionMock {
@@ -35,5 +36,6 @@ struct UserSessionMockConfiguration {
         
         liveLocationService = configuration.liveLocationService
         notificationService = configuration.notificationService
+        elementCallService = configuration.elementCallService ?? ElementCallServiceMock(.init(userID: configuration.clientProxy.userID))
     }
 }

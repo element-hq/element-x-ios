@@ -50,12 +50,11 @@ struct UserSessionFlowCoordinatorTests {
         (appMediator.windowManager as? WindowManagerMock)?.mainWindow = UIWindow()
         
         userIndicatorController = UserIndicatorControllerMock()
-        let userSession = UserSessionMock(.init(clientProxy: clientProxy))
+        let userSession = UserSessionMock(.init(clientProxy: clientProxy, elementCallService: elementCallService))
         
         let flowParameters = CommonFlowParameters(userSession: userSession,
                                                   availableSessionsPublisher: .init([.init(userSession: userSession)]),
                                                   bugReportService: BugReportServiceMock(.init()),
-                                                  elementCallService: elementCallService,
                                                   timelineControllerFactory: TimelineControllerFactoryMock(.init()),
                                                   emojiProvider: EmojiProvider(userSettings: userSession.userSettings),
                                                   linkMetadataProvider: LinkMetadataProvider(),

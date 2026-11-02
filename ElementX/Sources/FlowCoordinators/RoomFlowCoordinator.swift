@@ -679,7 +679,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                          emojiProvider: flowParameters.emojiProvider,
                                                          linkMetadataProvider: flowParameters.linkMetadataProvider,
                                                          completionSuggestionService: completionSuggestionService,
-                                                         ongoingCallRoomIDPublisher: flowParameters.ongoingCallRoomIDPublisher,
                                                          appMediator: flowParameters.appMediator,
                                                          analytics: flowParameters.analytics,
                                                          composerDraftService: composerDraftService,

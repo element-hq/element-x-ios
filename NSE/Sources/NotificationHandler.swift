@@ -153,6 +153,7 @@ nonisolated class NotificationHandler {
                                                     expirationTimestamp: expirationTimestamp,
                                                     roomID: itemProxy.roomID,
                                                     roomDisplayName: itemProxy.roomDisplayName,
+                                                    receiverID: itemProxy.receiverID,
                                                     callIntent: callIntent)
             case .callAnswer,
                  .callInvite,
@@ -188,7 +189,9 @@ nonisolated class NotificationHandler {
                                         timestamp: Timestamp,
                                         expirationTimestamp: Timestamp,
                                         roomID: String,
-                                        roomDisplayName: String, callIntent: RtcCallIntent?) async -> NotificationProcessingResult {
+                                        roomDisplayName: String,
+                                        receiverID: String,
+                                        callIntent: RtcCallIntent?) async -> NotificationProcessingResult {
         // Handle incoming VoIP calls, show the native OS call screen
         // https://developer.apple.com/documentation/callkit/sending-end-to-end-encrypted-voip-calls
         //
@@ -250,7 +253,8 @@ nonisolated class NotificationHandler {
                        ElementCallServiceNotificationKey.roomDisplayName.rawValue: roomDisplayName,
                        ElementCallServiceNotificationKey.expirationDate.rawValue: expirationDate,
                        ElementCallServiceNotificationKey.rtcNotifyEventID.rawValue: rtcNotifyEventID,
-                       ElementCallServiceNotificationKey.isVoiceCall.rawValue: callIntent == RtcCallIntent.audio] as [String: Any]
+                       ElementCallServiceNotificationKey.isVoiceCall.rawValue: callIntent == RtcCallIntent.audio,
+                       ElementCallServiceNotificationKey.receiverID.rawValue: receiverID] as [String: Any]
         
         do {
             try await CXProvider.reportNewIncomingVoIPPushPayload(payload)

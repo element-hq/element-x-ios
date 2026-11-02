@@ -30,8 +30,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private let appDelegate: AppDelegate
     private let appHooks: AppHooks
     private let bugReportService: BugReportServiceProtocol
-    // TODO: Each account's UserSession gets its own ElementCallService, which removes this one.
-    private let elementCallService: ElementCallServiceProtocol
     private let elementCallManager: ElementCallManagerProtocol
     
     /// Common background task to continue long-running tasks in the background.
@@ -115,8 +113,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         userIndicatorController = UserIndicatorController()
         
-        elementCallService = ElementCallService(appSettings: appSettings)
-        elementCallManager = ElementCallManager(service: elementCallService, appSettings: appSettings)
+        elementCallManager = ElementCallManager(appSettings: appSettings)
         
         navigationRootCoordinator = NavigationRootCoordinator()
         
@@ -132,7 +129,11 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                 appHooks: appHooks,
                                                 networkMonitor: networkMonitor)
         notificationManager = NotificationManager(notificationCenter: UNUserNotificationCenter.current(), appSettings: appSettings)
-        userSessionManager = UserSessionManager(userSessionStore: userSessionStore, appSettings: appSettings, notificationManager: notificationManager, liveLocationManager: LiveLocationManager(appSettings: appSettings))
+        userSessionManager = UserSessionManager(userSessionStore: userSessionStore,
+                                                appSettings: appSettings,
+                                                notificationManager: notificationManager,
+                                                liveLocationManager: LiveLocationManager(appSettings: appSettings),
+                                                elementCallManager: elementCallManager)
         
         let appLockService = AppLockService(keychainController: keychainController, appSettings: appSettings)
         let appLockNavigationCoordinator = NavigationRootCoordinator()
@@ -362,7 +363,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         // A new login has nothing to migrate.
         migratedUserIDs.insert(userSession.clientProxy.userID)
         userSessionManager.add(userSession)
-        configureActiveSession()
+        Task { await resumeClientServices() }
         authenticationFlowCoordinator = nil
         stateMachine.processEvent(.createdUserSession)
     }
@@ -745,7 +746,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private func showActiveSessionIfRestoring() {
         guard stateMachine.state == .restoringSession, userSession != nil else { return }
         
-        configureActiveSession()
+        Task { await resumeClientServices() }
         stateMachine.processEvent(.createdUserSession)
     }
     
@@ -844,7 +845,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                     case .signedIn(let session):
                         self.migratedUserIDs.insert(session.clientProxy.userID)
                         self.userSessionManager.add(session)
-                        self.configureActiveSession()
+                        Task { await self.resumeClientServices() }
                         self.softLogoutCoordinator = nil
                         stateMachine.processEvent(.createdUserSession)
                     case .clearAllData:
@@ -874,7 +875,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         let flowParameters = CommonFlowParameters(userSession: userSession,
                                                   availableSessionsPublisher: userSessionManager.sessionsPublisher.map { $0.map(UserSessionDetails.init) },
                                                   bugReportService: bugReportService,
-                                                  elementCallService: elementCallService,
                                                   timelineControllerFactory: TimelineControllerFactory(userSettings: userSession.userSettings),
                                                   emojiProvider: EmojiProvider(userSettings: userSession.userSettings),
                                                   linkMetadataProvider: LinkMetadataProvider(),
@@ -925,9 +925,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         Task { await pauseClientServices(isBackgroundTask: false) }
         userSessionFlowCoordinator?.stop()
-        // Leaves any ongoing call and releases the native call stack, which a soft logout would
-        // otherwise leave running against a session that can no longer reach the server.
-        elementCallService.setUserSession(nil)
         
         guard !isSoft else {
             stateMachine.processEvent(.showSoftLogout)
@@ -990,19 +987,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
     }
     
-    /// Points the app-wide services at the active account's session.
-    private func configureActiveSession() {
-        guard let userSession else {
-            fatalError("User session not setup")
-        }
-        
-        // TODO: Calls only follow the active account, ElementCallService must change to hold every account's session.
-        elementCallService.setUserSession(userSession)
-        Task {
-            await resumeClientServices()
-        }
-    }
-    
     private func configureNotificationManager() {
         notificationManager.delegate = self
         notificationManager.start()
@@ -1031,8 +1015,15 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                         await self?.resumeClientServices()
                         self?.scheduleDelayedPauseServices()
                     }
-                case .callAnswered(let roomID, let isVoiceCall):
-                    self?.handleAppRoute(.call(roomID: roomID, isVoiceCall: isVoiceCall), windowType: nil)
+                case let .callAnswered(userID, roomID, isVoiceCall):
+                    guard let self else { return }
+                    
+                    // TODO: Open other accounts' answered calls with their own session (#6387).
+                    if userSession == nil {
+                        storedAppRouteReceiverID = userID
+                    }
+                    
+                    handleAppRoute(.call(roomID: roomID, isVoiceCall: isVoiceCall), windowType: nil)
                 }
             }
             .store(in: &cancellables)
