@@ -340,10 +340,9 @@ See `compound-ios/Sources/Compound/` for full component set.
 Coverage target: **80%** (includes SDK, Compound, Rich Text Editor).
 
 Tests use **Swift Testing**. XCUI targets (UITests, AccessibilityTests, IntegrationTests) stay XCTest.
-- `@Test` display name = sentence, says what test check.
-- Function name = short title
-- Touch test file? Update existing tests to match: add missing display names, shorten function names to titles.
-- e.g. `@Test("A thing with foo doesn’t call bar or baz when starting") func startThingWithFoo()`.
+- `@Test` display name = sentence, says what test check, e.g. `@Test("The token is forgotten once the last account is removed") func removeLastAccount()`.
+- Function name = short title, like old XCTest name minus `test` (e.g. `initialState`, `removeLastAccount`, `unlockFailure`).
+- Touch test file? Update existing tests to match: add missing display names, rename functions to match.
 
 ### Test Types
 
