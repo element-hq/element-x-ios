@@ -350,91 +350,58 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
     
     func pushRegistry(_ registry: PKPushRegistry, didUpdate pushCredentials: PKPushCredentials, for type: PKPushType) { }
     
-    // swiftlint:disable:next cyclomatic_complexity
     func pushRegistry(_ registry: PKPushRegistry, didReceiveIncomingPushWith payload: PKPushPayload, for type: PKPushType, completion: @escaping () -> Void) {
-        guard let roomID = payload.dictionaryPayload[ElementCallServiceNotificationKey.roomID.rawValue] as? String else {
-            MXLog.error("Something went wrong, missing room identifier for incoming voip call: \(payload)")
-            assertionFailure("Incoming voip push is missing the room identifier")
+        guard let push = VoIPPushPayload(dictionary: payload.dictionaryPayload) else {
+            MXLog.error("Something went wrong, the incoming voip call push is missing details: \(payload)")
             reportImmediatelyEndedCall(reason: .failed, completion: completion)
             return
         }
         
-        guard let rtcNotificationID = payload.dictionaryPayload[ElementCallServiceNotificationKey.rtcNotifyEventID.rawValue] as? String else {
-            MXLog.error("Something went wrong, missing rtc notification event identifier for incoming voip call: \(payload)")
-            assertionFailure("Incoming voip push is missing the rtc notification event identifier")
-            reportImmediatelyEndedCall(reason: .failed, completion: completion)
+        let callerInfo = (roomID: push.roomID, roomDisplayName: push.roomDisplayName)
+        
+        guard ongoingCallID?.roomID != push.roomID else {
+            MXLog.warning("Call already ongoing for room \(push.roomID), reporting the duplicate push as handled")
+            reportImmediatelyEndedCall(reason: .answeredElsewhere, callerInfo: callerInfo, completion: completion)
             return
         }
         
-        guard let receiverID = payload.dictionaryPayload[ElementCallServiceNotificationKey.receiverID.rawValue] as? String else {
-            MXLog.error("Something went wrong, missing receiver for incoming voip call: \(payload)")
-            reportImmediatelyEndedCall(reason: .failed, completion: completion)
-            return
-        }
-        
-        let roomDisplayName = payload.dictionaryPayload[ElementCallServiceNotificationKey.roomDisplayName.rawValue] as? String
-        
-        guard ongoingCallID?.roomID != roomID else {
-            MXLog.warning("Call already ongoing for room \(roomID), reporting the duplicate push as handled")
-            reportImmediatelyEndedCall(reason: .answeredElsewhere,
-                                       callerInfo: (roomID: roomID, roomDisplayName: roomDisplayName),
-                                       completion: completion)
-            return
-        }
-        
-        guard incomingCallID?.rtcNotificationID != rtcNotificationID else {
+        guard incomingCallID?.rtcNotificationID != push.rtcNotificationID else {
             MXLog.info("Already ringing for this call, reporting the duplicate push as handled")
-            reportImmediatelyEndedCall(reason: .answeredElsewhere,
-                                       callerInfo: (roomID: roomID, roomDisplayName: roomDisplayName),
-                                       completion: completion)
+            reportImmediatelyEndedCall(reason: .answeredElsewhere, callerInfo: callerInfo, completion: completion)
             return
         }
         
         // An ongoing native call is tracked by CallKit, which offers its own call waiting.
         let isBusy = (incomingCallID != nil && answeredNativeCallID == nil) || ongoingCallID?.isNative == false
         guard !isBusy else {
-            MXLog.info("Another call is ringing or ongoing, reporting the call for room \(roomID) as missed")
-            reportImmediatelyEndedCall(reason: .unanswered,
-                                       callerInfo: (roomID: roomID, roomDisplayName: roomDisplayName),
-                                       completion: completion)
+            MXLog.info("Another call is ringing or ongoing, reporting the call for room \(push.roomID) as missed")
+            reportImmediatelyEndedCall(reason: .unanswered, callerInfo: callerInfo, completion: completion)
             return
         }
         
-        let isVoiceCall = payload.dictionaryPayload[ElementCallServiceNotificationKey.isVoiceCall.rawValue] as? Bool ?? false
-        
-        let callID = CallID(callKitID: UUID(), userID: receiverID, roomID: roomID, rtcNotificationID: rtcNotificationID, isVoiceCall: isVoiceCall)
+        let callID = CallID(callKitID: UUID(), userID: push.receiverID, roomID: push.roomID, rtcNotificationID: push.rtcNotificationID, isVoiceCall: push.isVoiceCall)
         incomingCallID = callID
-        
-        guard let expirationDate = (payload.dictionaryPayload[ElementCallServiceNotificationKey.expirationDate.rawValue] as? Date) else {
-            MXLog.error("Something went wrong, missing expiration timestamp for incoming voip call: \(payload)")
-            assertionFailure("Incoming voip push is missing the expiration timestamp")
-            clearIncomingCallState()
-            reportImmediatelyEndedCall(reason: .failed, completion: completion)
-            return
-        }
         
         let nowDate = timeProvider.now()
         
-        guard nowDate < expirationDate else {
-            MXLog.warning("Call expired for room \(roomID), reporting it as missed")
+        guard nowDate < push.expirationDate else {
+            MXLog.warning("Call expired for room \(push.roomID), reporting it as missed")
             clearIncomingCallState()
-            reportImmediatelyEndedCall(reason: .unanswered,
-                                       callerInfo: (roomID: roomID, roomDisplayName: roomDisplayName),
-                                       completion: completion)
+            reportImmediatelyEndedCall(reason: .unanswered, callerInfo: callerInfo, completion: completion)
             return
         }
         
-        let ringDuration: Duration = .seconds(min(expirationDate.timeIntervalSince1970 - nowDate.timeIntervalSince1970, 90))
+        let ringDuration: Duration = .seconds(min(push.expirationDate.timeIntervalSince1970 - nowDate.timeIntervalSince1970, 90))
         
         let update = CXCallUpdate()
         // Work Around: Always set video to true! https://github.com/element-hq/element-x-ios/issues/5335
         // If not for audio call the app will not be put to foreground and the webview won't be able to handle the call...
         // Consequence: The call will be presented to the user as a video call in CallKit UI,
         // but once Element Call is launched it will correctly route to a voice-only call.
-        update.hasVideo = appSettings.nativeCallEnabled ? !isVoiceCall : true
-        update.localizedCallerName = roomDisplayName
+        update.hasVideo = appSettings.nativeCallEnabled ? !push.isVoiceCall : true
+        update.localizedCallerName = push.roomDisplayName
         // https://stackoverflow.com/a/41230020/730924
-        update.remoteHandle = .init(type: .generic, value: roomID)
+        update.remoteHandle = .init(type: .generic, value: push.roomID)
         
         // The push registry uses the main queue so the completion is main actor bound,
         // whereas CallKit invokes its completion on a background queue.
