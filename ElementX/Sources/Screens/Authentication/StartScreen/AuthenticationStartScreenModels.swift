@@ -21,19 +21,42 @@ enum AuthenticationStartScreenViewModelAction: Equatable {
 }
 
 struct AuthenticationStartScreenViewState: BindableState {
-    /// The presentation anchor used for OAuth authentication.
-    var window: UIWindow?
+    enum Mode: Equatable {
+        case welcome
+        case addAccount
+        case classicAppWelcomeBack(ClassicAppAccount)
+        case classicAppOtherOptions(ClassicAppAccount)
+    }
+    
+    var mode: Mode
     
     let serverNameOrBaseURL: String?
     let showCreateAccountButton: Bool
     let showQRCodeLoginButton: Bool
-    
-    enum ClassicAppMode { case welcomeBack(ClassicAppAccount), otherOptions(ClassicAppAccount) }
-    var classicAppMode: ClassicAppMode?
-    
     let hideBrandChrome: Bool
     
+    /// The presentation anchor used for OAuth authentication.
+    var window: UIWindow?
+    
     var bindings = AuthenticationStartScreenViewStateBindings()
+    
+    var navigationTitle: String {
+        switch mode {
+        case .welcome, .classicAppWelcomeBack, .classicAppOtherOptions:
+            L10n.screenOnboardingWelcomeBack
+        case .addAccount:
+            L10n.commonAddAnotherAccount
+        }
+    }
+    
+    var navigationBarHidden: Bool {
+        switch mode {
+        case .welcome:
+            true
+        case .addAccount, .classicAppWelcomeBack, .classicAppOtherOptions:
+            false
+        }
+    }
     
     var loginButtonTitle: String {
         if let serverNameOrBaseURL {

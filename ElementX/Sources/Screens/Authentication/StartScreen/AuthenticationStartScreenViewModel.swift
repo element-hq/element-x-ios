@@ -27,6 +27,7 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
     
     init(authenticationService: AuthenticationServiceProtocol,
          provisioningParameters: AccountProvisioningParameters?,
+         isAddingAccount: Bool,
          isBugReportServiceEnabled: Bool,
          appMediator: AppMediatorProtocol,
          appSettings: AppSettings,
@@ -40,35 +41,49 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
         canReportProblem = isBugReportServiceEnabled
         
         let isQRCodeScanningSupported = !ProcessInfo.processInfo.isiOSAppOnMac
-        let isClassicAppAccountAllowed = if let classicAppAccount = authenticationService.classicAppAccount {
-            appSettings.accountProviders.contains(serverName: classicAppAccount.serverName, orBaseURL: classicAppAccount.homeserverURL)
-        } else {
-            false
-        }
         
-        let initialViewState = if !appSettings.allowOtherAccountProviders {
+        let serverNameOrBaseURL: String?
+        let showCreateAccountButton: Bool
+        let showQRCodeLoginButton: Bool
+        if !appSettings.allowOtherAccountProviders {
             // We don't show the create account button when custom providers are disallowed.
             // The assumption here being that if you're running a custom app, your users will already be created.
-            AuthenticationStartScreenViewState(serverNameOrBaseURL: appSettings.accountProviders.count == 1 ? appSettings.accountProviders[0].serverNameOrBaseURL : nil,
-                                               showCreateAccountButton: false,
-                                               showQRCodeLoginButton: isQRCodeScanningSupported,
-                                               classicAppMode: isClassicAppAccountAllowed ? authenticationService.classicAppAccount.map { .welcomeBack($0) } : nil,
-                                               hideBrandChrome: appSettings.hideBrandChrome)
+            serverNameOrBaseURL = appSettings.accountProviders.count == 1 ? appSettings.accountProviders[0].serverNameOrBaseURL : nil
+            showCreateAccountButton = false
+            showQRCodeLoginButton = isQRCodeScanningSupported
         } else if let provisioningParameters {
             // We only show the "Sign in to …" button when using a provisioning link.
-            AuthenticationStartScreenViewState(serverNameOrBaseURL: provisioningParameters.accountProvider,
-                                               showCreateAccountButton: false,
-                                               showQRCodeLoginButton: false,
-                                               classicAppMode: nil,
-                                               hideBrandChrome: appSettings.hideBrandChrome)
+            serverNameOrBaseURL = provisioningParameters.accountProvider
+            showCreateAccountButton = false
+            showQRCodeLoginButton = false
         } else {
             // The default configuration.
-            AuthenticationStartScreenViewState(serverNameOrBaseURL: nil,
-                                               showCreateAccountButton: appSettings.showCreateAccountButton,
-                                               showQRCodeLoginButton: isQRCodeScanningSupported,
-                                               classicAppMode: authenticationService.classicAppAccount.map { .welcomeBack($0) },
-                                               hideBrandChrome: appSettings.hideBrandChrome)
+            serverNameOrBaseURL = nil
+            showCreateAccountButton = appSettings.showCreateAccountButton
+            showQRCodeLoginButton = isQRCodeScanningSupported
         }
+        
+        let mode: AuthenticationStartScreenViewState.Mode = if isAddingAccount {
+            .addAccount
+        } else if let classicAppAccount = authenticationService.classicAppAccount {
+            if appSettings.allowOtherAccountProviders {
+                // A provisioning link takes precedence over the Classic app account.
+                provisioningParameters == nil ? .classicAppWelcomeBack(classicAppAccount) : .welcome
+            } else if appSettings.accountProviders.contains(serverName: classicAppAccount.serverName,
+                                                            orBaseURL: classicAppAccount.homeserverURL) {
+                .classicAppWelcomeBack(classicAppAccount)
+            } else {
+                .welcome
+            }
+        } else {
+            .welcome
+        }
+        
+        let initialViewState = AuthenticationStartScreenViewState(mode: mode,
+                                                                  serverNameOrBaseURL: serverNameOrBaseURL,
+                                                                  showCreateAccountButton: showCreateAccountButton,
+                                                                  showQRCodeLoginButton: showQRCodeLoginButton,
+                                                                  hideBrandChrome: appSettings.hideBrandChrome)
         
         super.init(initialViewState: initialViewState, mediaProvider: mediaProvider)
         
@@ -101,9 +116,9 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
         case .continueWithClassic(let account):
             Task { await login(classicAppAccount: account) }
         case .otherOptions(let account):
-            state.classicAppMode = .otherOptions(account)
+            state.mode = .classicAppOtherOptions(account)
         case .closeOtherOptions(let account):
-            state.classicAppMode = .welcomeBack(account)
+            state.mode = .classicAppWelcomeBack(account)
         case .openClassicApp:
             guard let classicAppDeepLinkURL = InfoPlistReader.main.classicAppDeepLinkURL else { return }
             appMediator.open(classicAppDeepLinkURL)
@@ -165,7 +180,7 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
     
     @CancellableTask private var reloadClassicAppSecretsTask: Task<Void, Never>?
     private func reloadClassicAppAccount() {
-        guard case let .welcomeBack(classicAppAccount) = state.classicAppMode else { return }
+        guard case let .classicAppWelcomeBack(classicAppAccount) = state.mode else { return }
         
         reloadClassicAppSecretsTask = Task { [weak self] in
             await self?.authenticationService.refreshClassicAppAccountState()
