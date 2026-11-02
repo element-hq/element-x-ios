@@ -70,6 +70,12 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
     private var answeredNativeCallID: CallID?
     private var endPendingCallTask: Task<Void, Never>?
     
+    /// The incoming call while nobody has answered it.
+    private var ringingCallID: CallID? {
+        guard !isIncomingCallAnswered, incomingCallID != answeredNativeCallID else { return nil }
+        return incomingCallID
+    }
+    
     private var ongoingCallID: CallID? {
         didSet {
             if let oldValue, oldValue.userID != ongoingCallID?.userID {
@@ -189,19 +195,35 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
     /// once CallKit knows about it, refusing it if the call went in the meantime.
     private func setupCallSession(roomID: String, roomDisplayName: String, isVideo: Bool, kind: ElementCallSessionKind, service: ElementCallServiceProtocol) {
         let isNative = kind != .webView
-        MXLog.info("Setting up a call session, native: \(isNative), video: \(isVideo), replacing an ongoing call: \(ongoingCallID != nil)")
+        MXLog.info("Setting up a call session, kind: \(kind), video: \(isVideo), replacing an ongoing call: \(ongoingCallID != nil)")
+        
+        let answeredCallID = answeredCallID(userID: service.userID, roomID: roomID, kind: kind)
+        
+        // The answered call ended before the native call stack took it over. Starting it as a new
+        // call would ring the caller back.
+        guard kind != .nativeAnswer || answeredCallID != nil else {
+            MXLog.info("Refusing to set up an answered call that has ended")
+            // Another account's answer in this room, which no account here can take over.
+            if let answeredNativeCallID, answeredNativeCallID.roomID == roomID {
+                MXLog.warning("Ending another account's answered call")
+                endPendingCall()
+            }
+            service.callSessionSetUp(roomID: roomID, isAccepted: false)
+            return
+        }
         
         // Drop any ongoing calls when starting a new one
         if ongoingCallID != nil {
             tearDownCallSession(sendEndCallAction: true)
         }
         
-        // Answering the ringing call keeps the call CallKit already shows rather than reporting a new one.
-        var callID = ringingCallID(userID: service.userID, roomID: roomID)
+        // Answering keeps the call CallKit already shows rather than reporting a new one.
+        var callID = answeredCallID
             ?? CallID(callKitID: UUID(), userID: service.userID, roomID: roomID, rtcNotificationID: nil, isVoiceCall: !isVideo)
         callID.isNative = isNative
         let isAnsweringIncomingCall = callID.rtcNotificationID != nil
         
+        endIncomingCall(notTakenOverBy: answeredCallID, roomID: roomID)
         clearIncomingCallState()
         ongoingCallID = callID
         
@@ -248,13 +270,32 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
         }
     }
     
-    /// The call ringing for the account in the room, if any.
-    private func ringingCallID(userID: String, roomID: String) -> CallID? {
-        guard let incomingCallID, incomingCallID.userID == userID, incomingCallID.roomID == roomID else {
-            return nil
+    /// The account's answered call in the room that a set-up of this kind takes over. A call that still
+    /// rings is never taken over: its ring would stay up, and declining it would hang up the call.
+    private func answeredCallID(userID: String, roomID: String, kind: ElementCallSessionKind) -> CallID? {
+        let callID: CallID? = switch kind {
+        case .native: nil
+        case .nativeAnswer: answeredNativeCallID
+        case .webView: isIncomingCallAnswered ? incomingCallID : nil
         }
         
-        return incomingCallID
+        guard let callID, callID.userID == userID, callID.roomID == roomID else { return nil }
+        return callID
+    }
+    
+    /// Ends what the incoming call left up once its state is cleared, as nothing would track it any more.
+    private func endIncomingCall(notTakenOverBy answeredCallID: CallID?, roomID: String) {
+        if let ringingCallID {
+            let reason: CXCallEndedReason = ringingCallID.roomID == roomID ? .answeredElsewhere : .unanswered
+            MXLog.info("Ending the ringing call as \(reason.rawValue), another call is starting")
+            callProvider.reportCall(with: ringingCallID.callKitID, endedAt: nil, reason: reason)
+        }
+        
+        // Nothing would end an answered call left up, and it would keep the media from a web view call.
+        if let answeredNativeCallID, answeredNativeCallID != answeredCallID {
+            MXLog.warning("Ending an answered call that another call replaced")
+            callProvider.reportCall(with: answeredNativeCallID.callKitID, endedAt: nil, reason: .failed)
+        }
     }
     
     private func reportCallSessionConnected(userID: String, roomID: String) {
@@ -500,7 +541,13 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
         // to get deeplinked into
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             // Then end the and call rely on `setupCallSession` to create a new one
-            provider.reportCall(with: incomingCallID.callKitID, endedAt: nil, reason: .remoteEnded)
+            self.callProvider.reportCall(with: incomingCallID.callKitID, endedAt: nil, reason: .remoteEnded)
+            
+            // The caller may have hung up meanwhile, and opening the call would ring them back.
+            guard self.isIncomingCallAnswered, self.incomingCallID == incomingCallID else {
+                MXLog.info("Not opening the answered call, it ended or opened before the hand-over")
+                return
+            }
             
             self.actionsSubject.send(.callAnswered(userID: incomingCallID.userID, roomID: incomingCallID.roomID, isVoiceCall: incomingCallID.isVoiceCall))
         }

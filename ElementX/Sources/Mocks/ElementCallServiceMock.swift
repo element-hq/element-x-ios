@@ -29,6 +29,6 @@ extension ElementCallServiceMock {
             ongoingCallRoomIDSubject.send(roomID)
         }
         
-        handleNativeCallRequestRoomProxyIsVoiceCallReturnValue = false
+        handleNativeCallRequestRoomProxyIsVoiceCallIsAnsweringReturnValue = false
     }
 }

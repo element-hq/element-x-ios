@@ -244,12 +244,12 @@ final class ElementCallServiceTests {
         let service = makeNativeCallService()
         let roomProxy = JoinedRoomProxyMock(.init(id: "!room:example.com"))
         
-        #expect(!service.handleNativeCallRequest(roomProxy: roomProxy, isVoiceCall: false))
+        #expect(!service.handleNativeCallRequest(roomProxy: roomProxy, isVoiceCall: false, isAnswering: false))
         
         appSettings.nativeCallEnabled = true
         service.setNativeCallStackEnabled(true)
         
-        #expect(service.handleNativeCallRequest(roomProxy: roomProxy, isVoiceCall: false))
+        #expect(service.handleNativeCallRequest(roomProxy: roomProxy, isVoiceCall: false, isAnswering: false))
     }
     
     // MARK: - Helpers

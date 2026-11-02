@@ -77,12 +77,12 @@ protocol ElementCallServiceProtocol: AnyObject {
     func setNativeCallStackEnabled(_ isEnabled: Bool)
     
     /// Starts, or returns to, a native call in the room, driving its screen through
-    /// ``nativeCallPresentationPublisher``.
+    /// ``nativeCallPresentationPublisher``. `isAnswering` takes over the call answered from CallKit.
     ///
     /// Returns `false` when there's no native call stack and the caller should present the Element
     /// Call web view instead.
     @discardableResult
-    func handleNativeCallRequest(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool) -> Bool
+    func handleNativeCallRequest(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool, isAnswering: Bool) -> Bool
     
     /// Asks the native call to minimize. The screen only comes down once a system window has
     /// started, which arrives through ``nativeCallPresentationPublisher``.
@@ -91,7 +91,7 @@ protocol ElementCallServiceProtocol: AnyObject {
     /// Brings the native call back out of its system window.
     func restoreNativeCall()
     
-    /// Registers the call with CallKit, adopting the ringing incoming call for the room if there is one.
+    /// Registers the call with CallKit, taking over the account's answered incoming call for the room if there is one.
     /// Returns once the manager has set the call up.
     func setupCallSession(roomID: String, roomDisplayName: String, isVideo: Bool, kind: ElementCallSessionKind) async
     

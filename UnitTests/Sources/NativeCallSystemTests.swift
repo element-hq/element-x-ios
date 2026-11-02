@@ -27,6 +27,15 @@ struct NativeCallSystemTests {
         #expect(service.setupCallSessionRoomIDRoomDisplayNameIsVideoKindReceivedArguments?.kind == .native)
     }
     
+    @Test("A call answered from CallKit is set up as an answer")
+    func answeringSetsUpNativeAnswer() async {
+        system.isAnswering = true
+        
+        await system.startCall(roomID: "!room:example.com", displayName: "welcome", isVideo: true)
+        
+        #expect(service.setupCallSessionRoomIDRoomDisplayNameIsVideoKindReceivedArguments?.kind == .nativeAnswer)
+    }
+    
     @Test
     func eventsReachCallStack() async {
         var events: [ElementCallSystemEvent] = []

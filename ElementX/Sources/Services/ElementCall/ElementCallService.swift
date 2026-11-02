@@ -91,12 +91,12 @@ final class ElementCallService: ElementCallServiceProtocol {
     }
     
     @discardableResult
-    func handleNativeCallRequest(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool) -> Bool {
+    func handleNativeCallRequest(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool, isAnswering: Bool) -> Bool {
         guard let nativeCallStack else {
             return false
         }
         
-        nativeCallStack.handleCallRequest(roomProxy: roomProxy, isVoiceCall: isVoiceCall)
+        nativeCallStack.handleCallRequest(roomProxy: roomProxy, isVoiceCall: isVoiceCall, isAnswering: isAnswering)
         return true
     }
     

@@ -213,8 +213,7 @@ final class ElementCallManagerTests {
         // Make sure the cancellation below exercises a scheduled timer rather than one that never started.
         await clock.waitForScheduledSleep()
         
-        // Simulate the answer flow handing off to setupCallSession, which must cancel
-        // the pending endUnansweredCallTask as part of clearing the incoming state.
+        // A set-up in the ringing room ends the ring, which must also cancel its timeout.
         await startCallSession(kind: .webView)
         
         let (endedCalls, endedCallsContinuation) = AsyncStream<CXCallEndedReason>.makeStream()
@@ -333,6 +332,36 @@ final class ElementCallManagerTests {
         
         serviceActions.send(.callSessionEnded(roomID: "!room:example.com", reason: nil))
         #expect(service.ongoingCallRoomIDPublisher.value == nil)
+    }
+    
+    @Test("Starting a call in the ringing room ends the ring as answered elsewhere", arguments: [ElementCallSessionKind.webView, .native])
+    func sameRoomStartEndsRing(kind: ElementCallSessionKind) async throws {
+        await reportIncomingPush(isVoiceCall: false)
+        let ringingUUID = try #require(callProvider.reportNewIncomingCallWithUpdateCompletionReceivedArguments?.uuid)
+        
+        await startCallSession(kind: kind)
+        
+        #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.uuid == ringingUUID)
+        #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.reason == .answeredElsewhere)
+        #expect(callProvider.reportCallWithEndedAtReasonCallsCount == 1)
+        
+        // Declining the ring that was left up used to hang up the call.
+        manager.endCall(withCallKitID: ringingUUID)
+        
+        #expect(service.ongoingCallRoomIDPublisher.value == "!room:example.com")
+        #expect(service.systemEventReceivedReceivedInvocations.isEmpty)
+    }
+    
+    @Test("Starting a call in another room ends the ring as missed")
+    func otherRoomStartMissesRing() async throws {
+        await reportIncomingPush(isVoiceCall: false)
+        let ringingUUID = try #require(callProvider.reportNewIncomingCallWithUpdateCompletionReceivedArguments?.uuid)
+        
+        await startCallSession(roomID: "!other:example.com", roomDisplayName: "other", kind: .webView)
+        
+        #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.uuid == ringingUUID)
+        #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.reason == .unanswered)
+        #expect(callProvider.reportCallWithEndedAtReasonCallsCount == 1)
     }
     
     // MARK: - Busy
@@ -530,21 +559,26 @@ final class ElementCallManagerTests {
         await reportIncomingPush(isVoiceCall: false)
         await clock.waitForScheduledSleep()
         
-        try await answerReportedCall()
+        let answeredUUID = try await answerReportedCall()
         
         // Answering starts the watchdog, so wait for it before asserting that the hand-over stops it.
         await clock.waitForScheduledSleep()
         
-        await startCallSession(kind: .native)
+        await startCallSession(kind: .nativeAnswer)
         
         // Taking the answered call over means keeping its identifier rather than reporting a new
         // outgoing call, which is what the update below would be part of.
         #expect(!callProvider.reportCallWithUpdatedCalled)
+        #expect(!callProvider.reportCallWithEndedAtReasonCalled)
         #expect(service.ongoingCallRoomIDPublisher.value == "!room:example.com")
+        #expect(service.callSessionSetUpRoomIDIsAcceptedReceivedArguments?.isAccepted == true)
         #expect(service.callSessionSetUpRoomIDIsAcceptedCallsCount == 1)
         
         // And the watchdog must be gone, otherwise it ends the call that was just taken over.
         #expect(!clock.hasPendingSleep, "The watchdog must not outlive the hand-over")
+        
+        manager.endCall(withCallKitID: answeredUUID)
+        #expect(service.systemEventReceivedReceivedInvocations == [.endCallRequested(roomID: "!room:example.com")])
     }
     
     @Test
@@ -561,10 +595,57 @@ final class ElementCallManagerTests {
         #expect(update.uuid != answeredUUID)
         #expect(update.update.localizedCallerName == "other")
         #expect(service.ongoingCallRoomIDPublisher.value == "!other:example.com")
+        #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.uuid == answeredUUID)
+        #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.reason == .failed)
         
         // Unlike a web view call, a native one is tracked by CallKit, so it gets the connected report too.
         serviceActions.send(.callSessionConnected(roomID: "!other:example.com"))
         #expect(callProvider.reportOutgoingCallWithConnectedAtReceivedArguments?.uuid == update.uuid)
+    }
+    
+    @Test("A web call in the answered room ends the answered native call")
+    func webStartEndsAnsweredNativeCall() async throws {
+        appSettings.nativeCallEnabled = true
+        await reportIncomingPush(isVoiceCall: false)
+        let answeredUUID = try await answerReportedCall()
+        
+        await startCallSession(kind: .webView)
+        
+        // Left up, CallKit would keep the media from the web view.
+        #expect(callProvider.reportCallWithEndedAtReasonCallsCount == 1)
+        #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.uuid == answeredUUID)
+        #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.reason == .failed)
+    }
+    
+    @Test("Taking over an answered call whose caller hung up is refused")
+    func goneAnswerIsRefused() async throws {
+        appSettings.nativeCallEnabled = true
+        await reportIncomingPush(isVoiceCall: false)
+        try await answerReportedCall()
+        
+        // The caller hangs up as the call is answered.
+        serviceActions.send(.incomingCallEnded(roomID: "!room:example.com", reason: .remoteEnded))
+        let requestsBefore = callController.requestCompletionCallsCount
+        
+        await startCallSession(kind: .nativeAnswer)
+        
+        // Starting it as a new call would ring the caller back.
+        #expect(service.callSessionSetUpRoomIDIsAcceptedReceivedArguments?.isAccepted == false)
+        #expect(service.callSessionSetUpRoomIDIsAcceptedCallsCount == 1)
+        #expect(callController.requestCompletionCallsCount == requestsBefore)
+        #expect(!service.ongoingCallChangedRoomIDReceivedInvocations.contains("!room:example.com"))
+    }
+    
+    @Test("A refused take-over leaves the ongoing call up")
+    func refusalKeepsOngoingCall() async {
+        await startCallSession(roomID: "!other:example.com", roomDisplayName: "other", kind: .native)
+        let requestsBefore = callController.requestCompletionCallsCount
+        
+        await startCallSession(kind: .nativeAnswer)
+        
+        #expect(service.callSessionSetUpRoomIDIsAcceptedReceivedArguments?.isAccepted == false)
+        #expect(callController.requestCompletionCallsCount == requestsBefore)
+        #expect(service.ongoingCallRoomIDPublisher.value == "!other:example.com")
     }
     
     // MARK: - Service
@@ -636,6 +717,28 @@ final class ElementCallManagerTests {
         let deferredAnswer = deferFulfillment(manager.actionsPublisher) { $0 == .callAnswered(userID: "@alice:matrix.org", roomID: "!room:example.com", isVoiceCall: false) }
         
         manager.provider(CXProvider(configuration: CXProviderConfiguration()), perform: CXAnswerCallAction(call: uuid))
+        
+        try await deferredAnswer.fulfill()
+    }
+    
+    @Test("A web answer whose caller hung up within the hand-over never opens")
+    func endedWebAnswerNeverOpens() async throws {
+        await reportIncomingPush(isVoiceCall: false)
+        let deferredAnswer = deferFailure(manager.actionsPublisher, timeout: .milliseconds(100), message: "Opening the call would ring the caller back") {
+            $0 == .callAnswered(userID: "@alice:matrix.org", roomID: "!room:example.com", isVoiceCall: false)
+        }
+        let answeredUUID = try await answerReportedCall()
+        
+        // The caller hangs up before the answer is handed over to the web view.
+        serviceActions.send(.incomingCallEnded(roomID: "!room:example.com", reason: .remoteEnded))
+        
+        // Only now, as the hang-up above reports the same call ended at once.
+        let (endedCalls, endedCallsContinuation) = AsyncStream<UUID>.makeStream()
+        callProvider.reportCallWithEndedAtReasonClosure = { uuid, _, _ in
+            endedCallsContinuation.yield(uuid)
+        }
+        let deferredHandOver = deferFulfillment(endedCalls) { $0 == answeredUUID }
+        try await deferredHandOver.fulfill()
         
         try await deferredAnswer.fulfill()
     }
@@ -730,6 +833,38 @@ final class ElementCallManagerTests {
         
         #expect(callProvider.reportCallWithUpdatedCalled, "Alice's call is a new CallKit call")
         #expect(callProvider.reportCallWithUpdatedReceivedArguments?.uuid != ringingUUID)
+        #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.uuid == ringingUUID)
+        #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.reason == .answeredElsewhere)
+        #expect(callProvider.reportCallWithEndedAtReasonCallsCount == 1)
+    }
+    
+    @Test("A native start ends an answered call rather than taking it over", arguments: ["@alice:matrix.org", "@bob:matrix.org"])
+    func nativeStartEndsAnsweredCall(receiverID: String) async throws {
+        appSettings.nativeCallEnabled = true
+        await reportIncomingPush(isVoiceCall: false, receiverID: receiverID)
+        let answeredUUID = try await answerReportedCall()
+        
+        await startCallSession(kind: .native)
+        
+        #expect(callProvider.reportCallWithUpdatedReceivedArguments?.uuid != nil, "Alice's call is a new CallKit call")
+        #expect(callProvider.reportCallWithUpdatedReceivedArguments?.uuid != answeredUUID)
+        #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.uuid == answeredUUID)
+        #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.reason == .failed)
+    }
+    
+    @Test("Another account's answered call is never taken over as an answer")
+    func otherAccountsAnswerIsRefused() async throws {
+        appSettings.nativeCallEnabled = true
+        await reportIncomingPush(isVoiceCall: false, receiverID: "@bob:matrix.org")
+        let answeredUUID = try await answerReportedCall()
+        
+        await startCallSession(kind: .nativeAnswer)
+        
+        #expect(service.callSessionSetUpRoomIDIsAcceptedReceivedArguments?.isAccepted == false)
+        // No account here can take Bob's call over, so it must not wait for the watchdog.
+        #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.uuid == answeredUUID)
+        #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.reason == .failed)
+        #expect(callProvider.reportCallWithEndedAtReasonCallsCount == 1)
     }
     
     @Test

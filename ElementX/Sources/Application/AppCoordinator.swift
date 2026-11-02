@@ -355,7 +355,7 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
         }
         
         MXLog.info("Starting call in room: \(roomIdentifier)")
-        handleAppRoute(AppRoute.call(roomID: roomIdentifier, isVoiceCall: intent.callCapability == .audioCall), windowType: nil)
+        handleAppRoute(AppRoute.call(roomID: roomIdentifier, isVoiceCall: intent.callCapability == .audioCall, isAnswering: false), windowType: nil)
     }
     
     // MARK: - WindowManagerDelegate
@@ -1035,7 +1035,7 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
                         storedAppRouteReceiverID = userID
                     }
                     
-                    handleAppRoute(.call(roomID: roomID, isVoiceCall: isVoiceCall), windowType: nil)
+                    handleAppRoute(.call(roomID: roomID, isVoiceCall: isVoiceCall, isAnswering: true), windowType: nil)
                 }
             }
             .store(in: &cancellables)
