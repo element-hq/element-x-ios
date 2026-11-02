@@ -25,7 +25,7 @@ final class ElementCallServiceTests {
         roomProxy.declineCallNotificationIDReturnValue = .success(())
         clientProxy.roomForIdentifierClosure = { [roomProxy] _ in .joined(roomProxy) }
         
-        service = ElementCallService(clientProxy: clientProxy, mediaProvider: MediaProviderMock(.init()), appSettings: appSettings)
+        service = ElementCallService(clientProxy: clientProxy, mediaProvider: MediaProviderMock(.init()), userSettings: appSettings.userSettings(for: clientProxy.userID))
     }
     
     // MARK: - Ringing call
@@ -221,6 +221,6 @@ final class ElementCallServiceTests {
     private func makeNativeCallService() -> ElementCallService {
         let clientProxy = ClientProxyMock(.init())
         clientProxy.makeNativeCallBackendReturnValue = ElementCallFakeMatrixBackend()
-        return ElementCallService(clientProxy: clientProxy, mediaProvider: MediaProviderMock(.init()), appSettings: appSettings)
+        return ElementCallService(clientProxy: clientProxy, mediaProvider: MediaProviderMock(.init()), userSettings: appSettings.userSettings(for: clientProxy.userID))
     }
 }

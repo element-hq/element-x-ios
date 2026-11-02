@@ -21,7 +21,7 @@ final class ElementCallService: ElementCallServiceProtocol {
     
     private let clientProxy: ClientProxyProtocol
     private let mediaProvider: MediaProviderProtocol
-    private let appSettings: AppSettings
+    private let userSettings: UserSettings
     
     var userID: String {
         clientProxy.userID
@@ -65,12 +65,12 @@ final class ElementCallService: ElementCallServiceProtocol {
     
     private var cancellables = Set<AnyCancellable>()
     
-    init(clientProxy: ClientProxyProtocol, mediaProvider: MediaProviderProtocol, appSettings: AppSettings) {
+    init(clientProxy: ClientProxyProtocol, mediaProvider: MediaProviderProtocol, userSettings: UserSettings) {
         self.clientProxy = clientProxy
         self.mediaProvider = mediaProvider
-        self.appSettings = appSettings
+        self.userSettings = userSettings
         
-        appSettings.nativeCallEnabledPublisher
+        userSettings.app.nativeCallEnabledPublisher
             .sink { [weak self] _ in
                 self?.updateNativeCallStack()
             }
@@ -135,7 +135,7 @@ final class ElementCallService: ElementCallServiceProtocol {
         let call = ObservedCall(roomID: roomID, rtcNotificationID: rtcNotificationID)
         observedCall = call
         
-        await watch(call)
+        await subscribe(to: call)
     }
     
     func stopObservingIncomingCall() {
@@ -175,7 +175,7 @@ final class ElementCallService: ElementCallServiceProtocol {
     
     /// Builds or releases the call stack to match the toggle and the setting.
     private func updateNativeCallStack() {
-        guard appSettings.nativeCallEnabled, isNativeCallStackEnabled else {
+        guard userSettings.app.nativeCallEnabled, isNativeCallStackEnabled else {
             stopNativeCallStack()
             return
         }
@@ -197,7 +197,7 @@ final class ElementCallService: ElementCallServiceProtocol {
         
         // The stats overlay is raw RTP counters, so it follows whatever already reveals developer
         // surface. Screen sharing stays off until the broadcast extension that makes it work lands.
-        let options = ElementCallOptions(isDeveloperModeEnabled: appSettings.developerOptionsEnabled)
+        let options = ElementCallOptions(isDeveloperModeEnabled: userSettings.app.developerOptionsEnabled)
         
         let stack = NativeCallStack(backend: backend,
                                     system: NativeCallSystem(service: self),
@@ -224,7 +224,7 @@ final class ElementCallService: ElementCallServiceProtocol {
     
     // MARK: - Private
     
-    private func watch(_ call: ObservedCall) async {
+    private func subscribe(to call: ObservedCall) async {
         guard case let .joined(roomProxy) = await clientProxy.roomForIdentifier(call.roomID) else {
             MXLog.warning("Failed to fetch a joined room for the incoming call.")
             return

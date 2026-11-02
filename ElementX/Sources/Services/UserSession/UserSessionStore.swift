@@ -130,7 +130,7 @@ class UserSessionStore: UserSessionStoreProtocol {
                            voiceMessageMediaManager: voiceMessageMediaManager,
                            liveLocationService: liveLocationService,
                            notificationService: notificationService,
-                           elementCallService: ElementCallService(clientProxy: clientProxy, mediaProvider: mediaProvider, appSettings: appSettings))
+                           elementCallService: ElementCallService(clientProxy: clientProxy, mediaProvider: mediaProvider, userSettings: userSettings))
     }
     
     private func restorePreviousLogin(_ credentials: KeychainCredentials, userSettings: UserSettings) async -> Result<ClientProxyProtocol, UserSessionStoreError> {

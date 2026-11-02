@@ -363,7 +363,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         // A new login has nothing to migrate.
         migratedUserIDs.insert(userSession.clientProxy.userID)
         userSessionManager.add(userSession)
-        configureActiveSession()
+        Task { await resumeClientServices() }
         authenticationFlowCoordinator = nil
         stateMachine.processEvent(.createdUserSession)
     }
@@ -746,7 +746,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private func showActiveSessionIfRestoring() {
         guard stateMachine.state == .restoringSession, userSession != nil else { return }
         
-        configureActiveSession()
+        Task { await resumeClientServices() }
         stateMachine.processEvent(.createdUserSession)
     }
     
@@ -845,7 +845,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                     case .signedIn(let session):
                         self.migratedUserIDs.insert(session.clientProxy.userID)
                         self.userSessionManager.add(session)
-                        self.configureActiveSession()
+                        Task { await self.resumeClientServices() }
                         self.softLogoutCoordinator = nil
                         stateMachine.processEvent(.createdUserSession)
                     case .clearAllData:
@@ -987,17 +987,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
     }
     
-    /// Resumes the active account's client services.
-    private func configureActiveSession() {
-        guard userSession != nil else {
-            fatalError("User session not setup")
-        }
-        
-        Task {
-            await resumeClientServices()
-        }
-    }
-    
     private func configureNotificationManager() {
         notificationManager.delegate = self
         notificationManager.start()
@@ -1030,13 +1019,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                     guard let self else { return }
                     
                     // TODO: Open other accounts' answered calls with their own session (#6387).
-                    guard userID == userSessionManager.userIDs.first else {
-                        MXLog.info("Dropping a call answered for \(userID), it isn't the active account.")
-                        // Out of CallKit's answer handler, as handleAppRoute does.
-                        Task { self.elementCallManager.dropAnsweredCall(userID: userID, roomID: roomID) }
-                        return
-                    }
-                    
                     if userSession == nil {
                         storedAppRouteReceiverID = userID
                     }
