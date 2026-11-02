@@ -63,6 +63,7 @@ protocol ElementCallServiceProtocol: AnyObject {
     var ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never> { get }
     
     /// What CallKit asks of the native call: audio session changes, mutes and hang-ups.
+    /// Replays an active audio session to a new subscriber, so a stack built after CallKit activated it still hears it.
     var nativeCallEventsPublisher: AnyPublisher<NativeCallEvent, Never> { get }
     
     /// The native call's screen needs presenting, minimizing, restoring or dismissing.
@@ -114,7 +115,7 @@ protocol ElementCallServiceProtocol: AnyObject {
     func stopObservingIncomingCall()
     func declineCall(roomID: String, rtcNotificationID: String) async
     func ongoingCallChanged(roomID: String?)
-    /// Completes the room's `setupCallSession`.
+    /// Completes the room's `setupCallSession`. A refusal also asks the native call to end with `.endCallRequested(roomID:)`.
     func callSessionSetUp(roomID: String, isAccepted: Bool)
     /// CallKit's side of the native call: the audio session, mutes and hang-ups.
     func systemEventReceived(_ event: NativeCallEvent)
