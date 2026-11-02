@@ -36,7 +36,7 @@ let package = Package(
         .testTarget(name: "MacrosTests",
                     dependencies: [
                         "MacrosImplementation",
-                        .product(name: "SwiftSyntaxMacrosTestSupport", package: "swift-syntax")
+                        .product(name: "SwiftSyntaxMacrosGenericTestSupport", package: "swift-syntax")
                     ],
                     swiftSettings: [
                         .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
