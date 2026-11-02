@@ -1,5 +1,8 @@
 blank_issues_enabled: true
 contact_links:
+ - name: Feature request
+   url: https://github.com/element-hq/element-meta/issues/new?template=enhancement.yml
+   about: Feature requests for all the Element apps are filed in element-meta.
  - name: Matrix Community Support
    url: "https://matrix.to/#/#matrix:matrix.org"
    about: General support questions can be asked here.
