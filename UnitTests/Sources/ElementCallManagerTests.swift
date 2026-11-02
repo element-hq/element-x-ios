@@ -1085,11 +1085,11 @@ private nonisolated class PKPushPayloadMock: PKPushPayload {
     var dict: [AnyHashable: Any] = [:]
     
     override init() {
-        dict[ElementCallServiceNotificationKey.roomID.rawValue] = "!room:example.com"
-        dict[ElementCallServiceNotificationKey.roomDisplayName.rawValue] = "welcome"
-        dict[ElementCallServiceNotificationKey.rtcNotifyEventID.rawValue] = "$000"
-        dict[ElementCallServiceNotificationKey.expirationDate.rawValue] = Date(timeIntervalSince1970: 10)
-        dict[ElementCallServiceNotificationKey.receiverID.rawValue] = "@alice:matrix.org"
+        dict[VoIPPushPayload.Key.roomID.rawValue] = "!room:example.com"
+        dict[VoIPPushPayload.Key.roomDisplayName.rawValue] = "welcome"
+        dict[VoIPPushPayload.Key.rtcNotifyEventID.rawValue] = "$000"
+        dict[VoIPPushPayload.Key.expirationDate.rawValue] = Date(timeIntervalSince1970: 10)
+        dict[VoIPPushPayload.Key.receiverID.rawValue] = "@alice:matrix.org"
     }
     
     override var dictionaryPayload: [AnyHashable: Any] {
@@ -1097,32 +1097,32 @@ private nonisolated class PKPushPayloadMock: PKPushPayload {
     }
     
     func updatingExpiration(_ from: Date, lifetime: TimeInterval) -> Self {
-        dict[ElementCallServiceNotificationKey.expirationDate.rawValue] = from.addingTimeInterval(lifetime)
+        dict[VoIPPushPayload.Key.expirationDate.rawValue] = from.addingTimeInterval(lifetime)
         return self
     }
     
     func updateIsVoice(_ isVoice: Bool) -> Self {
-        dict[ElementCallServiceNotificationKey.isVoiceCall.rawValue] = isVoice
+        dict[VoIPPushPayload.Key.isVoiceCall.rawValue] = isVoice
         return self
     }
     
     func updatingRoomID(_ roomID: String) -> Self {
-        dict[ElementCallServiceNotificationKey.roomID.rawValue] = roomID
+        dict[VoIPPushPayload.Key.roomID.rawValue] = roomID
         return self
     }
     
     func updatingRTCNotificationID(_ rtcNotificationID: String) -> Self {
-        dict[ElementCallServiceNotificationKey.rtcNotifyEventID.rawValue] = rtcNotificationID
+        dict[VoIPPushPayload.Key.rtcNotifyEventID.rawValue] = rtcNotificationID
         return self
     }
     
     func updatingReceiverID(_ receiverID: String) -> Self {
-        dict[ElementCallServiceNotificationKey.receiverID.rawValue] = receiverID
+        dict[VoIPPushPayload.Key.receiverID.rawValue] = receiverID
         return self
     }
     
     func removingReceiverID() -> Self {
-        dict[ElementCallServiceNotificationKey.receiverID.rawValue] = nil
+        dict[VoIPPushPayload.Key.receiverID.rawValue] = nil
         return self
     }
 }

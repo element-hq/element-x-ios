@@ -249,15 +249,15 @@ nonisolated class NotificationHandler {
         }
         
         let expirationDate = Date(timeIntervalSince1970: TimeInterval(expirationTimestamp / 1000))
-        let payload = [ElementCallServiceNotificationKey.roomID.rawValue: roomID,
-                       ElementCallServiceNotificationKey.roomDisplayName.rawValue: roomDisplayName,
-                       ElementCallServiceNotificationKey.expirationDate.rawValue: expirationDate,
-                       ElementCallServiceNotificationKey.rtcNotifyEventID.rawValue: rtcNotifyEventID,
-                       ElementCallServiceNotificationKey.isVoiceCall.rawValue: callIntent == RtcCallIntent.audio,
-                       ElementCallServiceNotificationKey.receiverID.rawValue: receiverID] as [String: Any]
+        let payload = VoIPPushPayload(roomID: roomID,
+                                      roomDisplayName: roomDisplayName,
+                                      rtcNotificationID: rtcNotifyEventID,
+                                      receiverID: receiverID,
+                                      expirationDate: expirationDate,
+                                      isVoiceCall: callIntent == RtcCallIntent.audio)
         
         do {
-            try await CXProvider.reportNewIncomingVoIPPushPayload(payload)
+            try await CXProvider.reportNewIncomingVoIPPushPayload(payload.dictionary)
             MXLog.info("Call notification delegated to CallKit")
         } catch {
             MXLog.error("Failed reporting voip call with error: \(error). Handling as push notification")
