@@ -528,5 +528,7 @@ struct NotificationSettingsScreenViewModelTests {
         try await deferred.fulfill()
         
         #expect(context.alertInfo != nil)
+        #expect(context.invitationsEnabled == false)
+        #expect(context.callsEnabled == true)
     }
 }
