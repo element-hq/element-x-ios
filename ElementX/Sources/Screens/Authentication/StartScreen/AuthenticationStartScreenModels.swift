@@ -40,6 +40,24 @@ struct AuthenticationStartScreenViewState: BindableState {
     
     var bindings = AuthenticationStartScreenViewStateBindings()
     
+    var navigationTitle: String {
+        switch mode {
+        case .welcome, .classicAppWelcomeBack, .classicAppOtherOptions:
+            L10n.screenOnboardingWelcomeBack
+        case .addAccount:
+            L10n.commonAddAnotherAccount
+        }
+    }
+    
+    var navigationBarHidden: Bool {
+        switch mode {
+        case .welcome:
+            true
+        case .addAccount, .classicAppWelcomeBack, .classicAppOtherOptions:
+            false
+        }
+    }
+    
     var loginButtonTitle: String {
         if let serverNameOrBaseURL {
             L10n.screenOnboardingSignInTo(serverNameOrBaseURL)

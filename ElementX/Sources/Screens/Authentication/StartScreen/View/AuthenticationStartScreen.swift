@@ -55,7 +55,8 @@ struct AuthenticationStartScreen: View {
                 AuthenticationStartScreenBackgroundImage()
             }
         }
-        .navigationBarHidden(context.viewState.mode == .welcome)
+        .navigationTitle(context.viewState.navigationTitle)
+        .navigationBarHidden(context.viewState.navigationBarHidden)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
         .alert(item: $context.alertInfo)
@@ -66,16 +67,15 @@ struct AuthenticationStartScreen: View {
     
     var content: some View {
         VStack(spacing: 0) {
-            if context.viewState.mode == .addAccount {
+            switch context.viewState.mode {
+            case .addAccount:
                 TitleAndIcon(title: L10n.screenOnboardingAddAccountTitle,
                              subtitle: L10n.screenOnboardingAddAccountSubtitle,
                              icon: \.plus,
                              iconStyle: .defaultSolid)
                     .padding(.top, 24)
                     .padding(.horizontal, 8)
-                
-                Spacer()
-            } else {
+            default:
                 Spacer()
                 
                 if verticalSizeClass == .regular {
@@ -102,9 +102,9 @@ struct AuthenticationStartScreen: View {
                     .padding()
                     .fixedSize(horizontal: false, vertical: true)
                 }
-                
-                Spacer()
             }
+            
+            Spacer()
         }
         .padding(.bottom)
         .padding(.horizontal, 16)
@@ -173,12 +173,6 @@ struct AuthenticationStartScreen: View {
     
     @ToolbarContentBuilder
     var toolbar: some ToolbarContent {
-        ToolbarItem(placement: .title) {
-            if context.viewState.mode == .addAccount {
-                Text(L10n.screenSettingsAddAccount)
-            }
-        }
-        
         ToolbarItem(placement: .primaryAction) {
             if case let .classicAppOtherOptions(classicAppAccount) = context.viewState.mode {
                 ToolbarButton(role: .close) {

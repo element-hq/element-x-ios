@@ -63,18 +63,18 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
             showQRCodeLoginButton = isQRCodeScanningSupported
         }
         
-        let classicAppAccount = authenticationService.classicAppAccount
-        let isClassicAppAccountAllowed = if let classicAppAccount, !appSettings.allowOtherAccountProviders {
-            appSettings.accountProviders.contains(serverName: classicAppAccount.serverName, orBaseURL: classicAppAccount.homeserverURL)
-        } else {
-            // A provisioning link takes precedence over the Classic app account.
-            provisioningParameters == nil
-        }
-        
         let mode: AuthenticationStartScreenViewState.Mode = if isAddingAccount {
             .addAccount
-        } else if let classicAppAccount, isClassicAppAccountAllowed {
-            .classicAppWelcomeBack(classicAppAccount)
+        } else if let classicAppAccount = authenticationService.classicAppAccount {
+            if appSettings.allowOtherAccountProviders {
+                // A provisioning link takes precedence over the Classic app account.
+                provisioningParameters == nil ? .classicAppWelcomeBack(classicAppAccount) : .welcome
+            } else if appSettings.accountProviders.contains(serverName: classicAppAccount.serverName,
+                                                            orBaseURL: classicAppAccount.homeserverURL) {
+                .classicAppWelcomeBack(classicAppAccount)
+            } else {
+                .welcome
+            }
         } else {
             .welcome
         }
