@@ -14,8 +14,8 @@ import Testing
 struct SDKMappingsTests {
     // MARK: Events
     
-    @Test
-    func stateIsReportedUnderTheSubscribedSpelling() throws {
+    @Test("A state event is reported under the event type it was subscribed as")
+    func stateEventType() throws {
         let event = RoomStateEvent(eventType: stateEventTypeFromString(s: "org.matrix.msc3401.call.member"),
                                    stateKey: "_@bob:example.org_DEV",
                                    sender: "@bob:example.org",
@@ -33,8 +33,8 @@ struct SDKMappingsTests {
         #expect(mappedEvent.encryption == .cleartext)
     }
     
-    @Test
-    func strippedStateIsDropped() {
+    @Test("Stripped state without an event ID is dropped")
+    func strippedState() {
         let event = RoomStateEvent(eventType: stateEventTypeFromString(s: "m.call.member"),
                                    stateKey: "",
                                    sender: "@bob:example.org",
@@ -45,8 +45,8 @@ struct SDKMappingsTests {
         #expect(SDKMappings.event(event, subscribedAs: "m.call.member") == nil)
     }
     
-    @Test
-    func messageLikeEventsCarryTheirEncryption() {
+    @Test("A message-like event carries its encryption")
+    func messageLikeEvent() {
         let event = RoomMessageLikeEvent(eventType: messageLikeEventTypeFromString(s: "m.reaction"),
                                          eventId: "$hand",
                                          sender: "@bob:example.org",
@@ -61,8 +61,8 @@ struct SDKMappingsTests {
         #expect(mappedEvent.encryption == .encrypted(senderDeviceID: "BOBDEVICE", isSenderConfirmed: true))
     }
     
-    @Test
-    func redactsIsReadFromTheContent() {
+    @Test("The redacted event ID is read from the content")
+    func redactedEventID() {
         #expect(SDKMappings.redactedEventID(fromContent: #"{"redacts":"$hand","reason":"lowered"}"#) == "$hand")
         // Before room version 11 `redacts` sat beside the content, which the SDK does not hand over.
         #expect(SDKMappings.redactedEventID(fromContent: #"{"reason":"lowered"}"#) == nil)
@@ -71,20 +71,20 @@ struct SDKMappingsTests {
     
     // MARK: Trust
     
-    @Test
-    func aSenderIsConfirmedUnlessItsShieldIsRed() {
+    @Test("A sender is confirmed unless its shield is red")
+    func senderConfirmation() {
         #expect(SDKMappings.encryption(encryptionInfo(senderID: "@bob:example.org", shield: .none)) == .encrypted(senderDeviceID: "BOBDEVICE", isSenderConfirmed: true))
         #expect(SDKMappings.encryption(encryptionInfo(senderID: "@bob:example.org", shield: .grey(code: .authenticityNotGuaranteed))) == .encrypted(senderDeviceID: "BOBDEVICE", isSenderConfirmed: true))
         #expect(SDKMappings.encryption(encryptionInfo(senderID: "@bob:example.org", shield: .red(code: .unknownDevice))) == .encrypted(senderDeviceID: "BOBDEVICE", isSenderConfirmed: false))
     }
     
-    @Test
-    func noEncryptionInfoIsCleartext() {
+    @Test("No encryption info maps to cleartext")
+    func cleartext() {
         #expect(SDKMappings.encryption(nil) == .cleartext)
     }
     
-    @Test
-    func anUnknownEncryptionStateIsNeverAGuess() {
+    @Test("An unknown encryption state is never guessed")
+    func unknownEncryptionState() {
         #expect(SDKMappings.isEncrypted(.encrypted) == true)
         #expect(SDKMappings.isEncrypted(.notEncrypted) == false)
         #expect(SDKMappings.isEncrypted(.unknown) == nil)
@@ -92,8 +92,8 @@ struct SDKMappingsTests {
     
     // MARK: Members
     
-    @Test
-    func membersAreComparedWholeAndNeverDeliveredEmpty() {
+    @Test("Members are compared as a whole and never delivered empty")
+    func memberDelivery() {
         #expect(SDKMappings.shouldDeliver(["@a:x", "@b:x"], lastDelivered: nil))
         #expect(!SDKMappings.shouldDeliver(["@a:x", "@b:x"], lastDelivered: ["@a:x", "@b:x"]))
         // One leaving as another joins keeps the count.
@@ -103,8 +103,8 @@ struct SDKMappingsTests {
     
     // MARK: To-device
     
-    @Test
-    func anEncryptedMessageComesFromItsAttestedSender() {
+    @Test("An encrypted to-device message comes from its attested sender")
+    func encryptedToDeviceMessage() {
         let message = ToDeviceMessage(eventType: "io.element.call.encryption_keys",
                                       senderId: "@mallory:example.org",
                                       content: "{}",
@@ -116,8 +116,8 @@ struct SDKMappingsTests {
         #expect(mappedMessage.encryption == .encrypted(senderDeviceID: "BOBDEVICE", isSenderConfirmed: true))
     }
     
-    @Test
-    func aCleartextMessageKeepsItsClaimedSender() {
+    @Test("A cleartext to-device message keeps its claimed sender")
+    func cleartextToDeviceMessage() {
         let message = ToDeviceMessage(eventType: "io.element.call.encryption_keys", senderId: "@bob:example.org", content: "{}", encryptionInfo: nil)
         
         let mappedMessage = SDKMappings.toDeviceMessage(message)
@@ -126,8 +126,8 @@ struct SDKMappingsTests {
         #expect(mappedMessage.encryption == .cleartext)
     }
     
-    @Test
-    func onlyTheFailedRecipientsAreUndelivered() {
+    @Test("Only the failed recipients are reported undelivered")
+    func undeliveredRecipients() {
         let recipients = [ElementCallDevice(userID: "@bob:x", deviceID: "B1"),
                           ElementCallDevice(userID: "@bob:x", deviceID: "B2"),
                           ElementCallDevice(userID: "@carol:x", deviceID: "C1")]
@@ -139,8 +139,8 @@ struct SDKMappingsTests {
     
     // MARK: Transports and failures
     
-    @Test
-    func transportsAreRebuiltAsTheMSC4143Array() throws {
+    @Test("Transports are rebuilt as the MSC4143 array")
+    func transportsJSON() throws {
         let json = SDKMappings.transportsJSON([.liveKit(url: nil, serviceUrl: "https://sfu.example.org"),
                                                .custom(transportType: "other", data: #"{"url":"https://other.example.org"}"#)])
         
@@ -150,8 +150,18 @@ struct SDKMappingsTests {
         #expect(SDKMappings.transportsJSON([]) == "[]")
     }
     
-    @Test
-    func aHomeserverRefusalKeepsItsErrorCode() {
+    @Test("LiveKit URLs are only included when present")
+    func liveKitURL() throws {
+        let json = SDKMappings.transportsJSON([.liveKit(url: "wss://sfu.example.org", serviceUrl: "https://jwt.example.org"),
+                                               .liveKit(url: "wss://sfu.example.org", serviceUrl: nil)])
+        
+        let array = try #require(JSONSerialization.jsonObject(with: Data(json.utf8)) as? [[String: String]])
+        #expect(array == [["type": "livekit", "url": "wss://sfu.example.org", "livekit_service_url": "https://jwt.example.org"],
+                          ["type": "livekit", "url": "wss://sfu.example.org"]])
+    }
+    
+    @Test("A homeserver refusal keeps its error code")
+    func homeserverRefusalError() {
         let error = SDKMappings.backendError(ClientError.MatrixApi(kind: .forbidden, code: "M_FORBIDDEN", msg: "no", details: nil))
         
         #expect(error.errorCode == "M_FORBIDDEN")
@@ -161,8 +171,8 @@ struct SDKMappingsTests {
         #expect(!error.isPermanent)
     }
     
-    @Test
-    func aRateLimitCarriesTheServersDelay() {
+    @Test("A rate limit carries the server's retry delay")
+    func rateLimitError() {
         let error = SDKMappings.backendError(ClientError.MatrixApi(kind: .limitExceeded(retryAfterMs: 7000), code: "M_LIMIT_EXCEEDED", msg: "slow down", details: nil))
         
         #expect(error.errorCode == "M_LIMIT_EXCEEDED")
@@ -170,8 +180,8 @@ struct SDKMappingsTests {
         #expect(!error.isPermanent)
     }
     
-    @Test
-    func aFailureWithNoCodeIsLeftForTheCoreToRetry() {
+    @Test("A failure with no error code is left for the core to retry")
+    func errorWithoutCode() {
         struct Offline: Error { }
         
         let error = SDKMappings.backendError(Offline())
@@ -183,8 +193,8 @@ struct SDKMappingsTests {
     
     // MARK: Sticky events
     
-    @Test
-    func stickyUpdatesFoldIntoTheWholeSet() {
+    @Test("Sticky event updates fold into the whole set")
+    func stickyEventUpdates() {
         var set = SDKStickyEventSet()
         let alice = stickyEvent(sender: "@alice:x", id: "$a1")
         let bob = stickyEvent(sender: "@bob:x", id: "$b1")
@@ -199,8 +209,8 @@ struct SDKMappingsTests {
         #expect(set.apply(.changes(added: [], updated: [], removed: [removal])).map(\.eventID) == ["$a2"])
     }
     
-    @Test
-    func aStickyEventIsReportedWithItsWireTypeAndContent() throws {
+    @Test("A sticky event is reported with its wire type and content")
+    func stickyEventContent() throws {
         let mappedEvent = try #require(SDKMappings.event(stickyEvent(sender: "@alice:x", id: "$a1")))
         
         #expect(mappedEvent.eventType == "org.matrix.msc4143.rtc.member")

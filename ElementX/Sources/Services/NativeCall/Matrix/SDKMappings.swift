@@ -123,8 +123,12 @@ nonisolated enum SDKMappings {
     static func transportsJSON(_ transports: [RtcTransport]) -> String {
         let objects: [[String: Any]] = transports.map { transport in
             switch transport {
-            case .liveKit(_, let serviceURL):
-                return ["type": "livekit", "livekit_service_url": serviceURL]
+            case .liveKit(let url, let serviceURL):
+                // MSC4195 omits absent fields rather than sending null.
+                var fields: [String: Any] = ["type": "livekit"]
+                fields["url"] = url
+                fields["livekit_service_url"] = serviceURL
+                return fields
             case .custom(let type, let data):
                 var fields = jsonObject(data) ?? [:]
                 fields["type"] = type
