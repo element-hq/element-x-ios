@@ -515,8 +515,6 @@
 "error_some_messages_have_not_been_sent" = "Some messages have not been sent";
 "error_unknown" = "Sorry, an error occurred";
 "error.account_already_logged_in" = "You’re already signed in as %1$@.";
-"full_screen_intent_banner_message" = "To ensure you never miss an important call, please change your settings to allow full-screen notifications when your phone is locked.";
-"full_screen_intent_banner_title" = "Enhance your call experience";
 "invite_friends_rich_title" = "🔐️ Join me on %1$@";
 "invite_friends_text" = "Hey, talk to me on %1$@: %2$@";
 "leave_conversation_alert_subtitle" = "Are you sure that you want to leave this conversation? This conversation is not public and you won't be able to rejoin without an invite.";
