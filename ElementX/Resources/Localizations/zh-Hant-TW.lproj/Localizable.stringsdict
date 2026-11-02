@@ -66,10 +66,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Forward %1$d message</string>
 			<key>other</key>
-			<string>Forward %1$d messages</string>
+			<string>轉發 %1$d 訊息</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -488,10 +486,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d message forwarded</string>
 			<key>other</key>
-			<string>%1$d messages forwarded</string>
+			<string>已轉發 %1$d 訊息</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

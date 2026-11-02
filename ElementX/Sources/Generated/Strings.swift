@@ -1190,10 +1190,6 @@ internal nonisolated enum L10n {
   internal static var errorSomeMessagesHaveNotBeenSent: String { return L10n.tr("Localizable", "error_some_messages_have_not_been_sent") }
   /// Sorry, an error occurred
   internal static var errorUnknown: String { return L10n.tr("Localizable", "error_unknown") }
-  /// To ensure you never miss an important call, please change your settings to allow full-screen notifications when your phone is locked.
-  internal static var fullScreenIntentBannerMessage: String { return L10n.tr("Localizable", "full_screen_intent_banner_message") }
-  /// Enhance your call experience
-  internal static var fullScreenIntentBannerTitle: String { return L10n.tr("Localizable", "full_screen_intent_banner_title") }
   /// 🔐️ Join me on %1$@
   internal static func inviteFriendsRichTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "invite_friends_rich_title", String(describing: p1))
