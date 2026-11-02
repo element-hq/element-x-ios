@@ -87,7 +87,7 @@ packages:
     # path: ../matrix-analytics-events
   EmbeddedElementCall:
     url: https://github.com/element-hq/element-call-swift # WebView implementation
-    exactVersion: 0.28.1-rc.2
+    exactVersion: 0.28.1
   ElementCall:
     url: https://github.com/element-hq/element-call-ios # Native implementation
     exactVersion: 0.1.0-rc.14
