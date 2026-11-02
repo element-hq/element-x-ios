@@ -89,15 +89,29 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
 
 struct RoomListFiltersState {
     private(set) var activeFilters: OrderedSet<RoomListFilter>
+    /// The number of pending invites, seen or not.
+    var invitesCount: Int
+    /// Whether any pending invite hasn't been opened yet, which moves the invites filter to the front.
+    var hasUnseenInvites: Bool
     private let userSettings: UserSettings
     
-    init(activeFilters: OrderedSet<RoomListFilter> = [], userSettings: UserSettings) {
+    init(activeFilters: OrderedSet<RoomListFilter> = [],
+         invitesCount: Int = 0,
+         hasUnseenInvites: Bool = false,
+         userSettings: UserSettings) {
         self.activeFilters = .init(activeFilters)
+        self.invitesCount = invitesCount
+        self.hasUnseenInvites = hasUnseenInvites
         self.userSettings = userSettings
     }
     
     var availableFilters: [RoomListFilter] {
         var availableFilters = OrderedSet(RoomListFilter.availableFilters)
+        
+        if hasUnseenInvites {
+            availableFilters.remove(.invites)
+            availableFilters.insert(.invites, at: 0)
+        }
         
         if !userSettings.app.lowPriorityFilterEnabled {
             availableFilters.remove(.lowPriority)
@@ -138,5 +152,13 @@ struct RoomListFiltersState {
     
     func isFilterActive(_ filter: RoomListFilter) -> Bool {
         activeFilters.contains(filter)
+    }
+    
+    func localizedName(for filter: RoomListFilter) -> String {
+        if filter == .invites, invitesCount > 0 {
+            UntranslatedL10n.screenRoomlistFilterInvitesCount(invitesCount)
+        } else {
+            filter.localizedName
+        }
     }
 }

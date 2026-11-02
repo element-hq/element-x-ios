@@ -114,6 +114,29 @@ final class RoomListFiltersStateTests {
         #expect(state.availableFilters == [.unreads, .favourites])
     }
     
+    @Test
+    func unseenInvitesOrder() {
+        state.invitesCount = 2
+        state.hasUnseenInvites = true
+        #expect(state.availableFilters == [.invites] + defaultFilters.filter { $0 != .invites })
+        
+        state.activateFilter(.unreads)
+        #expect(state.availableFilters == [.favourites, .people, .rooms])
+        
+        state.deactivateFilter(.unreads)
+        state.hasUnseenInvites = false
+        #expect(state.availableFilters == defaultFilters)
+    }
+    
+    @Test
+    func invitesCountName() {
+        #expect(state.localizedName(for: .invites) == L10n.screenRoomlistFilterInvites)
+        
+        state.invitesCount = 5
+        #expect(state.localizedName(for: .invites) == UntranslatedL10n.screenRoomlistFilterInvitesCount(5))
+        #expect(state.localizedName(for: .people) == L10n.screenRoomlistFilterPeople)
+    }
+    
     // MARK: Low Priority feature flag
     
     /// Don't forget to add .lowPriority into the mix above when enabling the feature.

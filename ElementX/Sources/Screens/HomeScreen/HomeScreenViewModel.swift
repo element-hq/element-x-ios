@@ -126,6 +126,22 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             }
             .store(in: &cancellables)
         
+        // The main room list is filtered and paginated so the invites are counted from the static one.
+        userSession.clientProxy.staticRoomSummaryProvider.roomListPublisher
+            .combineLatest(userSettings.account.seenInvitesPublisher)
+            .receive(on: DispatchQueue.main)
+            .map { rooms, seenInvites -> (count: Int, hasUnseen: Bool) in
+                let inviteIDs = rooms.filter { $0.joinRequestType?.isInvite == true }.map(\.id)
+                return (count: inviteIDs.count, hasUnseen: inviteIDs.contains { !seenInvites.contains($0) })
+            }
+            .removeDuplicates { $0 == $1 }
+            .sink { [weak self] invites in
+                guard let self else { return }
+                state.bindings.filtersState.invitesCount = invites.count
+                state.bindings.filtersState.hasUnseenInvites = invites.hasUnseen
+            }
+            .store(in: &cancellables)
+        
         userSettings.app.hasSeenNewSoundBannerPublisher
             .sink { [weak self] hasSeenNewSoundBanner in
                 self?.state.shouldShowNewSoundBanner = !hasSeenNewSoundBanner

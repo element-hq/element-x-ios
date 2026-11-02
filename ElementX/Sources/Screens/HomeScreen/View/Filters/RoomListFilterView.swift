@@ -9,12 +9,12 @@
 import SwiftUI
 
 struct RoomListFilterView: View {
-    let filter: RoomListFilter
+    let title: String
     @Binding var isActive: Bool
     
     var body: some View {
         Toggle(isOn: $isActive) {
-            Text(filter.localizedName)
+            Text(title)
         }
         .toggleStyle(FilterToggleStyle())
     }
@@ -58,7 +58,7 @@ private struct FilterToggleStyle: ToggleStyle {
 
 struct RoomListFilterView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        RoomListFilterView(filter: .people, isActive: .constant(false))
-        RoomListFilterView(filter: .people, isActive: .constant(true))
+        RoomListFilterView(title: RoomListFilter.people.localizedName, isActive: .constant(false))
+        RoomListFilterView(title: RoomListFilter.people.localizedName, isActive: .constant(true))
     }
 }
