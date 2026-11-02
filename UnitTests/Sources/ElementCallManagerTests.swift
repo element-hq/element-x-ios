@@ -389,16 +389,26 @@ final class ElementCallManagerTests {
         await expectImmediatelyEndedCallReported(forPayload: otherCall, expectedReason: .unanswered)
     }
     
-    @Test
-    func aCallDuringANativeCallStillRings() async {
-        // An ongoing native call is tracked by CallKit, which offers its own call waiting.
+    @Test("A call during a native call is reported as missed")
+    func nativeCallMissesRing() async {
         appSettings.nativeCallEnabled = true
         await startCallSession(kind: .native)
         
-        await reportIncomingPush(isVoiceCall: false, roomID: "!other:example.com")
+        let otherCall = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 60)
+            .updatingRoomID("!other:example.com")
+        await expectImmediatelyEndedCallReported(forPayload: otherCall, expectedReason: .unanswered)
+    }
+    
+    @Test("A call while a native call is being answered is reported as missed")
+    func answeringNativeCallMissesRing() async throws {
+        appSettings.nativeCallEnabled = true
+        await reportIncomingPush(isVoiceCall: false)
+        try await answerReportedCall()
         
-        #expect(callProvider.reportNewIncomingCallWithUpdateCompletionReceivedArguments?.update.remoteHandle?.value == "!other:example.com")
-        #expect(!callProvider.reportCallWithEndedAtReasonCalled)
+        let otherCall = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 60)
+            .updatingRoomID("!other:example.com")
+            .updatingRTCNotificationID("$111")
+        await expectImmediatelyEndedCallReported(forPayload: otherCall, expectedReason: .unanswered)
     }
     
     @Test
@@ -799,6 +809,56 @@ final class ElementCallManagerTests {
         #expect((callController.requestCompletionReceivedArguments?.transaction.actions.first as? CXSetMutedCallAction)?.isMuted == true)
     }
     
+    @Test("A CallKit mute for another call is ignored")
+    func otherCallMuteIgnored() async {
+        await startCallSession(kind: .native)
+        
+        manager.provider(CXProvider(configuration: CXProviderConfiguration()), perform: CXSetMutedCallAction(call: UUID(), muted: true))
+        
+        #expect(service.systemEventReceivedReceivedInvocations.isEmpty)
+    }
+    
+    // MARK: - Provider reset
+    
+    @Test("A CallKit reset ends the owner's native call and deactivates the audio everywhere")
+    func resetEndsOwnersNativeCall() async {
+        let bobActions = PassthroughSubject<ElementCallServiceAction, Never>()
+        let bob = makeCallService(userID: "@bob:matrix.org", actions: bobActions)
+        manager.add(bob)
+        await startCallSession(kind: .native, service: bob, actions: bobActions)
+        let requestsBefore = callController.requestCompletionCallsCount
+        
+        manager.providerDidReset(CXProvider(configuration: CXProviderConfiguration()))
+        
+        #expect(bob.systemEventReceivedReceivedInvocations == [.endCallRequested(roomID: "!room:example.com"), .audioSessionDeactivated])
+        #expect(service.systemEventReceivedReceivedInvocations == [.audioSessionDeactivated])
+        #expect(bob.ongoingCallRoomIDPublisher.value == nil)
+        // The provider dropped every call, so there's nothing left to request or report.
+        #expect(callController.requestCompletionCallsCount == requestsBefore)
+        #expect(!callProvider.reportCallWithEndedAtReasonCalled)
+    }
+    
+    @Test("A CallKit reset leaves a web call up")
+    func resetKeepsWebCall() async {
+        await startCallSession(kind: .webView)
+        
+        manager.providerDidReset(CXProvider(configuration: CXProviderConfiguration()))
+        
+        #expect(service.ongoingCallRoomIDPublisher.value == "!room:example.com")
+        #expect(service.systemEventReceivedReceivedInvocations == [.audioSessionDeactivated])
+    }
+    
+    @Test("A CallKit reset ends the ringing call")
+    func resetEndsRing() async {
+        await reportIncomingPush(isVoiceCall: false)
+        
+        manager.providerDidReset(CXProvider(configuration: CXProviderConfiguration()))
+        
+        await reportIncomingPush(isVoiceCall: false, roomID: "!other:example.com", rtcNotificationID: "$111")
+        #expect(callProvider.reportNewIncomingCallWithUpdateCompletionReceivedArguments?.update.remoteHandle?.value == "!other:example.com")
+        #expect(!callProvider.reportCallWithEndedAtReasonCalled)
+    }
+    
     // MARK: - Accounts
     
     @Test
@@ -1013,6 +1073,32 @@ final class ElementCallManagerTests {
         #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.reason == .remoteEnded)
     }
     
+    @Test("A service added while the audio session is active hears it")
+    func lateServiceHearsActiveAudio() {
+        manager.provider(CXProvider(configuration: CXProviderConfiguration()), didActivate: AVAudioSession.sharedInstance())
+        let bob = makeCallService(userID: "@bob:matrix.org")
+        
+        manager.add(bob)
+        
+        #expect(bob.systemEventReceivedReceivedInvocations == [.audioSessionActivated])
+    }
+    
+    @Test("A service added after the audio session ended hears nothing", arguments: [false, true])
+    func lateServiceMissesEndedAudio(isReset: Bool) {
+        let provider = CXProvider(configuration: CXProviderConfiguration())
+        manager.provider(provider, didActivate: AVAudioSession.sharedInstance())
+        if isReset {
+            manager.providerDidReset(provider)
+        } else {
+            manager.provider(provider, didDeactivate: AVAudioSession.sharedInstance())
+        }
+        let bob = makeCallService(userID: "@bob:matrix.org")
+        
+        manager.add(bob)
+        
+        #expect(bob.systemEventReceivedReceivedInvocations.isEmpty)
+    }
+    
     // MARK: - Removed and replaced services
     
     @Test
@@ -1082,8 +1168,8 @@ final class ElementCallManagerTests {
         #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.uuid == answeredUUID)
         #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.reason == .failed)
         
-        // C1's busy rule lets a ring through here anyway, so a ringing next push proves nothing.
-        manager.dropAnsweredCall(userID: "@bob:matrix.org", roomID: "!room:example.com")
+        await reportIncomingPush(isVoiceCall: false, roomID: "!other:example.com", rtcNotificationID: "$111")
+        #expect(callProvider.reportNewIncomingCallWithUpdateCompletionReceivedArguments?.update.remoteHandle?.value == "!other:example.com")
         #expect(callProvider.reportCallWithEndedAtReasonCallsCount == 1, "Nothing answered is left")
     }
     

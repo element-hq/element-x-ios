@@ -70,6 +70,8 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
     private var answeredNativeCallID: CallID?
     private var endPendingCallTask: Task<Void, Never>?
     
+    private var isAudioSessionActive = false
+    
     /// The incoming call while nobody has answered it.
     private var ringingCallID: CallID? {
         guard !isIncomingCallAnswered, incomingCallID != answeredNativeCallID else { return nil }
@@ -149,6 +151,11 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
         if let pendingDecline, pendingDecline.userID == userID {
             self.pendingDecline = nil
             decline(pendingDecline)
+        }
+        
+        // A lock-screen answer at cold launch activates the audio before the account's service is added.
+        if isAudioSessionActive {
+            service.systemEventReceived(.audioSessionActivated)
         }
     }
     
@@ -412,8 +419,7 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
             return
         }
         
-        // An ongoing native call is tracked by CallKit, which offers its own call waiting.
-        let isBusy = (incomingCallID != nil && answeredNativeCallID == nil) || ongoingCallID?.isNative == false
+        let isBusy = incomingCallID != nil || ongoingCallID != nil
         guard !isBusy else {
             MXLog.info("Another call is ringing or ongoing, reporting the call for room \(push.roomID) as missed")
             reportImmediatelyEndedCall(reason: .unanswered, callerInfo: callerInfo, completion: completion)
@@ -439,6 +445,7 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
         // If not for audio call the app will not be put to foreground and the webview won't be able to handle the call...
         // Consequence: The call will be presented to the user as a video call in CallKit UI,
         // but once Element Call is launched it will correctly route to a voice-only call.
+        // TODO: A native voice call answered on the lock screen at cold launch has no scene to start its call from, so the watchdog ends it.
         update.hasVideo = appSettings.nativeCallEnabled ? !push.isVoiceCall : true
         update.localizedCallerName = push.roomDisplayName
         // https://stackoverflow.com/a/41230020/730924
@@ -479,11 +486,13 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
     // so there's no owner left to route these to. Services without a native call stack ignore them.
     func provider(_ provider: CXProvider, didActivate audioSession: AVAudioSession) {
         MXLog.info("Call provider did activate audio session")
+        isAudioSessionActive = true
         services.values.forEach { $0.systemEventReceived(.audioSessionActivated) }
     }
     
     func provider(_ provider: CXProvider, didDeactivate audioSession: AVAudioSession) {
         MXLog.info("Call provider did deactivate audio session")
+        isAudioSessionActive = false
         services.values.forEach { $0.systemEventReceived(.audioSessionDeactivated) }
     }
     
@@ -494,8 +503,20 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
         callProvider.reportOutgoingCall(with: action.callUUID, startedConnectingAt: nil)
     }
     
+    /// The provider dropped every call, so nothing here is requested from or reported to CallKit.
     func providerDidReset(_ provider: CXProvider) {
         MXLog.info("Call provider did reset: \(provider)")
+        
+        // A web view call isn't tracked by CallKit, so it stays up.
+        if let ongoingCallID, ongoingCallID.isNative {
+            services[ongoingCallID.userID]?.systemEventReceived(.endCallRequested(roomID: ongoingCallID.roomID))
+            self.ongoingCallID = nil
+        }
+        
+        isAudioSessionActive = false
+        services.values.forEach { $0.systemEventReceived(.audioSessionDeactivated) }
+        
+        clearIncomingCallState()
     }
     
     func provider(_ provider: CXProvider, perform action: CXAnswerCallAction) {
@@ -554,10 +575,10 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
     }
     
     func provider(_ provider: CXProvider, perform action: CXSetMutedCallAction) {
-        if let ongoingCallID {
+        if let ongoingCallID, ongoingCallID.callKitID == action.callUUID {
             services[ongoingCallID.userID]?.systemEventReceived(.microphoneMuteChanged(isMuted: action.isMuted))
         } else {
-            MXLog.info("Ignoring a mute action without an ongoing call")
+            MXLog.info("Ignoring a mute action for a call that isn't the ongoing one")
         }
         
         action.fulfill()
