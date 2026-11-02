@@ -21,4 +21,30 @@ nonisolated enum ElementCallServiceNotificationKey: String {
     case receiverID
 }
 
+/// The incoming call a VoIP push carries, read from the payload the NSE builds with ``ElementCallServiceNotificationKey``.
+nonisolated struct VoIPPushPayload {
+    let roomID: String
+    let roomDisplayName: String?
+    let rtcNotificationID: String
+    let receiverID: String
+    let expirationDate: Date
+    let isVoiceCall: Bool
+    
+    init?(dictionary: [AnyHashable: Any]) {
+        guard let roomID = dictionary[ElementCallServiceNotificationKey.roomID.rawValue] as? String,
+              let rtcNotificationID = dictionary[ElementCallServiceNotificationKey.rtcNotifyEventID.rawValue] as? String,
+              let receiverID = dictionary[ElementCallServiceNotificationKey.receiverID.rawValue] as? String,
+              let expirationDate = dictionary[ElementCallServiceNotificationKey.expirationDate.rawValue] as? Date else {
+            return nil
+        }
+        
+        self.roomID = roomID
+        self.rtcNotificationID = rtcNotificationID
+        self.receiverID = receiverID
+        self.expirationDate = expirationDate
+        roomDisplayName = dictionary[ElementCallServiceNotificationKey.roomDisplayName.rawValue] as? String
+        isVoiceCall = dictionary[ElementCallServiceNotificationKey.isVoiceCall.rawValue] as? Bool ?? false
+    }
+}
+
 nonisolated let ElementCallServiceNotificationDiscardDelta = 15.0
