@@ -16,7 +16,7 @@ struct AuthenticationStartScreen: View {
     @Bindable var context: AuthenticationStartScreenViewModel.Context
     
     var body: some View {
-        if case let .welcomeBack(classicAppAccount) = context.viewState.classicAppMode,
+        if case let .classicAppWelcomeBack(classicAppAccount) = context.viewState.mode,
            classicAppAccount.state.isServerSupported != false {
             AuthenticationClassicAppAccountView(context: context, classicAppAccount: classicAppAccount)
         } else {
@@ -51,9 +51,12 @@ struct AuthenticationStartScreen: View {
             .scrollBounceBehavior(.basedOnSize)
         }
         .background {
-            AuthenticationStartScreenBackgroundImage()
+            if context.viewState.mode != .addAccount {
+                AuthenticationStartScreenBackgroundImage()
+            }
         }
-        .navigationBarHidden(context.viewState.classicAppMode == nil)
+        .navigationBarHidden(context.viewState.mode == .welcome)
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
         .alert(item: $context.alertInfo)
         .introspect(.window, on: .supportedVersions) { window in
@@ -63,34 +66,45 @@ struct AuthenticationStartScreen: View {
     
     var content: some View {
         VStack(spacing: 0) {
-            Spacer()
-            
-            if verticalSizeClass == .regular {
+            if context.viewState.mode == .addAccount {
+                TitleAndIcon(title: L10n.screenOnboardingAddAccountTitle,
+                             subtitle: L10n.screenOnboardingAddAccountSubtitle,
+                             icon: \.plus,
+                             iconStyle: .defaultSolid)
+                    .padding(.top, 24)
+                    .padding(.horizontal, 8)
+                
+                Spacer()
+            } else {
                 Spacer()
                 
-                AuthenticationStartLogo(hideBrandChrome: context.viewState.hideBrandChrome,
-                                        isOnGradient: !context.viewState.hideBrandChrome)
-            }
-            
-            Spacer()
-            
-            if !context.viewState.hideBrandChrome {
-                VStack(spacing: 8) {
-                    Text(L10n.screenOnboardingWelcomeTitle)
-                        .font(.compound.headingLGBold)
-                        .foregroundColor(.compound.textPrimary)
-                        .multilineTextAlignment(.center)
-                        .accessibilityAddTraits(.isHeader)
-                    Text(L10n.screenOnboardingWelcomeMessage(InfoPlistReader.main.productionAppName))
-                        .font(.compound.bodyLG)
-                        .foregroundColor(.compound.textPrimary)
-                        .multilineTextAlignment(.center)
+                if verticalSizeClass == .regular {
+                    Spacer()
+                    
+                    AuthenticationStartLogo(hideBrandChrome: context.viewState.hideBrandChrome,
+                                            isOnGradient: !context.viewState.hideBrandChrome)
                 }
-                .padding()
-                .fixedSize(horizontal: false, vertical: true)
+                
+                Spacer()
+                
+                if !context.viewState.hideBrandChrome {
+                    VStack(spacing: 8) {
+                        Text(L10n.screenOnboardingWelcomeTitle)
+                            .font(.compound.headingLGBold)
+                            .foregroundColor(.compound.textPrimary)
+                            .multilineTextAlignment(.center)
+                            .accessibilityAddTraits(.isHeader)
+                        Text(L10n.screenOnboardingWelcomeMessage(InfoPlistReader.main.productionAppName))
+                            .font(.compound.bodyLG)
+                            .foregroundColor(.compound.textPrimary)
+                            .multilineTextAlignment(.center)
+                    }
+                    .padding()
+                    .fixedSize(horizontal: false, vertical: true)
+                }
+                
+                Spacer()
             }
-            
-            Spacer()
         }
         .padding(.bottom)
         .padding(.horizontal, 16)
@@ -121,18 +135,20 @@ struct AuthenticationStartScreen: View {
                 .buttonStyle(.compound(.tertiary))
             }
             
-            versionText
-                .font(.compound.bodySM)
-                .foregroundColor(.compound.textSecondary)
-                .onTapGesture(count: 7) {
-                    context.send(viewAction: .reportProblem)
-                }
-                .accessibilityIdentifier(A11yIdentifiers.authenticationStartScreen.appVersion)
-                .overlay(alignment: .trailing) {
-                    developerOptionsButton
-                        .scaledOffset(x: 32, y: -0.5, relativeTo: .compound.bodySM)
-                }
-                .padding(.top, 16)
+            if context.viewState.mode != .addAccount {
+                versionText
+                    .font(.compound.bodySM)
+                    .foregroundColor(.compound.textSecondary)
+                    .onTapGesture(count: 7) {
+                        context.send(viewAction: .reportProblem)
+                    }
+                    .accessibilityIdentifier(A11yIdentifiers.authenticationStartScreen.appVersion)
+                    .overlay(alignment: .trailing) {
+                        developerOptionsButton
+                            .scaledOffset(x: 32, y: -0.5, relativeTo: .compound.bodySM)
+                    }
+                    .padding(.top, 16)
+            }
         }
         .padding(.horizontal, verticalSizeClass == .compact ? 128 : 24)
         .readableFrame()
@@ -157,8 +173,14 @@ struct AuthenticationStartScreen: View {
     
     @ToolbarContentBuilder
     var toolbar: some ToolbarContent {
+        ToolbarItem(placement: .title) {
+            if context.viewState.mode == .addAccount {
+                Text(L10n.screenSettingsAddAccount)
+            }
+        }
+        
         ToolbarItem(placement: .primaryAction) {
-            if case let .otherOptions(classicAppAccount) = context.viewState.classicAppMode {
+            if case let .classicAppOtherOptions(classicAppAccount) = context.viewState.mode {
                 ToolbarButton(role: .close) {
                     context.send(viewAction: .closeOtherOptions(classicAppAccount))
                 }
@@ -173,6 +195,7 @@ struct AuthenticationStartScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = makeViewModel()
     static let provisionedViewModel = makeViewModel(provisionedServerName: "example.com")
     static let classicAppViewModel = makeViewModel(hasClassicAppAccount: true)
+    static let addAccountViewModel = makeViewModel(isAddingAccount: true)
     
     static var previews: some View {
         AuthenticationStartScreen(context: viewModel.context)
@@ -184,9 +207,14 @@ struct AuthenticationStartScreen_Previews: PreviewProvider, TestablePreview {
             AuthenticationStartScreen(context: classicAppViewModel.context)
         }
         .previewDisplayName("Classic App")
+        
+        ElementNavigationStack {
+            AuthenticationStartScreen(context: addAccountViewModel.context)
+        }
+        .previewDisplayName("Add Account")
     }
     
-    static func makeViewModel(provisionedServerName: String? = nil, hasClassicAppAccount: Bool = false) -> AuthenticationStartScreenViewModel {
+    static func makeViewModel(provisionedServerName: String? = nil, hasClassicAppAccount: Bool = false, isAddingAccount: Bool = false) -> AuthenticationStartScreenViewModel {
         let classicAppAccount = ClassicAppAccount.mockDan
         classicAppAccount.state.isServerSupported = true
         classicAppAccount.state.availableSecrets = .complete
@@ -194,6 +222,7 @@ struct AuthenticationStartScreen_Previews: PreviewProvider, TestablePreview {
         
         return AuthenticationStartScreenViewModel(authenticationService: AuthenticationService.mock(classicAppManager: classicAppManager),
                                                   provisioningParameters: provisionedServerName.map { .init(accountProvider: $0, loginHint: nil) },
+                                                  isAddingAccount: isAddingAccount,
                                                   isBugReportServiceEnabled: true,
                                                   appMediator: AppMediatorMock(),
                                                   appSettings: .volatile(),

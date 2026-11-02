@@ -141,8 +141,8 @@ final class AuthenticationStartScreenViewModelTests {
         // Given a view model with a Classic app account whose server name resolves successfully.
         let classicAppAccount = makeClassicAppAccount()
         await setupViewModel(classicAppAccount: classicAppAccount)
-        guard case .welcomeBack(let account) = context.viewState.classicAppMode else {
-            Issue.record("Expected classicAppMode to be .welcomeBack")
+        guard case .classicAppWelcomeBack(let account) = context.viewState.mode else {
+            Issue.record("Expected mode to be .classicAppWelcomeBack")
             return
         }
         #expect(account == classicAppAccount)
@@ -165,8 +165,8 @@ final class AuthenticationStartScreenViewModelTests {
         let classicAppAccount = makeClassicAppAccount(serverName: "unknown-server.org",
                                                       homeserverURL: "https://matrix.company.com")
         await setupViewModel(classicAppAccount: classicAppAccount)
-        guard case .welcomeBack(let account) = context.viewState.classicAppMode else {
-            Issue.record("Expected classicAppMode to be .welcomeBack")
+        guard case .classicAppWelcomeBack(let account) = context.viewState.mode else {
+            Issue.record("Expected mode to be .classicAppWelcomeBack")
             return
         }
         #expect(account == classicAppAccount)
@@ -188,8 +188,8 @@ final class AuthenticationStartScreenViewModelTests {
         // Given a view model with a Classic app account whose server supports neither OAuth nor password login.
         let classicAppAccount = makeClassicAppAccount()
         await setupViewModel(classicAppAccount: classicAppAccount, supportsOAuth: false, supportsPasswordLogin: false)
-        guard case .welcomeBack(let account) = context.viewState.classicAppMode else {
-            Issue.record("Expected classicAppMode to be .welcomeBack")
+        guard case .classicAppWelcomeBack(let account) = context.viewState.mode else {
+            Issue.record("Expected mode to be .classicAppWelcomeBack")
             return
         }
         #expect(account == classicAppAccount)
@@ -206,7 +206,7 @@ final class AuthenticationStartScreenViewModelTests {
                              provisioningParameters: .init(accountProvider: "company.com", loginHint: nil))
         
         // Then the Classic app account should not be shown — provisioning takes precedence.
-        #expect(context.viewState.classicAppMode == nil)
+        #expect(context.viewState.mode == .welcome)
     }
     
     @Test
@@ -218,8 +218,8 @@ final class AuthenticationStartScreenViewModelTests {
         await setupViewModel(classicAppAccount: classicAppAccount)
         
         // Then the Classic app account should be shown as a welcome-back option.
-        guard case .welcomeBack(let account) = context.viewState.classicAppMode else {
-            Issue.record("Expected classicAppMode to be .welcomeBack")
+        guard case .classicAppWelcomeBack(let account) = context.viewState.mode else {
+            Issue.record("Expected mode to be .classicAppWelcomeBack")
             return
         }
         #expect(account == classicAppAccount)
@@ -234,7 +234,7 @@ final class AuthenticationStartScreenViewModelTests {
         await setupViewModel(classicAppAccount: classicAppAccount)
         
         // Then the Classic app account should not be shown since the server is not in the allowed providers.
-        #expect(context.viewState.classicAppMode == nil)
+        #expect(context.viewState.mode == .welcome)
     }
     
     @Test
@@ -242,8 +242,8 @@ final class AuthenticationStartScreenViewModelTests {
         // Given a view model with a Classic app account that requires backup before signing in.
         let classicAppAccount = makeClassicAppAccount()
         await setupViewModel(classicAppAccount: classicAppAccount, availableSecrets: .requiresBackup)
-        guard case .welcomeBack(let account) = context.viewState.classicAppMode else {
-            Issue.record("Expected classicAppMode to be .welcomeBack")
+        guard case .classicAppWelcomeBack(let account) = context.viewState.mode else {
+            Issue.record("Expected mode to be .classicAppWelcomeBack")
             return
         }
         #expect(account.state.availableSecrets == .requiresBackup)
@@ -271,10 +271,21 @@ final class AuthenticationStartScreenViewModelTests {
         try await deferredAction.fulfill()
     }
     
+    @Test
+    func addAccountWithClassicAppAccount() async {
+        // Given a view model for adding an account when a Classic app account exists.
+        let classicAppAccount = makeClassicAppAccount()
+        await setupViewModel(classicAppAccount: classicAppAccount, isAddingAccount: true)
+        
+        // Then the add account mode should be shown instead of the Classic app account.
+        #expect(context.viewState.mode == .addAccount)
+    }
+    
     // MARK: - Helpers
     
     private func setupViewModel(classicAppAccount: ClassicAppAccount? = nil,
                                 provisioningParameters: AccountProvisioningParameters? = nil,
+                                isAddingAccount: Bool = false,
                                 supportsOAuth: Bool = true,
                                 supportsPasswordLogin: Bool = true,
                                 availableSecrets: ClassicAppAccount.AvailableSecrets = .complete) async {
@@ -307,6 +318,7 @@ final class AuthenticationStartScreenViewModelTests {
         
         viewModel = AuthenticationStartScreenViewModel(authenticationService: authenticationService,
                                                        provisioningParameters: provisioningParameters,
+                                                       isAddingAccount: isAddingAccount,
                                                        isBugReportServiceEnabled: true,
                                                        appMediator: AppMediatorMock(),
                                                        appSettings: appSettings,

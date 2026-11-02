@@ -149,6 +149,7 @@ struct AuthenticationClassicAppAccountView_Previews: PreviewProvider { // Not Te
     static func makeViewModel() -> AuthenticationStartScreenViewModel {
         AuthenticationStartScreenViewModel(authenticationService: AuthenticationService.mock,
                                            provisioningParameters: nil,
+                                           isAddingAccount: false,
                                            isBugReportServiceEnabled: false,
                                            appMediator: AppMediatorMock(),
                                            appSettings: .volatile(),
