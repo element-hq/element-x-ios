@@ -208,7 +208,7 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
         
         // The answered call ended before the native call stack took it over. Starting it as a new
         // call would ring the caller back.
-        guard kind != .nativeAnswer || answeredCallID != nil else {
+        if case .native(takesOverAnsweredCall: true) = kind, answeredCallID == nil {
             MXLog.info("Refusing to set up an answered call that has ended")
             // Another account's answer in this room, which no account here can take over.
             if let answeredNativeCallID, answeredNativeCallID.roomID == roomID {
@@ -281,8 +281,7 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
     /// rings is never taken over: its ring would stay up, and declining it would hang up the call.
     private func answeredCallID(userID: String, roomID: String, kind: ElementCallSessionKind) -> CallID? {
         let callID: CallID? = switch kind {
-        case .native: nil
-        case .nativeAnswer: answeredNativeCallID
+        case .native(let takesOverAnsweredCall): takesOverAnsweredCall ? answeredNativeCallID : nil
         case .webView: isIncomingCallAnswered ? incomingCallID : nil
         }
         

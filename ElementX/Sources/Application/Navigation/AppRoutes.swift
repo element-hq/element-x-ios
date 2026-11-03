@@ -42,8 +42,8 @@ enum AppRoute: Hashable {
     case childEventOnRoomAlias(eventID: String, alias: String)
     /// The profile of a matrix user (outside of a room).
     case userProfile(userID: String)
-    /// An Element Call running in a particular room, `isAnswering` when it was answered from CallKit.
-    case call(roomID: String, isVoiceCall: Bool, isAnswering: Bool)
+    /// An Element Call running in a particular room
+    case call(roomID: String, isVoiceCall: Bool, answeredFromCallKit: Bool)
     /// The settings screen.
     case settings
     /// The setting screen for key backup.

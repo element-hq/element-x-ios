@@ -90,7 +90,7 @@ struct UserSessionFlowCoordinatorTests {
         // E.g. clearing the cache or signing out during a call: the call screen goes with the screens.
         await waitForConfirmation { confirmation in
             elementCallService.setupCallSessionRoomIDRoomDisplayNameIsVideoKindClosure = { _, _, _, _ in confirmation() }
-            userSessionFlowCoordinator.handleAppRoute(.call(roomID: "1", isVoiceCall: false, isAnswering: false), animated: false)
+            userSessionFlowCoordinator.handleAppRoute(.call(roomID: "1", isVoiceCall: false, answeredFromCallKit: false), animated: false)
         }
         
         rootCoordinator.setRootCoordinator(nil)

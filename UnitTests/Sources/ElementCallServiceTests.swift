@@ -102,7 +102,7 @@ final class ElementCallServiceTests {
         }
         defer { cancellable.cancel() }
         
-        await service.setupCallSession(roomID: "!room:example.com", roomDisplayName: "welcome", isVideo: true, kind: .native)
+        await service.setupCallSession(roomID: "!room:example.com", roomDisplayName: "welcome", isVideo: true, kind: .native(takesOverAnsweredCall: false))
         order.append("returned")
         
         #expect(order == ["sent", "set up", "returned"])
@@ -112,16 +112,16 @@ final class ElementCallServiceTests {
     func secondSetupReleasesFirst() async throws {
         var returned: [String] = []
         
-        let firstStarted = deferFulfillment(service.actionsPublisher) { $0 == .callSessionStarted(roomID: "!room:example.com", roomDisplayName: "first", isVideo: true, kind: .native) }
+        let firstStarted = deferFulfillment(service.actionsPublisher) { $0 == .callSessionStarted(roomID: "!room:example.com", roomDisplayName: "first", isVideo: true, kind: .native(takesOverAnsweredCall: false)) }
         let first = Task {
-            await service.setupCallSession(roomID: "!room:example.com", roomDisplayName: "first", isVideo: true, kind: .native)
+            await service.setupCallSession(roomID: "!room:example.com", roomDisplayName: "first", isVideo: true, kind: .native(takesOverAnsweredCall: false))
             returned.append("first")
         }
         try await firstStarted.fulfill()
         
-        let secondStarted = deferFulfillment(service.actionsPublisher) { $0 == .callSessionStarted(roomID: "!room:example.com", roomDisplayName: "second", isVideo: true, kind: .native) }
+        let secondStarted = deferFulfillment(service.actionsPublisher) { $0 == .callSessionStarted(roomID: "!room:example.com", roomDisplayName: "second", isVideo: true, kind: .native(takesOverAnsweredCall: false)) }
         let second = Task {
-            await service.setupCallSession(roomID: "!room:example.com", roomDisplayName: "second", isVideo: true, kind: .native)
+            await service.setupCallSession(roomID: "!room:example.com", roomDisplayName: "second", isVideo: true, kind: .native(takesOverAnsweredCall: false))
             returned.append("second")
         }
         try await secondStarted.fulfill()
@@ -244,12 +244,12 @@ final class ElementCallServiceTests {
         let service = makeNativeCallService()
         let roomProxy = JoinedRoomProxyMock(.init(id: "!room:example.com"))
         
-        #expect(!service.handleNativeCallRequest(roomProxy: roomProxy, isVoiceCall: false, isAnswering: false))
+        #expect(!service.handleNativeCallRequest(roomProxy: roomProxy, isVoiceCall: false, answeredFromCallKit: false))
         
         appSettings.nativeCallEnabled = true
         service.setNativeCallStackEnabled(true)
         
-        #expect(service.handleNativeCallRequest(roomProxy: roomProxy, isVoiceCall: false, isAnswering: false))
+        #expect(service.handleNativeCallRequest(roomProxy: roomProxy, isVoiceCall: false, answeredFromCallKit: false))
     }
     
     // MARK: - Helpers
@@ -284,7 +284,7 @@ final class ElementCallServiceTests {
             actionsCancellable.cancel()
         }
         
-        await service.setupCallSession(roomID: "!room:example.com", roomDisplayName: "Room", isVideo: true, kind: .nativeAnswer)
+        await service.setupCallSession(roomID: "!room:example.com", roomDisplayName: "Room", isVideo: true, kind: .native(takesOverAnsweredCall: true))
         return heardEvents
     }
 }

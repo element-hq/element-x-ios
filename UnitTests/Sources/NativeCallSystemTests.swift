@@ -24,16 +24,16 @@ struct NativeCallSystemTests {
     func startCallSetsUpNativeSession() async {
         await system.startCall(roomID: "!room:example.com", displayName: "welcome", isVideo: true)
         
-        #expect(service.setupCallSessionRoomIDRoomDisplayNameIsVideoKindReceivedArguments?.kind == .native)
+        #expect(service.setupCallSessionRoomIDRoomDisplayNameIsVideoKindReceivedArguments?.kind == .native(takesOverAnsweredCall: false))
     }
     
     @Test("A call answered from CallKit is set up as an answer")
     func answeringSetsUpNativeAnswer() async {
-        system.isAnswering = true
+        system.answeredFromCallKit = true
         
         await system.startCall(roomID: "!room:example.com", displayName: "welcome", isVideo: true)
         
-        #expect(service.setupCallSessionRoomIDRoomDisplayNameIsVideoKindReceivedArguments?.kind == .nativeAnswer)
+        #expect(service.setupCallSessionRoomIDRoomDisplayNameIsVideoKindReceivedArguments?.kind == .native(takesOverAnsweredCall: true))
     }
     
     @Test

@@ -38,8 +38,7 @@ enum CallEndReason: Equatable {
 
 enum ElementCallSessionKind: Equatable {
     case webView
-    case native
-    case nativeAnswer
+    case native(takesOverAnsweredCall: Bool)
 }
 
 /// What the service asks of the `ElementCallManager`, which owns CallKit and the VoIP pushes.
@@ -77,12 +76,12 @@ protocol ElementCallServiceProtocol: AnyObject {
     func setNativeCallStackEnabled(_ isEnabled: Bool)
     
     /// Starts, or returns to, a native call in the room, driving its screen through
-    /// ``nativeCallPresentationPublisher``. `isAnswering` takes over the call answered from CallKit.
+    /// ``nativeCallPresentationPublisher``. `answeredFromCallKit` takes over that answered call.
     ///
     /// Returns `false` when there's no native call stack and the caller should present the Element
     /// Call web view instead.
     @discardableResult
-    func handleNativeCallRequest(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool, isAnswering: Bool) -> Bool
+    func handleNativeCallRequest(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool, answeredFromCallKit: Bool) -> Bool
     
     /// Asks the native call to minimize. The screen only comes down once a system window has
     /// started, which arrives through ``nativeCallPresentationPublisher``.

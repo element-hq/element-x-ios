@@ -34,7 +34,7 @@ final class NativeCallStack {
     private struct CallRequest {
         let roomProxy: JoinedRoomProxyProtocol
         let isVoiceCall: Bool
-        let isAnswering: Bool
+        let answeredFromCallKit: Bool
     }
     
     /// A call requested while another one was still running, started once that one has ended.
@@ -72,8 +72,8 @@ final class NativeCallStack {
         }
     }
     
-    /// Starts, or returns to, the call in the room. `isAnswering` takes over the call answered from CallKit.
-    func handleCallRequest(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool, isAnswering: Bool) {
+    /// Starts, or returns to, the call in the room. `answeredFromCallKit` takes over that answered call.
+    func handleCallRequest(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool, answeredFromCallKit: Bool) {
         if controller.isInCall {
             guard controller.room?.roomID != roomProxy.id else {
                 // Reached while the call is still joining, before the service has an ongoing call
@@ -85,7 +85,7 @@ final class NativeCallStack {
             
             // The controller ignores a second call, so wait for the running one to leave its room.
             MXLog.info("\(Self.logPrefix) Leaving the ongoing call to start the one requested in another room.")
-            pendingCallRequest = CallRequest(roomProxy: roomProxy, isVoiceCall: isVoiceCall, isAnswering: isAnswering)
+            pendingCallRequest = CallRequest(roomProxy: roomProxy, isVoiceCall: isVoiceCall, answeredFromCallKit: answeredFromCallKit)
             controller.hangUp()
             return
         }
@@ -93,7 +93,7 @@ final class NativeCallStack {
         // Starting rings the room; joining one already running happens quietly.
         let callData = ElementCallData(isAudioCall: isVoiceCall,
                                        isStartingCall: !roomProxy.infoPublisher.value.hasRoomCall)
-        system.isAnswering = isAnswering
+        system.answeredFromCallKit = answeredFromCallKit
         controller.startCall(callData, room: NativeCallRoomContext(roomProxy: roomProxy))
         actionsSubject.send(.present)
     }
@@ -139,7 +139,7 @@ final class NativeCallStack {
         self.pendingCallRequest = nil
         handleCallRequest(roomProxy: pendingCallRequest.roomProxy,
                           isVoiceCall: pendingCallRequest.isVoiceCall,
-                          isAnswering: pendingCallRequest.isAnswering)
+                          answeredFromCallKit: pendingCallRequest.answeredFromCallKit)
     }
     
     /// Sends the call package's log lines to `MXLog`, keeping the package's own file and line so

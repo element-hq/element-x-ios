@@ -21,7 +21,7 @@ final class NativeCallSystem: ElementCallSystemProvidingProtocol {
     private let liveCallRoomIDsSubject: CurrentValueSubject<[String], Never>
     
     /// Set by the stack before each call it starts: the call takes over one answered from CallKit.
-    var isAnswering = false
+    var answeredFromCallKit = false
     
     /// Stored so the events keep flowing off the subject itself, without reaching back through the
     /// weak reference on every subscription.
@@ -45,7 +45,7 @@ final class NativeCallSystem: ElementCallSystemProvidingProtocol {
     func startCall(roomID: String, displayName: String, isVideo: Bool) async {
         // Set before the await, as a refusal arrives while the set-up waits.
         liveCallRoomIDsSubject.value.append(roomID)
-        await service?.setupCallSession(roomID: roomID, roomDisplayName: displayName, isVideo: isVideo, kind: isAnswering ? .nativeAnswer : .native)
+        await service?.setupCallSession(roomID: roomID, roomDisplayName: displayName, isVideo: isVideo, kind: .native(takesOverAnsweredCall: answeredFromCallKit))
     }
     
     func reportConnected(roomID: String) {

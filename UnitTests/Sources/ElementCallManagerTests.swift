@@ -279,11 +279,11 @@ final class ElementCallManagerTests {
         
         // Leaving a call to start one in another room requests an end call action for the first,
         // then starts the second before the system performs it.
-        await startCallSession(roomID: "!first:example.com", roomDisplayName: "first", kind: .native)
+        await startCallSession(roomID: "!first:example.com", roomDisplayName: "first", kind: .native(takesOverAnsweredCall: false))
         let firstCallID = try #require(callProvider.reportCallWithUpdatedReceivedArguments?.uuid)
         
         serviceActions.send(.callSessionEnded(roomID: "!first:example.com", reason: nil))
-        await startCallSession(roomID: "!second:example.com", roomDisplayName: "second", kind: .native)
+        await startCallSession(roomID: "!second:example.com", roomDisplayName: "second", kind: .native(takesOverAnsweredCall: false))
         
         manager.endCall(withCallKitID: firstCallID)
         
@@ -306,7 +306,7 @@ final class ElementCallManagerTests {
                       (.failed, .failed)])
     func aCallThatEndedWithoutUsIsReportedRatherThanEnded(reason: CallEndReason, callKitReason: CXCallEndedReason) async throws {
         appSettings.nativeCallEnabled = true
-        await startCallSession(kind: .native)
+        await startCallSession(kind: .native(takesOverAnsweredCall: false))
         let callID = try #require(callProvider.reportCallWithUpdatedReceivedArguments?.uuid)
         let requestsBeforeTheEnd = callController.requestCompletionCallsCount
         
@@ -334,7 +334,7 @@ final class ElementCallManagerTests {
         #expect(service.ongoingCallRoomIDPublisher.value == nil)
     }
     
-    @Test("Starting a call in the ringing room ends the ring as answered elsewhere", arguments: [ElementCallSessionKind.webView, .native])
+    @Test("Starting a call in the ringing room ends the ring as answered elsewhere", arguments: [ElementCallSessionKind.webView, .native(takesOverAnsweredCall: false)])
     func sameRoomStartEndsRing(kind: ElementCallSessionKind) async throws {
         await reportIncomingPush(isVoiceCall: false)
         let ringingUUID = try #require(callProvider.reportNewIncomingCallWithUpdateCompletionReceivedArguments?.uuid)
@@ -392,7 +392,7 @@ final class ElementCallManagerTests {
     @Test("A call during a native call is reported as missed")
     func nativeCallMissesRing() async {
         appSettings.nativeCallEnabled = true
-        await startCallSession(kind: .native)
+        await startCallSession(kind: .native(takesOverAnsweredCall: false))
         
         let otherCall = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 60)
             .updatingRoomID("!other:example.com")
@@ -574,7 +574,7 @@ final class ElementCallManagerTests {
         // Answering starts the watchdog, so wait for it before asserting that the hand-over stops it.
         await clock.waitForScheduledSleep()
         
-        await startCallSession(kind: .nativeAnswer)
+        await startCallSession(kind: .native(takesOverAnsweredCall: true))
         
         // Taking the answered call over means keeping its identifier rather than reporting a new
         // outgoing call, which is what the update below would be part of.
@@ -599,7 +599,7 @@ final class ElementCallManagerTests {
         
         let answeredUUID = try await answerReportedCall()
         
-        await startCallSession(roomID: "!other:example.com", roomDisplayName: "other", kind: .native)
+        await startCallSession(roomID: "!other:example.com", roomDisplayName: "other", kind: .native(takesOverAnsweredCall: false))
         
         let update = try #require(callProvider.reportCallWithUpdatedReceivedArguments)
         #expect(update.uuid != answeredUUID)
@@ -637,7 +637,7 @@ final class ElementCallManagerTests {
         serviceActions.send(.incomingCallEnded(roomID: "!room:example.com", reason: .remoteEnded))
         let requestsBefore = callController.requestCompletionCallsCount
         
-        await startCallSession(kind: .nativeAnswer)
+        await startCallSession(kind: .native(takesOverAnsweredCall: true))
         
         // Starting it as a new call would ring the caller back.
         #expect(service.callSessionSetUpRoomIDIsAcceptedReceivedArguments?.isAccepted == false)
@@ -648,10 +648,10 @@ final class ElementCallManagerTests {
     
     @Test("A refused take-over leaves the ongoing call up")
     func refusalKeepsOngoingCall() async {
-        await startCallSession(roomID: "!other:example.com", roomDisplayName: "other", kind: .native)
+        await startCallSession(roomID: "!other:example.com", roomDisplayName: "other", kind: .native(takesOverAnsweredCall: false))
         let requestsBefore = callController.requestCompletionCallsCount
         
-        await startCallSession(kind: .nativeAnswer)
+        await startCallSession(kind: .native(takesOverAnsweredCall: true))
         
         #expect(service.callSessionSetUpRoomIDIsAcceptedReceivedArguments?.isAccepted == false)
         #expect(callController.requestCompletionCallsCount == requestsBefore)
@@ -770,7 +770,7 @@ final class ElementCallManagerTests {
                 #expect(callProvider?.reportCallWithUpdatedCalled == true)
                 confirmation()
             }
-            serviceActions.send(.callSessionStarted(roomID: "!room:example.com", roomDisplayName: "welcome", isVideo: true, kind: .native))
+            serviceActions.send(.callSessionStarted(roomID: "!room:example.com", roomDisplayName: "welcome", isVideo: true, kind: .native(takesOverAnsweredCall: false)))
         }
         
         #expect(service.callSessionSetUpRoomIDIsAcceptedCallsCount == 1)
@@ -782,7 +782,7 @@ final class ElementCallManagerTests {
             completion(NSError(domain: "CallKit", code: 1))
         }
         
-        await startCallSession(kind: .native)
+        await startCallSession(kind: .native(takesOverAnsweredCall: false))
         
         #expect(service.callSessionSetUpRoomIDIsAcceptedReceivedArguments?.isAccepted == true)
         #expect(service.callSessionSetUpRoomIDIsAcceptedCallsCount == 1)
@@ -790,7 +790,7 @@ final class ElementCallManagerTests {
     
     @Test
     func callKitEventsReachService() async throws {
-        await startCallSession(kind: .native)
+        await startCallSession(kind: .native(takesOverAnsweredCall: false))
         let callID = try #require(callProvider.reportCallWithUpdatedReceivedArguments?.uuid)
         let provider = CXProvider(configuration: CXProviderConfiguration())
         
@@ -802,7 +802,7 @@ final class ElementCallManagerTests {
     
     @Test
     func nativeCallMuteReachesCallKit() async {
-        await startCallSession(kind: .native)
+        await startCallSession(kind: .native(takesOverAnsweredCall: false))
         
         serviceActions.send(.audioEnabledChanged(false, roomID: "!room:example.com"))
         
@@ -811,7 +811,7 @@ final class ElementCallManagerTests {
     
     @Test("A CallKit mute for another call is ignored")
     func otherCallMuteIgnored() async {
-        await startCallSession(kind: .native)
+        await startCallSession(kind: .native(takesOverAnsweredCall: false))
         
         manager.provider(CXProvider(configuration: CXProviderConfiguration()), perform: CXSetMutedCallAction(call: UUID(), muted: true))
         
@@ -825,7 +825,7 @@ final class ElementCallManagerTests {
         let bobActions = PassthroughSubject<ElementCallServiceAction, Never>()
         let bob = makeCallService(userID: "@bob:matrix.org", actions: bobActions)
         manager.add(bob)
-        await startCallSession(kind: .native, service: bob, actions: bobActions)
+        await startCallSession(kind: .native(takesOverAnsweredCall: false), service: bob, actions: bobActions)
         let requestsBefore = callController.requestCompletionCallsCount
         
         manager.providerDidReset(CXProvider(configuration: CXProviderConfiguration()))
@@ -889,7 +889,7 @@ final class ElementCallManagerTests {
         await reportIncomingPush(isVoiceCall: false, receiverID: "@bob:matrix.org")
         let ringingUUID = try #require(callProvider.reportNewIncomingCallWithUpdateCompletionReceivedArguments?.uuid)
         
-        await startCallSession(kind: .native)
+        await startCallSession(kind: .native(takesOverAnsweredCall: false))
         
         #expect(callProvider.reportCallWithUpdatedCalled, "Alice's call is a new CallKit call")
         #expect(callProvider.reportCallWithUpdatedReceivedArguments?.uuid != ringingUUID)
@@ -904,7 +904,7 @@ final class ElementCallManagerTests {
         await reportIncomingPush(isVoiceCall: false, receiverID: receiverID)
         let answeredUUID = try await answerReportedCall()
         
-        await startCallSession(kind: .native)
+        await startCallSession(kind: .native(takesOverAnsweredCall: false))
         
         #expect(callProvider.reportCallWithUpdatedReceivedArguments?.uuid != nil, "Alice's call is a new CallKit call")
         #expect(callProvider.reportCallWithUpdatedReceivedArguments?.uuid != answeredUUID)
@@ -918,7 +918,7 @@ final class ElementCallManagerTests {
         await reportIncomingPush(isVoiceCall: false, receiverID: "@bob:matrix.org")
         let answeredUUID = try await answerReportedCall()
         
-        await startCallSession(kind: .nativeAnswer)
+        await startCallSession(kind: .native(takesOverAnsweredCall: true))
         
         #expect(service.callSessionSetUpRoomIDIsAcceptedReceivedArguments?.isAccepted == false)
         // No account here can take Bob's call over, so it must not wait for the watchdog.
@@ -932,7 +932,7 @@ final class ElementCallManagerTests {
         appSettings.nativeCallEnabled = true
         let bobActions = PassthroughSubject<ElementCallServiceAction, Never>()
         manager.add(makeCallService(userID: "@bob:matrix.org", actions: bobActions))
-        await startCallSession(kind: .native)
+        await startCallSession(kind: .native(takesOverAnsweredCall: false))
         
         bobActions.send(.callSessionConnected(roomID: "!room:example.com"))
         bobActions.send(.audioEnabledChanged(false, roomID: "!room:example.com"))
@@ -985,7 +985,7 @@ final class ElementCallManagerTests {
         let bobActions = PassthroughSubject<ElementCallServiceAction, Never>()
         let bob = makeCallService(userID: "@bob:matrix.org", actions: bobActions)
         manager.add(bob)
-        await startCallSession(kind: .native, service: bob, actions: bobActions)
+        await startCallSession(kind: .native(takesOverAnsweredCall: false), service: bob, actions: bobActions)
         let callID = try #require(callProvider.reportCallWithUpdatedReceivedArguments?.uuid)
         let provider = CXProvider(configuration: CXProviderConfiguration())
         
@@ -1135,7 +1135,7 @@ final class ElementCallManagerTests {
         #expect(!bob.declineCallRoomIDRtcNotificationIDCalled)
     }
     
-    @Test(arguments: [ElementCallSessionKind.webView, .native])
+    @Test(arguments: [ElementCallSessionKind.webView, .native(takesOverAnsweredCall: false)])
     func removingAccountEndsOngoingCall(kind: ElementCallSessionKind) async {
         let bobActions = PassthroughSubject<ElementCallServiceAction, Never>()
         let bob = makeCallService(userID: "@bob:matrix.org", actions: bobActions)
@@ -1149,8 +1149,8 @@ final class ElementCallManagerTests {
         manager.remove(userID: "@bob:matrix.org")
         
         #expect(bob.ongoingCallRoomIDPublisher.value == nil, "Bob hears the call is gone before its service is dropped")
-        #expect(callProvider.reportCallWithEndedAtReasonReceivedInvocations.contains { $0.reason == .failed } == (kind == .native))
-        #expect(bob.systemEventReceivedReceivedInvocations.contains(.endCallRequested(roomID: "!room:example.com")) == (kind == .native))
+        #expect(callProvider.reportCallWithEndedAtReasonReceivedInvocations.contains { $0.reason == .failed } == (kind != .webView))
+        #expect(bob.systemEventReceivedReceivedInvocations.contains(.endCallRequested(roomID: "!room:example.com")) == (kind != .webView))
         
         await reportIncomingPush(isVoiceCall: false, roomID: "!other:example.com", rtcNotificationID: "$111")
         #expect(!callProvider.reportCallWithEndedAtReasonReceivedInvocations.contains { $0.reason == .unanswered })
@@ -1183,7 +1183,7 @@ final class ElementCallManagerTests {
         // Holds the start transaction open, as the system does until it has performed it.
         await waitForConfirmation(timeout: .seconds(1)) { requested in
             callController.requestCompletionClosure = { _, _ in requested() }
-            bobActions.send(.callSessionStarted(roomID: "!room:example.com", roomDisplayName: "welcome", isVideo: true, kind: .native))
+            bobActions.send(.callSessionStarted(roomID: "!room:example.com", roomDisplayName: "welcome", isVideo: true, kind: .native(takesOverAnsweredCall: false)))
         }
         let completeStart = try #require(callController.requestCompletionReceivedArguments?.completion)
         let startedCall = try #require(callController.requestCompletionReceivedArguments?.transaction.actions.first as? CXStartCallAction)
@@ -1202,7 +1202,7 @@ final class ElementCallManagerTests {
         #expect(callProvider.reportCallWithEndedAtReasonReceivedInvocations.count == 2, "Once at removal, again once the start has landed")
     }
     
-    @Test(arguments: [ElementCallSessionKind.webView, .native])
+    @Test(arguments: [ElementCallSessionKind.webView, .native(takesOverAnsweredCall: false)])
     func replacingServiceEndsLeftoverCall(kind: ElementCallSessionKind) async {
         let oldBobActions = PassthroughSubject<ElementCallServiceAction, Never>()
         let oldBob = makeCallService(userID: "@bob:matrix.org", actions: oldBobActions)
@@ -1217,8 +1217,8 @@ final class ElementCallManagerTests {
         manager.add(makeCallService(userID: "@bob:matrix.org"))
         
         #expect(oldBob.ongoingCallRoomIDPublisher.value == nil, "The old service hears nil before it's swapped out")
-        #expect(callProvider.reportCallWithEndedAtReasonReceivedInvocations.contains { $0.reason == .failed } == (kind == .native))
-        #expect(oldBob.systemEventReceivedReceivedInvocations.contains(.endCallRequested(roomID: "!room:example.com")) == (kind == .native))
+        #expect(callProvider.reportCallWithEndedAtReasonReceivedInvocations.contains { $0.reason == .failed } == (kind != .webView))
+        #expect(oldBob.systemEventReceivedReceivedInvocations.contains(.endCallRequested(roomID: "!room:example.com")) == (kind != .webView))
         
         await reportIncomingPush(isVoiceCall: false, roomID: "!other:example.com", rtcNotificationID: "$111")
         #expect(!callProvider.reportCallWithEndedAtReasonReceivedInvocations.contains { $0.reason == .unanswered })
