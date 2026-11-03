@@ -27,7 +27,7 @@ struct VoiceMessageRecordingComposer_Previews: PreviewProvider, TestablePreview 
     
     static var previews: some View {
         VoiceMessageRecordingComposer(recorderState: recorderState)
-            .messageComposerStyle(padsContent: false)
+            .messageComposerStyle(contentIncludesPadding: true)
             .fixedSize(horizontal: false, vertical: true)
     }
 }

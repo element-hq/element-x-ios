@@ -105,7 +105,7 @@ struct VoiceMessagePreviewComposer_Previews: PreviewProvider, TestablePreview {
     
     static var previews: some View {
         VoiceMessagePreviewComposer(playerState: playerState, waveform: .data(waveformData), onPlay: { }, onPause: { }, onSeek: { _ in }, onScrubbing: { _ in })
-            .messageComposerStyle(padsContent: false)
+            .messageComposerStyle(contentIncludesPadding: true)
             .fixedSize(horizontal: false, vertical: true)
     }
 }

@@ -926,11 +926,11 @@ final class ComposerToolbarViewModelTests {
     func discardingVoiceMessageRestoresReply() {
         viewModel.process(timelineAction: .setMode(mode: replyMode))
         viewModel.process(timelineAction: .setMode(mode: .recordVoiceMessage(state: AudioRecorderState())))
-        #expect(viewModel.state.voiceMessageReplyMode == replyMode)
+        #expect(viewModel.state.voiceMessageReply == replyMode.reply)
         
         viewModel.process(timelineAction: .setMode(mode: .default))
         #expect(viewModel.state.composerMode == replyMode)
-        #expect(viewModel.state.voiceMessageReplyMode == nil)
+        #expect(viewModel.state.voiceMessageReply == nil)
     }
     
     @Test
@@ -941,7 +941,7 @@ final class ComposerToolbarViewModelTests {
         
         viewModel.process(timelineAction: .setMode(mode: .default))
         #expect(viewModel.state.composerMode == .default)
-        #expect(viewModel.state.voiceMessageReplyMode == nil)
+        #expect(viewModel.state.voiceMessageReply == nil)
     }
     
     @Test
@@ -952,7 +952,7 @@ final class ComposerToolbarViewModelTests {
         
         viewModel.process(viewAction: .cancelReply)
         #expect(viewModel.state.composerMode == recordMode)
-        #expect(viewModel.state.voiceMessageReplyMode == nil)
+        #expect(viewModel.state.voiceMessageReply == nil)
     }
     
     @Test
@@ -965,7 +965,7 @@ final class ComposerToolbarViewModelTests {
         let otherReplyMode = ComposerMode.reply(eventID: "otherID", replyDetails: .loading(eventID: "otherID"), isThread: false)
         viewModel.process(timelineAction: .setMode(mode: otherReplyMode))
         #expect(viewModel.state.composerMode == previewMode)
-        #expect(viewModel.state.voiceMessageReplyMode == otherReplyMode)
+        #expect(viewModel.state.voiceMessageReply == otherReplyMode.reply)
     }
     
     @Test
@@ -974,7 +974,7 @@ final class ComposerToolbarViewModelTests {
         viewModel.process(timelineAction: .setMode(mode: .recordVoiceMessage(state: AudioRecorderState())))
         
         viewModel.process(timelineAction: .setMode(mode: .edit(originalEventOrTransactionID: .eventID("editID"), type: .default)))
-        #expect(viewModel.state.voiceMessageReplyMode == nil)
+        #expect(viewModel.state.voiceMessageReply == nil)
     }
     
     @Test
@@ -1004,7 +1004,7 @@ final class ComposerToolbarViewModelTests {
         
         let recordMode = ComposerMode.recordVoiceMessage(state: AudioRecorderState())
         let deferredReplyLoaded = deferFulfillment(viewModel.context.$viewState) {
-            $0.voiceMessageReplyMode == .reply(eventID: "testID", replyDetails: loadedReply, isThread: false)
+            $0.voiceMessageReply == .init(eventID: "testID", replyDetails: loadedReply, isThread: false)
         }
         viewModel.process(timelineAction: .setMode(mode: recordMode))
         

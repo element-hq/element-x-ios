@@ -282,14 +282,14 @@ struct ComposerToolbar: View {
                 voiceMessageTrashButton
                     .scaledPadding(.vertical, buttonVerticalPadding, relativeTo: .compound.headingLG)
                 VoiceMessageRecordingComposer(recorderState: state)
-                    .voiceMessageReplyHeader(context: context)
+                    .modifier(VoiceMessageComposerStyleModifier(context: context))
             }
         case .previewVoiceMessage(let state, let waveform, let isUploading):
             topBarLayout {
                 voiceMessageTrashButton
                     .scaledPadding(.vertical, buttonVerticalPadding, relativeTo: .compound.headingLG)
                 voiceMessagePreviewComposer(audioPlayerState: state, waveform: waveform)
-                    .voiceMessageReplyHeader(context: context)
+                    .modifier(VoiceMessageComposerStyleModifier(context: context))
             }
             .disabled(isUploading)
         default:
@@ -378,16 +378,21 @@ struct ComposerToolbarButtonStyle: ButtonStyle {
     }
 }
 
-private extension View {
-    /// Wraps the voice message composer in the same box as the text composer, with the reply header when replying.
-    func voiceMessageReplyHeader(context: ComposerToolbarViewModel.Context) -> some View {
-        var header: MessageComposerReplyHeader?
-        if case let .reply(_, replyDetails, _) = context.viewState.voiceMessageReplyMode {
-            header = MessageComposerReplyHeader(replyDetails: replyDetails) {
+/// Wraps the voice message composer in the same box as the text composer, with the reply header when replying.
+private struct VoiceMessageComposerStyleModifier: ViewModifier {
+    let context: ComposerToolbarViewModel.Context
+    
+    func body(content: Content) -> some View {
+        content
+            .messageComposerStyle(header: header, contentIncludesPadding: true)
+    }
+    
+    private var header: MessageComposerReplyHeader? {
+        context.viewState.voiceMessageReply.map { reply in
+            MessageComposerReplyHeader(replyDetails: reply.replyDetails) {
                 context.send(viewAction: .cancelReply)
             }
         }
-        return messageComposerStyle(header: header, padsContent: false)
     }
 }
 
@@ -404,11 +409,7 @@ struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
     static let voiceMessageUploadingViewModel = ComposerToolbarViewModel.mock(mockMode: .previewVoiceMessage(isUploading: true))
     static let replyLoadingViewModel = ComposerToolbarViewModel.mock(mockMode: .reply(isLoading: true))
     static let replyLoadedViewModel = ComposerToolbarViewModel.mock(mockMode: .reply(isLoading: false))
-    static let voiceMessageReplyViewModel = {
-        let viewModel = ComposerToolbarViewModel.mock(mockMode: .previewVoiceMessage(isUploading: false))
-        viewModel.state.voiceMessageReplyMode = replyLoadedViewModel.state.composerMode
-        return viewModel
-    }()
+    static let voiceMessageReplyViewModel = ComposerToolbarViewModel.mock(mockMode: .previewVoiceMessage(isUploading: false, isReplying: true))
     
     static let suggestionsViewModel = ComposerToolbarViewModel.mock(hasSuggestions: true)
     static let disabledViewModel = ComposerToolbarViewModel.mock(canSend: false)
