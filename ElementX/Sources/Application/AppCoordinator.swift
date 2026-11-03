@@ -435,13 +435,20 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
             return
         }
         
+        // The SDK keeps a reply to a threaded event in that event's thread.
+        let inReplyToEventID: String? = if appSettings.threadsEnabled, content.threadRootEventID != nil {
+            content.eventID
+        } else {
+            nil
+        }
+        
         guard let userSession = userSessionManager.session(for: receiverID) else {
             // Store the data so it can be sent once the receiver's session is live.
-            storedInlineReply = PendingInlineReplyDetails(userID: receiverID, roomID: roomID, message: replyText)
+            storedInlineReply = PendingInlineReplyDetails(userID: receiverID, roomID: roomID, inReplyToEventID: inReplyToEventID, message: replyText)
             return
         }
         
-        await processInlineReply(replyText, roomID: roomID, userSession: userSession)
+        await processInlineReply(replyText, roomID: roomID, inReplyToEventID: inReplyToEventID, userSession: userSession)
     }
     
     // MARK: - Private
@@ -746,7 +753,10 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
         self.storedInlineReply = nil
         
         Task {
-            await processInlineReply(storedInlineReply.message, roomID: storedInlineReply.roomID, userSession: userSession)
+            await processInlineReply(storedInlineReply.message,
+                                     roomID: storedInlineReply.roomID,
+                                     inReplyToEventID: storedInlineReply.inReplyToEventID,
+                                     userSession: userSession)
         }
     }
     
@@ -1185,7 +1195,7 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
         MXLog.info("Sentry configured (enabled: \(options.enabled))")
     }
     
-    private func processInlineReply(_ replyText: String, roomID: String, userSession: UserSessionProtocol) async {
+    private func processInlineReply(_ replyText: String, roomID: String, inReplyToEventID: String?, userSession: UserSessionProtocol) async {
         guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
             MXLog.error("Tried to reply in an unjoined room: \(roomID)")
             return
@@ -1193,7 +1203,7 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
         
         switch await roomProxy.timeline.sendMessage(replyText,
                                                     html: nil,
-                                                    inReplyToEventID: nil,
+                                                    inReplyToEventID: inReplyToEventID,
                                                     intentionalMentions: .empty) {
         case .success:
             break
@@ -1529,6 +1539,7 @@ private extension AppCoordinator {
 private struct PendingInlineReplyDetails {
     let userID: String
     let roomID: String
+    let inReplyToEventID: String?
     let message: String
 }
 
