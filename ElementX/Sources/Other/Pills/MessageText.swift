@@ -153,6 +153,9 @@ struct MessageText: UIViewRepresentable {
                                               range: NSRange(location: 0, length: attachmentString.length))
             }
             combined.append(attachmentString)
+            // A reserved area on its own line must follow the text's direction, otherwise
+            // lines on opposite sides stretch the bubble to the full width.
+            combined.applyParagraphWritingDirections()
         }
         
         return combined
