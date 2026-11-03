@@ -1,5 +1,5 @@
 {
-  "originHash" : "6e6e9ed0d8878b65a53eaaf2fe190543e21f32d857fc3cfdfac6ae49b4db4928",
+  "originHash" : "dc3ae21ce71fe91373532a0bfebda73b2d355eb37f4e5609561d0cefb3352902",
   "pins" : [
     {
       "identity" : "compound-design-tokens",
@@ -217,11 +217,11 @@
       }
     },
     {
-      "identity" : "sentry-cocoa",
+      "identity" : "sentry-apple-binaries",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/getsentry/sentry-cocoa",
+      "location" : "https://github.com/getsentry/sentry-apple-binaries",
       "state" : {
-        "revision" : "8689e780a295dfdc6501ac0dbb502461e16d6551",
+        "revision" : "e53e275024bb26ce86651ded70897680f3ab5c24",
         "version" : "9.29.2"
       }
     },

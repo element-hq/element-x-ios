@@ -267,9 +267,7 @@ targets:
     - package: SwiftState
     - package: GZIP
     - package: Sentry
-      products: 
-        - Sentry
-        - SentrySwiftUI
+      product: Sentry-Static
     - package: Version
     - package: Emojibase
     - package: WysiwygComposer
