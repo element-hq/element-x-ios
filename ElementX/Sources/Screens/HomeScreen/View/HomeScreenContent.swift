@@ -7,7 +7,7 @@
 //
 
 import Compound
-import SentrySwiftUI
+import Sentry
 import SwiftUI
 
 struct HomeScreenContent: View {

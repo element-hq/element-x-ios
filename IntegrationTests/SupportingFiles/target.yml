@@ -38,6 +38,7 @@ targets:
     - package: SwiftState
     - package: GZIP
     - package: Sentry
+      product: Sentry-Static
     - package: Collections
 
     info:

@@ -37,6 +37,7 @@ targets:
     - package: SwiftState
     - package: GZIP
     - package: Sentry
+      product: Sentry-Static
     - package: SnapshotTesting
     - package: Collections
     - package: SwiftOGG
