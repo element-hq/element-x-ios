@@ -37,7 +37,8 @@ jobs:
           restore-keys: compilation-cache-unit-tests-
 
       - name: Run tests
-        run: swift run -q tools ci unit-tests
+        # PRs skip the Pseudolanguage previews to save time, develop still runs them.
+        run: swift run -q tools ci unit-tests ${{ github.event_name == 'pull_request' && '--english-only-previews' || '' }}
 
       - name: Save compilation cache
         # Only develop populates the cache, all of the other runs simply read from it.

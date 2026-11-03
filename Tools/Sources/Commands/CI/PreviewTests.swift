@@ -8,6 +8,9 @@ struct PreviewTests: AsyncParsableCommand {
     @Flag(help: "Re-record snapshots for tests that fail or are missing a reference image.")
     var record = false
     
+    @Flag(help: "Only run the English test plan configuration, skipping the Pseudolanguage one.")
+    var englishOnly = false
+    
     private static let scheme = "PreviewTests"
     private static let device = "iPhone SE (3rd generation)"
     private static let osVersion = CI.defaultOSVersion
@@ -22,13 +25,18 @@ struct PreviewTests: AsyncParsableCommand {
         var testsFailed = false
         do {
             logger.info("\n🧪 Running preview tests…\n")
-            try await RunTests.parse([
+            var arguments = [
                 "--scheme", Self.scheme,
                 "--device", Self.device,
                 "--os-version", Self.osVersion,
                 "--create-simulator-name", Self.device,
                 "--create-simulator-type", Self.simulatorType
-            ]).run()
+            ]
+            if englishOnly {
+                arguments += ["--test-configuration", "English"]
+            }
+            
+            try await RunTests.parse(arguments).run()
         } catch {
             if record {
                 // In recording mode, test failures are expected — swift-snapshot-testing marks
