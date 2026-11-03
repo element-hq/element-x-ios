@@ -20,7 +20,7 @@ enum ComposerToolbarVoiceMessageAction {
     case pausePlayback
     case scrubPlayback(scrubbing: Bool)
     case seekPlayback(progress: Double)
-    case send
+    case send(inReplyToEventID: String?)
 }
 
 enum ComposerToolbarViewModelAction {
@@ -71,6 +71,8 @@ struct ComposerToolbarViewState: BindableState {
     let wysiwygViewModel: WysiwygComposerViewModel
     
     var composerMode: ComposerMode = .default
+    /// The message that the voice message being recorded replies to.
+    var voiceMessageReply: ComposerReply?
     var composerEmpty = true
     /// Could be false if sending is disabled in the room
     var canSend = true
@@ -326,6 +328,16 @@ extension FormatType {
     }
 }
 
+struct ComposerReply: Equatable {
+    let eventID: String
+    let replyDetails: TimelineItemReplyDetails
+    let isThread: Bool
+    
+    var composerMode: ComposerMode {
+        .reply(eventID: eventID, replyDetails: replyDetails, isThread: isThread)
+    }
+}
+
 enum ComposerMode: Equatable {
     enum EditType { case `default`, addCaption, editCaption }
     
@@ -371,6 +383,15 @@ enum ComposerMode: Equatable {
         switch self {
         case .reply(let eventID, _, _):
             return eventID
+        default:
+            return nil
+        }
+    }
+    
+    var reply: ComposerReply? {
+        switch self {
+        case .reply(let eventID, let replyDetails, let isThread):
+            return .init(eventID: eventID, replyDetails: replyDetails, isThread: isThread)
         default:
             return nil
         }
