@@ -46,16 +46,18 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
         userSessionManager.activeSession
     }
     
-    private var authenticationFlowCoordinator: AuthenticationFlowCoordinator?
+    private let rootFlowCoordinator: RootFlowCoordinator
     private let appLockFlowCoordinator: AppLockFlowCoordinator
     // periphery:ignore - used to avoid deallocation
     private var appLockSetupFlowCoordinator: AppLockSetupFlowCoordinator?
-    private var userSessionFlowCoordinator: UserSessionFlowCoordinator?
+    
     private var appDelegateObserver: AnyCancellable?
     /// Becomes `true` once the app is no longer waiting on a session restore, whatever the outcome.
     private let isSessionRestoredSubject = CurrentValueSubject<Bool, Never>(false)
     private var clientProxyObserver: AnyCancellable?
     private var cancellables = Set<AnyCancellable>()
+    /// A continuation to signal when the caches have been cleared successfully (or failed).
+    private var clearCacheContinuation: AsyncStream<Result<Void, ClearCacheError>>.Continuation?
     
     let windowManager: SecureWindowManagerProtocol
     let notificationManager: NotificationManagerProtocol
@@ -145,6 +147,16 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
                                             sdkGitSHA: sdkGitSha(),
                                             appHooks: appHooks)
         
+        rootFlowCoordinator = RootFlowCoordinator(navigationRootCoordinator: navigationRootCoordinator,
+                                                  userSessionManager: userSessionManager,
+                                                  appLockService: appLockService,
+                                                  bugReportService: bugReportService,
+                                                  appMediator: appMediator,
+                                                  appSettings: appSettings,
+                                                  appHooks: appHooks,
+                                                  analyticsService: analyticsService,
+                                                  userIndicatorController: userIndicatorController)
+        
         Self.setupSentry(bugReportService: bugReportService, appSettings: appSettings, analytics: analyticsService)
         
         analyticsService.startIfEnabled()
@@ -170,6 +182,7 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
         observeApplicationState()
         observeUserSessionChanges()
         observeAppLockChanges()
+        observeRootFlowActions()
         
         registerBackgroundAppRefresh()
         registerSearchBackfill()
@@ -253,13 +266,16 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
         
         switch appRoute {
         case .accountProvisioningLink:
-            if let authenticationFlowCoordinator {
-                authenticationFlowCoordinator.handleAppRoute(appRoute, animated: animated)
+            switch stateMachine.state {
+            case .signedOut, .signingOut, .signedIn:
+                rootFlowCoordinator.handleAppRoute(appRoute, animated: animated)
                 handled = true
+            case .initial, .restoringSession:
+                break
             }
         default:
-            if let userSessionFlowCoordinator {
-                userSessionFlowCoordinator.handleAppRoute(appRoute, animated: animated)
+            if stateMachine.state == .signedIn {
+                rootFlowCoordinator.handleAppRoute(appRoute, animated: animated)
                 handled = true
             }
         }
@@ -277,8 +293,8 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
             case .accountProvisioningLink:
                 handleAppRoute(route,
                                windowType: windowType)
-            case .oAuthCallback(let url):
-                authenticationFlowCoordinator?.handleOAuthCallbackURL(url)
+            case .oAuthCallback:
+                rootFlowCoordinator.handleAppRoute(route, animated: true)
             case .userProfile(let userID):
                 if isExternalURL {
                     handleAppRoute(route,
@@ -374,15 +390,11 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
         guard let roomID = content.roomID else {
             return true
         }
-        guard let userSessionFlowCoordinator else {
-            // there is not a user session yet
-            return false
-        }
         // Only the active account's rooms can be on screen.
         if let receiverID = content.receiverID, receiverID != userSession?.clientProxy.userID {
             return true
         }
-        return !userSessionFlowCoordinator.isDisplayingRoomScreen(withRoomID: roomID)
+        return !rootFlowCoordinator.isDisplayingRoomScreen(withRoomID: roomID)
     }
     
     func notificationTapped(content: UNNotificationContent) async {
@@ -672,7 +684,10 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
                 restoreUserSessions()
             case (.restoringSession, .failedRestoringSession, .signedOut):
                 showLoginErrorToast()
-                presentSplashScreen()
+                if let clearCacheContinuation = clearCacheContinuation.take() {
+                    cancelClearCache(clearCacheContinuation)
+                }
+                startAuthentication()
             case (.restoringSession, .createdUserSession, .signedIn):
                 setupUserSession(isNewLogin: false)
                 
@@ -683,7 +698,9 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
             case (_, .signOut, .signingOut):
                 logout()
             case (.signingOut(let disableAppLock), .completedSigningOut, .signedOut):
-                presentSplashScreen(disableAppLock: disableAppLock)
+                if disableAppLock {
+                    disableAppLockAfterSigningOut()
+                }
             case (.signedIn, .clearCache, .initial):
                 clearCache()
             default:
@@ -746,43 +763,11 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
     }
     
     private func startAuthentication() {
-        let navigationStackCoordinator = NavigationStackCoordinator()
-        
-        let encryptionKeyProvider = EncryptionKeyProvider()
-        let classicAppManager = ClassicAppManager()
-        let authenticationService = AuthenticationService(userSessionManager: userSessionManager,
-                                                          encryptionKeyProvider: encryptionKeyProvider,
-                                                          classicAppManager: classicAppManager,
-                                                          appSettings: appSettings,
-                                                          appHooks: appHooks)
-        Task { await authenticationService.setupClassicAppAccountState() }
-        
-        let coordinator = AuthenticationFlowCoordinator(authenticationService: authenticationService,
-                                                        navigationStackCoordinator: navigationStackCoordinator,
-                                                        bugReportService: bugReportService,
-                                                        appMediator: appMediator,
-                                                        appSettings: appSettings,
-                                                        appHooks: appHooks,
-                                                        userIndicatorController: userIndicatorController)
-        coordinator.actionsPublisher
-            .sink { [weak self] action in
-                guard let self else { return }
-                
-                switch action {
-                case .signInComplete(let userSession):
-                    handleSignedInUserSession(userSession)
-                }
-            }
-            .store(in: &cancellables)
-        
-        authenticationFlowCoordinator = coordinator
-        coordinator.start()
-        
-        navigationRootCoordinator.setRootCoordinator(navigationStackCoordinator)
+        rootFlowCoordinator.handleAppRoute(.authentication, animated: true)
         
         if storedAppRoute?.isAuthenticationRoute == true,
            let storedAppRoute = storedAppRoute.take() {
-            coordinator.handleAppRoute(storedAppRoute, animated: false)
+            rootFlowCoordinator.handleAppRoute(storedAppRoute, animated: false)
         }
     }
     
@@ -791,12 +776,11 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
         migratedUserIDs.insert(userSession.clientProxy.userID)
         userSessionManager.add(userSession)
         Task { await resumeClientServices() }
-        authenticationFlowCoordinator = nil
         stateMachine.processEvent(.createdUserSession)
     }
     
     private func runPostSessionSetupTasks() async {
-        guard let userSession, let userSessionFlowCoordinator else {
+        guard let userSession else {
             fatalError("User session not setup")
         }
         
@@ -813,7 +797,7 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
         
         if storedAppRoute?.isAuthenticationRoute == false,
            let storedAppRoute = storedAppRoute.take() {
-            userSessionFlowCoordinator.handleAppRoute(storedAppRoute, animated: false)
+            rootFlowCoordinator.handleAppRoute(storedAppRoute, animated: false)
         }
     }
     
@@ -830,40 +814,11 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
             analyticsService.signpost.startTransaction(.cachedRoomList)
         }
         
-        let flowParameters = CommonFlowParameters(userSession: userSession,
-                                                  availableSessionsPublisher: userSessionManager.sessionsPublisher.map { $0.map(UserSessionDetails.init) },
-                                                  bugReportService: bugReportService,
-                                                  timelineControllerFactory: TimelineControllerFactory(userSettings: userSession.userSettings),
-                                                  emojiProvider: EmojiProvider(userSettings: userSession.userSettings),
-                                                  linkMetadataProvider: LinkMetadataProvider(),
-                                                  appMediator: appMediator,
-                                                  analytics: analyticsService,
-                                                  userIndicatorController: userIndicatorController,
-                                                  stateMachineFactory: StateMachineFactory())
-        
-        let userSessionFlowCoordinator = UserSessionFlowCoordinator(isNewLogin: isNewLogin,
-                                                                    navigationRootCoordinator: navigationRootCoordinator,
-                                                                    appLockService: appLockFlowCoordinator.appLockService,
-                                                                    flowParameters: flowParameters)
-        
-        userSessionFlowCoordinator.actionsPublisher
-            .sink { [weak self] action in
-                guard let self else { return }
-                
-                switch action {
-                case .logout:
-                    stateMachine.processEvent(.signOut(disableAppLock: false))
-                case .clearCache:
-                    stateMachine.processEvent(.clearCache)
-                case .forceLogout:
-                    stateMachine.processEvent(.signOut(disableAppLock: true))
-                }
-            }
-            .store(in: &cancellables)
-        
-        userSessionFlowCoordinator.start()
-        
-        self.userSessionFlowCoordinator = userSessionFlowCoordinator
+        if let continuation = clearCacheContinuation.take() {
+            restoreUserSessionFlowAfterClearCache(continuation)
+        } else {
+            rootFlowCoordinator.handleAppRoute(.roomList, animated: true)
+        }
         
         Task {
             await runPostSessionSetupTasks()
@@ -882,7 +837,9 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
         showLoadingIndicator()
         
         Task { await pauseClientServices(isBackgroundTask: false) }
-        userSessionFlowCoordinator?.stop()
+        
+        // Show authentication before the session goes, under the loading indicator.
+        startAuthentication()
         
         Task {
             // Delete the pusher and stop the live location shares while the session can still reach the server.
@@ -916,22 +873,14 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
     
     private func tearDownUserSession() {
         userIndicatorController.retractAllIndicators()
-        
-        userSessionFlowCoordinator = nil
     }
     
-    private func presentSplashScreen(disableAppLock: Bool = false) {
-        navigationRootCoordinator.setRootCoordinator(SplashScreenCoordinator())
-        
-        startAuthentication()
-        
-        if disableAppLock {
-            Task {
-                // Ensure the navigation stack has settled.
-                try? await Task.sleep(for: .milliseconds(500))
-                appLockFlowCoordinator.appLockService.disable()
-                windowManager.switchToMain()
-            }
+    private func disableAppLockAfterSigningOut() {
+        Task {
+            // Ensure the navigation stack has settled.
+            try? await Task.sleep(for: .milliseconds(500))
+            appLockFlowCoordinator.appLockService.disable()
+            windowManager.switchToMain()
         }
     }
     
@@ -1010,6 +959,24 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
         .store(in: &cancellables)
     }
     
+    private func observeRootFlowActions() {
+        rootFlowCoordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .signInComplete(let userSession):
+                handleSignedInUserSession(userSession)
+            case .logout:
+                stateMachine.processEvent(.signOut(disableAppLock: false))
+            case .clearCache(let continuation):
+                clearCacheContinuation = continuation
+                stateMachine.processEvent(.clearCache)
+            case .forceLogout:
+                stateMachine.processEvent(.signOut(disableAppLock: true))
+            }
+        }
+        .store(in: &cancellables)
+    }
+    
     private func clearCache() {
         guard let userSession else {
             fatalError("User session not setup")
@@ -1018,10 +985,7 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
         restorationTask?.cancel()
         showLoadingIndicator()
         
-        navigationRootCoordinator.setRootCoordinator(PlaceholderScreenCoordinator(hideBrandChrome: appSettings.hideBrandChrome))
-        
         Task { await pauseClientServices(isBackgroundTask: false) }
-        userSessionFlowCoordinator?.stop()
         
         // Allow for everything to deallocate properly
         Task {
@@ -1029,6 +993,18 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
             stateMachine.processEvent(.startWithExistingSession)
             hideLoadingIndicator()
         }
+    }
+    
+    /// Tells the root flow coordinator to restore the user session flow.
+    private func restoreUserSessionFlowAfterClearCache(_ continuation: AsyncStream<Result<Void, ClearCacheError>>.Continuation) {
+        continuation.yield(.success(()))
+        continuation.finish()
+    }
+    
+    /// Tells the root flow coordinator that the session failed to restore after clearing the cache.
+    private func cancelClearCache(_ continuation: AsyncStream<Result<Void, ClearCacheError>>.Continuation) {
+        continuation.yield(.failure(.failedRestoringSession))
+        continuation.finish()
     }
     
     private static func setupSentry(bugReportService: BugReportServiceProtocol, appSettings: AppSettings, analytics: AnalyticsServiceProtocol) {
