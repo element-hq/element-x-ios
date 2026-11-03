@@ -12,6 +12,8 @@ import MatrixRustSDK
 // MARK: - Routes
 
 enum AppRoute: Hashable {
+    /// The root of the authentication flow.
+    case authentication
     /// An account provisioning link generated externally.
     case accountProvisioningLink(AccountProvisioningParameters)
     /// An external callback used to complete login with OAuth. This is only used when authentication

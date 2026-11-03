@@ -69,8 +69,6 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
         stateMachine.processEvent(.start)
     }
     
-    func stop() { }
-    
     func isDisplayingRoomScreen(withRoomID roomID: String) -> Bool {
         stateMachine.isDisplayingRoomScreen(withRoomID: roomID)
     }
@@ -168,7 +166,7 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
             }
         case .chatBackupSettings:
             actionsSubject.send(.showChatBackupSettings)
-        case .accountProvisioningLink, .oAuthCallback, .settings, .call, .search:
+        case .authentication, .accountProvisioningLink, .oAuthCallback, .settings, .call, .search:
             break // These routes cannot be handled.
         }
     }
