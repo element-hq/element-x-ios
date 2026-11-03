@@ -7,8 +7,10 @@
 //
 
 import Combine
+import ImageIO
 import MatrixRustSDK
 import SwiftUI
+import UniformTypeIdentifiers
 
 typealias MediaUploadPreviewScreenViewModelType = StateStoreViewModelV2<MediaUploadPreviewScreenViewState, MediaUploadPreviewScreenViewAction>
 
@@ -20,6 +22,7 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
     private var mediaURLs: [URL]
     
     private var processingTask: Task<Result<[MediaInfo], MediaUploadingPreprocessorError>, Never>
+    private var lateDrawingTimeoutTask: Task<Void, Never>?
     private var requestHandle: SendAttachmentJoinHandleProtocol?
     private let clientProxy: ClientProxyProtocol
     private let galleryEnabled: Bool
@@ -35,6 +38,7 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
          title: String?,
          shouldShowCaptionWarning: Bool,
          galleryEnabled: Bool,
+         imageDrawingEnabled: Bool,
          mediaUploadingPreprocessor: MediaUploadingPreprocessor,
          timelineController: TimelineControllerProtocol,
          clientProxy: ClientProxyProtocol,
@@ -49,9 +53,12 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
         // Start processing the media whilst the user is reviewing it/adding a caption.
         processingTask = Self.processMedia(at: mediaURLs, preprocessor: mediaUploadingPreprocessor, clientProxy: clientProxy)
         
+        let drawableMediaIndices = imageDrawingEnabled ? Set(mediaURLs.indices.filter { Self.canDraw(onMediaAt: mediaURLs[$0]) }) : []
+        
         super.init(initialViewState: MediaUploadPreviewScreenViewState(mediaURLs: mediaURLs,
                                                                        title: title,
                                                                        shouldShowCaptionWarning: shouldShowCaptionWarning,
+                                                                       drawableMediaIndices: drawableMediaIndices,
                                                                        bindings: .init(caption: caption ?? NSAttributedString())))
     }
     
@@ -61,12 +68,20 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
         
         switch viewAction {
         case .send:
+            guard !state.shouldDisableInteraction else { return }
+            
             startLoading()
             
-            Task { [processingTask] in
+            Task {
                 defer { stopLoading() }
                 
-                let result = await processingTask.value
+                // A drawing saved meanwhile restarts the processing, so wait for the latest one.
+                var processingTask = processingTask
+                var result = await processingTask.value
+                while processingTask != self.processingTask {
+                    processingTask = self.processingTask
+                    result = await processingTask.value
+                }
                 guard !processingTask.isCancelled else { return }
                 switch result {
                 case .success(let mediaInfos):
@@ -112,14 +127,16 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
             
             do {
                 try data.write(to: mediaURLs[index], options: .atomic)
-                
-                state.mediaEditVersion += 1
-                
-                processingTask.cancel()
-                processingTask = Self.processMedia(at: mediaURLs, preprocessor: mediaUploadingPreprocessor, clientProxy: clientProxy)
+                reloadEditedMedia()
             } catch {
                 MXLog.error("Failed writing cropped image with error: \(error)")
             }
+        case .drewOnMedia(let index):
+            guard mediaURLs.indices.contains(index) else { return }
+            reloadEditedMedia()
+            stopWaitingForLateDrawing()
+        case .savingDrawing:
+            waitForLateDrawing()
         }
     }
     
@@ -157,10 +174,45 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
     }
     
     func stopProcessing() {
+        lateDrawingTimeoutTask?.cancel()
         processingTask.cancel()
     }
     
     // MARK: - Private
+    
+    /// Reloads the preview and prepares the media again after a picture was changed on disk.
+    private func reloadEditedMedia() {
+        state.mediaEditVersion += 1
+        
+        processingTask.cancel()
+        processingTask = Self.processMedia(at: mediaURLs, preprocessor: mediaUploadingPreprocessor, clientProxy: clientProxy)
+    }
+    
+    /// Saving while still in Markup writes the drawing a moment after the editor is gone, so block the screen until it lands.
+    private func waitForLateDrawing() {
+        state.shouldDisableInteraction = true
+        lateDrawingTimeoutTask = Task {
+            try? await Task.sleep(for: .seconds(3))
+            guard !Task.isCancelled else { return }
+            stopWaitingForLateDrawing()
+        }
+    }
+    
+    private func stopWaitingForLateDrawing() {
+        guard let lateDrawingTimeoutTask else { return }
+        lateDrawingTimeoutTask.cancel()
+        self.lateDrawingTimeoutTask = nil
+        state.shouldDisableInteraction = false
+    }
+    
+    /// Only still pictures: Markup would flatten an animated image to a single frame.
+    private static func canDraw(onMediaAt url: URL) -> Bool {
+        guard UTType(filenameExtension: url.pathExtension)?.conforms(to: .image) == true,
+              let source = CGImageSourceCreateWithURL(url as CFURL, nil) else {
+            return false
+        }
+        return CGImageSourceGetCount(source) == 1
+    }
     
     private static func processMedia(at urls: [URL],
                                      preprocessor: MediaUploadingPreprocessor,

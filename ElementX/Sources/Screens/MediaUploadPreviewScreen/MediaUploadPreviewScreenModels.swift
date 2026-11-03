@@ -17,6 +17,8 @@ struct MediaUploadPreviewScreenViewState: BindableState {
     let mediaURLs: [URL]
     let title: String?
     let shouldShowCaptionWarning: Bool
+    /// The indices of the pictures that can be drawn on. Empty when drawing is disabled.
+    let drawableMediaIndices: Set<Int>
     var shouldDisableInteraction = false
     
     var mediaEditVersion = 0
@@ -30,8 +32,17 @@ struct MediaUploadPreviewScreenBindings: BindableState {
     var selectedRange = NSRange(location: 0, length: 0)
     
     var isPresentingMediaCaptionWarning = false
-    var isPresentingMediaEditor = false
+    var presentedEditor: MediaUploadPreviewEditor?
     var alertInfo: AlertInfo<MediaUploadPreviewAlertType>?
+}
+
+enum MediaUploadPreviewEditor: Hashable, Identifiable {
+    case crop(index: Int)
+    case draw(index: Int)
+    
+    var id: Self {
+        self
+    }
 }
 
 enum MediaUploadPreviewAlertType: Hashable {
@@ -43,4 +54,6 @@ enum MediaUploadPreviewScreenViewAction {
     case send
     case cancel
     case editedMedia(image: UIImage, index: Int)
+    case drewOnMedia(index: Int)
+    case savingDrawing
 }

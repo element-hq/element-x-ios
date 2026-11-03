@@ -33,37 +33,61 @@ struct MediaUploadPreviewScreen: View {
     }
     
     var body: some View {
-        mainContent
-            .id(context.viewState.mediaURLs)
-            .ignoresSafeArea(edges: [.horizontal])
-            .overlay(alignment: .top) { galleryBadge }
-            .safeAreaInset(edge: .bottom, spacing: 0) {
-                composer
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 16)
-                    .background() // Don't use compound so we match the QLPreviewController.
-            }
-            .navigationTitle(title)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar { toolbar }
-            .disabled(context.viewState.shouldDisableInteraction)
-            .interactiveDismissDisabled()
-            .presentationBackground(.background) // Fix a bug introduced by the caption warning.
-            .presentationColorScheme(colorSchemeOverride)
-            .onAppear(perform: focusComposerIfHardwareKeyboardConnected)
-            .alert(item: $context.alertInfo)
-            .sheet(isPresented: $context.isPresentingMediaEditor) {
-                ImageEditorView(imageURL: context.viewState.mediaURLs[currentIndex]) { croppedImage in
-                    context.send(viewAction: .editedMedia(image: croppedImage, index: currentIndex))
-                    context.isPresentingMediaEditor = false
-                } onCancel: {
-                    context.isPresentingMediaEditor = false
+        ElementNavigationStack {
+            mainContent
+                .id(context.viewState.mediaURLs)
+                .ignoresSafeArea(edges: [.horizontal])
+                .overlay(alignment: .top) { galleryBadge }
+                .safeAreaInset(edge: .bottom, spacing: 0) {
+                    composer
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 16)
+                        .background() // Don't use compound so we match the QLPreviewController.
                 }
-                .ignoresSafeArea()
+                .navigationTitle(title)
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar { toolbar }
+                .disabled(context.viewState.shouldDisableInteraction)
+                .interactiveDismissDisabled()
+                .presentationBackground(.background) // Fix a bug introduced by the caption warning.
                 .presentationColorScheme(colorSchemeOverride)
-                // Make sure out of bound error alerts are shown even if the sheet is presented
+                .onAppear(perform: focusComposerIfHardwareKeyboardConnected)
                 .alert(item: $context.alertInfo)
+        }
+        // Outside the stack: declared inside it, SwiftUI rebuilds the editor on rotation and when the app goes to or from the background.
+        .sheet(item: $context.presentedEditor) { editor in
+            editorSheet(for: editor)
+        }
+    }
+    
+    @ViewBuilder
+    private func editorSheet(for editor: MediaUploadPreviewEditor) -> some View {
+        switch editor {
+        case .crop(let index):
+            ImageEditorView(imageURL: context.viewState.mediaURLs[index]) { croppedImage in
+                context.send(viewAction: .editedMedia(image: croppedImage, index: index))
+                context.presentedEditor = nil
+            } onCancel: {
+                context.presentedEditor = nil
             }
+            .ignoresSafeArea()
+            .presentationColorScheme(colorSchemeOverride)
+            // Make sure out of bound error alerts are shown even if the sheet is presented
+            .alert(item: $context.alertInfo)
+        case .draw(let index):
+            ImageDrawingEditor(imageURL: context.viewState.mediaURLs[index]) {
+                context.send(viewAction: .drewOnMedia(index: index))
+            } onSave: {
+                context.send(viewAction: .savingDrawing)
+                context.presentedEditor = nil
+            } onCancel: {
+                context.presentedEditor = nil
+            }
+            .ignoresSafeArea()
+            .interactiveDismissDisabled()
+            .presentationColorScheme(colorSchemeOverride)
+            .alert(item: $context.alertInfo)
+        }
     }
     
     @ViewBuilder
@@ -169,9 +193,16 @@ struct MediaUploadPreviewScreen: View {
         }
         
         if isCurrentMediaImage {
-            ToolbarItem(placement: .primaryAction) {
-                Button { context.isPresentingMediaEditor = true } label: {
+            ToolbarItemGroup(placement: .primaryAction) {
+                Button { context.presentedEditor = .crop(index: currentIndex) } label: {
                     CompoundIcon(\.crop)
+                }
+                
+                if isCurrentMediaDrawable {
+                    Button { context.presentedEditor = .draw(index: currentIndex) } label: {
+                        CompoundIcon(\.edit)
+                    }
+                    .accessibilityLabel(UntranslatedL10n.screenMediaUploadPreviewA11yDraw)
                 }
             }
         }
@@ -189,6 +220,10 @@ struct MediaUploadPreviewScreen: View {
         }
         
         return type.conforms(to: .image)
+    }
+    
+    private var isCurrentMediaDrawable: Bool {
+        !ProcessInfo.processInfo.isiOSAppOnMac && context.viewState.drawableMediaIndices.contains(currentIndex)
     }
     
     private func handleKeyPress(_ key: UIKeyboardHIDUsage) {
@@ -393,14 +428,13 @@ struct MediaUploadPreviewScreen_Previews: PreviewProvider, TestablePreview {
                                                              title: "App Icon.png",
                                                              shouldShowCaptionWarning: true,
                                                              galleryEnabled: true,
+                                                             imageDrawingEnabled: false,
                                                              mediaUploadingPreprocessor: MediaUploadingPreprocessor(userSettings: .mock()),
                                                              timelineController: TimelineControllerMock(.init()),
                                                              clientProxy: ClientProxyMock(.init()),
                                                              userIndicatorController: UserIndicatorControllerMock())
     static var previews: some View {
-        ElementNavigationStack {
-            MediaUploadPreviewScreen(context: viewModel.context)
-        }
+        MediaUploadPreviewScreen(context: viewModel.context)
         
         MediaUploadPreviewScreen(context: viewModel.context)
             .captionWarningContent
