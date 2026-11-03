@@ -391,7 +391,7 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: AppBuildType.current != .release)
     var reactionCelebrationsEnabled: Bool
     
-    @UserPreference(defaultValue: false)
+    @UserPreference(defaultValue: true)
     var linkNewDeviceEnabled: Bool
     
     @UserPreference(key: "clientPausingAndResumingEnabledV2", defaultValue: false, volatile: true)
