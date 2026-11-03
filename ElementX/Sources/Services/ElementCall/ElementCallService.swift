@@ -37,9 +37,17 @@ final class ElementCallService: ElementCallServiceProtocol {
         ongoingCallRoomIDSubject.asCurrentValuePublisher()
     }
     
-    private let nativeCallEventsSubject = PassthroughSubject<NativeCallEvent, Never>()
+    /// Kept for stacks built later, as a call answered from the lock screen gets its stack after CallKit
+    /// activated the audio.
+    private let isAudioSessionActiveSubject = CurrentValueSubject<Bool, Never>(false)
+    private let callEventsSubject = PassthroughSubject<NativeCallEvent, Never>()
     var nativeCallEventsPublisher: AnyPublisher<NativeCallEvent, Never> {
-        nativeCallEventsSubject.eraseToAnyPublisher()
+        isAudioSessionActiveSubject
+            .removeDuplicates()
+            .drop { !$0 }
+            .map { $0 ? NativeCallEvent.audioSessionActivated : .audioSessionDeactivated }
+            .merge(with: callEventsSubject)
+            .eraseToAnyPublisher()
     }
     
     private let nativeCallPresentationSubject = PassthroughSubject<NativeCallPresentation, Never>()
@@ -83,12 +91,12 @@ final class ElementCallService: ElementCallServiceProtocol {
     }
     
     @discardableResult
-    func handleNativeCallRequest(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool) -> Bool {
+    func handleNativeCallRequest(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool, answeredFromCallKit: Bool) -> Bool {
         guard let nativeCallStack else {
             return false
         }
         
-        nativeCallStack.handleCallRequest(roomProxy: roomProxy, isVoiceCall: isVoiceCall)
+        nativeCallStack.handleCallRequest(roomProxy: roomProxy, isVoiceCall: isVoiceCall, answeredFromCallKit: answeredFromCallKit)
         return true
     }
     
@@ -165,10 +173,21 @@ final class ElementCallService: ElementCallServiceProtocol {
         }
         
         continuation.resume()
+        
+        if !isAccepted {
+            callEventsSubject.send(.endCallRequested(roomID: roomID))
+        }
     }
     
     func systemEventReceived(_ event: NativeCallEvent) {
-        nativeCallEventsSubject.send(event)
+        switch event {
+        case .audioSessionActivated:
+            isAudioSessionActiveSubject.send(true)
+        case .audioSessionDeactivated:
+            isAudioSessionActiveSubject.send(false)
+        case .microphoneMuteChanged, .endCallRequested:
+            callEventsSubject.send(event)
+        }
     }
     
     // MARK: - Native calls

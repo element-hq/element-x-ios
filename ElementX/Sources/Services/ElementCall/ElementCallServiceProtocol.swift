@@ -38,8 +38,7 @@ enum CallEndReason: Equatable {
 
 enum ElementCallSessionKind: Equatable {
     case webView
-    case native
-    case nativeAnswer
+    case native(takesOverAnsweredCall: Bool)
 }
 
 /// What the service asks of the `ElementCallManager`, which owns CallKit and the VoIP pushes.
@@ -63,6 +62,7 @@ protocol ElementCallServiceProtocol: AnyObject {
     var ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never> { get }
     
     /// What CallKit asks of the native call: audio session changes, mutes and hang-ups.
+    /// Replays an active audio session to a new subscriber, so a stack built after CallKit activated it still hears it.
     var nativeCallEventsPublisher: AnyPublisher<NativeCallEvent, Never> { get }
     
     /// The native call's screen needs presenting, minimizing, restoring or dismissing.
@@ -76,12 +76,12 @@ protocol ElementCallServiceProtocol: AnyObject {
     func setNativeCallStackEnabled(_ isEnabled: Bool)
     
     /// Starts, or returns to, a native call in the room, driving its screen through
-    /// ``nativeCallPresentationPublisher``.
+    /// ``nativeCallPresentationPublisher``. `answeredFromCallKit` takes over that answered call.
     ///
     /// Returns `false` when there's no native call stack and the caller should present the Element
     /// Call web view instead.
     @discardableResult
-    func handleNativeCallRequest(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool) -> Bool
+    func handleNativeCallRequest(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool, answeredFromCallKit: Bool) -> Bool
     
     /// Asks the native call to minimize. The screen only comes down once a system window has
     /// started, which arrives through ``nativeCallPresentationPublisher``.
@@ -90,7 +90,7 @@ protocol ElementCallServiceProtocol: AnyObject {
     /// Brings the native call back out of its system window.
     func restoreNativeCall()
     
-    /// Registers the call with CallKit, adopting the ringing incoming call for the room if there is one.
+    /// Registers the call with CallKit, taking over the account's answered incoming call for the room if there is one.
     /// Returns once the manager has set the call up.
     func setupCallSession(roomID: String, roomDisplayName: String, isVideo: Bool, kind: ElementCallSessionKind) async
     
@@ -114,7 +114,7 @@ protocol ElementCallServiceProtocol: AnyObject {
     func stopObservingIncomingCall()
     func declineCall(roomID: String, rtcNotificationID: String) async
     func ongoingCallChanged(roomID: String?)
-    /// Completes the room's `setupCallSession`.
+    /// Completes the room's `setupCallSession`. A refusal also asks the native call to end with `.endCallRequested(roomID:)`.
     func callSessionSetUp(roomID: String, isAccepted: Bool)
     /// CallKit's side of the native call: the audio session, mutes and hang-ups.
     func systemEventReceived(_ event: NativeCallEvent)

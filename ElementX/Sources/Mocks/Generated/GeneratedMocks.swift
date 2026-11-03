@@ -5259,45 +5259,45 @@ nonisolated class ElementCallServiceMock: ElementCallServiceProtocol, @unchecked
     }
     //MARK: - handleNativeCallRequest
 
-    private let handleNativeCallRequestRoomProxyIsVoiceCallCallsCountLock = NSLock()
-    private nonisolated(unsafe) var handleNativeCallRequestRoomProxyIsVoiceCallUnderlyingCallsCount = 0
-    var handleNativeCallRequestRoomProxyIsVoiceCallCallsCount: Int {
-        get { handleNativeCallRequestRoomProxyIsVoiceCallCallsCountLock.withLock { handleNativeCallRequestRoomProxyIsVoiceCallUnderlyingCallsCount } }
-        set { handleNativeCallRequestRoomProxyIsVoiceCallCallsCountLock.withLock { handleNativeCallRequestRoomProxyIsVoiceCallUnderlyingCallsCount = newValue } }
+    private let handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitCallsCountLock = NSLock()
+    private nonisolated(unsafe) var handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitUnderlyingCallsCount = 0
+    var handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitCallsCount: Int {
+        get { handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitCallsCountLock.withLock { handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitUnderlyingCallsCount } }
+        set { handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitCallsCountLock.withLock { handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitUnderlyingCallsCount = newValue } }
     }
-    var handleNativeCallRequestRoomProxyIsVoiceCallCalled: Bool {
-        return handleNativeCallRequestRoomProxyIsVoiceCallCallsCount > 0
+    var handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitCalled: Bool {
+        return handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitCallsCount > 0
     }
-    private let handleNativeCallRequestRoomProxyIsVoiceCallReceivedArgumentsLock = NSLock()
-    private nonisolated(unsafe) var handleNativeCallRequestRoomProxyIsVoiceCallUnderlyingReceivedArguments: (roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool)?
-    var handleNativeCallRequestRoomProxyIsVoiceCallReceivedArguments: (roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool)? {
-        get { handleNativeCallRequestRoomProxyIsVoiceCallReceivedArgumentsLock.withLock { handleNativeCallRequestRoomProxyIsVoiceCallUnderlyingReceivedArguments } }
-        set { handleNativeCallRequestRoomProxyIsVoiceCallReceivedArgumentsLock.withLock { handleNativeCallRequestRoomProxyIsVoiceCallUnderlyingReceivedArguments = newValue } }
+    private let handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitReceivedArgumentsLock = NSLock()
+    private nonisolated(unsafe) var handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitUnderlyingReceivedArguments: (roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool, answeredFromCallKit: Bool)?
+    var handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitReceivedArguments: (roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool, answeredFromCallKit: Bool)? {
+        get { handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitReceivedArgumentsLock.withLock { handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitUnderlyingReceivedArguments } }
+        set { handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitReceivedArgumentsLock.withLock { handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitUnderlyingReceivedArguments = newValue } }
     }
-    private let handleNativeCallRequestRoomProxyIsVoiceCallReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var handleNativeCallRequestRoomProxyIsVoiceCallUnderlyingReceivedInvocations: [(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool)] = []
-    var handleNativeCallRequestRoomProxyIsVoiceCallReceivedInvocations: [(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool)] {
-        get { handleNativeCallRequestRoomProxyIsVoiceCallReceivedInvocationsLock.withLock { handleNativeCallRequestRoomProxyIsVoiceCallUnderlyingReceivedInvocations } }
-        set { handleNativeCallRequestRoomProxyIsVoiceCallReceivedInvocationsLock.withLock { handleNativeCallRequestRoomProxyIsVoiceCallUnderlyingReceivedInvocations = newValue } }
+    private let handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitUnderlyingReceivedInvocations: [(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool, answeredFromCallKit: Bool)] = []
+    var handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitReceivedInvocations: [(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool, answeredFromCallKit: Bool)] {
+        get { handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitReceivedInvocationsLock.withLock { handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitUnderlyingReceivedInvocations } }
+        set { handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitReceivedInvocationsLock.withLock { handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitUnderlyingReceivedInvocations = newValue } }
     }
 
-    private let handleNativeCallRequestRoomProxyIsVoiceCallReturnValueLock = NSLock()
-    private nonisolated(unsafe) var handleNativeCallRequestRoomProxyIsVoiceCallUnderlyingReturnValue: Bool!
-    var handleNativeCallRequestRoomProxyIsVoiceCallReturnValue: Bool! {
-        get { handleNativeCallRequestRoomProxyIsVoiceCallReturnValueLock.withLock { handleNativeCallRequestRoomProxyIsVoiceCallUnderlyingReturnValue } }
-        set { handleNativeCallRequestRoomProxyIsVoiceCallReturnValueLock.withLock { handleNativeCallRequestRoomProxyIsVoiceCallUnderlyingReturnValue = newValue } }
+    private let handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitReturnValueLock = NSLock()
+    private nonisolated(unsafe) var handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitUnderlyingReturnValue: Bool!
+    var handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitReturnValue: Bool! {
+        get { handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitReturnValueLock.withLock { handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitUnderlyingReturnValue } }
+        set { handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitReturnValueLock.withLock { handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var handleNativeCallRequestRoomProxyIsVoiceCallClosure: ((JoinedRoomProxyProtocol, Bool) -> Bool)?
+    nonisolated(unsafe) var handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitClosure: ((JoinedRoomProxyProtocol, Bool, Bool) -> Bool)?
 
     @discardableResult
-    func handleNativeCallRequest(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool) -> Bool {
-        handleNativeCallRequestRoomProxyIsVoiceCallCallsCountLock.withLock { handleNativeCallRequestRoomProxyIsVoiceCallUnderlyingCallsCount += 1 }
-        handleNativeCallRequestRoomProxyIsVoiceCallReceivedArguments = (roomProxy: roomProxy, isVoiceCall: isVoiceCall)
-        handleNativeCallRequestRoomProxyIsVoiceCallReceivedInvocationsLock.withLock { handleNativeCallRequestRoomProxyIsVoiceCallUnderlyingReceivedInvocations.append((roomProxy: roomProxy, isVoiceCall: isVoiceCall)) }
-        if let handleNativeCallRequestRoomProxyIsVoiceCallClosure = handleNativeCallRequestRoomProxyIsVoiceCallClosure {
-            return handleNativeCallRequestRoomProxyIsVoiceCallClosure(roomProxy, isVoiceCall)
+    func handleNativeCallRequest(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool, answeredFromCallKit: Bool) -> Bool {
+        handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitCallsCountLock.withLock { handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitUnderlyingCallsCount += 1 }
+        handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitReceivedArguments = (roomProxy: roomProxy, isVoiceCall: isVoiceCall, answeredFromCallKit: answeredFromCallKit)
+        handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitReceivedInvocationsLock.withLock { handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitUnderlyingReceivedInvocations.append((roomProxy: roomProxy, isVoiceCall: isVoiceCall, answeredFromCallKit: answeredFromCallKit)) }
+        if let handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitClosure = handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitClosure {
+            return handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitClosure(roomProxy, isVoiceCall, answeredFromCallKit)
         } else {
-            return handleNativeCallRequestRoomProxyIsVoiceCallReturnValue
+            return handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitReturnValue
         }
     }
     //MARK: - minimizeNativeCall

@@ -12,13 +12,16 @@ import Testing
 
 @MainActor
 final class NativeCallStackTests {
+    private let service = ElementCallServiceMock(.init())
+    private let system: NativeCallSystem
     private let stack: NativeCallStack
     private var presentations: [NativeCallPresentation] = []
     private var cancellables = Set<AnyCancellable>()
     
     init() {
+        system = NativeCallSystem(service: service)
         stack = NativeCallStack(backend: ElementCallFakeMatrixBackend(),
-                                system: ElementCallFakeSystem(),
+                                system: system,
                                 options: ElementCallOptions(),
                                 style: .stock)
         
@@ -31,7 +34,7 @@ final class NativeCallStackTests {
     
     @Test
     func startingACallAsksForItsScreen() {
-        stack.handleCallRequest(roomProxy: roomProxy(id: "!room:example.com"), isVoiceCall: false)
+        stack.handleCallRequest(roomProxy: roomProxy(id: "!room:example.com"), isVoiceCall: false, answeredFromCallKit: false)
         
         #expect(presentations == [.present])
         #expect(stack.controller.room?.roomID == "!room:example.com")
@@ -39,7 +42,7 @@ final class NativeCallStackTests {
     
     @Test
     func aCallStartsARoomWithoutOneAndJoinsARoomWithOne() {
-        stack.handleCallRequest(roomProxy: roomProxy(id: "!empty:example.com", hasOngoingCall: false), isVoiceCall: true)
+        stack.handleCallRequest(roomProxy: roomProxy(id: "!empty:example.com", hasOngoingCall: false), isVoiceCall: true, answeredFromCallKit: false)
         // Starting rings the room; joining one already running happens quietly.
         #expect(stack.controller.callData?.isStartingCall == true)
         #expect(stack.controller.callData?.isAudioCall == true)
@@ -47,41 +50,52 @@ final class NativeCallStackTests {
         stack.stop()
         
         let joining = NativeCallStack(backend: ElementCallFakeMatrixBackend(),
-                                      system: ElementCallFakeSystem(),
+                                      system: NativeCallSystem(service: service),
                                       options: ElementCallOptions(),
                                       style: .stock)
-        joining.handleCallRequest(roomProxy: roomProxy(id: "!busy:example.com", hasOngoingCall: true), isVoiceCall: true)
+        joining.handleCallRequest(roomProxy: roomProxy(id: "!busy:example.com", hasOngoingCall: true), isVoiceCall: true, answeredFromCallKit: false)
         #expect(joining.controller.callData?.isStartingCall == false)
     }
     
     @Test
     func askingForTheCallYouAreAlreadyInRestoresItsScreen() {
         let roomProxy = roomProxy(id: "!room:example.com")
-        stack.handleCallRequest(roomProxy: roomProxy, isVoiceCall: false)
+        stack.handleCallRequest(roomProxy: roomProxy, isVoiceCall: false, answeredFromCallKit: false)
         presentations.removeAll()
         
         // Reached while the call is still joining, before the service has an ongoing call of its own.
-        stack.handleCallRequest(roomProxy: roomProxy, isVoiceCall: false)
+        stack.handleCallRequest(roomProxy: roomProxy, isVoiceCall: false, answeredFromCallKit: false)
         
         #expect(presentations == [.restore])
     }
     
     @Test
     func aCallInAnotherRoomWaitsForTheRunningOneToEnd() async throws {
-        stack.handleCallRequest(roomProxy: roomProxy(id: "!first:example.com"), isVoiceCall: false)
+        stack.handleCallRequest(roomProxy: roomProxy(id: "!first:example.com"), isVoiceCall: false, answeredFromCallKit: false)
         presentations.removeAll()
         
         // The controller ignores a second call, so this one is queued behind a hang up.
-        stack.handleCallRequest(roomProxy: roomProxy(id: "!second:example.com"), isVoiceCall: false)
+        stack.handleCallRequest(roomProxy: roomProxy(id: "!second:example.com"), isVoiceCall: false, answeredFromCallKit: false)
         #expect(stack.controller.room?.roomID == "!first:example.com")
         
         try await waitForPresentations([.dismiss, .present])
         #expect(stack.controller.room?.roomID == "!second:example.com")
     }
     
+    @Test("An answered call queued behind a running one still starts as an answer")
+    func queuedAnswerStartsAsAnswer() async throws {
+        stack.handleCallRequest(roomProxy: roomProxy(id: "!first:example.com"), isVoiceCall: false, answeredFromCallKit: false)
+        presentations.removeAll()
+        
+        stack.handleCallRequest(roomProxy: roomProxy(id: "!second:example.com"), isVoiceCall: false, answeredFromCallKit: true)
+        try await waitForPresentations([.dismiss, .present])
+        
+        #expect(system.answeredFromCallKit)
+    }
+    
     @Test
     func endingACallDismissesItsScreen() async throws {
-        stack.handleCallRequest(roomProxy: roomProxy(id: "!room:example.com"), isVoiceCall: false)
+        stack.handleCallRequest(roomProxy: roomProxy(id: "!room:example.com"), isVoiceCall: false, answeredFromCallKit: false)
         presentations.removeAll()
         
         stack.controller.hangUp()

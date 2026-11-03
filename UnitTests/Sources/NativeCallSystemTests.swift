@@ -24,15 +24,25 @@ struct NativeCallSystemTests {
     func startCallSetsUpNativeSession() async {
         await system.startCall(roomID: "!room:example.com", displayName: "welcome", isVideo: true)
         
-        #expect(service.setupCallSessionRoomIDRoomDisplayNameIsVideoKindReceivedArguments?.kind == .native)
+        #expect(service.setupCallSessionRoomIDRoomDisplayNameIsVideoKindReceivedArguments?.kind == .native(takesOverAnsweredCall: false))
+    }
+    
+    @Test("A call answered from CallKit is set up as an answer")
+    func answeringSetsUpNativeAnswer() async {
+        system.answeredFromCallKit = true
+        
+        await system.startCall(roomID: "!room:example.com", displayName: "welcome", isVideo: true)
+        
+        #expect(service.setupCallSessionRoomIDRoomDisplayNameIsVideoKindReceivedArguments?.kind == .native(takesOverAnsweredCall: true))
     }
     
     @Test
-    func eventsReachCallStack() {
+    func eventsReachCallStack() async {
         var events: [ElementCallSystemEvent] = []
         let cancellable = system.events.sink { events.append($0) }
         defer { cancellable.cancel() }
         
+        await system.startCall(roomID: "!room:example.com", displayName: "welcome", isVideo: true)
         nativeCallEvents.send(.audioSessionActivated)
         nativeCallEvents.send(.audioSessionDeactivated)
         nativeCallEvents.send(.microphoneMuteChanged(isMuted: true))
@@ -42,6 +52,40 @@ struct NativeCallSystemTests {
                            .audioSessionDeactivated,
                            .microphoneMuteChanged(isMuted: true),
                            .endCallRequested(roomID: "!room:example.com")])
+    }
+    
+    @Test("Only the live call hears a hang-up request")
+    func endRequestsReachLiveCallOnly() async {
+        var events: [ElementCallSystemEvent] = []
+        let cancellable = system.events.sink { events.append($0) }
+        defer { cancellable.cancel() }
+        
+        // The manager's refusal arrives while the set-up is waiting.
+        service.setupCallSessionRoomIDRoomDisplayNameIsVideoKindClosure = { [nativeCallEvents] roomID, _, _, _ in
+            nativeCallEvents.send(.endCallRequested(roomID: roomID))
+        }
+        
+        await system.startCall(roomID: "!room:example.com", displayName: "welcome", isVideo: true)
+        nativeCallEvents.send(.endCallRequested(roomID: "!other:example.com"))
+        system.endCall(roomID: "!room:example.com", reason: .local)
+        nativeCallEvents.send(.endCallRequested(roomID: "!room:example.com"))
+        
+        #expect(events == [.endCallRequested(roomID: "!room:example.com")])
+    }
+    
+    @Test("A call started while the previous one was ending still hears a hang-up request",
+          arguments: ["!other:example.com", "!room:example.com"])
+    func endRequestsReachNewerCall(roomID: String) async {
+        var events: [ElementCallSystemEvent] = []
+        let cancellable = system.events.sink { events.append($0) }
+        defer { cancellable.cancel() }
+        
+        await system.startCall(roomID: "!room:example.com", displayName: "welcome", isVideo: true)
+        await system.startCall(roomID: roomID, displayName: "welcome", isVideo: true)
+        system.endCall(roomID: "!room:example.com", reason: .local)
+        nativeCallEvents.send(.endCallRequested(roomID: roomID))
+        
+        #expect(events == [.endCallRequested(roomID: roomID)])
     }
     
     @Test

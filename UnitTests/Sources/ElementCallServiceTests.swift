@@ -102,7 +102,7 @@ final class ElementCallServiceTests {
         }
         defer { cancellable.cancel() }
         
-        await service.setupCallSession(roomID: "!room:example.com", roomDisplayName: "welcome", isVideo: true, kind: .native)
+        await service.setupCallSession(roomID: "!room:example.com", roomDisplayName: "welcome", isVideo: true, kind: .native(takesOverAnsweredCall: false))
         order.append("returned")
         
         #expect(order == ["sent", "set up", "returned"])
@@ -112,16 +112,16 @@ final class ElementCallServiceTests {
     func secondSetupReleasesFirst() async throws {
         var returned: [String] = []
         
-        let firstStarted = deferFulfillment(service.actionsPublisher) { $0 == .callSessionStarted(roomID: "!room:example.com", roomDisplayName: "first", isVideo: true, kind: .native) }
+        let firstStarted = deferFulfillment(service.actionsPublisher) { $0 == .callSessionStarted(roomID: "!room:example.com", roomDisplayName: "first", isVideo: true, kind: .native(takesOverAnsweredCall: false)) }
         let first = Task {
-            await service.setupCallSession(roomID: "!room:example.com", roomDisplayName: "first", isVideo: true, kind: .native)
+            await service.setupCallSession(roomID: "!room:example.com", roomDisplayName: "first", isVideo: true, kind: .native(takesOverAnsweredCall: false))
             returned.append("first")
         }
         try await firstStarted.fulfill()
         
-        let secondStarted = deferFulfillment(service.actionsPublisher) { $0 == .callSessionStarted(roomID: "!room:example.com", roomDisplayName: "second", isVideo: true, kind: .native) }
+        let secondStarted = deferFulfillment(service.actionsPublisher) { $0 == .callSessionStarted(roomID: "!room:example.com", roomDisplayName: "second", isVideo: true, kind: .native(takesOverAnsweredCall: false)) }
         let second = Task {
-            await service.setupCallSession(roomID: "!room:example.com", roomDisplayName: "second", isVideo: true, kind: .native)
+            await service.setupCallSession(roomID: "!room:example.com", roomDisplayName: "second", isVideo: true, kind: .native(takesOverAnsweredCall: false))
             returned.append("second")
         }
         try await secondStarted.fulfill()
@@ -163,10 +163,47 @@ final class ElementCallServiceTests {
     // MARK: - Native calls
     
     @Test
-    func systemEventsReachNativeCall() async throws {
-        let deferred = deferFulfillment(service.nativeCallEventsPublisher) { $0 == .endCallRequested(roomID: "!room:example.com") }
+    func systemEventsReachNativeCall() {
+        var events: [NativeCallEvent] = []
+        let cancellable = service.nativeCallEventsPublisher.sink { events.append($0) }
+        defer { cancellable.cancel() }
+        
+        service.systemEventReceived(.audioSessionActivated)
+        service.systemEventReceived(.audioSessionDeactivated)
+        service.systemEventReceived(.microphoneMuteChanged(isMuted: true))
+        service.systemEventReceived(.audioSessionActivated)
         service.systemEventReceived(.endCallRequested(roomID: "!room:example.com"))
-        try await deferred.fulfill()
+        
+        #expect(events == [.audioSessionActivated,
+                           .audioSessionDeactivated,
+                           .microphoneMuteChanged(isMuted: true),
+                           .audioSessionActivated,
+                           .endCallRequested(roomID: "!room:example.com")])
+    }
+    
+    @Test("A native call stack built after CallKit activated the audio hears it is active")
+    func lateSubscriberHearsActiveAudio() {
+        #expect(eventsHeardByLateSubscriber(after: [.audioSessionActivated]) == [.audioSessionActivated])
+    }
+    
+    @Test("A native call stack built after the audio session ended hears nothing")
+    func lateSubscriberMissesEndedAudio() {
+        #expect(eventsHeardByLateSubscriber(after: [.audioSessionActivated, .audioSessionDeactivated]).isEmpty)
+    }
+    
+    @Test("Mutes and hang-ups aren't replayed to a later native call stack")
+    func muteAndEndNotReplayed() {
+        #expect(eventsHeardByLateSubscriber(after: [.microphoneMuteChanged(isMuted: true), .endCallRequested(roomID: "!room:example.com")]).isEmpty)
+    }
+    
+    @Test("A refused set-up asks the native call to end")
+    func refusalEndsNativeCall() async {
+        #expect(await eventsHeardWhileSettingUp(isAccepted: false) == [.endCallRequested(roomID: "!room:example.com")])
+    }
+    
+    @Test("An accepted set-up leaves the native call running")
+    func acceptKeepsNativeCall() async {
+        #expect(await eventsHeardWhileSettingUp(isAccepted: true).isEmpty)
     }
     
     @Test
@@ -207,12 +244,12 @@ final class ElementCallServiceTests {
         let service = makeNativeCallService()
         let roomProxy = JoinedRoomProxyMock(.init(id: "!room:example.com"))
         
-        #expect(!service.handleNativeCallRequest(roomProxy: roomProxy, isVoiceCall: false))
+        #expect(!service.handleNativeCallRequest(roomProxy: roomProxy, isVoiceCall: false, answeredFromCallKit: false))
         
         appSettings.nativeCallEnabled = true
         service.setNativeCallStackEnabled(true)
         
-        #expect(service.handleNativeCallRequest(roomProxy: roomProxy, isVoiceCall: false))
+        #expect(service.handleNativeCallRequest(roomProxy: roomProxy, isVoiceCall: false, answeredFromCallKit: false))
     }
     
     // MARK: - Helpers
@@ -222,5 +259,32 @@ final class ElementCallServiceTests {
         let clientProxy = ClientProxyMock(.init())
         clientProxy.makeNativeCallBackendReturnValue = ElementCallFakeMatrixBackend()
         return ElementCallService(clientProxy: clientProxy, mediaProvider: MediaProviderMock(.init()), userSettings: appSettings.userSettings(for: clientProxy.userID))
+    }
+    
+    /// What a native call stack built after these system events hears, as the replay arrives during `sink`.
+    private func eventsHeardByLateSubscriber(after events: [NativeCallEvent]) -> [NativeCallEvent] {
+        events.forEach(service.systemEventReceived)
+        
+        var heardEvents: [NativeCallEvent] = []
+        let cancellable = service.nativeCallEventsPublisher.sink { heardEvents.append($0) }
+        cancellable.cancel()
+        return heardEvents
+    }
+    
+    /// What the native call hears while answering a call whose set-up the manager replies to at once.
+    private func eventsHeardWhileSettingUp(isAccepted: Bool) async -> [NativeCallEvent] {
+        var heardEvents: [NativeCallEvent] = []
+        let eventsCancellable = service.nativeCallEventsPublisher.sink { heardEvents.append($0) }
+        let actionsCancellable = service.actionsPublisher.sink { [service] action in
+            guard case let .callSessionStarted(roomID, _, _, _) = action else { return }
+            service.callSessionSetUp(roomID: roomID, isAccepted: isAccepted)
+        }
+        defer {
+            eventsCancellable.cancel()
+            actionsCancellable.cancel()
+        }
+        
+        await service.setupCallSession(roomID: "!room:example.com", roomDisplayName: "Room", isVideo: true, kind: .native(takesOverAnsweredCall: true))
+        return heardEvents
     }
 }

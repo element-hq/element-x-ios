@@ -179,8 +179,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 }
                 settingsFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
             }
-        case .call(let roomID, let isVoiceCall):
-            Task { await presentCallScreen(roomID: roomID, isVoiceCall: isVoiceCall) }
+        case let .call(roomID, isVoiceCall, answeredFromCallKit):
+            Task { await presentCallScreen(roomID: roomID, isVoiceCall: isVoiceCall, answeredFromCallKit: answeredFromCallKit) }
         case .roomList, .room, .roomAlias, .childRoom, .childRoomAlias,
              .roomDetails, .roomMemberDetails, .userProfile,
              .event, .eventOnRoomAlias, .childEvent, .childEventOnRoomAlias,
@@ -464,7 +464,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     // MARK: - Calls
     
-    private func presentCallScreen(roomID: String, isVoiceCall: Bool) async {
+    private func presentCallScreen(roomID: String, isVoiceCall: Bool, answeredFromCallKit: Bool) async {
         guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
             // An answered call is left up for the native stack, so it has to be ended here rather
             // than leaving the system with a call this room can no longer serve.
@@ -473,10 +473,10 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             return
         }
         
-        presentCallScreen(roomProxy: roomProxy, voiceOnly: isVoiceCall)
+        presentCallScreen(roomProxy: roomProxy, voiceOnly: isVoiceCall, answeredFromCallKit: answeredFromCallKit)
     }
     
-    private func presentCallScreen(roomProxy: JoinedRoomProxyProtocol, voiceOnly: Bool) {
+    private func presentCallScreen(roomProxy: JoinedRoomProxyProtocol, voiceOnly: Bool, answeredFromCallKit: Bool = false) {
         let colorScheme: ColorScheme = flowParameters.windowManager.mainWindow.traitCollection.userInterfaceStyle == .light ? .light : .dark
         presentCallScreen(configuration: .init(roomProxy: roomProxy,
                                                clientProxy: userSession.clientProxy,
@@ -484,14 +484,16 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                elementCallBaseURL: userSession.userSettings.app.elementCallBaseURL,
                                                elementCallBaseURLOverride: userSession.userSettings.app.elementCallBaseURLOverride,
                                                voiceOnly: voiceOnly,
-                                               colorScheme: colorScheme))
+                                               colorScheme: colorScheme),
+                          answeredFromCallKit: answeredFromCallKit)
     }
     
     private var callScreenPictureInPictureController: AVPictureInPictureController?
-    private func presentCallScreen(configuration: ElementCallConfiguration) {
+    private func presentCallScreen(configuration: ElementCallConfiguration, answeredFromCallKit: Bool) {
         // The service runs native calls and drives their screen through its own actions.
         if userSession.elementCallService.handleNativeCallRequest(roomProxy: configuration.roomProxy,
-                                                                  isVoiceCall: configuration.voiceOnly) {
+                                                                  isVoiceCall: configuration.voiceOnly,
+                                                                  answeredFromCallKit: answeredFromCallKit) {
             return
         }
         
