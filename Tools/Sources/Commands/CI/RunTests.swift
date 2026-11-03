@@ -39,6 +39,9 @@ struct RunTests: AsyncParsableCommand {
     @Option(help: "Only run a specific test (format: 'ClassName/testName').")
     var testName: String?
     
+    @Option(help: "Only run a specific test plan configuration (e.g. 'English').")
+    var testConfiguration: String?
+    
     @Flag(help: "Run the tests on a saturated CPU to reproduce the flakiness of a busy CI runner.")
     var constrained = false
     
@@ -82,6 +85,10 @@ struct RunTests: AsyncParsableCommand {
         }
         defer { cpuConstraint.stop() }
         
+        // Boot while xcodebuild compiles so the simulator is ready by the time the tests start.
+        let bootTask = Task { try await bootSimulator() }
+        defer { bootTask.cancel() }
+        
         try await executeXcodeBuild()
         
         try await shutdownSimulator()
@@ -120,6 +127,16 @@ struct RunTests: AsyncParsableCommand {
         logger.info("Created simulator '\(name)' (\(deviceID?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "unknown")).")
     }
     
+    // MARK: - Simulator Boot
+    
+    private func bootSimulator() async throws {
+        logger.info("Booting simulator '\(device)' in the background…")
+        
+        // Boot by UDID as the same name can exist for other runtimes. Failures are ignored, xcodebuild boots it otherwise.
+        let command = "xcrun simctl list devices 'iOS \(runtime)' available | grep -F '\(device) (' | grep -oE '[0-9A-F-]{36}' | head -1 | xargs xcrun simctl boot 2>/dev/null || true"
+        try await CI.run(.path("/bin/zsh"), ["-cu", command])
+    }
+    
     // MARK: - Simulator Shutdown
     
     private func shutdownSimulator() async throws {
@@ -156,6 +173,10 @@ struct RunTests: AsyncParsableCommand {
         
         if let testName {
             command += " -only-testing:\(scheme)/\(testName)"
+        }
+        
+        if let testConfiguration {
+            command += " -only-test-configuration '\(testConfiguration)'"
         }
         
         command += " | \(formatter)"

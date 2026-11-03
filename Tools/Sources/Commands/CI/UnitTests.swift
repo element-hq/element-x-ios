@@ -8,11 +8,16 @@ struct UnitTests: AsyncParsableCommand {
     @Flag(help: "Skip preview tests")
     var skipPreviews = false
     
+    @Flag(help: "Only run the English preview tests, skipping the Pseudolanguage ones.")
+    var englishOnlyPreviews = false
+    
     @Flag(help: "Run the unit tests on a saturated CPU to reproduce the flakiness of a busy CI runner.")
     var constrained = false
     
     private static let osVersion = CI.defaultOSVersion
-    private static let device = "iPhone 17"
+    // Shares the preview tests' simulator so only one is ever created and booted on the runner.
+    private static let device = "iPhone SE (3rd generation)"
+    private static let simulatorType = "com.apple.CoreSimulator.SimDeviceType.iPhone-SE-3rd-generation"
     
     func run() async throws {
         try await CI.lint()
@@ -27,6 +32,8 @@ struct UnitTests: AsyncParsableCommand {
                 "--scheme", "UnitTests",
                 "--device", Self.device,
                 "--os-version", Self.osVersion,
+                "--create-simulator-name", Self.device,
+                "--create-simulator-type", Self.simulatorType,
                 "--retries", "3"
             ]
             if constrained {
@@ -41,7 +48,7 @@ struct UnitTests: AsyncParsableCommand {
         
         if !skipPreviews {
             do {
-                try await PreviewTests.parse([]).run()
+                try await PreviewTests.parse(englishOnlyPreviews ? ["--english-only"] : []).run()
             } catch {
                 failures.append("PreviewTests")
                 logger.error("\n❌ Preview tests failed. \(error)\n")
