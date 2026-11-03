@@ -14,6 +14,7 @@ import UIKit
 
 class TimelineController: TimelineControllerProtocol {
     private let roomProxy: JoinedRoomProxyProtocol
+    private let liveTimeline: TimelineProxyProtocol
     private let liveTimelineItemProvider: TimelineItemProviderProtocol
     private let timelineItemFactory: RoomTimelineItemFactoryProtocol
     private let mediaProvider: MediaProviderProtocol
@@ -55,6 +56,7 @@ class TimelineController: TimelineControllerProtocol {
          allowedGalleryItemTypes: [TimelineAllowedGalleryItemType]? = nil) {
         self.allowedGalleryItemTypes = allowedGalleryItemTypes
         self.roomProxy = roomProxy
+        liveTimeline = timelineProxy
         liveTimelineItemProvider = timelineProxy.timelineItemProvider
         self.timelineItemFactory = timelineItemFactory
         self.mediaProvider = mediaProvider
@@ -99,7 +101,7 @@ class TimelineController: TimelineControllerProtocol {
     }
     
     func focusLive() {
-        activeTimeline = roomProxy.timeline
+        activeTimeline = liveTimeline
         activeTimelineItemProvider = liveTimelineItemProvider
     }
     
@@ -505,7 +507,7 @@ class TimelineController: TimelineControllerProtocol {
         
         // Inform the world that the initial items are loading from the store
         paginationState = TimelinePaginationState(backward: .paginating, forward: .paginating)
-        callbacks.send(.isLive(activeTimelineItemProvider.kind == .live))
+        callbacks.send(.isLive(activeTimelineItemProvider.kind == liveTimelineItemProvider.kind))
         
         let contentSizeChangePublisher = NotificationCenter.default.publisher(for: UIContentSizeCategory.didChangeNotification)
         let timelineUpdates = activeTimelineItemProvider.updatePublisher.merge(with: contentSizeChangePublisher.compactMap { [weak self] _ in
