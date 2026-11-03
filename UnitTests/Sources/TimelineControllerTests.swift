@@ -31,6 +31,15 @@ struct TimelineControllerTests {
         #expect(roomProxy.timelineFocusedOnEventEventIDNumberOfEventsReceivedArguments?.eventID == "$event")
     }
     
+    @Test("A thread whose focused event can't be found reports its live timeline as live")
+    func initialFocusFailureInThread() async throws {
+        let controller = makeController(liveTimeline: makeTimeline(kind: .thread(rootEventID: "$root"), eventIDs: ["$other"]),
+                                        initialFocussedEventID: "$event")
+        let deferred = deferFulfillment(isLivePublisher(of: controller)) { _ in true }
+        
+        #expect(try await deferred.fulfill())
+    }
+    
     @Test("Messages sent after returning to the live thread timeline go to the thread")
     func sendAfterFocusLiveInThread() async throws {
         let threadTimeline = makeTimeline(kind: .thread(rootEventID: "$root"), eventIDs: ["$other"])
@@ -54,14 +63,7 @@ struct TimelineControllerTests {
                                         focussedTimeline: makeTimeline(kind: .detached, eventIDs: ["$event"]))
         try await waitForTimelineItems(controller)
         
-        let isLivePublisher = controller.callbacks.compactMap { callback -> Bool? in
-            if case let .isLive(isLive) = callback {
-                isLive
-            } else {
-                nil
-            }
-        }
-        let deferred = deferFulfillment(isLivePublisher) { _ in true }
+        let deferred = deferFulfillment(isLivePublisher(of: controller)) { _ in true }
         
         controller.focusLive()
         
@@ -116,5 +118,17 @@ struct TimelineControllerTests {
             }
         }
         try await deferred.fulfill()
+    }
+    
+    private func isLivePublisher(of controller: TimelineController) -> AnyPublisher<Bool, Never> {
+        controller.callbacks
+            .compactMap { callback -> Bool? in
+                if case let .isLive(isLive) = callback {
+                    isLive
+                } else {
+                    nil
+                }
+            }
+            .eraseToAnyPublisher()
     }
 }
