@@ -13,7 +13,7 @@ import MatrixRustSDK
 
 enum ClientProxyAction {
     case receivedSyncUpdate
-    case receivedAuthError(isSoftLogout: Bool)
+    case receivedAuthError
     case receivedDecryptionError(UnableToDecryptInfo)
     
     var isSyncUpdate: Bool {

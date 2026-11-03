@@ -176,7 +176,6 @@ enum TestablePreviewsDictionary {
             "SettingsScreenUserStatusPickerView_Previews" : SettingsScreenUserStatusPickerView_Previews.self,
             "SettingsScreenUserStatusRow_Previews" : SettingsScreenUserStatusRow_Previews.self,
             "ShimmerOverlay_Previews" : ShimmerOverlay_Previews.self,
-            "SoftLogoutScreen_Previews" : SoftLogoutScreen_Previews.self,
             "SpaceAddRoomsScreenSelectedItem_Previews" : SpaceAddRoomsScreenSelectedItem_Previews.self,
             "SpaceHeaderTopicSheetView_Previews" : SpaceHeaderTopicSheetView_Previews.self,
             "SpaceHeaderView_Previews" : SpaceHeaderView_Previews.self,

@@ -199,11 +199,11 @@ class ClientProxy: ClientProxyProtocol {
         roomListStateUpdateTaskHandle = createRoomListServiceObserver(roomListService)
         roomListStateLoadingStateUpdateTaskHandle = createRoomListLoadingStateUpdateObserver(roomListService)
         
-        delegateHandle = try client.setDelegate(delegate: ClientDelegateWrapper { [weak self] isSoftLogout in
+        delegateHandle = try client.setDelegate(delegate: ClientDelegateWrapper { [weak self] in
             // Called by the SDK from arbitrary threads, hop to the main actor where the proxy lives.
             Task { @MainActor in
                 self?.hasEncounteredAuthError = true
-                self?.actionsSubject.send(.receivedAuthError(isSoftLogout: isSoftLogout))
+                self?.actionsSubject.send(.receivedAuthError)
             }
         } backgroundTaskErrorCallback: { error in
             switch error {
@@ -1398,10 +1398,10 @@ class ClientProxy: ClientProxyProtocol {
 }
 
 private final class ClientDelegateWrapper: ClientDelegate {
-    private let authErrorCallback: @Sendable (Bool) -> Void
+    private let authErrorCallback: @Sendable () -> Void
     private let backgroundTaskErrorCallback: @Sendable (MatrixRustSDK.BackgroundTaskFailureReason) -> Void
     
-    init(authErrorCallback: @escaping @Sendable (Bool) -> Void,
+    init(authErrorCallback: @escaping @Sendable () -> Void,
          backgroundTaskErrorCallback: @escaping @Sendable (MatrixRustSDK.BackgroundTaskFailureReason) -> Void) {
         self.authErrorCallback = authErrorCallback
         self.backgroundTaskErrorCallback = backgroundTaskErrorCallback
@@ -1411,7 +1411,8 @@ private final class ClientDelegateWrapper: ClientDelegate {
     
     func didReceiveAuthError(isSoftLogout: Bool) {
         MXLog.error("Received authentication error, softlogout=\(isSoftLogout)")
-        authErrorCallback(isSoftLogout)
+        // Note: soft logout isn't supported by MAS so we don't use it.
+        authErrorCallback()
     }
     
     // periphery:ignore - required by the SDK's delegate protocol

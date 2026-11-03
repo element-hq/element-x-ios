@@ -51,7 +51,6 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
     // periphery:ignore - used to avoid deallocation
     private var appLockSetupFlowCoordinator: AppLockSetupFlowCoordinator?
     private var userSessionFlowCoordinator: UserSessionFlowCoordinator?
-    private var softLogoutCoordinator: SoftLogoutScreenCoordinator?
     private var appDelegateObserver: AnyCancellable?
     /// Becomes `true` once the app is no longer waiting on a session restore, whatever the outcome.
     private let isSessionRestoredSubject = CurrentValueSubject<Bool, Never>(false)
@@ -279,11 +278,7 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
                 handleAppRoute(route,
                                windowType: windowType)
             case .oAuthCallback(let url):
-                if stateMachine.state == .softLogout {
-                    softLogoutCoordinator?.handleOAuthCallbackURL(url)
-                } else {
-                    authenticationFlowCoordinator?.handleOAuthCallbackURL(url)
-                }
+                authenticationFlowCoordinator?.handleOAuthCallbackURL(url)
             case .userProfile(let userID):
                 if isExternalURL {
                     handleAppRoute(route,
@@ -680,20 +675,15 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
                 presentSplashScreen()
             case (.restoringSession, .createdUserSession, .signedIn):
                 setupUserSession(isNewLogin: false)
-            case (.softLogout, .createdUserSession, .signedIn):
-                setupUserSession(isNewLogin: false)
-                restoreUserSessions()
                 
             case (.signingOut, .signOut, .signingOut):
                 // We can ignore signOut when already in the process of signing out,
                 // such as the SDK sending an authError due to token invalidation.
                 break
-            case (_, .signOut(let isSoft, _), .signingOut):
-                logout(isSoft: isSoft)
-            case (.signingOut(_, let disableAppLock), .completedSigningOut, .signedOut):
-                presentSplashScreen(isSoftLogout: false, disableAppLock: disableAppLock)
-            case (.signingOut(_, let disableAppLock), .showSoftLogout, .softLogout):
-                presentSplashScreen(isSoftLogout: true, disableAppLock: disableAppLock)
+            case (_, .signOut, .signingOut):
+                logout()
+            case (.signingOut(let disableAppLock), .completedSigningOut, .signedOut):
+                presentSplashScreen(disableAppLock: disableAppLock)
             case (.signedIn, .clearCache, .initial):
                 clearCache()
             default:
@@ -827,55 +817,6 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
         }
     }
     
-    private func startAuthenticationSoftLogout() {
-        guard let userSession else {
-            fatalError("User session not setup")
-        }
-        
-        Task { [self] in
-            let credentials = SoftLogoutScreenCredentials(userID: userSession.clientProxy.userID,
-                                                          homeserverName: userSession.clientProxy.homeserver,
-                                                          userDisplayName: userSession.clientProxy.userProfilePublisher.value.displayName ?? "",
-                                                          deviceID: userSession.clientProxy.deviceID)
-            
-            let authenticationService = AuthenticationService(userSessionManager: userSessionManager,
-                                                              encryptionKeyProvider: EncryptionKeyProvider(),
-                                                              classicAppManager: ClassicAppManager(),
-                                                              appSettings: appSettings,
-                                                              appHooks: appHooks)
-            _ = await authenticationService.configure(for: userSession.clientProxy.homeserver, flow: .login)
-            
-            let parameters = SoftLogoutScreenCoordinatorParameters(authenticationService: authenticationService,
-                                                                   credentials: credentials,
-                                                                   keyBackupNeeded: false,
-                                                                   appMediator: appMediator,
-                                                                   appSettings: appSettings,
-                                                                   appHooks: appHooks,
-                                                                   userIndicatorController: userIndicatorController)
-            let coordinator = SoftLogoutScreenCoordinator(parameters: parameters)
-            softLogoutCoordinator = coordinator
-            coordinator.actions
-                .sink { [weak self] action in
-                    guard let self else { return }
-                    
-                    switch action {
-                    case .signedIn(let session):
-                        self.migratedUserIDs.insert(session.clientProxy.userID)
-                        self.userSessionManager.add(session)
-                        Task { await self.resumeClientServices() }
-                        self.softLogoutCoordinator = nil
-                        stateMachine.processEvent(.createdUserSession)
-                    case .clearAllData:
-                        self.softLogoutCoordinator = nil
-                        stateMachine.processEvent(.signOut(isSoft: false, disableAppLock: false))
-                    }
-                }
-                .store(in: &cancellables)
-            
-            navigationRootCoordinator.setRootCoordinator(coordinator)
-        }
-    }
-    
     private func setupUserSession(isNewLogin: Bool) {
         guard let userSession else {
             fatalError("User session not setup")
@@ -911,11 +852,11 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
                 
                 switch action {
                 case .logout:
-                    stateMachine.processEvent(.signOut(isSoft: false, disableAppLock: false))
+                    stateMachine.processEvent(.signOut(disableAppLock: false))
                 case .clearCache:
                     stateMachine.processEvent(.clearCache)
                 case .forceLogout:
-                    stateMachine.processEvent(.signOut(isSoft: false, disableAppLock: true))
+                    stateMachine.processEvent(.signOut(disableAppLock: true))
                 }
             }
             .store(in: &cancellables)
@@ -929,7 +870,7 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
         }
     }
     
-    private func logout(isSoft: Bool) {
+    private func logout() {
         guard let userSession else {
             fatalError("User session not setup")
         }
@@ -942,12 +883,6 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
         
         Task { await pauseClientServices(isBackgroundTask: false) }
         userSessionFlowCoordinator?.stop()
-        
-        guard !isSoft else {
-            stateMachine.processEvent(.showSoftLogout)
-            hideLoadingIndicator()
-            return
-        }
         
         Task {
             // Delete the pusher and stop the live location shares while the session can still reach the server.
@@ -985,14 +920,10 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
         userSessionFlowCoordinator = nil
     }
     
-    private func presentSplashScreen(isSoftLogout: Bool = false, disableAppLock: Bool = false) {
+    private func presentSplashScreen(disableAppLock: Bool = false) {
         navigationRootCoordinator.setRootCoordinator(SplashScreenCoordinator())
         
-        if isSoftLogout {
-            startAuthenticationSoftLogout()
-        } else {
-            startAuthentication()
-        }
+        startAuthentication()
         
         if disableAppLock {
             Task {
@@ -1052,13 +983,13 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
             .sink { [weak self] callback in
                 guard let self else { return }
                 switch callback {
-                case .didReceiveAuthError(let userID, let isSoftLogout):
+                case .didReceiveAuthError(let userID):
                     // Only the active account can be signed out for now.
                     guard userID == userSessionManager.activeSession?.clientProxy.userID else {
                         MXLog.error("Ignoring an auth error for \(userID), it isn't the active account.")
                         return
                     }
-                    stateMachine.processEvent(.signOut(isSoft: isSoftLogout, disableAppLock: false))
+                    stateMachine.processEvent(.signOut(disableAppLock: false))
                 }
             }
             .store(in: &cancellables)
@@ -1073,7 +1004,7 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
             case .unlockApp:
                 windowManager.switchToMain()
             case .forceLogout:
-                stateMachine.processEvent(.signOut(isSoft: false, disableAppLock: true))
+                stateMachine.processEvent(.signOut(disableAppLock: true))
             }
         }
         .store(in: &cancellables)

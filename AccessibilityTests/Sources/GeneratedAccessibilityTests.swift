@@ -715,10 +715,6 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "ShimmerOverlay_Previews")
     }
 
-    func testSoftLogoutScreen() async throws {
-        try await performAccessibilityAudit(named: "SoftLogoutScreen_Previews")
-    }
-
     func testSpaceAddRoomsScreenSelectedItem() async throws {
         try await performAccessibilityAudit(named: "SpaceAddRoomsScreenSelectedItem_Previews")
     }

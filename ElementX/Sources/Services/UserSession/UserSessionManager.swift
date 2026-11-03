@@ -52,8 +52,8 @@ final class UserSessionManager: UserSessionManagerProtocol {
                     let userID = userSession.clientProxy.userID
                     return userSession.callbacks.map { callback in
                         switch callback {
-                        case .didReceiveAuthError(let isSoftLogout):
-                            UserSessionManagerCallback.didReceiveAuthError(userID: userID, isSoftLogout: isSoftLogout)
+                        case .didReceiveAuthError:
+                            UserSessionManagerCallback.didReceiveAuthError(userID: userID)
                         }
                     }
                 })

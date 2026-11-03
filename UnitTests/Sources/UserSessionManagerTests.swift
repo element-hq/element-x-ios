@@ -308,14 +308,14 @@ struct UserSessionManagerTests {
         let bob = makeUserSession(userID: "@bob:matrix.org")
         manager.add(bob)
         
-        let deferred = deferFulfillment(manager.callbacksPublisher) { $0 == .didReceiveAuthError(userID: "@bob:matrix.org", isSoftLogout: true) }
-        bob.callbacks.send(.didReceiveAuthError(isSoftLogout: true))
+        let deferred = deferFulfillment(manager.callbacksPublisher) { $0 == .didReceiveAuthError(userID: "@bob:matrix.org") }
+        bob.callbacks.send(.didReceiveAuthError)
         try await deferred.fulfill()
         
         // A replaced session (e.g. after clearing the cache) mustn't report anything anymore.
         let deferredFailure = deferFailure(manager.callbacksPublisher, timeout: .seconds(1)) { _ in true }
         manager.add(makeUserSession(userID: "@bob:matrix.org"))
-        bob.callbacks.send(.didReceiveAuthError(isSoftLogout: false))
+        bob.callbacks.send(.didReceiveAuthError)
         try await deferredFailure.fulfill()
     }
     
