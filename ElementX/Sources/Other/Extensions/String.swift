@@ -105,25 +105,20 @@ nonisolated extension String {
 }
 
 nonisolated extension String {
-    /// Whether the first character with a strong BiDi direction is right-to-left.
-    /// Mirrors the Unicode BiDi "first strong" rule used by TextKit to resolve
-    /// paragraph direction when `baseWritingDirection` is `.natural`.
-    var firstStrongCharacterIsRTL: Bool {
-        for scalar in unicodeScalars {
-            let value = scalar.value
-            // Strong RTL: Hebrew, Arabic, Syriac, Thaana, NKo, Samaritan, Mandaic,
-            // Arabic Extended, and their presentation forms.
-            let isStrongRTL = (0x0590...0x08FF).contains(value) ||
-                (0xFB1D...0xFDFF).contains(value) ||
-                (0xFE70...0xFEFF).contains(value)
-            if isStrongRTL {
-                return true
-            }
-            if scalar.properties.isAlphabetic {
-                return false
-            }
+    /// The direction of the first character with a strong BiDi direction, or `nil` when there
+    /// isn't one (e.g. the string only contains emojis, digits or punctuation). Mirrors the Unicode
+    /// BiDi "first strong" rule used by TextKit to resolve a paragraph's direction.
+    var firstStrongCharacterDirection: NSWritingDirection? {
+        guard let value = unicodeScalars.first(where: \.properties.isAlphabetic)?.value else {
+            return nil
         }
-        return false
+        
+        // Strong RTL: Hebrew, Arabic, Syriac, Thaana, NKo, Samaritan, Mandaic,
+        // Arabic Extended, and their presentation forms.
+        let isRTL = (0x0590...0x08FF).contains(value) ||
+            (0xFB1D...0xFDFF).contains(value) ||
+            (0xFE70...0xFEFF).contains(value)
+        return isRTL ? .rightToLeft : .leftToRight
     }
 }
 
