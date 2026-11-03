@@ -831,6 +831,7 @@
 		7D6DC832DE7A3DE874E2E9BC /* MatrixRustSDK in Frameworks */ = {isa = PBXBuildFile; productRef = BB111AE9D390233CDD2C7FD5 /* MatrixRustSDK */; };
 		7DCFC31B49BDD2BC32184E58 /* TimelineControllerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0D5AE752AF87DA0A920812 /* TimelineControllerFactory.swift */; };
 		7E2BB42805C59DB57E95610F /* PillView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7773CBFDBD458E0B7E270507 /* PillView.swift */; };
+		7E2C87E11463ECF9290494E8 /* NSAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3EFE3592C32F9FA0E79B166 /* NSAttributedString.swift */; };
 		7E429C44DD0C99870C6E9972 /* MapLibre.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1DBA4A688563F86CC0D3E537 /* MapLibre.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7E91BAC17963ED41208F489B /* UserSessionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E8BDC092D817B68CD9040C5 /* UserSessionStore.swift */; };
 		7F0B6EB5CB52D7B7A2BB7D15 /* BannedRoomProxyMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FD7E851E2BA8C5A8D284B2A /* BannedRoomProxyMock.swift */; };
@@ -2927,6 +2928,7 @@
 		B35297BA5FF73D83D8C72A2A /* TimelineItemsSelectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineItemsSelectionTests.swift; sourceTree = "<group>"; };
 		B3561843E139EA7CDAED0933 /* ClientFactoryHook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientFactoryHook.swift; sourceTree = "<group>"; };
 		B383DCD3DCB19E00FD478A5F /* ConfirmationDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmationDialog.swift; sourceTree = "<group>"; };
+		B3EFE3592C32F9FA0E79B166 /* NSAttributedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAttributedString.swift; sourceTree = "<group>"; };
 		B4005D82E9D27BAF006A8FE1 /* AppLockScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLockScreenViewModel.swift; sourceTree = "<group>"; };
 		B40233F2989AD49906BB310D /* RoomPollsHistoryScreenViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomPollsHistoryScreenViewModelTests.swift; sourceTree = "<group>"; };
 		B410B32B72C90BF94E481F33 /* AppLockSetupPINScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLockSetupPINScreenModels.swift; sourceTree = "<group>"; };
@@ -4679,6 +4681,7 @@
 				04DF593C3F7AF4B2FBAEB05D /* FileManager.swift */,
 				E3877D3CFAC1D33823359BAF /* HTMLParserStyle.swift */,
 				4E2245243369B99216C7D84E /* ImageCache.swift */,
+				B3EFE3592C32F9FA0E79B166 /* NSAttributedString.swift */,
 				F72EFC8C634469F9262659C7 /* NSItemProvider.swift */,
 				95BAC0F6C9644336E9567EE6 /* NSRegularExpresion.swift */,
 				5327E3B3C58BEB0E65F4CF98 /* Observable.swift */,
@@ -9366,6 +9369,7 @@
 				5846723185B444D52E077874 /* ModerationAndSafetySettingsScreenViewModel.swift in Sources */,
 				7C8F9E3AF56E7FF5B338DBFA /* ModerationAndSafetySettingsScreenViewModelProtocol.swift in Sources */,
 				A88A0C11EB4231EE2989C659 /* MultiAccountAnnouncementView.swift in Sources */,
+				7E2C87E11463ECF9290494E8 /* NSAttributedString.swift in Sources */,
 				5152FF71D3AE01A1ADF0FC62 /* NSEAccountSettings.swift in Sources */,
 				1AF6BFB40515EB31B9485665 /* NSENotificationTone.swift in Sources */,
 				E938F7A45D6A3DBBE6789A03 /* NSEUserSession.swift in Sources */,

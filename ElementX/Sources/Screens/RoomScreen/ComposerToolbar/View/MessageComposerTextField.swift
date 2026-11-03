@@ -103,11 +103,13 @@ private struct UITextViewWrapper: UIViewRepresentable {
     }
     
     func updateUIView(_ textView: UITextView, context: UIViewRepresentableContext<UITextViewWrapper>) {
-        // Prevent the textView from inheriting attributes from mention pills
+        // Prevent the textView from inheriting attributes from mention pills, keeping the current paragraph's direction.
         textView.typingAttributes = [.font: font,
-                                     .foregroundColor: UIColor.compound.textPrimary]
+                                     .foregroundColor: UIColor.compound.textPrimary,
+                                     .paragraphStyle: textView.typingAttributes[.paragraphStyle] ?? NSParagraphStyle.default]
         
-        if textView.attributedText != text {
+        let directedText = text.applyingParagraphWritingDirections()
+        if textView.attributedText != directedText {
             // Remember the selection if only the attributes have changed.
             let selection = textView.attributedText.string == text.string ? textView.selectedTextRange : nil
             
@@ -116,7 +118,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
             // https://github.com/element-hq/element-x-ios/issues/3369
             _ = textView.layoutManager
             
-            textView.attributedText = text
+            textView.attributedText = directedText
             
             // Re-apply the default font when setting text for e.g. edits.
             textView.font = font
@@ -173,6 +175,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
         }
         
         func textViewDidChange(_ textView: UITextView) {
+            textView.textStorage.applyParagraphWritingDirections()
             text.wrappedValue = textView.attributedText
         }
         
