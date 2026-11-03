@@ -166,7 +166,8 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
         
         let containedInDisplayName: Bool
         if let displayName {
-            containedInDisplayName = displayName.localizedStandardContains(searchText)
+            // The search text can't contain whitespace, so "janeqdoe" has to find "Jane Q Doe".
+            containedInDisplayName = displayName.filter { !$0.isWhitespace }.localizedStandardContains(searchText)
         } else {
             containedInDisplayName = false
         }
