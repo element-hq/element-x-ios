@@ -39,7 +39,6 @@ class SignallingTimelineItemProviderMock: TimelineItemProviderMock, @unchecked S
         self.paginationState = paginationState
         kind = .live
         updatePublisher = stateSubject.eraseToAnyPublisher()
-        membershipChangePublisher = Empty().eraseToAnyPublisher()
         
         guard listenForSignals else { return }
         
