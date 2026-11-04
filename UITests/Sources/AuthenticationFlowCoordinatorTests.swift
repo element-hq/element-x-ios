@@ -10,33 +10,7 @@ import XCTest
 
 @MainActor
 class AuthenticationFlowCoordinatorUITests: XCTestCase {
-    func testLoginWithPassword() async throws {
-        // Given the authentication flow.
-        let app = Application.launch(.authenticationFlow)
-        
-        // Check the bug report flow works.
-        try await verifyReportBugButton(app)
-        
-        // Splash Screen: Tap get started button
-        app.buttons[A11yIdentifiers.authenticationStartScreen.signIn].tap()
-        
-        // Server Selection: Clear the default, enter a server address and submit.
-        // The \n triggers confirm directly, navigating to the login screen.
-        app.textFields[A11yIdentifiers.changeServerScreen.server].clearAndTypeText("example.com\n", app: app)
-        
-        // Login Screen: Wait for continue button to appear
-        let continueButton = app.buttons[A11yIdentifiers.loginScreen.continue]
-        XCTAssertTrue(continueButton.waitForExistence(timeout: 2.0))
-        
-        // Login Screen: Enter valid credentials
-        app.textFields[A11yIdentifiers.loginScreen.emailUsername].clearAndTypeText("alice\n", app: app)
-        app.secureTextFields[A11yIdentifiers.loginScreen.password].clearAndTypeText("12345678", app: app)
-        
-        try await app.assertScreenshot()
-        
-        // Login Screen: Tap next
-        app.buttons[A11yIdentifiers.loginScreen.continue].tap()
-    }
+    // Signing in with a password is covered by RootFlowCoordinatorUITests.testSignIn.
     
     func testLoginWithIncorrectPassword() {
         // Given the authentication flow.

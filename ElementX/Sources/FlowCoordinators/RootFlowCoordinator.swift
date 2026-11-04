@@ -35,6 +35,7 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
     private let appHooks: AppHooks
     private let analyticsService: AnalyticsServiceProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
+    private let authenticationServiceFactory: AuthenticationServiceFactoryProtocol
     
     private var authenticationFlowCoordinator: AuthenticationFlowCoordinator?
     private var userSessionFlowCoordinator: UserSessionFlowCoordinator?
@@ -87,7 +88,8 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
          appSettings: AppSettings,
          appHooks: AppHooks,
          analyticsService: AnalyticsServiceProtocol,
-         userIndicatorController: UserIndicatorControllerProtocol) {
+         userIndicatorController: UserIndicatorControllerProtocol,
+         authenticationServiceFactory: AuthenticationServiceFactoryProtocol = AuthenticationServiceFactory()) {
         self.navigationRootCoordinator = navigationRootCoordinator
         self.userSessionManager = userSessionManager
         self.appLockService = appLockService
@@ -97,6 +99,7 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
         self.appHooks = appHooks
         self.analyticsService = analyticsService
         self.userIndicatorController = userIndicatorController
+        self.authenticationServiceFactory = authenticationServiceFactory
         
         stateMachine = .init(state: .initial)
         configureStateMachine()
@@ -235,11 +238,11 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
     
     private func startAuthenticationFlow(isAddingAccount: Bool) {
         let navigationStackCoordinator = NavigationStackCoordinator()
-        let authenticationService = AuthenticationService(userSessionManager: userSessionManager,
-                                                          encryptionKeyProvider: EncryptionKeyProvider(),
-                                                          classicAppManager: ClassicAppManager(),
-                                                          appSettings: appSettings,
-                                                          appHooks: appHooks)
+        let authenticationService = authenticationServiceFactory.makeAuthenticationService(userSessionManager: userSessionManager,
+                                                                                           encryptionKeyProvider: EncryptionKeyProvider(),
+                                                                                           classicAppManager: ClassicAppManager(),
+                                                                                           appSettings: appSettings,
+                                                                                           appHooks: appHooks)
         Task { await authenticationService.setupClassicAppAccountState() }
         
         let coordinator = AuthenticationFlowCoordinator(authenticationService: authenticationService,

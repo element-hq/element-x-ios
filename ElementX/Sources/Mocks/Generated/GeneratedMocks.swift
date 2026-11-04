@@ -1668,6 +1668,51 @@ nonisolated class AudioSessionMock: AudioSessionProtocol, @unchecked Sendable {
         try setActiveOptionsClosure?(active, options)
     }
 }
+nonisolated class AuthenticationServiceFactoryMock: AuthenticationServiceFactoryProtocol, @unchecked Sendable {
+
+    //MARK: - makeAuthenticationService
+
+    private let makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksCallsCountLock = NSLock()
+    private nonisolated(unsafe) var makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksUnderlyingCallsCount = 0
+    var makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksCallsCount: Int {
+        get { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksCallsCountLock.withLock { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksUnderlyingCallsCount } }
+        set { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksCallsCountLock.withLock { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksUnderlyingCallsCount = newValue } }
+    }
+    var makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksCalled: Bool {
+        return makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksCallsCount > 0
+    }
+    private let makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksReceivedArgumentsLock = NSLock()
+    private nonisolated(unsafe) var makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksUnderlyingReceivedArguments: (userSessionManager: UserSessionManagerProtocol, encryptionKeyProvider: EncryptionKeyProviderProtocol, classicAppManager: ClassicAppManagerProtocol?, appSettings: AppSettings, appHooks: AppHooks)?
+    var makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksReceivedArguments: (userSessionManager: UserSessionManagerProtocol, encryptionKeyProvider: EncryptionKeyProviderProtocol, classicAppManager: ClassicAppManagerProtocol?, appSettings: AppSettings, appHooks: AppHooks)? {
+        get { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksReceivedArgumentsLock.withLock { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksUnderlyingReceivedArguments } }
+        set { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksReceivedArgumentsLock.withLock { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksUnderlyingReceivedArguments = newValue } }
+    }
+    private let makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksUnderlyingReceivedInvocations: [(userSessionManager: UserSessionManagerProtocol, encryptionKeyProvider: EncryptionKeyProviderProtocol, classicAppManager: ClassicAppManagerProtocol?, appSettings: AppSettings, appHooks: AppHooks)] = []
+    var makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksReceivedInvocations: [(userSessionManager: UserSessionManagerProtocol, encryptionKeyProvider: EncryptionKeyProviderProtocol, classicAppManager: ClassicAppManagerProtocol?, appSettings: AppSettings, appHooks: AppHooks)] {
+        get { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksReceivedInvocationsLock.withLock { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksUnderlyingReceivedInvocations } }
+        set { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksReceivedInvocationsLock.withLock { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksReturnValueLock = NSLock()
+    private nonisolated(unsafe) var makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksUnderlyingReturnValue: AuthenticationServiceProtocol!
+    var makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksReturnValue: AuthenticationServiceProtocol! {
+        get { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksReturnValueLock.withLock { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksUnderlyingReturnValue } }
+        set { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksReturnValueLock.withLock { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksClosure: ((UserSessionManagerProtocol, EncryptionKeyProviderProtocol, ClassicAppManagerProtocol?, AppSettings, AppHooks) -> AuthenticationServiceProtocol)?
+
+    func makeAuthenticationService(userSessionManager: UserSessionManagerProtocol, encryptionKeyProvider: EncryptionKeyProviderProtocol, classicAppManager: ClassicAppManagerProtocol?, appSettings: AppSettings, appHooks: AppHooks) -> AuthenticationServiceProtocol {
+        makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksCallsCountLock.withLock { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksUnderlyingCallsCount += 1 }
+        makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksReceivedArguments = (userSessionManager: userSessionManager, encryptionKeyProvider: encryptionKeyProvider, classicAppManager: classicAppManager, appSettings: appSettings, appHooks: appHooks)
+        makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksReceivedInvocationsLock.withLock { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksUnderlyingReceivedInvocations.append((userSessionManager: userSessionManager, encryptionKeyProvider: encryptionKeyProvider, classicAppManager: classicAppManager, appSettings: appSettings, appHooks: appHooks)) }
+        if let makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksClosure = makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksClosure {
+            return makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksClosure(userSessionManager, encryptionKeyProvider, classicAppManager, appSettings, appHooks)
+        } else {
+            return makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksReturnValue
+        }
+    }
+}
 nonisolated class BannedRoomProxyMock: BannedRoomProxyProtocol, @unchecked Sendable {
     var info: BaseRoomInfoProxyProtocol {
         get { return underlyingInfo }
