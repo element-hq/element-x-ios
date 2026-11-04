@@ -8,6 +8,7 @@
 ## Strong Conventions
 
 PRs must follow rules. Prefer Xcode MCP tools over terminal commands.
+Before any task: walk `.gitmodules` recursive, read each submodule `CONTRIBUTING.md` if present. Cover all work — code, branches, commits, PRs. Clash this file? Submodule win.
 
 ### Code Style
 
@@ -20,8 +21,9 @@ PRs must follow rules. Prefer Xcode MCP tools over terminal commands.
 
 ### Comments
 
-- **Code speak for itself** — doc comments fine, but no comments restating what clear code already says.
-- **Do** comment when code hides trap, hard to follow, or choice needs justifying.
+- **Code speak for itself** — no comments restating what clear code already says.
+- Doc comment (`///`) must open with *what* — summary line describe what symbol is/does. Discussion may follow, only if useful to callers.
+- Rationale/implementation detail — trap, hard-to-follow code, choice needing justification → inline `//` comment at the spot, not doc.
 - Comments short — one line where possible. Exceed only when truly needed.
 
 ### PII & Logging
