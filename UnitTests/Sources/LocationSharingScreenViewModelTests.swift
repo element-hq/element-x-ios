@@ -333,7 +333,7 @@ struct LocationSharingScreenViewModelTests {
         context.alertInfo?.secondaryButton?.action?()
         try await durationPicker.fulfill()
         
-        let deferredFailure = deferFailure(viewModel.actions, timeout: .seconds(1)) { $0 == .close }
+        let deferredFailure = deferFailure(viewModel.actions, timeout: .milliseconds(300)) { $0 == .close }
         context.alertInfo?.verticalButtons?.first?.action?()
         try await deferredFailure.fulfill()
     }

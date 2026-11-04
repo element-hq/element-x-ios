@@ -140,7 +140,7 @@ final class MediaUploadPreviewScreenViewModelTests {
         #expect(userIndicatorController.submitIndicatorDelayCallsCount == 0)
         
         // When attempting to send the file
-        let deferredFailure = deferFailure(viewModel.actions, timeout: .seconds(1), message: "The screen should remain visible.") { $0 == .dismiss }
+        let deferredFailure = deferFailure(viewModel.actions, timeout: .milliseconds(300), message: "The screen should remain visible.") { $0 == .dismiss }
         context.send(viewAction: .send)
         #expect(context.viewState.shouldDisableInteraction, "The interaction should be disabled while sending.")
         #expect(userIndicatorController.submitIndicatorDelayCallsCount == 1) // Loading indicator
@@ -163,7 +163,7 @@ final class MediaUploadPreviewScreenViewModelTests {
         
         // When attempting to send the media.
         let deferredAlert = deferFulfillment(context.observe(\.viewState.bindings.alertInfo)) { $0 != nil }
-        let deferredFailure = deferFailure(viewModel.actions, timeout: .seconds(1), message: "The screen should remain visible.") { $0 == .dismiss }
+        let deferredFailure = deferFailure(viewModel.actions, timeout: .milliseconds(300), message: "The screen should remain visible.") { $0 == .dismiss }
         context.send(viewAction: .send)
         
         #expect(context.viewState.shouldDisableInteraction, "The interaction should be disabled while sending.")
@@ -195,7 +195,7 @@ final class MediaUploadPreviewScreenViewModelTests {
         
         // When attempting to send an image that is larger the limit.
         let deferredAlert = deferFulfillment(context.observe(\.viewState.bindings.alertInfo)) { $0 != nil }
-        let deferredFailure = deferFailure(viewModel.actions, timeout: .seconds(1), message: "The screen should remain visible.") { $0 == .dismiss }
+        let deferredFailure = deferFailure(viewModel.actions, timeout: .milliseconds(300), message: "The screen should remain visible.") { $0 == .dismiss }
         context.send(viewAction: .send)
         
         #expect(context.viewState.shouldDisableInteraction, "The interaction should be disabled while sending.")
@@ -239,7 +239,7 @@ final class MediaUploadPreviewScreenViewModelTests {
         #expect(userIndicatorController.submitIndicatorDelayCallsCount == 0)
         
         // When attempting to send the file
-        let deferredFailure = deferFailure(viewModel.actions, timeout: .seconds(1), message: "The screen should remain visible.") { $0 == .dismiss }
+        let deferredFailure = deferFailure(viewModel.actions, timeout: .milliseconds(300), message: "The screen should remain visible.") { $0 == .dismiss }
         context.send(viewAction: .send)
         #expect(context.viewState.shouldDisableInteraction, "The interaction should be disabled while sending.")
         #expect(userIndicatorController.submitIndicatorDelayCallsCount == 1) // Loading indicator

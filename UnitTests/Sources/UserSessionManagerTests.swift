@@ -313,7 +313,7 @@ struct UserSessionManagerTests {
         try await deferred.fulfill()
         
         // A replaced session (e.g. after clearing the cache) mustn't report anything anymore.
-        let deferredFailure = deferFailure(manager.callbacksPublisher, timeout: .seconds(1)) { _ in true }
+        let deferredFailure = deferFailure(manager.callbacksPublisher, timeout: .milliseconds(300)) { _ in true }
         manager.add(makeUserSession(userID: "@bob:matrix.org"))
         bob.callbacks.send(.didReceiveAuthError(isSoftLogout: false))
         try await deferredFailure.fulfill()

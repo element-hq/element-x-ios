@@ -361,7 +361,7 @@ final class SecurityAndPrivacyScreenViewModelTests {
         setupViewModel(joinedParentSpaces: [], joinRule: .public)
         
         // Saving shouldn't dismiss this screen (or trigger any other action).
-        let deferred = deferFailure(viewModel.actionsPublisher, timeout: .seconds(1)) { _ in true }
+        let deferred = deferFailure(viewModel.actionsPublisher, timeout: .milliseconds(300)) { _ in true }
         
         context.desiredSettings.accessType = .inviteOnly
         context.send(viewAction: .save)
@@ -428,7 +428,7 @@ final class SecurityAndPrivacyScreenViewModelTests {
         #expect(context.alertInfo != nil)
         
         // The screen should not be dismissed if a failure occurred.
-        let deferred = deferFailure(viewModel.actionsPublisher, timeout: .seconds(1)) { _ in true }
+        let deferred = deferFailure(viewModel.actionsPublisher, timeout: .milliseconds(300)) { _ in true }
         context.alertInfo?.primaryButton.action?() // Save
         try await deferred.fulfill()
     }

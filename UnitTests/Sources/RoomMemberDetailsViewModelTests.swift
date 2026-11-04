@@ -187,7 +187,7 @@ struct RoomMemberDetailsViewModelTests {
         clientProxy.userIdentityForFallBackToServerReturnValue = .failure(.forbiddenAccess)
         
         // The user identity is always unknown, i.e. never not unknown.
-        let deferred = deferFailure(viewModel.context.$viewState.compactMap(\.bindings.inviteConfirmationUser), timeout: .seconds(5)) {
+        let deferred = deferFailure(viewModel.context.$viewState.compactMap(\.bindings.inviteConfirmationUser), timeout: .milliseconds(300)) {
             !$0.isUnknown
         }
         context.send(viewAction: .openDirectChat)

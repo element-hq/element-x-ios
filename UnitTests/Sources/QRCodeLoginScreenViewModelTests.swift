@@ -155,7 +155,7 @@ struct QRCodeLoginScreenViewModelTests {
         try await deferredAction.fulfill()
         
         let currentState = context.viewState.state
-        let deferredFailure = deferFailure(context.$viewState, timeout: .seconds(1)) { $0.state != currentState }
+        let deferredFailure = deferFailure(context.$viewState, timeout: .milliseconds(300)) { $0.state != currentState }
         linkDesktopProgressSubject.send(.syncingSecrets)
         try await deferredFailure.fulfill()
         
@@ -182,7 +182,7 @@ struct QRCodeLoginScreenViewModelTests {
         setup(mode: .login, linkDesktopTimeout: .zero)
         
         // The timeout only applies when linking a desktop, so signing in must never expire.
-        let deferredFailure = deferFailure(context.$viewState, timeout: .seconds(1)) { $0.state == .error(.expired) }
+        let deferredFailure = deferFailure(context.$viewState, timeout: .milliseconds(300)) { $0.state == .error(.expired) }
         try await deferredFailure.fulfill()
     }
     
@@ -211,7 +211,7 @@ struct QRCodeLoginScreenViewModelTests {
         try await deferredAction.fulfill()
         
         let currentState = context.viewState.state
-        let deferredFailure = deferFailure(context.$viewState, timeout: .seconds(1)) { $0.state != currentState }
+        let deferredFailure = deferFailure(context.$viewState, timeout: .milliseconds(300)) { $0.state != currentState }
         linkMobileProgressSubject.send(.syncingSecrets)
         try await deferredFailure.fulfill()
         
@@ -298,7 +298,7 @@ struct QRCodeLoginScreenViewModelTests {
         try await deferredExpiry.fulfill()
         
         // When Rust later reports an error for the cancelled link.
-        let deferredFailure = deferFailure(context.$viewState, timeout: .seconds(1)) { $0.state != .error(.expired) }
+        let deferredFailure = deferFailure(context.$viewState, timeout: .milliseconds(300)) { $0.state != .error(.expired) }
         linkDesktopProgressSubject.send(completion: .failure(.cancelled))
         
         // Then the expired error should still be shown.

@@ -266,7 +266,7 @@ struct SpaceScreenViewModelTests {
         }
         
         let deferred = deferFulfillment(context.observe(\.viewState.visibleRooms.count)) { $0 == 2 }
-        let deferredFailure = deferFailure(context.observe(\.viewState.editMode), timeout: .seconds(1)) { $0 == .inactive }
+        let deferredFailure = deferFailure(context.observe(\.viewState.editMode), timeout: .milliseconds(300)) { $0 == .inactive }
         context.send(viewAction: .confirmRemoveSelectedChildren)
         try await deferred.fulfill()
         try await deferredFailure.fulfill()

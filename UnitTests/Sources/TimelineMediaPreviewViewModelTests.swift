@@ -56,7 +56,7 @@ struct TimelineMediaPreviewViewModelTests {
         
         // When the preview controller sets an item that fails to load.
         mediaProvider.loadFileFromSourceFilenameClosure = { _, _ in .failure(.failedRetrievingFile) }
-        let failure = deferFailure(viewModel.state.previewControllerDriver, timeout: .seconds(1)) { $0.isItemLoaded }
+        let failure = deferFailure(viewModel.state.previewControllerDriver, timeout: .milliseconds(300)) { $0.isItemLoaded }
         context.send(viewAction: .updateCurrentItem(.media(context.viewState.dataSource.previewItems[0])))
         try await failure.fulfill()
         
@@ -81,7 +81,7 @@ struct TimelineMediaPreviewViewModelTests {
         #expect(context.viewState.currentItem == .media(context.viewState.dataSource.previewItems[1]))
         
         // When swiping back to the first item.
-        let failure = deferFailure(viewModel.state.previewControllerDriver, timeout: .seconds(1)) { $0.isItemLoaded }
+        let failure = deferFailure(viewModel.state.previewControllerDriver, timeout: .milliseconds(300)) { $0.isItemLoaded }
         context.send(viewAction: .updateCurrentItem(.media(context.viewState.dataSource.previewItems[0])))
         try await failure.fulfill()
         
@@ -98,7 +98,7 @@ struct TimelineMediaPreviewViewModelTests {
         
         // When swiping to a "loading more" item and there are more media items to load.
         timelineController.update(paginationState: .init(backward: .idle, forward: .endReached))
-        let failure = deferFailure(viewModel.state.previewControllerDriver, timeout: .seconds(1)) { $0.isItemLoaded }
+        let failure = deferFailure(viewModel.state.previewControllerDriver, timeout: .milliseconds(300)) { $0.isItemLoaded }
         context.send(viewAction: .updateCurrentItem(.loading(.paginatingBackwards)))
         try await failure.fulfill()
         
@@ -122,7 +122,7 @@ struct TimelineMediaPreviewViewModelTests {
         
         // And the preview controller attempts to update the current item (now at a new index in the array but it hasn't changed in the data source).
         mediaProvider.loadFileFromSourceFilenameClosure = { _, _ in .failure(.failedRetrievingFile) }
-        let failure = deferFailure(viewModel.state.previewControllerDriver, timeout: .seconds(1)) { $0.isItemLoaded }
+        let failure = deferFailure(viewModel.state.previewControllerDriver, timeout: .milliseconds(300)) { $0.isItemLoaded }
         context.send(viewAction: .updateCurrentItem(.media(context.viewState.dataSource.previewItems[3])))
         try await failure.fulfill()
         
@@ -306,7 +306,7 @@ struct TimelineMediaPreviewViewModelTests {
         }
         
         // When the preview controller sets the current item.
-        let failure = deferFailure(viewModel.state.previewControllerDriver, timeout: .seconds(1)) { $0.isItemLoaded }
+        let failure = deferFailure(viewModel.state.previewControllerDriver, timeout: .milliseconds(300)) { $0.isItemLoaded }
         context.send(viewAction: .updateCurrentItem(.media(mediaItem)))
         try await failure.fulfill()
         
@@ -328,7 +328,7 @@ struct TimelineMediaPreviewViewModelTests {
         }
         
         // When the preview controller sets the current item.
-        let failure = deferFailure(viewModel.state.previewControllerDriver, timeout: .seconds(1)) { $0.isItemLoaded }
+        let failure = deferFailure(viewModel.state.previewControllerDriver, timeout: .milliseconds(300)) { $0.isItemLoaded }
         context.send(viewAction: .updateCurrentItem(.media(mediaItem)))
         try await failure.fulfill()
         

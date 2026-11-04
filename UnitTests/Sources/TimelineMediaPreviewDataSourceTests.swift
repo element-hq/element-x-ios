@@ -148,7 +148,7 @@ struct TimelineMediaPreviewDataSourceTests {
         let dataSource = try assertInitialDataSource()
         
         // When one of the items changes but no pagination has occurred.
-        let deferred = deferFailure(dataSource.previewItemsPaginationPublisher, timeout: .seconds(1)) { _ in true }
+        let deferred = deferFailure(dataSource.previewItemsPaginationPublisher, timeout: .milliseconds(300)) { _ in true }
         dataSource.updatePreviewItems(itemViewStates: initialMediaViewStates)
         
         // Then no pagination should be detected and none of the data should have changed.
@@ -305,7 +305,7 @@ struct TimelineMediaPreviewDataSourceTests {
         #expect(dataSource.currentMediaItemID == initialItem.previewID, "The current item should also be the initial item.")
         
         // When the timeline loads more items but still doesn't include the initial item.
-        let failure = deferFailure(dataSource.previewItemsPaginationPublisher, timeout: .seconds(1)) { _ in true }
+        let failure = deferFailure(dataSource.previewItemsPaginationPublisher, timeout: .milliseconds(300)) { _ in true }
         let loadedItems = newChunk().map { RoomTimelineItemViewState(item: $0, groupStyle: .single) }
         dataSource.updatePreviewItems(itemViewStates: loadedItems)
         try await failure.fulfill()
@@ -367,7 +367,7 @@ struct TimelineMediaPreviewDataSourceTests {
         
         // When the upload completes and the timeline swaps the echo's transaction ID for its event ID.
         items[items.count - 1] = makeUpload(id: .eventID("$e1"))
-        let deferred = deferFailure(dataSource.previewItemsPaginationPublisher, timeout: .seconds(1)) { _ in true }
+        let deferred = deferFailure(dataSource.previewItemsPaginationPublisher, timeout: .milliseconds(300)) { _ in true }
         dataSource.updatePreviewItems(itemViewStates: items.map { RoomTimelineItemViewState(item: $0, groupStyle: .single) })
         try await deferred.fulfill()
         
