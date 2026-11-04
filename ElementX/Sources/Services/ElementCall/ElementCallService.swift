@@ -208,11 +208,7 @@ final class ElementCallService: ElementCallServiceProtocol {
         
         let style = ElementCallStyle(theme: NativeCallTheme(),
                                      icons: NativeCallIcons(),
-                                     avatars: NativeCallAvatars(mediaProvider: mediaProvider),
-                                     strings: .init(you: L10n.commonYou,
-                                                    error: L10n.commonError,
-                                                    stop: L10n.actionStop,
-                                                    back: L10n.actionBack))
+                                     avatars: NativeCallAvatars(mediaProvider: mediaProvider))
         
         // The stats overlay is raw RTP counters, so it follows whatever already reveals developer
         // surface. Screen sharing stays off until the broadcast extension that makes it work lands.

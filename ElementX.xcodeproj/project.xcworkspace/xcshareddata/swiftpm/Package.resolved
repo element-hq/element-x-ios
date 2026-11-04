@@ -60,8 +60,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/element-call-ios",
       "state" : {
-        "revision" : "f561bd50806623b424911f8855712efdcc5b64e3",
-        "version" : "0.1.0-rc.14"
+        "revision" : "6bfc46fd11f3fde00e8acea4b824973a26540ed7",
+        "version" : "0.1.0-rc.15"
       }
     },
     {
@@ -185,8 +185,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/matrix-rust-rtc",
       "state" : {
-        "revision" : "de417a84c566932192c011d9931403b304b9156b",
-        "version" : "0.5.0-rc.8"
+        "revision" : "2d82ac0f317419dace67cb885dc4383c82fac6c5",
+        "version" : "0.5.0-rc.9"
       }
     },
     {
