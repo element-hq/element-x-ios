@@ -116,9 +116,11 @@ struct NativeCallIcons: ElementCallIconRenderingProtocol {
         case .raisedHand: \.raisedHandSolid
         case .userProfile: \.userProfileSolid
         case .overflow: \.overflowHorizontal
+        case .preferences: \.preferences
         case .collapse: \.collapse
         case .info: \.infoSolid
         case .chevronRight: \.chevronRight
+        case .close: \.close
         case .error: \.errorSolid
         case .spinner: \.spinner
         case .keyOff: \.keyOffSolid

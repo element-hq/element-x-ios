@@ -173,6 +173,11 @@ final nonisolated class SDKMatrixBackend: ElementCallMatrixBackendProtocol {
         }
     }
     
+    func liveKitToken(for request: ElementCallLiveKitTokenRequest) async throws(ElementCallMatrixBackendError) -> String {
+        // Not yet available in the bindings
+        throw ElementCallMatrixBackendError(errorCode: "M_UNRECOGNIZED", statusCode: 404, reason: "The SDK bindings cannot request a LiveKit token from the homeserver")
+    }
+    
     /// The SDK falls back to the well-known when the homeserver lacks the MSC4143 endpoint; neither
     /// answering is none.
     func rtcTransportsJSON() async throws(ElementCallMatrixBackendError) -> String {
