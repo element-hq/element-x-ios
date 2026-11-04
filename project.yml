@@ -112,10 +112,10 @@ packages:
     exactVersion: 1.2.1
   AsyncAlgorithms:
     url: https://github.com/apple/swift-async-algorithms
-    exactVersion: 1.1.6
+    exactVersion: 1.1.7
   Collections:
     url: https://github.com/apple/swift-collections
-    exactVersion: 1.7.1
+    exactVersion: 1.7.5
   DeviceKit:
     url: https://github.com/devicekit/DeviceKit
     exactVersion: 5.9.0
@@ -133,7 +133,7 @@ packages:
     exactVersion: 4.2.2
   Kingfisher:
     url: https://github.com/onevcat/Kingfisher
-    exactVersion: 8.13.0
+    exactVersion: 8.14.0
   KZFileWatchers:
     url: https://github.com/krzysztofzablocki/KZFileWatchers
     exactVersion: 1.2.0
@@ -145,25 +145,25 @@ packages:
     exactVersion: 1.3.0
   Mantis:
     url: https://github.com/guoyingtao/Mantis
-    exactVersion: 3.1.0
+    exactVersion: 3.1.1
   MapLibre:
     url: https://github.com/maplibre/maplibre-gl-native-distribution
     exactVersion: 6.31.0
   PostHog:
     url: https://github.com/PostHog/posthog-ios
-    exactVersion: 3.85.3
+    exactVersion: 3.92.6
   Sentry:
     url: https://github.com/getsentry/sentry-apple-binaries
-    exactVersion: 9.29.2
+    exactVersion: 9.31.0
   SnapshotTesting:
     url: https://github.com/pointfreeco/swift-snapshot-testing
     exactVersion: 1.19.7
   SwiftFlow:
     url: https://github.com/tevelee/SwiftUI-Flow.git
-    exactVersion: 3.5.1
+    exactVersion: 3.5.5
   SwiftSoup:
     url: https://github.com/scinfu/SwiftSoup.git
-    exactVersion: 2.13.9
+    exactVersion: 2.14.3
   SwiftState:
     url: https://github.com/ReactKit/SwiftState
     exactVersion: 6.0.1
