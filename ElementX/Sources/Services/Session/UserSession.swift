@@ -57,8 +57,8 @@ class UserSession: UserSessionProtocol {
             .sink { [weak self] callback in
                 guard let self else { return }
                 switch callback {
-                case .receivedAuthError(let isSoftLogout):
-                    callbacks.send(.didReceiveAuthError(isSoftLogout: isSoftLogout))
+                case .receivedAuthError:
+                    callbacks.send(.didReceiveAuthError)
                     authErrorCancellable = nil
                 default:
                     break

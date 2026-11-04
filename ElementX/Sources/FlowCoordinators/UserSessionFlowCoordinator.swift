@@ -161,14 +161,13 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     func stop() {
         // Releases the native call stack before the session goes or another account's flow starts.
         userSession.elementCallService.setNativeCallStackEnabled(false)
-        chatsTabFlowCoordinator.stop()
     }
     
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
         MXLog.info("Handling app route: \(appRoute)")
         
         switch appRoute {
-        case .accountProvisioningLink, .oAuthCallback:
+        case .authentication, .accountProvisioningLink, .oAuthCallback:
             break // We always ignore these flows when logged in.
         case .settings, .chatBackupSettings:
             if ProcessInfo.processInfo.isiOSAppOnMac, flowParameters.windowManager.secondaryWindowsEnabled {

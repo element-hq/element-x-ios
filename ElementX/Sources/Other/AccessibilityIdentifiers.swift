@@ -35,7 +35,6 @@ enum A11yIdentifiers {
     static let serverConfirmationScreen = ServerConfirmationScreen()
     static let sessionVerificationScreen = SessionVerificationScreen()
     static let settingsScreen = SettingsScreen()
-    static let softLogoutScreen = SoftLogoutScreen()
     static let startChatScreen = StartChatScreen()
     static let roomMemberDetailsScreen = RoomMemberDetailsScreen()
     static let createRoomScreen = CreateRoomScreen()
@@ -273,17 +272,6 @@ enum A11yIdentifiers {
         let advancedSettings = "settings_advanced-settings"
         let developerOptions = "settings_developer-options"
         let logout = "settings-logout"
-    }
-    
-    struct SoftLogoutScreen {
-        let title = "soft_logout-title"
-        let message = "soft_logout-message"
-        let password = "soft_logout-password"
-        let forgotPassword = "soft_logout-forgot_password"
-        let next = "soft_logout-next"
-        let clearDataTitle = "soft_logout-clear_data_title"
-        let clearDataMessage = "soft_logout-clear_data_message"
-        let clearData = "soft_logout-clear_data"
     }
     
     struct StartChatScreen {

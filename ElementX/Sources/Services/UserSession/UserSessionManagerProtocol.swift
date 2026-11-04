@@ -10,7 +10,7 @@ import Foundation
 import MatrixRustSDK
 
 enum UserSessionManagerCallback: Equatable {
-    case didReceiveAuthError(userID: String, isSoftLogout: Bool)
+    case didReceiveAuthError(userID: String)
 }
 
 // sourcery: AutoMockable

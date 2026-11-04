@@ -10,7 +10,7 @@ import Combine
 import Foundation
 
 enum UserSessionCallback {
-    case didReceiveAuthError(isSoftLogout: Bool)
+    case didReceiveAuthError
 }
 
 struct SessionSecurityState: Equatable {

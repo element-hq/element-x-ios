@@ -1251,13 +1251,6 @@ extension PreviewTests {
     }
 
     @Test
-    func softLogoutScreen() async throws {
-        for (index, preview) in SoftLogoutScreen_Previews._allPreviews.enumerated() {
-            try await assertSnapshots(matching: preview, step: index)
-        }
-    }
-
-    @Test
     func spaceAddRoomsScreenSelectedItem() async throws {
         for (index, preview) in SpaceAddRoomsScreenSelectedItem_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)

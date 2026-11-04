@@ -16,8 +16,6 @@ class AppCoordinatorStateMachine {
         case initial
         /// Showing the authentication flow
         case signedOut
-        /// Showing the soft logout flow
-        case softLogout
         /// Opening an existing session.
         case restoringSession
         
@@ -25,7 +23,7 @@ class AppCoordinatorStateMachine {
         case signedIn
         
         /// Processing a sign out request
-        case signingOut(isSoft: Bool, disableAppLock: Bool)
+        case signingOut(disableAppLock: Bool)
     }
     
     /// Events that can be triggered on the AppCoordinator state machine
@@ -43,9 +41,7 @@ class AppCoordinatorStateMachine {
         case createdUserSession
         
         /// Request sign out.
-        case signOut(isSoft: Bool, disableAppLock: Bool)
-        /// Request the soft logout screen.
-        case showSoftLogout
+        case signOut(disableAppLock: Bool)
         /// Signing out completed.
         case completedSigningOut
         
@@ -66,23 +62,21 @@ class AppCoordinatorStateMachine {
     
     private func configure() {
         stateMachine.addRoutes(event: .startWithAuthentication, transitions: [.initial => .signedOut])
-        stateMachine.addRoutes(event: .createdUserSession, transitions: [.signedOut => .signedIn,
-                                                                         .softLogout => .signedIn])
+        stateMachine.addRoutes(event: .createdUserSession, transitions: [.signedOut => .signedIn])
         stateMachine.addRoutes(event: .startWithExistingSession, transitions: [.initial => .restoringSession])
         stateMachine.addRoutes(event: .createdUserSession, transitions: [.restoringSession => .signedIn])
         stateMachine.addRoutes(event: .failedRestoringSession, transitions: [.restoringSession => .signedOut])
         
-        stateMachine.addRoutes(event: .completedSigningOut, transitions: [.signingOut(isSoft: false, disableAppLock: false) => .signedOut,
-                                                                          .signingOut(isSoft: false, disableAppLock: true) => .signedOut])
-        stateMachine.addRoutes(event: .showSoftLogout, transitions: [.signingOut(isSoft: true, disableAppLock: false) => .softLogout])
+        stateMachine.addRoutes(event: .completedSigningOut, transitions: [.signingOut(disableAppLock: false) => .signedOut,
+                                                                          .signingOut(disableAppLock: true) => .signedOut])
         
         stateMachine.addRoutes(event: .clearCache, transitions: [.signedIn => .initial])
         
         // Transitions with associated values need to be handled through `addRouteMapping`
         stateMachine.addRouteMapping { event, fromState, _ in
             switch (fromState, event) {
-            case (_, .signOut(let isSoft, let disableAppLock)):
-                return .signingOut(isSoft: isSoft, disableAppLock: disableAppLock)
+            case (_, .signOut(let disableAppLock)):
+                return .signingOut(disableAppLock: disableAppLock)
             default:
                 return nil
             }

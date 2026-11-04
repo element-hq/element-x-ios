@@ -630,6 +630,59 @@ class MockScreen: Identifiable {
             retainedState.append(flowCoordinator)
             
             return nil
+        case .rootFlow, .rootFlowSignedIn:
+            let userID = "@mock:client.com"
+            let userSettings = appSettings.userSettings(for: userID)
+            userSettings.account.hasRunIdentityConfirmationOnboarding = true
+            userSettings.app.hasRunNotificationPermissionsOnboarding = true
+            userSettings.app.analyticsConsentState = .optedOut
+            
+            let clientProxy = ClientProxyMock(.init(userID: userID,
+                                                    deviceID: "MOCKCLIENT",
+                                                    roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
+            let userSession = UserSessionMock(.init(clientProxy: clientProxy, userSettings: userSettings))
+            let userSessionManager = UserSessionManagerMock(.init())
+            if id == .rootFlowSignedIn {
+                userSessionManager.activeSession = userSession
+                userSessionManager.sessionsPublisher = .init([userSession])
+            }
+            
+            let appMediator = AppMediatorMock(.init())
+            appMediator.windowManager = windowManager
+            
+            let flowCoordinator = RootFlowCoordinator(navigationRootCoordinator: navigationRootCoordinator,
+                                                      userSessionManager: userSessionManager,
+                                                      appLockService: AppLockService(keychainController: KeychainControllerMock(),
+                                                                                     appSettings: appSettings),
+                                                      bugReportService: BugReportServiceMock(.init()),
+                                                      appMediator: appMediator,
+                                                      appSettings: appSettings,
+                                                      appHooks: AppHooks(),
+                                                      analyticsService: analytics,
+                                                      userIndicatorController: UserIndicatorControllerMock(),
+                                                      authenticationServiceFactory: AuthenticationServiceFactoryMock(.init()))
+            
+            flowCoordinator.actionsPublisher
+                .sink { [weak flowCoordinator] action in
+                    switch action {
+                    case .signInComplete:
+                        // The signed in session is a bare mock, use the populated one instead.
+                        userSessionManager.activeSession = userSession
+                        userSessionManager.sessionsPublisher = .init([userSession])
+                        flowCoordinator?.handleAppRoute(.roomList, animated: true)
+                    case .logout:
+                        flowCoordinator?.handleAppRoute(.authentication, animated: true)
+                    case .clearCache, .forceLogout:
+                        break
+                    }
+                }
+                .store(in: &cancellables)
+            
+            flowCoordinator.handleAppRoute(id == .rootFlowSignedIn ? .roomList : .authentication, animated: false)
+            
+            retainedState.append(flowCoordinator)
+            
+            return nil
         case .roomMembersListScreenPendingInvites:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let members: [RoomMemberProxyMock] = [.mockInvitedAlice, .mockBob, .mockCharlie]

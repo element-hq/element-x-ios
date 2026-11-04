@@ -83,6 +83,7 @@ extension ClientProxyMock {
         ignoredUsersPublisher = .init([RoomMemberProxyMock].allMembers.map(\.userID))
         
         notificationSettings = configuration.notificationSettings
+        roomsToAwait = []
         
         isOnlyDeviceLeftReturnValue = .success(false)
         hasDevicesToVerifyAgainstReturnValue = .success(true)
