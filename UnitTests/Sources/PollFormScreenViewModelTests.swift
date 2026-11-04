@@ -193,7 +193,7 @@ struct PollFormScreenViewModelTests {
         context.options.append(.init(text: "France 🇫🇷"))
         #expect(!context.viewState.isSubmitButtonDisabled)
         
-        let deferredFailure = deferFailure(viewModel.actions, timeout: .seconds(1)) { $0 == .close }
+        let deferredFailure = deferFailure(viewModel.actions, timeout: .milliseconds(300)) { $0 == .close }
         context.send(viewAction: .delete)
         
         try await deferredFailure.fulfill()

@@ -452,7 +452,7 @@ final class RoomFlowCoordinatorTests {
     /// Handles a route that isn't expected to trigger any navigation.
     private func processNotExpectingNavigation(route: AppRoute) async throws {
         let currentStackCount = navigationStackCoordinator.stackCoordinators.count
-        let deferred = deferFailure(navigationStackCoordinator.observe(\.stackCoordinators.count), timeout: .seconds(1)) { $0 != currentStackCount }
+        let deferred = deferFailure(navigationStackCoordinator.observe(\.stackCoordinators.count), timeout: .milliseconds(300)) { $0 != currentStackCount }
         
         roomFlowCoordinator.handleAppRoute(route, animated: true)
         try await deferred.fulfill()

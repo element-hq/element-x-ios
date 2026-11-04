@@ -277,7 +277,7 @@ final class RoomScreenViewModelTests {
         #expect(viewModel.state.shouldShowCallButton)
         
         // When the call from the other room finishes.
-        let deferredFailure = deferFailure(viewModel.context.$viewState, timeout: .seconds(1)) { !$0.shouldShowCallButton }
+        let deferredFailure = deferFailure(viewModel.context.$viewState, timeout: .milliseconds(300)) { !$0.shouldShowCallButton }
         elementCallService.ongoingCallChanged(roomID: nil)
         try await deferredFailure.fulfill()
         
@@ -436,7 +436,7 @@ final class RoomScreenViewModelTests {
                                             userIndicatorController: UserIndicatorControllerMock())
         
         let deferredInvisible = deferFailure(viewModel.context.$viewState,
-                                             timeout: .seconds(1),
+                                             timeout: .milliseconds(300),
                                              message: "The icon should be hidden when the room history visibility is not .shared or .worldReadable") { viewState in
             viewState.roomHistorySharingState != nil
         }
@@ -445,7 +445,7 @@ final class RoomScreenViewModelTests {
         configuration.historyVisibility = .shared
         infoSubject.send(RoomInfoProxyMock(configuration))
         let deferredInvisibleUnencrypted = deferFailure(viewModel.context.$viewState,
-                                                        timeout: .seconds(1),
+                                                        timeout: .milliseconds(300),
                                                         message: "The icon should not be shown when the room is unencrypted") { viewState in
             viewState.roomHistorySharingState != nil
         }

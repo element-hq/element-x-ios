@@ -233,7 +233,7 @@ final class HomeScreenViewModelTests {
         try await deferred.fulfill()
         
         // And when the recovery state comes through a second time the banner should still not be shown.
-        let failure = deferFailure(context.$viewState, timeout: .seconds(1)) { $0.securityBannerMode != .dismissed }
+        let failure = deferFailure(context.$viewState, timeout: .milliseconds(300)) { $0.securityBannerMode != .dismissed }
         securityStateStateSubject.send(.init(verificationState: .verified, recoveryState: .disabled))
         try await failure.fulfill()
     }
@@ -387,7 +387,7 @@ final class HomeScreenViewModelTests {
         
         // Arming it after the view model exists (Developer options) doesn't present it on its own.
         userSettings.app.hasSeenMultiAccountAnnouncement = false
-        let deferredFailure = deferFailure(context.$viewState, timeout: .seconds(1)) { $0.bindings.isPresentingMultiAccountAnnouncement }
+        let deferredFailure = deferFailure(context.$viewState, timeout: .milliseconds(300)) { $0.bindings.isPresentingMultiAccountAnnouncement }
         try await deferredFailure.fulfill()
         
         let deferred = deferFulfillment(context.$viewState) { $0.bindings.isPresentingMultiAccountAnnouncement }
@@ -401,7 +401,7 @@ final class HomeScreenViewModelTests {
         
         // A swipe down dismisses it without any of the announcement's actions.
         context.isPresentingMultiAccountAnnouncement = false
-        let deferredReappearance = deferFailure(context.$viewState, timeout: .seconds(1)) { $0.bindings.isPresentingMultiAccountAnnouncement }
+        let deferredReappearance = deferFailure(context.$viewState, timeout: .milliseconds(300)) { $0.bindings.isPresentingMultiAccountAnnouncement }
         context.send(viewAction: .screenAppeared)
         try await deferredReappearance.fulfill()
     }
@@ -432,7 +432,7 @@ final class HomeScreenViewModelTests {
         let securityStateSubject = CurrentValueSubject<SessionSecurityState, Never>(.init(verificationState: verificationState, recoveryState: .enabled))
         setupViewModel(securityStatePublisher: securityStateSubject.asCurrentValuePublisher())
         
-        let deferred = deferFailure(context.$viewState, timeout: .seconds(1)) { $0.bindings.isPresentingMultiAccountAnnouncement }
+        let deferred = deferFailure(context.$viewState, timeout: .milliseconds(300)) { $0.bindings.isPresentingMultiAccountAnnouncement }
         context.send(viewAction: .screenAppeared)
         try await deferred.fulfill()
         #expect(userSettings.app.hasSeenMultiAccountAnnouncement == (hiddenCase == .alreadySeen))
@@ -445,13 +445,13 @@ final class HomeScreenViewModelTests {
         let securityStateSubject = CurrentValueSubject<SessionSecurityState, Never>(.init(verificationState: .unverified, recoveryState: .enabled))
         setupViewModel(securityStatePublisher: securityStateSubject.asCurrentValuePublisher())
         
-        let deferredFailure = deferFailure(context.$viewState, timeout: .seconds(1)) { $0.bindings.isPresentingMultiAccountAnnouncement }
+        let deferredFailure = deferFailure(context.$viewState, timeout: .milliseconds(300)) { $0.bindings.isPresentingMultiAccountAnnouncement }
         context.send(viewAction: .screenAppeared)
         try await deferredFailure.fulfill()
         
         // Becoming verified doesn't present it on its own…
         securityStateSubject.send(.init(verificationState: .verified, recoveryState: .enabled))
-        let deferredVerifiedFailure = deferFailure(context.$viewState, timeout: .seconds(1)) { $0.bindings.isPresentingMultiAccountAnnouncement }
+        let deferredVerifiedFailure = deferFailure(context.$viewState, timeout: .milliseconds(300)) { $0.bindings.isPresentingMultiAccountAnnouncement }
         try await deferredVerifiedFailure.fulfill()
         
         // …the room list appearing again does, e.g. once the identity confirmation cover is dismissed.
@@ -466,7 +466,7 @@ final class HomeScreenViewModelTests {
         userSettings.app.hasSeenMultiAccountAnnouncement = false
         setupViewModel(otherAccountUserIDs: ["@other:client.com"])
         
-        let deferred = deferFailure(context.$viewState, timeout: .seconds(1)) { $0.bindings.isPresentingMultiAccountAnnouncement }
+        let deferred = deferFailure(context.$viewState, timeout: .milliseconds(300)) { $0.bindings.isPresentingMultiAccountAnnouncement }
         context.send(viewAction: .screenAppeared)
         try await deferred.fulfill()
         
@@ -494,7 +494,7 @@ final class HomeScreenViewModelTests {
         #expect(context.viewState.roomListMode == .skeletons)
         
         // The provider reports loaded before the first summaries have been published.
-        let failure = deferFailure(context.$viewState, timeout: .seconds(1)) { $0.roomListMode != .skeletons }
+        let failure = deferFailure(context.$viewState, timeout: .milliseconds(300)) { $0.roomListMode != .skeletons }
         stateSubject.send(.loaded(totalNumberOfRooms: 8))
         try await failure.fulfill()
         
@@ -545,7 +545,7 @@ final class HomeScreenViewModelTests {
         try await deferred.fulfill()
         
         // A filter or a search without matches empties the list, the mode must not regress.
-        let failure = deferFailure(context.$viewState, timeout: .seconds(1)) { $0.roomListMode != .rooms }
+        let failure = deferFailure(context.$viewState, timeout: .milliseconds(300)) { $0.roomListMode != .rooms }
         roomListSubject.send([])
         stateSubject.send(.loaded(totalNumberOfRooms: 9))
         try await failure.fulfill()

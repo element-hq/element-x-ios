@@ -351,7 +351,7 @@ final class CreateRoomScreenViewModelTests {
         setup()
         appMediator.isCameraAvailable = false
         
-        let deferredFailure = deferFailure(viewModel.actions, timeout: .seconds(1)) { action in
+        let deferredFailure = deferFailure(viewModel.actions, timeout: .milliseconds(300)) { action in
             guard case .displayCameraPicker = action else { return false }
             return true
         }

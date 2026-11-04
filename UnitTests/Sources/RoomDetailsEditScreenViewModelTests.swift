@@ -176,7 +176,7 @@ struct RoomDetailsEditScreenViewModelTests {
         setupViewModel(roomProxyConfiguration: .init(name: "Some room", members: [.mockMeAdmin]))
         appMediator.isCameraAvailable = false
         
-        let deferredFailure = deferFailure(viewModel.actions, timeout: .seconds(1)) { $0 == .displayCameraPicker }
+        let deferredFailure = deferFailure(viewModel.actions, timeout: .milliseconds(300)) { $0 == .displayCameraPicker }
         context.send(viewAction: .displayCameraPicker)
         try await deferredFailure.fulfill()
         

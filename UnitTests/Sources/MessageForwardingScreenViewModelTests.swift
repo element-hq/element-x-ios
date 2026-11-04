@@ -123,7 +123,7 @@ struct MessageForwardingScreenViewModelTests {
         viewModel = makeViewModel(recentlyVisitedRoomIDs: [forwardingPayload.roomID, "7"])
         context = viewModel.context
         
-        let deferred = deferFailure(context.$viewState.map(\.showsSuggestions), timeout: .seconds(1)) { $0 }
+        let deferred = deferFailure(context.$viewState.map(\.showsSuggestions), timeout: .milliseconds(300)) { $0 }
         try await deferred.fulfill()
     }
     
@@ -137,7 +137,7 @@ struct MessageForwardingScreenViewModelTests {
                                                      userIndicatorController: UserIndicatorControllerMock())
         context = viewModel.context
         
-        let deferred = deferFailure(context.$viewState.map(\.showsSuggestions), timeout: .seconds(1)) { $0 }
+        let deferred = deferFailure(context.$viewState.map(\.showsSuggestions), timeout: .milliseconds(300)) { $0 }
         try await deferred.fulfill()
     }
     

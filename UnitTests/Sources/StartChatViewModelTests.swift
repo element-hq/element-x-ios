@@ -107,7 +107,7 @@ struct StartChatScreenViewModelTests {
         clientProxy.userIdentityForFallBackToServerReturnValue = .failure(.forbiddenAccess)
         
         // User identity never becomes known, i.e. is never not unknown
-        let deferred = deferFailure(viewModel.context.$viewState.compactMap(\.bindings.selectedUserToInvite), timeout: .seconds(5)) {
+        let deferred = deferFailure(viewModel.context.$viewState.compactMap(\.bindings.selectedUserToInvite), timeout: .milliseconds(300)) {
             !$0.isUnknown
         }
         context.send(viewAction: .selectUser(.mockBob))

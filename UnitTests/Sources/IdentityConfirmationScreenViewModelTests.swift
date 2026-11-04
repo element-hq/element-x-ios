@@ -38,7 +38,7 @@ struct IdentityConfirmationScreenViewModelTests {
         setupViewModel(verificationState: .unknown)
         #expect(!context.viewState.isUnverified)
         
-        let deferredFailure = deferFailure(context.observe(\.viewState.isUnverified), timeout: .seconds(1)) { $0 }
+        let deferredFailure = deferFailure(context.observe(\.viewState.isUnverified), timeout: .milliseconds(300)) { $0 }
         securityStateSubject.send(.init(verificationState: .verified, recoveryState: .unknown))
         try await deferredFailure.fulfill()
         
@@ -105,7 +105,7 @@ struct IdentityConfirmationScreenViewModelTests {
     mutating func availableActionsWhileSecurityStateIsPending() async throws {
         setupViewModel(hasDevicesToVerifyAgainst: true)
         
-        let deferred = deferFailure(context.observe(\.viewState.availableActions), timeout: .seconds(1)) { $0 != nil }
+        let deferred = deferFailure(context.observe(\.viewState.availableActions), timeout: .milliseconds(300)) { $0 != nil }
         try await deferred.fulfill()
         
         #expect(context.viewState.availableActions == nil)

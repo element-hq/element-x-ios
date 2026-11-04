@@ -137,7 +137,7 @@ struct ChatsTabFlowCoordinatorTests {
         #expect(detailNavigationStack?.rootCoordinator is RoomDetailsScreenCoordinator)
         #expect(detailCoordinator != nil)
         
-        let unexpectedFulfillment = deferFailure(stateMachineFactory.chatsTabFlowStatePublisher, timeout: .seconds(1)) { _ in true }
+        let unexpectedFulfillment = deferFailure(stateMachineFactory.chatsTabFlowStatePublisher, timeout: .milliseconds(300)) { _ in true }
         chatsTabFlowCoordinator.handleAppRoute(.roomDetails(roomID: "1"), animated: true)
         try await unexpectedFulfillment.fulfill()
         
@@ -162,7 +162,7 @@ struct ChatsTabFlowCoordinatorTests {
         #expect(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
         #expect(detailCoordinator != nil)
         
-        let unexpectedFulfillment = deferFailure(stateMachineFactory.chatsTabFlowStatePublisher, timeout: .seconds(1)) { _ in true }
+        let unexpectedFulfillment = deferFailure(stateMachineFactory.chatsTabFlowStatePublisher, timeout: .milliseconds(300)) { _ in true }
         chatsTabFlowCoordinator.handleAppRoute(.roomDetails(roomID: "1"), animated: true)
         try await unexpectedFulfillment.fulfill()
         

@@ -184,7 +184,7 @@ final class TimelineViewModelTests {
         #expect(viewModel.context.viewState.timelineState.focussedEvent == nil)
         
         // When focussing on a loaded item.
-        let deferred = deferFailure(viewModel.context.$viewState, timeout: .seconds(1)) { !$0.timelineState.isLive }
+        let deferred = deferFailure(viewModel.context.$viewState, timeout: .milliseconds(300)) { !$0.timelineState.isLive }
         await viewModel.focusOnEvent(eventID: "t1")
         try await deferred.fulfill()
         
@@ -900,7 +900,7 @@ final class TimelineViewModelTests {
                                       userIndicatorController: userIndicatorController,
                                       appMediator: AppMediatorMock(.init(isCameraAvailable: false)))
         
-        let deferredFailure = deferFailure(viewModel.actions, timeout: .seconds(1)) { action in
+        let deferredFailure = deferFailure(viewModel.actions, timeout: .milliseconds(300)) { action in
             guard case .displayCameraPicker = action else { return false }
             return true
         }
@@ -942,7 +942,7 @@ final class TimelineViewModelTests {
         let viewModel = makeViewModel(timelineController: TimelineControllerMock(.init(timelineItems: [item])), userSettings: userSettings)
         
         // When adding a tada reaction without the feature flag.
-        let deferred = deferFailure(viewModel.context.$viewState, timeout: .seconds(1)) { $0.pendingReactionEffect != nil }
+        let deferred = deferFailure(viewModel.context.$viewState, timeout: .milliseconds(300)) { $0.pendingReactionEffect != nil }
         viewModel.process(viewAction: .toggleReaction(key: "🎉", itemID: item.id))
         
         // Then no effect plays.
@@ -965,7 +965,7 @@ final class TimelineViewModelTests {
         let viewModel = makeReactionEffectsViewModel(item: item)
         
         // When removing that reaction, or adding a different one.
-        let deferred = deferFailure(viewModel.context.$viewState, timeout: .seconds(1)) { $0.pendingReactionEffect != nil }
+        let deferred = deferFailure(viewModel.context.$viewState, timeout: .milliseconds(300)) { $0.pendingReactionEffect != nil }
         viewModel.process(viewAction: .toggleReaction(key: "🎉", itemID: item.id))
         viewModel.process(viewAction: .toggleReaction(key: "🦄", itemID: item.id))
         
@@ -1035,7 +1035,7 @@ final class TimelineViewModelTests {
         viewModel.process(viewAction: .playReactionEffect(origin: CGPoint(x: 10, y: 20)))
         
         // But not again when the item is updated or scrolled back into view.
-        let deferredFailure = deferFailure(viewModel.context.$viewState, timeout: .seconds(1)) { $0.pendingReactionEffect != nil }
+        let deferredFailure = deferFailure(viewModel.context.$viewState, timeout: .milliseconds(300)) { $0.pendingReactionEffect != nil }
         timelineController.callbacks.send(.updatedTimelineItems(timelineItems: [reactedItem], isSwitchingTimelines: false))
         try await deferredFailure.fulfill()
     }
@@ -1048,7 +1048,7 @@ final class TimelineViewModelTests {
         let viewModel = makeReactionEffectsViewModel(item: item, timelineController: timelineController)
         
         // When loading a tada sent before the timeline was opened and one sent by the user.
-        let deferred = deferFailure(viewModel.context.$viewState, timeout: .seconds(1)) { $0.pendingReactionEffect != nil }
+        let deferred = deferFailure(viewModel.context.$viewState, timeout: .milliseconds(300)) { $0.pendingReactionEffect != nil }
         timelineController.callbacks.send(.updatedTimelineItems(timelineItems: [item.reacted(by: "@charlie:server.com", at: .distantPast),
                                                                                 otherItem.reacted(by: RoomMemberProxyMock.mockMe.userID, at: .now)],
                                                                 isSwitchingTimelines: false))

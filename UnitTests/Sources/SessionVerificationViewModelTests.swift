@@ -18,7 +18,7 @@ struct SessionVerificationViewModelTests {
     var sessionVerificationController: SessionVerificationControllerProxyMock!
     
     init() throws {
-        sessionVerificationController = SessionVerificationControllerProxyMock.configureMock()
+        sessionVerificationController = SessionVerificationControllerProxyMock.configureMock(requestDelay: .milliseconds(500))
         viewModel = SessionVerificationScreenViewModel(sessionVerificationControllerProxy: sessionVerificationController,
                                                        flow: .deviceInitiator,
                                                        userSession: UserSessionMock(.init()))

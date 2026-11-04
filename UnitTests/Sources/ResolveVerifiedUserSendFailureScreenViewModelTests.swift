@@ -70,7 +70,7 @@ struct ResolveVerifiedUserSendFailureScreenViewModelTests {
             }
             
             // When resolving the first failure.
-            let deferredFailure = deferFailure(viewModel.actionsPublisher, timeout: .seconds(1)) { $0 == .dismiss }
+            let deferredFailure = deferFailure(viewModel.actionsPublisher, timeout: .milliseconds(300)) { $0 == .dismiss }
             context.send(viewAction: .resolveAndResend)
             
             // Then the sheet should remain open for the next failure.

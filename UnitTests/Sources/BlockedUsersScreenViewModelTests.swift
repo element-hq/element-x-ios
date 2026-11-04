@@ -21,7 +21,7 @@ struct BlockedUsersScreenViewModelTests {
                                                     userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                     userIndicatorController: UserIndicatorControllerMock())
         
-        let deferred = deferFailure(viewModel.context.observe(\.viewState.blockedUsers), timeout: .seconds(1)) { $0.contains { $0.displayName != nil } }
+        let deferred = deferFailure(viewModel.context.observe(\.viewState.blockedUsers), timeout: .milliseconds(300)) { $0.contains { $0.displayName != nil } }
         try await deferred.fulfill()
         
         #expect(!viewModel.context.viewState.blockedUsers.isEmpty)

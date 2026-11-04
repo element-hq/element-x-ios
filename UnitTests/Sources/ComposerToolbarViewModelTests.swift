@@ -865,7 +865,7 @@ final class ComposerToolbarViewModelTests {
         try await fulfillment.fulfill()
         
         // There are 2 violations, ensure that resolving the first one is not enough.
-        let failure = deferFailure(viewModel.context.$viewState, timeout: .seconds(1), message: "Composer should still be disabled") { $0.canSend == true }
+        let failure = deferFailure(viewModel.context.$viewState, timeout: .milliseconds(300), message: "Composer should still be disabled") { $0.canSend == true }
         mockSubject.send([IdentityStatusChange(userId: "@alice:localhost", changedTo: .pinned)])
         try await failure.fulfill()
         

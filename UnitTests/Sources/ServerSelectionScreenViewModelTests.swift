@@ -218,7 +218,7 @@ struct ServerSelectionScreenViewModelTests {
         
         // When confirming a second time before the first confirmation has finished (e.g. Continue then keyboard Done).
         var continueCount = 0
-        let deferredFailure = deferFailure(viewModel.actions, timeout: .seconds(1), message: "The flow should only continue once.") { action in
+        let deferredFailure = deferFailure(viewModel.actions, timeout: .milliseconds(300), message: "The flow should only continue once.") { action in
             guard action.isContinueWithPassword else { return false }
             continueCount += 1
             return continueCount > 1
