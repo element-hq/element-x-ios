@@ -61,6 +61,16 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
     
     private let stateMachine: StateMachine<State, Event>
     
+    /// Information about an ``AppRoute`` that can be re-played when ready.
+    private struct PendingAppRoute {
+        let appRoute: AppRoute
+        let userID: String?
+        let awaitsRoom: Bool
+    }
+    
+    /// A stored route that was received before the flow was ready.
+    private var pendingRoute: PendingAppRoute?
+    
     private var cancellables = Set<AnyCancellable>()
     private var clearCacheTask: AnyCancellable?
     
@@ -97,14 +107,23 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
+        handleAppRoute(appRoute, userID: nil, awaitsRoom: false, animated: animated)
+    }
+    
+    func handleAppRoute(_ appRoute: AppRoute, userID: String?, awaitsRoom: Bool, animated: Bool) {
         switch appRoute {
         case .authentication:
             stateMachine.tryEvent(.startAuthentication(isAddingAccount: false))
         case .accountProvisioningLink:
-            if case .authenticationFlow = stateMachine.state {
+            switch stateMachine.state {
+            case .initial:
+                pendingRoute = .init(appRoute: appRoute, userID: userID, awaitsRoom: awaitsRoom)
+            case .authenticationFlow:
                 authenticationFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
-            } else {
-                // TODO: Start a flow to add a new account?
+            case .userSessionFlow:
+                break // TODO: Start a flow to add a new account?
+            case .clearingCache:
+                break
             }
         case .oAuthCallback(let url):
             if case .authenticationFlow = stateMachine.state {
@@ -122,12 +141,16 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
              .roomDetails, .roomMemberDetails, .userProfile,
              .event, .eventOnRoomAlias, .childEvent, .childEventOnRoomAlias,
              .call, .settings, .chatBackupSettings, .share, .transferOwnership, .thread, .search:
-            // Showing these during authentication would abort the sign in.
-            guard stateMachine.state == .userSessionFlow else {
-                MXLog.info("Ignoring app route, there's no user session flow.")
-                return
+            switch stateMachine.state {
+            case .initial:
+                pendingRoute = .init(appRoute: appRoute, userID: userID, awaitsRoom: awaitsRoom)
+            case .authenticationFlow:
+                MXLog.info("Ignoring app route, an authentication flow is in progress.")
+            case .userSessionFlow:
+                handleUserSessionRoute(appRoute, userID: userID, awaitsRoom: awaitsRoom, animated: animated)
+            case .clearingCache:
+                break
             }
-            userSessionFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
         }
     }
     
@@ -242,6 +265,14 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
         coordinator.start()
         
         navigationRootCoordinator.setRootCoordinator(navigationStackCoordinator)
+        
+        if let pendingRoute = pendingRoute.take() {
+            if pendingRoute.appRoute.isAuthenticationRoute {
+                coordinator.handleAppRoute(pendingRoute.appRoute, animated: false)
+            } else {
+                MXLog.info("Ignoring user session app route during authentication.")
+            }
+        }
     }
     
     private func startUserSessionFlow(isNewLogin: Bool) {
@@ -281,6 +312,32 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
         
         userSessionFlowCoordinator = coordinator
         coordinator.start()
+        
+        if let pendingRoute = pendingRoute.take() {
+            if pendingRoute.appRoute.isAuthenticationRoute {
+                // TODO: Start a flow to add a new account?
+            } else {
+                handleUserSessionRoute(pendingRoute.appRoute, userID: pendingRoute.userID, awaitsRoom: pendingRoute.awaitsRoom, animated: false)
+            }
+        }
+    }
+    
+    private func handleUserSessionRoute(_ appRoute: AppRoute, userID: String?, awaitsRoom: Bool, animated: Bool) {
+        guard let userSession = userSessionManager.activeSession else {
+            fatalError("User session not setup")
+        }
+        
+        if let userID, userID != userSession.clientProxy.userID {
+            // TODO: Switch to the route's account (element-hq/element-meta#3328).
+            MXLog.info("Ignoring an app route for \(userID), it isn't the active account.")
+            return
+        }
+        
+        if awaitsRoom, case .room(let roomID, _) = appRoute {
+            userSession.clientProxy.roomsToAwait.insert(roomID)
+        }
+        
+        userSessionFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
     }
     
     private func stopUserSessionFlow() {

@@ -64,12 +64,8 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
     
     private let appRouteURLParser: AppRouteURLParser
     
-    private var storedAppRoute: AppRoute?
-    /// The account of a notification tapped while restoring, its route only opens once that account is the active one.
-    @Consumable private var storedAppRouteReceiverID: String?
     /// A reply made from a notification before its account was live.
     private var storedInlineReply: PendingInlineReplyDetails?
-    @Consumable private var storedRoomsToAwait: Set<String>?
     
     init(appDelegate: AppDelegate) {
         let appHooks = AppHooks()
@@ -247,12 +243,13 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
     func handleAppRoute(_ appRoute: AppRoute, windowType: SecondaryWindowType?) {
         // Read before resuming the services, by which time a push tap or deep link will have made the app active.
         let animated = appMediator.appState == .active
-        Task {
-            await asyncHandleAppRoute(appRoute, windowType: windowType, animated: animated)
-        }
+        Task { await handleAppRoute(appRoute, userID: nil, awaitsRoom: false, windowType: windowType, animated: animated) }
     }
     
-    private func asyncHandleAppRoute(_ appRoute: AppRoute, windowType: SecondaryWindowType?, animated: Bool) async {
+    private func handleAppRoute(_ appRoute: AppRoute, userID: String?, awaitsRoom: Bool, windowType: SecondaryWindowType?, animated: Bool) async {
+        // The animated parameter can be removed once iOS 18 is dropped in favour of using `Task.immediate` to read it in here.
+        // let animated = appMediator.appState == .active
+        
         MXLog.info("Handling app route:  \(appRoute)")
         
         await resumeClientServices()
@@ -262,27 +259,7 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
             return
         }
         
-        var handled = false
-        
-        switch appRoute {
-        case .accountProvisioningLink:
-            switch stateMachine.state {
-            case .signedOut, .signingOut, .signedIn:
-                rootFlowCoordinator.handleAppRoute(appRoute, animated: animated)
-                handled = true
-            case .initial, .restoringSession:
-                break
-            }
-        default:
-            if stateMachine.state == .signedIn {
-                rootFlowCoordinator.handleAppRoute(appRoute, animated: animated)
-                handled = true
-            }
-        }
-        
-        if !handled {
-            storedAppRoute = appRoute
-        }
+        rootFlowCoordinator.handleAppRoute(appRoute, userID: userID, awaitsRoom: awaitsRoom, animated: animated)
     }
     
     func handleDeepLink(_ url: URL, isExternalURL: Bool, windowType: SecondaryWindowType?) -> Bool {
@@ -405,33 +382,23 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
             return
         }
         
-        if let userSession {
-            guard receiverID == userSession.clientProxy.userID else {
-                // TODO: Switch to the receiver's account and open the room (element-hq/element-meta#3328).
-                MXLog.info("Ignoring a notification tap for \(receiverID), it isn't the active account.")
-                return
-            }
-        } else {
-            storedAppRouteReceiverID = receiverID
-        }
-        
         let eventID = appSettings.focusEventOnNotificationTap ? content.eventID : nil
-        if content.categoryIdentifier == NotificationConstants.Category.invite {
-            if let userSession {
-                userSession.clientProxy.roomsToAwait.insert(roomID)
-            } else {
-                storedRoomsToAwait = [roomID]
-            }
-            handleAppRoute(.room(roomID: roomID, via: []), windowType: nil)
+        let isInvite = content.categoryIdentifier == NotificationConstants.Category.invite
+        let appRoute: AppRoute
+        if isInvite {
+            appRoute = .room(roomID: roomID, via: [])
         } else if appSettings.threadsEnabled, let threadRootEventID = content.threadRootEventID {
-            handleAppRoute(.thread(roomID: roomID, threadRootEventID: threadRootEventID, focusEventID: eventID), windowType: nil)
+            appRoute = .thread(roomID: roomID, threadRootEventID: threadRootEventID, focusEventID: eventID)
         } else if let eventID {
             // Only track main timeline event deeplinking
             analyticsService.signpost.startTransaction(.notificationToMessage)
-            handleAppRoute(.event(eventID: eventID, roomID: roomID, via: []), windowType: nil)
+            appRoute = .event(eventID: eventID, roomID: roomID, via: [])
         } else {
-            handleAppRoute(.room(roomID: roomID, via: []), windowType: nil)
+            appRoute = .room(roomID: roomID, via: [])
         }
+        
+        let animated = appMediator.appState == .active
+        Task { await handleAppRoute(appRoute, userID: receiverID, awaitsRoom: isInvite, windowType: nil, animated: animated) }
     }
     
     func handleInlineReply(_ service: NotificationManagerProtocol, content: UNNotificationContent, replyText: String) async {
@@ -764,11 +731,6 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
     
     private func startAuthentication() {
         rootFlowCoordinator.handleAppRoute(.authentication, animated: true)
-        
-        if storedAppRoute?.isAuthenticationRoute == true,
-           let storedAppRoute = storedAppRoute.take() {
-            rootFlowCoordinator.handleAppRoute(storedAppRoute, animated: false)
-        }
     }
     
     func handleSignedInUserSession(_ userSession: UserSessionProtocol) {
@@ -777,28 +739,6 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
         userSessionManager.add(userSession)
         Task { await resumeClientServices() }
         stateMachine.processEvent(.createdUserSession)
-    }
-    
-    private func runPostSessionSetupTasks() async {
-        guard let userSession else {
-            fatalError("User session not setup")
-        }
-        
-        if let storedAppRouteReceiverID, storedAppRouteReceiverID != userSession.clientProxy.userID {
-            // TODO: Switch to the receiver's account and open the room (element-hq/element-meta#3328).
-            MXLog.info("Dropping a notification tap for \(storedAppRouteReceiverID), it isn't the active account.")
-            storedAppRoute = nil
-            storedRoomsToAwait = nil
-        }
-        
-        if let storedRoomsToAwait {
-            userSession.clientProxy.roomsToAwait = storedRoomsToAwait
-        }
-        
-        if storedAppRoute?.isAuthenticationRoute == false,
-           let storedAppRoute = storedAppRoute.take() {
-            rootFlowCoordinator.handleAppRoute(storedAppRoute, animated: false)
-        }
     }
     
     private func setupUserSession(isNewLogin: Bool) {
@@ -818,10 +758,6 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
             restoreUserSessionFlowAfterClearCache(continuation)
         } else {
             rootFlowCoordinator.handleAppRoute(.roomList, animated: true)
-        }
-        
-        Task {
-            await runPostSessionSetupTasks()
         }
     }
     
@@ -916,11 +852,9 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
                     guard let self else { return }
                     
                     // TODO: Open other accounts' answered calls with their own session (#6387).
-                    if userSession == nil {
-                        storedAppRouteReceiverID = userID
-                    }
-                    
-                    handleAppRoute(.call(roomID: roomID, isVoiceCall: isVoiceCall, answeredFromCallKit: true), windowType: nil)
+                    let animated = appMediator.appState == .active
+                    let callRoute = AppRoute.call(roomID: roomID, isVoiceCall: isVoiceCall, answeredFromCallKit: true)
+                    Task { await handleAppRoute(callRoute, userID: userID, awaitsRoom: false, windowType: nil, animated: animated) }
                 }
             }
             .store(in: &cancellables)
