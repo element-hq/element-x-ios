@@ -69,7 +69,7 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     /// A stored route that was received before the flow was ready.
-    private var pendingRoute: PendingAppRoute?
+    private var pendingAppRoute: PendingAppRoute?
     
     private var cancellables = Set<AnyCancellable>()
     private var clearCacheTask: AnyCancellable?
@@ -117,7 +117,7 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
         case .accountProvisioningLink:
             switch stateMachine.state {
             case .initial:
-                pendingRoute = .init(appRoute: appRoute, userID: userID, awaitsRoom: awaitsRoom)
+                pendingAppRoute = .init(appRoute: appRoute, userID: userID, awaitsRoom: awaitsRoom)
             case .authenticationFlow:
                 authenticationFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
             case .userSessionFlow:
@@ -143,7 +143,7 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
              .call, .settings, .chatBackupSettings, .share, .transferOwnership, .thread, .search:
             switch stateMachine.state {
             case .initial:
-                pendingRoute = .init(appRoute: appRoute, userID: userID, awaitsRoom: awaitsRoom)
+                pendingAppRoute = .init(appRoute: appRoute, userID: userID, awaitsRoom: awaitsRoom)
             case .authenticationFlow:
                 MXLog.info("Ignoring app route, an authentication flow is in progress.")
             case .userSessionFlow:
@@ -266,9 +266,9 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
         
         navigationRootCoordinator.setRootCoordinator(navigationStackCoordinator)
         
-        if let pendingRoute = pendingRoute.take() {
-            if pendingRoute.appRoute.isAuthenticationRoute {
-                coordinator.handleAppRoute(pendingRoute.appRoute, animated: false)
+        if let pending = pendingAppRoute.take() {
+            if pending.appRoute.isAuthenticationRoute {
+                coordinator.handleAppRoute(pending.appRoute, animated: false)
             } else {
                 MXLog.info("Ignoring user session app route during authentication.")
             }
@@ -313,11 +313,11 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
         userSessionFlowCoordinator = coordinator
         coordinator.start()
         
-        if let pendingRoute = pendingRoute.take() {
-            if pendingRoute.appRoute.isAuthenticationRoute {
+        if let pending = pendingAppRoute.take() {
+            if pending.appRoute.isAuthenticationRoute {
                 // TODO: Start a flow to add a new account?
             } else {
-                handleUserSessionRoute(pendingRoute.appRoute, userID: pendingRoute.userID, awaitsRoom: pendingRoute.awaitsRoom, animated: false)
+                handleUserSessionRoute(pending.appRoute, userID: pending.userID, awaitsRoom: pending.awaitsRoom, animated: false)
             }
         }
     }
