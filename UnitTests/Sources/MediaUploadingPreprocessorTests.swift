@@ -763,7 +763,8 @@ final class MediaUploadingPreprocessorTests {
     private func makeAnimatedGIFWithLocation(loopCount: Int) throws -> URL {
         let assetURL = try #require(Bundle(for: Self.self).url(forResource: "test_animated_image.gif", withExtension: nil))
         let gifSource = try #require(CGImageSourceCreateWithURL(assetURL as NSURL, nil))
-        let frameCount = CGImageSourceGetCount(gifSource)
+        // A handful of frames is enough to check they're all kept, re-encoding all of the asset's frames is slow.
+        let frameCount = min(CGImageSourceGetCount(gifSource), 5)
         try #require(frameCount > 1)
         
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent("\(Self.self)-\(UUID().uuidString)")
