@@ -226,6 +226,12 @@ nonisolated extension SDKListener: CallDeclineListener where T == String {
     }
 }
 
+nonisolated extension SDKListener: RoomStateEventsListener where T == [RoomStateEvent] {
+    func onUpdate(events: [RoomStateEvent]) {
+        onUpdateClosure(events)
+    }
+}
+
 nonisolated extension SDKListener: TypingNotificationsListener where T == [String] {
     func call(typingUserIds: [String]) {
         onUpdateClosure(typingUserIds)

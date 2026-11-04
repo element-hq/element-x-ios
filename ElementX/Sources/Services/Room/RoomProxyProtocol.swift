@@ -67,6 +67,10 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     
     var membersPublisher: CurrentValuePublisher<[RoomMemberProxyProtocol], Never> { get }
     
+    /// Signals a member change once ``membersPublisher`` holds the stored members.
+    /// Call ``updateMembers()`` to also fetch any members the store is missing.
+    var membershipChangePublisher: AnyPublisher<Void, Never> { get }
+    
     var typingMembersPublisher: CurrentValuePublisher<[String], Never> { get }
     
     var identityStatusChangesPublisher: CurrentValuePublisher<[IdentityStatusChange], Never> { get }
