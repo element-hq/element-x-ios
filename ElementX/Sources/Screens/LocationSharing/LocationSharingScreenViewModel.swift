@@ -276,23 +276,13 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
         }
     }
     
-    /// It's easier to achieve the format we want with a DateComponentsFormatter
-    /// than using the `.formatted` function of Duration.
-    private static let durationFormatter: DateComponentsFormatter = {
-        let formatter = DateComponentsFormatter()
-        formatter.unitsStyle = .full
-        formatter.allowedUnits = [.hour, .minute]
-        return formatter
-    }()
-    
     private func showLiveLocationDurationPicker() {
         let durations: [Duration] = [.seconds(15 * 60), // 15 minutes
                                      .seconds(60 * 60), // 1 hour
                                      .seconds(60 * 60 * 8)] // 8 hours
         
-        let durationButtons: [AlertInfo<LocationSharingViewAlert>.AlertButton] = durations.compactMap { duration in
-            guard let title = Self.durationFormatter.string(from: duration.seconds) else { return nil }
-            return .init(title: title) { [weak self] in
+        let durationButtons: [AlertInfo<LocationSharingViewAlert>.AlertButton] = durations.map { duration in
+            .init(title: DurationFormatter.string(for: duration.seconds, in: [.hour, .minute])) { [weak self] in
                 Task { [weak self] in await self?.startLiveLocationSharingInRoom(duration: duration) }
             }
         }

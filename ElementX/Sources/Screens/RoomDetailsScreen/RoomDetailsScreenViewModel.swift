@@ -298,6 +298,12 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             state.canEditSecurityAndPrivacy = powerLevels.canOwnUserEditSecurityAndPrivacy(isSpace: roomInfo.isSpace,
                                                                                            joinRule: roomInfo.joinRule)
         }
+        
+        updateAdditionalSecurityRows()
+    }
+    
+    private func updateAdditionalSecurityRows() {
+        state.additionalSecurityRows = userSession.userHooks.roomDetailsScreenHook.additionalSecurityRows(roomProxy: roomProxy)
     }
     
     private func fetchMembersIfNeeded() async {

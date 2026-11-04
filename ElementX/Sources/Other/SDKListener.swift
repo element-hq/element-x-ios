@@ -244,6 +244,12 @@ nonisolated extension SDKListener: KnockRequestsListener where T == [KnockReques
     }
 }
 
+nonisolated extension SDKListener: RoomStateEventsListener where T == [RoomStateEvent] {
+    func onUpdate(events: [RoomStateEvent]) {
+        onUpdateClosure(events)
+    }
+}
+
 nonisolated extension SDKListener: LiveLocationsListener where T == [LiveLocationShareUpdate] {
     func onUpdate(updates: [LiveLocationShareUpdate]) {
         onUpdateClosure(updates)

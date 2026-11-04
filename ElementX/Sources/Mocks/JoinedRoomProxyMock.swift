@@ -68,6 +68,7 @@ extension JoinedRoomProxyMock {
         knockRequestsStatePublisher = CurrentValueSubject(configuration.knockRequestsState).asCurrentValuePublisher()
         typingMembersPublisher = CurrentValueSubject([]).asCurrentValuePublisher()
         identityStatusChangesPublisher = CurrentValueSubject([]).asCurrentValuePublisher()
+        stateEventContentsPublisherEventTypeReturnValue = Just([:]).eraseToAnyPublisher()
         
         makeLiveLocationServiceReturnValue = RoomLiveLocationServiceMock(.init())
         

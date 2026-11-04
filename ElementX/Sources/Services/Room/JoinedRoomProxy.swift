@@ -616,6 +616,22 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         }
     }
     
+    // MARK: - Room State
+    
+    func stateEventContentsPublisher(eventType: StateEventType) -> AnyPublisher<[String: String], Never> {
+        Deferred { [room] in
+            let contentsSubject = CurrentValueSubject<[String: String]?, Never>(nil)
+            let taskHandle = room.subscribeToStateEvents(eventType: eventType, listener: SDKListener.onMainActor { events in
+                contentsSubject.send(Dictionary(events.map { ($0.stateKey, $0.contentJson) }) { _, last in last })
+            })
+            
+            return contentsSubject
+                .compactMap { $0 }
+                .handleEvents(receiveCancel: taskHandle.cancel)
+        }
+        .eraseToAnyPublisher()
+    }
+    
     // MARK: - Element Call
     
     func elementCallWidgetDriver(deviceID: String) -> ElementCallWidgetDriverProtocol {
