@@ -30,6 +30,9 @@ jobs:
         run: source ci_scripts/ci_common.sh && setup_github_actions_environment
 
       - name: Restore compilation cache
+        # Don't restore the cache on develop, only save it there for other branches and PRs to use.
+        # Building from scratch stops the saved cache from growing with every run.
+        if: ${{ !(github.event_name == 'push' && github.ref == 'refs/heads/develop') }}
         uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ~/Library/Developer/Xcode/CompilationCache.noindex
