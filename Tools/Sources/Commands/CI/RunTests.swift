@@ -85,10 +85,6 @@ struct RunTests: AsyncParsableCommand {
         }
         defer { cpuConstraint.stop() }
         
-        // Boot while xcodebuild compiles so the simulator is ready by the time the tests start.
-        let bootTask = Task { try await bootSimulator() }
-        defer { bootTask.cancel() }
-        
         try await executeXcodeBuild()
         
         try await shutdownSimulator()
@@ -125,16 +121,6 @@ struct RunTests: AsyncParsableCommand {
         let deviceID = try await CI.run(.path("/bin/zsh"), ["-cu", "xcrun simctl create '\(name)' \(type) \(simulatorRuntime)"],
                                         output: .string(limit: 4096)).standardOutput
         logger.info("Created simulator '\(name)' (\(deviceID?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "unknown")).")
-    }
-    
-    // MARK: - Simulator Boot
-    
-    private func bootSimulator() async throws {
-        logger.info("Booting simulator '\(device)' in the background…")
-        
-        // Boot by UDID as the same name can exist for other runtimes. Failures are ignored, xcodebuild boots it otherwise.
-        let command = "xcrun simctl list devices 'iOS \(runtime)' available | grep -F '\(device) (' | grep -oE '[0-9A-F-]{36}' | head -1 | xargs xcrun simctl boot 2>/dev/null || true"
-        try await CI.run(.path("/bin/zsh"), ["-cu", command])
     }
     
     // MARK: - Simulator Shutdown
