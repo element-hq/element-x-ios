@@ -43,6 +43,8 @@ protocol UserSessionManagerProtocol: AnyObject {
     /// Registers a session that's ready to be used, replacing any previous session for its account.
     /// A new account becomes the active one, a known account keeps its place.
     func add(_ userSession: UserSessionProtocol)
+    /// Logs an account out of the server, then removes it. Other accounts are untouched.
+    func logout(userID: String) async
     /// Deletes an account's credentials and data, and forgets its session.
     func remove(userID: String)
     /// Deletes every account's credentials and data.
