@@ -156,6 +156,7 @@ struct RoomListFiltersState {
     
     func localizedName(for filter: RoomListFilter) -> String {
         if filter == .invites, invitesCount > 0 {
+            // TODO: Move this string to Localazy if the prominent invites filter ships, or delete it if the feature is removed.
             UntranslatedL10n.screenRoomlistFilterInvitesCount(invitesCount)
         } else {
             filter.localizedName
