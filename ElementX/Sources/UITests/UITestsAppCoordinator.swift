@@ -672,7 +672,7 @@ class MockScreen: Identifiable {
                         flowCoordinator?.handleAppRoute(.roomList, animated: true)
                     case .logout:
                         flowCoordinator?.handleAppRoute(.authentication, animated: true)
-                    case .clearCache, .forceLogout:
+                    case .clearCache, .accountDeactivated, .forceLogout:
                         break
                     }
                 }

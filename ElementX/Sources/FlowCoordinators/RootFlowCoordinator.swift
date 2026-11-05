@@ -15,6 +15,8 @@ enum RootFlowCoordinatorAction {
     case logout
     /// Clear the active account's caches. The continuation is used to signal success/failure.
     case clearCache(AsyncStream<Result<Void, ClearCacheError>>.Continuation)
+    /// Logout without any confirmation. The account was deactivated.
+    case accountDeactivated
     /// Logout and disable App Lock without any confirmation. The user forgot their PIN.
     case forceLogout
 }
@@ -307,6 +309,8 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
                     actionsSubject.send(.logout)
                 case .clearCache:
                     stateMachine.tryEvent(.clearCache)
+                case .accountDeactivated:
+                    actionsSubject.send(.accountDeactivated)
                 case .forceLogout:
                     actionsSubject.send(.forceLogout)
                 }
