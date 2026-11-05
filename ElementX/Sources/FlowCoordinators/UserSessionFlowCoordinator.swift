@@ -167,6 +167,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     func stop() {
         // Releases the native call stack before the session goes or another account's flow starts.
         userSession.elementCallService.setNativeCallStackEnabled(false)
+        dismissCallScreenIfNeeded()
     }
     
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
@@ -549,26 +550,26 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         callScreenCoordinator.actions
             .sink { [weak self, weak callScreenCoordinator] action in
                 // A replaced call hangs up as it goes, and its late actions must leave the call that replaced it alone.
-                guard let self, let callScreenCoordinator, navigationTabCoordinator.overlayCoordinator === callScreenCoordinator else { return }
+                guard let self, let callScreenCoordinator, navigationRootCoordinator.overlayCoordinator === callScreenCoordinator else { return }
                 
                 switch action {
                 case .pictureInPictureIsAvailable(let controller):
                     callScreenPictureInPictureController = controller
                 case .pictureInPictureStarted:
                     MXLog.info("Hiding call for PiP presentation.")
-                    navigationTabCoordinator.setOverlayPresentationMode(.minimized)
+                    navigationRootCoordinator.setOverlayPresentationMode(.minimized)
                 case .pictureInPictureStopped:
                     MXLog.info("Restoring call after PiP presentation.")
-                    navigationTabCoordinator.setOverlayPresentationMode(.fullScreen)
+                    navigationRootCoordinator.setOverlayPresentationMode(.fullScreen)
                 case .dismiss:
                     callScreenPictureInPictureController = nil
-                    navigationTabCoordinator.setOverlayCoordinator(nil)
+                    navigationRootCoordinator.setOverlayCoordinator(nil)
                 }
             }
             .store(in: &cancellables)
         
         callScreenPictureInPictureController = nil
-        navigationTabCoordinator.setOverlayCoordinator(callScreenCoordinator, animated: true)
+        navigationRootCoordinator.setOverlayCoordinator(callScreenCoordinator, animated: true)
         
         flowParameters.analytics.track(screen: .RoomCall)
     }
@@ -579,8 +580,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             return
         }
         
-        guard !(navigationTabCoordinator.overlayCoordinator is NativeCallScreenCoordinator) else {
-            navigationTabCoordinator.setOverlayPresentationMode(.fullScreen)
+        guard !(navigationRootCoordinator.overlayCoordinator is NativeCallScreenCoordinator) else {
+            navigationRootCoordinator.setOverlayPresentationMode(.fullScreen)
             return
         }
         
@@ -589,18 +590,18 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         if ProcessInfo.processInfo.isiOSAppOnMac {
             flowParameters.appMediator.windowManager.registerCoordinator(coordinator, flowCoordinator: nil, forWindowType: .call)
         } else {
-            navigationTabCoordinator.setOverlayCoordinator(coordinator, animated: true)
+            navigationRootCoordinator.setOverlayCoordinator(coordinator, animated: true)
             flowParameters.analytics.track(screen: .RoomCall)
         }
     }
     
     private func minimizeCallScreen() {
-        if navigationTabCoordinator.overlayCoordinator is NativeCallScreenCoordinator {
-            navigationTabCoordinator.setOverlayPresentationMode(.minimized)
+        if navigationRootCoordinator.overlayCoordinator is NativeCallScreenCoordinator {
+            navigationRootCoordinator.setOverlayPresentationMode(.minimized)
             return
         }
         
-        guard navigationTabCoordinator.overlayCoordinator is CallScreenCoordinator else { return }
+        guard navigationRootCoordinator.overlayCoordinator is CallScreenCoordinator else { return }
         
         guard let callScreenPictureInPictureController else {
             MXLog.warning("Picture in picture isn't available, dismissing the call screen.")
@@ -610,12 +611,12 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         
         MXLog.info("Starting picture in picture to hide the call screen overlay.")
         callScreenPictureInPictureController.startPictureInPicture()
-        navigationTabCoordinator.setOverlayPresentationMode(.minimized)
+        navigationRootCoordinator.setOverlayPresentationMode(.minimized)
     }
     
     private func restoreCallScreen() {
-        if navigationTabCoordinator.overlayCoordinator is NativeCallScreenCoordinator {
-            navigationTabCoordinator.setOverlayPresentationMode(.fullScreen)
+        if navigationRootCoordinator.overlayCoordinator is NativeCallScreenCoordinator {
+            navigationRootCoordinator.setOverlayPresentationMode(.fullScreen)
         } else {
             MXLog.info("Returning to existing call.")
             // Stopping comes back as `.pictureInPictureStopped`, which restores the screen.
@@ -627,12 +628,12 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         if ProcessInfo.processInfo.isiOSAppOnMac {
             flowParameters.appMediator.windowManager.closeSecondaryWindow(forType: .call)
         } else {
-            guard navigationTabCoordinator.overlayCoordinator is CallScreenCoordinator
-                || navigationTabCoordinator.overlayCoordinator is NativeCallScreenCoordinator else {
+            guard navigationRootCoordinator.overlayCoordinator is CallScreenCoordinator
+                || navigationRootCoordinator.overlayCoordinator is NativeCallScreenCoordinator else {
                 return
             }
             
-            navigationTabCoordinator.setOverlayCoordinator(nil)
+            navigationRootCoordinator.setOverlayCoordinator(nil)
         }
     }
     
