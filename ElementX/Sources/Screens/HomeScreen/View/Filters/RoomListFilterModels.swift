@@ -28,25 +28,6 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
         RoomListFilter.allCases
     }
     
-    var localizedName: String {
-        switch self {
-        case .people:
-            return L10n.screenRoomlistFilterPeople
-        case .rooms:
-            return L10n.screenRoomlistFilterRooms
-        case .unreads:
-            return L10n.screenRoomlistFilterUnreads
-        case .mentions:
-            return L10n.screenRoomlistFilterMention
-        case .favourites:
-            return L10n.screenRoomlistFilterFavourites
-        case .invites:
-            return L10n.screenRoomlistFilterInvites
-        case .lowPriority:
-            return L10n.screenRoomlistFilterLowPriority
-        }
-    }
-    
     var incompatibleFilters: [RoomListFilter] {
         switch self {
         case .people:
@@ -155,11 +136,20 @@ struct RoomListFiltersState {
     }
     
     func localizedName(for filter: RoomListFilter) -> String {
-        if filter == .invites, invitesCount > 0 {
-            // TODO: Move this string to Localazy if the prominent invites filter ships, or delete it if the feature is removed.
-            UntranslatedL10n.screenRoomlistFilterInvitesCount(invitesCount)
-        } else {
-            filter.localizedName
+        switch filter {
+        case .unreads: L10n.screenRoomlistFilterUnreads
+        case .mentions: L10n.screenRoomlistFilterMention
+        case .favourites: L10n.screenRoomlistFilterFavourites
+        case .people: L10n.screenRoomlistFilterPeople
+        case .rooms: L10n.screenRoomlistFilterRooms
+        case .invites:
+            if invitesCount > 0 {
+                // TODO: Move this string to Localazy if the prominent invites filter ships, or delete it if the feature is removed.
+                UntranslatedL10n.screenRoomlistFilterInvitesCount(invitesCount)
+            } else {
+                L10n.screenRoomlistFilterInvites
+            }
+        case .lowPriority: L10n.screenRoomlistFilterLowPriority
         }
     }
 }

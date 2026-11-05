@@ -58,7 +58,7 @@ private struct FilterToggleStyle: ToggleStyle {
 
 struct RoomListFilterView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        RoomListFilterView(title: RoomListFilter.people.localizedName, isActive: .constant(false))
-        RoomListFilterView(title: RoomListFilter.people.localizedName, isActive: .constant(true))
+        RoomListFilterView(title: L10n.screenRoomlistFilterPeople, isActive: .constant(false))
+        RoomListFilterView(title: L10n.screenRoomlistFilterPeople, isActive: .constant(true))
     }
 }
