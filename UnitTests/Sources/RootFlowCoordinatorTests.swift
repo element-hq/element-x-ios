@@ -30,6 +30,7 @@ struct RootFlowCoordinatorTests {
         
         rootFlowCoordinator = RootFlowCoordinator(navigationRootCoordinator: navigationRootCoordinator,
                                                   userSessionManager: userSessionManager,
+                                                  elementCallManager: ElementCallManagerMock(),
                                                   appLockService: AppLockServiceMock(),
                                                   bugReportService: BugReportServiceMock(.init()),
                                                   appMediator: AppMediatorMock(.init()),

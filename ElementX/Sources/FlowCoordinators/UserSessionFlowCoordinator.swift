@@ -6,10 +6,8 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import AVKit
 import Combine
 import Compound
-import ElementCall
 import SwiftState
 import SwiftUI
 
@@ -18,6 +16,8 @@ enum UserSessionFlowCoordinatorAction {
     case clearCache
     /// Logout and disable App Lock without any confirmation. The user forgot their PIN.
     case forceLogout
+    case presentCall(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool)
+    case minimizeCall
 }
 
 class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
@@ -161,7 +161,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     func stop() {
         // Releases the native call stack before the session goes or another account's flow starts.
         userSession.elementCallService.setNativeCallStackEnabled(false)
-        dismissCallScreenIfNeeded()
     }
     
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
@@ -170,6 +169,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         switch appRoute {
         case .authentication, .accountProvisioningLink, .oAuthCallback:
             break // We always ignore these flows when logged in.
+        case .call:
+            break // The root flow coordinator presents calls.
         case .settings, .chatBackupSettings:
             if ProcessInfo.processInfo.isiOSAppOnMac, flowParameters.windowManager.secondaryWindowsEnabled {
                 startSettingsFlow(detached: true)
@@ -179,8 +180,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 }
                 settingsFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
             }
-        case let .call(roomID, isVoiceCall, answeredFromCallKit):
-            Task { await presentCallScreen(roomID: roomID, isVoiceCall: isVoiceCall, answeredFromCallKit: answeredFromCallKit) }
         case .roomList, .room, .roomAlias, .childRoom, .childRoomAlias,
              .roomDetails, .roomMemberDetails, .userProfile,
              .event, .eventOnRoomAlias, .childEvent, .childEventOnRoomAlias,
@@ -260,9 +259,9 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 case .sessionVerification(let flow):
                     presentSessionVerificationScreen(flow: flow)
                 case .showCallScreen(let roomProxy, let isVoiceCall):
-                    presentCallScreen(roomProxy: roomProxy, voiceOnly: isVoiceCall)
+                    actionsSubject.send(.presentCall(roomProxy: roomProxy, isVoiceCall: isVoiceCall))
                 case .hideCallScreenOverlay:
-                    hideCallScreenOverlay()
+                    actionsSubject.send(.minimizeCall)
                 case .logout:
                     Task { await self.runLogoutFlow() }
                 }
@@ -274,7 +273,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 guard let self else { return }
                 switch action {
                 case .presentCallScreen(let roomProxy, let isVoiceCall):
-                    presentCallScreen(roomProxy: roomProxy, voiceOnly: isVoiceCall)
+                    actionsSubject.send(.presentCall(roomProxy: roomProxy, isVoiceCall: isVoiceCall))
                 case .verifyUser(let userID):
                     presentSessionVerificationScreen(flow: .userInitiator(userID: userID))
                 case .showSettings:
@@ -334,7 +333,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             }
             .store(in: &cancellables)
         
-        setupCallObservers()
         setupUnreadNotificationsObserver()
         
         searchScreenCoordinator?.actionsPublisher
@@ -354,6 +352,13 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     navigationTabCoordinator.selectedTab = navigationTabCoordinator.previousTab == .search ? .chats : navigationTabCoordinator.previousTab ?? .chats
                 }
             }
+            .store(in: &cancellables)
+    }
+    
+    private func setupUnreadNotificationsObserver() {
+        userSession.notificationService.badgeCountPublisher
+            .removeDuplicates()
+            .weakAssign(to: \.badgeCount, on: chatsTabDetails)
             .store(in: &cancellables)
     }
     
@@ -460,180 +465,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         navigationStackCoordinator.setRootCoordinator(coordinator)
         
         navigationTabCoordinator.setSheetCoordinator(navigationStackCoordinator)
-    }
-    
-    // MARK: - Calls
-    
-    private func presentCallScreen(roomID: String, isVoiceCall: Bool, answeredFromCallKit: Bool) async {
-        guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
-            // An answered call is left up for the native stack, so it has to be ended here rather
-            // than leaving the system with a call this room can no longer serve.
-            MXLog.error("Cannot present the call screen, \(roomID) isn't a joined room")
-            userSession.elementCallService.tearDownCallSession(roomID: roomID)
-            return
-        }
-        
-        presentCallScreen(roomProxy: roomProxy, voiceOnly: isVoiceCall, answeredFromCallKit: answeredFromCallKit)
-    }
-    
-    private func presentCallScreen(roomProxy: JoinedRoomProxyProtocol, voiceOnly: Bool, answeredFromCallKit: Bool = false) {
-        let colorScheme: ColorScheme = flowParameters.windowManager.mainWindow.traitCollection.userInterfaceStyle == .light ? .light : .dark
-        presentCallScreen(configuration: .init(roomProxy: roomProxy,
-                                               clientProxy: userSession.clientProxy,
-                                               clientID: InfoPlistReader.main.bundleIdentifier,
-                                               elementCallBaseURL: userSession.userSettings.app.elementCallBaseURL,
-                                               elementCallBaseURLOverride: userSession.userSettings.app.elementCallBaseURLOverride,
-                                               voiceOnly: voiceOnly,
-                                               colorScheme: colorScheme),
-                          answeredFromCallKit: answeredFromCallKit)
-    }
-    
-    private var callScreenPictureInPictureController: AVPictureInPictureController?
-    private func presentCallScreen(configuration: ElementCallConfiguration, answeredFromCallKit: Bool) {
-        // The service runs native calls and drives their screen through its own actions.
-        if userSession.elementCallService.handleNativeCallRequest(roomProxy: configuration.roomProxy,
-                                                                  isVoiceCall: configuration.voiceOnly,
-                                                                  answeredFromCallKit: answeredFromCallKit) {
-            return
-        }
-        
-        guard userSession.elementCallService.ongoingCallRoomIDPublisher.value != configuration.callRoomID else {
-            MXLog.info("Returning to existing call.")
-            callScreenPictureInPictureController?.stopPictureInPicture()
-            return
-        }
-        
-        let callScreenCoordinator = CallScreenCoordinator(parameters: .init(userSession: userSession,
-                                                                            configuration: configuration,
-                                                                            allowPictureInPicture: true,
-                                                                            analytics: flowParameters.analytics))
-        
-        callScreenCoordinator.actions
-            .sink { [weak self] action in
-                guard let self else { return }
-                switch action {
-                case .pictureInPictureIsAvailable(let controller):
-                    callScreenPictureInPictureController = controller
-                case .pictureInPictureStarted:
-                    MXLog.info("Hiding call for PiP presentation.")
-                    navigationRootCoordinator.setOverlayPresentationMode(.minimized)
-                case .pictureInPictureStopped:
-                    MXLog.info("Restoring call after PiP presentation.")
-                    navigationRootCoordinator.setOverlayPresentationMode(.fullScreen)
-                case .dismiss:
-                    callScreenPictureInPictureController = nil
-                    navigationRootCoordinator.setOverlayCoordinator(nil)
-                }
-            }
-            .store(in: &cancellables)
-        
-        navigationRootCoordinator.setOverlayCoordinator(callScreenCoordinator, animated: true)
-        
-        flowParameters.analytics.track(screen: .RoomCall)
-    }
-    
-    private func hideCallScreenOverlay() {
-        if navigationRootCoordinator.overlayCoordinator is NativeCallScreenCoordinator {
-            userSession.elementCallService.minimizeNativeCall()
-            return
-        }
-        
-        guard let callScreenPictureInPictureController else {
-            MXLog.warning("Picture in picture isn't available, dismissing the call screen.")
-            dismissCallScreenIfNeeded()
-            return
-        }
-        
-        MXLog.info("Starting picture in picture to hide the call screen overlay.")
-        callScreenPictureInPictureController.startPictureInPicture()
-        navigationRootCoordinator.setOverlayPresentationMode(.minimized)
-    }
-    
-    private func setupUnreadNotificationsObserver() {
-        userSession.notificationService.badgeCountPublisher
-            .removeDuplicates()
-            .weakAssign(to: \.badgeCount, on: chatsTabDetails)
-            .store(in: &cancellables)
-    }
-    
-    // MARK: - Native calls
-    
-    private func setupCallObservers() {
-        userSession.elementCallService.nativeCallPresentationPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] presentation in
-                self?.handleNativeCall(presentation)
-            }
-            .store(in: &cancellables)
-        
-        userSession.elementCallService.nativeCallEventsPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] event in
-                guard let self else { return }
-                
-                switch event {
-                case .endCallRequested:
-                    // A native call comes down on `.dismiss` instead, once it has actually left the room.
-                    if navigationRootCoordinator.overlayCoordinator is CallScreenCoordinator {
-                        dismissCallScreenIfNeeded()
-                    }
-                default:
-                    break
-                }
-            }
-            .store(in: &cancellables)
-    }
-    
-    private func handleNativeCall(_ presentation: NativeCallPresentation) {
-        switch presentation {
-        case .present:
-            presentNativeCallScreen()
-        case .restore:
-            restoreNativeCallScreen()
-        case .minimize:
-            navigationRootCoordinator.setOverlayPresentationMode(.minimized)
-        case .dismiss:
-            dismissCallScreenIfNeeded()
-        }
-    }
-    
-    private func presentNativeCallScreen() {
-        guard let controller = userSession.elementCallService.nativeCallController else {
-            MXLog.error("Cannot present a native call without a call stack")
-            return
-        }
-        
-        guard !(navigationRootCoordinator.overlayCoordinator is NativeCallScreenCoordinator) else {
-            restoreNativeCallScreen()
-            return
-        }
-        
-        let coordinator = NativeCallScreenCoordinator(parameters: .init(controller: controller))
-        
-        if ProcessInfo.processInfo.isiOSAppOnMac {
-            flowParameters.appMediator.windowManager.registerCoordinator(coordinator, flowCoordinator: nil, forWindowType: .call)
-        } else {
-            navigationRootCoordinator.setOverlayCoordinator(coordinator, animated: true)
-            flowParameters.analytics.track(screen: .RoomCall)
-        }
-    }
-    
-    private func restoreNativeCallScreen() {
-        userSession.elementCallService.restoreNativeCall()
-        navigationRootCoordinator.setOverlayPresentationMode(.fullScreen)
-    }
-    
-    private func dismissCallScreenIfNeeded() {
-        if ProcessInfo.processInfo.isiOSAppOnMac {
-            flowParameters.appMediator.windowManager.closeSecondaryWindow(forType: .call)
-        } else {
-            guard navigationRootCoordinator.overlayCoordinator is CallScreenCoordinator
-                || navigationRootCoordinator.overlayCoordinator is NativeCallScreenCoordinator else {
-                return
-            }
-            
-            navigationRootCoordinator.setOverlayCoordinator(nil)
-        }
     }
     
     // MARK: - Logout

@@ -47,7 +47,6 @@ struct UserSessionFlowCoordinatorTests {
         networkMonitor.reachabilityPublisher = networkReachabilitySubject.asCurrentValuePublisher()
         let appMediator = AppMediatorMock(.init())
         appMediator.networkMonitor = networkMonitor
-        (appMediator.windowManager as? WindowManagerMock)?.mainWindow = UIWindow()
         
         userIndicatorController = UserIndicatorControllerMock()
         let userSession = UserSessionMock(.init(clientProxy: clientProxy, elementCallService: elementCallService))
@@ -83,20 +82,6 @@ struct UserSessionFlowCoordinatorTests {
     mutating func settingsPresentation() async throws {
         try await process(route: .settings, expectedUserSessionState: .settingsScreen)
         #expect((tabCoordinator?.sheetCoordinator as? NavigationStackCoordinator)?.rootCoordinator is SettingsScreenCoordinator)
-    }
-    
-    @Test("Stopping the flow ends its web call")
-    func stopEndsWebCall() async {
-        // E.g. clearing the cache or signing out during a call: the call screen goes with the screens.
-        await waitForConfirmation { confirmation in
-            elementCallService.setupCallSessionRoomIDRoomDisplayNameIsVideoKindClosure = { _, _, _, _ in confirmation() }
-            userSessionFlowCoordinator.handleAppRoute(.call(roomID: "1", isVoiceCall: false, answeredFromCallKit: false), animated: false)
-        }
-        
-        userSessionFlowCoordinator.stop()
-        
-        #expect(elementCallService.tearDownCallSessionRoomIDReceivedRoomID == "1",
-                "A call left ongoing would make every later call count as busy")
     }
     
     @Test("The room route presents the room")

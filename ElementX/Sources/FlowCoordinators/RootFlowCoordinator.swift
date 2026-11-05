@@ -5,6 +5,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import AVKit
 import Combine
 import SwiftState
 import SwiftUI
@@ -24,10 +25,11 @@ enum ClearCacheError: Error {
     case failedRestoringSession
 }
 
-/// Switches the app's root between the authentication flow and the user session flow.
+/// Switches the app's root between the authentication flow and the user session flow, and shows calls above both.
 class RootFlowCoordinator: FlowCoordinatorProtocol {
     private let navigationRootCoordinator: NavigationRootCoordinator
     private let userSessionManager: UserSessionManagerProtocol
+    private let elementCallManager: ElementCallManagerProtocol
     private let appLockService: AppLockServiceProtocol
     private let bugReportService: BugReportServiceProtocol
     private let appMediator: AppMediatorProtocol
@@ -72,6 +74,34 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
     /// A stored route that was received before the flow was ready.
     private var pendingAppRoute: PendingAppRoute?
     
+    /// The web call on the overlay, with everything that belongs to that call alone.
+    private struct WebCall {
+        let userSession: UserSessionProtocol
+        let roomID: String
+        let coordinator: CallScreenCoordinator
+        var pictureInPictureController: AVPictureInPictureController?
+        var cancellables: Set<AnyCancellable>
+    }
+    
+    /// A call to open for an account, from a room, CallKit or Recents.
+    private struct PendingCall {
+        let userID: String
+        let roomID: String
+        let isVoiceCall: Bool
+        let answeredFromCallKit: Bool
+    }
+    
+    private var webCall: WebCall?
+    /// A call waiting for its account's session to be live. One at a time, a newer call drops it.
+    private var pendingCall: PendingCall?
+    private var pendingCallCancellable: AnyCancellable?
+    // TODO: Observe each call's own service once each call builds its own stack.
+    /// The active account's service, which runs the native call stack and drives its screen.
+    private var nativeCallService: ElementCallServiceProtocol?
+    private var nativeCallPresentationCancellable: AnyCancellable?
+    /// The active account while it signs out or clears its caches. Its calls are dropped until a user session flow starts.
+    private var leavingUserID: String?
+    
     private var cancellables = Set<AnyCancellable>()
     private var clearCacheTask: AnyCancellable?
     
@@ -82,6 +112,7 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
     
     init(navigationRootCoordinator: NavigationRootCoordinator,
          userSessionManager: UserSessionManagerProtocol,
+         elementCallManager: ElementCallManagerProtocol,
          appLockService: AppLockServiceProtocol,
          bugReportService: BugReportServiceProtocol,
          appMediator: AppMediatorProtocol,
@@ -92,6 +123,7 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
          authenticationServiceFactory: AuthenticationServiceFactoryProtocol = AuthenticationServiceFactory()) {
         self.navigationRootCoordinator = navigationRootCoordinator
         self.userSessionManager = userSessionManager
+        self.elementCallManager = elementCallManager
         self.appLockService = appLockService
         self.bugReportService = bugReportService
         self.appMediator = appMediator
@@ -140,10 +172,12 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
             } else {
                 stateMachine.tryEvent(.startUserSession)
             }
+        case let .call(roomID, isVoiceCall, answeredFromCallKit):
+            presentCall(userID: userID, roomID: roomID, isVoiceCall: isVoiceCall, answeredFromCallKit: answeredFromCallKit)
         case .room, .roomAlias, .childRoom, .childRoomAlias,
              .roomDetails, .roomMemberDetails, .userProfile,
              .event, .eventOnRoomAlias, .childEvent, .childEventOnRoomAlias,
-             .call, .settings, .chatBackupSettings, .share, .transferOwnership, .thread, .search:
+             .settings, .chatBackupSettings, .share, .transferOwnership, .thread, .search:
             switch stateMachine.state {
             case .initial:
                 pendingAppRoute = .init(appRoute: appRoute, userID: userID, awaitsRoom: awaitsRoom)
@@ -170,9 +204,61 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
         navigationRootCoordinator.setRootCoordinator(nil, animated: animated)
     }
     
+    // TODO: Take the account too, a room ID alone can't tell accounts' rooms apart.
     func isDisplayingRoomScreen(withRoomID roomID: String) -> Bool {
         guard stateMachine.state == .userSessionFlow else { return false }
         return userSessionFlowCoordinator?.isDisplayingRoomScreen(withRoomID: roomID) ?? false
+    }
+    
+    /// Opens the room's call as the session's account, returning to it when it's already open.
+    /// Any other call is replaced.
+    func presentCall(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool, answeredFromCallKit: Bool, userSession: UserSessionProtocol) {
+        if let heldCall = pendingCall.take() {
+            pendingCallCancellable = nil
+            drop(heldCall, because: "a newer call opened")
+        }
+        
+        // A service with the native call stack runs the call and drives its screen through its presentation publisher.
+        if userSession.elementCallService.handleNativeCallRequest(roomProxy: roomProxy, isVoiceCall: isVoiceCall, answeredFromCallKit: answeredFromCallKit) {
+            return
+        }
+        
+        // Native calls replace web calls, so with them on a call without a native stack can't open.
+        guard !userSession.userSettings.app.nativeCallEnabled else {
+            let call = PendingCall(userID: userSession.clientProxy.userID, roomID: roomProxy.id, isVoiceCall: isVoiceCall, answeredFromCallKit: answeredFromCallKit)
+            drop(call, because: "there's no native call stack for it")
+            return
+        }
+        
+        if let webCall,
+           webCall.userSession.clientProxy.userID == userSession.clientProxy.userID,
+           webCall.roomID == roomProxy.id {
+            MXLog.info("Returning to the ongoing call.")
+            webCall.pictureInPictureController?.stopPictureInPicture()
+            return
+        }
+        
+        presentWebCall(roomProxy: roomProxy, isVoiceCall: isVoiceCall, userSession: userSession)
+    }
+    
+    /// Hides the call screen: a native call minimizes, a web call moves to picture in picture or ends without it.
+    func minimizeCall() {
+        if navigationRootCoordinator.overlayCoordinator is NativeCallScreenCoordinator {
+            nativeCallService?.minimizeNativeCall()
+            return
+        }
+        
+        guard let webCall else { return }
+        
+        guard let pictureInPictureController = webCall.pictureInPictureController else {
+            MXLog.warning("Picture in picture isn't available, dismissing the call screen.")
+            navigationRootCoordinator.setOverlayCoordinator(nil)
+            return
+        }
+        
+        MXLog.info("Starting picture in picture to hide the call screen.")
+        pictureInPictureController.startPictureInPicture()
+        navigationRootCoordinator.setOverlayPresentationMode(.minimized)
     }
     
     // MARK: - Private
@@ -214,6 +300,9 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
                 startAuthenticationFlow(isAddingAccount: isAddingAccount)
             case (.userSessionFlow, .startAuthentication(let isAddingAccount), .authenticationFlow):
                 stopUserSessionFlow()
+                if !isAddingAccount {
+                    closeCallOfLeavingAccount()
+                }
                 startAuthenticationFlow(isAddingAccount: isAddingAccount)
             case (.initial, .startUserSession, .userSessionFlow):
                 startUserSessionFlow(isNewLogin: false)
@@ -223,6 +312,7 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
                 startUserSessionFlow(isNewLogin: true)
             case (.userSessionFlow, .clearCache, .clearingCache):
                 stopUserSessionFlow()
+                closeCallOfLeavingAccount()
                 clearCache()
             case (.clearingCache, .startUserSession, .userSessionFlow):
                 startUserSessionFlow(isNewLogin: false)
@@ -283,6 +373,8 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
             fatalError("User session not setup")
         }
         
+        leavingUserID = nil
+        
         let flowParameters = CommonFlowParameters(userSession: userSession,
                                                   availableSessionsPublisher: userSessionManager.sessionsPublisher.map { $0.map(UserSessionDetails.init) },
                                                   bugReportService: bugReportService,
@@ -298,6 +390,7 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
                                                      navigationRootCoordinator: navigationRootCoordinator,
                                                      appLockService: appLockService,
                                                      flowParameters: flowParameters)
+        let userID = userSession.clientProxy.userID
         coordinator.actionsPublisher
             .sink { [weak self] action in
                 guard let self else { return }
@@ -309,12 +402,17 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.clearCache)
                 case .forceLogout:
                     actionsSubject.send(.forceLogout)
+                case .presentCall(let roomProxy, let isVoiceCall):
+                    presentCall(roomProxy: roomProxy, isVoiceCall: isVoiceCall, userID: userID)
+                case .minimizeCall:
+                    minimizeCall()
                 }
             }
             .store(in: &cancellables)
         
         userSessionFlowCoordinator = coordinator
         coordinator.start()
+        observeNativeCalls(of: userSession.elementCallService)
         
         if let pending = pendingAppRoute.take() {
             if pending.appRoute.isAuthenticationRoute {
@@ -345,6 +443,7 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
     
     private func stopUserSessionFlow() {
         userSessionFlowCoordinator?.stop()
+        stopObservingNativeCalls()
         userSessionFlowCoordinator = nil
     }
     
@@ -360,5 +459,243 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
             self?.stateMachine.tryEvent(.startUserSession)
         }
         .asCancellable()
+    }
+    
+    // MARK: - Calls by account
+    
+    /// Opens a call a room asked for, with its account's session.
+    private func presentCall(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool, userID: String) {
+        // Looked up, not captured by the flow's sink, which outlives the session.
+        guard let userSession = userSessionManager.session(for: userID) else {
+            MXLog.error("Cannot present the call, \(userID) has no session.")
+            return
+        }
+        
+        presentCall(roomProxy: roomProxy, isVoiceCall: isVoiceCall, answeredFromCallKit: false, userSession: userSession)
+    }
+    
+    /// Opens a call that comes in by account, answered through CallKit or started from Recents,
+    /// above every account's screens, whatever the root shows.
+    ///
+    /// An account with no live session yet has its call held until it has one, one call at a time.
+    /// A call that can't open, or whose account is leaving, is dropped.
+    private func presentCall(userID: String?, roomID: String, isVoiceCall: Bool, answeredFromCallKit: Bool) {
+        guard let userID = userID ?? userSessionManager.userIDs.first else {
+            // TODO: Call back once an account signs in again (element-hq/element-meta#3325).
+            MXLog.info("Dropping the call in \(roomID), no account is signed in.")
+            return
+        }
+        
+        let call = PendingCall(userID: userID, roomID: roomID, isVoiceCall: isVoiceCall, answeredFromCallKit: answeredFromCallKit)
+        
+        guard userSessionManager.userIDs.contains(userID) else {
+            drop(call, because: "\(userID) isn't signed in")
+            return
+        }
+        
+        guard userID != leavingUserID else {
+            drop(call, because: "\(userID) is leaving")
+            return
+        }
+        
+        guard let userSession = userSessionManager.session(for: userID) else {
+            hold(call)
+            return
+        }
+        
+        Task {
+            let room = await userSession.clientProxy.roomForIdentifier(roomID)
+            
+            guard userID != leavingUserID, userSessionManager.session(for: userID)?.clientProxy === userSession.clientProxy else {
+                drop(call, because: "\(userID) left while its room loaded")
+                return
+            }
+            
+            guard case let .joined(roomProxy) = room else {
+                drop(call, because: "it isn't a joined room")
+                return
+            }
+            
+            presentCall(roomProxy: roomProxy, isVoiceCall: isVoiceCall, answeredFromCallKit: answeredFromCallKit, userSession: userSession)
+        }
+    }
+    
+    private func hold(_ call: PendingCall) {
+        if let replacedCall = pendingCall {
+            drop(replacedCall, because: "a newer call replaced it")
+        }
+        
+        MXLog.info("Holding the call in \(call.roomID) until \(call.userID) has a live session")
+        pendingCall = call
+        
+        // Not received on the main queue, so the session is seen in the same step that adds it.
+        pendingCallCancellable = userSessionManager.sessionsPublisher
+            .sink { [weak self] userSessions in
+                guard let self else { return }
+                
+                guard userSessionManager.userIDs.contains(call.userID) else {
+                    pendingCall = nil
+                    pendingCallCancellable = nil
+                    drop(call, because: "\(call.userID) isn't signed in any more")
+                    return
+                }
+                
+                guard userSessions.contains(where: { $0.clientProxy.userID == call.userID }) else { return }
+                openPendingCall()
+            }
+    }
+    
+    private func openPendingCall() {
+        guard let call = pendingCall.take() else { return }
+        pendingCallCancellable = nil
+        
+        // Deferred so the account's state is checked again once the step that published its session is over.
+        Task {
+            presentCall(userID: call.userID, roomID: call.roomID, isVoiceCall: call.isVoiceCall, answeredFromCallKit: call.answeredFromCallKit)
+        }
+    }
+    
+    private func drop(_ call: PendingCall, because reason: String) {
+        MXLog.warning("Dropping the call in \(call.roomID): \(reason)")
+        
+        if call.answeredFromCallKit {
+            elementCallManager.dropAnsweredCall(userID: call.userID, roomID: call.roomID)
+        }
+    }
+    
+    /// The active account signs out or clears its caches: its web call goes with it, and its new calls are dropped.
+    private func closeCallOfLeavingAccount() {
+        guard let userID = userSessionManager.activeSession?.clientProxy.userID else { return }
+        
+        leavingUserID = userID
+        
+        if webCall?.userSession.clientProxy.userID == userID {
+            navigationRootCoordinator.setOverlayCoordinator(nil)
+        }
+    }
+    
+    // MARK: - Web calls
+    
+    private func presentWebCall(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool, userSession: UserSessionProtocol) {
+        let colorScheme: ColorScheme = appMediator.windowManager.mainWindow.traitCollection.userInterfaceStyle == .light ? .light : .dark
+        let configuration = ElementCallConfiguration(roomProxy: roomProxy,
+                                                     clientProxy: userSession.clientProxy,
+                                                     clientID: InfoPlistReader.main.bundleIdentifier,
+                                                     elementCallBaseURL: userSession.userSettings.app.elementCallBaseURL,
+                                                     elementCallBaseURLOverride: userSession.userSettings.app.elementCallBaseURLOverride,
+                                                     voiceOnly: isVoiceCall,
+                                                     colorScheme: colorScheme)
+        
+        let coordinator = CallScreenCoordinator(parameters: .init(userSession: userSession,
+                                                                  configuration: configuration,
+                                                                  allowPictureInPicture: true,
+                                                                  analytics: analyticsService))
+        
+        var callCancellables = Set<AnyCancellable>()
+        coordinator.actions
+            .sink { [weak self, weak coordinator] action in
+                guard let self, let coordinator else { return }
+                handleWebCallAction(action, coordinator: coordinator)
+            }
+            .store(in: &callCancellables)
+        
+        // Replacing the screen runs its `stop()`, ending the call, and then this callback.
+        // It must only ever clear this call's record, never the one replacing it.
+        navigationRootCoordinator.setOverlayCoordinator(coordinator) { [weak self, weak coordinator] in
+            guard let self, webCall?.coordinator === coordinator else { return }
+            webCall = nil
+        }
+        
+        webCall = WebCall(userSession: userSession,
+                          roomID: roomProxy.id,
+                          coordinator: coordinator,
+                          pictureInPictureController: nil,
+                          cancellables: callCancellables)
+        
+        analyticsService.track(screen: .RoomCall)
+    }
+    
+    private func handleWebCallAction(_ action: CallScreenCoordinatorAction, coordinator: CallScreenCoordinator) {
+        // A replaced call's late actions must leave the call that replaced it alone.
+        guard navigationRootCoordinator.overlayCoordinator === coordinator else { return }
+        
+        switch action {
+        case .pictureInPictureIsAvailable(let controller):
+            webCall?.pictureInPictureController = controller
+        case .pictureInPictureStarted:
+            MXLog.info("Hiding the call for picture in picture.")
+            navigationRootCoordinator.setOverlayPresentationMode(.minimized)
+        case .pictureInPictureStopped:
+            MXLog.info("Restoring the call after picture in picture.")
+            navigationRootCoordinator.setOverlayPresentationMode(.fullScreen)
+        case .dismiss:
+            navigationRootCoordinator.setOverlayCoordinator(nil)
+        }
+    }
+    
+    // MARK: - Native calls
+    
+    private func observeNativeCalls(of service: ElementCallServiceProtocol) {
+        nativeCallService = service
+        nativeCallPresentationCancellable = service.nativeCallPresentationPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] presentation in
+                self?.handleNativeCall(presentation)
+            }
+    }
+    
+    private func stopObservingNativeCalls() {
+        nativeCallService = nil
+        nativeCallPresentationCancellable = nil
+        // The `.dismiss` the stopped stack sends hops to the main queue, after this sink is gone.
+        dismissNativeCall()
+    }
+    
+    private func handleNativeCall(_ presentation: NativeCallPresentation) {
+        switch presentation {
+        case .present:
+            presentNativeCall()
+        case .restore:
+            restoreNativeCall()
+        case .minimize:
+            navigationRootCoordinator.setOverlayPresentationMode(.minimized)
+        case .dismiss:
+            dismissNativeCall()
+        }
+    }
+    
+    private func presentNativeCall() {
+        guard let controller = nativeCallService?.nativeCallController else {
+            MXLog.error("Cannot present a native call without a call stack")
+            return
+        }
+        
+        guard !(navigationRootCoordinator.overlayCoordinator is NativeCallScreenCoordinator) else {
+            restoreNativeCall()
+            return
+        }
+        
+        let coordinator = NativeCallScreenCoordinator(parameters: .init(controller: controller))
+        
+        if ProcessInfo.processInfo.isiOSAppOnMac {
+            appMediator.windowManager.closeSecondaryWindow(forType: .call)
+            appMediator.windowManager.registerCoordinator(coordinator, flowCoordinator: nil, forWindowType: .call)
+        } else {
+            navigationRootCoordinator.setOverlayCoordinator(coordinator)
+            analyticsService.track(screen: .RoomCall)
+        }
+    }
+    
+    private func restoreNativeCall() {
+        nativeCallService?.restoreNativeCall()
+        navigationRootCoordinator.setOverlayPresentationMode(.fullScreen)
+    }
+    
+    private func dismissNativeCall() {
+        if ProcessInfo.processInfo.isiOSAppOnMac {
+            appMediator.windowManager.closeSecondaryWindow(forType: .call)
+        } else if navigationRootCoordinator.overlayCoordinator is NativeCallScreenCoordinator {
+            navigationRootCoordinator.setOverlayCoordinator(nil)
+        }
     }
 }

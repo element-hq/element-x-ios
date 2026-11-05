@@ -610,10 +610,10 @@ class MockScreen: Identifiable {
             let timelineControllerFactory = TimelineControllerFactoryMock(.init(timelineController: timelineController))
             
             let userSession = UserSessionMock(.init(clientProxy: clientProxy, userSettings: userSettings))
+            let appLockService = AppLockService(keychainController: KeychainControllerMock(), appSettings: appSettings)
             let flowCoordinator = UserSessionFlowCoordinator(isNewLogin: false,
                                                              navigationRootCoordinator: navigationRootCoordinator,
-                                                             appLockService: AppLockService(keychainController: KeychainControllerMock(),
-                                                                                            appSettings: appSettings),
+                                                             appLockService: appLockService,
                                                              flowParameters: CommonFlowParameters(userSession: userSession,
                                                                                                   availableSessionsPublisher: .init([.init(userSession: userSession)]),
                                                                                                   bugReportService: BugReportServiceMock(.init()),
@@ -625,9 +625,35 @@ class MockScreen: Identifiable {
                                                                                                   userIndicatorController: UserIndicatorControllerMock(),
                                                                                                   stateMachineFactory: StateMachineFactory()))
             
+            // Never routed, it only presents the flow's calls above it.
+            let rootFlowCoordinator = RootFlowCoordinator(navigationRootCoordinator: navigationRootCoordinator,
+                                                          userSessionManager: UserSessionManagerMock(.init()),
+                                                          elementCallManager: ElementCallManagerMock(),
+                                                          appLockService: appLockService,
+                                                          bugReportService: BugReportServiceMock(.init()),
+                                                          appMediator: appMediator,
+                                                          appSettings: appSettings,
+                                                          appHooks: AppHooks(),
+                                                          analyticsService: analytics,
+                                                          userIndicatorController: UserIndicatorControllerMock())
+            
+            flowCoordinator.actionsPublisher
+                .sink { action in
+                    switch action {
+                    case .presentCall(let roomProxy, let isVoiceCall):
+                        rootFlowCoordinator.presentCall(roomProxy: roomProxy, isVoiceCall: isVoiceCall, answeredFromCallKit: false, userSession: userSession)
+                    case .minimizeCall:
+                        rootFlowCoordinator.minimizeCall()
+                    case .logout, .clearCache, .forceLogout:
+                        break
+                    }
+                }
+                .store(in: &cancellables)
+            
             flowCoordinator.start()
             
             retainedState.append(flowCoordinator)
+            retainedState.append(rootFlowCoordinator)
             
             return nil
         case .rootFlow, .rootFlowSignedIn:
@@ -652,6 +678,7 @@ class MockScreen: Identifiable {
             
             let flowCoordinator = RootFlowCoordinator(navigationRootCoordinator: navigationRootCoordinator,
                                                       userSessionManager: userSessionManager,
+                                                      elementCallManager: ElementCallManagerMock(),
                                                       appLockService: AppLockService(keychainController: KeychainControllerMock(),
                                                                                      appSettings: appSettings),
                                                       bugReportService: BugReportServiceMock(.init()),

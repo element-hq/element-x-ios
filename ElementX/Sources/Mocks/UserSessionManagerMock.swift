@@ -5,11 +5,22 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Combine
+
 extension UserSessionManagerMock {
-    struct Configuration { }
+    struct Configuration {
+        var userSessions = CurrentValueSubject<[UserSessionProtocol], Never>([])
+    }
     
     convenience init(_ configuration: Configuration) {
         self.init()
+        
+        let userSessions = configuration.userSessions
+        userIDs = userSessions.value.map(\.clientProxy.userID)
+        sessionsPublisher = userSessions.asCurrentValuePublisher()
+        sessionForClosure = { userID in
+            userSessions.value.first { $0.clientProxy.userID == userID }
+        }
         
         userSessionForSessionDirectoriesPassphraseReturnValue = .success(UserSessionMock(.init()))
         clientSessionDelegate = KeychainControllerMock()
