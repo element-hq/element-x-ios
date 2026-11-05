@@ -117,9 +117,10 @@ class SecureBackupController: SecureBackupControllerProtocol {
             }
             
             let keyUploadErrored = Mutex(false)
+            let passphraseKey = passphrase.map { SecretStorageKey.newFromPassphrase(passphrase: $0) }
             // Note: `enableRecovery` also handles the reset case (equivalent to `resetRecoveryKey`).
             // Despite the name, it is the correct call for both initial setup and key rotation.
-            let recoveryKey = try await encryption.enableRecovery(waitForBackupsToUpload: false, passphrase: passphrase, progressListener: SDKListener.onMainActor { [weak self] state in
+            let recoveryKey = try await encryption.enableRecovery(waitForBackupsToUpload: false, key: passphraseKey, progressListener: SDKListener.onMainActor { [weak self] state in
                 guard let self else { return }
                 
                 switch state {
