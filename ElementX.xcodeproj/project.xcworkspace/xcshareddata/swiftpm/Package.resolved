@@ -1,5 +1,5 @@
 {
-  "originHash" : "6274488ec4556c6be8747a4a936e5fabe43434b6b920600604663d500316164a",
+  "originHash" : "5cf2edde36bcbedfc060297e3747bd45bb605a2118a4c8bf235a2342f48c129b",
   "pins" : [
     {
       "identity" : "compound-design-tokens",
@@ -104,8 +104,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/onevcat/Kingfisher",
       "state" : {
-        "revision" : "8648fe649c5d62be38721110f835821906e9242a",
-        "version" : "8.13.0"
+        "revision" : "3feb743b5c92c2b443614d10a00e605212a2b4b1",
+        "version" : "8.14.0"
       }
     },
     {
@@ -140,8 +140,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/guoyingtao/Mantis",
       "state" : {
-        "revision" : "0960be1feed2e62f62a5fddbb8d72b26008db881",
-        "version" : "3.1.0"
+        "revision" : "89764f30f1b39693f4671731cb3c981a6cf4bf42",
+        "version" : "3.1.1"
       }
     },
     {
@@ -212,8 +212,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/PostHog/posthog-ios",
       "state" : {
-        "revision" : "d97d9a0babda42ecee026bd0a5a9ea1756349dc1",
-        "version" : "3.85.3"
+        "revision" : "252a24f3d5b34d09eccc1f8b3afe3ea0504264aa",
+        "version" : "3.92.6"
       }
     },
     {
@@ -221,8 +221,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getsentry/sentry-apple-binaries",
       "state" : {
-        "revision" : "e53e275024bb26ce86651ded70897680f3ab5c24",
-        "version" : "9.29.2"
+        "revision" : "9a3f411fdbf069903a9fed21290373a2964257ac",
+        "version" : "9.31.0"
       }
     },
     {
@@ -248,8 +248,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-async-algorithms",
       "state" : {
-        "revision" : "789dcf1f3d3f00251482f40a432ab7144c181987",
-        "version" : "1.1.6"
+        "revision" : "13713a4ffdee8abd929f92568ee9462a46ae26e0",
+        "version" : "1.1.7"
       }
     },
     {
@@ -257,8 +257,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-collections",
       "state" : {
-        "revision" : "98ef3c98609a1e31b7e157b5b619579001a789d6",
-        "version" : "1.7.1"
+        "revision" : "f96b909e1a9e469620bc5037c1e24e00153f376f",
+        "version" : "1.7.5"
       }
     },
     {
@@ -311,8 +311,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/scinfu/SwiftSoup.git",
       "state" : {
-        "revision" : "18b80329749eca5ea29fc50211dca5c7eff5bfec",
-        "version" : "2.13.9"
+        "revision" : "e7f85f4d3dd91ca9a1e94d3328aa1ed5120a8c0f",
+        "version" : "2.14.3"
       }
     },
     {
@@ -329,8 +329,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/tevelee/SwiftUI-Flow.git",
       "state" : {
-        "revision" : "19e86b750b3c67260cbb28c459004c0dfdb11899",
-        "version" : "3.5.1"
+        "revision" : "196e7256758333914eb2313e349032fcd057ba6e",
+        "version" : "3.5.5"
       }
     },
     {

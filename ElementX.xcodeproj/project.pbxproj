@@ -11146,7 +11146,7 @@
 			repositoryURL = "https://github.com/apple/swift-async-algorithms";
 			requirement = {
 				kind = exactVersion;
-				version = 1.1.6;
+				version = 1.1.7;
 			};
 		};
 		4BDA7F6042968E8422470F3F /* XCRemoteSwiftPackageReference "LoremSwiftum" */ = {
@@ -11210,7 +11210,7 @@
 			repositoryURL = "https://github.com/guoyingtao/Mantis";
 			requirement = {
 				kind = exactVersion;
-				version = 3.1.0;
+				version = 3.1.1;
 			};
 		};
 		78A200F617ACBF1000AA17D4 /* XCRemoteSwiftPackageReference "sentry-apple-binaries" */ = {
@@ -11218,7 +11218,7 @@
 			repositoryURL = "https://github.com/getsentry/sentry-apple-binaries";
 			requirement = {
 				kind = exactVersion;
-				version = 9.29.2;
+				version = 9.31.0;
 			};
 		};
 		8213398B60F9B660D9216ADF /* XCRemoteSwiftPackageReference "element-call-swift" */ = {
@@ -11242,7 +11242,7 @@
 			repositoryURL = "https://github.com/PostHog/posthog-ios";
 			requirement = {
 				kind = exactVersion;
-				version = 3.85.3;
+				version = 3.92.6;
 			};
 		};
 		AB8E808A59756170682BEC20 /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
@@ -11250,7 +11250,7 @@
 			repositoryURL = "https://github.com/scinfu/SwiftSoup.git";
 			requirement = {
 				kind = exactVersion;
-				version = 2.13.9;
+				version = 2.14.3;
 			};
 		};
 		AC3475112CA40C2C6E78D1EB /* XCRemoteSwiftPackageReference "matrix-analytics-events" */ = {
@@ -11274,7 +11274,7 @@
 			repositoryURL = "https://github.com/onevcat/Kingfisher";
 			requirement = {
 				kind = exactVersion;
-				version = 8.13.0;
+				version = 8.14.0;
 			};
 		};
 		D5F7D47BBAAE0CF1DDEB3034 /* XCRemoteSwiftPackageReference "DeviceKit" */ = {
@@ -11314,7 +11314,7 @@
 			repositoryURL = "https://github.com/tevelee/SwiftUI-Flow.git";
 			requirement = {
 				kind = exactVersion;
-				version = 3.5.1;
+				version = 3.5.5;
 			};
 		};
 		EC6D0C817B1C21D9D096505A /* XCRemoteSwiftPackageReference "Version" */ = {
@@ -11338,7 +11338,7 @@
 			repositoryURL = "https://github.com/apple/swift-collections";
 			requirement = {
 				kind = exactVersion;
-				version = 1.7.1;
+				version = 1.7.5;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
