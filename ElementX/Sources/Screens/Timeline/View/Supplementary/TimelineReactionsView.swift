@@ -44,7 +44,7 @@ struct TimelineReactionsView: View {
     var body: some View {
         layout {
             ForEach(reactions) { reaction in
-                TimelineReactionButton(reaction: reaction) { key in
+                TimelineReactionButton(reaction: reaction, mediaProvider: context.mediaProvider) { key in
                     feedbackGenerator.impactOccurred()
                     context.send(viewAction: .toggleReaction(key: key, itemID: itemID))
                 } showReactionSummary: { key in
@@ -170,6 +170,7 @@ struct TimelineCollapseButtonLabel: View {
 
 struct TimelineReactionButton: View {
     let reaction: AggregatedReaction
+    let mediaProvider: MediaProviderProtocol?
     let toggleReaction: (String) -> Void
     let showReactionSummary: (String) -> Void
     @ScaledMetric(relativeTo: .subheadline) private var lineHeight = 20
@@ -207,7 +208,7 @@ struct TimelineReactionButton: View {
                 // Designs have bodyMD for the key but practically this makes
                 // emojis too big. bodySM gives a more appropriate size when compared
                 // to the count text and the lineHeight/padding in the designs.
-                Text(reaction.displayKey)
+                ReactionKeyView(reaction: reaction, mediaProvider: mediaProvider, size: lineHeight)
                     .font(.compound.bodySM)
                 if reaction.count > 1 {
                     Text(String(reaction.count))
@@ -223,6 +224,27 @@ struct TimelineReactionButton: View {
     
     var textColor: Color {
         reaction.isHighlighted ? Color.compound.textPrimary : .compound.textSecondary
+    }
+}
+
+/// Shows a reaction's key, or its custom image when the key is an `mxc://` URI.
+struct ReactionKeyView: View {
+    let reaction: AggregatedReaction
+    let mediaProvider: MediaProviderProtocol?
+    let size: CGFloat
+    
+    var body: some View {
+        // Reaction keys carry no mimetype, so always hint `image/gif` to take LoadableImage's animated path. Kingfisher sniffs the actual format, so static images still render (full size, no thumbnail).
+        if let imageURL = reaction.imageURL, let mediaSource = try? MediaSourceProxy(url: imageURL, mimeType: "image/gif") {
+            LoadableImage(mediaSource: mediaSource,
+                          size: CGSize(width: size, height: size),
+                          mediaProvider: mediaProvider,
+                          transformer: { $0.scaledToFit() },
+                          placeholder: { Color.clear })
+                .frame(width: size, height: size)
+        } else {
+            Text(reaction.displayKey)
+        }
     }
 }
 

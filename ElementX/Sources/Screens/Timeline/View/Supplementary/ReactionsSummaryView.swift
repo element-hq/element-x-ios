@@ -33,7 +33,7 @@ struct ReactionsSummaryView: View {
             ScrollViewReader { scrollView in
                 HStack(spacing: 8) {
                     ForEach(reactions) { reaction in
-                        ReactionSummaryButton(reaction: reaction, highlighted: selectedReactionKey == reaction.key) { key in
+                        ReactionSummaryButton(reaction: reaction, highlighted: selectedReactionKey == reaction.key, mediaProvider: mediaProvider) { key in
                             selectedReactionKey = key
                         }
                     }
@@ -72,7 +72,9 @@ struct ReactionsSummaryView: View {
 private struct ReactionSummaryButton: View {
     let reaction: AggregatedReaction
     let highlighted: Bool
+    let mediaProvider: MediaProviderProtocol?
     let action: (String) -> Void
+    @ScaledMetric(relativeTo: .headline) private var imageSize = 22
     
     var body: some View {
         Button { action(reaction.key) } label: { label }
@@ -80,7 +82,7 @@ private struct ReactionSummaryButton: View {
     
     var label: some View {
         HStack(spacing: 4) {
-            Text(reaction.displayKey)
+            ReactionKeyView(reaction: reaction, mediaProvider: mediaProvider, size: imageSize)
                 .font(.compound.headingSM)
                 .foregroundColor(textColor)
             if reaction.count > 1 {
