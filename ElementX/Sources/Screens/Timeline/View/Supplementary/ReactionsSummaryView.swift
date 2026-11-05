@@ -74,7 +74,7 @@ private struct ReactionSummaryButton: View {
     let highlighted: Bool
     let mediaProvider: MediaProviderProtocol?
     let action: (String) -> Void
-    @ScaledMetric(relativeTo: .headline) private var imageSize = 22
+    @ScaledMetric(relativeTo: .compound.headingSM) private var imageSize = 22
     
     var body: some View {
         Button { action(reaction.key) } label: { label }
