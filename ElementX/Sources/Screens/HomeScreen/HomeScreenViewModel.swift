@@ -128,9 +128,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         // The main room list is filtered and paginated so the invites are counted from the static one.
         userSession.clientProxy.staticRoomSummaryProvider.roomListPublisher
-            .combineLatest(userSettings.account.seenInvitesPublisher)
+            .combineLatest(userSettings.account.seenInvitesPublisher, userSettings.app.prominentInvitesFilterEnabledPublisher)
             .receive(on: DispatchQueue.main)
-            .map { rooms, seenInvites -> (count: Int, hasUnseen: Bool) in
+            .map { rooms, seenInvites, isEnabled -> (count: Int, hasUnseen: Bool) in
+                guard isEnabled else { return (count: 0, hasUnseen: false) }
                 let inviteIDs = rooms.filter { $0.joinRequestType?.isInvite == true }.map(\.id)
                 return (count: inviteIDs.count, hasUnseen: inviteIDs.contains { !seenInvites.contains($0) })
             }
