@@ -13,6 +13,8 @@ enum SettingsFlowCoordinatorAction {
     case dismiss
     case clearCache
     case runLogoutFlow
+    /// Logout without a confirmation. The account was deactivated.
+    case accountDeactivated
     /// Logout without a confirmation. The user forgot their PIN.
     case forceLogout
 }
@@ -343,7 +345,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                 
                 switch action {
                 case .accountDeactivated:
-                    actionsSubject.send(.forceLogout)
+                    actionsSubject.send(.accountDeactivated)
                 }
             }
             .store(in: &cancellables)

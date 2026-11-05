@@ -894,6 +894,8 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
             case .clearCache(let continuation):
                 clearCacheContinuation = continuation
                 stateMachine.processEvent(.clearCache)
+            case .accountDeactivated:
+                stateMachine.processEvent(.signOut(disableAppLock: false))
             case .forceLogout:
                 stateMachine.processEvent(.signOut(disableAppLock: true))
             }

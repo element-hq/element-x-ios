@@ -16,6 +16,8 @@ import SwiftUI
 enum UserSessionFlowCoordinatorAction {
     case logout
     case clearCache
+    /// Logout without any confirmation. The account was deactivated.
+    case accountDeactivated
     /// Logout and disable App Lock without any confirmation. The user forgot their PIN.
     case forceLogout
 }
@@ -392,6 +394,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     try? await Task.sleep(for: .milliseconds(100))
                     await self.runLogoutFlow()
                 }
+            case .accountDeactivated:
+                actionsSubject.send(.accountDeactivated)
             case .forceLogout:
                 actionsSubject.send(.forceLogout)
             }
