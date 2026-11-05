@@ -48,6 +48,11 @@ nonisolated extension AggregatedReaction {
     
     /// The key to be displayed on screen. See `maxDisplayChars`.
     var displayKey: String {
-        key.ellipsize(length: Self.maxDisplayChars)
+        imageURL == nil ? key.ellipsize(length: Self.maxDisplayChars) : L10n.commonReaction
+    }
+    
+    /// The custom image to display instead of the key, when the key is an `mxc://` URI (MSC4027).
+    var imageURL: URL? {
+        key.hasPrefix("mxc://") ? URL(string: key) : nil
     }
 }
