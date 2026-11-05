@@ -93,12 +93,13 @@ private struct ReactionSummaryButton: View {
         }
         .padding(.vertical, 8)
         .padding(.horizontal, 12)
-        .background(highlighted ? Color.compound.bgActionPrimaryRest : .clear, in: Capsule())
+        .background(highlighted ? Color.compound.bgSubtlePrimary : .clear, in: Capsule(style: .circular))
+        .overlay(Capsule(style: .circular).strokeBorder(highlighted ? Color.compound.borderInteractivePrimary : .clear))
         .accessibilityElement(children: .combine)
     }
     
     var textColor: Color {
-        highlighted ? Color.compound.textOnSolidPrimary : Color.compound.textSecondary
+        highlighted ? Color.compound.textPrimary : Color.compound.textSecondary
     }
 }
 
