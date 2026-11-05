@@ -15665,6 +15665,37 @@ nonisolated class UserSessionManagerMock: UserSessionManagerProtocol, @unchecked
         addReceivedInvocationsLock.withLock { addUnderlyingReceivedInvocations.append(userSession) }
         addClosure?(userSession)
     }
+    //MARK: - logout
+
+    private let logoutUserIDCallsCountLock = NSLock()
+    private nonisolated(unsafe) var logoutUserIDUnderlyingCallsCount = 0
+    var logoutUserIDCallsCount: Int {
+        get { logoutUserIDCallsCountLock.withLock { logoutUserIDUnderlyingCallsCount } }
+        set { logoutUserIDCallsCountLock.withLock { logoutUserIDUnderlyingCallsCount = newValue } }
+    }
+    var logoutUserIDCalled: Bool {
+        return logoutUserIDCallsCount > 0
+    }
+    private let logoutUserIDReceivedUserIDLock = NSLock()
+    private nonisolated(unsafe) var logoutUserIDUnderlyingReceivedUserID: String?
+    var logoutUserIDReceivedUserID: String? {
+        get { logoutUserIDReceivedUserIDLock.withLock { logoutUserIDUnderlyingReceivedUserID } }
+        set { logoutUserIDReceivedUserIDLock.withLock { logoutUserIDUnderlyingReceivedUserID = newValue } }
+    }
+    private let logoutUserIDReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var logoutUserIDUnderlyingReceivedInvocations: [String] = []
+    var logoutUserIDReceivedInvocations: [String] {
+        get { logoutUserIDReceivedInvocationsLock.withLock { logoutUserIDUnderlyingReceivedInvocations } }
+        set { logoutUserIDReceivedInvocationsLock.withLock { logoutUserIDUnderlyingReceivedInvocations = newValue } }
+    }
+    nonisolated(unsafe) var logoutUserIDClosure: ((String) async -> Void)?
+
+    @concurrent func logout(userID: String) async {
+        logoutUserIDCallsCountLock.withLock { logoutUserIDUnderlyingCallsCount += 1 }
+        logoutUserIDReceivedUserID = userID
+        logoutUserIDReceivedInvocationsLock.withLock { logoutUserIDUnderlyingReceivedInvocations.append(userID) }
+        await logoutUserIDClosure?(userID)
+    }
     //MARK: - remove
 
     private let removeUserIDCallsCountLock = NSLock()

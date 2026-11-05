@@ -26,6 +26,8 @@ final class UserSessionManager: UserSessionManagerProtocol {
     private var areServicesRunning = false
     /// Accounts whose caches were cleared. Their old session stays live until restoring replaces it.
     private var clearedUserIDs: Set<String> = []
+    /// Accounts that are logging out, so that their teardown only runs once.
+    private var loggingOutUserIDs: Set<String> = []
     
     /// Every signed in account, most recently selected first, with its session once it's live.
     /// Assigning `nil` removes an account rather than clearing its session.
@@ -152,6 +154,27 @@ final class UserSessionManager: UserSessionManagerProtocol {
         notificationManager.add(userSession.notificationService)
         liveLocationManager.add(userSession.liveLocationService)
         elementCallManager.add(userSession.elementCallService)
+    }
+    
+    func logout(userID: String) async {
+        guard let userSession = session(for: userID) else {
+            MXLog.error("Tried to log out \(userID), which doesn't have a live session.")
+            return
+        }
+        guard loggingOutUserIDs.insert(userID).inserted else { return }
+        defer { loggingOutUserIDs.remove(userID) }
+        
+        await userSession.clientProxy.pauseServices()
+        
+        // Delete the pusher and stop the live location shares while the session can still reach the server.
+        await userSession.notificationService.tearDown()
+        await userSession.liveLocationService.stopAllLiveLocations()
+        
+        await userSession.clientProxy.logout()
+        
+        // Remove the user, clearing user data.
+        remove(userID: userID)
+        userSession.userSettings.account.reset()
     }
     
     func remove(userID: String) {
