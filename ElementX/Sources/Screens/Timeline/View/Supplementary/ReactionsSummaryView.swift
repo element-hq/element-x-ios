@@ -85,11 +85,9 @@ private struct ReactionSummaryButton: View {
             ReactionKeyView(reaction: reaction, mediaProvider: mediaProvider, size: imageSize)
                 .font(.compound.headingSM)
                 .foregroundColor(textColor)
-            if reaction.count > 1 {
-                Text(String(reaction.count))
-                    .font(.compound.headingSM)
-                    .foregroundColor(textColor)
-            }
+            Text(String(reaction.count))
+                .font(.compound.headingSM)
+                .foregroundColor(textColor)
         }
         .padding(.vertical, 8)
         .padding(.horizontal, 12)

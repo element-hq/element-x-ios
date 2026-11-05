@@ -210,11 +210,9 @@ struct TimelineReactionButton: View {
                 // to the count text and the lineHeight/padding in the designs.
                 ReactionKeyView(reaction: reaction, mediaProvider: mediaProvider, size: lineHeight)
                     .font(.compound.bodySM)
-                if reaction.count > 1 {
-                    Text(String(reaction.count))
-                        .font(.compound.bodyMD)
-                        .foregroundColor(textColor)
-                }
+                Text(String(reaction.count))
+                    .font(.compound.bodyMD)
+                    .foregroundColor(textColor)
             }
             .frame(height: lineHeight, alignment: .center)
             .padding(.vertical, 6)
