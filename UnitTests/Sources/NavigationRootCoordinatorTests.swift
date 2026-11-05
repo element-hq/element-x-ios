@@ -18,7 +18,7 @@ struct NavigationRootCoordinatorTests {
         navigationRootCoordinator = NavigationRootCoordinator()
     }
     
-    @Test
+    @Test("Setting a root replaces the previous one")
     func rootChanges() {
         #expect(navigationRootCoordinator.rootCoordinator == nil)
         
@@ -33,9 +33,43 @@ struct NavigationRootCoordinatorTests {
         assertCoordinatorsEqual(secondRootCoordinator, navigationRootCoordinator.rootCoordinator)
     }
     
+    @Test("The overlay sits above the root and stays across presentation mode changes")
+    func overlay() {
+        let rootCoordinator = SomeTestCoordinator()
+        navigationRootCoordinator.setRootCoordinator(rootCoordinator)
+        
+        let overlayCoordinator = SomeTestCoordinator()
+        navigationRootCoordinator.setOverlayCoordinator(overlayCoordinator)
+        
+        assertCoordinatorsEqual(rootCoordinator, navigationRootCoordinator.rootCoordinator)
+        assertCoordinatorsEqual(overlayCoordinator, navigationRootCoordinator.overlayCoordinator)
+        
+        // The coordinator should still be retained when changing the presentation mode.
+        navigationRootCoordinator.setOverlayPresentationMode(.minimized)
+        assertCoordinatorsEqual(overlayCoordinator, navigationRootCoordinator.overlayCoordinator)
+        navigationRootCoordinator.setOverlayPresentationMode(.fullScreen)
+        assertCoordinatorsEqual(overlayCoordinator, navigationRootCoordinator.overlayCoordinator)
+        
+        navigationRootCoordinator.setOverlayCoordinator(nil)
+        
+        assertCoordinatorsEqual(rootCoordinator, navigationRootCoordinator.rootCoordinator)
+        #expect(navigationRootCoordinator.overlayCoordinator == nil)
+    }
+    
+    @Test("Changing the root keeps the overlay")
+    func overlaySurvivesRootChanges() async {
+        let overlayCoordinator = SomeTestCoordinator()
+        await waitForConfirmation("Changing the root must not tear the overlay down", expectedCount: 0, timeout: .seconds(1)) { confirmation in
+            navigationRootCoordinator.setOverlayCoordinator(overlayCoordinator) { confirmation() }
+            navigationRootCoordinator.setRootCoordinator(SomeTestCoordinator())
+            navigationRootCoordinator.setRootCoordinator(nil)
+        }
+        assertCoordinatorsEqual(overlayCoordinator, navigationRootCoordinator.overlayCoordinator)
+    }
+    
     // MARK: - Dismissal Callbacks
     
-    @Test
+    @Test("Replacing the root runs its dismissal callback")
     func replacementDismissalCallbacks() async {
         #expect(navigationRootCoordinator.rootCoordinator == nil)
         
@@ -48,6 +82,53 @@ struct NavigationRootCoordinatorTests {
             
             navigationRootCoordinator.setRootCoordinator(nil)
         }
+    }
+    
+    @Test("Removing the overlay runs its dismissal callback")
+    func overlayDismissalCallback() async {
+        let overlayCoordinator = SomeTestCoordinator()
+        
+        await confirmation("Wait for callback") { confirm in
+            navigationRootCoordinator.setOverlayCoordinator(overlayCoordinator) {
+                confirm()
+            }
+            
+            navigationRootCoordinator.setOverlayCoordinator(nil)
+        }
+    }
+    
+    @Test("Changing the overlay's presentation mode doesn't run its dismissal callback")
+    func overlayDismissalCallbackWhenChangingMode() async {
+        let overlayCoordinator = SomeTestCoordinator()
+        
+        await waitForConfirmation("Callback should not be called when just changing mode",
+                                  expectedCount: 0,
+                                  timeout: .seconds(1)) { confirmation in
+            navigationRootCoordinator.setOverlayCoordinator(overlayCoordinator) {
+                confirmation()
+            }
+            
+            navigationRootCoordinator.setOverlayPresentationMode(.minimized)
+        }
+    }
+    
+    // MARK: - Stopping
+    
+    @Test("Stopping tears down the root and everything presented over it")
+    func stop() {
+        let rootCoordinator = StopTrackingCoordinator()
+        let sheetCoordinator = StopTrackingCoordinator()
+        let overlayCoordinator = StopTrackingCoordinator()
+        
+        navigationRootCoordinator.setRootCoordinator(rootCoordinator)
+        navigationRootCoordinator.setSheetCoordinator(sheetCoordinator)
+        navigationRootCoordinator.setOverlayCoordinator(overlayCoordinator)
+        
+        navigationRootCoordinator.stop()
+        
+        #expect(rootCoordinator.didStop)
+        #expect(sheetCoordinator.didStop)
+        #expect(overlayCoordinator.didStop)
     }
     
     // MARK: - Private
@@ -65,4 +146,12 @@ struct NavigationRootCoordinatorTests {
 
 private class SomeTestCoordinator: CoordinatorProtocol {
     let id = UUID()
+}
+
+private class StopTrackingCoordinator: CoordinatorProtocol {
+    private(set) var didStop = false
+    
+    func stop() {
+        didStop = true
+    }
 }
