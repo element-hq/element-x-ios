@@ -15,7 +15,6 @@ import Sentry
 import SwiftUI
 import Version
 
-// swiftlint:disable:next type_body_length
 class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, SecureWindowManagerDelegate {
     private let stateMachine: AppCoordinatorStateMachine
     private let navigationRootCoordinator: NavigationRootCoordinator
@@ -772,21 +771,13 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
         
         showLoadingIndicator()
         
-        Task { await pauseClientServices(isBackgroundTask: false) }
+        clientProxyObserver = nil
         
         // Show authentication before the session goes, under the loading indicator.
         startAuthentication()
         
         Task {
-            // Delete the pusher and stop the live location shares while the session can still reach the server.
-            await userSession.notificationService.tearDown()
-            await userSession.liveLocationService.stopAllLiveLocations()
-            
-            // First log out from the server
-            await userSession.clientProxy.logout()
-            
-            // Regardless of the result, clear user data
-            userSessionManager.remove(userID: userSession.clientProxy.userID)
+            await userSessionManager.logout(userID: userSession.clientProxy.userID)
             tearDownUserSession()
             
             // Signed in accounts that aren't live yet still count.
@@ -794,7 +785,6 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
                 notificationManager.reset()
             }
             
-            userSession.userSettings.account.reset()
             appHooks.remoteSettingsHook.reset(appSettings)
             
             // Reset analytics
