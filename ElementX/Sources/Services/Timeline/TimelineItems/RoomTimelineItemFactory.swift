@@ -593,7 +593,7 @@ nonisolated struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         switch encryptedMessage {
         case .megolmV1AesSha2(let sessionID, let cause):
             switch cause {
-            case .unknown:
+            case .unknown, .malformed: // TBC: Should we treat .malformed differently?
                 encryptionType = .megolmV1AesSha2(sessionID: sessionID, cause: .unknown)
                 errorLabel = L10n.commonWaitingForDecryptionKey
             case .verificationViolation:

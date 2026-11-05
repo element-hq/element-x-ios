@@ -329,7 +329,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         
         do {
             // Then we update members using the sync API, this is slower but will get us the latest members
-            let membersIterator = try await room.members()
+            let membersIterator = try await room.membersFetchingGlobalProfiles()
             if let members = membersIterator.nextChunk(chunkSize: membersIterator.len()) {
                 membersSubject.value = members.map(RoomMemberProxy.init)
             }

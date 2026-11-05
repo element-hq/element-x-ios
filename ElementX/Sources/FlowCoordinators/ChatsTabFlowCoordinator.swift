@@ -358,6 +358,7 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
         case .historicalMessageAndBackupIsDisabled, .historicalMessageAndDeviceIsUnverified: .HistoricalMessage
         case .withheldForUnverifiedOrInsecureDevice: .RoomKeysWithheldForUnverifiedDevice
         case .withheldBySender: .OlmKeysNotSentError
+        case .malformed: .UnknownError // TBC: Should we add an error for this?
         }
         
         flowParameters.analytics.trackError(context: nil,

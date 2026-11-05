@@ -1042,6 +1042,39 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         }
     }
 
+    //MARK: - getInvitePermission
+
+    open var getInvitePermissionThrowableError: Error?
+    private let getInvitePermissionCallsCountLock = NSLock()
+    private var getInvitePermissionUnderlyingCallsCount = 0
+    open var getInvitePermissionCallsCount: Int {
+        get { getInvitePermissionCallsCountLock.withLock { getInvitePermissionUnderlyingCallsCount } }
+        set { getInvitePermissionCallsCountLock.withLock { getInvitePermissionUnderlyingCallsCount = newValue } }
+    }
+    open var getInvitePermissionCalled: Bool {
+        return getInvitePermissionCallsCount > 0
+    }
+
+    private let getInvitePermissionReturnValueLock = NSLock()
+    open var getInvitePermissionUnderlyingReturnValue: InvitePermissionState!
+    open var getInvitePermissionReturnValue: InvitePermissionState! {
+        get { getInvitePermissionReturnValueLock.withLock { getInvitePermissionUnderlyingReturnValue } }
+        set { getInvitePermissionReturnValueLock.withLock { getInvitePermissionUnderlyingReturnValue = newValue } }
+    }
+    open var getInvitePermissionClosure: (() async throws -> InvitePermissionState)?
+
+    open override func getInvitePermission() async throws -> InvitePermissionState {
+        if let error = getInvitePermissionThrowableError {
+            throw error
+        }
+        getInvitePermissionCallsCountLock.withLock { getInvitePermissionUnderlyingCallsCount += 1 }
+        if let getInvitePermissionClosure = getInvitePermissionClosure {
+            return try await getInvitePermissionClosure()
+        } else {
+            return getInvitePermissionReturnValue
+        }
+    }
+
     //MARK: - getMaxMediaUploadSize
 
     open var getMaxMediaUploadSizeThrowableError: Error?
@@ -3575,6 +3608,42 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         try await setInviteAvatarsDisplayPolicyPolicyClosure?(policy)
     }
 
+    //MARK: - setInvitePermission
+
+    open var setInvitePermissionActionThrowableError: Error?
+    private let setInvitePermissionActionCallsCountLock = NSLock()
+    private var setInvitePermissionActionUnderlyingCallsCount = 0
+    open var setInvitePermissionActionCallsCount: Int {
+        get { setInvitePermissionActionCallsCountLock.withLock { setInvitePermissionActionUnderlyingCallsCount } }
+        set { setInvitePermissionActionCallsCountLock.withLock { setInvitePermissionActionUnderlyingCallsCount = newValue } }
+    }
+    open var setInvitePermissionActionCalled: Bool {
+        return setInvitePermissionActionCallsCount > 0
+    }
+    private let setInvitePermissionActionReceivedActionLock = NSLock()
+    private var setInvitePermissionActionUnderlyingReceivedAction: InvitePermissionAction?
+    open var setInvitePermissionActionReceivedAction: InvitePermissionAction? {
+        get { setInvitePermissionActionReceivedActionLock.withLock { setInvitePermissionActionUnderlyingReceivedAction } }
+        set { setInvitePermissionActionReceivedActionLock.withLock { setInvitePermissionActionUnderlyingReceivedAction = newValue } }
+    }
+    private let setInvitePermissionActionReceivedInvocationsLock = NSLock()
+    private var setInvitePermissionActionUnderlyingReceivedInvocations: [InvitePermissionAction] = []
+    open var setInvitePermissionActionReceivedInvocations: [InvitePermissionAction] {
+        get { setInvitePermissionActionReceivedInvocationsLock.withLock { setInvitePermissionActionUnderlyingReceivedInvocations } }
+        set { setInvitePermissionActionReceivedInvocationsLock.withLock { setInvitePermissionActionUnderlyingReceivedInvocations = newValue } }
+    }
+    open var setInvitePermissionActionClosure: ((InvitePermissionAction) async throws -> Void)?
+
+    open override func setInvitePermission(action: InvitePermissionAction) async throws {
+        if let error = setInvitePermissionActionThrowableError {
+            throw error
+        }
+        setInvitePermissionActionCallsCountLock.withLock { setInvitePermissionActionUnderlyingCallsCount += 1 }
+        setInvitePermissionActionReceivedAction = action
+        setInvitePermissionActionReceivedInvocationsLock.withLock { setInvitePermissionActionUnderlyingReceivedInvocations.append(action) }
+        try await setInvitePermissionActionClosure?(action)
+    }
+
     //MARK: - setMediaPreviewDisplayPolicy
 
     open var setMediaPreviewDisplayPolicyPolicyThrowableError: Error?
@@ -4022,6 +4091,53 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
             return subscribeToIgnoredUsersListenerClosure(listener)
         } else {
             return subscribeToIgnoredUsersListenerReturnValue
+        }
+    }
+
+    //MARK: - subscribeToInvitePermission
+
+    open var subscribeToInvitePermissionListenerThrowableError: Error?
+    private let subscribeToInvitePermissionListenerCallsCountLock = NSLock()
+    private var subscribeToInvitePermissionListenerUnderlyingCallsCount = 0
+    open var subscribeToInvitePermissionListenerCallsCount: Int {
+        get { subscribeToInvitePermissionListenerCallsCountLock.withLock { subscribeToInvitePermissionListenerUnderlyingCallsCount } }
+        set { subscribeToInvitePermissionListenerCallsCountLock.withLock { subscribeToInvitePermissionListenerUnderlyingCallsCount = newValue } }
+    }
+    open var subscribeToInvitePermissionListenerCalled: Bool {
+        return subscribeToInvitePermissionListenerCallsCount > 0
+    }
+    private let subscribeToInvitePermissionListenerReceivedListenerLock = NSLock()
+    private var subscribeToInvitePermissionListenerUnderlyingReceivedListener: InvitePermissionListener?
+    open var subscribeToInvitePermissionListenerReceivedListener: InvitePermissionListener? {
+        get { subscribeToInvitePermissionListenerReceivedListenerLock.withLock { subscribeToInvitePermissionListenerUnderlyingReceivedListener } }
+        set { subscribeToInvitePermissionListenerReceivedListenerLock.withLock { subscribeToInvitePermissionListenerUnderlyingReceivedListener = newValue } }
+    }
+    private let subscribeToInvitePermissionListenerReceivedInvocationsLock = NSLock()
+    private var subscribeToInvitePermissionListenerUnderlyingReceivedInvocations: [InvitePermissionListener] = []
+    open var subscribeToInvitePermissionListenerReceivedInvocations: [InvitePermissionListener] {
+        get { subscribeToInvitePermissionListenerReceivedInvocationsLock.withLock { subscribeToInvitePermissionListenerUnderlyingReceivedInvocations } }
+        set { subscribeToInvitePermissionListenerReceivedInvocationsLock.withLock { subscribeToInvitePermissionListenerUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let subscribeToInvitePermissionListenerReturnValueLock = NSLock()
+    open var subscribeToInvitePermissionListenerUnderlyingReturnValue: TaskHandle!
+    open var subscribeToInvitePermissionListenerReturnValue: TaskHandle! {
+        get { subscribeToInvitePermissionListenerReturnValueLock.withLock { subscribeToInvitePermissionListenerUnderlyingReturnValue } }
+        set { subscribeToInvitePermissionListenerReturnValueLock.withLock { subscribeToInvitePermissionListenerUnderlyingReturnValue = newValue } }
+    }
+    open var subscribeToInvitePermissionListenerClosure: ((InvitePermissionListener) async throws -> TaskHandle)?
+
+    open override func subscribeToInvitePermission(listener: InvitePermissionListener) async throws -> TaskHandle {
+        if let error = subscribeToInvitePermissionListenerThrowableError {
+            throw error
+        }
+        subscribeToInvitePermissionListenerCallsCountLock.withLock { subscribeToInvitePermissionListenerUnderlyingCallsCount += 1 }
+        subscribeToInvitePermissionListenerReceivedListener = listener
+        subscribeToInvitePermissionListenerReceivedInvocationsLock.withLock { subscribeToInvitePermissionListenerUnderlyingReceivedInvocations.append(listener) }
+        if let subscribeToInvitePermissionListenerClosure = subscribeToInvitePermissionListenerClosure {
+            return try await subscribeToInvitePermissionListenerClosure(listener)
+        } else {
+            return subscribeToInvitePermissionListenerReturnValue
         }
     }
 
@@ -6543,48 +6659,48 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
 
     //MARK: - enableRecovery
 
-    open var enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerThrowableError: Error?
-    private let enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerCallsCountLock = NSLock()
-    private var enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerUnderlyingCallsCount = 0
-    open var enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerCallsCount: Int {
-        get { enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerCallsCountLock.withLock { enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerUnderlyingCallsCount } }
-        set { enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerCallsCountLock.withLock { enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerUnderlyingCallsCount = newValue } }
+    open var enableRecoveryWaitForBackupsToUploadKeyProgressListenerThrowableError: Error?
+    private let enableRecoveryWaitForBackupsToUploadKeyProgressListenerCallsCountLock = NSLock()
+    private var enableRecoveryWaitForBackupsToUploadKeyProgressListenerUnderlyingCallsCount = 0
+    open var enableRecoveryWaitForBackupsToUploadKeyProgressListenerCallsCount: Int {
+        get { enableRecoveryWaitForBackupsToUploadKeyProgressListenerCallsCountLock.withLock { enableRecoveryWaitForBackupsToUploadKeyProgressListenerUnderlyingCallsCount } }
+        set { enableRecoveryWaitForBackupsToUploadKeyProgressListenerCallsCountLock.withLock { enableRecoveryWaitForBackupsToUploadKeyProgressListenerUnderlyingCallsCount = newValue } }
     }
-    open var enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerCalled: Bool {
-        return enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerCallsCount > 0
+    open var enableRecoveryWaitForBackupsToUploadKeyProgressListenerCalled: Bool {
+        return enableRecoveryWaitForBackupsToUploadKeyProgressListenerCallsCount > 0
     }
-    private let enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerReceivedArgumentsLock = NSLock()
-    private var enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerUnderlyingReceivedArguments: (waitForBackupsToUpload: Bool, passphrase: String?, progressListener: EnableRecoveryProgressListener)?
-    open var enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerReceivedArguments: (waitForBackupsToUpload: Bool, passphrase: String?, progressListener: EnableRecoveryProgressListener)? {
-        get { enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerReceivedArgumentsLock.withLock { enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerUnderlyingReceivedArguments } }
-        set { enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerReceivedArgumentsLock.withLock { enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerUnderlyingReceivedArguments = newValue } }
+    private let enableRecoveryWaitForBackupsToUploadKeyProgressListenerReceivedArgumentsLock = NSLock()
+    private var enableRecoveryWaitForBackupsToUploadKeyProgressListenerUnderlyingReceivedArguments: (waitForBackupsToUpload: Bool, key: SecretStorageKey?, progressListener: EnableRecoveryProgressListener)?
+    open var enableRecoveryWaitForBackupsToUploadKeyProgressListenerReceivedArguments: (waitForBackupsToUpload: Bool, key: SecretStorageKey?, progressListener: EnableRecoveryProgressListener)? {
+        get { enableRecoveryWaitForBackupsToUploadKeyProgressListenerReceivedArgumentsLock.withLock { enableRecoveryWaitForBackupsToUploadKeyProgressListenerUnderlyingReceivedArguments } }
+        set { enableRecoveryWaitForBackupsToUploadKeyProgressListenerReceivedArgumentsLock.withLock { enableRecoveryWaitForBackupsToUploadKeyProgressListenerUnderlyingReceivedArguments = newValue } }
     }
-    private let enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerReceivedInvocationsLock = NSLock()
-    private var enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerUnderlyingReceivedInvocations: [(waitForBackupsToUpload: Bool, passphrase: String?, progressListener: EnableRecoveryProgressListener)] = []
-    open var enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerReceivedInvocations: [(waitForBackupsToUpload: Bool, passphrase: String?, progressListener: EnableRecoveryProgressListener)] {
-        get { enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerReceivedInvocationsLock.withLock { enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerUnderlyingReceivedInvocations } }
-        set { enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerReceivedInvocationsLock.withLock { enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerUnderlyingReceivedInvocations = newValue } }
+    private let enableRecoveryWaitForBackupsToUploadKeyProgressListenerReceivedInvocationsLock = NSLock()
+    private var enableRecoveryWaitForBackupsToUploadKeyProgressListenerUnderlyingReceivedInvocations: [(waitForBackupsToUpload: Bool, key: SecretStorageKey?, progressListener: EnableRecoveryProgressListener)] = []
+    open var enableRecoveryWaitForBackupsToUploadKeyProgressListenerReceivedInvocations: [(waitForBackupsToUpload: Bool, key: SecretStorageKey?, progressListener: EnableRecoveryProgressListener)] {
+        get { enableRecoveryWaitForBackupsToUploadKeyProgressListenerReceivedInvocationsLock.withLock { enableRecoveryWaitForBackupsToUploadKeyProgressListenerUnderlyingReceivedInvocations } }
+        set { enableRecoveryWaitForBackupsToUploadKeyProgressListenerReceivedInvocationsLock.withLock { enableRecoveryWaitForBackupsToUploadKeyProgressListenerUnderlyingReceivedInvocations = newValue } }
     }
 
-    private let enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerReturnValueLock = NSLock()
-    open var enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerUnderlyingReturnValue: String!
-    open var enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerReturnValue: String! {
-        get { enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerReturnValueLock.withLock { enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerUnderlyingReturnValue } }
-        set { enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerReturnValueLock.withLock { enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerUnderlyingReturnValue = newValue } }
+    private let enableRecoveryWaitForBackupsToUploadKeyProgressListenerReturnValueLock = NSLock()
+    open var enableRecoveryWaitForBackupsToUploadKeyProgressListenerUnderlyingReturnValue: String!
+    open var enableRecoveryWaitForBackupsToUploadKeyProgressListenerReturnValue: String! {
+        get { enableRecoveryWaitForBackupsToUploadKeyProgressListenerReturnValueLock.withLock { enableRecoveryWaitForBackupsToUploadKeyProgressListenerUnderlyingReturnValue } }
+        set { enableRecoveryWaitForBackupsToUploadKeyProgressListenerReturnValueLock.withLock { enableRecoveryWaitForBackupsToUploadKeyProgressListenerUnderlyingReturnValue = newValue } }
     }
-    open var enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerClosure: ((Bool, String?, EnableRecoveryProgressListener) async throws -> String)?
+    open var enableRecoveryWaitForBackupsToUploadKeyProgressListenerClosure: ((Bool, SecretStorageKey?, EnableRecoveryProgressListener) async throws -> String)?
 
-    open override func enableRecovery(waitForBackupsToUpload: Bool, passphrase: String?, progressListener: EnableRecoveryProgressListener) async throws -> String {
-        if let error = enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerThrowableError {
+    open override func enableRecovery(waitForBackupsToUpload: Bool, key: SecretStorageKey?, progressListener: EnableRecoveryProgressListener) async throws -> String {
+        if let error = enableRecoveryWaitForBackupsToUploadKeyProgressListenerThrowableError {
             throw error
         }
-        enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerCallsCountLock.withLock { enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerUnderlyingCallsCount += 1 }
-        enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerReceivedArguments = (waitForBackupsToUpload: waitForBackupsToUpload, passphrase: passphrase, progressListener: progressListener)
-        enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerReceivedInvocationsLock.withLock { enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerUnderlyingReceivedInvocations.append((waitForBackupsToUpload: waitForBackupsToUpload, passphrase: passphrase, progressListener: progressListener)) }
-        if let enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerClosure = enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerClosure {
-            return try await enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerClosure(waitForBackupsToUpload, passphrase, progressListener)
+        enableRecoveryWaitForBackupsToUploadKeyProgressListenerCallsCountLock.withLock { enableRecoveryWaitForBackupsToUploadKeyProgressListenerUnderlyingCallsCount += 1 }
+        enableRecoveryWaitForBackupsToUploadKeyProgressListenerReceivedArguments = (waitForBackupsToUpload: waitForBackupsToUpload, key: key, progressListener: progressListener)
+        enableRecoveryWaitForBackupsToUploadKeyProgressListenerReceivedInvocationsLock.withLock { enableRecoveryWaitForBackupsToUploadKeyProgressListenerUnderlyingReceivedInvocations.append((waitForBackupsToUpload: waitForBackupsToUpload, key: key, progressListener: progressListener)) }
+        if let enableRecoveryWaitForBackupsToUploadKeyProgressListenerClosure = enableRecoveryWaitForBackupsToUploadKeyProgressListenerClosure {
+            return try await enableRecoveryWaitForBackupsToUploadKeyProgressListenerClosure(waitForBackupsToUpload, key, progressListener)
         } else {
-            return enableRecoveryWaitForBackupsToUploadPassphraseProgressListenerReturnValue
+            return enableRecoveryWaitForBackupsToUploadKeyProgressListenerReturnValue
         }
     }
 
@@ -11962,6 +12078,39 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         }
     }
 
+    //MARK: - membersFetchingGlobalProfiles
+
+    open var membersFetchingGlobalProfilesThrowableError: Error?
+    private let membersFetchingGlobalProfilesCallsCountLock = NSLock()
+    private var membersFetchingGlobalProfilesUnderlyingCallsCount = 0
+    open var membersFetchingGlobalProfilesCallsCount: Int {
+        get { membersFetchingGlobalProfilesCallsCountLock.withLock { membersFetchingGlobalProfilesUnderlyingCallsCount } }
+        set { membersFetchingGlobalProfilesCallsCountLock.withLock { membersFetchingGlobalProfilesUnderlyingCallsCount = newValue } }
+    }
+    open var membersFetchingGlobalProfilesCalled: Bool {
+        return membersFetchingGlobalProfilesCallsCount > 0
+    }
+
+    private let membersFetchingGlobalProfilesReturnValueLock = NSLock()
+    open var membersFetchingGlobalProfilesUnderlyingReturnValue: RoomMembersIterator!
+    open var membersFetchingGlobalProfilesReturnValue: RoomMembersIterator! {
+        get { membersFetchingGlobalProfilesReturnValueLock.withLock { membersFetchingGlobalProfilesUnderlyingReturnValue } }
+        set { membersFetchingGlobalProfilesReturnValueLock.withLock { membersFetchingGlobalProfilesUnderlyingReturnValue = newValue } }
+    }
+    open var membersFetchingGlobalProfilesClosure: (() async throws -> RoomMembersIterator)?
+
+    open override func membersFetchingGlobalProfiles() async throws -> RoomMembersIterator {
+        if let error = membersFetchingGlobalProfilesThrowableError {
+            throw error
+        }
+        membersFetchingGlobalProfilesCallsCountLock.withLock { membersFetchingGlobalProfilesUnderlyingCallsCount += 1 }
+        if let membersFetchingGlobalProfilesClosure = membersFetchingGlobalProfilesClosure {
+            return try await membersFetchingGlobalProfilesClosure()
+        } else {
+            return membersFetchingGlobalProfilesReturnValue
+        }
+    }
+
     //MARK: - membersNoSync
 
     open var membersNoSyncThrowableError: Error?
@@ -16115,6 +16264,53 @@ open class SearchServiceSDKMock: MatrixRustSDK.SearchService, @unchecked Sendabl
             return await subscribeToResultsListenerClosure(listener)
         } else {
             return subscribeToResultsListenerReturnValue
+        }
+    }
+}
+open class SecretStorageKeySDKMock: MatrixRustSDK.SecretStorageKey, @unchecked Sendable {
+    public init() {
+        super.init(noHandle: .init())
+    }
+
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
+    }
+
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
+    static func reset()
+    {
+    }
+
+    //MARK: - toBase58
+
+    private let toBase58CallsCountLock = NSLock()
+    private var toBase58UnderlyingCallsCount = 0
+    open var toBase58CallsCount: Int {
+        get { toBase58CallsCountLock.withLock { toBase58UnderlyingCallsCount } }
+        set { toBase58CallsCountLock.withLock { toBase58UnderlyingCallsCount = newValue } }
+    }
+    open var toBase58Called: Bool {
+        return toBase58CallsCount > 0
+    }
+
+    private let toBase58ReturnValueLock = NSLock()
+    open var toBase58UnderlyingReturnValue: String!
+    open var toBase58ReturnValue: String! {
+        get { toBase58ReturnValueLock.withLock { toBase58UnderlyingReturnValue } }
+        set { toBase58ReturnValueLock.withLock { toBase58UnderlyingReturnValue = newValue } }
+    }
+    open var toBase58Closure: (() -> String)?
+
+    open override func toBase58() -> String {
+        toBase58CallsCountLock.withLock { toBase58UnderlyingCallsCount += 1 }
+        if let toBase58Closure = toBase58Closure {
+            return toBase58Closure()
+        } else {
+            return toBase58ReturnValue
         }
     }
 }
