@@ -22,6 +22,8 @@ final class UserSessionManager: UserSessionManagerProtocol {
     private let elementCallManager: ElementCallManagerProtocol
     
     private let sessionsSubject = CurrentValueSubject<[UserSessionProtocol], Never>([])
+    private let callbacksSubject = PassthroughSubject<UserSessionManagerCallback, Never>()
+    private var authErrorsCancellable: AnyCancellable?
     /// Whether the services are running, so that the sessions restored meanwhile are resumed too.
     private var areServicesRunning = false
     /// Accounts whose caches were cleared. Their old session stays live until restoring replaces it.
@@ -48,20 +50,7 @@ final class UserSessionManager: UserSessionManagerProtocol {
     }
     
     var callbacksPublisher: AnyPublisher<UserSessionManagerCallback, Never> {
-        sessionsSubject
-            .map { userSessions in
-                Publishers.MergeMany(userSessions.map { userSession in
-                    let userID = userSession.clientProxy.userID
-                    return userSession.callbacks.map { callback in
-                        switch callback {
-                        case .didReceiveAuthError:
-                            UserSessionManagerCallback.didReceiveAuthError(userID: userID)
-                        }
-                    }
-                })
-            }
-            .switchToLatest()
-            .eraseToAnyPublisher()
+        callbacksSubject.eraseToAnyPublisher()
     }
     
     var clientSessionDelegate: ClientSessionDelegate {
@@ -96,6 +85,24 @@ final class UserSessionManager: UserSessionManagerProtocol {
             }
             .map(\.userID)
         accounts = OrderedDictionary(uniqueKeysWithValues: userIDs.map { ($0, UserSessionProtocol?.none) })
+        
+        authErrorsCancellable = sessionsSubject
+            .map { userSessions in
+                Publishers.MergeMany(userSessions.map { userSession in
+                    let userID = userSession.clientProxy.userID
+                    return userSession.callbacks.map { callback in
+                        switch callback {
+                        case .didReceiveAuthError: userID
+                        }
+                    }
+                })
+            }
+            .switchToLatest()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] userID in
+                guard let self else { return }
+                Task { await self.logout(userID: userID, isUnexpected: true) }
+            }
     }
     
     func session(for userID: String) -> UserSessionProtocol? {
@@ -157,6 +164,10 @@ final class UserSessionManager: UserSessionManagerProtocol {
     }
     
     func logout(userID: String) async {
+        await logout(userID: userID, isUnexpected: false)
+    }
+    
+    private func logout(userID: String, isUnexpected: Bool) async {
         guard let userSession = session(for: userID) else {
             MXLog.error("Tried to log out \(userID), which doesn't have a live session.")
             return
@@ -175,6 +186,8 @@ final class UserSessionManager: UserSessionManagerProtocol {
         // Remove the user, clearing user data.
         remove(userID: userID)
         userSession.userSettings.account.reset()
+        
+        callbacksSubject.send(.didRemoveAccount(userID: userID, isUnexpected: isUnexpected))
     }
     
     func remove(userID: String) {
@@ -253,6 +266,7 @@ final class UserSessionManager: UserSessionManagerProtocol {
             notificationManager.remove(userID: userID)
             liveLocationManager.remove(userID: userID)
             elementCallManager.remove(userID: userID)
+            callbacksSubject.send(.didRemoveAccount(userID: userID, isUnexpected: true))
             return nil
         }
     }
