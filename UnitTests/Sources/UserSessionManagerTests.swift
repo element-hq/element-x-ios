@@ -5,12 +5,14 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Combine
 @testable import ElementX
 import Testing
 
 @MainActor
 struct UserSessionManagerTests {
     let userSessionStore = UserSessionStoreMock()
+    let userSessionMigrator = UserSessionMigratorMock(.init())
     let appSettings = AppSettings.volatile()
     let notificationManager = NotificationManagerMock()
     let liveLocationManager = LiveLocationManagerMock()
@@ -34,17 +36,18 @@ struct UserSessionManagerTests {
         userSessionStore.restoreUserSessionUserIDClosure = { userID in
             userID == "@bob:matrix.org" ? .success(bob) : .failure(.failedRestoringLogin)
         }
-        let recorder = RestorationRecorder()
-        
-        await manager.restoreSessions { userSession in
+        userSessionMigrator.migrateClosure = { _ in
             // Migrations run before the session can be used.
-            #expect(manager.session(for: userSession.clientProxy.userID) == nil)
-            recorder.preparedUserIDs.append(userSession.clientProxy.userID)
-        } didAdd: { recorder.addedUserIDs.append($0.clientProxy.userID) }
+            #expect(manager.session(for: "@bob:matrix.org") == nil)
+        }
+        let recorder = RestorationRecorder(manager)
+        
+        await manager.restoreSessions()
         
         #expect(userSessionStore.restoreUserSessionUserIDReceivedInvocations == ["@alice:matrix.org", "@bob:matrix.org"])
-        #expect(recorder.preparedUserIDs == ["@bob:matrix.org"])
-        #expect(recorder.addedUserIDs == ["@bob:matrix.org"])
+        #expect(userSessionMigrator.migrateCallsCount == 1)
+        #expect((userSessionMigrator.migrateReceivedUserSession as? UserSessionMock) === bob)
+        #expect(recorder.restoredUserIDs == ["@bob:matrix.org"])
         // The store deletes an account that fails to restore.
         #expect(manager.userIDs == ["@bob:matrix.org"])
         #expect((manager.activeSession as? UserSessionMock) === bob)
@@ -54,15 +57,15 @@ struct UserSessionManagerTests {
     func restoreFailures() async {
         let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org"])
         userSessionStore.restoreUserSessionUserIDReturnValue = .failure(.failedRestoringLogin)
-        let recorder = RestorationRecorder()
+        let recorder = RestorationRecorder(manager)
         
-        await manager.restoreSessions { recorder.preparedUserIDs.append($0.clientProxy.userID) } didAdd: { recorder.addedUserIDs.append($0.clientProxy.userID) }
+        await manager.restoreSessions()
         
         #expect(userSessionStore.restoreUserSessionUserIDReceivedInvocations == ["@alice:matrix.org", "@bob:matrix.org"])
         #expect(manager.userIDs.isEmpty)
         #expect(manager.activeSession == nil)
-        #expect(recorder.preparedUserIDs.isEmpty)
-        #expect(recorder.addedUserIDs.isEmpty)
+        #expect(!userSessionMigrator.migrateCalled)
+        #expect(recorder.restoredUserIDs.isEmpty)
     }
     
     @Test("Restoring makes only one account live without multi-account")
@@ -71,7 +74,7 @@ struct UserSessionManagerTests {
         let sessions = ["@alice:matrix.org": makeUserSession(userID: "@alice:matrix.org"), "@bob:matrix.org": makeUserSession(userID: "@bob:matrix.org")]
         userSessionStore.restoreUserSessionUserIDClosure = { userID in sessions[userID].map { .success($0) } ?? .failure(.failedRestoringLogin) }
         
-        await manager.restoreSessions { _ in } didAdd: { _ in }
+        await manager.restoreSessions()
         
         #expect(userSessionStore.restoreUserSessionUserIDReceivedInvocations == ["@alice:matrix.org"])
         #expect(manager.userIDs == ["@alice:matrix.org", "@bob:matrix.org"])
@@ -87,12 +90,12 @@ struct UserSessionManagerTests {
         let sessions = ["@alice:matrix.org": UserSessionMock(.init(clientProxy: aliceClientProxy)), "@bob:matrix.org": UserSessionMock(.init(clientProxy: bobClientProxy))]
         userSessionStore.restoreUserSessionUserIDClosure = { userID in sessions[userID].map { .success($0) } ?? .failure(.failedRestoringLogin) }
         await manager.resumeServices()
-        let recorder = RestorationRecorder()
+        let recorder = RestorationRecorder(manager)
         
-        await manager.restoreSessions { _ in } didAdd: { recorder.addedUserIDs.append($0.clientProxy.userID) }
+        await manager.restoreSessions()
         
         #expect(userSessionStore.restoreUserSessionUserIDReceivedInvocations == ["@alice:matrix.org", "@bob:matrix.org"])
-        #expect(recorder.addedUserIDs == ["@alice:matrix.org", "@bob:matrix.org"])
+        #expect(recorder.restoredUserIDs == ["@alice:matrix.org", "@bob:matrix.org"])
         #expect(aliceClientProxy.resumeServicesCalled)
         #expect(bobClientProxy.resumeServicesCalled)
         #expect(manager.activeSession?.clientProxy.userID == "@alice:matrix.org")
@@ -105,11 +108,11 @@ struct UserSessionManagerTests {
         manager.add(makeUserSession(userID: "@alice:matrix.org"))
         userSessionStore.restoreUserSessionUserIDReturnValue = .success(makeUserSession(userID: "@bob:matrix.org"))
         
-        await manager.restoreSessions { _ in } didAdd: { _ in }
+        await manager.restoreSessions()
         #expect(userSessionStore.restoreUserSessionUserIDReceivedInvocations == ["@bob:matrix.org"])
         
         // Once every account is live, there's nothing left to restore.
-        await manager.restoreSessions { _ in } didAdd: { _ in }
+        await manager.restoreSessions()
         #expect(userSessionStore.restoreUserSessionUserIDCallsCount == 1)
     }
     
@@ -120,26 +123,10 @@ struct UserSessionManagerTests {
         userSessionStore.restoreUserSessionUserIDReturnValue = .success(UserSessionMock(.init(clientProxy: aliceClientProxy)))
         
         // E.g. a background launch, which pauses the sessions when its task completes.
-        await manager.restoreSessions { _ in } didAdd: { _ in }
+        await manager.restoreSessions()
         
         #expect(manager.activeSession != nil)
         #expect(!aliceClientProxy.resumeServicesCalled)
-    }
-    
-    @Test("Restoring stops once cancelled")
-    func restoreCancellation() async {
-        appSettings.multiAccountEnabled = true
-        let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org"])
-        userSessionStore.restoreUserSessionUserIDReturnValue = .success(makeUserSession(userID: "@alice:matrix.org"))
-        
-        // E.g. signing out while an account is being migrated.
-        await Task {
-            await manager.restoreSessions { _ in withUnsafeCurrentTask { $0?.cancel() } } didAdd: { _ in }
-        }.value
-        
-        #expect(userSessionStore.restoreUserSessionUserIDReceivedInvocations == ["@alice:matrix.org"])
-        #expect(manager.activeSession == nil)
-        #expect(manager.userIDs == ["@alice:matrix.org", "@bob:matrix.org"])
     }
     
     @Test("Clearing the caches replaces the session on the next restore")
@@ -158,16 +145,17 @@ struct UserSessionManagerTests {
         
         let newAlice = makeUserSession(userID: "@alice:matrix.org")
         userSessionStore.restoreUserSessionUserIDReturnValue = .success(newAlice)
-        await manager.restoreSessions { _ in
+        userSessionMigrator.migrateClosure = { _ in
             // The cleared session stays live until the new one replaces it.
             #expect((manager.activeSession as? UserSessionMock) === oldAlice)
-        } didAdd: { _ in }
+        }
         
+        await manager.restoreSessions()
         #expect(userSessionStore.restoreUserSessionUserIDReceivedInvocations == ["@alice:matrix.org"])
         #expect((manager.activeSession as? UserSessionMock) === newAlice)
         #expect((manager.session(for: "@bob:matrix.org") as? UserSessionMock) === bob)
         
-        await manager.restoreSessions { _ in } didAdd: { _ in }
+        await manager.restoreSessions()
         #expect(userSessionStore.restoreUserSessionUserIDCallsCount == 1)
     }
     
@@ -183,11 +171,50 @@ struct UserSessionManagerTests {
         userSessionStore.restoreUserSessionUserIDReturnValue = .failure(.failedRestoringLogin)
         
         await manager.clearCaches(userID: "@alice:matrix.org")
-        await manager.restoreSessions { _ in } didAdd: { _ in }
+        await manager.restoreSessions()
         
         #expect(userSessionStore.restoreUserSessionUserIDReceivedInvocations == ["@alice:matrix.org"])
         #expect(manager.userIDs == ["@bob:matrix.org"])
         #expect((manager.activeSession as? UserSessionMock) === bob)
+    }
+    
+    @Test("Logging out an account mid-restore doesn't stop the other accounts restoring")
+    func logoutDuringRestore() async {
+        appSettings.multiAccountEnabled = true
+        let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org", "@carol:matrix.org"])
+        manager.add(makeUserSession(userID: "@alice:matrix.org"))
+        let sessions = ["@bob:matrix.org": makeUserSession(userID: "@bob:matrix.org"), "@carol:matrix.org": makeUserSession(userID: "@carol:matrix.org")]
+        userSessionStore.restoreUserSessionUserIDClosure = { userID in sessions[userID].map { .success($0) } ?? .failure(.failedRestoringLogin) }
+        userSessionMigrator.migrateClosure = { userSession in
+            guard userSession as? UserSessionMock === sessions["@bob:matrix.org"] else { return }
+            await manager.logout(userID: "@alice:matrix.org")
+        }
+        let recorder = RestorationRecorder(manager)
+        
+        await manager.restoreSessions()
+        
+        #expect(recorder.restoredUserIDs == ["@bob:matrix.org", "@carol:matrix.org"])
+        #expect(manager.userIDs == ["@bob:matrix.org", "@carol:matrix.org"])
+    }
+    
+    @Test("An account removed while it's restoring isn't added back")
+    func removalDuringRestore() async {
+        appSettings.multiAccountEnabled = true
+        let manager = makeManager(userIDs: ["@alice:matrix.org"])
+        let aliceClientProxy = ClientProxyMock(.init(userID: "@alice:matrix.org"))
+        aliceClientProxy.clearCachesReturnValue = .success(())
+        manager.add(UserSessionMock(.init(clientProxy: aliceClientProxy)))
+        await manager.clearCaches(userID: "@alice:matrix.org")
+        userSessionStore.restoreUserSessionUserIDReturnValue = .success(makeUserSession(userID: "@alice:matrix.org"))
+        // The cleared session is still live, so it can be logged out while its replacement restores.
+        userSessionMigrator.migrateClosure = { _ in await manager.logout(userID: "@alice:matrix.org") }
+        let recorder = RestorationRecorder(manager)
+        
+        await manager.restoreSessions()
+        
+        #expect(recorder.restoredUserIDs.isEmpty)
+        #expect(manager.userIDs.isEmpty)
+        #expect(manager.activeSession == nil)
     }
     
     @Test("Adding a session registers it, making a new account the active one")
@@ -200,12 +227,14 @@ struct UserSessionManagerTests {
         #expect(manager.userIDs == ["@alice:matrix.org", "@bob:matrix.org"])
         #expect((manager.session(for: "@bob:matrix.org") as? UserSessionMock) === bob)
         #expect(manager.activeSession == nil)
+        #expect(!userSessionMigrator.markAsMigratedCalled)
         
-        // A new account becomes the active one.
+        // A new account becomes the active one, with nothing to migrate.
         let carol = makeUserSession(userID: "@carol:matrix.org")
         manager.add(carol)
         #expect(manager.userIDs == ["@carol:matrix.org", "@alice:matrix.org", "@bob:matrix.org"])
-        #expect(appSettings.userSettings(for: "@carol:matrix.org").account.lastSelectedDate != nil)
+        #expect(carol.userSettings.account.lastSelectedDate != nil)
+        #expect((userSessionMigrator.markAsMigratedReceivedUserSession as? UserSessionMock) === carol)
         #expect((manager.activeSession as? UserSessionMock) === carol)
         #expect(manager.sessionsPublisher.value.map(\.clientProxy.userID) == ["@carol:matrix.org", "@bob:matrix.org"])
     }
@@ -333,7 +362,7 @@ struct UserSessionManagerTests {
         userSessionStore.restoreUserSessionUserIDReturnValue = .failure(.failedRestoringLogin)
         
         let deferred = deferFulfillment(manager.callbacksPublisher) { $0 == .didRemoveAccount(userID: "@alice:matrix.org", isUnexpected: true) }
-        await manager.restoreSessions { _ in } didAdd: { _ in }
+        await manager.restoreSessions()
         try await deferred.fulfill()
         
         #expect(notificationManager.removeUserIDReceivedInvocations == ["@alice:matrix.org"])
@@ -400,7 +429,8 @@ struct UserSessionManagerTests {
                                   appSettings: appSettings,
                                   notificationManager: notificationManager,
                                   liveLocationManager: liveLocationManager,
-                                  elementCallManager: elementCallManager)
+                                  elementCallManager: elementCallManager,
+                                  userSessionMigrator: userSessionMigrator)
     }
     
     private func makeUserSession(userID: String) -> UserSessionMock {
@@ -408,7 +438,15 @@ struct UserSessionManagerTests {
     }
 }
 
+/// Records the accounts reported as restored, in order.
 private final class RestorationRecorder {
-    var preparedUserIDs: [String] = []
-    var addedUserIDs: [String] = []
+    private(set) var restoredUserIDs: [String] = []
+    private var cancellable: AnyCancellable?
+    
+    init(_ manager: UserSessionManagerProtocol) {
+        cancellable = manager.callbacksPublisher.sink { [weak self] callback in
+            guard case .didRestoreSession(let userID) = callback else { return }
+            self?.restoredUserIDs.append(userID)
+        }
+    }
 }

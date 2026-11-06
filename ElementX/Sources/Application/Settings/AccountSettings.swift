@@ -20,6 +20,10 @@ final nonisolated class AccountSettings: @unchecked Sendable {
     @UserPreference
     var lastSelectedDate: Date?
     
+    /// The last version of the app that this account's session has been migrated to.
+    @UserPreference
+    var lastVersionMigrated: String?
+    
     @UserPreference(defaultValue: false)
     var hasRunIdentityConfirmationOnboarding: Bool
     

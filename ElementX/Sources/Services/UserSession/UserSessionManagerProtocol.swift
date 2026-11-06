@@ -10,6 +10,8 @@ import Foundation
 import MatrixRustSDK
 
 enum UserSessionManagerCallback: Equatable {
+    /// An account's session was restored and is now live.
+    case didRestoreSession(userID: String)
     /// An account was removed along with all of its data.
     ///
     /// `isUnexpected` can be used to inform the user of the event.
@@ -34,9 +36,10 @@ protocol UserSessionManagerProtocol: AnyObject {
     // MARK: - Lifecycle
     
     /// Restores every account that isn't live, or whose caches were cleared, most recently selected first and one after the other.
-    /// Each session is `prepare`d (e.g. migrated), added, passed to `didAdd`, then resumed if the services are running.
+    ///
+    /// Each session is migrated, added, reported with `didRestoreSession`, then resumed if the services are running.
     /// An account that fails is removed (the store deletes its data). Without `multiAccountEnabled` only one account is ever live.
-    func restoreSessions(prepare: @MainActor (UserSessionProtocol) async -> Void, didAdd: @MainActor (UserSessionProtocol) -> Void) async
+    func restoreSessions() async
     /// Clears an account's caches. Its session stays live until `restoreSessions` replaces it.
     func clearCaches(userID: String) async
     /// Creates the session of an account that has just signed in, and stores its credentials.
