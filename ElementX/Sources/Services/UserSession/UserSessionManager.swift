@@ -20,6 +20,7 @@ final class UserSessionManager: UserSessionManagerProtocol {
     private let notificationManager: NotificationManagerProtocol
     private let liveLocationManager: LiveLocationManagerProtocol
     private let elementCallManager: ElementCallManagerProtocol
+    private let userSessionMigrator: UserSessionMigratorProtocol
     
     private let sessionsSubject = CurrentValueSubject<[UserSessionProtocol], Never>([])
     private let callbacksSubject = PassthroughSubject<UserSessionManagerCallback, Never>()
@@ -30,6 +31,8 @@ final class UserSessionManager: UserSessionManagerProtocol {
     private var clearedUserIDs: Set<String> = []
     /// Accounts that are logging out, so that their teardown only runs once.
     private var loggingOutUserIDs: Set<String> = []
+    /// Restores the signed in accounts.
+    private var restorationTask: Task<Void, Never>?
     
     /// Every signed in account, most recently selected first, with its session once it's live.
     /// Assigning `nil` removes an account rather than clearing its session.
@@ -66,13 +69,16 @@ final class UserSessionManager: UserSessionManagerProtocol {
          appSettings: AppSettings,
          notificationManager: NotificationManagerProtocol,
          liveLocationManager: LiveLocationManagerProtocol,
-         elementCallManager: ElementCallManagerProtocol) {
+         elementCallManager: ElementCallManagerProtocol,
+         userSessionMigrator: UserSessionMigratorProtocol) {
         self.userSessionStore = userSessionStore
         self.appSettings = appSettings
         self.notificationManager = notificationManager
         self.liveLocationManager = liveLocationManager
         self.elementCallManager = elementCallManager
+        self.userSessionMigrator = userSessionMigrator
         
+        #warning("Read lastSelectedDate without appSettings.userSettings(for:), which must only come from a user session.")
         let userIDs = userSessionStore.userIDs
             .map { (userID: $0, lastSelectedDate: appSettings.userSettings(for: $0).account.lastSelectedDate) }
             .sorted { lhs, rhs in
@@ -111,20 +117,38 @@ final class UserSessionManager: UserSessionManagerProtocol {
     
     // MARK: - Lifecycle
     
-    func restoreSessions(prepare: @MainActor (UserSessionProtocol) async -> Void, didAdd: @MainActor (UserSessionProtocol) -> Void) async {
+    func restoreSessions() async {
+        let previousRestorationTask = restorationTask
+        let restorationTask = Task {
+            // A previous restoration may still be building a client, which mustn't share a store with a new one.
+            await previousRestorationTask?.value
+            await restoreAccounts()
+        }
+        self.restorationTask = restorationTask
+        
+        await restorationTask.value
+    }
+    
+    func clearCaches(userID: String) async {
+        guard let userSession = session(for: userID) else { return }
+        
+        clearedUserIDs.insert(userID) // Marked before clearing, so it is ready to restore after clearing is done.
+        await userSession.clientProxy.clearCaches()
+    }
+    
+    private func restoreAccounts() async {
         for userID in accounts.keys where session(for: userID) == nil || clearedUserIDs.contains(userID) {
             // Every live session syncs, so without multi-account only one account is ever made live.
             guard appSettings.multiAccountEnabled || !hasLiveSession else { return }
-            // Signing out or clearing the cache cancels this, after which nothing may go live.
-            guard !Task.isCancelled else { return }
-            guard let userSession = await restoreUserSession(userID: userID) else { continue }
-            guard !Task.isCancelled else { return }
+            // Skip any account that was removed while restoring those before it.
+            guard accounts.keys.contains(userID), let userSession = await restoreUserSession(userID: userID) else { continue }
             
-            await prepare(userSession)
-            guard !Task.isCancelled else { return }
+            await userSessionMigrator.migrate(userSession)
+            // The account may have been removed while it was restoring.
+            guard accounts.keys.contains(userID) else { continue }
             
             add(userSession)
-            didAdd(userSession)
+            callbacksSubject.send(.didRestoreSession(userID: userID))
             
             if areServicesRunning {
                 await userSession.clientProxy.resumeServices()
@@ -133,14 +157,6 @@ final class UserSessionManager: UserSessionManagerProtocol {
             // Lets the work queued for this session (e.g. its first sync) start before the next account's restore.
             await Task.yield()
         }
-    }
-    
-    func clearCaches(userID: String) async {
-        guard let userSession = session(for: userID) else { return }
-        
-        // Marked before clearing, so a restore that starts meanwhile replaces the session.
-        clearedUserIDs.insert(userID)
-        await userSession.clientProxy.clearCaches()
     }
     
     func userSession(for client: ClientProtocol, sessionDirectories: SessionDirectories, passphrase: Data) async -> Result<UserSessionProtocol, UserSessionStoreError> {
@@ -154,7 +170,8 @@ final class UserSessionManager: UserSessionManagerProtocol {
         if accounts.keys.contains(userID) {
             accounts[userID] = userSession
         } else {
-            appSettings.userSettings(for: userID).account.lastSelectedDate = .now
+            userSession.userSettings.account.lastSelectedDate = .now
+            userSessionMigrator.markAsMigrated(userSession)
             accounts.updateValue(userSession, forKey: userID, insertingAt: 0)
         }
         
