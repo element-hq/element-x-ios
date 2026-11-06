@@ -201,10 +201,6 @@ struct SecureBackupRecoveryKeyScreen: View {
             .onAppear { focused = true }
     }
     
-    private var generateButtonTitle: String {
-        context.viewState.mode == .setupRecovery ? L10n.screenRecoveryKeySetupGenerateKey : L10n.screenRecoveryKeyChangeGenerateKey
-    }
-    
     private var confirmRecoveryKeySection: some View {
         SecureField(L10n.screenRecoveryKeyConfirmKeyPlaceholder, text: $context.confirmationRecoveryKey)
             .focused($focused)
@@ -318,6 +314,7 @@ struct SecureBackupRecoveryKeyScreen_Previews: PreviewProvider, TestablePreview 
             backupController.generateRecoveryKeyReturnValue = key
         }
         
+        backupController.activateRecoveryKeyReturnValue = .success(())
         backupController.checkRecoveryKeyReturnValue = checkResult
         
         let viewModel = SecureBackupRecoveryKeyScreenViewModel(secureBackupController: backupController,
