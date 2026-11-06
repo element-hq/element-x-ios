@@ -56,6 +56,24 @@ struct SecureBackupRecoveryKeyScreenViewStateTests {
     }
     
     @Test
+    func checkingAsksForTheExistingKey() {
+        let state = makeState(mode: .checkRecovery)
+        
+        #expect(state.title == L10n.screenRecoveryKeyCheckTitle)
+        #expect(state.subtitle == L10n.screenRecoveryKeyCheckSubtitle)
+        #expect(state.recoveryKeySubtitle == nil)
+    }
+    
+    @Test
+    func completingACheckHasItsOwnTitle() {
+        var state = makeState(mode: .checkRecovery)
+        state.isCompleted = true
+        
+        #expect(state.title == L10n.screenRecoveryKeyCheckSuccessTitle)
+        #expect(state.subtitle == L10n.screenCustomRecoveryKeySuccessSubtitle)
+    }
+    
+    @Test
     func unknownModeShowsAnError() {
         let state = makeState(mode: .unknown)
         

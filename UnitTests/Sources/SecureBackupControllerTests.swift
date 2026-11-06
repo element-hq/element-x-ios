@@ -159,6 +159,26 @@ struct SecureBackupControllerTests {
         
         #expect(result.isFailure(.failedGeneratingRecoveryKey))
     }
+    
+    // MARK: - Checking a recovery key
+    
+    @Test
+    func checkingARecoveryKeyRecoversWithIt() async {
+        var recoveredKey: String?
+        encryption.recoverRecoveryKeyClosure = { recoveredKey = $0 }
+        
+        let result = await controller.checkRecoveryKey("the key")
+        
+        #expect(result.isSuccess)
+        #expect(recoveredKey == "the key")
+    }
+    
+    @Test
+    func anIncorrectRecoveryKeyFailsTheCheck() async {
+        encryption.recoverRecoveryKeyClosure = { _ in throw TestError() }
+        
+        #expect(await controller.checkRecoveryKey("not the key").isFailure(.failedConfirmingRecoveryKey))
+    }
 }
 
 private extension Result where Failure == SecureBackupControllerError {
