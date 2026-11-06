@@ -43,11 +43,6 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
             }
             .store(in: &cancellables)
         
-        roomProxy.membershipChangePublisher.sink { [roomProxy] in
-            Task { await roomProxy.updateMembers() }
-        }
-        .store(in: &cancellables)
-        
         updateMembers(roomProxy.membersPublisher.value)
     }
     

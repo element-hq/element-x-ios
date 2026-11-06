@@ -65,7 +65,6 @@ extension JoinedRoomProxyMock {
         ownUserID = configuration.ownUserID
         
         membersPublisher = CurrentValueSubject(configuration.members).asCurrentValuePublisher()
-        membershipChangePublisher = PassthroughSubject().eraseToAnyPublisher()
         knockRequestsStatePublisher = CurrentValueSubject(configuration.knockRequestsState).asCurrentValuePublisher()
         typingMembersPublisher = CurrentValueSubject([]).asCurrentValuePublisher()
         identityStatusChangesPublisher = CurrentValueSubject([]).asCurrentValuePublisher()

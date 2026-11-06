@@ -77,11 +77,6 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
             }
             .store(in: &cancellables)
         
-        roomProxy.membershipChangePublisher.sink { [roomProxy] _ in
-            Task { await roomProxy.updateMembers() }
-        }
-        .store(in: &cancellables)
-        
         roomProxy.infoPublisher
             .map(\.powerLevels)
             .removeDuplicates { $0?.userPowerLevels == $1?.userPowerLevels }

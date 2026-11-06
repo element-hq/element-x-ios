@@ -60,11 +60,6 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         membersSubject.asCurrentValuePublisher()
     }
     
-    private let membershipChangeSubject = PassthroughSubject<Void, Never>()
-    var membershipChangePublisher: AnyPublisher<Void, Never> {
-        membershipChangeSubject.eraseToAnyPublisher()
-    }
-    
     private let typingMembersSubject = CurrentValueSubject<[String], Never>([])
     var typingMembersPublisher: CurrentValuePublisher<[String], Never> {
         typingMembersSubject.asCurrentValuePublisher()
@@ -768,28 +763,21 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             reloadMembersTask = Task { [weak self] in
                 while let self, needsMembersReload {
                     needsMembersReload = false
-                    if await reloadMembersFromStore() {
-                        membershipChangeSubject.send(())
-                    }
+                    await updateMembers()
                 }
                 self?.reloadMembersTask = nil
             }
         })
     }
     
-    /// Returns whether the published members changed.
-    @discardableResult
-    private func reloadMembersFromStore() async -> Bool {
+    private func reloadMembersFromStore() async {
         do {
             if let members = try await Self.changedMembers(in: room.membersNoSync(), from: publishedMembers) {
                 publishMembers(members)
-                return true
             }
         } catch {
             MXLog.error("Failed updating members using no sync API: \(error)")
         }
-        
-        return false
     }
     
     /// Reads every member off the main actor as large rooms have thousands. Returns nil when nothing changed,

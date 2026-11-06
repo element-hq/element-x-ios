@@ -5944,11 +5944,6 @@ nonisolated class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Senda
         set(value) { underlyingMembersPublisher = value }
     }
     nonisolated(unsafe) var underlyingMembersPublisher: CurrentValuePublisher<[RoomMemberProxyProtocol], Never>!
-    var membershipChangePublisher: AnyPublisher<Void, Never> {
-        get { return underlyingMembershipChangePublisher }
-        set(value) { underlyingMembershipChangePublisher = value }
-    }
-    nonisolated(unsafe) var underlyingMembershipChangePublisher: AnyPublisher<Void, Never>!
     var typingMembersPublisher: CurrentValuePublisher<[String], Never> {
         get { return underlyingTypingMembersPublisher }
         set(value) { underlyingTypingMembersPublisher = value }
