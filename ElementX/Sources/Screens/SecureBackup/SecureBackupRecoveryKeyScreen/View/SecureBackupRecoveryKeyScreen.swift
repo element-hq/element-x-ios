@@ -151,25 +151,8 @@ struct SecureBackupRecoveryKeyScreen: View {
             ZStack {
                 RecoveryKeyView(recoveryKey: "", isInvisibleForLayout: true) { }
                 
-                if context.viewState.recoveryKey == nil {
-                    if !context.viewState.isGeneratingKey {
-                        Button(generateButtonTitle) {
-                            context.send(viewAction: .generateKey)
-                        }
-                        .font(.compound.bodyLGSemibold)
-                        .accessibilityIdentifier(A11yIdentifiers.secureBackupRecoveryKeyScreen.generateRecoveryKey)
-                    } else {
-                        HStack(spacing: 8) {
-                            ProgressView()
-                            Text(L10n.screenRecoveryKeyGeneratingKey)
-                        }
-                        .font(.compound.bodyLGSemibold)
-                        .foregroundStyle(.compound.textPrimary)
-                    }
-                } else {
-                    RecoveryKeyView(recoveryKey: context.viewState.recoveryKey ?? "") {
-                        context.send(viewAction: .copyKey)
-                    }
+                RecoveryKeyView(recoveryKey: context.viewState.recoveryKey ?? "") {
+                    context.send(viewAction: .copyKey)
                 }
             }
             .frame(maxWidth: .infinity)
@@ -185,10 +168,6 @@ struct SecureBackupRecoveryKeyScreen: View {
                     .padding(.leading, 16)
             }
         }
-    }
-    
-    private var generateButtonTitle: String {
-        context.viewState.mode == .setupRecovery ? L10n.screenRecoveryKeySetupGenerateKey : L10n.screenRecoveryKeyChangeGenerateKey
     }
     
     private var confirmRecoveryKeySection: some View {
@@ -242,18 +221,12 @@ private struct RecoveryKeyView: View {
 @available(iOS 26.0, *)
 struct SecureBackupRecoveryKeyScreen_Previews: PreviewProvider, TestablePreview {
     static let key = "EsTM njec uHYA yHmh dQdW Nj4o bNRU 9jMN XGMc KUNM UFr5 R8GY"
-    static let generatingViewModel = viewModel(recoveryState: .disabled, key: key)
     static let setupViewModel = viewModel(recoveryState: .enabled, key: key)
     static let incompleteViewModel = viewModel(recoveryState: .incomplete)
     static let unknownViewModel = viewModel(recoveryState: .unknown)
     static let completedViewModel = viewModel(recoveryState: .enabled, key: key, isCompleted: true)
     
     static var previews: some View {
-        ElementNavigationStack {
-            SecureBackupRecoveryKeyScreen(context: generatingViewModel.context)
-        }
-        .previewDisplayName("Generating")
-        
         ElementNavigationStack {
             SecureBackupRecoveryKeyScreen(context: setupViewModel.context)
         }
@@ -273,6 +246,7 @@ struct SecureBackupRecoveryKeyScreen_Previews: PreviewProvider, TestablePreview 
         ElementNavigationStack {
             SecureBackupRecoveryKeyScreen(context: completedViewModel.context)
         }
+        .snapshotPreferences(expect: completedViewModel.context.observe(\.viewState.isCompleted))
         .previewDisplayName("Completed")
     }
     
@@ -281,13 +255,10 @@ struct SecureBackupRecoveryKeyScreen_Previews: PreviewProvider, TestablePreview 
         backupController.recoveryState = CurrentValueSubject<SecureBackupRecoveryState, Never>(recoveryState).asCurrentValuePublisher()
         
         if let key {
-            backupController.generateRecoveryKeyWithPassphraseReturnValue = .success(key)
-        } else {
-            backupController.generateRecoveryKeyWithPassphraseClosure = { _ in
-                try? await Task.sleep(for: .seconds(1000))
-                return .success("youshouldntseeme")
-            }
+            backupController.generateRecoveryKeyReturnValue = key
         }
+        
+        backupController.activateRecoveryKeyReturnValue = .success(())
         
         let viewModel = SecureBackupRecoveryKeyScreenViewModel(secureBackupController: backupController,
                                                                userIndicatorController: UserIndicatorControllerMock(),

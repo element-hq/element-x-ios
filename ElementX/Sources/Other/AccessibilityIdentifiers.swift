@@ -235,7 +235,6 @@ enum A11yIdentifiers {
     }
     
     struct SecureBackupRecoveryKeyScreen {
-        let generateRecoveryKey = "secure_backup_recovery_key-generate_recovery_key"
         let copyRecoveryKey = "secure_backup_recovery_key-copy_recovery_key"
         let done = "secure_backup_recovery_key-done"
         let finish = "secure_backup_recovery_key-finish"

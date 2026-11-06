@@ -41,6 +41,7 @@ enum SecureBackupControllerError: Error {
     case failedDisablingBackup
     
     case failedGeneratingRecoveryKey
+    case failedActivatingRecoveryKey
     case failedConfirmingRecoveryKey
     
     case failedUploadingForBackup
@@ -55,6 +56,11 @@ protocol SecureBackupControllerProtocol {
     func enable() async -> Result<Void, SecureBackupControllerError>
     func disable() async -> Result<Void, SecureBackupControllerError>
     
+    /// Generates a new recovery key without activating it, so it can be shown to the user first.
+    func generateRecoveryKey() -> String
+    /// Makes the most recently generated recovery key the active one.
+    func activateRecoveryKey() async -> Result<Void, SecureBackupControllerError>
+    /// Generates a recovery key (from the passphrase if given) and activates it straight away.
     func generateRecoveryKey(withPassphrase passphrase: String?) async -> Result<String, SecureBackupControllerError>
     func confirmRecoveryKey(_ key: String) async -> Result<Void, SecureBackupControllerError>
     

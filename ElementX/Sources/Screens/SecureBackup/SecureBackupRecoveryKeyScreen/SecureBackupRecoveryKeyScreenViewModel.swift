@@ -32,10 +32,9 @@ class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewM
                                            presentationContext: presentationContext,
                                            bindings: .init()))
         
-        // The user is taken straight to their new key. The SDK can't yet generate it without it also becoming active, so a
-        // changed key replaces the existing one as soon as this screen opens.
+        // The user is taken straight to their new key, which only becomes active once they confirm having saved it.
         if state.mode == .setupRecovery || state.mode == .changeRecovery {
-            process(viewAction: .generateKey)
+            state.recoveryKey = secureBackupController.generateRecoveryKey()
         }
     }
     
@@ -45,20 +44,6 @@ class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewM
         MXLog.info("View model: received view action: \(viewAction)")
         
         switch viewAction {
-        case .generateKey:
-            state.isGeneratingKey = true
-            
-            Task {
-                switch await secureBackupController.generateRecoveryKey(withPassphrase: nil) {
-                case .success(let key):
-                    state.recoveryKey = key
-                case .failure(let error):
-                    MXLog.error("Failed generating recovery key with error: \(error)")
-                    state.bindings.alertInfo = .init(id: .init())
-                }
-                
-                state.isGeneratingKey = false
-            }
         case .copyKey:
             UIPasteboard.general.string = state.recoveryKey
             userIndicatorController.submitIndicator(.init(title: "Copied recovery key"))
@@ -89,11 +74,27 @@ class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewM
                                              title: L10n.screenRecoveryKeySetupConfirmationTitle,
                                              message: L10n.screenRecoveryKeySetupConfirmationDescription,
                                              primaryButton: .init(title: L10n.actionContinue) { [weak self] in
-                                                 self?.state.isCompleted = true
+                                                 self?.activateKey()
                                              },
                                              secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
         case .complete:
             actionsSubject.send(.complete)
+        }
+    }
+    
+    private func activateKey() {
+        Task {
+            showLoadingIndicator()
+            
+            switch await secureBackupController.activateRecoveryKey() {
+            case .success:
+                state.isCompleted = true
+            case .failure(let error):
+                MXLog.error("Failed activating recovery key with error: \(error)")
+                state.bindings.alertInfo = .init(id: .init())
+            }
+            
+            hideLoadingIndicator()
         }
     }
     
