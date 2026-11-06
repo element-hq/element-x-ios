@@ -15546,20 +15546,20 @@ nonisolated class UserSessionManagerMock: UserSessionManagerProtocol, @unchecked
     }
     //MARK: - restoreSessions
 
-    private let restoreSessionsPrepareDidAddCallsCountLock = NSLock()
-    private nonisolated(unsafe) var restoreSessionsPrepareDidAddUnderlyingCallsCount = 0
-    var restoreSessionsPrepareDidAddCallsCount: Int {
-        get { restoreSessionsPrepareDidAddCallsCountLock.withLock { restoreSessionsPrepareDidAddUnderlyingCallsCount } }
-        set { restoreSessionsPrepareDidAddCallsCountLock.withLock { restoreSessionsPrepareDidAddUnderlyingCallsCount = newValue } }
+    private let restoreSessionsCallsCountLock = NSLock()
+    private nonisolated(unsafe) var restoreSessionsUnderlyingCallsCount = 0
+    var restoreSessionsCallsCount: Int {
+        get { restoreSessionsCallsCountLock.withLock { restoreSessionsUnderlyingCallsCount } }
+        set { restoreSessionsCallsCountLock.withLock { restoreSessionsUnderlyingCallsCount = newValue } }
     }
-    var restoreSessionsPrepareDidAddCalled: Bool {
-        return restoreSessionsPrepareDidAddCallsCount > 0
+    var restoreSessionsCalled: Bool {
+        return restoreSessionsCallsCount > 0
     }
-    nonisolated(unsafe) var restoreSessionsPrepareDidAddClosure: ((@MainActor (UserSessionProtocol) async -> Void, @MainActor (UserSessionProtocol) -> Void) async -> Void)?
+    nonisolated(unsafe) var restoreSessionsClosure: (() async -> Void)?
 
-    @concurrent func restoreSessions(prepare: @MainActor (UserSessionProtocol) async -> Void, didAdd: @MainActor (UserSessionProtocol) -> Void) async {
-        restoreSessionsPrepareDidAddCallsCountLock.withLock { restoreSessionsPrepareDidAddUnderlyingCallsCount += 1 }
-        await restoreSessionsPrepareDidAddClosure?(prepare, didAdd)
+    @concurrent func restoreSessions() async {
+        restoreSessionsCallsCountLock.withLock { restoreSessionsUnderlyingCallsCount += 1 }
+        await restoreSessionsClosure?()
     }
     //MARK: - clearCaches
 
@@ -15856,6 +15856,71 @@ nonisolated class UserSessionManagerMock: UserSessionManagerProtocol, @unchecked
     func stopSearchBackfill() {
         stopSearchBackfillCallsCountLock.withLock { stopSearchBackfillUnderlyingCallsCount += 1 }
         stopSearchBackfillClosure?()
+    }
+}
+nonisolated class UserSessionMigratorMock: UserSessionMigratorProtocol, @unchecked Sendable {
+
+    //MARK: - migrate
+
+    private let migrateCallsCountLock = NSLock()
+    private nonisolated(unsafe) var migrateUnderlyingCallsCount = 0
+    var migrateCallsCount: Int {
+        get { migrateCallsCountLock.withLock { migrateUnderlyingCallsCount } }
+        set { migrateCallsCountLock.withLock { migrateUnderlyingCallsCount = newValue } }
+    }
+    var migrateCalled: Bool {
+        return migrateCallsCount > 0
+    }
+    private let migrateReceivedUserSessionLock = NSLock()
+    private nonisolated(unsafe) var migrateUnderlyingReceivedUserSession: UserSessionProtocol?
+    var migrateReceivedUserSession: UserSessionProtocol? {
+        get { migrateReceivedUserSessionLock.withLock { migrateUnderlyingReceivedUserSession } }
+        set { migrateReceivedUserSessionLock.withLock { migrateUnderlyingReceivedUserSession = newValue } }
+    }
+    private let migrateReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var migrateUnderlyingReceivedInvocations: [UserSessionProtocol] = []
+    var migrateReceivedInvocations: [UserSessionProtocol] {
+        get { migrateReceivedInvocationsLock.withLock { migrateUnderlyingReceivedInvocations } }
+        set { migrateReceivedInvocationsLock.withLock { migrateUnderlyingReceivedInvocations = newValue } }
+    }
+    nonisolated(unsafe) var migrateClosure: ((UserSessionProtocol) async -> Void)?
+
+    @concurrent func migrate(_ userSession: UserSessionProtocol) async {
+        migrateCallsCountLock.withLock { migrateUnderlyingCallsCount += 1 }
+        migrateReceivedUserSession = userSession
+        migrateReceivedInvocationsLock.withLock { migrateUnderlyingReceivedInvocations.append(userSession) }
+        await migrateClosure?(userSession)
+    }
+    //MARK: - markAsMigrated
+
+    private let markAsMigratedCallsCountLock = NSLock()
+    private nonisolated(unsafe) var markAsMigratedUnderlyingCallsCount = 0
+    var markAsMigratedCallsCount: Int {
+        get { markAsMigratedCallsCountLock.withLock { markAsMigratedUnderlyingCallsCount } }
+        set { markAsMigratedCallsCountLock.withLock { markAsMigratedUnderlyingCallsCount = newValue } }
+    }
+    var markAsMigratedCalled: Bool {
+        return markAsMigratedCallsCount > 0
+    }
+    private let markAsMigratedReceivedUserSessionLock = NSLock()
+    private nonisolated(unsafe) var markAsMigratedUnderlyingReceivedUserSession: UserSessionProtocol?
+    var markAsMigratedReceivedUserSession: UserSessionProtocol? {
+        get { markAsMigratedReceivedUserSessionLock.withLock { markAsMigratedUnderlyingReceivedUserSession } }
+        set { markAsMigratedReceivedUserSessionLock.withLock { markAsMigratedUnderlyingReceivedUserSession = newValue } }
+    }
+    private let markAsMigratedReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var markAsMigratedUnderlyingReceivedInvocations: [UserSessionProtocol] = []
+    var markAsMigratedReceivedInvocations: [UserSessionProtocol] {
+        get { markAsMigratedReceivedInvocationsLock.withLock { markAsMigratedUnderlyingReceivedInvocations } }
+        set { markAsMigratedReceivedInvocationsLock.withLock { markAsMigratedUnderlyingReceivedInvocations = newValue } }
+    }
+    nonisolated(unsafe) var markAsMigratedClosure: ((UserSessionProtocol) -> Void)?
+
+    func markAsMigrated(_ userSession: UserSessionProtocol) {
+        markAsMigratedCallsCountLock.withLock { markAsMigratedUnderlyingCallsCount += 1 }
+        markAsMigratedReceivedUserSession = userSession
+        markAsMigratedReceivedInvocationsLock.withLock { markAsMigratedUnderlyingReceivedInvocations.append(userSession) }
+        markAsMigratedClosure?(userSession)
     }
 }
 nonisolated class UserSessionMock: UserSessionProtocol, @unchecked Sendable {

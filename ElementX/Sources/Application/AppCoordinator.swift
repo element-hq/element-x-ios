@@ -36,11 +36,6 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
     
     private var backgroundRefreshSyncObserver: AnyCancellable?
     
-    private var userSessionMigrationsOldVersion: Version?
-    /// The accounts migrated since launch, so restoring one again (e.g. after clearing the cache) never migrates it twice.
-    private var migratedUserIDs: Set<String> = []
-    /// Restores the signed in accounts. Cancelled when signing out or clearing the cache.
-    private var restorationTask: Task<Void, Never>?
     private var userSession: UserSessionProtocol? {
         userSessionManager.activeSession
     }
@@ -94,9 +89,14 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
         let appBuild = InfoPlistReader.main.bundleVersion
         MXLog.info("\(appName) \(appVersion) (\(appBuild))")
         
+        guard let currentVersion = Version(appVersion) else {
+            fatalError("The app's version number **must** use semver for migration purposes.")
+        }
+        
         if ProcessInfo.processInfo.environment["RESET_APP_SETTINGS"].map(Bool.init) == true {
             appSettings.resetAllSettings()
         }
+        let previousVersion = appSettings.lastVersionLaunched.flatMap(Version.init)
         
         self.appDelegate = appDelegate
         self.appHooks = appHooks
@@ -129,7 +129,8 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
                                                 appSettings: appSettings,
                                                 notificationManager: notificationManager,
                                                 liveLocationManager: LiveLocationManager(appSettings: appSettings),
-                                                elementCallManager: elementCallManager)
+                                                elementCallManager: elementCallManager,
+                                                userSessionMigrator: UserSessionMigrator(newVersion: currentVersion, oldAppVersion: previousVersion, appSettings: appSettings, appMediator: appMediator))
         
         let appLockService = AppLockService(keychainController: keychainController, appSettings: appSettings)
         let appLockNavigationCoordinator = NavigationRootCoordinator()
@@ -160,11 +161,7 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
         
         configureNotificationManager()
         
-        guard let currentVersion = Version(InfoPlistReader(bundle: .main).bundleShortVersionString) else {
-            fatalError("The app's version number **must** use semver for migration purposes.")
-        }
-        
-        if let previousVersion = appSettings.lastVersionLaunched.flatMap(Version.init) {
+        if let previousVersion {
             performMigrationsIfNecessary(from: previousVersion, to: currentVersion)
         } else {
             // The app has been deleted since the previous run. Reset everything.
@@ -456,131 +453,6 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
                 }
             }
         }
-        
-        // Store the old version to run additional migrations on the user session once it has been set up.
-        userSessionMigrationsOldVersion = oldVersion
-    }
-    
-    // swiftlint:disable:next cyclomatic_complexity
-    private func performUserSessionMigrations(_ userSession: UserSessionProtocol) async {
-        guard let oldVersion = userSessionMigrationsOldVersion,
-              migratedUserIDs.insert(userSession.clientProxy.userID).inserted else {
-            return
-        }
-        
-        MXLog.info("Migrating user session from \(oldVersion)")
-        
-        // Vacuuming can outlast a background task, getting the app killed before the migrations below run.
-        if appMediator.appState != .background {
-            MXLog.info("Performing client store optimizations.")
-            await userSession.clientProxy.optimizeStores()
-            MXLog.info("Finished optimizing client stores.")
-        }
-        
-        if oldVersion < Version(1, 6, 0) {
-            MXLog.info("Migrating to v1.6.0, marking identity confirmation onboarding as ran.")
-            userSession.userSettings.account.hasRunIdentityConfirmationOnboarding = true
-            userSession.userSettings.app.hasRunNotificationPermissionsOnboarding = true
-        }
-        
-        if oldVersion < Version(25, 6, 0) {
-            MXLog.info("Migrating to version 25.06.0, migrating timeline media settings to account data.")
-            performSettingsToAccountDataMigration(userSession: userSession)
-        }
-        
-        if oldVersion < Version(25, 9, 2) {
-            MXLog.info("Migrating to version 25.09.2, triggering sync to ensure m.space state is up to date.")
-            await userSession.clientProxy.expireSyncSessions()
-        }
-        
-        if oldVersion < Version(25, 10, 0) {
-            MXLog.info("Migrating to version 25.10.0, showing new sound banner to existing user.")
-            appSettings.hasSeenNewSoundBanner = false
-        }
-        
-        if oldVersion < Version(26, 07, 3) {
-            MXLog.info("Migrating to version 26.07.3, marking the app as previously signed in.")
-            appSettings.hasSignedInBefore = true
-        }
-        
-        if oldVersion < Version(26, 10, 1) {
-            MXLog.info("Migrating to version 26.10.1, moving initial 'session specific' settings.")
-            userSession.userSettings.account.migrateAppSettingsValue(\.hasRunIdentityConfirmationOnboardingKey)
-            userSession.userSettings.account.migrateAppSettingsValue(\.searchBreadcrumbsKey)
-        }
-        
-        if oldVersion < Version(26, 10, 2) {
-            MXLog.info("Migrating to version 26.10.2, moving visible account settings.")
-            userSession.userSettings.account.migrateAppSettingsValue(\.showAllRoomListActivityKey)
-            userSession.userSettings.account.migrateAppSettingsValue(\.selectedNotificationToneKey)
-            userSession.userSettings.account.migrateAppSettingsValue(\.sharePresenceKey)
-            
-            // Make sure system notification sounds are available in the new directory.
-            if let selectedNotificationTone = userSession.userSettings.account.selectedNotificationTone {
-                do {
-                    MXLog.info("Copying the selected system notification sound.")
-                    try NotificationToneManager.copySystemToneIfNeeded(selectedNotificationTone)
-                } catch {
-                    MXLog.error("Failed migrating the selected notification sound: \(error)")
-                }
-            }
-        }
-        
-        if oldVersion < Version(26, 10, 3) {
-            MXLog.info("Migrating to version 26.10.3, moving the notifications switch into the account.")
-            userSession.userSettings.account.migrateAppSettingsValue(\.enableNotificationsKey)
-        }
-        
-        if oldVersion < Version(26, 10, 4) {
-            MXLog.info("Migrating to version 26.10.4, moving the seen invites into the account.")
-            userSession.userSettings.account.migrateAppSettingsValue(\.seenInvitesKey)
-        }
-    }
-    
-    /// This could be removed once the adoption of 25.06.x is widespread.
-    private func performSettingsToAccountDataMigration(userSession: UserSessionProtocol) {
-        guard let userDefaults = UserDefaults(suiteName: InfoPlistReader.main.appGroupIdentifier) else {
-            return
-        }
-        
-        let hideInviteAvatars = userDefaults.value(forKey: "hideInviteAvatars") as? Bool
-        let timelineMediaVisibility = userDefaults
-            .data(forKey: "timelineMediaVisibility")
-            .flatMap {
-                try? JSONDecoder().decode(TimelineMediaVisibility.self, from: $0)
-            }
-        let hideTimelineMedia = userDefaults.value(forKey: "hideTimelineMedia") as? Bool
-        
-        guard hideInviteAvatars != nil || timelineMediaVisibility != nil || hideTimelineMedia != nil else {
-            // No migration needed, no local settings found.
-            return
-        }
-        
-        Task {
-            switch await userSession.clientProxy.fetchMediaPreviewConfiguration() {
-            case let .success(config):
-                guard config == nil else {
-                    // Found a server configuration, no need to migrate.
-                    userDefaults.removeObject(forKey: "hideInviteAvatars")
-                    userDefaults.removeObject(forKey: "timelineMediaVisibility")
-                    userDefaults.removeObject(forKey: "hideTimelineMedia")
-                    return
-                }
-                
-                if let hideInviteAvatars, case .success = await userSession.clientProxy.setHideInviteAvatars(hideInviteAvatars) {
-                    userDefaults.removeObject(forKey: "hideInviteAvatars")
-                }
-                
-                if let timelineMediaVisibility, case .success = await userSession.clientProxy.setTimelineMediaVisibility(timelineMediaVisibility) {
-                    userDefaults.removeObject(forKey: "timelineMediaVisibility")
-                } else if let hideTimelineMedia, case .success = await userSession.clientProxy.setTimelineMediaVisibility(hideTimelineMedia ? .never : .always) {
-                    userDefaults.removeObject(forKey: "hideTimelineMedia")
-                }
-            case let .failure(error):
-                MXLog.error("Could not perform migration, failed to fetch media preview config: \(error)")
-                return
-            }
-        }
     }
     
     /// Clears the keychain, app support directory etc ready for a fresh use.
@@ -684,19 +556,8 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
     }
     
     private func restoreUserSessions() {
-        let previousRestorationTask = restorationTask
-        restorationTask = Task {
-            // A cancelled restoration may still be building a client, which mustn't share a store with a new one.
-            await previousRestorationTask?.value
-            
-            await userSessionManager.restoreSessions { [weak self] userSession in
-                await self?.performUserSessionMigrations(userSession)
-            } didAdd: { [weak self] userSession in
-                self?.showActiveSessionIfRestoring()
-                self?.sendStoredInlineReply(from: userSession)
-            }
-            
-            guard !Task.isCancelled else { return }
+        Task {
+            await userSessionManager.restoreSessions()
             // An account that was already live becomes the active one when those before it fail (e.g. after clearing the cache).
             showActiveSessionIfRestoring()
             
@@ -733,8 +594,6 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
     }
     
     func handleSignedInUserSession(_ userSession: UserSessionProtocol) {
-        // A new login has nothing to migrate.
-        migratedUserIDs.insert(userSession.clientProxy.userID)
         userSessionManager.add(userSession)
         Task { await resumeClientServices() }
         stateMachine.processEvent(.createdUserSession)
@@ -766,7 +625,6 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
         }
         
         // TODO: With other accounts signed in, switch to the most recently used one instead (element-hq/element-meta#3325).
-        restorationTask?.cancel()
         windowManager.closeAllSecondaryWindows()
         
         showLoadingIndicator()
@@ -840,11 +698,16 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
     }
     
     private func observeUserSessionChanges() {
+        // Delivered synchronously, so a restored session is shown before the manager resumes it.
         userSessionManager.callbacksPublisher
-            .receive(on: DispatchQueue.main)
             .sink { [weak self] callback in
                 guard let self else { return }
                 switch callback {
+                case .didRestoreSession(let userID):
+                    showActiveSessionIfRestoring()
+                    if let userSession = userSessionManager.session(for: userID) {
+                        sendStoredInlineReply(from: userSession)
+                    }
                 case .didRemoveAccount:
                     handleAccountRemoval()
                 }
@@ -908,7 +771,6 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
             fatalError("User session not setup")
         }
         
-        restorationTask?.cancel()
         showLoadingIndicator()
         
         Task { await pauseClientServices(isBackgroundTask: false) }
