@@ -4,7 +4,6 @@
 
 ✨ Features
 * Allow replying to a message with a voice message by @UzairKhalid-crypto in https://github.com/element-hq/element-x-ios/pull/6307
-* Burst confetti for 🎉 reactions and add a snow effect by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/6451
 * Render custom image reactions by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/6475
 
 🙌 Improvements
@@ -47,6 +46,7 @@
 * Add account flow preparation. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/6452
 * Take over only answered calls and report calls during a native call as missed by @Velin92 in https://github.com/element-hq/element-x-ios/pull/6459
 * Bump element-call-ios to 0.1.0-rc.15 by @BillCarsonFr in https://github.com/element-hq/element-x-ios/pull/6470
+* Burst confetti for 🎉 reactions and add a snow effect by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/6451
 
 Others
 * Upgrade Element Call to the 0.28.1 RC. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/6414
