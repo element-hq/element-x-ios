@@ -260,7 +260,7 @@ struct UserSessionManagerTests {
         
         manager.remove(userID: "@alice:matrix.org")
         
-        #expect((userSessionStore.logoutUserSessionReceivedUserSession as? UserSessionMock) === alice)
+        #expect(userSessionStore.logoutUserIDReceivedUserID == "@alice:matrix.org")
         #expect(manager.userIDs.isEmpty)
         #expect(manager.activeSession == nil)
     }
@@ -275,7 +275,6 @@ struct UserSessionManagerTests {
         let alice = UserSessionMock(.init(clientProxy: aliceClientProxy,
                                           liveLocationService: aliceLiveLocationService,
                                           notificationService: aliceNotificationService))
-        alice.userSettings.account.seenInvites = ["!room:matrix.org"]
         let bobClientProxy = ClientProxyMock(.init(userID: "@bob:matrix.org"))
         let bobNotificationService = NotificationServiceMock(.init())
         let bobLiveLocationService = LiveLocationServiceMock(.init())
@@ -293,8 +292,7 @@ struct UserSessionManagerTests {
         #expect(aliceNotificationService.tearDownCalled)
         #expect(aliceLiveLocationService.stopAllLiveLocationsCalled)
         #expect(aliceClientProxy.logoutCalled)
-        #expect((userSessionStore.logoutUserSessionReceivedUserSession as? UserSessionMock) === alice)
-        #expect(alice.userSettings.account.seenInvites.isEmpty)
+        #expect(userSessionStore.logoutUserIDReceivedUserID == "@alice:matrix.org")
         #expect(manager.userIDs == ["@bob:matrix.org"])
         
         #expect(!bobClientProxy.pauseServicesCalled)
@@ -316,8 +314,27 @@ struct UserSessionManagerTests {
         await manager.logout(userID: "@alice:matrix.org")
         
         #expect(aliceClientProxy.logoutCallsCount == 1)
-        #expect(userSessionStore.logoutUserSessionCallsCount == 1)
+        #expect(userSessionStore.logoutUserIDCallsCount == 1)
         #expect(manager.userIDs.isEmpty)
+    }
+    
+    @Test("Logging out every account removes the live ones and those that aren't live yet")
+    func logoutAll() async {
+        let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org"])
+        let aliceClientProxy = ClientProxyMock(.init(userID: "@alice:matrix.org"))
+        manager.add(UserSessionMock(.init(clientProxy: aliceClientProxy)))
+        var removals: [UserSessionManagerCallback] = []
+        let cancellable = manager.callbacksPublisher.sink { removals.append($0) }
+        
+        await manager.logoutAll()
+        
+        // Only a live session can be logged out of the server, but every account is removed from the device.
+        #expect(aliceClientProxy.logoutCalled)
+        #expect(userSessionStore.logoutUserIDReceivedInvocations == ["@alice:matrix.org", "@bob:matrix.org"])
+        #expect(removals == [.didRemoveAccount(userID: "@alice:matrix.org", isUnexpected: false),
+                             .didRemoveAccount(userID: "@bob:matrix.org", isUnexpected: false)])
+        #expect(manager.userIDs.isEmpty)
+        cancellable.cancel()
     }
     
     @Test("Adding a session connects its services")

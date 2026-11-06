@@ -535,10 +535,8 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
                 break
             case (_, .signOut, .signingOut):
                 logout()
-            case (.signingOut(let disableAppLock), .completedSigningOut, .signedOut):
-                if disableAppLock {
-                    disableAppLockAfterSigningOut()
-                }
+            case (.signingOut, .completedSigningOut, .signedOut):
+                break
             case (.signedIn, .clearCache, .initial):
                 clearCache()
             default:
@@ -648,6 +646,16 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
         userIndicatorController.retractAllIndicators()
     }
     
+    /// Logs out every account, then disables App Lock if requested (e.g. when the user forgot their PIN).
+    private func logoutAllAccounts(disableAppLock: Bool) {
+        Task {
+            await userSessionManager.logoutAll()
+            if disableAppLock {
+                disableAppLockAfterSigningOut()
+            }
+        }
+    }
+    
     private func disableAppLockAfterSigningOut() {
         Task {
             // Ensure the navigation stack has settled.
@@ -740,7 +748,7 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
             case .unlockApp:
                 windowManager.switchToMain()
             case .forceLogout:
-                stateMachine.processEvent(.signOut(disableAppLock: true))
+                logoutAllAccounts(disableAppLock: true)
             }
         }
         .store(in: &cancellables)
@@ -753,14 +761,14 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
             case .signInComplete(let userSession):
                 handleSignedInUserSession(userSession)
             case .logout:
-                stateMachine.processEvent(.signOut(disableAppLock: false))
+                stateMachine.processEvent(.signOut)
             case .clearCache(let continuation):
                 clearCacheContinuation = continuation
                 stateMachine.processEvent(.clearCache)
             case .accountDeactivated:
-                stateMachine.processEvent(.signOut(disableAppLock: false))
+                stateMachine.processEvent(.signOut)
             case .forceLogout:
-                stateMachine.processEvent(.signOut(disableAppLock: true))
+                logoutAllAccounts(disableAppLock: true)
             }
         }
         .store(in: &cancellables)

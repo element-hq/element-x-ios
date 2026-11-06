@@ -15,12 +15,13 @@ import Testing
 struct UserSessionStoreTests {
     let keychainController = KeychainControllerMock(.init())
     let clientFactory = ClientFactoryMock(.init())
+    let appSettings = AppSettings.volatile()
     let store: UserSessionStore
     
     init() {
         store = UserSessionStore(keychainController: keychainController,
                                  clientFactory: clientFactory,
-                                 appSettings: .volatile(),
+                                 appSettings: appSettings,
                                  analyticsService: AnalyticsServiceMock(.init()),
                                  appHooks: AppHooks(),
                                  networkMonitor: NetworkMonitorMock(.init()))
@@ -28,7 +29,7 @@ struct UserSessionStoreTests {
     
     // MARK: - Accessors
     
-    @Test
+    @Test("The store has sessions once credentials are stored")
     func hasSessions() {
         #expect(!store.hasSessions)
         
@@ -36,7 +37,7 @@ struct UserSessionStoreTests {
         #expect(store.hasSessions)
     }
     
-    @Test
+    @Test("The user IDs come from the stored credentials")
     func userIDs() {
         keychainController.restorationTokensReturnValue = [makeCredentials(sessionDirectories: .init(), userID: "@alice:matrix.org"),
                                                            makeCredentials(sessionDirectories: .init(), userID: "@bob:matrix.org")]
@@ -45,7 +46,7 @@ struct UserSessionStoreTests {
     
     // MARK: - Restoration
     
-    @Test
+    @Test("Restoring an account without credentials fails")
     func restoreUnknownAccount() async {
         guard case .failure(.unknownAccount) = await store.restoreUserSession(userID: "@alice:matrix.org") else {
             Issue.record("Restoration should fail when there are no credentials.")
@@ -53,11 +54,12 @@ struct UserSessionStoreTests {
         }
     }
     
-    @Test
+    @Test("Restoring without the account's data fails and discards its credentials and settings")
     func restoreWithMissingUserData() async {
         // Given credentials whose session data is no longer on disk.
         let credentials = makeCredentials(sessionDirectories: .init())
         keychainController.restorationTokensReturnValue = [credentials]
+        appSettings.userSettings(for: credentials.userID).account.seenInvites = ["!room:matrix.org"]
         
         // When restoring the session.
         guard case .failure(.failedRestoringLogin) = await store.restoreUserSession(userID: credentials.userID) else {
@@ -65,11 +67,12 @@ struct UserSessionStoreTests {
             return
         }
         
-        // Then the credentials should have been discarded.
+        // Then the credentials and settings should have been discarded.
         #expect(keychainController.removeRestorationTokenForUsernameReceivedInvocations == [credentials.userID])
+        #expect(appSettings.userSettings(for: credentials.userID).account.seenInvites.isEmpty)
     }
     
-    @Test
+    @Test("Restoring fails and discards the credentials when the client can't be created")
     func restoreWhenClientCreationFails() async throws {
         // Given valid session data but a client factory that fails.
         let sessionDirectories = try makeValidSessionDirectories()
@@ -88,7 +91,7 @@ struct UserSessionStoreTests {
         #expect(keychainController.removeRestorationTokenForUsernameReceivedInvocations == [credentials.userID])
     }
     
-    @Test
+    @Test("Restoring builds a user session for the account's client")
     func restoreSucceeds() async throws {
         // Given valid session data for Alice, stored after another account.
         let sessionDirectories = try makeValidSessionDirectories()
@@ -108,7 +111,7 @@ struct UserSessionStoreTests {
     
     // MARK: - Session creation
     
-    @Test
+    @Test("A user session is built for a new client and its credentials are stored")
     func userSessionForClientSucceeds() async {
         // Given a freshly authenticated client from the SDK.
         let client = ClientSDKMock(.init(userID: "@alice:matrix.org"))
@@ -126,7 +129,7 @@ struct UserSessionStoreTests {
         #expect(keychainController.setRestorationTokenForUsernameReceivedArguments?.restorationToken.passphrase == RestorationTokenFixtures.passphrase)
     }
     
-    @Test
+    @Test("Nothing is stored when a new client can't provide its session")
     func userSessionForClientFails() async {
         // Given a freshly authenticated client that fails to provide its session.
         let client = ClientSDKMock(.init(userID: "@alice:matrix.org"))
@@ -144,21 +147,22 @@ struct UserSessionStoreTests {
     
     // MARK: - Logout/Reset
     
-    @Test
+    @Test("Logging out deletes the account's credentials and settings")
     func logout() {
-        // Given a stored session.
+        // Given a stored session with some account settings.
         let userID = "@alice:matrix.org"
         keychainController.restorationTokensReturnValue = [makeCredentials(sessionDirectories: .init(), userID: userID)]
-        let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: userID))))
+        appSettings.userSettings(for: userID).account.seenInvites = ["!room:matrix.org"]
         
         // When logging out.
-        store.logout(userSession: userSession)
+        store.logout(userID: userID)
         
-        // Then the stored credentials should be removed.
+        // Then the stored credentials and settings should be removed.
         #expect(keychainController.removeRestorationTokenForUsernameReceivedInvocations == [userID])
+        #expect(appSettings.userSettings(for: userID).account.seenInvites.isEmpty)
     }
     
-    @Test
+    @Test("Resetting deletes every account's credentials")
     func reset() {
         store.reset()
         #expect(keychainController.removeAllRestorationTokensCalled)
