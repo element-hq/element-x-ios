@@ -528,15 +528,6 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
                 startAuthentication()
             case (.restoringSession, .createdUserSession, .signedIn):
                 setupUserSession(isNewLogin: false)
-                
-            case (.signingOut, .signOut, .signingOut):
-                // We can ignore signOut when already in the process of signing out,
-                // such as the SDK sending an authError due to token invalidation.
-                break
-            case (_, .signOut, .signingOut):
-                logout()
-            case (.signingOut, .completedSigningOut, .signedOut):
-                break
             case (.signedIn, .clearCache, .initial):
                 clearCache()
             default:
@@ -615,35 +606,6 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
         } else {
             rootFlowCoordinator.handleAppRoute(.roomList, animated: true)
         }
-    }
-    
-    private func logout() {
-        guard let userSession else {
-            fatalError("User session not setup")
-        }
-        
-        // TODO: With other accounts signed in, switch to the most recently used one instead (element-hq/element-meta#3325).
-        windowManager.closeAllSecondaryWindows()
-        
-        showLoadingIndicator()
-        
-        clientProxyObserver = nil
-        
-        // Show authentication before the session goes, under the loading indicator.
-        startAuthentication()
-        
-        Task {
-            await userSessionManager.logout(userID: userSession.clientProxy.userID)
-            tearDownUserSession()
-            
-            stateMachine.processEvent(.completedSigningOut)
-            
-            hideLoadingIndicator()
-        }
-    }
-    
-    private func tearDownUserSession() {
-        userIndicatorController.retractAllIndicators()
     }
     
     /// Logs out every account, then disables App Lock if requested (e.g. when the user forgot their PIN).
@@ -760,13 +722,11 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
             switch action {
             case .signInComplete(let userSession):
                 handleSignedInUserSession(userSession)
-            case .logout:
-                stateMachine.processEvent(.signOut)
+            case .closeSecondaryWindows:
+                windowManager.closeAllSecondaryWindows()
             case .clearCache(let continuation):
                 clearCacheContinuation = continuation
                 stateMachine.processEvent(.clearCache)
-            case .accountDeactivated:
-                stateMachine.processEvent(.signOut)
             case .forceLogout:
                 logoutAllAccounts(disableAppLock: true)
             }

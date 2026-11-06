@@ -641,10 +641,14 @@ class MockScreen: Identifiable {
                                                     deviceID: "MOCKCLIENT",
                                                     roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
             let userSession = UserSessionMock(.init(clientProxy: clientProxy, userSettings: userSettings))
-            let userSessionManager = UserSessionManagerMock(.init())
-            if id == .rootFlowSignedIn {
-                userSessionManager.activeSession = userSession
-                userSessionManager.sessionsPublisher = .init([userSession])
+            let userSessionManagerCallbacks = PassthroughSubject<UserSessionManagerCallback, Never>()
+            let userSessionManager = UserSessionManagerMock(.init(sessions: id == .rootFlowSignedIn ? [userSession] : [],
+                                                                  callbacksPublisher: userSessionManagerCallbacks.eraseToAnyPublisher()))
+            // Logging out removes the only account, as the real manager would.
+            userSessionManager.logoutUserIDClosure = { @MainActor userID in
+                userSessionManager.activeSession = nil
+                userSessionManager.sessionsPublisher = .init([])
+                userSessionManagerCallbacks.send(.didRemoveAccount(userID: userID, isUnexpected: false))
             }
             
             let appMediator = AppMediatorMock(.init())
@@ -670,9 +674,7 @@ class MockScreen: Identifiable {
                         userSessionManager.activeSession = userSession
                         userSessionManager.sessionsPublisher = .init([userSession])
                         flowCoordinator?.handleAppRoute(.roomList, animated: true)
-                    case .logout:
-                        flowCoordinator?.handleAppRoute(.authentication, animated: true)
-                    case .clearCache, .accountDeactivated, .forceLogout:
+                    case .closeSecondaryWindows, .clearCache, .forceLogout:
                         break
                     }
                 }
