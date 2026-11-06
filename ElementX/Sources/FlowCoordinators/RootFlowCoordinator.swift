@@ -12,11 +12,10 @@ import SwiftUI
 enum RootFlowCoordinatorAction {
     /// Authentication completed, the session still needs adding to the `UserSessionManager`.
     case signInComplete(userSession: UserSessionProtocol)
-    case logout
+    /// The shown account was removed, so any secondary windows showing it should close.
+    case closeSecondaryWindows
     /// Clear the active account's caches. The continuation is used to signal success/failure.
     case clearCache(AsyncStream<Result<Void, ClearCacheError>>.Continuation)
-    /// Logout without any confirmation. The account was deactivated.
-    case accountDeactivated
     /// Logout and disable App Lock without any confirmation. The user forgot their PIN.
     case forceLogout
 }
@@ -48,18 +47,22 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
         /// The authentication flow is the root.
         case authenticationFlow(isAddingAccount: Bool)
         /// A user session flow is the root.
-        case userSessionFlow
+        case userSessionFlow(userID: String)
         /// A placeholder is being shown while clearing caches.
-        case clearingCache
+        case clearingCache(userID: String)
+        /// A placeholder is being shown while the active account logs out.
+        case loggingOut(userID: String)
     }
     
     enum Event: EventType {
         /// Request presentation of the authentication flow, either with no account signed in or to sign in another one.
         case startAuthentication(isAddingAccount: Bool)
-        /// Request presentation of the active account's user session flow.
-        case startUserSession
+        /// Request presentation of the given account's user session flow.
+        case startUserSession(userID: String)
         /// Request clearing the active account's caches.
         case clearCache
+        /// Request logging out the active account.
+        case logout
     }
     
     private let stateMachine: StateMachine<State, Event>
@@ -105,6 +108,8 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
         
         stateMachine = .init(state: .initial)
         configureStateMachine()
+        
+        setupSubscriptions()
     }
     
     func start(animated: Bool) {
@@ -127,7 +132,7 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
                 authenticationFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
             case .userSessionFlow:
                 break // TODO: Start a flow to add a new account?
-            case .clearingCache:
+            case .clearingCache, .loggingOut:
                 break
             }
         case .oAuthCallback(let url):
@@ -137,10 +142,10 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
                 MXLog.error("Received an OAuth callback without an authentication flow.")
             }
         case .roomList:
-            if stateMachine.state == .userSessionFlow {
+            if case .userSessionFlow = stateMachine.state {
                 userSessionFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
-            } else {
-                stateMachine.tryEvent(.startUserSession)
+            } else if let userID = userSessionManager.activeSession?.clientProxy.userID {
+                stateMachine.tryEvent(.startUserSession(userID: userID))
             }
         case .room, .roomAlias, .childRoom, .childRoomAlias,
              .roomDetails, .roomMemberDetails, .userProfile,
@@ -153,7 +158,7 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
                 MXLog.info("Ignoring app route, an authentication flow is in progress.")
             case .userSessionFlow:
                 handleUserSessionRoute(appRoute, userID: userID, awaitsRoom: awaitsRoom, animated: animated)
-            case .clearingCache:
+            case .clearingCache, .loggingOut:
                 break
             }
         }
@@ -161,7 +166,7 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
     
     func clearRoute(animated: Bool) {
         switch stateMachine.state {
-        case .initial, .clearingCache:
+        case .initial, .clearingCache, .loggingOut:
             break
         case .authenticationFlow:
             authenticationFlowCoordinator?.clearRoute(animated: animated)
@@ -173,7 +178,7 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     func isDisplayingRoomScreen(withRoomID roomID: String) -> Bool {
-        guard stateMachine.state == .userSessionFlow else { return false }
+        guard case .userSessionFlow = stateMachine.state else { return false }
         return userSessionFlowCoordinator?.isDisplayingRoomScreen(withRoomID: roomID) ?? false
     }
     
@@ -184,21 +189,30 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
             switch (fromState, event) {
             case (.initial, .startAuthentication(isAddingAccount: false)):
                 .authenticationFlow(isAddingAccount: false)
-            case (.initial, .startUserSession):
-                .userSessionFlow
+            case (.initial, .startUserSession(let userID)):
+                .userSessionFlow(userID: userID)
                 
-            case (.authenticationFlow, .startUserSession):
-                .userSessionFlow
+            case (.authenticationFlow, .startUserSession(let userID)):
+                .userSessionFlow(userID: userID)
                 
             case (.userSessionFlow, .startAuthentication(let isAddingAccount)):
                 .authenticationFlow(isAddingAccount: isAddingAccount)
-            case (.userSessionFlow, .clearCache):
-                .clearingCache
+            case (.userSessionFlow(let userID), .clearCache):
+                .clearingCache(userID: userID)
+            case (.userSessionFlow(let userID), .logout):
+                .loggingOut(userID: userID)
+            case (.userSessionFlow, .startUserSession(let userID)):
+                .userSessionFlow(userID: userID)
                 
             case (.clearingCache, .startAuthentication(isAddingAccount: false)):
                 .authenticationFlow(isAddingAccount: false)
-            case (.clearingCache, .startUserSession):
-                .userSessionFlow
+            case (.clearingCache, .startUserSession(let userID)):
+                .userSessionFlow(userID: userID)
+                
+            case (.loggingOut, .startAuthentication(isAddingAccount: false)):
+                .authenticationFlow(isAddingAccount: false)
+            case (.loggingOut, .startUserSession(let userID)):
+                .userSessionFlow(userID: userID)
                 
             default:
                 nil
@@ -226,7 +240,19 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
             case (.userSessionFlow, .clearCache, .clearingCache):
                 stopUserSessionFlow()
                 clearCache()
+            case (.userSessionFlow, .logout, .loggingOut(let userID)):
+                stopUserSessionFlow()
+                logout(userID: userID)
+            case (.userSessionFlow, .startUserSession, .userSessionFlow):
+                stopUserSessionFlow()
+                startUserSessionFlow(isNewLogin: false)
             case (.clearingCache, .startUserSession, .userSessionFlow):
+                startUserSessionFlow(isNewLogin: false)
+            case (.loggingOut, .startAuthentication(let isAddingAccount), .authenticationFlow):
+                hideLoadingIndicator()
+                startAuthenticationFlow(isAddingAccount: isAddingAccount)
+            case (.loggingOut, .startUserSession, .userSessionFlow):
+                hideLoadingIndicator()
                 startUserSessionFlow(isNewLogin: false)
             default:
                 fatalError("Unhandled transition: \(context)")
@@ -236,6 +262,27 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
         stateMachine.addErrorHandler { context in
             fatalError("Unexpected transition: \(context)")
         }
+    }
+    
+    private func setupSubscriptions() {
+        userSessionManager.callbacksPublisher
+            .sink { [weak self] callback in
+                guard let self, case .didRemoveAccount(let userID, _) = callback else { return }
+                
+                let shownUserID = switch stateMachine.state {
+                case .userSessionFlow(let userID), .loggingOut(let userID): userID
+                default: String?.none
+                }
+                guard userID == shownUserID else { return }
+                
+                actionsSubject.send(.closeSecondaryWindows)
+                if let activeUserID = userSessionManager.activeSession?.clientProxy.userID {
+                    stateMachine.tryEvent(.startUserSession(userID: activeUserID))
+                } else {
+                    stateMachine.tryEvent(.startAuthentication(isAddingAccount: false))
+                }
+            }
+            .store(in: &cancellables)
     }
     
     private func startAuthenticationFlow(isAddingAccount: Bool) {
@@ -305,12 +352,10 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
                 guard let self else { return }
                 
                 switch action {
-                case .logout:
-                    actionsSubject.send(.logout)
+                case .logout, .accountDeactivated:
+                    stateMachine.tryEvent(.logout)
                 case .clearCache:
                     stateMachine.tryEvent(.clearCache)
-                case .accountDeactivated:
-                    actionsSubject.send(.accountDeactivated)
                 case .forceLogout:
                     actionsSubject.send(.forceLogout)
                 }
@@ -348,8 +393,17 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func stopUserSessionFlow() {
+        userIndicatorController.retractAllIndicators()
         userSessionFlowCoordinator?.stop()
         userSessionFlowCoordinator = nil
+    }
+    
+    private func logout(userID: String) {
+        navigationRootCoordinator.setRootCoordinator(PlaceholderScreenCoordinator(hideBrandChrome: appSettings.hideBrandChrome))
+        showLoadingIndicator()
+        
+        // The account's removal moves on to the next account or authentication.
+        Task { await userSessionManager.logout(userID: userID) }
     }
     
     private func clearCache() {
@@ -360,9 +414,27 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
         
         clearCacheTask = Task { [weak self] in
             defer { self?.clearCacheTask = nil }
-            guard case .success = await stream.first() else { return }
-            self?.stateMachine.tryEvent(.startUserSession)
+            guard case .success = await stream.first(),
+                  let userID = self?.userSessionManager.activeSession?.clientProxy.userID else { return }
+            self?.stateMachine.tryEvent(.startUserSession(userID: userID))
         }
         .asCancellable()
+    }
+    
+    // MARK: - User Indicators
+    
+    private var loadingIndicatorID: String {
+        "\(Self.self)-Loading"
+    }
+    
+    private func showLoadingIndicator() {
+        userIndicatorController.submitIndicator(UserIndicator(id: loadingIndicatorID,
+                                                              type: .modal,
+                                                              title: L10n.commonLoading,
+                                                              persistent: true))
+    }
+    
+    private func hideLoadingIndicator() {
+        userIndicatorController.retractIndicatorWithId(loadingIndicatorID)
     }
 }

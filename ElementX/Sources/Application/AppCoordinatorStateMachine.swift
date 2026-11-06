@@ -21,9 +21,6 @@ class AppCoordinatorStateMachine {
         
         /// User session started
         case signedIn
-        
-        /// Processing a sign out request
-        case signingOut
     }
     
     /// Events that can be triggered on the AppCoordinator state machine
@@ -39,11 +36,6 @@ class AppCoordinatorStateMachine {
         
         /// A session has been created.
         case createdUserSession
-        
-        /// Request sign out.
-        case signOut
-        /// Signing out completed.
-        case completedSigningOut
         
         /// Request cache clearing.
         case clearCache
@@ -66,9 +58,6 @@ class AppCoordinatorStateMachine {
         stateMachine.addRoutes(event: .startWithExistingSession, transitions: [.initial => .restoringSession])
         stateMachine.addRoutes(event: .createdUserSession, transitions: [.restoringSession => .signedIn])
         stateMachine.addRoutes(event: .failedRestoringSession, transitions: [.restoringSession => .signedOut])
-        
-        stateMachine.addRoutes(event: .signOut, transitions: [.any => .signingOut])
-        stateMachine.addRoutes(event: .completedSigningOut, transitions: [.signingOut => .signedOut])
         
         stateMachine.addRoutes(event: .clearCache, transitions: [.signedIn => .initial])
         

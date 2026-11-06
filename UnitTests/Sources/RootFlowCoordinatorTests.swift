@@ -5,6 +5,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Combine
 @testable import ElementX
 import SwiftUI
 import Testing
@@ -12,7 +13,8 @@ import Testing
 @MainActor
 struct RootFlowCoordinatorTests {
     private let navigationRootCoordinator = NavigationRootCoordinator()
-    private let userSessionManager = UserSessionManagerMock(.init())
+    private let userSessionManager: UserSessionManagerMock
+    private let userSessionManagerCallbacks = PassthroughSubject<UserSessionManagerCallback, Never>()
     private let clientProxy: ClientProxyMock
     private let roomID = "1"
     private let inviteRoomID = "someAwesomeRoomId1"
@@ -25,8 +27,8 @@ struct RootFlowCoordinatorTests {
         clientProxy.roomPreviewForIdentifierViaReturnValue = .success(RoomPreviewProxyMock.invited())
         
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
-        userSessionManager.activeSession = userSession
-        userSessionManager.sessionsPublisher = .init([userSession])
+        userSessionManager = UserSessionManagerMock(.init(sessions: [userSession],
+                                                          callbacksPublisher: userSessionManagerCallbacks.eraseToAnyPublisher()))
         
         rootFlowCoordinator = RootFlowCoordinator(navigationRootCoordinator: navigationRootCoordinator,
                                                   userSessionManager: userSessionManager,
@@ -74,6 +76,37 @@ struct RootFlowCoordinatorTests {
         let splitCoordinator = try #require(chatsSplitCoordinator)
         let deferred = deferFailure(splitCoordinator.observe(\.detailRootCoordinatorID), timeout: .seconds(1)) { $0 != nil }
         try await deferred.fulfill()
+    }
+    
+    // MARK: Account removal
+    
+    @Test("Removing the shown account switches to the next account's flow")
+    func shownAccountRemoval() async throws {
+        rootFlowCoordinator.handleAppRoute(.roomList, animated: false)
+        let aliceRootCoordinator = navigationRootCoordinator.rootCoordinator
+        
+        let bob = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@bob:matrix.org"))))
+        userSessionManager.activeSession = bob
+        userSessionManager.sessionsPublisher = .init([bob])
+        let deferred = deferFulfillment(rootFlowCoordinator.actionsPublisher) { action in
+            guard case .closeSecondaryWindows = action else { return false }
+            return true
+        }
+        userSessionManagerCallbacks.send(.didRemoveAccount(userID: "@alice:matrix.org", isUnexpected: false))
+        try await deferred.fulfill()
+        
+        #expect(navigationRootCoordinator.rootCoordinator is NavigationTabCoordinator<UserSessionFlowCoordinator.HomeTab>)
+        #expect(navigationRootCoordinator.rootCoordinator !== aliceRootCoordinator)
+    }
+    
+    @Test("Removing an account that isn't shown leaves the root untouched")
+    func backgroundAccountRemoval() {
+        rootFlowCoordinator.handleAppRoute(.roomList, animated: false)
+        let rootCoordinator = navigationRootCoordinator.rootCoordinator
+        
+        userSessionManagerCallbacks.send(.didRemoveAccount(userID: "@bob:matrix.org", isUnexpected: true))
+        
+        #expect(navigationRootCoordinator.rootCoordinator === rootCoordinator)
     }
     
     // MARK: - Helpers
