@@ -40,12 +40,6 @@ class TimelineItemProvider: TimelineItemProviderProtocol {
     
     let kind: TimelineKind
     
-    private let membershipChangeSubject = PassthroughSubject<Void, Never>()
-    var membershipChangePublisher: AnyPublisher<Void, Never> {
-        membershipChangeSubject
-            .eraseToAnyPublisher()
-    }
-    
     deinit {
         diffContinuation.finish()
         roomTimelineObservationToken?.cancel()
@@ -86,23 +80,13 @@ class TimelineItemProvider: TimelineItemProviderProtocol {
         
         // Building the item proxies and computing/applying the CollectionDifference can be
         // expensive, so run it off the main actor and only hop back to publish the result.
-        let result = await Self.processDiffs(diffs, on: itemProxies, spanName: "process_timeline_list_diffs:\(kind)")
-        
-        itemProxies = result.itemProxies
-        
-        if result.hasMembershipChange {
-            membershipChangeSubject.send(())
-        }
+        itemProxies = await Self.processDiffs(diffs, on: itemProxies)
     }
     
     @concurrent
-    private static func processDiffs(_ diffs: [TimelineDiff],
-                                     on currentItems: [TimelineItemProxy],
-                                     spanName: String) async -> (itemProxies: [TimelineItemProxy], hasMembershipChange: Bool) {
-        var hasMembershipChange = false
-        
-        let itemProxies = diffs.reduce(currentItems) { currentItems, diff in
-            guard let collectionDiff = buildDiff(from: diff, on: currentItems, hasMembershipChange: &hasMembershipChange) else {
+    private static func processDiffs(_ diffs: [TimelineDiff], on currentItems: [TimelineItemProxy]) async -> [TimelineItemProxy] {
+        diffs.reduce(currentItems) { currentItems, diff in
+            guard let collectionDiff = buildDiff(from: diff, on: currentItems) else {
                 MXLog.error("Failed building CollectionDifference from \(diff)")
                 return currentItems
             }
@@ -114,22 +98,15 @@ class TimelineItemProvider: TimelineItemProviderProtocol {
             
             return updatedItems
         }
-        
-        return (itemProxies, hasMembershipChange)
     }
     
-    private nonisolated static func buildDiff(from diff: TimelineDiff, on itemProxies: [TimelineItemProxy], hasMembershipChange: inout Bool) -> CollectionDifference<TimelineItemProxy>? {
+    private nonisolated static func buildDiff(from diff: TimelineDiff, on itemProxies: [TimelineItemProxy]) -> CollectionDifference<TimelineItemProxy>? {
         var changes = [CollectionDifference<TimelineItemProxy>.Change]()
         
         switch diff {
         case .append(let items):
             for (index, item) in items.enumerated() {
                 let itemProxy = TimelineItemProxy(item: item)
-                
-                if itemProxy.isMembershipChange {
-                    hasMembershipChange = true
-                }
-                
                 changes.append(.insert(offset: Int(itemProxies.count) + index, element: itemProxy, associatedWith: nil))
             }
         case .clear:
@@ -149,10 +126,6 @@ class TimelineItemProvider: TimelineItemProviderProtocol {
             changes.append(.remove(offset: 0, element: itemProxy, associatedWith: nil))
         case .pushBack(let item):
             let itemProxy = TimelineItemProxy(item: item)
-            
-            if itemProxy.isMembershipChange {
-                hasMembershipChange = true
-            }
             
             changes.append(.insert(offset: Int(itemProxies.count), element: itemProxy, associatedWith: nil))
         case .pushFront(let item):
@@ -182,22 +155,6 @@ class TimelineItemProvider: TimelineItemProviderProtocol {
         }
         
         return CollectionDifference(changes)
-    }
-}
-
-private nonisolated extension TimelineItemProxy {
-    var isMembershipChange: Bool {
-        switch self {
-        case .event(let eventTimelineItemProxy):
-            switch eventTimelineItemProxy.content {
-            case .roomMembership:
-                true
-            default:
-                false
-            }
-        case .virtual, .unknown:
-            false
-        }
     }
 }
 

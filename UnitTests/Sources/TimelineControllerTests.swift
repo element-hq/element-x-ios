@@ -82,7 +82,6 @@ struct TimelineControllerTests {
         provider.kind = kind
         provider.itemProxies = itemProxies
         provider.paginationState = paginationState
-        provider.membershipChangePublisher = PassthroughSubject().eraseToAnyPublisher()
         provider.updatePublisher = CurrentValueSubject((itemProxies, paginationState)).eraseToAnyPublisher()
         
         return TimelineProxyMock(.init(timelineItemProvider: provider))

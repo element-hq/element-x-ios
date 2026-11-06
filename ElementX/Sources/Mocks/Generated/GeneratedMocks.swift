@@ -13791,11 +13791,6 @@ nonisolated class TimelineItemProviderMock: TimelineItemProviderProtocol, @unche
         set(value) { underlyingKind = value }
     }
     nonisolated(unsafe) var underlyingKind: TimelineKind!
-    var membershipChangePublisher: AnyPublisher<Void, Never> {
-        get { return underlyingMembershipChangePublisher }
-        set(value) { underlyingMembershipChangePublisher = value }
-    }
-    nonisolated(unsafe) var underlyingMembershipChangePublisher: AnyPublisher<Void, Never>!
 
 }
 nonisolated class TimelineProxyMock: TimelineProxyProtocol, @unchecked Sendable {

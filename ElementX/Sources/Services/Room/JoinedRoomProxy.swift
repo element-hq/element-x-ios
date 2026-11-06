@@ -22,12 +22,17 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     // periphery:ignore - required for instance retention in the rust codebase
     private var typingNotificationObservationToken: TaskHandle?
     // periphery:ignore - required for instance retention in the rust codebase
+    private var memberChangesObservationToken: TaskHandle?
+    // periphery:ignore - required for instance retention in the rust codebase
     private var identityStatusChangesObservationToken: TaskHandle?
     // periphery:ignore - required for instance retention in the rust codebase
     private var knockRequestsChangesObservationToken: TaskHandle?
     
     private var innerPinnedEventsTimeline: TimelineProxyProtocol?
     private var innerPinnedEventsTimelineTask: Task<Result<TimelineProxyProtocol, RoomProxyError>, Never>?
+    
+    private var reloadMembersTask: Task<Void, Never>?
+    private var needsMembersReload = false
     
     private var subscribedForUpdates = false
     
@@ -49,6 +54,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         infoSubject.asCurrentValuePublisher()
     }
     
+    private var publishedMembers = [RoomMember]()
     private let membersSubject = CurrentValueSubject<[RoomMemberProxyProtocol], Never>([])
     var membersPublisher: CurrentValuePublisher<[RoomMemberProxyProtocol], Never> {
         membersSubject.asCurrentValuePublisher()
@@ -123,6 +129,8 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         
         Task {
             subscribeToRoomInfoUpdates()
+            
+            subscribeToMemberChanges()
             
             subscribeToTypingNotifications()
             
@@ -318,20 +326,13 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     func updateMembers() async {
         // We always update members first using the no sync API in case internet is not readily available
         // To get the members stored on disk first, this API call is very fast.
-        do {
-            let membersNoSyncIterator = try await room.membersNoSync()
-            if let members = membersNoSyncIterator.nextChunk(chunkSize: membersNoSyncIterator.len()) {
-                membersSubject.value = members.map(RoomMemberProxy.init)
-            }
-        } catch {
-            MXLog.error("Failed updating members using no sync API: \(error)")
-        }
+        await reloadMembersFromStore()
         
         do {
             // Then we update members using the sync API, this is slower but will get us the latest members
             let membersIterator = try await room.membersFetchingGlobalProfiles()
-            if let members = membersIterator.nextChunk(chunkSize: membersIterator.len()) {
-                membersSubject.value = members.map(RoomMemberProxy.init)
+            if let members = await Self.changedMembers(in: membersIterator, from: publishedMembers) {
+                publishMembers(members)
             }
         } catch {
             MXLog.error("Failed updating members using sync API: \(error)")
@@ -748,6 +749,49 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     }
     
     // MARK: - Private
+    
+    private func subscribeToMemberChanges() {
+        memberChangesObservationToken = room.subscribeToStateEvents(eventType: .roomMember, listener: SDKListener.onMainActor { [weak self] _ in
+            guard let self else { return }
+            
+            MXLog.info("Received room member changes")
+            
+            // Changes arriving while a reload runs are folded into a single follow-up reload.
+            needsMembersReload = true
+            guard reloadMembersTask == nil else { return }
+            
+            reloadMembersTask = Task { [weak self] in
+                while let self, needsMembersReload {
+                    needsMembersReload = false
+                    await updateMembers()
+                }
+                self?.reloadMembersTask = nil
+            }
+        })
+    }
+    
+    private func reloadMembersFromStore() async {
+        do {
+            if let members = try await Self.changedMembers(in: room.membersNoSync(), from: publishedMembers) {
+                publishMembers(members)
+            }
+        } catch {
+            MXLog.error("Failed updating members using no sync API: \(error)")
+        }
+    }
+    
+    /// Reads every member off the main actor as large rooms have thousands. Returns nil when nothing changed,
+    /// which is most updates once the full list is stored, so that member screens don't rebuild for nothing.
+    @concurrent
+    private static func changedMembers(in iterator: RoomMembersIterator, from publishedMembers: [RoomMember]) async -> [RoomMember]? {
+        guard let members = iterator.nextChunk(chunkSize: iterator.len()), members != publishedMembers else { return nil }
+        return members
+    }
+    
+    private func publishMembers(_ members: [RoomMember]) {
+        publishedMembers = members
+        membersSubject.value = members.map(RoomMemberProxy.init)
+    }
     
     private func subscribeToTypingNotifications() {
         typingNotificationObservationToken = room.subscribeToTypingNotifications(listener: SDKListener.onMainActor { [weak self] typingUserIDs in
