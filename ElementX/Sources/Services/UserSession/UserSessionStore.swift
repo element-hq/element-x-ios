@@ -57,8 +57,7 @@ class UserSessionStore: UserSessionStoreProtocol {
             return .failure(.unknownAccount)
         }
         
-        let userSettings = appHooks.userSessionHook.configure(appSettings.userSettings(for: credentials.userID),
-                                                              forHomeserver: credentials.restorationToken.session.homeserverUrl)
+        let userSettings = configuredUserSettings(for: credentials)
         
         switch await restorePreviousLogin(credentials, userSettings: userSettings) {
         case .success(let clientProxy):
@@ -67,6 +66,7 @@ class UserSessionStore: UserSessionStoreProtocol {
             MXLog.error("Failed restoring login with error: \(error)")
             
             // On any restoration failure reset the token and restart
+            userSettings.account.reset()
             keychainController.removeRestorationTokenForUsername(credentials.userID)
             do {
                 try credentials.restorationToken.sessionDirectories.delete()
@@ -100,17 +100,23 @@ class UserSessionStore: UserSessionStoreProtocol {
         }
     }
     
-    func logout(userSession: UserSessionProtocol) {
-        let userID = userSession.clientProxy.userID
+    func logout(userID: String) {
         let credentials = keychainController.restorationTokens().first { $0.userID == userID }
         keychainController.removeRestorationTokenForUsername(userID)
         
         if let credentials {
+            configuredUserSettings(for: credentials).account.reset()
             try? credentials.restorationToken.sessionDirectories.delete()
         }
     }
     
     // MARK: - Private
+    
+    /// The account's settings, with the hooks for its homeserver applied.
+    private func configuredUserSettings(for credentials: KeychainCredentials) -> UserSettings {
+        appHooks.userSessionHook.configure(appSettings.userSettings(for: credentials.userID),
+                                           forHomeserver: credentials.restorationToken.session.homeserverUrl)
+    }
     
     private func buildUserSessionWithClient(_ clientProxy: ClientProxyProtocol, userSettings: UserSettings) async -> UserSessionProtocol {
         let mediaProvider = MediaProvider(mediaLoader: clientProxy.mediaLoader,

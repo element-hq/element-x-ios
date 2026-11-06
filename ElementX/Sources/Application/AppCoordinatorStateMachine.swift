@@ -23,7 +23,7 @@ class AppCoordinatorStateMachine {
         case signedIn
         
         /// Processing a sign out request
-        case signingOut(disableAppLock: Bool)
+        case signingOut
     }
     
     /// Events that can be triggered on the AppCoordinator state machine
@@ -41,7 +41,7 @@ class AppCoordinatorStateMachine {
         case createdUserSession
         
         /// Request sign out.
-        case signOut(disableAppLock: Bool)
+        case signOut
         /// Signing out completed.
         case completedSigningOut
         
@@ -67,20 +67,10 @@ class AppCoordinatorStateMachine {
         stateMachine.addRoutes(event: .createdUserSession, transitions: [.restoringSession => .signedIn])
         stateMachine.addRoutes(event: .failedRestoringSession, transitions: [.restoringSession => .signedOut])
         
-        stateMachine.addRoutes(event: .completedSigningOut, transitions: [.signingOut(disableAppLock: false) => .signedOut,
-                                                                          .signingOut(disableAppLock: true) => .signedOut])
+        stateMachine.addRoutes(event: .signOut, transitions: [.any => .signingOut])
+        stateMachine.addRoutes(event: .completedSigningOut, transitions: [.signingOut => .signedOut])
         
         stateMachine.addRoutes(event: .clearCache, transitions: [.signedIn => .initial])
-        
-        // Transitions with associated values need to be handled through `addRouteMapping`
-        stateMachine.addRouteMapping { event, fromState, _ in
-            switch (fromState, event) {
-            case (_, .signOut(let disableAppLock)):
-                return .signingOut(disableAppLock: disableAppLock)
-            default:
-                return nil
-            }
-        }
         
         addTransitionHandler { context in
             if let event = context.event {

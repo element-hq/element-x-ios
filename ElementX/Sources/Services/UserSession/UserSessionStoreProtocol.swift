@@ -30,12 +30,12 @@ protocol UserSessionStoreProtocol {
     /// Returns the delegate that should handle any changes to a `Client`'s `Session`.
     var clientSessionDelegate: ClientSessionDelegate { get }
     
-    /// Restores the session of the given account. If this fails, the account's credentials and data are deleted.
+    /// Restores the session of the given account. If this fails, the account's credentials, data and settings are deleted.
     func restoreUserSession(userID: String) async -> Result<UserSessionProtocol, UserSessionStoreError>
     
     /// Creates a user session for a new client from the SDK along with the passphrase used for the data stores.
     func userSession(for client: ClientProtocol, sessionDirectories: SessionDirectories, passphrase: Data) async -> Result<UserSessionProtocol, UserSessionStoreError>
     
-    /// Logs out of the specified session.
-    func logout(userSession: UserSessionProtocol)
+    /// Deletes the credentials, data and settings of the given account.
+    func logout(userID: String)
 }

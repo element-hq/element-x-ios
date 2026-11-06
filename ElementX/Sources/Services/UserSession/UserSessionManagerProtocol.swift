@@ -51,6 +51,8 @@ protocol UserSessionManagerProtocol: AnyObject {
     func add(_ userSession: UserSessionProtocol)
     /// Logs an account out of the server, then removes it.
     func logout(userID: String) async
+    /// Logs out every account.
+    func logoutAll() async
     /// Deletes an account's credentials and data, and forgets its session.
     func remove(userID: String)
     /// Deletes every account's credentials and data.

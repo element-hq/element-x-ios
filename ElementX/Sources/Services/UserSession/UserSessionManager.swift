@@ -202,18 +202,31 @@ final class UserSessionManager: UserSessionManagerProtocol {
         
         // Remove the user, clearing user data.
         remove(userID: userID)
-        userSession.userSettings.account.reset()
         
         callbacksSubject.send(.didRemoveAccount(userID: userID, isUnexpected: isUnexpected))
     }
     
+    func logoutAll() async {
+        await restorationTask?.value // Wait for all accounts to finish restoration first.
+        
+        for userID in userIDs {
+            if session(for: userID) != nil {
+                await logout(userID: userID)
+            } else {
+                // Very unlikely to happen in practice.
+                remove(userID: userID) // Without a live session just make sure the account's local data is deleted.
+                callbacksSubject.send(.didRemoveAccount(userID: userID, isUnexpected: false))
+            }
+        }
+    }
+    
     func remove(userID: String) {
-        guard let userSession = accounts[userID] ?? nil else {
-            MXLog.error("Tried to remove \(userID), which doesn't have a live session.")
+        guard accounts.keys.contains(userID) else {
+            MXLog.error("Tried to remove \(userID), which isn't signed in.")
             return
         }
         
-        userSessionStore.logout(userSession: userSession)
+        userSessionStore.logout(userID: userID)
         clearedUserIDs.remove(userID)
         accounts.removeValue(forKey: userID)
         notificationManager.remove(userID: userID)

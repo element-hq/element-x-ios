@@ -15696,6 +15696,23 @@ nonisolated class UserSessionManagerMock: UserSessionManagerProtocol, @unchecked
         logoutUserIDReceivedInvocationsLock.withLock { logoutUserIDUnderlyingReceivedInvocations.append(userID) }
         await logoutUserIDClosure?(userID)
     }
+    //MARK: - logoutAll
+
+    private let logoutAllCallsCountLock = NSLock()
+    private nonisolated(unsafe) var logoutAllUnderlyingCallsCount = 0
+    var logoutAllCallsCount: Int {
+        get { logoutAllCallsCountLock.withLock { logoutAllUnderlyingCallsCount } }
+        set { logoutAllCallsCountLock.withLock { logoutAllUnderlyingCallsCount = newValue } }
+    }
+    var logoutAllCalled: Bool {
+        return logoutAllCallsCount > 0
+    }
+    nonisolated(unsafe) var logoutAllClosure: (() async -> Void)?
+
+    @concurrent func logoutAll() async {
+        logoutAllCallsCountLock.withLock { logoutAllUnderlyingCallsCount += 1 }
+        await logoutAllClosure?()
+    }
     //MARK: - remove
 
     private let removeUserIDCallsCountLock = NSLock()
@@ -16093,34 +16110,34 @@ nonisolated class UserSessionStoreMock: UserSessionStoreProtocol, @unchecked Sen
     }
     //MARK: - logout
 
-    private let logoutUserSessionCallsCountLock = NSLock()
-    private nonisolated(unsafe) var logoutUserSessionUnderlyingCallsCount = 0
-    var logoutUserSessionCallsCount: Int {
-        get { logoutUserSessionCallsCountLock.withLock { logoutUserSessionUnderlyingCallsCount } }
-        set { logoutUserSessionCallsCountLock.withLock { logoutUserSessionUnderlyingCallsCount = newValue } }
+    private let logoutUserIDCallsCountLock = NSLock()
+    private nonisolated(unsafe) var logoutUserIDUnderlyingCallsCount = 0
+    var logoutUserIDCallsCount: Int {
+        get { logoutUserIDCallsCountLock.withLock { logoutUserIDUnderlyingCallsCount } }
+        set { logoutUserIDCallsCountLock.withLock { logoutUserIDUnderlyingCallsCount = newValue } }
     }
-    var logoutUserSessionCalled: Bool {
-        return logoutUserSessionCallsCount > 0
+    var logoutUserIDCalled: Bool {
+        return logoutUserIDCallsCount > 0
     }
-    private let logoutUserSessionReceivedUserSessionLock = NSLock()
-    private nonisolated(unsafe) var logoutUserSessionUnderlyingReceivedUserSession: UserSessionProtocol?
-    var logoutUserSessionReceivedUserSession: UserSessionProtocol? {
-        get { logoutUserSessionReceivedUserSessionLock.withLock { logoutUserSessionUnderlyingReceivedUserSession } }
-        set { logoutUserSessionReceivedUserSessionLock.withLock { logoutUserSessionUnderlyingReceivedUserSession = newValue } }
+    private let logoutUserIDReceivedUserIDLock = NSLock()
+    private nonisolated(unsafe) var logoutUserIDUnderlyingReceivedUserID: String?
+    var logoutUserIDReceivedUserID: String? {
+        get { logoutUserIDReceivedUserIDLock.withLock { logoutUserIDUnderlyingReceivedUserID } }
+        set { logoutUserIDReceivedUserIDLock.withLock { logoutUserIDUnderlyingReceivedUserID = newValue } }
     }
-    private let logoutUserSessionReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var logoutUserSessionUnderlyingReceivedInvocations: [UserSessionProtocol] = []
-    var logoutUserSessionReceivedInvocations: [UserSessionProtocol] {
-        get { logoutUserSessionReceivedInvocationsLock.withLock { logoutUserSessionUnderlyingReceivedInvocations } }
-        set { logoutUserSessionReceivedInvocationsLock.withLock { logoutUserSessionUnderlyingReceivedInvocations = newValue } }
+    private let logoutUserIDReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var logoutUserIDUnderlyingReceivedInvocations: [String] = []
+    var logoutUserIDReceivedInvocations: [String] {
+        get { logoutUserIDReceivedInvocationsLock.withLock { logoutUserIDUnderlyingReceivedInvocations } }
+        set { logoutUserIDReceivedInvocationsLock.withLock { logoutUserIDUnderlyingReceivedInvocations = newValue } }
     }
-    nonisolated(unsafe) var logoutUserSessionClosure: ((UserSessionProtocol) -> Void)?
+    nonisolated(unsafe) var logoutUserIDClosure: ((String) -> Void)?
 
-    func logout(userSession: UserSessionProtocol) {
-        logoutUserSessionCallsCountLock.withLock { logoutUserSessionUnderlyingCallsCount += 1 }
-        logoutUserSessionReceivedUserSession = userSession
-        logoutUserSessionReceivedInvocationsLock.withLock { logoutUserSessionUnderlyingReceivedInvocations.append(userSession) }
-        logoutUserSessionClosure?(userSession)
+    func logout(userID: String) {
+        logoutUserIDCallsCountLock.withLock { logoutUserIDUnderlyingCallsCount += 1 }
+        logoutUserIDReceivedUserID = userID
+        logoutUserIDReceivedInvocationsLock.withLock { logoutUserIDUnderlyingReceivedInvocations.append(userID) }
+        logoutUserIDClosure?(userID)
     }
 }
 nonisolated class VoiceMessageCacheMock: VoiceMessageCacheProtocol, @unchecked Sendable {
