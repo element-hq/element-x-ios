@@ -780,17 +780,6 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
             await userSessionManager.logout(userID: userSession.clientProxy.userID)
             tearDownUserSession()
             
-            // Signed in accounts that aren't live yet still count.
-            if userSessionManager.userIDs.isEmpty {
-                notificationManager.reset()
-            }
-            
-            appHooks.remoteSettingsHook.reset(appSettings)
-            
-            // Reset analytics
-            analyticsService.optOut()
-            analyticsService.resetConsentState()
-            
             stateMachine.processEvent(.completedSigningOut)
             
             hideLoadingIndicator()
@@ -856,16 +845,27 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
             .sink { [weak self] callback in
                 guard let self else { return }
                 switch callback {
-                case .didReceiveAuthError(let userID):
-                    // Only the active account can be signed out for now.
-                    guard userID == userSessionManager.activeSession?.clientProxy.userID else {
-                        MXLog.error("Ignoring an auth error for \(userID), it isn't the active account.")
-                        return
-                    }
-                    stateMachine.processEvent(.signOut(disableAppLock: false))
+                case .didRemoveAccount:
+                    handleAccountRemoval()
                 }
             }
             .store(in: &cancellables)
+    }
+    
+    private func handleAccountRemoval() {
+        #warning("Make sure to test this but it may well move.")
+        if let activeSession = userSessionManager.activeSession {
+            appHooks.remoteSettingsHook.loadCache(forHomeserver: activeSession.clientProxy.homeserver, applyingTo: appSettings)
+        } else {
+            appHooks.remoteSettingsHook.reset(appSettings)
+        }
+        
+        // Signed in accounts that aren't live yet still count.
+        guard userSessionManager.userIDs.isEmpty else { return }
+        
+        notificationManager.reset()
+        analyticsService.optOut()
+        analyticsService.resetConsentState()
     }
     
     private func observeAppLockChanges() {

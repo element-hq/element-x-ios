@@ -237,7 +237,7 @@ struct UserSessionManagerTests {
     }
     
     @Test("Logging out tears down and removes only the given account")
-    func logoutOneAccount() async {
+    func logoutOneAccount() async throws {
         appSettings.multiAccountEnabled = true
         let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org"])
         let aliceClientProxy = ClientProxyMock(.init(userID: "@alice:matrix.org"))
@@ -256,7 +256,9 @@ struct UserSessionManagerTests {
         manager.add(alice)
         manager.add(bob)
         
+        let deferred = deferFulfillment(manager.callbacksPublisher) { $0 == .didRemoveAccount(userID: "@alice:matrix.org", isUnexpected: false) }
         await manager.logout(userID: "@alice:matrix.org")
+        try await deferred.fulfill()
         
         #expect(aliceClientProxy.pauseServicesCalled)
         #expect(aliceNotificationService.tearDownCalled)
@@ -325,12 +327,14 @@ struct UserSessionManagerTests {
         #expect(Set(elementCallManager.removeUserIDReceivedInvocations) == ["@alice:matrix.org", "@bob:matrix.org"])
     }
     
-    @Test("A failed restore disconnects the account's services")
-    func restoreFailureDisconnectsServices() async {
+    @Test("A failed restore disconnects the account's services and reports its unexpected removal")
+    func restorationFailure() async throws {
         let manager = makeManager(userIDs: ["@alice:matrix.org"])
         userSessionStore.restoreUserSessionUserIDReturnValue = .failure(.failedRestoringLogin)
         
+        let deferred = deferFulfillment(manager.callbacksPublisher) { $0 == .didRemoveAccount(userID: "@alice:matrix.org", isUnexpected: true) }
         await manager.restoreSessions { _ in } didAdd: { _ in }
+        try await deferred.fulfill()
         
         #expect(notificationManager.removeUserIDReceivedInvocations == ["@alice:matrix.org"])
         #expect(liveLocationManager.removeUserIDReceivedInvocations == ["@alice:matrix.org"])
@@ -354,22 +358,38 @@ struct UserSessionManagerTests {
         #expect(bobClientProxy.pauseServicesCallsCount == 1)
     }
     
-    @Test("The auth errors of the live sessions are reported")
-    func authErrors() async throws {
+    @Test("An auth error logs out only the account it belongs to, even when it isn't the active one")
+    func authError() async throws {
+        appSettings.multiAccountEnabled = true
         let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org"])
-        manager.add(makeUserSession(userID: "@alice:matrix.org"))
-        let bob = makeUserSession(userID: "@bob:matrix.org")
+        let aliceClientProxy = ClientProxyMock(.init(userID: "@alice:matrix.org"))
+        let bobClientProxy = ClientProxyMock(.init(userID: "@bob:matrix.org"))
+        let bob = UserSessionMock(.init(clientProxy: bobClientProxy))
+        manager.add(UserSessionMock(.init(clientProxy: aliceClientProxy)))
         manager.add(bob)
         
-        let deferred = deferFulfillment(manager.callbacksPublisher) { $0 == .didReceiveAuthError(userID: "@bob:matrix.org") }
+        let deferred = deferFulfillment(manager.callbacksPublisher) { $0 == .didRemoveAccount(userID: "@bob:matrix.org", isUnexpected: true) }
         bob.callbacks.send(.didReceiveAuthError)
         try await deferred.fulfill()
         
-        // A replaced session (e.g. after clearing the cache) mustn't report anything anymore.
+        #expect(bobClientProxy.logoutCalled)
+        #expect(!aliceClientProxy.logoutCalled)
+        #expect(manager.userIDs == ["@alice:matrix.org"])
+    }
+    
+    @Test("An auth error from a replaced session is ignored")
+    func replacedSessionAuthError() async throws {
+        let manager = makeManager(userIDs: ["@alice:matrix.org"])
+        let oldAlice = makeUserSession(userID: "@alice:matrix.org")
+        manager.add(oldAlice)
+        // E.g. after clearing the cache.
+        manager.add(makeUserSession(userID: "@alice:matrix.org"))
+        
         let deferredFailure = deferFailure(manager.callbacksPublisher, timeout: .milliseconds(300)) { _ in true }
-        manager.add(makeUserSession(userID: "@bob:matrix.org"))
-        bob.callbacks.send(.didReceiveAuthError)
+        oldAlice.callbacks.send(.didReceiveAuthError)
         try await deferredFailure.fulfill()
+        
+        #expect(manager.userIDs == ["@alice:matrix.org"])
     }
     
     // MARK: - Helpers

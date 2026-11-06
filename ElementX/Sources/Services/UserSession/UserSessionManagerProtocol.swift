@@ -10,7 +10,10 @@ import Foundation
 import MatrixRustSDK
 
 enum UserSessionManagerCallback: Equatable {
-    case didReceiveAuthError(userID: String)
+    /// An account was removed along with all of its data.
+    ///
+    /// `isUnexpected` can be used to inform the user of the event.
+    case didRemoveAccount(userID: String, isUnexpected: Bool)
 }
 
 // sourcery: AutoMockable
@@ -21,7 +24,7 @@ protocol UserSessionManagerProtocol: AnyObject {
     var sessionsPublisher: CurrentValuePublisher<[UserSessionProtocol], Never> { get }
     /// The session of the account whose UI is on screen.
     var activeSession: UserSessionProtocol? { get }
-    /// The auth errors of every live session, with the account they belong to.
+    /// The changes made to the accounts, such as an account being removed.
     var callbacksPublisher: AnyPublisher<UserSessionManagerCallback, Never> { get }
     /// The delegate that stores changes to a client's session, such as refreshed tokens.
     var clientSessionDelegate: ClientSessionDelegate { get }
@@ -43,7 +46,7 @@ protocol UserSessionManagerProtocol: AnyObject {
     /// Registers a session that's ready to be used, replacing any previous session for its account.
     /// A new account becomes the active one, a known account keeps its place.
     func add(_ userSession: UserSessionProtocol)
-    /// Logs an account out of the server, then removes it. Other accounts are untouched.
+    /// Logs an account out of the server, then removes it.
     func logout(userID: String) async
     /// Deletes an account's credentials and data, and forgets its session.
     func remove(userID: String)
