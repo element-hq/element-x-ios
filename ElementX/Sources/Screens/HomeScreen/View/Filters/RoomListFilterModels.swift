@@ -28,25 +28,6 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
         RoomListFilter.allCases
     }
     
-    var localizedName: String {
-        switch self {
-        case .people:
-            return L10n.screenRoomlistFilterPeople
-        case .rooms:
-            return L10n.screenRoomlistFilterRooms
-        case .unreads:
-            return L10n.screenRoomlistFilterUnreads
-        case .mentions:
-            return L10n.screenRoomlistFilterMention
-        case .favourites:
-            return L10n.screenRoomlistFilterFavourites
-        case .invites:
-            return L10n.screenRoomlistFilterInvites
-        case .lowPriority:
-            return L10n.screenRoomlistFilterLowPriority
-        }
-    }
-    
     var incompatibleFilters: [RoomListFilter] {
         switch self {
         case .people:
@@ -89,15 +70,29 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
 
 struct RoomListFiltersState {
     private(set) var activeFilters: OrderedSet<RoomListFilter>
+    /// The number of pending invites, seen or not.
+    var invitesCount: Int
+    /// Whether any pending invite hasn't been opened yet, which moves the invites filter to the front.
+    var hasUnseenInvites: Bool
     private let userSettings: UserSettings
     
-    init(activeFilters: OrderedSet<RoomListFilter> = [], userSettings: UserSettings) {
+    init(activeFilters: OrderedSet<RoomListFilter> = [],
+         invitesCount: Int = 0,
+         hasUnseenInvites: Bool = false,
+         userSettings: UserSettings) {
         self.activeFilters = .init(activeFilters)
+        self.invitesCount = invitesCount
+        self.hasUnseenInvites = hasUnseenInvites
         self.userSettings = userSettings
     }
     
     var availableFilters: [RoomListFilter] {
         var availableFilters = OrderedSet(RoomListFilter.availableFilters)
+        
+        if hasUnseenInvites {
+            availableFilters.remove(.invites)
+            availableFilters.insert(.invites, at: 0)
+        }
         
         if !userSettings.app.lowPriorityFilterEnabled {
             availableFilters.remove(.lowPriority)
@@ -138,5 +133,23 @@ struct RoomListFiltersState {
     
     func isFilterActive(_ filter: RoomListFilter) -> Bool {
         activeFilters.contains(filter)
+    }
+    
+    func localizedName(for filter: RoomListFilter) -> String {
+        switch filter {
+        case .unreads: L10n.screenRoomlistFilterUnreads
+        case .mentions: L10n.screenRoomlistFilterMention
+        case .favourites: L10n.screenRoomlistFilterFavourites
+        case .people: L10n.screenRoomlistFilterPeople
+        case .rooms: L10n.screenRoomlistFilterRooms
+        case .invites:
+            if invitesCount > 0 {
+                // TODO: Move this string to Localazy if the prominent invites filter ships, or delete it if the feature is removed.
+                UntranslatedL10n.screenRoomlistFilterInvitesCount(invitesCount)
+            } else {
+                L10n.screenRoomlistFilterInvites
+            }
+        case .lowPriority: L10n.screenRoomlistFilterLowPriority
+        }
     }
 }

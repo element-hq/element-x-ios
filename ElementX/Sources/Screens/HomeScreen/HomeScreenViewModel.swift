@@ -126,6 +126,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             }
             .store(in: &cancellables)
         
+        setupInvitesSubscription()
+        
         userSettings.app.hasSeenNewSoundBannerPublisher
             .sink { [weak self] hasSeenNewSoundBanner in
                 self?.state.shouldShowNewSoundBanner = !hasSeenNewSoundBanner
@@ -339,6 +341,28 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 
                 updateRooms()
                 updateRoomListMode(with: state, hasRooms: !rooms.isEmpty)
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func setupInvitesSubscription() {
+        // The main room list is filtered and paginated so the invites are counted from the static one.
+        userSession.clientProxy.staticRoomSummaryProvider.roomListPublisher
+            .combineLatest(userSettings.account.seenInvitesPublisher, userSettings.app.prominentInvitesFilterEnabledPublisher, spaceFilterSubject)
+            .map { rooms, seenInvites, isEnabled, spaceFilter -> (count: Int, hasUnseen: Bool) in
+                guard isEnabled else { return (count: 0, hasUnseen: false) }
+                let inviteIDs = rooms
+                    .filter { $0.joinRequestType?.isInvite == true }
+                    .map(\.id)
+                    .filter { spaceFilter?.descendants.contains($0) ?? true }
+                return (count: inviteIDs.count, hasUnseen: inviteIDs.contains { !seenInvites.contains($0) })
+            }
+            .removeDuplicates { $0 == $1 }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] invites in
+                guard let self else { return }
+                state.bindings.filtersState.invitesCount = invites.count
+                state.bindings.filtersState.hasUnseenInvites = invites.hasUnseen
             }
             .store(in: &cancellables)
     }
