@@ -145,7 +145,7 @@ struct SecureBackupRecoveryKeyScreen: View {
     
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
-        if context.viewState.isModallyPresented == true, context.viewState.recoveryKey == nil, !context.viewState.isCompleted {
+        if context.viewState.isModallyPresented, !context.viewState.isCompleted {
             ToolbarItem(placement: .cancellationAction) {
                 Button(L10n.actionCancel) {
                     context.send(viewAction: .cancel)
