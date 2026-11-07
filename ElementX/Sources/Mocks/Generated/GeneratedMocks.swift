@@ -11628,6 +11628,62 @@ nonisolated class SecureBackupControllerMock: SecureBackupControllerProtocol, @u
     }
     //MARK: - generateRecoveryKey
 
+    private let generateRecoveryKeyCallsCountLock = NSLock()
+    private nonisolated(unsafe) var generateRecoveryKeyUnderlyingCallsCount = 0
+    var generateRecoveryKeyCallsCount: Int {
+        get { generateRecoveryKeyCallsCountLock.withLock { generateRecoveryKeyUnderlyingCallsCount } }
+        set { generateRecoveryKeyCallsCountLock.withLock { generateRecoveryKeyUnderlyingCallsCount = newValue } }
+    }
+    var generateRecoveryKeyCalled: Bool {
+        return generateRecoveryKeyCallsCount > 0
+    }
+
+    private let generateRecoveryKeyReturnValueLock = NSLock()
+    private nonisolated(unsafe) var generateRecoveryKeyUnderlyingReturnValue: String!
+    var generateRecoveryKeyReturnValue: String! {
+        get { generateRecoveryKeyReturnValueLock.withLock { generateRecoveryKeyUnderlyingReturnValue } }
+        set { generateRecoveryKeyReturnValueLock.withLock { generateRecoveryKeyUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var generateRecoveryKeyClosure: (() -> String)?
+
+    func generateRecoveryKey() -> String {
+        generateRecoveryKeyCallsCountLock.withLock { generateRecoveryKeyUnderlyingCallsCount += 1 }
+        if let generateRecoveryKeyClosure = generateRecoveryKeyClosure {
+            return generateRecoveryKeyClosure()
+        } else {
+            return generateRecoveryKeyReturnValue
+        }
+    }
+    //MARK: - activateRecoveryKey
+
+    private let activateRecoveryKeyCallsCountLock = NSLock()
+    private nonisolated(unsafe) var activateRecoveryKeyUnderlyingCallsCount = 0
+    var activateRecoveryKeyCallsCount: Int {
+        get { activateRecoveryKeyCallsCountLock.withLock { activateRecoveryKeyUnderlyingCallsCount } }
+        set { activateRecoveryKeyCallsCountLock.withLock { activateRecoveryKeyUnderlyingCallsCount = newValue } }
+    }
+    var activateRecoveryKeyCalled: Bool {
+        return activateRecoveryKeyCallsCount > 0
+    }
+
+    private let activateRecoveryKeyReturnValueLock = NSLock()
+    private nonisolated(unsafe) var activateRecoveryKeyUnderlyingReturnValue: Result<Void, SecureBackupControllerError>!
+    var activateRecoveryKeyReturnValue: Result<Void, SecureBackupControllerError>! {
+        get { activateRecoveryKeyReturnValueLock.withLock { activateRecoveryKeyUnderlyingReturnValue } }
+        set { activateRecoveryKeyReturnValueLock.withLock { activateRecoveryKeyUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var activateRecoveryKeyClosure: (() async -> Result<Void, SecureBackupControllerError>)?
+
+    @concurrent func activateRecoveryKey() async -> Result<Void, SecureBackupControllerError> {
+        activateRecoveryKeyCallsCountLock.withLock { activateRecoveryKeyUnderlyingCallsCount += 1 }
+        if let activateRecoveryKeyClosure = activateRecoveryKeyClosure {
+            return await activateRecoveryKeyClosure()
+        } else {
+            return activateRecoveryKeyReturnValue
+        }
+    }
+    //MARK: - generateRecoveryKey
+
     private let generateRecoveryKeyWithPassphraseCallsCountLock = NSLock()
     private nonisolated(unsafe) var generateRecoveryKeyWithPassphraseUnderlyingCallsCount = 0
     var generateRecoveryKeyWithPassphraseCallsCount: Int {

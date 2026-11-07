@@ -22,6 +22,9 @@ class SecureBackupController: SecureBackupControllerProtocol {
     // periphery:ignore - required for instance retention in the rust codebase
     private var recoveryStateListenerTaskHandle: TaskHandle?
     
+    /// A generated recovery key that is only handed to the SDK when it gets activated.
+    private var pendingRecoveryKey: SecretStorageKey?
+    
     /// Used to dedupe remote backup state requests
     @CancellableTask private var remoteBackupStateTask: Task<Void, Error>?
     
@@ -108,38 +111,32 @@ class SecureBackupController: SecureBackupControllerProtocol {
         return .success(())
     }
     
-    func generateRecoveryKey(withPassphrase passphrase: String?) async -> Result<String, SecureBackupControllerError> {
-        do {
-            if recoveryState.value == .disabled {
-                MXLog.info("Enabling recovery")
-            } else {
-                MXLog.info("Resetting recovery key")
-            }
-            
-            let keyUploadErrored = Mutex(false)
-            let passphraseKey = passphrase.map { SecretStorageKey.newFromPassphrase(passphrase: $0) }
-            // Note: `enableRecovery` also handles the reset case (equivalent to `resetRecoveryKey`).
-            // Despite the name, it is the correct call for both initial setup and key rotation.
-            let recoveryKey = try await encryption.enableRecovery(waitForBackupsToUpload: false, key: passphraseKey, progressListener: SDKListener.onMainActor { [weak self] state in
-                guard let self else { return }
-                
-                switch state {
-                case .starting, .creatingBackup, .creatingRecoveryKey, .backingUp:
-                    recoveryStateSubject.send(.settingUp)
-                case .done:
-                    recoveryStateSubject.send(.enabled)
-                case .roomKeyUploadError:
-                    MXLog.error("Failed enabling recovery: room key upload error")
-                    keyUploadErrored.withLock { $0 = true }
-                }
-            })
-            
-            return keyUploadErrored.withLock { $0 } ? .failure(.failedGeneratingRecoveryKey) : .success(recoveryKey)
-        } catch {
-            MXLog.error("Failed generating recovery key with error: \(error)")
-            
-            return .failure(.failedGeneratingRecoveryKey)
+    func generateRecoveryKey() -> String {
+        MXLog.info("Generating recovery key")
+        
+        let key = SecretStorageKey()
+        pendingRecoveryKey = key
+        return key.toBase58()
+    }
+    
+    func activateRecoveryKey() async -> Result<Void, SecureBackupControllerError> {
+        guard let key = pendingRecoveryKey else {
+            MXLog.error("Failed activating recovery key: none has been generated")
+            return .failure(.failedActivatingRecoveryKey)
         }
+        
+        switch await enableRecovery(with: key) {
+        case .success:
+            pendingRecoveryKey = nil
+            return .success(())
+        case .failure:
+            return .failure(.failedActivatingRecoveryKey)
+        }
+    }
+    
+    func generateRecoveryKey(withPassphrase passphrase: String?) async -> Result<String, SecureBackupControllerError> {
+        let key = passphrase.map { SecretStorageKey.newFromPassphrase(passphrase: $0) } ?? SecretStorageKey()
+        return await enableRecovery(with: key)
     }
     
     func confirmRecoveryKey(_ key: String) async -> Result<Void, SecureBackupControllerError> {
@@ -185,6 +182,39 @@ class SecureBackupController: SecureBackupControllerProtocol {
     }
     
     // MARK: - Private
+    
+    private func enableRecovery(with key: SecretStorageKey) async -> Result<String, SecureBackupControllerError> {
+        do {
+            if recoveryState.value == .disabled {
+                MXLog.info("Enabling recovery")
+            } else {
+                MXLog.info("Resetting recovery key")
+            }
+            
+            let keyUploadErrored = Mutex(false)
+            // Note: `enableRecovery` also handles the reset case (equivalent to `resetRecoveryKey`).
+            // Despite the name, it is the correct call for both initial setup and key rotation.
+            let recoveryKey = try await encryption.enableRecovery(waitForBackupsToUpload: false, key: key, progressListener: SDKListener.onMainActor { [weak self] state in
+                guard let self else { return }
+                
+                switch state {
+                case .starting, .creatingBackup, .creatingRecoveryKey, .backingUp:
+                    recoveryStateSubject.send(.settingUp)
+                case .done:
+                    recoveryStateSubject.send(.enabled)
+                case .roomKeyUploadError:
+                    MXLog.error("Failed enabling recovery: room key upload error")
+                    keyUploadErrored.withLock { $0 = true }
+                }
+            })
+            
+            return keyUploadErrored.withLock { $0 } ? .failure(.failedGeneratingRecoveryKey) : .success(recoveryKey)
+        } catch {
+            MXLog.error("Failed enabling recovery with error: \(error)")
+            
+            return .failure(.failedGeneratingRecoveryKey)
+        }
+    }
     
     private func updateBackupStateFromRemote(retry: Bool = true) {
         remoteBackupStateTask = Task { [weak self] in

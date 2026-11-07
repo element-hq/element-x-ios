@@ -9,8 +9,12 @@
 import Compound
 import SwiftUI
 
+/// Receives a value once the user has generated and saved a new recovery key.
+typealias SecureBackupLogoutConfirmationScreenRecoveryKeyContinuation = AsyncStream<Void>.Continuation
+
 enum SecureBackupLogoutConfirmationScreenViewModelAction {
     case cancel
+    case generateRecoveryKey(SecureBackupLogoutConfirmationScreenRecoveryKeyContinuation)
     case logout
 }
 
@@ -82,5 +86,6 @@ enum SecureBackupLogoutConfirmationScreenAlertType {
 
 enum SecureBackupLogoutConfirmationScreenViewAction {
     case cancel
+    case generateRecoveryKey
     case logout
 }

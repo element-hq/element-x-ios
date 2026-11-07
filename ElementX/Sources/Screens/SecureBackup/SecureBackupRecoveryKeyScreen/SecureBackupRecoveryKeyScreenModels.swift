@@ -6,11 +6,18 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import Foundation
+import Compound
+import SwiftUI
 
 enum SecureBackupRecoveryKeyScreenViewModelAction {
-    case done(mode: SecureBackupRecoveryKeyScreenViewMode)
-    case cancel
+    case complete
+}
+
+/// Where the screen is being shown, which decides what its final button says.
+enum SecureBackupRecoveryKeyScreenPresentationContext {
+    case standard
+    /// The screen is part of removing the device, after which the removal carries on.
+    case deviceRemoval
 }
 
 enum SecureBackupRecoveryKeyScreenViewMode {
@@ -25,19 +32,46 @@ struct SecureBackupRecoveryKeyScreenViewState: BindableState {
     var isModallyPresented: Bool
     
     let mode: SecureBackupRecoveryKeyScreenViewMode
+    let presentationContext: SecureBackupRecoveryKeyScreenPresentationContext
+    /// Whether the new recovery key is saved and the screen is showing that it is now active.
+    var isCompleted = false
     
     var recoveryKey: String?
-    var isGeneratingKey = false
     var doneButtonEnabled = false
     
     var bindings: SecureBackupRecoveryKeyScreenViewBindings
     
+    /// Setting up or changing the key goes straight to generating it, so the introduction is never seen.
+    private var hasKey: Bool {
+        recoveryKey != nil
+    }
+    
+    /// The title of the button that closes the screen once the new recovery key is active.
+    var completionButtonTitle: String {
+        switch presentationContext {
+        case .standard:
+            L10n.actionDone
+        case .deviceRemoval:
+            L10n.screenSignoutSaveRecoveryKeyActionContinue
+        }
+    }
+    
+    var icon: KeyPath<CompoundIcons, Image> {
+        isCompleted ? \.checkCircleSolid : \.keySolid
+    }
+    
+    var iconStyle: BigIcon.Style {
+        isCompleted ? .successSolid : .defaultSolid
+    }
+    
     var title: String {
+        guard !isCompleted else { return L10n.screenRecoveryKeySuccessTitle }
+        
         switch mode {
         case .setupRecovery:
-            return recoveryKey == nil ? L10n.screenRecoveryKeySetupTitle : L10n.screenRecoveryKeySaveTitle
+            return hasKey ? L10n.screenRecoveryKeySaveTitle : L10n.screenRecoveryKeySetupTitle
         case .changeRecovery:
-            return recoveryKey == nil ? L10n.screenRecoveryKeyChangeTitle : L10n.screenRecoveryKeySaveTitle
+            return hasKey ? L10n.screenRecoveryKeySaveTitle : L10n.screenRecoveryKeyChangeTitle
         case .fixRecovery:
             return L10n.screenRecoveryKeyConfirmTitle
         default:
@@ -46,11 +80,13 @@ struct SecureBackupRecoveryKeyScreenViewState: BindableState {
     }
     
     var subtitle: String? {
+        guard !isCompleted else { return L10n.screenCustomRecoveryKeySuccessSubtitle }
+        
         switch mode {
         case .setupRecovery:
-            return recoveryKey == nil ? L10n.screenRecoveryKeySetupDescription : L10n.screenRecoveryKeySaveDescription
+            return hasKey ? L10n.screenRecoveryKeySaveDescription : L10n.screenRecoveryKeySetupDescription
         case .changeRecovery:
-            return recoveryKey == nil ? L10n.screenRecoveryKeyChangeDescription : L10n.screenRecoveryKeySaveDescription
+            return hasKey ? L10n.screenRecoveryKeySaveDescription : L10n.screenRecoveryKeyChangeDescription
         case .fixRecovery:
             return L10n.screenRecoveryKeyConfirmDescription
         default:
@@ -61,9 +97,9 @@ struct SecureBackupRecoveryKeyScreenViewState: BindableState {
     var recoveryKeySubtitle: String? {
         switch mode {
         case .setupRecovery:
-            return recoveryKey == nil ? L10n.screenRecoveryKeySetupGenerateKeyDescription : L10n.screenRecoveryKeySaveKeyDescription
+            return hasKey ? L10n.screenRecoveryKeySaveKeyDescription : L10n.screenRecoveryKeySetupGenerateKeyDescription
         case .changeRecovery:
-            return recoveryKey == nil ? L10n.screenRecoveryKeyChangeGenerateKeyDescription : L10n.screenRecoveryKeySaveKeyDescription
+            return hasKey ? L10n.screenRecoveryKeySaveKeyDescription : L10n.screenRecoveryKeyChangeGenerateKeyDescription
         case .fixRecovery:
             return L10n.screenRecoveryKeyConfirmKeyDescription
         default:
@@ -78,10 +114,12 @@ struct SecureBackupRecoveryKeyScreenViewBindings {
 }
 
 enum SecureBackupRecoveryKeyScreenViewAction {
-    case generateKey
     case copyKey
     case keySaved
     case confirmKey
-    case done
+    /// The user has saved the key and wants to continue, which asks them to confirm that.
+    case confirmKeySaved
+    /// The user has seen that the new key is active.
+    case complete
     case cancel
 }

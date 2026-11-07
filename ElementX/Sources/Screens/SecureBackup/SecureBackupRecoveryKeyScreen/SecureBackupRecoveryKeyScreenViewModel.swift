@@ -22,13 +22,20 @@ class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewM
     
     init(secureBackupController: SecureBackupControllerProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
-         isModallyPresented: Bool) {
+         isModallyPresented: Bool,
+         presentationContext: SecureBackupRecoveryKeyScreenPresentationContext = .standard) {
         self.secureBackupController = secureBackupController
         self.userIndicatorController = userIndicatorController
         
         super.init(initialViewState: .init(isModallyPresented: isModallyPresented,
                                            mode: secureBackupController.recoveryState.value.viewMode,
+                                           presentationContext: presentationContext,
                                            bindings: .init()))
+        
+        // The user is taken straight to their new key, which only becomes active once they confirm having saved it.
+        if state.mode == .setupRecovery || state.mode == .changeRecovery {
+            state.recoveryKey = secureBackupController.generateRecoveryKey()
+        }
     }
     
     // MARK: - Public
@@ -37,20 +44,6 @@ class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewM
         MXLog.info("View model: received view action: \(viewAction)")
         
         switch viewAction {
-        case .generateKey:
-            state.isGeneratingKey = true
-            
-            Task {
-                switch await secureBackupController.generateRecoveryKey(withPassphrase: nil) {
-                case .success(let key):
-                    state.recoveryKey = key
-                case .failure(let error):
-                    MXLog.error("Failed generating recovery key with error: \(error)")
-                    state.bindings.alertInfo = .init(id: .init())
-                }
-                
-                state.isGeneratingKey = false
-            }
         case .copyKey:
             UIPasteboard.general.string = state.recoveryKey
             userIndicatorController.submitIndicator(.init(title: "Copied recovery key"))
@@ -63,7 +56,8 @@ class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewM
                 
                 switch await secureBackupController.confirmRecoveryKey(state.bindings.confirmationRecoveryKey) {
                 case .success:
-                    actionsSubject.send(.done(mode: state.mode))
+                    showSuccessIndicator(title: L10n.screenRecoveryKeyConfirmSuccess)
+                    actionsSubject.send(.complete)
                 case .failure(let error):
                     MXLog.error("Failed confirming recovery key with error: \(error)")
                     state.bindings.alertInfo = .init(id: .init(),
@@ -74,16 +68,33 @@ class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewM
                 hideLoadingIndicator()
             }
         case .cancel:
-            actionsSubject.send(.cancel)
-        case .done:
+            actionsSubject.send(.complete)
+        case .confirmKeySaved:
             state.bindings.alertInfo = .init(id: .init(),
                                              title: L10n.screenRecoveryKeySetupConfirmationTitle,
                                              message: L10n.screenRecoveryKeySetupConfirmationDescription,
                                              primaryButton: .init(title: L10n.actionContinue) { [weak self] in
-                                                 guard let self else { return }
-                                                 actionsSubject.send(.done(mode: state.mode))
+                                                 self?.activateKey()
                                              },
                                              secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
+        case .complete:
+            actionsSubject.send(.complete)
+        }
+    }
+    
+    private func activateKey() {
+        Task {
+            showLoadingIndicator()
+            
+            switch await secureBackupController.activateRecoveryKey() {
+            case .success:
+                state.isCompleted = true
+            case .failure(let error):
+                MXLog.error("Failed activating recovery key with error: \(error)")
+                state.bindings.alertInfo = .init(id: .init())
+            }
+            
+            hideLoadingIndicator()
         }
     }
     
@@ -98,6 +109,14 @@ class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewM
     
     private func hideLoadingIndicator() {
         userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
+    }
+    
+    private func showSuccessIndicator(title: String) {
+        userIndicatorController.submitIndicator(.init(id: .init(),
+                                                      type: .toast(progress: nil),
+                                                      title: title,
+                                                      icon: \.check,
+                                                      persistent: false))
     }
 }
 
