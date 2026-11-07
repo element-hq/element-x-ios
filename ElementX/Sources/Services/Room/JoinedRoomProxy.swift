@@ -162,7 +162,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                                                                                             filter: .all,
                                                                                             internalIdPrefix: UUID().uuidString,
                                                                                             dateDividerMode: .daily,
-                                                                                            trackReadReceipts: .disabled,
+                                                                                            trackReadReceipts: .messageLikeEvents,
                                                                                             reportUtds: true))
             openRoomSpan?.finish()
             
