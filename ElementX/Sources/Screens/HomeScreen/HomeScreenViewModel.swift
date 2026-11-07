@@ -207,9 +207,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             actionsSubject.send(.presentReportRoom(roomIdentifier: roomIdentifier))
         case .showSettings:
             actionsSubject.send(.presentSettingsScreen)
-        case .setupRecovery:
-            actionsSubject.send(.presentSecureBackupSettings)
-        case .confirmRecoveryKey:
+        case .setupRecovery, .confirmRecoveryKey:
             actionsSubject.send(.presentRecoveryKeyScreen)
         case .resetEncryption:
             actionsSubject.send(.presentEncryptionResetScreen)
