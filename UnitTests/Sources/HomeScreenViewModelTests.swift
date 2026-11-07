@@ -260,6 +260,24 @@ final class HomeScreenViewModelTests {
         try await deferred.fulfill()
     }
     
+    @Test("The set up recovery banner starts creating the recovery key")
+    func setUpRecoveryBannerStartsTheRecoveryKeyFlow() async throws {
+        setupViewModel()
+        
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .presentRecoveryKeyScreen }
+        context.send(viewAction: .setupRecovery)
+        try await deferred.fulfill()
+    }
+    
+    @Test("The out of sync banner asks for the recovery key")
+    func outOfSyncRecoveryBannerStartsTheRecoveryKeyFlow() async throws {
+        setupViewModel()
+        
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .presentRecoveryKeyScreen }
+        context.send(viewAction: .confirmRecoveryKey)
+        try await deferred.fulfill()
+    }
+    
     @Test("Invites show an unread dot until they've been seen")
     func inviteUnreadBadge() async throws {
         setupViewModel(invites: .rooms)
@@ -651,8 +669,6 @@ extension HomeScreenViewModelAction: @MainActor @retroactive Equatable {
             lhsID == rhsID
         case (.transferOwnership(let lhsID), .transferOwnership(let rhsID)):
             lhsID == rhsID
-        case (.presentSecureBackupSettings, .presentSecureBackupSettings):
-            true
         case (.presentRecoveryKeyScreen, .presentRecoveryKeyScreen):
             true
         case (.presentEncryptionResetScreen, .presentEncryptionResetScreen):
