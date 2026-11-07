@@ -19,7 +19,7 @@ struct NavigationTabCoordinatorTests {
         navigationTabCoordinator = NavigationTabCoordinator()
     }
     
-    @Test
+    @Test("Setting tabs replaces the previous ones")
     mutating func tabs() {
         #expect(navigationTabCoordinator.tabCoordinators.isEmpty)
         
@@ -36,7 +36,7 @@ struct NavigationTabCoordinatorTests {
         assertCoordinatorsEqual(navigationTabCoordinator.tabCoordinators, [chatsCoordinator, spacesCoordinator])
     }
     
-    @Test
+    @Test("A sheet shows above the tabs and can be removed")
     mutating func singleSheet() {
         let tabCoordinator = SomeTestCoordinator()
         navigationTabCoordinator.setTabs([.init(coordinator: tabCoordinator, details: .init(tag: .tab, title: "Tab", icon: \.help, selectedIcon: \.helpSolid))])
@@ -53,7 +53,7 @@ struct NavigationTabCoordinatorTests {
         #expect(navigationTabCoordinator.sheetCoordinator == nil)
     }
     
-    @Test
+    @Test("A new sheet replaces the previous one")
     mutating func multipleSheets() {
         let tabCoordinator = SomeTestCoordinator()
         navigationTabCoordinator.setTabs([.init(coordinator: tabCoordinator, details: .init(tag: .tab, title: "Tab", icon: \.help, selectedIcon: \.helpSolid))])
@@ -71,7 +71,7 @@ struct NavigationTabCoordinatorTests {
         assertCoordinatorsEqual(someOtherSheetCoordinator, navigationTabCoordinator.sheetCoordinator)
     }
     
-    @Test
+    @Test("A full screen cover shows above the tabs and can be removed")
     mutating func fullScreenCover() {
         let tabCoordinator = SomeTestCoordinator()
         navigationTabCoordinator.setTabs([.init(coordinator: tabCoordinator, details: .init(tag: .tab, title: "Tab", icon: \.help, selectedIcon: \.helpSolid))])
@@ -88,32 +88,9 @@ struct NavigationTabCoordinatorTests {
         #expect(navigationTabCoordinator.fullScreenCoverCoordinator == nil)
     }
     
-    @Test
-    mutating func overlay() {
-        let tabCoordinator = SomeTestCoordinator()
-        navigationTabCoordinator.setTabs([.init(coordinator: tabCoordinator, details: .init(tag: .tab, title: "Tab", icon: \.help, selectedIcon: \.helpSolid))])
-        
-        let overlayCoordinator = SomeTestCoordinator()
-        navigationTabCoordinator.setOverlayCoordinator(overlayCoordinator)
-        
-        assertCoordinatorsEqual(navigationTabCoordinator.tabCoordinators, [tabCoordinator])
-        assertCoordinatorsEqual(overlayCoordinator, navigationTabCoordinator.overlayCoordinator)
-        
-        // The coordinator should still be retained when changing the presentation mode.
-        navigationTabCoordinator.setOverlayPresentationMode(.minimized)
-        assertCoordinatorsEqual(overlayCoordinator, navigationTabCoordinator.overlayCoordinator)
-        navigationTabCoordinator.setOverlayPresentationMode(.fullScreen)
-        assertCoordinatorsEqual(overlayCoordinator, navigationTabCoordinator.overlayCoordinator)
-        
-        navigationTabCoordinator.setOverlayCoordinator(nil)
-        
-        assertCoordinatorsEqual(navigationTabCoordinator.tabCoordinators, [tabCoordinator])
-        #expect(navigationTabCoordinator.overlayCoordinator == nil)
-    }
-    
     // MARK: - Dismissal Callbacks
     
-    @Test
+    @Test("Replacing the tabs runs their dismissal callbacks")
     mutating func tabDismissalCallbacks() async {
         let chatsCoordinator = SomeTestCoordinator()
         let spacesCoordinator = SomeTestCoordinator()
@@ -129,7 +106,7 @@ struct NavigationTabCoordinatorTests {
         }
     }
     
-    @Test
+    @Test("Removing the sheet runs its dismissal callback")
     mutating func sheetDismissalCallback() async {
         let coordinator = SomeTestCoordinator()
         await confirmation("Wait for callback") { confirm in
@@ -141,7 +118,7 @@ struct NavigationTabCoordinatorTests {
         }
     }
     
-    @Test
+    @Test("Removing the full screen cover runs its dismissal callback")
     mutating func fullScreenCoverDismissalCallback() async {
         let coordinator = SomeTestCoordinator()
         await confirmation("Wait for callback") { confirm in
@@ -153,54 +130,23 @@ struct NavigationTabCoordinatorTests {
         }
     }
     
-    @Test
-    mutating func overlayDismissalCallback() async {
-        let overlayCoordinator = SomeTestCoordinator()
-        
-        await confirmation("Wait for callback") { confirm in
-            navigationTabCoordinator.setOverlayCoordinator(overlayCoordinator) {
-                confirm()
-            }
-            
-            navigationTabCoordinator.setOverlayCoordinator(nil)
-        }
-    }
-    
-    @Test
-    mutating func overlayDismissalCallbackWhenChangingMode() async {
-        let overlayCoordinator = SomeTestCoordinator()
-        
-        await waitForConfirmation("Callback should not be called when just changing mode",
-                                  expectedCount: 0,
-                                  timeout: .seconds(1)) { confirmation in
-            navigationTabCoordinator.setOverlayCoordinator(overlayCoordinator) {
-                confirmation()
-            }
-            
-            navigationTabCoordinator.setOverlayPresentationMode(.minimized)
-        }
-    }
-    
     // MARK: - Stopping
     
-    @Test
-    mutating func stoppingTearsDownTheTabsAndEverythingPresentedOverThem() {
+    @Test("Stopping tears down the tabs and everything presented over them")
+    mutating func stop() {
         let tabCoordinator = StopTrackingCoordinator()
         let sheetCoordinator = StopTrackingCoordinator()
         let fullScreenCoverCoordinator = StopTrackingCoordinator()
-        let overlayCoordinator = StopTrackingCoordinator()
         
         navigationTabCoordinator.setTabs([.init(coordinator: tabCoordinator, details: .init(tag: .tab, title: "Tab", icon: \.help, selectedIcon: \.helpSolid))])
         navigationTabCoordinator.setSheetCoordinator(sheetCoordinator)
         navigationTabCoordinator.setFullScreenCoverCoordinator(fullScreenCoverCoordinator)
-        navigationTabCoordinator.setOverlayCoordinator(overlayCoordinator)
         
         navigationTabCoordinator.stop()
         
         #expect(tabCoordinator.didStop)
         #expect(sheetCoordinator.didStop)
         #expect(fullScreenCoverCoordinator.didStop)
-        #expect(overlayCoordinator.didStop)
     }
     
     // MARK: - Private
