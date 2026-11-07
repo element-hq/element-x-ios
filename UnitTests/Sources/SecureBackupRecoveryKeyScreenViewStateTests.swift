@@ -82,16 +82,38 @@ struct SecureBackupRecoveryKeyScreenViewStateTests {
         #expect(state.recoveryKeySubtitle == nil)
     }
     
-    @Test(arguments: [SecureBackupRecoveryKeyScreenViewMode.setupRecovery, .changeRecovery, .fixRecovery, .unknown])
-    func completingShowsTheSuccessScreen(mode: SecureBackupRecoveryKeyScreenViewMode) {
-        var state = makeState(mode: mode, recoveryKey: "key")
+    @Test("Completing a change of the recovery key says that the new key is active")
+    func completingAChange() {
+        var state = makeState(mode: .changeRecovery, recoveryKey: "key")
         #expect(state.icon == \.keySolid)
         
         state.isCompleted = true
         
         #expect(state.title == L10n.screenRecoveryKeySuccessTitle)
         #expect(state.subtitle == L10n.screenCustomRecoveryKeySuccessSubtitle)
+        #expect(state.completionNotice == nil)
         #expect(state.icon == \.checkCircleSolid)
+    }
+    
+    @Test("Completing the set up says that the backup is ready and where to change the key")
+    func completingTheSetUp() {
+        var state = makeState(mode: .setupRecovery, recoveryKey: "key")
+        #expect(state.completionNotice == nil)
+        
+        state.isCompleted = true
+        
+        #expect(state.title == L10n.screenCustomRecoveryKeySuccessTitle)
+        #expect(state.subtitle == L10n.screenCustomRecoveryKeySuccessSubtitle)
+        #expect(state.completionNotice == L10n.screenCustomRecoveryKeySuccessNotice)
+        #expect(state.icon == \.checkCircleSolid)
+    }
+    
+    @Test(arguments: [SecureBackupRecoveryKeyScreenViewMode.fixRecovery, .checkRecovery, .unknown])
+    func completingElsewhereHasNoNotice(mode: SecureBackupRecoveryKeyScreenViewMode) {
+        var state = makeState(mode: mode)
+        state.isCompleted = true
+        
+        #expect(state.completionNotice == nil)
     }
     
     // MARK: - Helpers
