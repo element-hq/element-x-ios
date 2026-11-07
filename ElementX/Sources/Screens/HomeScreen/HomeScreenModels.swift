@@ -19,7 +19,6 @@ enum HomeScreenViewModelAction {
     case presentSpace(SpaceRoomListProxyProtocol)
     case roomLeft(roomIdentifier: String)
     case transferOwnership(roomIdentifier: String)
-    case presentSecureBackupSettings
     case presentRecoveryKeyScreen
     case presentEncryptionResetScreen
     case presentSettingsScreen
