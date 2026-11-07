@@ -71,6 +71,14 @@ struct SecureBackupRecoveryKeyScreen: View {
                     .font(.compound.bodyMD)
                     .multilineTextAlignment(.center)
             }
+            
+            if let notice = context.viewState.completionNotice {
+                Text(notice)
+                    .foregroundColor(.compound.textSecondary)
+                    .font(.compound.bodyMD)
+                    .multilineTextAlignment(.center)
+                    .padding(.top, 24)
+            }
         }
     }
     
@@ -256,6 +264,7 @@ struct SecureBackupRecoveryKeyScreen_Previews: PreviewProvider, TestablePreview 
     static let incompleteViewModel = viewModel(recoveryState: .incomplete)
     static let unknownViewModel = viewModel(recoveryState: .unknown)
     static let completedViewModel = viewModel(recoveryState: .enabled, key: key, isCompleted: true)
+    static let setupCompletedViewModel = viewModel(recoveryState: .disabled, key: key, isCompleted: true)
     static let checkViewModel = viewModel(recoveryState: .enabled, isCheckingKey: true)
     static let checkInvalidViewModel = viewModel(recoveryState: .enabled, isCheckingKey: true, enteredKey: "Not the key", checkResult: .failure(.failedConfirmingRecoveryKey))
     static let checkCompletedViewModel = viewModel(recoveryState: .enabled, isCheckingKey: true, enteredKey: key)
@@ -281,7 +290,13 @@ struct SecureBackupRecoveryKeyScreen_Previews: PreviewProvider, TestablePreview 
             SecureBackupRecoveryKeyScreen(context: completedViewModel.context)
         }
         .snapshotPreferences(expect: completedViewModel.context.observe(\.viewState.isCompleted))
-        .previewDisplayName("Completed")
+        .previewDisplayName("Change completed")
+        
+        ElementNavigationStack {
+            SecureBackupRecoveryKeyScreen(context: setupCompletedViewModel.context)
+        }
+        .snapshotPreferences(expect: setupCompletedViewModel.context.observe(\.viewState.isCompleted))
+        .previewDisplayName("Set up completed")
         
         ElementNavigationStack {
             SecureBackupRecoveryKeyScreen(context: checkViewModel.context)

@@ -75,7 +75,7 @@ struct SecureBackupRecoveryKeyScreenViewState: BindableState {
     }
     
     var title: String {
-        guard !isCompleted else { return mode == .checkRecovery ? L10n.screenRecoveryKeyCheckSuccessTitle : L10n.screenRecoveryKeySuccessTitle }
+        guard !isCompleted else { return completedTitle }
         
         switch mode {
         case .setupRecovery:
@@ -88,6 +88,17 @@ struct SecureBackupRecoveryKeyScreenViewState: BindableState {
             return L10n.screenRecoveryKeyCheckTitle
         default:
             return L10n.errorUnknown
+        }
+    }
+    
+    private var completedTitle: String {
+        switch mode {
+        case .checkRecovery:
+            L10n.screenRecoveryKeyCheckSuccessTitle
+        case .setupRecovery:
+            L10n.screenCustomRecoveryKeySuccessTitle
+        default:
+            L10n.screenRecoveryKeySuccessTitle
         }
     }
     
@@ -106,6 +117,11 @@ struct SecureBackupRecoveryKeyScreenViewState: BindableState {
         default:
             return nil
         }
+    }
+    
+    /// Where to change the recovery key later, shown when the backup has only just been set up.
+    var completionNotice: String? {
+        isCompleted && mode == .setupRecovery ? L10n.screenCustomRecoveryKeySuccessNotice : nil
     }
     
     var recoveryKeySubtitle: String? {
