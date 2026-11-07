@@ -12,11 +12,12 @@ import SwiftUI
 struct SecureBackupLogoutConfirmationScreenCoordinatorParameters {
     let secureBackupController: SecureBackupControllerProtocol
     let homeserverReachabilityPublisher: CurrentValuePublisher<HomeserverReachability, Never>
+    let learnMoreURL: URL
+    let mode: SecureBackupLogoutConfirmationScreenViewMode
 }
 
 enum SecureBackupLogoutConfirmationScreenCoordinatorAction {
     case cancel
-    case settings
     case logout
 }
 
@@ -31,7 +32,9 @@ final class SecureBackupLogoutConfirmationScreenCoordinator: CoordinatorProtocol
     
     init(parameters: SecureBackupLogoutConfirmationScreenCoordinatorParameters) {
         viewModel = SecureBackupLogoutConfirmationScreenViewModel(secureBackupController: parameters.secureBackupController,
-                                                                  homeserverReachabilityPublisher: parameters.homeserverReachabilityPublisher)
+                                                                  homeserverReachabilityPublisher: parameters.homeserverReachabilityPublisher,
+                                                                  learnMoreURL: parameters.learnMoreURL,
+                                                                  mode: parameters.mode)
     }
     
     func start() {
@@ -43,8 +46,6 @@ final class SecureBackupLogoutConfirmationScreenCoordinator: CoordinatorProtocol
             switch action {
             case .cancel:
                 actionsSubject.send(.cancel)
-            case .settings:
-                actionsSubject.send(.settings)
             case .logout:
                 actionsSubject.send(.logout)
             }
