@@ -35,14 +35,14 @@ struct RoomListFiltersView: View {
                         }
                         
                         ForEach(state.activeFilters) { filter in
-                            RoomListFilterView(title: state.localizedName(for: filter),
+                            RoomListFilterView(filter: filter,
                                                isActive: getBinding(for: filter, scrollViewProxy: proxy))
                                 .matchedGeometryEffect(id: filter.id, in: namespace)
                                 // This will make the animation always render the enabled ones on top
                                 .zIndex(1)
                         }
                         ForEach(state.availableFilters) { filter in
-                            RoomListFilterView(title: state.localizedName(for: filter),
+                            RoomListFilterView(filter: filter,
                                                isActive: getBinding(for: filter, scrollViewProxy: proxy))
                                 .matchedGeometryEffect(id: filter.id, in: namespace)
                         }
@@ -96,15 +96,6 @@ struct RoomListFiltersView_Previews: PreviewProvider, TestablePreview {
         RoomListFiltersView(state: .constant(.init(activeFilters: [.rooms, .favourites],
                                                    userSettings: .mock())))
         RoomListFiltersView(state: .constant(.init(activeFilters: [.lowPriority],
-                                                   userSettings: .mock())))
-        RoomListFiltersView(state: .constant(.init(invitesCount: 5,
-                                                   hasUnseenInvites: true,
-                                                   userSettings: .mock())))
-        RoomListFiltersView(state: .constant(.init(invitesCount: 5,
-                                                   userSettings: .mock())))
-        RoomListFiltersView(state: .constant(.init(activeFilters: [.invites],
-                                                   invitesCount: 5,
-                                                   hasUnseenInvites: true,
                                                    userSettings: .mock())))
     }
 }

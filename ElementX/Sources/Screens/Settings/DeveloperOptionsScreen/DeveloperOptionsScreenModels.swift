@@ -62,7 +62,6 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var fuzzyRoomListSearchEnabled: Bool { get set }
     var lowPriorityFilterEnabled: Bool { get set }
     var mentionsFilterEnabled: Bool { get set }
-    var prominentInvitesFilterEnabled: Bool { get set }
     
     var linkPreviewsEnabled: Bool { get set }
     

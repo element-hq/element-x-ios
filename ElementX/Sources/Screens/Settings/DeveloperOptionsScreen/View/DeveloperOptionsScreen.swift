@@ -76,11 +76,6 @@ struct DeveloperOptionsScreen: View {
                 Toggle(isOn: $context.mentionsFilterEnabled) {
                     Text("Mentions filter")
                 }
-                
-                Toggle(isOn: $context.prominentInvitesFilterEnabled) {
-                    Text("Prominent invites filter")
-                    Text("Shows the invite count and moves the filter first while any invite is unseen.")
-                }
             }
             
             Section("Room") {
