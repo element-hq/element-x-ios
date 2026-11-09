@@ -912,21 +912,22 @@ final class TimelineViewModelTests {
     
     // MARK: - Reaction effects
     
-    @Test
-    func playEffectForAddedTadaReaction() async throws {
+    @Test("Adding a celebration reaction plays its effect from the reaction",
+          arguments: [("🎉", ParticleEmitterType.confetti), ("🎉\u{FE0F}", .confetti), ("🎊", .confetti), ("🥳", .confetti)])
+    func playEffectForAddedReaction(key: String, type: ParticleEmitterType) async throws {
         // Given a message the user hasn't reacted to.
         let item = TextRoomTimelineItem(text: "Message", sender: "bob")
         let viewModel = makeReactionEffectsViewModel(item: item)
         
-        // When adding a tada reaction to it.
+        // When adding a celebration reaction to it.
         let deferred = deferFulfillment(viewModel.context.$viewState) { $0.pendingReactionEffect != nil }
-        viewModel.process(viewAction: .toggleReaction(key: "🎉", itemID: item.id))
+        viewModel.process(viewAction: .toggleReaction(key: key, itemID: item.id))
         try await deferred.fulfill()
         
         // Then the reaction is flagged for its effect, which plays once the reaction reports its position.
         #expect(viewModel.state.pendingReactionEffect?.itemID == item.id)
-        #expect(viewModel.state.pendingReactionEffect?.key == "🎉")
-        #expect(viewModel.state.pendingReactionEffect?.type == .confetti)
+        #expect(viewModel.state.pendingReactionEffect?.key == key)
+        #expect(viewModel.state.pendingReactionEffect?.type == type)
         
         viewModel.process(viewAction: .playReactionEffect(origin: CGPoint(x: 10, y: 20)))
         

@@ -21,7 +21,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         static let focusTimelineToastIndicatorID = "RoomScreenFocusTimelineToastIndicator"
         static let toastErrorID = "RoomScreenToastError"
         static let selectionLimitIndicatorID = "RoomScreenSelectionLimitIndicator"
-        static let reactionEffects: [String: ParticleEmitterType] = ["🎉": .confetti]
         static let particleEffectDuration = Duration.seconds(5)
         static let pendingReactionEffectTimeout = Duration.seconds(2)
     }
@@ -1205,11 +1204,16 @@ extension TimelineViewModel {
 // MARK: - Reaction effects
 
 private extension TimelineViewModel {
+    // Keys without variation selectors, see `reactionEffectType(for:)`.
+    static let reactionEffects: [String: ParticleEmitterType] = [
+        "🎉": .confetti, "🎊": .confetti, "🥳": .confetti
+    ]
+    
     func prepareIncomingReactionEffects(in timelineItems: [RoomTimelineItemProtocol]) {
         guard userSettings.app.reactionCelebrationsEnabled else { return }
         
         for case let item as EventBasedTimelineItemProtocol in timelineItems {
-            for reaction in item.properties.reactions where Constants.reactionEffects[reaction.key] != nil {
+            for reaction in item.properties.reactions where reactionEffectType(for: reaction.key) != nil {
                 for sender in reaction.senders where sender.id != roomProxy.ownUserID && sender.timestamp > reactionEffectsStartDate {
                     if playedReactionEffects.insert(sender).inserted {
                         prepareReactionEffect(for: reaction.key, on: item.id)
@@ -1223,7 +1227,7 @@ private extension TimelineViewModel {
         guard userSettings.app.reactionCelebrationsEnabled,
               !UIAccessibility.isReduceMotionEnabled,
               !ProcessInfo.processInfo.isLowPowerModeEnabled,
-              let type = Constants.reactionEffects[key] else {
+              let type = reactionEffectType(for: key) else {
             return
         }
         
@@ -1235,6 +1239,11 @@ private extension TimelineViewModel {
             guard await (try? Task.sleep(for: Constants.pendingReactionEffectTimeout)) != nil else { return }
             state.pendingReactionEffect = nil
         }
+    }
+    
+    // Clients disagree on emoji variation selectors (`❤` vs `❤️`), so they're ignored when matching.
+    func reactionEffectType(for key: String) -> ParticleEmitterType? {
+        Self.reactionEffects[key.replacingOccurrences(of: "\u{FE0F}", with: "")]
     }
     
     func playReactionEffect(at origin: CGPoint?) {
