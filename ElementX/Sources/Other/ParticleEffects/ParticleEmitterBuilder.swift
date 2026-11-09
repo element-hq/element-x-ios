@@ -54,6 +54,35 @@ enum ParticleEmitterBuilder {
         }
     }
     
+    /// Twinkles bursting out in every direction, shrinking as they fade.
+    static func buildSparkleCells() -> [CAEmitterCell] {
+        let sparkle = makeSymbolImage(systemName: "sparkle", pointSize: 16)
+        
+        return [UIColor.systemYellow, .systemOrange].map { color in
+            let cell = CAEmitterCell()
+            cell.setContents(sparkle)
+            
+            cell.birthRate = 150
+            cell.lifetime = 1.2
+            
+            cell.velocity = 250
+            cell.velocityRange = 100
+            cell.emissionRange = 2 * .pi
+            
+            cell.color = color.cgColor
+            cell.alphaSpeed = -0.8
+            
+            cell.scale = 0.6
+            cell.scaleRange = 0.3
+            cell.scaleSpeed = -0.4
+            
+            cell.spin = 2
+            cell.spinRange = 4
+            
+            return cell
+        }
+    }
+    
     /// Soft flames that burn from yellow to red as they rise and taper off, with embers flying out of them and smoke drifting above.
     static func buildFireCells() -> [CAEmitterCell] {
         let flame = CAEmitterCell()
@@ -116,6 +145,34 @@ enum ParticleEmitterBuilder {
         smoke.spinRange = 1
         
         return [flame, ember, smoke]
+    }
+    
+    /// Rings of sparks, a burst per emitter layer.
+    static func buildFireworkCells() -> [CAEmitterCell] {
+        let spark = makeCircleImage(radius: 3)
+        
+        return confettiColors.map { color in
+            let cell = CAEmitterCell()
+            cell.setContents(spark)
+            
+            // Emits everything at once, roughly a hundred sparks.
+            cell.birthRate = 2000
+            cell.duration = 0.05
+            cell.lifetime = 1.8
+            
+            // A narrow velocity range keeps the sparks together as a ring.
+            cell.velocity = 220
+            cell.velocityRange = 40
+            cell.emissionRange = 2 * .pi
+            cell.yAcceleration = 120
+            
+            cell.color = color.cgColor
+            cell.alphaSpeed = -0.55
+            
+            cell.scale = 0.8
+            
+            return cell
+        }
     }
     
     // MARK: - Private
