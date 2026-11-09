@@ -15,6 +15,7 @@ struct RootFlowCoordinatorTests {
     private let navigationRootCoordinator = NavigationRootCoordinator()
     private let userSessionManager: UserSessionManagerMock
     private let userSessionManagerCallbacks = PassthroughSubject<UserSessionManagerCallback, Never>()
+    private let userIndicatorController = UserIndicatorControllerMock()
     private let clientProxy: ClientProxyMock
     private let roomID = "1"
     private let inviteRoomID = "someAwesomeRoomId1"
@@ -38,7 +39,7 @@ struct RootFlowCoordinatorTests {
                                                   appSettings: .volatile(),
                                                   appHooks: AppHooks(),
                                                   analyticsService: AnalyticsServiceMock(.init()),
-                                                  userIndicatorController: UserIndicatorControllerMock())
+                                                  userIndicatorController: userIndicatorController)
     }
     
     // MARK: Pending routes
@@ -94,6 +95,34 @@ struct RootFlowCoordinatorTests {
         #expect(navigationRootCoordinator.rootCoordinator == nil)
     }
     
+    @Test("A failed restore at launch shows a toast and waits for the other accounts to restore")
+    func failedRestoration() {
+        // Given an account that's still restoring.
+        userSessionManager.activeSession = nil
+        userSessionManager.userIDs = ["@bob:matrix.org"]
+        
+        // When another account fails to restore.
+        userSessionManagerCallbacks.send(.didRemoveAccount(userID: "@alice:matrix.org", error: .failedRestoringSession))
+        
+        // Then the failure is shown without leaving the launch screen.
+        #expect(userIndicatorController.submitIndicatorDelayReceivedArguments?.indicator.title == "Failed logging in")
+        #expect(navigationRootCoordinator.rootCoordinator == nil)
+    }
+    
+    @Test("Authentication is shown once every account has failed to restore at launch")
+    func lastFailedRestoration() {
+        // Given no accounts left to restore.
+        userSessionManager.activeSession = nil
+        userSessionManager.userIDs = []
+        
+        // When the last account fails to restore.
+        userSessionManagerCallbacks.send(.didRemoveAccount(userID: "@alice:matrix.org", error: .failedRestoringSession))
+        
+        // Then authentication is shown along with the failure.
+        #expect(navigationRootCoordinator.rootCoordinator is NavigationStackCoordinator)
+        #expect(userIndicatorController.submitIndicatorDelayReceivedArguments?.indicator.title == "Failed logging in")
+    }
+    
     // MARK: Account removal
     
     @Test("Removing the shown account switches to the next account's flow")
@@ -108,7 +137,7 @@ struct RootFlowCoordinatorTests {
             guard case .closeSecondaryWindows = action else { return false }
             return true
         }
-        userSessionManagerCallbacks.send(.didRemoveAccount(userID: "@alice:matrix.org", isUnexpected: false))
+        userSessionManagerCallbacks.send(.didRemoveAccount(userID: "@alice:matrix.org", error: nil))
         try await deferred.fulfill()
         
         #expect(navigationRootCoordinator.rootCoordinator is NavigationTabCoordinator<UserSessionFlowCoordinator.HomeTab>)
@@ -120,7 +149,7 @@ struct RootFlowCoordinatorTests {
         rootFlowCoordinator.handleAppRoute(.roomList, animated: false)
         let rootCoordinator = navigationRootCoordinator.rootCoordinator
         
-        userSessionManagerCallbacks.send(.didRemoveAccount(userID: "@bob:matrix.org", isUnexpected: true))
+        userSessionManagerCallbacks.send(.didRemoveAccount(userID: "@bob:matrix.org", error: .remoteLogout))
         
         #expect(navigationRootCoordinator.rootCoordinator === rootCoordinator)
     }

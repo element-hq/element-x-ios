@@ -12,15 +12,8 @@ import SwiftUI
 enum RootFlowCoordinatorAction {
     /// The shown account was removed, so any secondary windows showing it should close.
     case closeSecondaryWindows
-    /// Clear the active account's caches. The continuation is used to signal success/failure.
-    case clearCache(AsyncStream<Result<Void, ClearCacheError>>.Continuation)
     /// Logout and disable App Lock without any confirmation. The user forgot their PIN.
     case forceLogout
-}
-
-enum ClearCacheError: Error {
-    /// The account's session wasn't restored after clearing its caches.
-    case failedRestoringSession
 }
 
 /// Switches the app's root between the authentication flow and the user session flow.
@@ -76,7 +69,6 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
     private var pendingAppRoute: PendingAppRoute?
     
     private var cancellables = Set<AnyCancellable>()
-    private var clearCacheTask: AnyCancellable?
     
     private let actionsSubject: PassthroughSubject<RootFlowCoordinatorAction, Never> = .init()
     var actionsPublisher: AnyPublisher<RootFlowCoordinatorAction, Never> {
@@ -223,8 +215,7 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
             MXLog.info("Transitioning from `\(context.fromState)` to `\(context.toState)` with event `\(String(describing: context.event))`.")
             
             switch (context.fromState, context.event, context.toState) {
-            case (.initial, .startAuthentication(let isAddingAccount), .authenticationFlow),
-                 (.clearingCache, .startAuthentication(let isAddingAccount), .authenticationFlow):
+            case (.initial, .startAuthentication(let isAddingAccount), .authenticationFlow):
                 startAuthenticationFlow(isAddingAccount: isAddingAccount)
             case (.userSessionFlow, .startAuthentication(let isAddingAccount), .authenticationFlow):
                 stopUserSessionFlow()
@@ -235,21 +226,21 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
                 // TODO: Restore the settings screen when cancelling with isAddingAccount == true .
                 authenticationFlowCoordinator = nil
                 startUserSessionFlow(isNewLogin: true)
-            case (.userSessionFlow, .clearCache, .clearingCache):
+            case (.userSessionFlow, .clearCache, .clearingCache(let userID)):
                 stopUserSessionFlow()
-                clearCache()
+                clearCache(userID: userID)
             case (.userSessionFlow, .logout, .loggingOut(let userID)):
                 stopUserSessionFlow()
                 logout(userID: userID)
             case (.userSessionFlow, .startUserSession, .userSessionFlow):
                 stopUserSessionFlow()
                 startUserSessionFlow(isNewLogin: false)
-            case (.clearingCache, .startUserSession, .userSessionFlow):
-                startUserSessionFlow(isNewLogin: false)
-            case (.loggingOut, .startAuthentication(let isAddingAccount), .authenticationFlow):
+            case (.clearingCache, .startAuthentication(let isAddingAccount), .authenticationFlow),
+                 (.loggingOut, .startAuthentication(let isAddingAccount), .authenticationFlow):
                 hideLoadingIndicator()
                 startAuthenticationFlow(isAddingAccount: isAddingAccount)
-            case (.loggingOut, .startUserSession, .userSessionFlow):
+            case (.clearingCache, .startUserSession, .userSessionFlow),
+                 (.loggingOut, .startUserSession, .userSessionFlow):
                 hideLoadingIndicator()
                 startUserSessionFlow(isNewLogin: false)
             default:
@@ -270,30 +261,45 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
                 switch callback {
                 case .didRestoreSession(let userID):
                     handleRestoredSession(userID: userID)
-                case .didRemoveAccount(let userID, _):
-                    handleRemovedAccount(userID: userID)
+                case .didRemoveAccount(let userID, let error):
+                    handleRemovedAccount(userID: userID, error: error)
                 }
             }
             .store(in: &cancellables)
     }
     
     private func handleRestoredSession(userID: String) {
-        guard case .initial = stateMachine.state, userID == userSessionManager.activeSession?.clientProxy.userID else { return }
-        stateMachine.tryEvent(.startUserSession(userID: userID))
+        switch stateMachine.state {
+        case .initial where userID == userSessionManager.activeSession?.clientProxy.userID,
+             .clearingCache(userID):
+            stateMachine.tryEvent(.startUserSession(userID: userID))
+        default:
+            break
+        }
     }
     
-    private func handleRemovedAccount(userID: String) {
-        let shownUserID = switch stateMachine.state {
-        case .userSessionFlow(let userID), .loggingOut(let userID): userID
-        default: String?.none
+    private func handleRemovedAccount(userID: String, error: UserSessionManagerError?) {
+        switch stateMachine.state {
+        case .initial:
+            if userSessionManager.userIDs.isEmpty {
+                stateMachine.tryEvent(.startAuthentication(isAddingAccount: false))
+            } else {
+                // Continue waiting while other accounts are restoring.
+            }
+        case .userSessionFlow(userID), .clearingCache(userID), .loggingOut(userID):
+            actionsSubject.send(.closeSecondaryWindows)
+            if let activeUserID = userSessionManager.activeSession?.clientProxy.userID {
+                stateMachine.tryEvent(.startUserSession(userID: activeUserID))
+            } else {
+                stateMachine.tryEvent(.startAuthentication(isAddingAccount: false))
+            }
+        default:
+            break
         }
-        guard userID == shownUserID else { return }
         
-        actionsSubject.send(.closeSecondaryWindows)
-        if let activeUserID = userSessionManager.activeSession?.clientProxy.userID {
-            stateMachine.tryEvent(.startUserSession(userID: activeUserID))
-        } else {
-            stateMachine.tryEvent(.startAuthentication(isAddingAccount: false))
+        // Shown after the transition, as stopping a user session flow retracts every indicator.
+        if error == .failedRestoringSession {
+            showLoginErrorToast()
         }
     }
     
@@ -427,19 +433,12 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
         Task { await userSessionManager.logout(userID: userID) }
     }
     
-    private func clearCache() {
+    private func clearCache(userID: String) {
         navigationRootCoordinator.setRootCoordinator(PlaceholderScreenCoordinator(hideBrandChrome: appSettings.hideBrandChrome))
+        showLoadingIndicator()
         
-        let (stream, continuation) = AsyncStream<Result<Void, ClearCacheError>>.makeStream()
-        actionsSubject.send(.clearCache(continuation))
-        
-        clearCacheTask = Task { [weak self] in
-            defer { self?.clearCacheTask = nil }
-            guard case .success = await stream.first(),
-                  let userID = self?.userSessionManager.activeSession?.clientProxy.userID else { return }
-            self?.stateMachine.tryEvent(.startUserSession(userID: userID))
-        }
-        .asCancellable()
+        // The account's restoration moves on to its flow again, or its removal to the next account or authentication.
+        Task { await userSessionManager.clearCaches(userID: userID) }
     }
     
     // MARK: - User Indicators
@@ -457,5 +456,9 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
     
     private func hideLoadingIndicator() {
         userIndicatorController.retractIndicatorWithId(loadingIndicatorID)
+    }
+    
+    private func showLoginErrorToast() {
+        userIndicatorController.submitIndicator(UserIndicator(title: "Failed logging in"))
     }
 }
