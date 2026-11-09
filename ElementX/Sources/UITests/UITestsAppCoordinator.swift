@@ -650,6 +650,11 @@ class MockScreen: Identifiable {
                 userSessionManager.sessionsPublisher = .init([])
                 userSessionManagerCallbacks.send(.didRemoveAccount(userID: userID, isUnexpected: false))
             }
+            // The signed in session is a bare mock, use the populated one instead.
+            userSessionManager.addClosure = { _ in
+                userSessionManager.activeSession = userSession
+                userSessionManager.sessionsPublisher = .init([userSession])
+            }
             
             let appMediator = AppMediatorMock(.init())
             appMediator.windowManager = windowManager
@@ -665,20 +670,6 @@ class MockScreen: Identifiable {
                                                       analyticsService: analytics,
                                                       userIndicatorController: UserIndicatorControllerMock(),
                                                       authenticationServiceFactory: AuthenticationServiceFactoryMock(.init()))
-            
-            flowCoordinator.actionsPublisher
-                .sink { [weak flowCoordinator] action in
-                    switch action {
-                    case .signInComplete:
-                        // The signed in session is a bare mock, use the populated one instead.
-                        userSessionManager.activeSession = userSession
-                        userSessionManager.sessionsPublisher = .init([userSession])
-                        flowCoordinator?.handleAppRoute(.roomList, animated: true)
-                    case .closeSecondaryWindows, .clearCache, .forceLogout:
-                        break
-                    }
-                }
-                .store(in: &cancellables)
             
             flowCoordinator.handleAppRoute(id == .rootFlowSignedIn ? .roomList : .authentication, animated: false)
             

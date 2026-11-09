@@ -78,6 +78,22 @@ struct RootFlowCoordinatorTests {
         try await deferred.fulfill()
     }
     
+    // MARK: Session restoration
+    
+    @Test("Restoring the active account's session shows its flow")
+    func activeSessionRestoration() {
+        userSessionManagerCallbacks.send(.didRestoreSession(userID: "@alice:matrix.org"))
+        
+        #expect(navigationRootCoordinator.rootCoordinator is NavigationTabCoordinator<UserSessionFlowCoordinator.HomeTab>)
+    }
+    
+    @Test("Restoring an account that isn't active shows nothing")
+    func inactiveSessionRestoration() {
+        userSessionManagerCallbacks.send(.didRestoreSession(userID: "@bob:matrix.org"))
+        
+        #expect(navigationRootCoordinator.rootCoordinator == nil)
+    }
+    
     // MARK: Account removal
     
     @Test("Removing the shown account switches to the next account's flow")
