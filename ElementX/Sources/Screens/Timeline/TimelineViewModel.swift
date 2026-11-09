@@ -1206,7 +1206,15 @@ extension TimelineViewModel {
 private extension TimelineViewModel {
     // Keys without variation selectors, see `reactionEffectType(for:)`.
     static let reactionEffects: [String: ParticleEmitterType] = [
-        "🎉": .confetti, "🎊": .confetti, "🥳": .confetti
+        "🎉": .confetti, "🎊": .confetti, "🥳": .confetti,
+        "❤": .hearts(colors: [.systemRed, .systemPink]), "❣": .hearts(colors: [.systemRed, .systemPink]), "♥": .hearts(colors: [.systemRed, .systemPink]),
+        "🩷": .hearts(colors: [.systemPink]), "💖": .hearts(colors: [.systemPink]), "💗": .hearts(colors: [.systemPink]), "💓": .hearts(colors: [.systemPink]),
+        "💞": .hearts(colors: [.systemPink]), "💕": .hearts(colors: [.systemPink]), "💘": .hearts(colors: [.systemPink]), "💝": .hearts(colors: [.systemPink]),
+        "🧡": .hearts(colors: [.systemOrange]), "💛": .hearts(colors: [.systemYellow]), "💚": .hearts(colors: [.systemGreen]),
+        "💙": .hearts(colors: [.systemBlue]), "🩵": .hearts(colors: [.systemCyan]), "💜": .hearts(colors: [.systemPurple]),
+        "🤎": .hearts(colors: [.brown]), "🩶": .hearts(colors: [.systemGray]),
+        // Paired with a contrasting shade so that they still show on a background of the same colour.
+        "🖤": .hearts(colors: [.black, .darkGray]), "🤍": .hearts(colors: [.white, .lightGray])
     ]
     
     func prepareIncomingReactionEffects(in timelineItems: [RoomTimelineItemProtocol]) {

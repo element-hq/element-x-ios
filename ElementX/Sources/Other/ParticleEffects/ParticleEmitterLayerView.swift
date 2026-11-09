@@ -7,9 +7,10 @@
 
 import SwiftUI
 
-enum ParticleEmitterType {
+enum ParticleEmitterType: Equatable {
     case snow
     case confetti
+    case hearts(colors: [UIColor])
 }
 
 final class ParticleEmitterLayerView: UIView {
@@ -67,6 +68,7 @@ final class ParticleEmitterLayerView: UIView {
         let cells = switch emitterType {
         case .snow: ParticleEmitterBuilder.buildSnowCells()
         case .confetti: ParticleEmitterBuilder.buildConfettiCells()
+        case .hearts(let colors): ParticleEmitterBuilder.buildHeartCells(colors: colors)
         }
         
         // Start mid simulation so that the snow already covers the view instead of falling into it.
@@ -82,7 +84,7 @@ final class ParticleEmitterLayerView: UIView {
             emitterLayers.append(emitterLayer)
         }
         
-        guard emitterType == .confetti else { return }
+        guard emitterType != .snow else { return }
         
         UINotificationFeedbackGenerator().notificationOccurred(.success)
         
@@ -102,7 +104,7 @@ final class ParticleEmitterLayerView: UIView {
             emitterLayer.emitterShape = .line
             emitterLayer.emitterSize = CGSize(width: bounds.width, height: 1)
             emitterLayer.emitterPosition = CGPoint(x: bounds.midX, y: -20)
-        case .confetti:
+        case .confetti, .hearts:
             emitterLayer.emitterShape = .point
             emitterLayer.emitterSize = .zero
             emitterLayer.emitterPosition = emitterOrigin.map { convert($0, from: nil) } ?? CGPoint(x: bounds.midX, y: bounds.midY)

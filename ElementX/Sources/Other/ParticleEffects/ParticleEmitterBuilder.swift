@@ -26,6 +26,20 @@ enum ParticleEmitterBuilder {
         }
     }
     
+    /// Confetti made of hearts in the given colours, swaying instead of spinning.
+    static func buildHeartCells(colors: [UIColor]) -> [CAEmitterCell] {
+        let heart = makeSymbolImage(systemName: "heart.fill", pointSize: 16)
+        
+        return colors.map { color in
+            let cell = makeConfettiCell(shape: heart, color: color)
+            // The same amount of hearts however many colours they come in.
+            cell.birthRate = 480 / Float(colors.count)
+            cell.spin = 0
+            cell.spinRange = 2
+            return cell
+        }
+    }
+    
     // MARK: - Private
     
     private static let confettiColors: [UIColor] = [.systemRed, .systemOrange, .systemYellow, .systemGreen, .systemBlue, .systemPink]
@@ -92,6 +106,15 @@ enum ParticleEmitterBuilder {
         return UIGraphicsImageRenderer(size: size).image { context in
             UIColor.white.setFill()
             context.cgContext.fillEllipse(in: CGRect(origin: .zero, size: size))
+        }
+    }
+    
+    private static func makeSymbolImage(systemName: String, pointSize: CGFloat) -> UIImage {
+        let symbol = UIImage(systemName: systemName, withConfiguration: UIImage.SymbolConfiguration(pointSize: pointSize)) ?? UIImage()
+        
+        // Redrawn so that the cell's colour tints a plain white image, symbols are templates otherwise.
+        return UIGraphicsImageRenderer(size: symbol.size).image { _ in
+            symbol.withTintColor(.white).draw(at: .zero)
         }
     }
     
