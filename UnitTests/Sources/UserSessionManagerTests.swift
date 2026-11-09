@@ -441,6 +441,44 @@ struct UserSessionManagerTests {
         #expect(manager.userIDs == ["@alice:matrix.org"])
     }
     
+    @Test("The sessions are republished when one of their profiles or unread counts changes")
+    func sessionsAreRepublishedWhenTheirDetailsChange() async throws {
+        let manager = makeManager(userIDs: [])
+        let aliceClientProxy = ClientProxyMock(.init(userID: "@alice:matrix.org"))
+        let aliceProfile = CurrentValueSubject<UserProfile, Never>(.init(userID: "@alice:matrix.org", displayName: "Alice"))
+        aliceClientProxy.userProfilePublisher = aliceProfile.asCurrentValuePublisher()
+        let bobNotificationService = NotificationServiceMock(.init(userID: "@bob:matrix.org"))
+        let bobUnreadCount = CurrentValueSubject<Int, Never>(0)
+        bobNotificationService.badgeCountPublisher = bobUnreadCount.asCurrentValuePublisher()
+        manager.addNewSession(UserSessionMock(.init(clientProxy: aliceClientProxy)))
+        manager.addNewSession(UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@bob:matrix.org")), notificationService: bobNotificationService)))
+        let sessionDetails = manager.sessionsPublisher.map { $0.map(UserSessionDetails.init) }
+        
+        let profileUpdated = deferFulfillment(sessionDetails) { $0.last?.userProfile.displayName == "Alice Liddell" }
+        aliceProfile.send(.init(userID: "@alice:matrix.org", displayName: "Alice Liddell"))
+        try await profileUpdated.fulfill()
+        
+        let unreadCountUpdated = deferFulfillment(sessionDetails) { $0.first?.unreadCount == 3 }
+        bobUnreadCount.send(3)
+        try await unreadCountUpdated.fulfill()
+    }
+    
+    @Test("Adding a session loads its profile, so the name of every account is known")
+    func addingASessionLoadsItsProfile() async throws {
+        let manager = makeManager(userIDs: [])
+        let clientProxy = ClientProxyMock(.init(userID: "@alice:matrix.org"))
+        let (profileLoads, continuation) = AsyncStream<Void>.makeStream()
+        clientProxy.loadUserProfileIfNeededClosure = {
+            continuation.yield()
+            return .success(())
+        }
+        let profileLoaded = deferFulfillment(profileLoads) { _ in true }
+        
+        manager.addNewSession(UserSessionMock(.init(clientProxy: clientProxy)))
+        
+        try await profileLoaded.fulfill()
+    }
+    
     // MARK: - Helpers
     
     private func makeManager(userIDs: [String]) -> UserSessionManager {

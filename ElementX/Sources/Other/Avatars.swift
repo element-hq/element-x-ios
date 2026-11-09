@@ -66,6 +66,8 @@ enum UserAvatarSizeOnScreen {
     case spacesCompact
     case timeline
     case settings
+    case settingsOtherAccount
+    case settingsOtherAccountsStack
     case roomDetails
     case roomMembersList
     case roomChangeRoles
@@ -95,7 +97,7 @@ enum UserAvatarSizeOnScreen {
     
     var value: CGFloat {
         switch self {
-        case .readReceipt:
+        case .readReceipt, .settingsOtherAccountsStack:
             16
         case .spaceHeader:
             20
@@ -105,7 +107,7 @@ enum UserAvatarSizeOnScreen {
             28
         case .chatsCompact, .spacesCompact, .map,
              .timeline, .readReceiptSheet, .completionSuggestions,
-             .blockedUsers, .roomMembersList, .knockingUserBanner:
+             .blockedUsers, .roomMembersList, .knockingUserBanner, .settingsOtherAccount:
             32
         case .startChat:
             36
