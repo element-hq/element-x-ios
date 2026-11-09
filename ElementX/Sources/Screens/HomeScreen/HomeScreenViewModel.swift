@@ -357,9 +357,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             }
             .removeDuplicates()
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] hasInvites in
-                self?.state.bindings.filtersState.hasInvites = hasInvites
-            }
+            .weakAssign(to: \.state.bindings.filtersState.hasInvites, on: self)
             .store(in: &cancellables)
     }
     
