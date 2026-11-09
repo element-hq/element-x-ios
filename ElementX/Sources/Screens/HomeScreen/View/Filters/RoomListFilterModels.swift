@@ -89,15 +89,28 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
 
 struct RoomListFiltersState {
     private(set) var activeFilters: OrderedSet<RoomListFilter>
+    /// Whether there are pending invites, or `nil` when they aren't checked because the prominent invites filter is off.
+    var hasInvites: Bool?
     private let userSettings: UserSettings
     
-    init(activeFilters: OrderedSet<RoomListFilter> = [], userSettings: UserSettings) {
+    init(activeFilters: OrderedSet<RoomListFilter> = [],
+         hasInvites: Bool? = nil,
+         userSettings: UserSettings) {
         self.activeFilters = .init(activeFilters)
+        self.hasInvites = hasInvites
         self.userSettings = userSettings
     }
     
     var availableFilters: [RoomListFilter] {
         var availableFilters = OrderedSet(RoomListFilter.availableFilters)
+        
+        if let hasInvites {
+            availableFilters.remove(.invites)
+            
+            if hasInvites {
+                availableFilters.insert(.invites, at: 0)
+            }
+        }
         
         if !userSettings.app.lowPriorityFilterEnabled {
             availableFilters.remove(.lowPriority)

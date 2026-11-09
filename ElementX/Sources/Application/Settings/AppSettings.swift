@@ -353,6 +353,10 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: false)
     var mentionsFilterEnabled: Bool
     
+    /// Puts the invites filter first while there are invites and hides it when there are none.
+    @UserPreference(defaultValue: false)
+    var prominentInvitesFilterEnabled: Bool
+    
     /// Configuration to enable only signed device isolation mode for  crypto. In this mode only devices signed by their owner will be considered in e2ee rooms.
     @UserPreference(defaultValue: false)
     var enableOnlySignedDeviceIsolationMode: Bool
