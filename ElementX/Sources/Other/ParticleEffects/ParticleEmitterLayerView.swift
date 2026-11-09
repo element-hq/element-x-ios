@@ -9,6 +9,10 @@ import SwiftUI
 
 enum ParticleEmitterType: Equatable {
     case snow
+    /// A short burst of snow, falling from the top of the view and fading out.
+    case snowfall
+    /// A short burst of rain, falling from the top of the view.
+    case rainfall
     case confetti
     case hearts(colors: [UIColor])
 }
@@ -67,6 +71,8 @@ final class ParticleEmitterLayerView: UIView {
     private func emit() {
         let cells = switch emitterType {
         case .snow: ParticleEmitterBuilder.buildSnowCells()
+        case .snowfall: ParticleEmitterBuilder.buildSnowfallCells()
+        case .rainfall: ParticleEmitterBuilder.buildRainfallCells()
         case .confetti: ParticleEmitterBuilder.buildConfettiCells()
         case .hearts(let colors): ParticleEmitterBuilder.buildHeartCells(colors: colors)
         }
@@ -90,7 +96,7 @@ final class ParticleEmitterLayerView: UIView {
         
         // A single burst of particles, they keep animating until their lifetime runs out.
         burstTask = Task {
-            guard await (try? Task.sleep(for: .milliseconds(250))) != nil else { return }
+            guard await (try? Task.sleep(for: .milliseconds([.snowfall, .rainfall].contains(emitterType) ? 1000 : 250))) != nil else { return }
             emitterLayers.forEach { $0.birthRate = 0 }
         }
     }
@@ -99,7 +105,7 @@ final class ParticleEmitterLayerView: UIView {
         emitterLayer.frame = bounds
         
         switch emitterType {
-        case .snow:
+        case .snow, .snowfall, .rainfall:
             // Falls in from above the view.
             emitterLayer.emitterShape = .line
             emitterLayer.emitterSize = CGSize(width: bounds.width, height: 1)
