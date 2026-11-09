@@ -15,6 +15,8 @@ enum ParticleEmitterType: Equatable {
     case rainfall
     case confetti
     case hearts(colors: [UIColor])
+    /// Flames rising from the origin.
+    case fire
 }
 
 final class ParticleEmitterLayerView: UIView {
@@ -75,6 +77,7 @@ final class ParticleEmitterLayerView: UIView {
         case .rainfall: ParticleEmitterBuilder.buildRainfallCells()
         case .confetti: ParticleEmitterBuilder.buildConfettiCells()
         case .hearts(let colors): ParticleEmitterBuilder.buildHeartCells(colors: colors)
+        case .fire: ParticleEmitterBuilder.buildFireCells()
         }
         
         // Start mid simulation so that the snow already covers the view instead of falling into it.
@@ -96,7 +99,7 @@ final class ParticleEmitterLayerView: UIView {
         
         // A single burst of particles, they keep animating until their lifetime runs out.
         burstTask = Task {
-            guard await (try? Task.sleep(for: .milliseconds([.snowfall, .rainfall].contains(emitterType) ? 1000 : 250))) != nil else { return }
+            guard await (try? Task.sleep(for: .milliseconds([.snowfall, .rainfall, .fire].contains(emitterType) ? 1000 : 250))) != nil else { return }
             emitterLayers.forEach { $0.birthRate = 0 }
         }
     }
@@ -114,6 +117,13 @@ final class ParticleEmitterLayerView: UIView {
             emitterLayer.emitterShape = .point
             emitterLayer.emitterSize = .zero
             emitterLayer.emitterPosition = emitterOrigin.map { convert($0, from: nil) } ?? CGPoint(x: bounds.midX, y: bounds.midY)
+        case .fire:
+            // A short line gives the flames a base instead of a single point.
+            emitterLayer.emitterShape = .line
+            emitterLayer.emitterSize = CGSize(width: 60, height: 1)
+            emitterLayer.emitterPosition = emitterOrigin.map { convert($0, from: nil) } ?? CGPoint(x: bounds.midX, y: bounds.midY)
+            // Overlapping flames glow in the dark, additive blending would wash them out to white in light mode.
+            emitterLayer.renderMode = traitCollection.userInterfaceStyle == .dark ? .additive : .unordered
         }
     }
 }

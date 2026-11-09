@@ -54,6 +54,70 @@ enum ParticleEmitterBuilder {
         }
     }
     
+    /// Soft flames that burn from yellow to red as they rise and taper off, with embers flying out of them and smoke drifting above.
+    static func buildFireCells() -> [CAEmitterCell] {
+        let flame = CAEmitterCell()
+        flame.setContents(makeSoftCircleImage(radius: 16))
+        
+        flame.birthRate = 300
+        flame.lifetime = 0.9
+        flame.lifetimeRange = 0.3
+        
+        // Fired from a line emitter, which unlike a point one aims a zero longitude straight up.
+        // A negative acceleration keeps them rising.
+        flame.velocity = 100
+        flame.velocityRange = 40
+        flame.emissionRange = .pi / 10
+        flame.yAcceleration = -200
+        
+        // Starts yellow, losing green (orange, then red) and fading as it rises.
+        flame.color = UIColor(red: 1, green: 0.85, blue: 0.3, alpha: 0.7).cgColor
+        flame.greenSpeed = -1
+        flame.blueSpeed = -0.4
+        flame.alphaSpeed = -0.8
+        
+        flame.scale = 1
+        flame.scaleRange = 0.3
+        flame.scaleSpeed = -0.8
+        
+        let ember = CAEmitterCell()
+        ember.setContents(makeCircleImage(radius: 2))
+        
+        ember.birthRate = 20
+        ember.lifetime = 1.6
+        ember.lifetimeRange = 0.5
+        
+        ember.velocity = 180
+        ember.velocityRange = 80
+        ember.emissionRange = .pi / 4
+        ember.yAcceleration = -60
+        
+        ember.color = UIColor.systemOrange.cgColor
+        ember.alphaSpeed = -0.6
+        
+        let smoke = CAEmitterCell()
+        smoke.setContents(makeSoftCircleImage(radius: 24))
+        
+        smoke.birthRate = 30
+        smoke.lifetime = 2.5
+        smoke.lifetimeRange = 0.5
+        
+        // Slower than the flames so that it lingers above them, spreading out as it grows.
+        smoke.velocity = 70
+        smoke.velocityRange = 20
+        smoke.emissionRange = .pi / 6
+        smoke.yAcceleration = -30
+        
+        smoke.color = UIColor.systemGray.withAlphaComponent(0.3).cgColor
+        smoke.alphaSpeed = -0.12
+        
+        smoke.scale = 0.5
+        smoke.scaleSpeed = 0.4
+        smoke.spinRange = 1
+        
+        return [flame, ember, smoke]
+    }
+    
     // MARK: - Private
     
     private static let confettiColors: [UIColor] = [.systemRed, .systemOrange, .systemYellow, .systemGreen, .systemBlue, .systemPink]
@@ -147,6 +211,18 @@ enum ParticleEmitterBuilder {
         return UIGraphicsImageRenderer(size: size).image { context in
             UIColor.white.setFill()
             context.cgContext.fillEllipse(in: CGRect(origin: .zero, size: size))
+        }
+    }
+    
+    /// A white circle fading out towards its edge.
+    private static func makeSoftCircleImage(radius: CGFloat) -> UIImage {
+        let size = CGSize(width: radius * 2, height: radius * 2)
+        let colors = [UIColor.white.cgColor, UIColor.white.withAlphaComponent(0).cgColor] as CFArray
+        let gradient = CGGradient(colorsSpace: nil, colors: colors, locations: nil)
+        
+        return UIGraphicsImageRenderer(size: size).image { context in
+            let center = CGPoint(x: radius, y: radius)
+            gradient.map { context.cgContext.drawRadialGradient($0, startCenter: center, startRadius: 0, endCenter: center, endRadius: radius, options: []) }
         }
     }
     
