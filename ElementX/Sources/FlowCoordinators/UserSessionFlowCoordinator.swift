@@ -321,6 +321,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             }
             .store(in: &cancellables)
         
+        setupSyncingIndicatorObserver()
+        
         onboardingFlowCoordinator.actions
             .sink { [weak self] action in
                 guard let self else { return }
@@ -354,6 +356,30 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     guard navigationTabCoordinator.selectedTab == .search else { return }
                     // Return to the tab the user came from, but never back into search.
                     navigationTabCoordinator.selectedTab = navigationTabCoordinator.previousTab == .search ? .chats : navigationTabCoordinator.previousTab ?? .chats
+                }
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func setupSyncingIndicatorObserver() {
+        let syncingIndicatorID = "StaleDataIndicator"
+        userSession.clientProxy.loadingStatePublisher
+            .dropFirst()
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] state in
+                guard let self else { return }
+                switch state {
+                case .loading:
+                    if userSession.clientProxy.homeserverReachabilityPublisher.value == .reachable,
+                       flowParameters.appMediator.networkMonitor.reachabilityPublisher.value == .reachable {
+                        flowParameters.userIndicatorController.submitIndicator(.init(id: syncingIndicatorID,
+                                                                                     type: .toast(progress: .indeterminate),
+                                                                                     title: L10n.commonSyncing,
+                                                                                     persistent: true))
+                    }
+                case .notLoading:
+                    flowParameters.userIndicatorController.retractIndicatorWithId(syncingIndicatorID)
                 }
             }
             .store(in: &cancellables)

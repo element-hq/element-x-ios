@@ -163,21 +163,12 @@ final class UserSessionManager: UserSessionManagerProtocol {
         await userSessionStore.userSession(for: client, sessionDirectories: sessionDirectories, passphrase: passphrase)
     }
     
-    func add(_ userSession: UserSessionProtocol) {
-        let userID = userSession.clientProxy.userID
-        clearedUserIDs.remove(userID)
+    func addNewSession(_ userSession: UserSessionProtocol) {
+        add(userSession)
         
-        if accounts.keys.contains(userID) {
-            accounts[userID] = userSession
-        } else {
-            userSession.userSettings.account.lastSelectedDate = .now
-            userSessionMigrator.markAsMigrated(userSession)
-            accounts.updateValue(userSession, forKey: userID, insertingAt: 0)
+        if areServicesRunning {
+            Task { await userSession.clientProxy.resumeServices() }
         }
-        
-        notificationManager.add(userSession.notificationService)
-        liveLocationManager.add(userSession.liveLocationService)
-        elementCallManager.add(userSession.elementCallService)
     }
     
     func logout(userID: String) async {
@@ -299,5 +290,24 @@ final class UserSessionManager: UserSessionManagerProtocol {
             callbacksSubject.send(.didRemoveAccount(userID: userID, isUnexpected: true))
             return nil
         }
+    }
+    
+    /// Registers a session that's ready to be used, replacing any previous session for its account.
+    /// A new account becomes the active one, a known account keeps its place.
+    private func add(_ userSession: UserSessionProtocol) {
+        let userID = userSession.clientProxy.userID
+        clearedUserIDs.remove(userID)
+        
+        if accounts.keys.contains(userID) {
+            accounts[userID] = userSession
+        } else {
+            userSession.userSettings.account.lastSelectedDate = .now
+            userSessionMigrator.markAsMigrated(userSession)
+            accounts.updateValue(userSession, forKey: userID, insertingAt: 0)
+        }
+        
+        notificationManager.add(userSession.notificationService)
+        liveLocationManager.add(userSession.liveLocationService)
+        elementCallManager.add(userSession.elementCallService)
     }
 }

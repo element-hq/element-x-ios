@@ -651,7 +651,7 @@ class MockScreen: Identifiable {
                 userSessionManagerCallbacks.send(.didRemoveAccount(userID: userID, isUnexpected: false))
             }
             // The signed in session is a bare mock, use the populated one instead.
-            userSessionManager.addClosure = { _ in
+            userSessionManager.addNewSessionClosure = { _ in
                 userSessionManager.activeSession = userSession
                 userSessionManager.sessionsPublisher = .init([userSession])
             }

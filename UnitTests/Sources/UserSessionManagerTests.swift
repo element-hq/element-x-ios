@@ -105,7 +105,7 @@ struct UserSessionManagerTests {
     func restoreSkipsLiveAccounts() async {
         appSettings.multiAccountEnabled = true
         let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org"])
-        manager.add(makeUserSession(userID: "@alice:matrix.org"))
+        manager.addNewSession(makeUserSession(userID: "@alice:matrix.org"))
         userSessionStore.restoreUserSessionUserIDReturnValue = .success(makeUserSession(userID: "@bob:matrix.org"))
         
         await manager.restoreSessions()
@@ -129,6 +129,29 @@ struct UserSessionManagerTests {
         #expect(!aliceClientProxy.resumeServicesCalled)
     }
     
+    @Test("Signing in while the services are running resumes the new session")
+    func signInWhileRunning() async {
+        let manager = makeManager(userIDs: [])
+        await manager.resumeServices()
+        let aliceClientProxy = ClientProxyMock(.init(userID: "@alice:matrix.org"))
+        
+        await waitForConfirmation("Wait for the new session to resume", timeout: .seconds(1)) { confirmation in
+            aliceClientProxy.resumeServicesClosure = { confirmation() }
+            manager.addNewSession(UserSessionMock(.init(clientProxy: aliceClientProxy)))
+        }
+    }
+    
+    @Test("Signing in while the services are paused doesn't resume the new session")
+    func signInWhilePaused() async {
+        let manager = makeManager(userIDs: [])
+        let aliceClientProxy = ClientProxyMock(.init(userID: "@alice:matrix.org"))
+        
+        await waitForConfirmation("The new session shouldn't resume", expectedCount: 0, timeout: .seconds(1)) { confirmation in
+            aliceClientProxy.resumeServicesClosure = { confirmation() }
+            manager.addNewSession(UserSessionMock(.init(clientProxy: aliceClientProxy)))
+        }
+    }
+    
     @Test("Clearing the caches replaces the session on the next restore")
     func clearCachesReplacesSession() async {
         appSettings.multiAccountEnabled = true
@@ -137,8 +160,8 @@ struct UserSessionManagerTests {
         aliceClientProxy.clearCachesReturnValue = .success(())
         let oldAlice = UserSessionMock(.init(clientProxy: aliceClientProxy))
         let bob = makeUserSession(userID: "@bob:matrix.org")
-        manager.add(oldAlice)
-        manager.add(bob)
+        manager.addNewSession(oldAlice)
+        manager.addNewSession(bob)
         
         await manager.clearCaches(userID: "@alice:matrix.org")
         #expect(aliceClientProxy.clearCachesCalled)
@@ -165,9 +188,9 @@ struct UserSessionManagerTests {
         let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org"])
         let aliceClientProxy = ClientProxyMock(.init(userID: "@alice:matrix.org"))
         aliceClientProxy.clearCachesReturnValue = .success(())
-        manager.add(UserSessionMock(.init(clientProxy: aliceClientProxy)))
+        manager.addNewSession(UserSessionMock(.init(clientProxy: aliceClientProxy)))
         let bob = makeUserSession(userID: "@bob:matrix.org")
-        manager.add(bob)
+        manager.addNewSession(bob)
         userSessionStore.restoreUserSessionUserIDReturnValue = .failure(.failedRestoringLogin)
         
         await manager.clearCaches(userID: "@alice:matrix.org")
@@ -182,7 +205,7 @@ struct UserSessionManagerTests {
     func logoutDuringRestore() async {
         appSettings.multiAccountEnabled = true
         let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org", "@carol:matrix.org"])
-        manager.add(makeUserSession(userID: "@alice:matrix.org"))
+        manager.addNewSession(makeUserSession(userID: "@alice:matrix.org"))
         let sessions = ["@bob:matrix.org": makeUserSession(userID: "@bob:matrix.org"), "@carol:matrix.org": makeUserSession(userID: "@carol:matrix.org")]
         userSessionStore.restoreUserSessionUserIDClosure = { userID in sessions[userID].map { .success($0) } ?? .failure(.failedRestoringLogin) }
         userSessionMigrator.migrateClosure = { userSession in
@@ -203,7 +226,7 @@ struct UserSessionManagerTests {
         let manager = makeManager(userIDs: ["@alice:matrix.org"])
         let aliceClientProxy = ClientProxyMock(.init(userID: "@alice:matrix.org"))
         aliceClientProxy.clearCachesReturnValue = .success(())
-        manager.add(UserSessionMock(.init(clientProxy: aliceClientProxy)))
+        manager.addNewSession(UserSessionMock(.init(clientProxy: aliceClientProxy)))
         await manager.clearCaches(userID: "@alice:matrix.org")
         userSessionStore.restoreUserSessionUserIDReturnValue = .success(makeUserSession(userID: "@alice:matrix.org"))
         // The cleared session is still live, so it can be logged out while its replacement restores.
@@ -217,46 +240,25 @@ struct UserSessionManagerTests {
         #expect(manager.activeSession == nil)
     }
     
-    @Test("Adding a session registers it, making a new account the active one")
-    func addSession() {
+    @Test("Adding a new session registers it as the active account, with nothing to migrate")
+    func addNewSession() {
         let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org"])
-        
-        // A known account keeps its place, e.g. after clearing the cache.
-        let bob = makeUserSession(userID: "@bob:matrix.org")
-        manager.add(bob)
-        #expect(manager.userIDs == ["@alice:matrix.org", "@bob:matrix.org"])
-        #expect((manager.session(for: "@bob:matrix.org") as? UserSessionMock) === bob)
-        #expect(manager.activeSession == nil)
-        #expect(!userSessionMigrator.markAsMigratedCalled)
-        
-        // A new account becomes the active one, with nothing to migrate.
         let carol = makeUserSession(userID: "@carol:matrix.org")
-        manager.add(carol)
+        
+        manager.addNewSession(carol)
+        
         #expect(manager.userIDs == ["@carol:matrix.org", "@alice:matrix.org", "@bob:matrix.org"])
         #expect(carol.userSettings.account.lastSelectedDate != nil)
         #expect((userSessionMigrator.markAsMigratedReceivedUserSession as? UserSessionMock) === carol)
         #expect((manager.activeSession as? UserSessionMock) === carol)
-        #expect(manager.sessionsPublisher.value.map(\.clientProxy.userID) == ["@carol:matrix.org", "@bob:matrix.org"])
-    }
-    
-    @Test("Adding a session replaces the session of a known account")
-    func addKnownAccount() {
-        let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org"])
-        manager.add(makeUserSession(userID: "@alice:matrix.org"))
-        
-        // E.g. restoring again after clearing the cache, or signing in again after a soft logout.
-        let newAlice = makeUserSession(userID: "@alice:matrix.org")
-        manager.add(newAlice)
-        
-        #expect(manager.userIDs == ["@alice:matrix.org", "@bob:matrix.org"])
-        #expect((manager.activeSession as? UserSessionMock) === newAlice)
+        #expect(manager.sessionsPublisher.value.map(\.clientProxy.userID) == ["@carol:matrix.org"])
     }
     
     @Test("Removing an account deletes it")
     func removeAccount() {
         let manager = makeManager(userIDs: ["@alice:matrix.org"])
         let alice = makeUserSession(userID: "@alice:matrix.org")
-        manager.add(alice)
+        manager.addNewSession(alice)
         
         manager.remove(userID: "@alice:matrix.org")
         
@@ -281,8 +283,8 @@ struct UserSessionManagerTests {
         let bob = UserSessionMock(.init(clientProxy: bobClientProxy,
                                         liveLocationService: bobLiveLocationService,
                                         notificationService: bobNotificationService))
-        manager.add(alice)
-        manager.add(bob)
+        manager.addNewSession(alice)
+        manager.addNewSession(bob)
         
         let deferred = deferFulfillment(manager.callbacksPublisher) { $0 == .didRemoveAccount(userID: "@alice:matrix.org", isUnexpected: false) }
         await manager.logout(userID: "@alice:matrix.org")
@@ -306,7 +308,7 @@ struct UserSessionManagerTests {
     func duplicateLogout() async {
         let manager = makeManager(userIDs: ["@alice:matrix.org"])
         let aliceClientProxy = ClientProxyMock(.init(userID: "@alice:matrix.org"))
-        manager.add(UserSessionMock(.init(clientProxy: aliceClientProxy)))
+        manager.addNewSession(UserSessionMock(.init(clientProxy: aliceClientProxy)))
         
         // Simulate the SDK reporting an auth error while the server logout is in flight.
         aliceClientProxy.logoutClosure = { await manager.logout(userID: "@alice:matrix.org") }
@@ -322,7 +324,7 @@ struct UserSessionManagerTests {
     func logoutAll() async {
         let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org"])
         let aliceClientProxy = ClientProxyMock(.init(userID: "@alice:matrix.org"))
-        manager.add(UserSessionMock(.init(clientProxy: aliceClientProxy)))
+        manager.addNewSession(UserSessionMock(.init(clientProxy: aliceClientProxy)))
         var removals: [UserSessionManagerCallback] = []
         let cancellable = manager.callbacksPublisher.sink { removals.append($0) }
         
@@ -342,7 +344,7 @@ struct UserSessionManagerTests {
         let manager = makeManager(userIDs: [])
         let alice = makeUserSession(userID: "@alice:matrix.org")
         
-        manager.add(alice)
+        manager.addNewSession(alice)
         
         #expect(notificationManager.addReceivedService === alice.notificationService)
         #expect(liveLocationManager.addReceivedService === alice.liveLocationService)
@@ -352,7 +354,7 @@ struct UserSessionManagerTests {
     @Test("Removing an account disconnects its services")
     func removeDisconnectsServices() {
         let manager = makeManager(userIDs: ["@alice:matrix.org"])
-        manager.add(makeUserSession(userID: "@alice:matrix.org"))
+        manager.addNewSession(makeUserSession(userID: "@alice:matrix.org"))
         
         manager.remove(userID: "@alice:matrix.org")
         
@@ -364,7 +366,7 @@ struct UserSessionManagerTests {
     @Test("Resetting disconnects every account's services")
     func resetAllAccounts() {
         let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org"])
-        manager.add(makeUserSession(userID: "@alice:matrix.org"))
+        manager.addNewSession(makeUserSession(userID: "@alice:matrix.org"))
         
         manager.reset()
         
@@ -392,8 +394,8 @@ struct UserSessionManagerTests {
         let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org"])
         let aliceClientProxy = ClientProxyMock(.init(userID: "@alice:matrix.org"))
         let bobClientProxy = ClientProxyMock(.init(userID: "@bob:matrix.org"))
-        manager.add(UserSessionMock(.init(clientProxy: aliceClientProxy)))
-        manager.add(UserSessionMock(.init(clientProxy: bobClientProxy)))
+        manager.addNewSession(UserSessionMock(.init(clientProxy: aliceClientProxy)))
+        manager.addNewSession(UserSessionMock(.init(clientProxy: bobClientProxy)))
         
         await manager.resumeServices()
         #expect(aliceClientProxy.resumeServicesCallsCount == 1)
@@ -411,8 +413,8 @@ struct UserSessionManagerTests {
         let aliceClientProxy = ClientProxyMock(.init(userID: "@alice:matrix.org"))
         let bobClientProxy = ClientProxyMock(.init(userID: "@bob:matrix.org"))
         let bob = UserSessionMock(.init(clientProxy: bobClientProxy))
-        manager.add(UserSessionMock(.init(clientProxy: aliceClientProxy)))
-        manager.add(bob)
+        manager.addNewSession(UserSessionMock(.init(clientProxy: aliceClientProxy)))
+        manager.addNewSession(bob)
         
         let deferred = deferFulfillment(manager.callbacksPublisher) { $0 == .didRemoveAccount(userID: "@bob:matrix.org", isUnexpected: true) }
         bob.callbacks.send(.didReceiveAuthError)
@@ -426,10 +428,13 @@ struct UserSessionManagerTests {
     @Test("An auth error from a replaced session is ignored")
     func replacedSessionAuthError() async throws {
         let manager = makeManager(userIDs: ["@alice:matrix.org"])
-        let oldAlice = makeUserSession(userID: "@alice:matrix.org")
-        manager.add(oldAlice)
-        // E.g. after clearing the cache.
-        manager.add(makeUserSession(userID: "@alice:matrix.org"))
+        let oldAliceClientProxy = ClientProxyMock(.init(userID: "@alice:matrix.org"))
+        oldAliceClientProxy.clearCachesReturnValue = .success(())
+        let oldAlice = UserSessionMock(.init(clientProxy: oldAliceClientProxy))
+        manager.addNewSession(oldAlice)
+        userSessionStore.restoreUserSessionUserIDReturnValue = .success(makeUserSession(userID: "@alice:matrix.org"))
+        await manager.clearCaches(userID: "@alice:matrix.org")
+        await manager.restoreSessions()
         
         let deferredFailure = deferFailure(manager.callbacksPublisher, timeout: .milliseconds(300)) { _ in true }
         oldAlice.callbacks.send(.didReceiveAuthError)

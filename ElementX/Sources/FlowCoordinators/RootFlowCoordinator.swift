@@ -230,7 +230,7 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
                 stopUserSessionFlow()
                 startAuthenticationFlow(isAddingAccount: isAddingAccount)
             case (.initial, .startUserSession, .userSessionFlow):
-                startUserSessionFlow(isNewLogin: false)
+                startUserSessionFlow(isAppLaunch: true, isNewLogin: false)
             case (.authenticationFlow, .startUserSession, .userSessionFlow):
                 // TODO: Restore the settings screen when cancelling with isAddingAccount == true .
                 authenticationFlowCoordinator = nil
@@ -320,7 +320,7 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
                 
                 switch action {
                 case .signInComplete(let userSession):
-                    userSessionManager.add(userSession)
+                    userSessionManager.addNewSession(userSession)
                     stateMachine.tryEvent(.startUserSession(userID: userSession.clientProxy.userID))
                 }
             }
@@ -340,9 +340,17 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func startUserSessionFlow(isNewLogin: Bool) {
+    private func startUserSessionFlow(isAppLaunch: Bool = false, isNewLogin: Bool) {
         guard let userSession = userSessionManager.activeSession else {
             fatalError("User session not setup")
+        }
+        
+        if let serverName = userSession.clientProxy.userIDServerName {
+            analyticsService.signpost.addGlobalTag(.homeserver, value: serverName)
+        }
+        
+        if isAppLaunch {
+            analyticsService.signpost.startTransaction(.cachedRoomList)
         }
         
         let flowParameters = CommonFlowParameters(userSession: userSession,
