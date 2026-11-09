@@ -97,5 +97,12 @@ struct RoomListFiltersView_Previews: PreviewProvider, TestablePreview {
                                                    userSettings: .mock())))
         RoomListFiltersView(state: .constant(.init(activeFilters: [.lowPriority],
                                                    userSettings: .mock())))
+        RoomListFiltersView(state: .constant(.init(hasInvites: true,
+                                                   userSettings: .mock())))
+        RoomListFiltersView(state: .constant(.init(hasInvites: false,
+                                                   userSettings: .mock())))
+        RoomListFiltersView(state: .constant(.init(activeFilters: [.invites],
+                                                   hasInvites: true,
+                                                   userSettings: .mock())))
     }
 }
