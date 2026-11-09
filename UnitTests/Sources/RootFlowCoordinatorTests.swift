@@ -144,6 +144,18 @@ struct RootFlowCoordinatorTests {
         #expect(navigationRootCoordinator.rootCoordinator !== aliceRootCoordinator)
     }
     
+    @Test("Removing the shown account waits while another account is still restoring")
+    func shownAccountRemovalWhileRestoring() {
+        rootFlowCoordinator.handleAppRoute(.roomList, animated: false)
+        let aliceRootCoordinator = navigationRootCoordinator.rootCoordinator
+        
+        userSessionManager.activeSession = nil
+        userSessionManager.userIDs = ["@bob:matrix.org"]
+        userSessionManagerCallbacks.send(.didRemoveAccount(userID: "@alice:matrix.org", error: .remoteLogout))
+        
+        #expect(navigationRootCoordinator.rootCoordinator === aliceRootCoordinator)
+    }
+    
     @Test("Removing an account that isn't shown leaves the root untouched")
     func backgroundAccountRemoval() {
         rootFlowCoordinator.handleAppRoute(.roomList, animated: false)

@@ -181,6 +181,7 @@ final class UserSessionManager: UserSessionManagerProtocol {
         if areServicesRunning {
             if userSession.clientProxy.userID == activeSession?.clientProxy.userID {
                 signposter.startTransaction(.upToDateRoomList)
+                setupLoadingStateSubscription() // Ensure the signpost's transaction can be finished.
             }
             Task { await userSession.clientProxy.resumeServices() }
         }
@@ -215,7 +216,9 @@ final class UserSessionManager: UserSessionManagerProtocol {
     func logoutAll() async {
         await restorationTask?.value // Wait for all accounts to finish restoration first.
         
-        for userID in userIDs {
+        // Reversed so the active session's flow remains as the main window's content
+        // during the process, only being replaced by authentication at the very end.
+        for userID in userIDs.reversed() {
             if session(for: userID) != nil {
                 await logout(userID: userID)
             } else {
