@@ -319,7 +319,7 @@ struct UserSessionManagerTests {
         #expect(manager.userIDs.isEmpty)
     }
     
-    @Test("Logging out every account removes the live ones and those that aren't live yet")
+    @Test("Logging out every account removes the live ones and those that aren't live yet, the active one last")
     func logoutAll() async {
         let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org"])
         let aliceClientProxy = ClientProxyMock(.init(userID: "@alice:matrix.org"))
@@ -331,9 +331,9 @@ struct UserSessionManagerTests {
         
         // Only a live session can be logged out of the server, but every account is removed from the device.
         #expect(aliceClientProxy.logoutCalled)
-        #expect(userSessionStore.logoutUserIDReceivedInvocations == ["@alice:matrix.org", "@bob:matrix.org"])
-        #expect(removals == [.didRemoveAccount(userID: "@alice:matrix.org", error: nil),
-                             .didRemoveAccount(userID: "@bob:matrix.org", error: nil)])
+        #expect(userSessionStore.logoutUserIDReceivedInvocations == ["@bob:matrix.org", "@alice:matrix.org"])
+        #expect(removals == [.didRemoveAccount(userID: "@bob:matrix.org", error: nil),
+                             .didRemoveAccount(userID: "@alice:matrix.org", error: nil)])
         #expect(manager.userIDs.isEmpty)
         cancellable.cancel()
     }

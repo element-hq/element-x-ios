@@ -223,7 +223,7 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
             case (.initial, .startUserSession, .userSessionFlow):
                 startUserSessionFlow(isAppLaunch: true, isNewLogin: false)
             case (.authenticationFlow, .startUserSession, .userSessionFlow):
-                // TODO: Restore the settings screen when cancelling with isAddingAccount == true .
+                // TODO: Restore the settings screen when cancelling with isAddingAccount == true.
                 authenticationFlowCoordinator = nil
                 startUserSessionFlow(isNewLogin: true)
             case (.userSessionFlow, .clearCache, .clearingCache(let userID)):
@@ -290,8 +290,12 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
             actionsSubject.send(.closeSecondaryWindows)
             if let activeUserID = userSessionManager.activeSession?.clientProxy.userID {
                 stateMachine.tryEvent(.startUserSession(userID: activeUserID))
-            } else {
+            } else if userSessionManager.userIDs.isEmpty {
                 stateMachine.tryEvent(.startAuthentication(isAddingAccount: false))
+            } else {
+                // Continue waiting while other accounts are restoring.
+                // Nothing shows the next account once it restores yet, however if we were to build
+                // account switching by observing the active session then this would come for free.
             }
         default:
             break
