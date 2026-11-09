@@ -50,8 +50,6 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
     private let isSessionRestoredSubject = CurrentValueSubject<Bool, Never>(false)
     private var clientProxyObserver: AnyCancellable?
     private var cancellables = Set<AnyCancellable>()
-    /// A continuation to signal when the caches have been cleared successfully (or failed).
-    private var clearCacheContinuation: AsyncStream<Result<Void, ClearCacheError>>.Continuation?
     
     let windowManager: SecureWindowManagerProtocol
     let notificationManager: NotificationManagerProtocol
@@ -513,20 +511,13 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
             }
             
             switch (context.fromState, context.event, context.toState) {
-            case (.initial, .startWithAuthentication, .signedOut):
+            case (.initial, .startWithAuthentication, .running):
                 startAuthentication()
             case (.initial, .startWithExistingSession, .restoringSession):
                 restoreUserSessions()
-            case (.restoringSession, .failedRestoringSession, .signedOut):
-                showLoginErrorToast()
-                if let clearCacheContinuation = clearCacheContinuation.take() {
-                    cancelClearCache(clearCacheContinuation)
-                }
-                startAuthentication()
-            case (.restoringSession, .createdUserSession, .signedIn):
-                setupUserSession()
-            case (.signedIn, .clearCache, .initial):
-                clearCache()
+            case (.restoringSession, .restoredSession, .running),
+                 (.restoringSession, .failedRestoringSession, .running):
+                break
             default:
                 fatalError("Unknown transition: \(context)")
             }
@@ -544,8 +535,6 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
     private func restoreUserSessions() {
         Task {
             await userSessionManager.restoreSessions()
-            // An account that was already live becomes the active one when those before it fail (e.g. after clearing the cache).
-            showActiveSessionIfRestoring()
             
             if stateMachine.state == .restoringSession {
                 MXLog.error("Failed to restore an existing session.")
@@ -554,12 +543,12 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
         }
     }
     
-    /// Shows the active session as soon as it's live, while the app is waiting for one.
-    private func showActiveSessionIfRestoring() {
+    /// Resumes the active session's services once it's live, and stops waiting for a restore.
+    private func finishActiveSessionRestoration() {
         guard stateMachine.state == .restoringSession, userSession != nil else { return }
         
         Task { await resumeClientServices() }
-        stateMachine.processEvent(.createdUserSession)
+        stateMachine.processEvent(.restoredSession)
     }
     
     /// Sends a reply made from a notification before its account was live.
@@ -577,12 +566,6 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
     
     private func startAuthentication() {
         rootFlowCoordinator.handleAppRoute(.authentication, animated: true)
-    }
-    
-    private func setupUserSession() {
-        if let continuation = clearCacheContinuation.take() {
-            restoreUserSessionFlowAfterClearCache(continuation)
-        }
     }
     
     /// Logs out every account, then disables App Lock if requested (e.g. when the user forgot their PIN).
@@ -651,7 +634,7 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
                 guard let self else { return }
                 switch callback {
                 case .didRestoreSession(let userID):
-                    showActiveSessionIfRestoring()
+                    finishActiveSessionRestoration()
                     if let userSession = userSessionManager.session(for: userID) {
                         sendStoredInlineReply(from: userSession)
                     }
@@ -699,43 +682,11 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
             switch action {
             case .closeSecondaryWindows:
                 windowManager.closeAllSecondaryWindows()
-            case .clearCache(let continuation):
-                clearCacheContinuation = continuation
-                stateMachine.processEvent(.clearCache)
             case .forceLogout:
                 logoutAllAccounts(disableAppLock: true)
             }
         }
         .store(in: &cancellables)
-    }
-    
-    private func clearCache() {
-        guard let userSession else {
-            fatalError("User session not setup")
-        }
-        
-        showLoadingIndicator()
-        
-        Task { await pauseClientServices(isBackgroundTask: false) }
-        
-        // Allow for everything to deallocate properly
-        Task {
-            await userSessionManager.clearCaches(userID: userSession.clientProxy.userID)
-            stateMachine.processEvent(.startWithExistingSession)
-            hideLoadingIndicator()
-        }
-    }
-    
-    /// Tells the root flow coordinator to restore the user session flow.
-    private func restoreUserSessionFlowAfterClearCache(_ continuation: AsyncStream<Result<Void, ClearCacheError>>.Continuation) {
-        continuation.yield(.success(()))
-        continuation.finish()
-    }
-    
-    /// Tells the root flow coordinator that the session failed to restore after clearing the cache.
-    private func cancelClearCache(_ continuation: AsyncStream<Result<Void, ClearCacheError>>.Continuation) {
-        continuation.yield(.failure(.failedRestoringSession))
-        continuation.finish()
     }
     
     private static func setupSentry(bugReportService: BugReportServiceProtocol, appSettings: AppSettings, analytics: AnalyticsServiceProtocol) {
@@ -850,25 +801,6 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
             await notificationManager.showLocalNotification(with: "⚠️ " + L10n.commonError,
                                                             subtitle: L10n.errorSomeMessagesHaveNotBeenSent)
         }
-    }
-    
-    // MARK: Toasts and loading indicators
-    
-    private static let loadingIndicatorIdentifier = "\(AppCoordinator.self)-Loading"
-    
-    private func showLoadingIndicator() {
-        userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
-                                                              type: .modal,
-                                                              title: L10n.commonLoading,
-                                                              persistent: true))
-    }
-    
-    private func hideLoadingIndicator() {
-        userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
-    }
-    
-    private func showLoginErrorToast() {
-        userIndicatorController.submitIndicator(UserIndicator(title: "Failed logging in"))
     }
     
     // MARK: - Application State

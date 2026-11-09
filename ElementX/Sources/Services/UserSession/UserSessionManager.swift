@@ -12,8 +12,8 @@ import OrderedCollections
 
 /// Owns the live session of every account signed in on this device, most recently active first.
 ///
-/// Only the `AppCoordinator` calls the lifecycle methods, so the active account always changes
-/// through its state machine. Flows only receive the `UserSessionDetails` of its sessions.
+/// Accounts only change here: coordinators call its lifecycle methods for the user's actions and react
+/// to its callbacks, rather than changing accounts themselves. Flows only receive the `UserSessionDetails` of its sessions.
 final class UserSessionManager: UserSessionManagerProtocol {
     private let userSessionStore: UserSessionStoreProtocol
     private let appSettings: AppSettings
@@ -107,7 +107,7 @@ final class UserSessionManager: UserSessionManagerProtocol {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] userID in
                 guard let self else { return }
-                Task { await self.logout(userID: userID, isUnexpected: true) }
+                Task { await self.logout(userID: userID, error: .remoteLogout) }
             }
     }
     
@@ -132,8 +132,10 @@ final class UserSessionManager: UserSessionManagerProtocol {
     func clearCaches(userID: String) async {
         guard let userSession = session(for: userID) else { return }
         
+        await userSession.clientProxy.pauseServices()
         clearedUserIDs.insert(userID) // Marked before clearing, so it is ready to restore after clearing is done.
         await userSession.clientProxy.clearCaches()
+        await restoreSessions()
     }
     
     private func restoreAccounts() async {
@@ -172,10 +174,10 @@ final class UserSessionManager: UserSessionManagerProtocol {
     }
     
     func logout(userID: String) async {
-        await logout(userID: userID, isUnexpected: false)
+        await logout(userID: userID, error: nil)
     }
     
-    private func logout(userID: String, isUnexpected: Bool) async {
+    private func logout(userID: String, error: UserSessionManagerError?) async {
         guard let userSession = session(for: userID) else {
             MXLog.error("Tried to log out \(userID), which doesn't have a live session.")
             return
@@ -194,7 +196,7 @@ final class UserSessionManager: UserSessionManagerProtocol {
         // Remove the user, clearing user data.
         remove(userID: userID)
         
-        callbacksSubject.send(.didRemoveAccount(userID: userID, isUnexpected: isUnexpected))
+        callbacksSubject.send(.didRemoveAccount(userID: userID, error: error))
     }
     
     func logoutAll() async {
@@ -206,7 +208,7 @@ final class UserSessionManager: UserSessionManagerProtocol {
             } else {
                 // Very unlikely to happen in practice.
                 remove(userID: userID) // Without a live session just make sure the account's local data is deleted.
-                callbacksSubject.send(.didRemoveAccount(userID: userID, isUnexpected: false))
+                callbacksSubject.send(.didRemoveAccount(userID: userID, error: nil))
             }
         }
     }
@@ -287,7 +289,7 @@ final class UserSessionManager: UserSessionManagerProtocol {
             notificationManager.remove(userID: userID)
             liveLocationManager.remove(userID: userID)
             elementCallManager.remove(userID: userID)
-            callbacksSubject.send(.didRemoveAccount(userID: userID, isUnexpected: true))
+            callbacksSubject.send(.didRemoveAccount(userID: userID, error: .failedRestoringSession))
             return nil
         }
     }

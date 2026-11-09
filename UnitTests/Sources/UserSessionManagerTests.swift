@@ -152,28 +152,29 @@ struct UserSessionManagerTests {
         }
     }
     
-    @Test("Clearing the caches replaces the session on the next restore")
+    @Test("Clearing the caches pauses the account's session and replaces it by restoring the account")
     func clearCachesReplacesSession() async {
         appSettings.multiAccountEnabled = true
         let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org"])
         let aliceClientProxy = ClientProxyMock(.init(userID: "@alice:matrix.org"))
         aliceClientProxy.clearCachesReturnValue = .success(())
         let oldAlice = UserSessionMock(.init(clientProxy: aliceClientProxy))
-        let bob = makeUserSession(userID: "@bob:matrix.org")
+        let bobClientProxy = ClientProxyMock(.init(userID: "@bob:matrix.org"))
+        let bob = UserSessionMock(.init(clientProxy: bobClientProxy))
         manager.addNewSession(oldAlice)
         manager.addNewSession(bob)
-        
-        await manager.clearCaches(userID: "@alice:matrix.org")
-        #expect(aliceClientProxy.clearCachesCalled)
         
         let newAlice = makeUserSession(userID: "@alice:matrix.org")
         userSessionStore.restoreUserSessionUserIDReturnValue = .success(newAlice)
         userSessionMigrator.migrateClosure = { _ in
             // The cleared session stays live until the new one replaces it.
-            #expect((manager.activeSession as? UserSessionMock) === oldAlice)
+            #expect((manager.session(for: "@alice:matrix.org") as? UserSessionMock) === oldAlice)
         }
         
-        await manager.restoreSessions()
+        await manager.clearCaches(userID: "@alice:matrix.org")
+        #expect(aliceClientProxy.pauseServicesCalled)
+        #expect(!bobClientProxy.pauseServicesCalled)
+        #expect(aliceClientProxy.clearCachesCalled)
         #expect(userSessionStore.restoreUserSessionUserIDReceivedInvocations == ["@alice:matrix.org"])
         #expect((manager.activeSession as? UserSessionMock) === newAlice)
         #expect((manager.session(for: "@bob:matrix.org") as? UserSessionMock) === bob)
@@ -194,7 +195,6 @@ struct UserSessionManagerTests {
         userSessionStore.restoreUserSessionUserIDReturnValue = .failure(.failedRestoringLogin)
         
         await manager.clearCaches(userID: "@alice:matrix.org")
-        await manager.restoreSessions()
         
         #expect(userSessionStore.restoreUserSessionUserIDReceivedInvocations == ["@alice:matrix.org"])
         #expect(manager.userIDs == ["@bob:matrix.org"])
@@ -227,13 +227,12 @@ struct UserSessionManagerTests {
         let aliceClientProxy = ClientProxyMock(.init(userID: "@alice:matrix.org"))
         aliceClientProxy.clearCachesReturnValue = .success(())
         manager.addNewSession(UserSessionMock(.init(clientProxy: aliceClientProxy)))
-        await manager.clearCaches(userID: "@alice:matrix.org")
         userSessionStore.restoreUserSessionUserIDReturnValue = .success(makeUserSession(userID: "@alice:matrix.org"))
         // The cleared session is still live, so it can be logged out while its replacement restores.
         userSessionMigrator.migrateClosure = { _ in await manager.logout(userID: "@alice:matrix.org") }
         let recorder = RestorationRecorder(manager)
         
-        await manager.restoreSessions()
+        await manager.clearCaches(userID: "@alice:matrix.org")
         
         #expect(recorder.restoredUserIDs.isEmpty)
         #expect(manager.userIDs.isEmpty)
@@ -286,7 +285,7 @@ struct UserSessionManagerTests {
         manager.addNewSession(alice)
         manager.addNewSession(bob)
         
-        let deferred = deferFulfillment(manager.callbacksPublisher) { $0 == .didRemoveAccount(userID: "@alice:matrix.org", isUnexpected: false) }
+        let deferred = deferFulfillment(manager.callbacksPublisher) { $0 == .didRemoveAccount(userID: "@alice:matrix.org", error: nil) }
         await manager.logout(userID: "@alice:matrix.org")
         try await deferred.fulfill()
         
@@ -333,8 +332,8 @@ struct UserSessionManagerTests {
         // Only a live session can be logged out of the server, but every account is removed from the device.
         #expect(aliceClientProxy.logoutCalled)
         #expect(userSessionStore.logoutUserIDReceivedInvocations == ["@alice:matrix.org", "@bob:matrix.org"])
-        #expect(removals == [.didRemoveAccount(userID: "@alice:matrix.org", isUnexpected: false),
-                             .didRemoveAccount(userID: "@bob:matrix.org", isUnexpected: false)])
+        #expect(removals == [.didRemoveAccount(userID: "@alice:matrix.org", error: nil),
+                             .didRemoveAccount(userID: "@bob:matrix.org", error: nil)])
         #expect(manager.userIDs.isEmpty)
         cancellable.cancel()
     }
@@ -375,12 +374,12 @@ struct UserSessionManagerTests {
         #expect(Set(elementCallManager.removeUserIDReceivedInvocations) == ["@alice:matrix.org", "@bob:matrix.org"])
     }
     
-    @Test("A failed restore disconnects the account's services and reports its unexpected removal")
+    @Test("A failed restore disconnects the account's services and reports its removal")
     func restorationFailure() async throws {
         let manager = makeManager(userIDs: ["@alice:matrix.org"])
         userSessionStore.restoreUserSessionUserIDReturnValue = .failure(.failedRestoringLogin)
         
-        let deferred = deferFulfillment(manager.callbacksPublisher) { $0 == .didRemoveAccount(userID: "@alice:matrix.org", isUnexpected: true) }
+        let deferred = deferFulfillment(manager.callbacksPublisher) { $0 == .didRemoveAccount(userID: "@alice:matrix.org", error: .failedRestoringSession) }
         await manager.restoreSessions()
         try await deferred.fulfill()
         
@@ -416,7 +415,7 @@ struct UserSessionManagerTests {
         manager.addNewSession(UserSessionMock(.init(clientProxy: aliceClientProxy)))
         manager.addNewSession(bob)
         
-        let deferred = deferFulfillment(manager.callbacksPublisher) { $0 == .didRemoveAccount(userID: "@bob:matrix.org", isUnexpected: true) }
+        let deferred = deferFulfillment(manager.callbacksPublisher) { $0 == .didRemoveAccount(userID: "@bob:matrix.org", error: .remoteLogout) }
         bob.callbacks.send(.didReceiveAuthError)
         try await deferred.fulfill()
         
@@ -434,7 +433,6 @@ struct UserSessionManagerTests {
         manager.addNewSession(oldAlice)
         userSessionStore.restoreUserSessionUserIDReturnValue = .success(makeUserSession(userID: "@alice:matrix.org"))
         await manager.clearCaches(userID: "@alice:matrix.org")
-        await manager.restoreSessions()
         
         let deferredFailure = deferFailure(manager.callbacksPublisher, timeout: .milliseconds(300)) { _ in true }
         oldAlice.callbacks.send(.didReceiveAuthError)

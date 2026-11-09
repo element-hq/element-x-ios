@@ -648,7 +648,7 @@ class MockScreen: Identifiable {
             userSessionManager.logoutUserIDClosure = { @MainActor userID in
                 userSessionManager.activeSession = nil
                 userSessionManager.sessionsPublisher = .init([])
-                userSessionManagerCallbacks.send(.didRemoveAccount(userID: userID, isUnexpected: false))
+                userSessionManagerCallbacks.send(.didRemoveAccount(userID: userID, error: nil))
             }
             // The signed in session is a bare mock, use the populated one instead.
             userSessionManager.addNewSessionClosure = { _ in
