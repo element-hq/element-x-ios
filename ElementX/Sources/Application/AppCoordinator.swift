@@ -515,9 +515,6 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
             switch (context.fromState, context.event, context.toState) {
             case (.initial, .startWithAuthentication, .signedOut):
                 startAuthentication()
-            case (.signedOut, .createdUserSession, .signedIn):
-                setupUserSession(isNewLogin: true)
-                restoreUserSessions()
             case (.initial, .startWithExistingSession, .restoringSession):
                 restoreUserSessions()
             case (.restoringSession, .failedRestoringSession, .signedOut):
@@ -527,7 +524,7 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
                 }
                 startAuthentication()
             case (.restoringSession, .createdUserSession, .signedIn):
-                setupUserSession(isNewLogin: false)
+                setupUserSession()
             case (.signedIn, .clearCache, .initial):
                 clearCache()
             default:
@@ -582,13 +579,7 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
         rootFlowCoordinator.handleAppRoute(.authentication, animated: true)
     }
     
-    func handleSignedInUserSession(_ userSession: UserSessionProtocol) {
-        userSessionManager.add(userSession)
-        Task { await resumeClientServices() }
-        stateMachine.processEvent(.createdUserSession)
-    }
-    
-    private func setupUserSession(isNewLogin: Bool) {
+    private func setupUserSession() {
         guard let userSession else {
             fatalError("User session not setup")
         }
@@ -597,14 +588,10 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
             analyticsService.signpost.addGlobalTag(.homeserver, value: serverName)
         }
         
-        if !isNewLogin {
-            analyticsService.signpost.startTransaction(.cachedRoomList)
-        }
+        analyticsService.signpost.startTransaction(.cachedRoomList)
         
         if let continuation = clearCacheContinuation.take() {
             restoreUserSessionFlowAfterClearCache(continuation)
-        } else {
-            rootFlowCoordinator.handleAppRoute(.roomList, animated: true)
         }
     }
     
@@ -720,8 +707,6 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
         rootFlowCoordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
             switch action {
-            case .signInComplete(let userSession):
-                handleSignedInUserSession(userSession)
             case .closeSecondaryWindows:
                 windowManager.closeAllSecondaryWindows()
             case .clearCache(let continuation):

@@ -10,8 +10,6 @@ import SwiftState
 import SwiftUI
 
 enum RootFlowCoordinatorAction {
-    /// Authentication completed, the session still needs adding to the `UserSessionManager`.
-    case signInComplete(userSession: UserSessionProtocol)
     /// The shown account was removed, so any secondary windows showing it should close.
     case closeSecondaryWindows
     /// Clear the active account's caches. The continuation is used to signal success/failure.
@@ -267,22 +265,36 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
     private func setupSubscriptions() {
         userSessionManager.callbacksPublisher
             .sink { [weak self] callback in
-                guard let self, case .didRemoveAccount(let userID, _) = callback else { return }
+                guard let self else { return }
                 
-                let shownUserID = switch stateMachine.state {
-                case .userSessionFlow(let userID), .loggingOut(let userID): userID
-                default: String?.none
-                }
-                guard userID == shownUserID else { return }
-                
-                actionsSubject.send(.closeSecondaryWindows)
-                if let activeUserID = userSessionManager.activeSession?.clientProxy.userID {
-                    stateMachine.tryEvent(.startUserSession(userID: activeUserID))
-                } else {
-                    stateMachine.tryEvent(.startAuthentication(isAddingAccount: false))
+                switch callback {
+                case .didRestoreSession(let userID):
+                    handleRestoredSession(userID: userID)
+                case .didRemoveAccount(let userID, _):
+                    handleRemovedAccount(userID: userID)
                 }
             }
             .store(in: &cancellables)
+    }
+    
+    private func handleRestoredSession(userID: String) {
+        guard case .initial = stateMachine.state, userID == userSessionManager.activeSession?.clientProxy.userID else { return }
+        stateMachine.tryEvent(.startUserSession(userID: userID))
+    }
+    
+    private func handleRemovedAccount(userID: String) {
+        let shownUserID = switch stateMachine.state {
+        case .userSessionFlow(let userID), .loggingOut(let userID): userID
+        default: String?.none
+        }
+        guard userID == shownUserID else { return }
+        
+        actionsSubject.send(.closeSecondaryWindows)
+        if let activeUserID = userSessionManager.activeSession?.clientProxy.userID {
+            stateMachine.tryEvent(.startUserSession(userID: activeUserID))
+        } else {
+            stateMachine.tryEvent(.startAuthentication(isAddingAccount: false))
+        }
     }
     
     private func startAuthenticationFlow(isAddingAccount: Bool) {
@@ -308,7 +320,8 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
                 
                 switch action {
                 case .signInComplete(let userSession):
-                    actionsSubject.send(.signInComplete(userSession: userSession))
+                    userSessionManager.add(userSession)
+                    stateMachine.tryEvent(.startUserSession(userID: userSession.clientProxy.userID))
                 }
             }
             .store(in: &cancellables)
