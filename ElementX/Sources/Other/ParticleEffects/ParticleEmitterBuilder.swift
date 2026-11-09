@@ -15,6 +15,20 @@ enum ParticleEmitterBuilder {
          makeSnowCell(scale: 0.25, alpha: 0.2, velocity: 40, birthRate: 24)]
     }
     
+    /// Brighter and faster than `buildSnowCells`, so that it reaches down the view before fading out.
+    static func buildSnowfallCells() -> [CAEmitterCell] {
+        [makeSnowfallCell(scale: 0.5, alpha: 0.6, velocity: 300, birthRate: 60),
+         makeSnowfallCell(scale: 0.25, alpha: 0.4, velocity: 200, birthRate: 120)]
+    }
+    
+    /// Thin streaks falling fast and almost straight down.
+    static func buildRainfallCells() -> [CAEmitterCell] {
+        let drop = makeRoundedRectangleImage(size: CGSize(width: 2, height: 16), cornerRadius: 1)
+        
+        return [makeRainCell(shape: drop, alpha: 0.5, velocity: 900),
+                makeRainCell(shape: drop, alpha: 0.3, velocity: 700)]
+    }
+    
     /// A cell per colour, alternating between the shapes, each particle getting its own random depth.
     /// The confetti is fired up from a single point, like a cannon.
     static func buildConfettiCells() -> [CAEmitterCell] {
@@ -66,6 +80,33 @@ enum ParticleEmitterBuilder {
         // sideways drift. An xAcceleration would instead keep pushing them all the same way.
         cell.emissionLongitude = .pi
         cell.emissionRange = .pi / 8
+        
+        return cell
+    }
+    
+    private static func makeSnowfallCell(scale: CGFloat, alpha: CGFloat, velocity: CGFloat, birthRate: Float) -> CAEmitterCell {
+        let cell = makeSnowCell(scale: scale, alpha: alpha, velocity: velocity, birthRate: birthRate)
+        // Gone within the time the effect stays on screen instead of disappearing all at once.
+        cell.alphaSpeed = -Float(alpha) / 3
+        return cell
+    }
+    
+    private static func makeRainCell(shape: UIImage, alpha: CGFloat, velocity: CGFloat) -> CAEmitterCell {
+        let cell = CAEmitterCell()
+        cell.setContents(shape)
+        
+        cell.birthRate = 80
+        cell.lifetime = 2
+        
+        cell.velocity = velocity
+        cell.velocityRange = velocity / 4
+        cell.yAcceleration = 200
+        
+        cell.color = UIColor.systemBlue.withAlphaComponent(alpha).cgColor
+        
+        // Straight down, the streaks aren't rotated to follow their direction.
+        cell.emissionLongitude = .pi
+        cell.emissionRange = .pi / 64
         
         return cell
     }

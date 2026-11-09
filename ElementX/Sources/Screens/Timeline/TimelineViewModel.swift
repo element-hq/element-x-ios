@@ -1214,7 +1214,8 @@ private extension TimelineViewModel {
         "💙": .hearts(colors: [.systemBlue]), "🩵": .hearts(colors: [.systemCyan]), "💜": .hearts(colors: [.systemPurple]),
         "🤎": .hearts(colors: [.brown]), "🩶": .hearts(colors: [.systemGray]),
         // Paired with a contrasting shade so that they still show on a background of the same colour.
-        "🖤": .hearts(colors: [.black, .darkGray]), "🤍": .hearts(colors: [.white, .lightGray])
+        "🖤": .hearts(colors: [.black, .darkGray]), "🤍": .hearts(colors: [.white, .lightGray]),
+        "❄": .snowfall, "🌧": .rainfall, "⛈": .rainfall, "🌦": .rainfall, "☔": .rainfall
     ]
     
     func prepareIncomingReactionEffects(in timelineItems: [RoomTimelineItemProtocol]) {

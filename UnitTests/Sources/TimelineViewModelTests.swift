@@ -916,7 +916,8 @@ final class TimelineViewModelTests {
           arguments: [("🎉", ParticleEmitterType.confetti), ("🎉\u{FE0F}", .confetti), ("🎊", .confetti), ("🥳", .confetti),
                       ("❤️", .hearts(colors: [.systemRed, .systemPink])), ("❤", .hearts(colors: [.systemRed, .systemPink])),
                       ("♥️", .hearts(colors: [.systemRed, .systemPink])), ("💖", .hearts(colors: [.systemPink])),
-                      ("💙", .hearts(colors: [.systemBlue])), ("🖤", .hearts(colors: [.black, .darkGray]))])
+                      ("💙", .hearts(colors: [.systemBlue])), ("🖤", .hearts(colors: [.black, .darkGray])),
+                      ("❄️", .snowfall), ("🌧️", .rainfall), ("⛈️", .rainfall), ("🌦️", .rainfall), ("☔️", .rainfall)])
     func playEffectForAddedReaction(key: String, type: ParticleEmitterType) async throws {
         // Given a message the user hasn't reacted to.
         let item = TextRoomTimelineItem(text: "Message", sender: "bob")
