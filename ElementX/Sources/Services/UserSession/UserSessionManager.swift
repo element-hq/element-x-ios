@@ -21,6 +21,7 @@ final class UserSessionManager: UserSessionManagerProtocol {
     private let liveLocationManager: LiveLocationManagerProtocol
     private let elementCallManager: ElementCallManagerProtocol
     private let userSessionMigrator: UserSessionMigratorProtocol
+    private let signposter: Signposter
     
     private let sessionsSubject = CurrentValueSubject<[UserSessionProtocol], Never>([])
     private let callbacksSubject = PassthroughSubject<UserSessionManagerCallback, Never>()
@@ -33,11 +34,18 @@ final class UserSessionManager: UserSessionManagerProtocol {
     private var loggingOutUserIDs: Set<String> = []
     /// Restores the signed in accounts.
     private var restorationTask: Task<Void, Never>?
+    /// Finishes the `upToDateRoomList` transaction once the active session's room list is up to date.
+    private var loadingStateCancellable: AnyCancellable?
     
     /// Every signed in account, most recently selected first, with its session once it's live.
     /// Assigning `nil` removes an account rather than clearing its session.
     private var accounts: OrderedDictionary<String, UserSessionProtocol?> = [:] {
-        didSet { sessionsSubject.send(accounts.values.compactMap { $0 }) }
+        didSet {
+            sessionsSubject.send(accounts.values.compactMap { $0 })
+            if accounts.isEmpty {
+                loadingStateCancellable = nil
+            }
+        }
     }
     
     var userIDs: [String] {
@@ -70,15 +78,17 @@ final class UserSessionManager: UserSessionManagerProtocol {
          notificationManager: NotificationManagerProtocol,
          liveLocationManager: LiveLocationManagerProtocol,
          elementCallManager: ElementCallManagerProtocol,
-         userSessionMigrator: UserSessionMigratorProtocol) {
+         userSessionMigrator: UserSessionMigratorProtocol,
+         signposter: Signposter) {
         self.userSessionStore = userSessionStore
         self.appSettings = appSettings
         self.notificationManager = notificationManager
         self.liveLocationManager = liveLocationManager
         self.elementCallManager = elementCallManager
         self.userSessionMigrator = userSessionMigrator
+        self.signposter = signposter
         
-        #warning("Read lastSelectedDate without appSettings.userSettings(for:), which must only come from a user session.")
+        #warning("We shouldn't call appSettings.userSettings(for:), they must only come from a user session.")
         let userIDs = userSessionStore.userIDs
             .map { (userID: $0, lastSelectedDate: appSettings.userSettings(for: $0).account.lastSelectedDate) }
             .sorted { lhs, rhs in
@@ -169,6 +179,9 @@ final class UserSessionManager: UserSessionManagerProtocol {
         add(userSession)
         
         if areServicesRunning {
+            if userSession.clientProxy.userID == activeSession?.clientProxy.userID {
+                signposter.startTransaction(.upToDateRoomList)
+            }
             Task { await userSession.clientProxy.resumeServices() }
         }
     }
@@ -249,13 +262,20 @@ final class UserSessionManager: UserSessionManagerProtocol {
     
     func resumeServices() async {
         areServicesRunning = true
+        
+        guard activeSession != nil else { return }
+        
+        signposter.startTransaction(.upToDateRoomList)
         for userSession in sessionsSubject.value {
             await userSession.clientProxy.resumeServices()
         }
+        
+        setupLoadingStateSubscription()
     }
     
     func pauseServices() async {
         areServicesRunning = false
+        loadingStateCancellable = nil
         for userSession in sessionsSubject.value {
             await userSession.clientProxy.pauseServices()
         }
@@ -276,6 +296,23 @@ final class UserSessionManager: UserSessionManagerProtocol {
     }
     
     // MARK: - Private
+    
+    private func setupLoadingStateSubscription() {
+        guard loadingStateCancellable == nil else { return }
+        
+        // Follows the active session, so swapping accounts or clearing the cache observes the new client.
+        // TODO: Cancel the in-flight transaction when the active account changes, rather than letting the new account finish it.
+        loadingStateCancellable = sessionsSubject
+            .compactMap { $0.first?.clientProxy }
+            .removeDuplicates { $0 === $1 }
+            .map { $0.loadingStatePublisher.dropFirst().removeDuplicates() }
+            .switchToLatest()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] state in
+                guard case .notLoading = state else { return }
+                self?.signposter.finishTransaction(.upToDateRoomList)
+            }
+    }
     
     /// Restores an account's session, removing the account when that fails (the store deletes its data).
     private func restoreUserSession(userID: String) async -> UserSessionProtocol? {

@@ -450,7 +450,8 @@ struct UserSessionManagerTests {
                                   notificationManager: notificationManager,
                                   liveLocationManager: liveLocationManager,
                                   elementCallManager: elementCallManager,
-                                  userSessionMigrator: userSessionMigrator)
+                                  userSessionMigrator: userSessionMigrator,
+                                  signposter: Signposter())
     }
     
     private func makeUserSession(userID: String) -> UserSessionMock {
