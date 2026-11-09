@@ -254,7 +254,7 @@ enum ParticleEmitterBuilder {
         cell.spin = 4
         cell.spinRange = 8
         
-        // A point emitter aims a zero longitude to the right (along the x axis), so the cannon turns it a quarter up.
+        // A rectangle emitter aims a zero longitude to the right (along the x axis), so the cannon turns it a quarter up.
         // The narrow cone keeps the burst together and gravity brings it back down.
         cell.emissionLongitude = -.pi / 2
         cell.emissionRange = .pi / 8
