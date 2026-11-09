@@ -15634,36 +15634,36 @@ nonisolated class UserSessionManagerMock: UserSessionManagerProtocol, @unchecked
             return userSessionForSessionDirectoriesPassphraseReturnValue
         }
     }
-    //MARK: - add
+    //MARK: - addNewSession
 
-    private let addCallsCountLock = NSLock()
-    private nonisolated(unsafe) var addUnderlyingCallsCount = 0
-    var addCallsCount: Int {
-        get { addCallsCountLock.withLock { addUnderlyingCallsCount } }
-        set { addCallsCountLock.withLock { addUnderlyingCallsCount = newValue } }
+    private let addNewSessionCallsCountLock = NSLock()
+    private nonisolated(unsafe) var addNewSessionUnderlyingCallsCount = 0
+    var addNewSessionCallsCount: Int {
+        get { addNewSessionCallsCountLock.withLock { addNewSessionUnderlyingCallsCount } }
+        set { addNewSessionCallsCountLock.withLock { addNewSessionUnderlyingCallsCount = newValue } }
     }
-    var addCalled: Bool {
-        return addCallsCount > 0
+    var addNewSessionCalled: Bool {
+        return addNewSessionCallsCount > 0
     }
-    private let addReceivedUserSessionLock = NSLock()
-    private nonisolated(unsafe) var addUnderlyingReceivedUserSession: UserSessionProtocol?
-    var addReceivedUserSession: UserSessionProtocol? {
-        get { addReceivedUserSessionLock.withLock { addUnderlyingReceivedUserSession } }
-        set { addReceivedUserSessionLock.withLock { addUnderlyingReceivedUserSession = newValue } }
+    private let addNewSessionReceivedUserSessionLock = NSLock()
+    private nonisolated(unsafe) var addNewSessionUnderlyingReceivedUserSession: UserSessionProtocol?
+    var addNewSessionReceivedUserSession: UserSessionProtocol? {
+        get { addNewSessionReceivedUserSessionLock.withLock { addNewSessionUnderlyingReceivedUserSession } }
+        set { addNewSessionReceivedUserSessionLock.withLock { addNewSessionUnderlyingReceivedUserSession = newValue } }
     }
-    private let addReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var addUnderlyingReceivedInvocations: [UserSessionProtocol] = []
-    var addReceivedInvocations: [UserSessionProtocol] {
-        get { addReceivedInvocationsLock.withLock { addUnderlyingReceivedInvocations } }
-        set { addReceivedInvocationsLock.withLock { addUnderlyingReceivedInvocations = newValue } }
+    private let addNewSessionReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var addNewSessionUnderlyingReceivedInvocations: [UserSessionProtocol] = []
+    var addNewSessionReceivedInvocations: [UserSessionProtocol] {
+        get { addNewSessionReceivedInvocationsLock.withLock { addNewSessionUnderlyingReceivedInvocations } }
+        set { addNewSessionReceivedInvocationsLock.withLock { addNewSessionUnderlyingReceivedInvocations = newValue } }
     }
-    nonisolated(unsafe) var addClosure: ((UserSessionProtocol) -> Void)?
+    nonisolated(unsafe) var addNewSessionClosure: ((UserSessionProtocol) -> Void)?
 
-    func add(_ userSession: UserSessionProtocol) {
-        addCallsCountLock.withLock { addUnderlyingCallsCount += 1 }
-        addReceivedUserSession = userSession
-        addReceivedInvocationsLock.withLock { addUnderlyingReceivedInvocations.append(userSession) }
-        addClosure?(userSession)
+    func addNewSession(_ userSession: UserSessionProtocol) {
+        addNewSessionCallsCountLock.withLock { addNewSessionUnderlyingCallsCount += 1 }
+        addNewSessionReceivedUserSession = userSession
+        addNewSessionReceivedInvocationsLock.withLock { addNewSessionUnderlyingReceivedInvocations.append(userSession) }
+        addNewSessionClosure?(userSession)
     }
     //MARK: - logout
 

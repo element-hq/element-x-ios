@@ -20,6 +20,7 @@ struct UserSessionFlowCoordinatorTests {
     
     private let networkReachabilitySubject: CurrentValueSubject<NetworkMonitorReachability, Never> = .init(.reachable)
     private let homeserverReachabilitySubject: CurrentValueSubject<HomeserverReachability, Never> = .init(.reachable)
+    private let loadingStateSubject: CurrentValueSubject<ClientProxyLoadingState, Never> = .init(.notLoading)
     private let elementCallService = ElementCallServiceMock(.init())
     private var tabCoordinator: NavigationTabCoordinator<UserSessionFlowCoordinator.HomeTab>? {
         rootCoordinator?.rootCoordinator as? NavigationTabCoordinator
@@ -42,6 +43,7 @@ struct UserSessionFlowCoordinatorTests {
         
         let clientProxy = ClientProxyMock(.init(userID: "hi@bob", deviceID: "call-device-id", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
         clientProxy.homeserverReachabilityPublisher = homeserverReachabilitySubject.asCurrentValuePublisher()
+        clientProxy.loadingStatePublisher = loadingStateSubject.asCurrentValuePublisher()
         
         let networkMonitor = NetworkMonitorMock(.init())
         networkMonitor.reachabilityPublisher = networkReachabilitySubject.asCurrentValuePublisher()
@@ -255,6 +257,39 @@ struct UserSessionFlowCoordinatorTests {
         #expect(retractReachabilityIndicatorCallsCount == 3)
     }
     
+    @Test("The syncing indicator follows the session's loading state while it's reachable")
+    func syncingIndicator() async throws {
+        // Given a flow in its initial state.
+        try await Task.sleep(for: .milliseconds(100))
+        #expect(!userIndicatorController.submitIndicatorDelayCalled)
+        #expect(retractSyncingIndicatorCallsCount == 0)
+        
+        // When the session starts loading.
+        loadingStateSubject.send(.loading)
+        try await Task.sleep(for: .milliseconds(100))
+        
+        // Then a syncing indicator should be shown.
+        #expect(userIndicatorController.submitIndicatorDelayCallsCount == 1)
+        #expect(userIndicatorController.submitIndicatorDelayReceivedArguments?.indicator.title == L10n.commonSyncing)
+        
+        // When the session finishes loading.
+        loadingStateSubject.send(.notLoading)
+        try await Task.sleep(for: .milliseconds(100))
+        
+        // Then the syncing indicator should be hidden.
+        #expect(retractSyncingIndicatorCallsCount == 1)
+        
+        // When the homeserver is unreachable and the session starts loading again.
+        homeserverReachabilitySubject.send(.unreachable)
+        try await Task.sleep(for: .milliseconds(100))
+        let submitIndicatorCallsCount = userIndicatorController.submitIndicatorDelayCallsCount
+        loadingStateSubject.send(.loading)
+        try await Task.sleep(for: .milliseconds(100))
+        
+        // Then no syncing indicator should be shown.
+        #expect(userIndicatorController.submitIndicatorDelayCallsCount == submitIndicatorCallsCount)
+    }
+    
     // MARK: - Helpers
     
     private func process(route: AppRoute,
@@ -317,6 +352,13 @@ struct UserSessionFlowCoordinatorTests {
         userIndicatorController
             .retractIndicatorWithIdReceivedInvocations
             .filter { $0 == "io.element.elementx.reachability.notification" }
+            .count
+    }
+    
+    private var retractSyncingIndicatorCallsCount: Int {
+        userIndicatorController
+            .retractIndicatorWithIdReceivedInvocations
+            .filter { $0 == "StaleDataIndicator" }
             .count
     }
 }

@@ -580,16 +580,6 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
     }
     
     private func setupUserSession() {
-        guard let userSession else {
-            fatalError("User session not setup")
-        }
-        
-        if let serverName = userSession.clientProxy.userIDServerName {
-            analyticsService.signpost.addGlobalTag(.homeserver, value: serverName)
-        }
-        
-        analyticsService.signpost.startTransaction(.cachedRoomList)
-        
         if let continuation = clearCacheContinuation.take() {
             restoreUserSessionFlowAfterClearCache(continuation)
         }
@@ -894,35 +884,25 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
     }
     
     private func resumeClientServices() async {
-        guard let userSession else { return }
-        
-        analyticsService.signpost.startTransaction(.upToDateRoomList)
+        if userSession != nil {
+            analyticsService.signpost.startTransaction(.upToDateRoomList)
+        }
         
         await userSessionManager.resumeServices()
         
-        guard clientProxyObserver == nil else {
+        guard let userSession, clientProxyObserver == nil else {
             return
         }
         
+        #warning("Re-observe when the active account changes, this keeps observing the previous account until the next resume.")
         clientProxyObserver = userSession.clientProxy
             .loadingStatePublisher
             .dropFirst()
             .removeDuplicates()
             .receive(on: DispatchQueue.main)
             .sink { [weak self] state in
-                let toastIdentifier = "StaleDataIndicator"
-                guard let self else { return }
-                
-                switch state {
-                case .loading:
-                    if self.userSession?.clientProxy.homeserverReachabilityPublisher.value == .reachable,
-                       self.appMediator.networkMonitor.reachabilityPublisher.value == .reachable {
-                        self.userIndicatorController.submitIndicator(.init(id: toastIdentifier, type: .toast(progress: .indeterminate), title: L10n.commonSyncing, persistent: true))
-                    }
-                case .notLoading:
-                    self.analyticsService.signpost.finishTransaction(.upToDateRoomList)
-                    self.userIndicatorController.retractIndicatorWithId(toastIdentifier)
-                }
+                guard case .notLoading = state else { return }
+                self?.analyticsService.signpost.finishTransaction(.upToDateRoomList)
             }
     }
     

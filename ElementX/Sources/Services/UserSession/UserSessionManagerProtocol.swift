@@ -44,11 +44,11 @@ protocol UserSessionManagerProtocol: AnyObject {
     func clearCaches(userID: String) async
     /// Creates the session of an account that has just signed in, and stores its credentials.
     ///
-    /// The session isn't registered: `add` it once it's ready to be used.
+    /// The session isn't registered: add it with `addNewSession` once it's ready to be used.
     func userSession(for client: ClientProtocol, sessionDirectories: SessionDirectories, passphrase: Data) async -> Result<UserSessionProtocol, UserSessionStoreError>
-    /// Registers a session that's ready to be used, replacing any previous session for its account.
-    /// A new account becomes the active one, a known account keeps its place.
-    func add(_ userSession: UserSessionProtocol)
+    /// Registers the session of an account that has just signed in, making a new account the active one.
+    /// The session is resumed if the services are running.
+    func addNewSession(_ userSession: UserSessionProtocol)
     /// Logs an account out of the server, then removes it.
     func logout(userID: String) async
     /// Logs out every account.
