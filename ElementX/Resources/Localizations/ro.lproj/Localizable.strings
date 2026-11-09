@@ -203,8 +203,6 @@
 "action_voice_call" = "Apel vocal";
 "action_yes" = "Da";
 "action_yes_try_again" = "Da, încercați din nou";
-"banner_migrate_to_native_sliding_sync_action" = "Deconectați-vă și faceți upgrade";
-"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ nu mai acceptă vechiul protocol. Vă rugăm să vă deconectați și să vă reconectați pentru a continua utilizarea aplicației.";
 "banner_new_sound_message" = "Sunetul pentru notificări a fost actualizat: mai clar, mai rapid și mai puțin perturbator.";
 "banner_new_sound_title" = "Am reîmprospătat sunetele";
 "banner_set_up_recovery_content" = "Conversațiile dvs. sunt salvate automat cu criptare end-to-end. Pentru a restabili acest backup și a vă păstra identitatea digitală atunci când pierdeți accesul la toate dispozitivele dvs., veți avea nevoie de cheia de recuperare.";
@@ -539,7 +537,6 @@
 "notification_knock_request_body" = "A trimis o cerere de alăturare";
 "notification_live_location_started_body" = "A început să își partajeze locația în timp real";
 "notification_mentioned_you_body" = "%1$@ v-a menționat";
-"notification_new_messages" = "Mesaje noi";
 "notification_reaction_body" = "A reacționat cu %1$@";
 "notification_received_while_offline_ios" = "Ați primit una sau mai multe notificări în timp ce erați offline.";
 "notification_room_action_mark_as_read" = "Marcați ca citită";
@@ -698,9 +695,7 @@
 "screen_bug_report_send_notification_settings_description" = "Dacă întâmpinați probleme cu notificările, încărcarea setărilor notificărilor ne poate ajuta să identificăm cauza principală.";
 "screen_bug_report_send_notification_settings_title" = "Trimiteți setările notificărilor";
 "screen_bug_report_view_logs" = "Vizualizați jurnalele";
-"screen_change_account_provider_other" = "Altul";
 "screen_change_account_provider_subtitle" = "Utilizați un alt furnizor de cont, cum ar fi propriul server privat sau un cont de serviciu.";
-"screen_change_account_provider_title" = "Schimbați furnizorul contului";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
 "screen_change_server_error_element_pro_required_message" = "Aplicația Element Pro este necesară pe %1$@. Descărcați-o din magazin.";
 "screen_change_server_error_element_pro_required_title" = "Este necesar Element Pro";
@@ -710,7 +705,6 @@
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ nu are voie să se conecteze la %2$@.";
 "screen_change_server_error_unauthorized_homeserver_content" = "Această aplicație a fost configurată pentru a permite: %1$@.";
 "screen_change_server_error_unauthorized_homeserver_title" = "Furnizorul de cont %1$@ nu este permis.";
-"screen_change_server_form_header" = "Adresa URL a homeserverului";
 "screen_change_server_form_notice" = "Introduceți o adresă de domeniu.";
 "screen_change_server_navigation_title_login" = "Conectare";
 "screen_change_server_navigation_title_register" = "Creați un cont";

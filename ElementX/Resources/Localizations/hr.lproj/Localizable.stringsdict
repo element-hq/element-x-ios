@@ -254,24 +254,6 @@
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
 	</dict>
-	<key>notification_compat_summary_line_for_room</key>
-	<dict>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>few</key>
-			<string>%1$@: %2$d poruke</string>
-			<key>one</key>
-			<string>%1$@: %2$d poruka</string>
-			<key>other</key>
-			<string>%1$@: %2$d poruka</string>
-		</dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-	</dict>
 	<key>notification_compat_summary_title</key>
 	<dict>
 		<key>COUNT</key>
@@ -322,42 +304,6 @@
 			<string>Dijeljeni privitak %1$d</string>
 			<key>other</key>
 			<string>Dijeljeni prilozi %1$d</string>
-		</dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-	</dict>
-	<key>notification_invitations</key>
-	<dict>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>few</key>
-			<string>%d pozivnice</string>
-			<key>one</key>
-			<string>%d pozivnica</string>
-			<key>other</key>
-			<string>%d pozivnica</string>
-		</dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-	</dict>
-	<key>notification_new_messages_for_room</key>
-	<dict>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>few</key>
-			<string>%d nove poruke</string>
-			<key>one</key>
-			<string>%d nova poruka</string>
-			<key>other</key>
-			<string>%d novih poruka</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -808,24 +754,6 @@
 			<string>Blokirali ste %1$d korisnika. Nećete primati obavijesti za ovog korisnika.</string>
 			<key>other</key>
 			<string>Blokirali ste %1$d korisnika. Nećete primati obavijesti za te korisnike.</string>
-		</dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-	</dict>
-	<key>troubleshoot_notifications_test_detect_push_provider_success</key>
-	<dict>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>few</key>
-			<string>Pronađena su %1$d pružatelja push obavijesti: %2$@</string>
-			<key>one</key>
-			<string>Pronađen je %1$d pružatelj push obavijesti: %2$@</string>
-			<key>other</key>
-			<string>Pronađeno je %1$d pružatelja push obavijesti: %2$@</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

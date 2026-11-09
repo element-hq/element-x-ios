@@ -203,8 +203,6 @@
 "action_voice_call" = "Voice call";
 "action_yes" = "Sim";
 "action_yes_try_again" = "Sim, tentar novamente";
-"banner_migrate_to_native_sliding_sync_action" = "Sair e atualizar";
-"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ não tem mais suporte ao protocolo antigo. Saia da sua conta e entre novamente para continuar utilizando o aplicativo.";
 "banner_new_sound_message" = "O seu ping de notificação foi atualizado—mais suave, mais rápido, e menos disruptivo.";
 "banner_new_sound_title" = "Recarregamos seus sons";
 "banner_set_up_recovery_content" = "Recupere sua identidade criptográfica e o histórico de mensagens com uma chave de recuperação caso você perda todos os dispositivos existentes.";
@@ -481,7 +479,7 @@
 "dialog_unsaved_changes_description_ios" = "Suas alterações não serão salvas";
 "dialog_unsaved_changes_title" = "Salvar alterações?";
 "dialog_video_quality_selector_subtitle_file_size" = "O tamanho máximo permitido de arquivos é: %1$@";
-"dialog_video_quality_selector_subtitle_no_file_size" = "Selecione a qualidade do video que quer enviar.";
+"dialog_video_quality_selector_subtitle_no_file_size" = "Selecione a qualidade do vídeo que quer enviar.";
 "dialog_video_quality_selector_title" = "Selecione a qualidade de envio dos vídeos";
 "emoji_picker_category_activity" = "Atividades";
 "emoji_picker_category_flags" = "Bandeiras";
@@ -539,7 +537,6 @@
 "notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Mencionou você: %1$@";
-"notification_new_messages" = "Novas mensagens";
 "notification_reaction_body" = "Reagiu com %1$@";
 "notification_received_while_offline_ios" = "You received one or more notifications while offline.";
 "notification_room_action_mark_as_read" = "Marcar como lida";
@@ -698,9 +695,7 @@
 "screen_bug_report_send_notification_settings_description" = "Se estiver enfrentando problemas com as notificações, enviar as regras de notificações push pode ajudar-nos a descobrir o que está errado. Observe que as regras podem conter informações privadas, como o seu nome de exibição ou palavras chaves de notificação.";
 "screen_bug_report_send_notification_settings_title" = "Enviar configurações de notificação";
 "screen_bug_report_view_logs" = "Ver registros";
-"screen_change_account_provider_other" = "Outro";
 "screen_change_account_provider_subtitle" = "Use um provedor de conta diferente, como seu próprio servidor privado ou uma conta corporativa.";
-"screen_change_account_provider_title" = "Alterar provedor da conta";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
 "screen_change_server_error_element_pro_required_message" = "O app Element Pro é necessário no %1$@. Por favor, baixe-o da loja.";
 "screen_change_server_error_element_pro_required_title" = "Element Pro necessário";
@@ -710,7 +705,6 @@
 "screen_change_server_error_unauthorized_homeserver" = "O %1$@ não tem permissão para se conectar a %2$@.";
 "screen_change_server_error_unauthorized_homeserver_content" = "Este app foi configurado para permitir: %1$@.";
 "screen_change_server_error_unauthorized_homeserver_title" = "O provedor de conta %1$@ não é permitido.";
-"screen_change_server_form_header" = "URL do servidor";
 "screen_change_server_form_notice" = "Digite o endereço de um domínio.";
 "screen_change_server_navigation_title_login" = "Sign in";
 "screen_change_server_navigation_title_register" = "Create account";

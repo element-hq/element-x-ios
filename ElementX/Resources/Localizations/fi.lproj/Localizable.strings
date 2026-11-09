@@ -203,8 +203,6 @@
 "action_voice_call" = "Äänipuhelu";
 "action_yes" = "Kyllä";
 "action_yes_try_again" = "Kyllä, yritä uudelleen";
-"banner_migrate_to_native_sliding_sync_action" = "Kirjaudu Ulos & Päivitä";
-"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ ei enää tue vanhaa protokollaa. Kirjaudu ulos ja takaisin sisään jatkaaksesi sovelluksen käyttöä.";
 "banner_new_sound_message" = "Ilmoitusääni on päivitetty — selkeämpi, nopeampi ja vähemmän häiritsevä.";
 "banner_new_sound_title" = "Olemme päivittäneet äänesi";
 "banner_set_up_recovery_content" = "Keskustelusi varmuuskopioidaan automaattisesti päästä päähän -salauksella. Jotta voit palauttaa tämän varmuuskopion ja säilyttää digitaalisen identiteettisi, kun menetät pääsyn kaikkiin laitteisiisi, tarvitset palautusavaimesi.";
@@ -539,7 +537,6 @@
 "notification_knock_request_body" = "Pyytää liittymistä";
 "notification_live_location_started_body" = "Aloitti reaaliaikaisen sijainnin jakamisen";
 "notification_mentioned_you_body" = "Mainitsi sinut: %1$@";
-"notification_new_messages" = "Uusia viestejä";
 "notification_reaction_body" = "Reaktio: %1$@";
 "notification_received_while_offline_ios" = "Sait yhden tai useamman ilmoituksen kun olit offline-tilassa.";
 "notification_room_action_mark_as_read" = "Merkitse luetuksi";
@@ -698,9 +695,7 @@
 "screen_bug_report_send_notification_settings_description" = "Jos sinulla on ongelmia ilmoitusten kanssa, ilmoitusasetusten lähettäminen voi auttaa meitä selvittämään ongelman syyn.";
 "screen_bug_report_send_notification_settings_title" = "Lähetä ilmoitusasetukset";
 "screen_bug_report_view_logs" = "Näytä lokitiedostot";
-"screen_change_account_provider_other" = "Muu";
 "screen_change_account_provider_subtitle" = "Käytä toista palveluntarjoajaa, kuten omaa yksityistä palvelintasi tai työpaikkaasi.";
-"screen_change_account_provider_title" = "Vaihda palveluntarjoajaa";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
 "screen_change_server_error_element_pro_required_message" = "Element Pro -sovellus on pakollinen %1$@ -palvelimella. Lataa se sovelluskaupasta.";
 "screen_change_server_error_element_pro_required_title" = "Element Pro vaaditaan";
@@ -710,7 +705,6 @@
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ ei saa yhdistää %2$@ -palvelimeen.";
 "screen_change_server_error_unauthorized_homeserver_content" = "Tämä sovellus on määritetty sallimaan: %1$@.";
 "screen_change_server_error_unauthorized_homeserver_title" = "Palveluntarjoaja %1$@ ei ole sallittu.";
-"screen_change_server_form_header" = "Kotipalvelimen osoite";
 "screen_change_server_form_notice" = "Anna verkkotunnuksen osoite.";
 "screen_change_server_navigation_title_login" = "Kirjaudu sisään";
 "screen_change_server_navigation_title_register" = "Luo tili";

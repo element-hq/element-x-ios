@@ -242,24 +242,6 @@
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
 	</dict>
-	<key>notification_compat_summary_line_for_room</key>
-	<dict>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>few</key>
-			<string>%1$@: %2$d zprávy</string>
-			<key>one</key>
-			<string>%1$@: %2$d zpráva</string>
-			<key>other</key>
-			<string>%1$@: %2$d zpráv</string>
-		</dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-	</dict>
 	<key>notification_compat_summary_title</key>
 	<dict>
 		<key>COUNT</key>
@@ -308,42 +290,6 @@
 			<string>Shared %1$d attachment</string>
 			<key>other</key>
 			<string>Shared %1$d attachments</string>
-		</dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-	</dict>
-	<key>notification_invitations</key>
-	<dict>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>few</key>
-			<string>%d pozvánky</string>
-			<key>one</key>
-			<string>%d pozvánka</string>
-			<key>other</key>
-			<string>%d pozvánek</string>
-		</dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-	</dict>
-	<key>notification_new_messages_for_room</key>
-	<dict>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>few</key>
-			<string>%d nové zprávy</string>
-			<key>one</key>
-			<string>%d nová zpráva</string>
-			<key>other</key>
-			<string>%d nových zpráv</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -784,24 +730,6 @@
 			<string>Zablokovali jste %1$d uživatele. Nebudete dostávat oznámení od tohoto uživatele.</string>
 			<key>other</key>
 			<string>Zablokovali jste %1$d uživatelů. Nebudete dostávat oznámení od těchto uživatelů.</string>
-		</dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-	</dict>
-	<key>troubleshoot_notifications_test_detect_push_provider_success</key>
-	<dict>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>few</key>
-			<string>Nalezeni %1$d push poskytovatelé: %2$@</string>
-			<key>one</key>
-			<string>Nalezen %1$d push poskytovatel: %2$@</string>
-			<key>other</key>
-			<string>Nalezeno %1$d push poskytovatelů: %2$@</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

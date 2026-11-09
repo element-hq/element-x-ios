@@ -203,8 +203,6 @@
 "action_voice_call" = "Voice call";
 "action_yes" = "Evet";
 "action_yes_try_again" = "Evet, tekrar dene";
-"banner_migrate_to_native_sliding_sync_action" = "Çıkış Yap ve Yükselt";
-"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ artık eski protokolü destekleniyor. Uygulamayı kullanmaya devam etmek için lütfen çıkış yapın ve tekrar giriş yapın\n";
 "banner_new_sound_message" = "Bildirim sesi güncellendi — daha net, daha hızlı ve daha az dikkat dağıtıcı.";
 "banner_new_sound_title" = "We’ve refreshed your sounds";
 "banner_set_up_recovery_content" = "Mevcut tüm cihazlarınızı kaybettiyseniz şifreleme kimliğinizi ve mesaj geçmişinizi bir kurtarma anahtarıyla kurtarın.";
@@ -539,7 +537,6 @@
 "notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Senden bahsettim: %1$@";
-"notification_new_messages" = "Yeni Mesajlar";
 "notification_reaction_body" = "%1$@ ile tepki verildi";
 "notification_received_while_offline_ios" = "You received one or more notifications while offline.";
 "notification_room_action_mark_as_read" = "Okundu olarak işaretle";
@@ -698,9 +695,7 @@
 "screen_bug_report_send_notification_settings_description" = "Bildirimlerle ilgili sorun yaşıyorsanız, bildirim ayarlarını göndermek sorunun kaynağını bulmamıza yardımcı olabilir. Bu ayarların, görünen adınız veya bildirim almak istediğiniz anahtar kelimeler gibi özel bilgiler içerebileceğini unutmayın.";
 "screen_bug_report_send_notification_settings_title" = "Bildirim ayarlarını gönder";
 "screen_bug_report_view_logs" = "Günlükleri görüntüle";
-"screen_change_account_provider_other" = "Diğer";
 "screen_change_account_provider_subtitle" = "Kendi özel sunucunuz veya iş hesabınız gibi farklı bir hesap sağlayıcı kullanın.";
-"screen_change_account_provider_title" = "Hesap sağlayıcısını değiştir";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
 "screen_change_server_error_element_pro_required_message" = "The Element Pro app is required on %1$@. Please download it from the store.";
 "screen_change_server_error_element_pro_required_title" = "Element Pro required";
@@ -710,7 +705,6 @@
 "screen_change_server_error_unauthorized_homeserver" = "%1$@, %2$@ ile bağlantı kurma yetkisine sahip değil.";
 "screen_change_server_error_unauthorized_homeserver_content" = "Bu uygulama şu sağlayıcılara izin verecek şekilde yapılandırıldı: %1$@.";
 "screen_change_server_error_unauthorized_homeserver_title" = "Hesap sağlayıcısı %1$@ İzin verilmiyor.";
-"screen_change_server_form_header" = "Ana sunucu URL'si";
 "screen_change_server_form_notice" = "Enter a domain address.";
 "screen_change_server_navigation_title_login" = "Sign in";
 "screen_change_server_navigation_title_register" = "Create account";

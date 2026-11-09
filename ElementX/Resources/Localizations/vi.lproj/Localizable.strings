@@ -203,8 +203,6 @@
 "action_voice_call" = "Voice call";
 "action_yes" = "Có";
 "action_yes_try_again" = "Có, thử lại";
-"banner_migrate_to_native_sliding_sync_action" = "Đăng xuất & Nâng cấp";
-"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ không còn hỗ trợ giao thức cũ. Vui lòng đăng xuất và đăng nhập lại để tiếp tục sử dụng ứng dụng.";
 "banner_new_sound_message" = "Thông báo của bạn đã được cập nhật — rõ ràng hơn, nhanh hơn và ít gây khó chịu hơn.";
 "banner_new_sound_title" = "Chúng tôi đã làm mới âm thanh của bạn.";
 "banner_set_up_recovery_content" = "Các cuộc trò chuyện của bạn được tự động sao lưu bằng mã hóa đầu cuối. Để khôi phục bản sao lưu này và giữ lại danh tính kỹ thuật số của bạn khi bạn mất quyền truy cập vào tất cả các thiết bị, bạn sẽ cần khóa khôi phục.";
@@ -539,7 +537,6 @@
 "notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Đã nhắc đến bạn: %1$@";
-"notification_new_messages" = "Tin nhắn mới";
 "notification_reaction_body" = "Đã thả %1$@ vào tin nhắn";
 "notification_received_while_offline_ios" = "Bạn đã nhận được một hoặc nhiều thông báo khi đang ngoại tuyến.";
 "notification_room_action_mark_as_read" = "Đánh dấu đã đọc";
@@ -698,9 +695,7 @@
 "screen_bug_report_send_notification_settings_description" = "Nếu bạn gặp sự cố với thông báo, việc tải lên các quy tắc thông báo có thể giúp chúng tôi xác định nguyên nhân chính. Xin lưu ý rằng các quy tắc này có thể chứa thông tin riêng tư, chẳng hạn như tên hiển thị hoặc từ khóa mà bạn muốn nhận thông báo.";
 "screen_bug_report_send_notification_settings_title" = "Cài đặt thông báo";
 "screen_bug_report_view_logs" = "Xem nhật ký";
-"screen_change_account_provider_other" = "Khác";
 "screen_change_account_provider_subtitle" = "Sử dụng nhà cung cấp tài khoản khác, ví dụ như máy chủ riêng của bạn hoặc tài khoản công việc.";
-"screen_change_account_provider_title" = "Thay đổi nhà cung cấp tài khoản";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
 "screen_change_server_error_element_pro_required_message" = "Ứng dụng Element Pro là bắt buộc trên %1$@. Vui lòng tải xuống từ cửa hàng.";
 "screen_change_server_error_element_pro_required_title" = "Element Pro là bắt buộc";
@@ -710,7 +705,6 @@
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ không được phép kết nối với %2$@ .";
 "screen_change_server_error_unauthorized_homeserver_content" = "Ứng dụng này đã được cấu hình để cho phép: %1$@ .";
 "screen_change_server_error_unauthorized_homeserver_title" = "Không cho phép nhà cung cấp tài khoản %1$@.";
-"screen_change_server_form_header" = "URL homeserver";
 "screen_change_server_form_notice" = "Enter a domain address.";
 "screen_change_server_navigation_title_login" = "Sign in";
 "screen_change_server_navigation_title_register" = "Create account";

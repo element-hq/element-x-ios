@@ -203,8 +203,6 @@
 "action_voice_call" = "Voice call";
 "action_yes" = "Bai";
 "action_yes_try_again" = "Bai, saiatu berriro";
-"banner_migrate_to_native_sliding_sync_action" = "Amaitu saioa eta bertsio-berritu";
-"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@(e)k ez da bateragarria lehengo protokoloarekin. Amaitu saioa eta hasi berriro aplikazioa erabiltzen jarraitzeko.";
 "banner_new_sound_message" = "Your notification ping has been updated—clearer, quicker, and less disruptive.";
 "banner_new_sound_title" = "We’ve refreshed your sounds";
 "banner_set_up_recovery_content" = "Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.";
@@ -539,7 +537,6 @@
 "notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Aipatu zaitu: %1$@";
-"notification_new_messages" = "Mezu berriak";
 "notification_reaction_body" = "%1$@ (r)ekin erreakzionatu du";
 "notification_received_while_offline_ios" = "You received one or more notifications while offline.";
 "notification_room_action_mark_as_read" = "Markatu irakurritzat";
@@ -698,9 +695,7 @@
 "screen_bug_report_send_notification_settings_description" = "If you are having issues with notifications, uploading the notification push rules can help us pinpoint the root cause. Note these rules can contain private information, such as your display name or keywords to be notified for.";
 "screen_bug_report_send_notification_settings_title" = "Send notification settings";
 "screen_bug_report_view_logs" = "Ikusi erregistroak";
-"screen_change_account_provider_other" = "Beste bat";
 "screen_change_account_provider_subtitle" = "Erabili beste kontu-hornitzaile bat, hala nola zure zerbitzari pribatua edo laneko kontu bat.";
-"screen_change_account_provider_title" = "Aldatu kontu-hornitzailea";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
 "screen_change_server_error_element_pro_required_message" = "The Element Pro app is required on %1$@. Please download it from the store.";
 "screen_change_server_error_element_pro_required_title" = "Element Pro behar da";
@@ -710,7 +705,6 @@
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ is not allowed to connect to %2$@.";
 "screen_change_server_error_unauthorized_homeserver_content" = "This app has been configured to allow: %1$@.";
 "screen_change_server_error_unauthorized_homeserver_title" = "Ez da %1$@ kontu-hornitzailea onartzen.";
-"screen_change_server_form_header" = "Zerbitzariaren URLa";
 "screen_change_server_form_notice" = "Sartu domeinu-helbide bat.";
 "screen_change_server_navigation_title_login" = "Sign in";
 "screen_change_server_navigation_title_register" = "Create account";

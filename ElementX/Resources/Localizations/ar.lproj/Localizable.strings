@@ -202,8 +202,6 @@
 "action_voice_call" = "مكالمة صوتية";
 "action_yes" = "نعم";
 "action_yes_try_again" = "نعم، حاول مرة أخرى";
-"banner_migrate_to_native_sliding_sync_action" = "تسجيل الخروج والترقية";
-"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "لم يعد %1$@ يدعم البروتوكول القديم. يرجى تسجيل الخروج ثم تسجيل الدخول مرة أخرى لمتابعة استخدام التطبيق.";
 "banner_new_sound_message" = "تم تحديث صوت إشعاراتك، ليصبح أوضح وأسرع وأقل إزعاجًا.";
 "banner_new_sound_title" = "حدّثنا الأصوات لديك";
 "banner_set_up_recovery_content" = "يتم نسخ دردشاتك احتياطيًا تلقائيًا بتشفير من طرف إلى طرف. لاستعادة هذه النسخة الاحتياطية والاحتفاظ بهويتك الرقمية إذا فقدت الوصول إلى جميع أجهزتك، ستحتاج إلى مفتاح الاسترداد.";
@@ -538,7 +536,6 @@
 "notification_knock_request_body" = "طلبت الإنضمام";
 "notification_live_location_started_body" = "بدأوا بمشاركة موقعهم المباشر";
 "notification_mentioned_you_body" = "ذكرك: %1$@";
-"notification_new_messages" = "رسائل جديدة";
 "notification_reaction_body" = "تفاعلت بـ %1$@";
 "notification_received_while_offline_ios" = "تلقيت إشعارًا واحدًا أو أكثر أثناء عدم الاتصال بالإنترنت.";
 "notification_room_action_mark_as_read" = "وضع علامة كمقروء";
@@ -697,9 +694,7 @@
 "screen_bug_report_send_notification_settings_description" = "إذا كنت تواجه مشكلات في الإشعارات، يمكن أن يساعد رفع قواعد الإشعارات الفورية في تحديد السبب الجذري. لاحظ أن هذه القواعد قد تحتوي على معلومات خاصة، مثل اسم العرض الخاص بك أو الكلمات المفتاحية التي تريد تلقي إشعارات عنها.";
 "screen_bug_report_send_notification_settings_title" = "إرسال إعدادات الإشعارات";
 "screen_bug_report_view_logs" = "عرض السجلات";
-"screen_change_account_provider_other" = "غير ذلك";
 "screen_change_account_provider_subtitle" = "استخدم مزوّد حسابات آخر كسيرفرك الخاص أو حساب عمل.";
-"screen_change_account_provider_title" = "تغيير مزوّد الحسابات";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
 "screen_change_server_error_element_pro_required_message" = "تطبيق Element Pro مطلوب على %1$@. يرجى تنزيله من المتجر.";
 "screen_change_server_error_element_pro_required_title" = "Element Pro مطلوب";
@@ -709,7 +704,6 @@
 "screen_change_server_error_unauthorized_homeserver" = "غير مسموح لـ %1$@ بالاتصال بـ %2$@.";
 "screen_change_server_error_unauthorized_homeserver_content" = "تم إعداد هذا التطبيق للسماح بـ: %1$@.";
 "screen_change_server_error_unauthorized_homeserver_title" = "موفّر الحساب %1$@ غير مسموح به.";
-"screen_change_server_form_header" = "عنوان الـ URL للسيرفر";
 "screen_change_server_form_notice" = "أدخل عنوان نطاق.";
 "screen_change_server_navigation_title_login" = "تسجيل الدخول";
 "screen_change_server_navigation_title_register" = "إنشاء حساب";

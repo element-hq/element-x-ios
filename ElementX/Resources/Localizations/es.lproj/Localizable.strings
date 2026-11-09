@@ -203,8 +203,6 @@
 "action_voice_call" = "Llamada de voz";
 "action_yes" = "Sí";
 "action_yes_try_again" = "Sí, intentar de nuevo";
-"banner_migrate_to_native_sliding_sync_action" = "Cerrar sesión y actualizar";
-"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ ya no es compatible con el antiguo protocolo. Cierra sesión y vuelve a iniciarla para seguir usando la aplicación.";
 "banner_new_sound_message" = "Se ha actualizado tu sonido de notificación: más claro, rápido y menos disruptivo.";
 "banner_new_sound_title" = "Hemos actualizado tus sonidos";
 "banner_set_up_recovery_content" = "Tus chats se respaldan automáticamente con cifrado de extremo a extremo. Para restaurar esta copia de seguridad y conservar tu identidad digital si pierdes el acceso a todos tus dispositivos, necesitarás tu clave de recuperación.";
@@ -539,7 +537,6 @@
 "notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Comenzó a compartir su ubicación en tiempo real";
 "notification_mentioned_you_body" = "Te mencionó: %1$@";
-"notification_new_messages" = "Mensajes nuevos";
 "notification_reaction_body" = "Reaccionó con %1$@";
 "notification_received_while_offline_ios" = "Recibiste una o más notificaciones mientras estabas sin conexión.";
 "notification_room_action_mark_as_read" = "Marcar como leído";
@@ -698,9 +695,7 @@
 "screen_bug_report_send_notification_settings_description" = "Si tienes problemas con las notificaciones, enviar las reglas de notificaciones push puede ayudarnos a identificar la causa raíz. Ten en cuenta que estas reglas pueden contener información privada, como tu nombre público o las palabras clave para las que quieres recibir notificaciones.";
 "screen_bug_report_send_notification_settings_title" = "Enviar ajustes de notificación";
 "screen_bug_report_view_logs" = "Ver los registros";
-"screen_change_account_provider_other" = "Otro";
 "screen_change_account_provider_subtitle" = "Usa un proveedor de cuentas diferente, como tu propio servidor privado o una cuenta de trabajo.";
-"screen_change_account_provider_title" = "Cambiar proveedor de cuentas";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
 "screen_change_server_error_element_pro_required_message" = "%1$@ requiere la aplicación Element Pro. Descárgala de la tienda.";
 "screen_change_server_error_element_pro_required_title" = "Se requiere Element Pro";
@@ -710,7 +705,6 @@
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ no está autorizado para conectarse a %2$@.";
 "screen_change_server_error_unauthorized_homeserver_content" = "Esta aplicación se ha configurado para permitir: %1$@.";
 "screen_change_server_error_unauthorized_homeserver_title" = "No se permite el proveedor de cuentas %1$@.";
-"screen_change_server_form_header" = "URL del servidor base";
 "screen_change_server_form_notice" = "Introduce una dirección de dominio.";
 "screen_change_server_navigation_title_login" = "Iniciar sesión";
 "screen_change_server_navigation_title_register" = "Crear cuenta";

@@ -203,8 +203,6 @@
 "action_voice_call" = "Glasovni poziv";
 "action_yes" = "Da";
 "action_yes_try_again" = "Da, pokušaj ponovno";
-"banner_migrate_to_native_sliding_sync_action" = "Odjava i nadogradnja";
-"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ više ne podržava stari protokol. Odjavite se i ponovno prijavite kako biste se nastavili služiti aplikacijom.";
 "banner_new_sound_message" = "Vaš je signal obavijesti ažuriran – jasniji je, brži i manje ometajući.";
 "banner_new_sound_title" = "Ažurirali smo vaše zvukove";
 "banner_set_up_recovery_content" = "Vaši se razgovori automatski sigurnosno kopiraju enkripcijom od početka do kraja. Da biste vratili ovu sigurnosnu kopiju i zadržali svoj digitalni identitet kada izgubite pristup svim svojim uređajima, trebat će vam ključ za oporavak.";
@@ -539,7 +537,6 @@
 "notification_knock_request_body" = "Zatraženo pridruživanje";
 "notification_live_location_started_body" = "Počeli su dijeliti svoju lokaciju uživo";
 "notification_mentioned_you_body" = "Korisnik vas je spomenuo: %1$@";
-"notification_new_messages" = "Nove poruke";
 "notification_reaction_body" = "Reagirao/la je s %1$@";
 "notification_received_while_offline_ios" = "Primili ste jednu ili više obavijesti dok ste bili izvan mreže.";
 "notification_room_action_mark_as_read" = "Označi kao pročitano";
@@ -698,9 +695,7 @@
 "screen_bug_report_send_notification_settings_description" = "Ako imate problema s obavijestima, prijenos pravila za slanje obavijesti može nam pomoći da utvrdimo uzrok. Imajte na umu da ta pravila mogu sadržavati privatne podatke, kao što su vaše ime za prikaz ili ključne riječi za koje želite primati obavijesti.";
 "screen_bug_report_send_notification_settings_title" = "Postavke slanja obavijesti";
 "screen_bug_report_view_logs" = "Prikaz zapisnika";
-"screen_change_account_provider_other" = "Ostalo";
 "screen_change_account_provider_subtitle" = "Koristite drugog davatelja računa, kao što je vlastiti privatni poslužitelj ili poslovni račun.";
-"screen_change_account_provider_title" = "Promijeni davatelja usluga računa";
 "screen_change_server_error_element_pro_required_action_ios" = "Trgovina aplikacija";
 "screen_change_server_error_element_pro_required_message" = "Potrebna je aplikacija Element Pro na %1$@. Molimo vas da je preuzmete iz trgovine.";
 "screen_change_server_error_element_pro_required_title" = "Potreban je Element Pro";
@@ -710,7 +705,6 @@
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ nije dopušteno povezivanje s %2$@.";
 "screen_change_server_error_unauthorized_homeserver_content" = "Ova je aplikacija konfigurirana tako da dopušta: %1$@.";
 "screen_change_server_error_unauthorized_homeserver_title" = "Davatelj usluga računa %1$@ nije dopušten.";
-"screen_change_server_form_header" = "URL matičnog poslužitelja";
 "screen_change_server_form_notice" = "Unesite adresu domene.";
 "screen_change_server_navigation_title_login" = "Prijava";
 "screen_change_server_navigation_title_register" = "Izradi račun";

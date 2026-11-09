@@ -203,8 +203,6 @@
 "action_voice_call" = "Φωνητική κλήση";
 "action_yes" = "Ναι";
 "action_yes_try_again" = "Ναι, δοκιμή ξανά";
-"banner_migrate_to_native_sliding_sync_action" = "Αποσύνδεση & Αναβάθμιση";
-"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "Το %1$@ δεν υποστηρίζει πλέον το παλιό πρωτόκολλο. Αποσυνδεθείτε και συνδεθείτε ξανά για να συνεχίσετε να χρησιμοποιείτε την εφαρμογή.";
 "banner_new_sound_message" = "Το ping ειδοποιήσεών σας έχει ενημερωθεί—είναι πιο σαφές, πιο γρήγορο και λιγότερο ενοχλητικό.";
 "banner_new_sound_title" = "Ανανεώσαμε τους ήχους σας";
 "banner_set_up_recovery_content" = "Οι συνομιλίες σας αποθηκεύονται αυτόματα με κρυπτογράφηση από άκρο σε άκρο. Για να επαναφέρετε αυτό το αντίγραφο ασφαλείας και να διατηρήσετε την ψηφιακή σας ταυτότητα όταν χάσετε την πρόσβαση σε όλες τις συσκευές σας, θα χρειαστείτε το κλειδί ανάκτησης. ";
@@ -539,7 +537,6 @@
 "notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Σέ ανέφερε: %1$@";
-"notification_new_messages" = "Νέα Μηνύματα";
 "notification_reaction_body" = "Αντέδρασε με %1$@";
 "notification_received_while_offline_ios" = "Λάβατε μία ή περισσότερες ειδοποιήσεις ενώ ήσασταν εκτός σύνδεσης.";
 "notification_room_action_mark_as_read" = "Επισήμανση ως αναγνωσμένου";
@@ -698,9 +695,7 @@
 "screen_bug_report_send_notification_settings_description" = "Εάν αντιμετωπίζετε προβλήματα με τις ειδοποιήσεις, η μεταφόρτωση των κανόνων προώθησης ειδοποιήσεων μπορεί να μας βοηθήσει να εντοπίσουμε την αιτία. Λάβετε υπόψη ότι αυτοί οι κανόνες μπορεί να περιέχουν ιδιωτικές πληροφορίες, όπως το εμφανιζόμενο όνομά σας ή λέξεις-κλειδιά για τις οποίες θα λαμβάνετε ειδοποιήσεις.";
 "screen_bug_report_send_notification_settings_title" = "Ρυθμίσεις αποστολής ειδοποιήσεων";
 "screen_bug_report_view_logs" = "Προβολή αρχείων καταγραφής";
-"screen_change_account_provider_other" = "Άλλο";
 "screen_change_account_provider_subtitle" = "Χρησιμοποίησε διαφορετικό πάροχο λογαριασμού, όπως τον δικό σου ιδιωτικό διακομιστή ή έναν εργασιακό λογαριασμό.";
-"screen_change_account_provider_title" = "Αλλαγή παρόχου λογαριασμού";
 "screen_change_server_error_element_pro_required_action_ios" = "Κατάστημα εφαρμογών";
 "screen_change_server_error_element_pro_required_message" = "Η εφαρμογή Element Pro απαιτείται στο %1$@. Παρακαλώ κατεβάστε την από το κατάστημα.";
 "screen_change_server_error_element_pro_required_title" = "Απαιτείται το Element Pro";
@@ -710,7 +705,6 @@
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ δεν επιτρέπεται να συνδεθεί με %2$@.";
 "screen_change_server_error_unauthorized_homeserver_content" = "Αυτή η εφαρμογή έχει ρυθμιστεί ώστε να επιτρέπει: %1$@.";
 "screen_change_server_error_unauthorized_homeserver_title" = "Ο πάροχος %1$@ λογαριασμού δεν επιτρέπεται.";
-"screen_change_server_form_header" = "URL οικιακού διακομιστή";
 "screen_change_server_form_notice" = "Εισήγαγε μια διεύθυνση τομέα.";
 "screen_change_server_navigation_title_login" = "Sign in";
 "screen_change_server_navigation_title_register" = "Create account";

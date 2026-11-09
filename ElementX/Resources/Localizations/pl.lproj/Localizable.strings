@@ -1,4 +1,4 @@
-"a11y_active" = "Active";
+"a11y_active" = "Aktywny";
 "a11y_add_avatar" = "Dodaj awatar";
 "a11y_add_reaction" = "Dodaj reakcję: %1$@";
 "a11y_address" = "Adres";
@@ -19,7 +19,7 @@
 "a11y_gallery_scanning" = "Galeria, skanowanie %1$d";
 "a11y_gallery_video" = "Galeria, wideo %1$d";
 "a11y_hide_password" = "Ukryj hasło";
-"a11y_inactive" = "Inactive";
+"a11y_inactive" = "Nieaktywny";
 "a11y_info" = "Informacje";
 "a11y_join_call" = "Dołącz do połączenia";
 "a11y_jump_to_bottom" = "Przejdź na dół";
@@ -59,8 +59,8 @@
 "a11y_start_call" = "Rozpocznij rozmowę";
 "a11y_start_video_call" = "Rozpocznij rozmowę wideo";
 "a11y_start_voice_call" = "Rozpocznij połączenie głosowe";
-"a11y_state_collapsed" = "Collapsed";
-"a11y_state_expanded" = "Expanded";
+"a11y_state_collapsed" = "Zwinięto";
+"a11y_state_expanded" = "Rozwinięto";
 "a11y_status" = "Status";
 "a11y_tombstoned_room" = "Pokój nagrobkowy";
 "a11y_user_menu" = "Menu użytkownika";
@@ -203,8 +203,6 @@
 "action_voice_call" = "Rozmowa głosowa";
 "action_yes" = "Tak";
 "action_yes_try_again" = "Tak, spróbuj ponownie";
-"banner_migrate_to_native_sliding_sync_action" = "Wyloguj się i zaktualizuj";
-"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ już nie wspiera starego protokołu. Zaloguj się ponownie, aby dalej korzystać z aplikacji.";
 "banner_new_sound_message" = "Sygnał powiadomień został zaktualizowany — jest wyraźniejszy, szybszy i mniej uciążliwy.";
 "banner_new_sound_title" = "Odświeżyliśmy Twoje dźwięki";
 "banner_set_up_recovery_content" = "Twoje czaty są automatycznie archiwizowane za pomocą szyfrowania end-to-end. Aby przywrócić kopię zapasową i swoją tożsamość cyfrową, wymagany będzie klucz przywracania.";
@@ -495,7 +493,7 @@
 "emoji_picker_search_placeholder" = "Wyszukaj emoji";
 "error_account_already_logged_in_title" = "Konto już zalogowane";
 "error_account_creation_not_possible" = "Twój dostawca konta wymaga aktualizacji, aby uzyskać wsparcie usługi Matrix Authentication Service i tworzenia kont.";
-"error_camera_unavailable" = "The camera is not available";
+"error_camera_unavailable" = "Kamera jest niedostępna";
 "error_failed_creating_the_permalink" = "Nie udało się utworzyć linku bezpośredniego";
 "error_failed_loading_map" = "%1$@ nie mogło wczytać mapy. Spróbuj ponownie później.";
 "error_failed_loading_messages" = "Nie udało się załadować wiadomości";
@@ -539,7 +537,6 @@
 "notification_knock_request_body" = "Poprosił o dołączenie";
 "notification_live_location_started_body" = "Rozpoczął udostępnianie swojej lokalizacji";
 "notification_mentioned_you_body" = "Wspomniano o Tobie: %1$@";
-"notification_new_messages" = "Nowe wiadomości";
 "notification_reaction_body" = "Zareagował z %1$@";
 "notification_received_while_offline_ios" = "Otrzymano jedno lub więcej powiadomień, będąc offline.";
 "notification_room_action_mark_as_read" = "Oznacz jako przeczytane";
@@ -698,9 +695,7 @@
 "screen_bug_report_send_notification_settings_description" = "Jeśli posiadasz problemy z powiadomieniami, przesłanie nam swoich ustawień pomoże nam ustalić przyczynę usterki.";
 "screen_bug_report_send_notification_settings_title" = "Ustawienia powiadomień";
 "screen_bug_report_view_logs" = "Wyświetl logi";
-"screen_change_account_provider_other" = "Inne";
 "screen_change_account_provider_subtitle" = "Użyj innego dostawcy konta, takiego jak własny serwer lub konta służbowego.";
-"screen_change_account_provider_title" = "Zmień dostawcę konta";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
 "screen_change_server_error_element_pro_required_message" = "Wymagana jest aplikacja Element Pro na %1$@. Znajdziesz ją w sklepie z aplikacjami.";
 "screen_change_server_error_element_pro_required_title" = "Wymagany jest Element Pro";
@@ -710,7 +705,6 @@
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ nie posiada zezwolenia na dołączenie do %2$@.";
 "screen_change_server_error_unauthorized_homeserver_content" = "Aplikacja została skonfigurowana tak, aby zezwalała na: %1$@.";
 "screen_change_server_error_unauthorized_homeserver_title" = "Dostawca konta %1$@ jest niedozwolony.";
-"screen_change_server_form_header" = "URL serwera domowego";
 "screen_change_server_form_notice" = "Wprowadź adres domeny.";
 "screen_change_server_navigation_title_login" = "Zaloguj";
 "screen_change_server_navigation_title_register" = "Utwórz konto";
@@ -1223,7 +1217,7 @@
 "screen_recovery_key_setup_generate_key_description" = "Nie udostępniaj tego nikomu!";
 "screen_recovery_key_setup_success" = "Skonfigurowano przywracanie pomyślnie";
 "screen_recovery_key_setup_title" = "Uzyskaj klucz przywracania";
-"screen_recovery_key_success_title" = "Your new recovery key is now active";
+"screen_recovery_key_success_title" = "Nowy klucz przywracania jest już aktywny";
 "screen_report_content_block_user" = "Zablokuj użytkownika";
 "screen_report_content_block_user_hint" = "Zaznacz, jeśli chcesz ukryć wszystkie bieżące i przyszłe wiadomości od tego użytkownika.";
 "screen_report_content_explanation" = "Wiadomość zostanie zgłoszona do Twojego dostawcy konta. Nie będzie mógł on przeczytać żadnych zaszyfrowanych wiadomości.";
@@ -1469,13 +1463,13 @@
 "screen_roomlist_tombstoned_room_description" = "Ten pokój został ulepszony";
 "screen_roomlist_your_spaces" = "Twoje przestrzenie";
 "screen_search_empty_state_message" = "Szukaj czatów i wiadomości";
-"screen_search_empty_state_title" = "Rozpocznij wyszukiwanie";
-"screen_search_from_your_messages_header" = "From your messages";
+"screen_search_empty_state_title" = "Rozpocznij wyszukiwanie…";
+"screen_search_from_your_messages_header" = "Z Twoich wiadomości";
 "screen_search_history_limit_message" = "Search runs on your device, so your encrypted messages stay private.\nYour device keeps the most recent 3 months of messages, so older messages can’t be searched yet.";
 "screen_search_history_limit_title" = "Search covers the last 3 months";
 "screen_search_messages_no_results_message" = "There are no results for “%1$@” in your recent messages.";
 "screen_search_messages_no_results_title" = "No results in the last 3 months";
-"screen_search_no_results_message" = "Nie znaleziono wyników dla \"%1$@\". Spróbuj wpisać nowe zapytanie.";
+"screen_search_no_results_message" = "Nie znaleziono wyników dla “%1$@”. Prosimy o wpisanie nowego terminu.";
 "screen_search_recent_searches" = "Ostatnie wyszukiwania";
 "screen_search_tab_chats" = "Czaty";
 "screen_search_tab_messages" = "Wiadomości";
@@ -1516,8 +1510,8 @@
 "screen_security_and_privacy_room_visibility_section_footer" = "Adresy pokoi pomagają w znalezieniu i dołączeniu do pokoi i przestrzeni. Umożliwiają również łatwe udostępnianie ich innym.";
 "screen_security_and_privacy_room_visibility_section_header" = "Widoczność";
 "screen_security_and_privacy_title" = "Bezpieczeństwo i prywatność";
-"screen_select_account_permalink_room_subtitle" = "None of your accounts have joined this room yet, choose which one to use.";
-"screen_select_account_permalink_title" = "Select an account to open the link:";
+"screen_select_account_permalink_room_subtitle" = "Żadne z Twoich kont nie dołączyło jeszcze do tego pokoju. Wybierz konta, które chcesz użyć.";
+"screen_select_account_permalink_title" = "Wybierz konto, aby otworzyć link:";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix to otwarta sieć do bezpiecznej i zdecentralizowanej komunikacji.";
 "screen_server_confirmation_title_picker_mode" = "Wybierz dostawcę konta";
 "screen_session_verification_compare_emojis_subtitle" = "Upewnij się, że zestaw emoji poniżej pasuje do tych na drugiej sesji.";
@@ -1592,7 +1586,7 @@
 "screen_signout_recovery_disabled_title" = "Zamierzasz utracić dostęp do swoich zaszyfrowanych czatów";
 "screen_signout_save_recovery_key_action_check" = "Check your recovery key";
 "screen_signout_save_recovery_key_action_continue" = "Kontynuuj usuwanie tego urządzenia";
-"screen_signout_save_recovery_key_action_generate" = "Generate new recovery key";
+"screen_signout_save_recovery_key_action_generate" = "Wygeneruj nowy klucz przywracania";
 "screen_signout_save_recovery_key_subtitle" = "To jest twoje jedyne urządzenie. Jeśli je usuniesz, będziesz potrzebować klucza przywracania, aby potwierdzić swoją tożsamość cyfrową i przywrócić zaszyfrowane czaty przy następnym logowaniu.";
 "screen_signout_save_recovery_key_title" = "Upewnij się, że posiadasz dostęp do klucza przywracania przed usunięciem urządzenia";
 "screen_space_add_room_action" = "Pokój";
@@ -1658,11 +1652,11 @@
 "slash_command_description_unignore_user" = "Stops ignoring a user, showing their messages going forward";
 "slash_command_description_upgrade_room" = "Upgrades a room to a new version";
 "slash_command_description_whois" = "Displays information about a user";
-"slash_command_error" = "Command error";
+"slash_command_error" = "Błąd polecenia";
 "slash_command_error_discard_session_not_handled" = "Only supported in encrypted rooms";
 "slash_command_not_supported_in_threads" = "The command \"%1$@\" is recognized but not supported in threads.";
 "slash_command_parameters_error" = "The command \"%1$@\" needs more parameters, or some parameters are incorrect. The syntax is\n\n%2$@";
-"slash_command_unrecognized" = "Unrecognized command: %1$@";
+"slash_command_unrecognized" = "Nieznane polecenie: %1$@";
 "state_event_avatar_changed_too" = "(zdjęcie profilowe też zostało zmienione)";
 "state_event_avatar_url_changed" = "%1$@ zmienił swoje zdjęcie profilowe";
 "state_event_avatar_url_changed_by_you" = "Zmieniłeś swoje zdjęcie profilowe";

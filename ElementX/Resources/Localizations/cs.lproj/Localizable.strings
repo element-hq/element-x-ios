@@ -203,8 +203,6 @@
 "action_voice_call" = "Voice call";
 "action_yes" = "Ano";
 "action_yes_try_again" = "Ano, zkusit znovu";
-"banner_migrate_to_native_sliding_sync_action" = "Odhlásit se a upgradovat";
-"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ již nepodporuje starý protokol. Odhlaste se a znovu přihlaste, abyste mohli pokračovat v používání aplikace.";
 "banner_new_sound_message" = "Váš zvuk oznámení byl aktualizován – je jasnější, rychlejší a méně rušivý.";
 "banner_new_sound_title" = "Aktualizovali jsme vaše zvuky";
 "banner_set_up_recovery_content" = "Vaše chaty jsou automaticky zálohovány pomocí koncového šifrování. Chcete-li tuto zálohu obnovit a zachovat si svou digitální identitu v případě, že ztratíte přístup ke všem svým zařízením, budete potřebovat svůj klíč pro obnovení.";
@@ -539,7 +537,6 @@
 "notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Zmínili vás: %1$@";
-"notification_new_messages" = "Nové zprávy";
 "notification_reaction_body" = "Reagoval(a) s %1$@";
 "notification_received_while_offline_ios" = "Když jste byli offline, obdrželi jste jedno nebo více oznámení.";
 "notification_room_action_mark_as_read" = "Označit jako přečtené";
@@ -698,9 +695,7 @@
 "screen_bug_report_send_notification_settings_description" = "Pokud máte problémy s oznámeními, nahrání nastavení oznámení nám může pomoci určit jejich příčinu.";
 "screen_bug_report_send_notification_settings_title" = "Nastavení odesílání oznámení";
 "screen_bug_report_view_logs" = "Zobrazit protokoly";
-"screen_change_account_provider_other" = "Jiný";
 "screen_change_account_provider_subtitle" = "Použijte jiného poskytovatele účtu, například vlastní soukromý server nebo pracovní účet.";
-"screen_change_account_provider_title" = "Změnit poskytovatele účtu";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
 "screen_change_server_error_element_pro_required_message" = "Na %1$@ je vyžadována aplikace Element Pro. Stáhněte si ji prosím z obchodu.";
 "screen_change_server_error_element_pro_required_title" = "Vyžadován Element Pro";
@@ -710,7 +705,6 @@
 "screen_change_server_error_unauthorized_homeserver" = "Uživateli %1$@ není dovoleno se připojit do %2$@.";
 "screen_change_server_error_unauthorized_homeserver_content" = "Tato aplikace byla nakonfigurována tak, aby umožňovala: %1$@.";
 "screen_change_server_error_unauthorized_homeserver_title" = "Poskytovatel účtu %1$@ není povolen.";
-"screen_change_server_form_header" = "Adresa URL domovského serveru";
 "screen_change_server_form_notice" = "Zadejte adresu domény.";
 "screen_change_server_navigation_title_login" = "Sign in";
 "screen_change_server_navigation_title_register" = "Create account";

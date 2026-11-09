@@ -203,8 +203,6 @@
 "action_voice_call" = "Chiamata vocale";
 "action_yes" = "Sì";
 "action_yes_try_again" = "Sì, riprova";
-"banner_migrate_to_native_sliding_sync_action" = "Esci e aggiorna";
-"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ non supporta più il vecchio protocollo. Esci e accedi nuovamente per continuare a utilizzare l'app.";
 "banner_new_sound_message" = "Il ping delle notifiche è stato aggiornato: ora è più chiaro, più rapido e meno fastidioso.";
 "banner_new_sound_title" = "Abbiamo rinnovato i tuoi suoni";
 "banner_set_up_recovery_content" = "Le tue conversazioni vengono automaticamente salvate con crittografia end-to-end. Per ripristinare questo backup e conservare la tua identità digitale quando perdi l'accesso a tutti i tuoi dispositivi, avrai bisogno della tua chiave di recupero.";
@@ -539,7 +537,6 @@
 "notification_knock_request_body" = "Richiesta di accesso";
 "notification_live_location_started_body" = "Ha iniziato a condividere la posizione in tempo reale";
 "notification_mentioned_you_body" = "Ti ha menzionato: %1$@";
-"notification_new_messages" = "Nuovi messaggi";
 "notification_reaction_body" = "Ha reagito con %1$@";
 "notification_received_while_offline_ios" = "Hai ricevuto una o più notifiche mentre eri offline.";
 "notification_room_action_mark_as_read" = "Segna come letto";
@@ -698,9 +695,7 @@
 "screen_bug_report_send_notification_settings_description" = "Se riscontri problemi con le notifiche, caricare le regole per le notifiche push può aiutarci a individuare la causa principale. Tieni presente che queste regole possono contenere informazioni private, come il tuo nome visualizzato o le parole chiave per cui ricevere notifiche.";
 "screen_bug_report_send_notification_settings_title" = "Invia impostazioni di notifica";
 "screen_bug_report_view_logs" = "Visualizza i log";
-"screen_change_account_provider_other" = "Altro";
 "screen_change_account_provider_subtitle" = "Utilizza un provider di account diverso, ad esempio il tuo server privato o un account di lavoro.";
-"screen_change_account_provider_title" = "Cambia fornitore dell'account";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
 "screen_change_server_error_element_pro_required_message" = "L'app Element Pro è necessaria su %1$@. Scaricala dallo store.";
 "screen_change_server_error_element_pro_required_title" = "Element Pro è richiesto";
@@ -710,7 +705,6 @@
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ non è autorizzato a connettersi a %2$@.";
 "screen_change_server_error_unauthorized_homeserver_content" = "Questa app è stata configurata per consentire: %1$@.";
 "screen_change_server_error_unauthorized_homeserver_title" = "Fornitore dell'account %1$@ non consentito.";
-"screen_change_server_form_header" = "URL dell'homeserver";
 "screen_change_server_form_notice" = "Inserisci un indirizzo di dominio.";
 "screen_change_server_navigation_title_login" = "Accedi";
 "screen_change_server_navigation_title_register" = "Crea account";
@@ -1244,7 +1238,7 @@
 "screen_reset_identity_confirmation_title" = "Non riesci a confermare? Vai al tuo account per reimpostare la tua identità digitale.";
 "screen_resolve_send_failure_changed_identity_primary_button_title" = "Ritira la verifica e invia";
 "screen_resolve_send_failure_changed_identity_subtitle" = "Puoi ritirare la tua verifica e inviare comunque questo messaggio, oppure annullarlo per ora e riprovare più tardi dopo aver riverificato %1$@.";
-"screen_resolve_send_failure_changed_identity_title" = "Il tuo messaggio non è stato inviato perché l'identità digitale verificata di %1$@è stata reimpostata";
+"screen_resolve_send_failure_changed_identity_title" = "Il tuo messaggio non è stato inviato perché l'identità digitale verificata di %1$@ è stata reimpostata";
 "screen_resolve_send_failure_unsigned_device_primary_button_title" = "Invia comunque il messaggio";
 "screen_resolve_send_failure_unsigned_device_subtitle" = "%1$@ sta usando uno o più dispositivi non verificati. Puoi inviare il messaggio in ogni caso, oppure annullarlo e riprovare più tardi quando %2$@ avrà verificato tutti i suoi dispositivi.";
 "screen_resolve_send_failure_unsigned_device_title" = "Il tuo messaggio non è stato inviato perché %1$@ non ha verificato tutti i dispositivi.";
@@ -1618,7 +1612,7 @@
 "screen_start_chat_join_room_by_address_supporting_text" = "ad esempio #room -name:matrix.org";
 "screen_static_location_sheet_timestamp_description" = "Condivisa %1$@";
 "screen_static_location_sheet_title" = "Sulla mappa";
-"screen_timeline_item_menu_send_failure_changed_identity" = "Il messaggio non è stato inviato perché l'identità digitale verificata di %1$@è stata reimpostata.";
+"screen_timeline_item_menu_send_failure_changed_identity" = "Il messaggio non è stato inviato perché l'identità digitale verificata di %1$@ è stata reimpostata.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Messaggio non inviato perché %1$@ non ha verificato tutti i dispositivi.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Messaggio non inviato perché non hai verificato uno o più dispositivi.";
 "screen_view_location_title" = "Posizione";

@@ -254,24 +254,6 @@
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
 	</dict>
-	<key>notification_compat_summary_line_for_room</key>
-	<dict>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>few</key>
-			<string>%1$@: %2$d mesaje</string>
-			<key>one</key>
-			<string>%1$@: %2$d mesaj</string>
-			<key>other</key>
-			<string>%1$@: %2$d de mesaje</string>
-		</dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-	</dict>
 	<key>notification_compat_summary_title</key>
 	<dict>
 		<key>COUNT</key>
@@ -322,42 +304,6 @@
 			<string>%1$d atașament partajat</string>
 			<key>other</key>
 			<string>%1$d de atașamente partajate</string>
-		</dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-	</dict>
-	<key>notification_invitations</key>
-	<dict>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>few</key>
-			<string>%d invitații</string>
-			<key>one</key>
-			<string>%d invitație</string>
-			<key>other</key>
-			<string>%d de invitații</string>
-		</dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-	</dict>
-	<key>notification_new_messages_for_room</key>
-	<dict>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>few</key>
-			<string>%d mesaje noi</string>
-			<key>one</key>
-			<string>%d mesaj nou</string>
-			<key>other</key>
-			<string>%d de mesaje noi</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -808,24 +754,6 @@
 			<string>Ați blocat %1$d utilizator. Nu veți primi notificări pentru acest utilizator.</string>
 			<key>other</key>
 			<string>Ați blocat %1$d de utilizatori. Nu veți primi notificări pentru acești utilizatori.</string>
-		</dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-	</dict>
-	<key>troubleshoot_notifications_test_detect_push_provider_success</key>
-	<dict>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>few</key>
-			<string>S-au găsit %1$d furnizori push: %2$@</string>
-			<key>one</key>
-			<string>S-a găsit %1$d furnizor push: %2$@</string>
-			<key>other</key>
-			<string>S-au găsit %1$d de furnizori push: %2$@</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
