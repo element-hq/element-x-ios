@@ -21,14 +21,14 @@ final class RoomListFiltersStateTests {
         state = RoomListFiltersState(userSettings: userSettings)
     }
     
-    @Test
+    @Test("No filters are active and the default filters are available")
     func initialState() {
         #expect(!state.isFiltering)
         #expect(state.activeFilters == [])
         #expect(state.availableFilters == defaultFilters)
     }
     
-    @Test
+    @Test("Activating and deactivating a filter updates the available filters")
     func setAndUnsetFilters() {
         state.activateFilter(.unreads)
         #expect(state.isFiltering)
@@ -40,7 +40,7 @@ final class RoomListFiltersStateTests {
         #expect(state.availableFilters == defaultFilters)
     }
     
-    @Test
+    @Test("Filters that can't be combined with an active filter are hidden")
     func mutuallyExclusiveFilters() {
         state.activateFilter(.people)
         #expect(state.isFiltering)
@@ -63,7 +63,7 @@ final class RoomListFiltersStateTests {
         #expect(state.availableFilters == [.favourites])
     }
     
-    @Test
+    @Test("Activating a filter that can't be combined with an active one is ignored")
     func ignoresIncompatibleFilter() {
         state.activateFilter(.people)
         state.activateFilter(.invites)
@@ -71,7 +71,7 @@ final class RoomListFiltersStateTests {
         #expect(state.activeFilters == [.people])
     }
     
-    @Test
+    @Test("Clearing the filters brings back the default filters")
     func clearFilters() {
         state.activateFilter(.people)
         #expect(state.activeFilters == [.people])
@@ -91,7 +91,7 @@ final class RoomListFiltersStateTests {
         #expect(state.availableFilters == defaultFilters)
     }
     
-    @Test
+    @Test("The available filters keep their order as filters are toggled")
     func order() {
         state.activateFilter(.favourites)
         #expect(state.activeFilters == [.favourites])
@@ -114,10 +114,33 @@ final class RoomListFiltersStateTests {
         #expect(state.availableFilters == [.unreads, .favourites])
     }
     
+    @Test("The invites filter moves to the front while there are unseen invites")
+    func unseenInvitesOrder() {
+        state.invitesCount = 2
+        state.hasUnseenInvites = true
+        #expect(state.availableFilters == [.invites] + defaultFilters.filter { $0 != .invites })
+        
+        state.activateFilter(.unreads)
+        #expect(state.availableFilters == [.favourites, .people, .rooms])
+        
+        state.deactivateFilter(.unreads)
+        state.hasUnseenInvites = false
+        #expect(state.availableFilters == defaultFilters)
+    }
+    
+    @Test("The invites filter name shows the count when there are invites")
+    func invitesCountName() {
+        #expect(state.localizedName(for: .invites) == L10n.screenRoomlistFilterInvites)
+        
+        state.invitesCount = 5
+        #expect(state.localizedName(for: .invites) == UntranslatedL10n.screenRoomlistFilterInvitesCount(5))
+        #expect(state.localizedName(for: .people) == L10n.screenRoomlistFilterPeople)
+    }
+    
     // MARK: Low Priority feature flag
     
     /// Don't forget to add .lowPriority into the mix above when enabling the feature.
-    @Test
+    @Test("The low priority filter is available when its feature flag is on")
     func withLowPriorityFeature() {
         enableLowPriorityFeature()
         #expect(!state.isFiltering)
@@ -132,7 +155,7 @@ final class RoomListFiltersStateTests {
     // MARK: Mentions feature flag
     
     /// Don't forget to add .mentions into the mix above when enabling the feature.
-    @Test
+    @Test("The mentions filter is available when its feature flag is on")
     func withMentionsFeature() {
         enableMentionsFeature()
         #expect(!state.isFiltering)

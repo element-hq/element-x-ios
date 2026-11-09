@@ -10,6 +10,10 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 internal nonisolated enum UntranslatedL10n {
+  /// Invites (%1$d)
+  internal static func screenRoomlistFilterInvitesCount(_ p1: Int) -> String {
+    return UntranslatedL10n.tr("Untranslated", "screen_roomlist_filter_invites_count", p1)
+  }
   /// Untranslated
   internal static var untranslated: String { return UntranslatedL10n.tr("Untranslated", "untranslated") }
   /// Plural format key: "%#@VARIABLE@"
