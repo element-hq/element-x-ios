@@ -48,7 +48,6 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
     private var appDelegateObserver: AnyCancellable?
     /// Becomes `true` once the app is no longer waiting on a session restore, whatever the outcome.
     private let isSessionRestoredSubject = CurrentValueSubject<Bool, Never>(false)
-    private var clientProxyObserver: AnyCancellable?
     private var cancellables = Set<AnyCancellable>()
     
     let windowManager: SecureWindowManagerProtocol
@@ -128,7 +127,8 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
                                                 notificationManager: notificationManager,
                                                 liveLocationManager: LiveLocationManager(appSettings: appSettings),
                                                 elementCallManager: elementCallManager,
-                                                userSessionMigrator: UserSessionMigrator(newVersion: currentVersion, oldAppVersion: previousVersion, appSettings: appSettings, appMediator: appMediator))
+                                                userSessionMigrator: UserSessionMigrator(newVersion: currentVersion, oldAppVersion: previousVersion, appSettings: appSettings, appMediator: appMediator),
+                                                signposter: analyticsService.signpost)
         
         let appLockService = AppLockService(keychainController: keychainController, appSettings: appSettings)
         let appLockNavigationCoordinator = NavigationRootCoordinator()
@@ -812,30 +812,10 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
         }
         
         await userSessionManager.pauseServices()
-        clientProxyObserver = nil
     }
     
     private func resumeClientServices() async {
-        if userSession != nil {
-            analyticsService.signpost.startTransaction(.upToDateRoomList)
-        }
-        
         await userSessionManager.resumeServices()
-        
-        guard let userSession, clientProxyObserver == nil else {
-            return
-        }
-        
-        #warning("Re-observe when the active account changes, this keeps observing the previous account until the next resume.")
-        clientProxyObserver = userSession.clientProxy
-            .loadingStatePublisher
-            .dropFirst()
-            .removeDuplicates()
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] state in
-                guard case .notLoading = state else { return }
-                self?.analyticsService.signpost.finishTransaction(.upToDateRoomList)
-            }
     }
     
     private func observeApplicationState() {

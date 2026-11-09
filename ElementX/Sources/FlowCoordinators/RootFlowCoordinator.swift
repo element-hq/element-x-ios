@@ -298,8 +298,13 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
         }
         
         // Shown after the transition, as stopping a user session flow retracts every indicator.
-        if error == .failedRestoringSession {
+        switch error {
+        case .remoteLogout:
+            break // Show the Device Removed Remotely screen.
+        case .failedRestoringSession:
             showLoginErrorToast()
+        case .none:
+            break
         }
     }
     
