@@ -298,30 +298,6 @@
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
 	</dict>
-	<key>notification_compat_summary_line_for_room</key>
-	<dict>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>few</key>
-			<string>%1$@: %2$d neges</string>
-			<key>many</key>
-			<string>%1$@: %2$d neges</string>
-			<key>one</key>
-			<string>%1$@: %2$d neges</string>
-			<key>other</key>
-			<string>%1$@: %2$d neges</string>
-			<key>two</key>
-			<string>%1$@: %2$d neges</string>
-			<key>zero</key>
-			<string>%1$@: %2$d negeseuon</string>
-		</dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-	</dict>
 	<key>notification_compat_summary_title</key>
 	<dict>
 		<key>COUNT</key>
@@ -374,54 +350,6 @@
 			<string>Shared %1$d attachment</string>
 			<key>other</key>
 			<string>Shared %1$d attachments</string>
-		</dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-	</dict>
-	<key>notification_invitations</key>
-	<dict>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>few</key>
-			<string>%d gwahoddiadau</string>
-			<key>many</key>
-			<string>%d gwahoddiadau</string>
-			<key>one</key>
-			<string>%d gwahoddiadau</string>
-			<key>other</key>
-			<string>%d gwahoddiadau</string>
-			<key>two</key>
-			<string>%d gwahoddiadau</string>
-			<key>zero</key>
-			<string>%d gwahoddiadau</string>
-		</dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-	</dict>
-	<key>notification_new_messages_for_room</key>
-	<dict>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>few</key>
-			<string>%d neges newydd</string>
-			<key>many</key>
-			<string>%d neges newydd</string>
-			<key>one</key>
-			<string>%d neges newydd</string>
-			<key>other</key>
-			<string>%d neges newydd</string>
-			<key>two</key>
-			<string>%d neges newydd</string>
-			<key>zero</key>
-			<string>%d negeseuon newydd</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -934,30 +862,6 @@
 			<string>Rydych wedi rhwystro %1$d defnyddiwr. Fyddwch chi ddim yn derbyn hysbysiadau ar gyfer y defnyddiwr hwn.</string>
 			<key>zero</key>
 			<string>Rydych wedi rhwystro %1$d defnyddiwr. Fyddwch chi ddim yn derbyn hysbysiadau ar gyfer y defnyddiwr hwn.</string>
-		</dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-	</dict>
-	<key>troubleshoot_notifications_test_detect_push_provider_success</key>
-	<dict>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>few</key>
-			<string>Wedi canfod %1$d darparwr gwthio: %2$@</string>
-			<key>many</key>
-			<string>Wedi canfod %1$d darparwr gwthio: %2$@</string>
-			<key>one</key>
-			<string>Wedi canfod %1$d darparwr gwthio: %2$@</string>
-			<key>other</key>
-			<string>Wedi canfod %1$d darparwr gwthio: %2$@</string>
-			<key>two</key>
-			<string>Wedi canfod %1$d darparwr gwthio: %2$@</string>
-			<key>zero</key>
-			<string>Wedi canfod %1$d darparwyr gwthio: %2$@</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

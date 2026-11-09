@@ -203,8 +203,6 @@
 "action_voice_call" = "تماس صوتی";
 "action_yes" = "بله";
 "action_yes_try_again" = "بله. تلاش دوباره";
-"banner_migrate_to_native_sliding_sync_action" = "خروج و ارتقا";
-"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "‏%1$@ دیگر از شیوه‌نامهٔ قدیمی پشتیبانی نمی‌کند. لطفاً برای ادامهٔ استفاده از کاره، خارج شده و دوباره وارد شوید.";
 "banner_new_sound_message" = "پینگ اعلان شما به‌روزرسانی شده است—واضح‌تر، سریع‌تر و کم‌دردسرتر.";
 "banner_new_sound_title" = "ما صداهای شما را تازه کرده‌ایم";
 "banner_set_up_recovery_content" = "چت‌های شما به طور خودکار با رمزگذاری سراسری پشتیبان‌گیری می‌شوند. برای بازیابی این پشتیبان‌گیری و حفظ هویت دیجیتال خود در زمانی که دسترسی به تمام دستگاه‌هایتان را از دست می‌دهید، به کلید بازیابی خود نیاز خواهید داشت.";
@@ -539,7 +537,6 @@
 "notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "شروع به اشتراک گذاری موقعیت مکانی زنده خود کردند";
 "notification_mentioned_you_body" = "به شما اشاره کرد: %1$@";
-"notification_new_messages" = "پیام جدید";
 "notification_reaction_body" = "با %1$@ واکنش داد";
 "notification_received_while_offline_ios" = "شما در حالت آفلاین یک یا چند اعلان دریافت کرده‌اید.";
 "notification_room_action_mark_as_read" = "علامت‌گذاری به عنوان خوانده شده";
@@ -698,9 +695,7 @@
 "screen_bug_report_send_notification_settings_description" = "اگر با اعلان‌ها مشکل دارید، آپلود قوانین ارسال اعلان می‌تواند به ما در شناسایی علت اصلی کمک کند. توجه داشته باشید که این قوانین می‌توانند حاوی اطلاعات خصوصی مانند نام نمایشی یا کلمات کلیدی شما باشند که باید برای آنها اعلان دریافت کنید.";
 "screen_bug_report_send_notification_settings_title" = "تنظیمات ارسال اعلان";
 "screen_bug_report_view_logs" = "دیدن گزارش‌ها";
-"screen_change_account_provider_other" = "دیگر";
 "screen_change_account_provider_subtitle" = "استفاده از فراهم کنندهٔ حسابی دیگر چون کارساز خصوصی خوتان یا حسابی کاری.";
-"screen_change_account_provider_title" = "تغییر فراهم کنندهٔ حساب";
 "screen_change_server_error_element_pro_required_action_ios" = "فروشگاه کاره";
 "screen_change_server_error_element_pro_required_message" = "برنامه Element Pro برای %1$@ مورد نیاز است. لطفاً آن را از فروشگاه دانلود کنید.";
 "screen_change_server_error_element_pro_required_title" = "المنت پرو مورد نیاز است";
@@ -710,7 +705,6 @@
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ اجازه اتصال به %2$@ را ندارد.";
 "screen_change_server_error_unauthorized_homeserver_content" = "این برنامه طوری پیکربندی شده است که اجازه موارد زیر را بدهد: %1$@.";
 "screen_change_server_error_unauthorized_homeserver_title" = "ارائه دهنده حساب %1$@ مجاز نیست.";
-"screen_change_server_form_header" = "نشانی کارساز خانگی";
 "screen_change_server_form_notice" = "ورود نشانی دامنه.";
 "screen_change_server_navigation_title_login" = "Sign in";
 "screen_change_server_navigation_title_register" = "Create account";

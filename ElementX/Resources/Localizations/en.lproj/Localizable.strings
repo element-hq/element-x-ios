@@ -203,8 +203,6 @@
 "action_voice_call" = "Voice call";
 "action_yes" = "Yes";
 "action_yes_try_again" = "Yes, try again";
-"banner_migrate_to_native_sliding_sync_action" = "Log Out & Upgrade";
-"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ no longer supports the old protocol. Please log out and log back in to continue using the app.";
 "banner_new_sound_message" = "Your notification ping has been updated—clearer, quicker, and less disruptive.";
 "banner_new_sound_title" = "We’ve refreshed your sounds";
 "banner_set_up_recovery_content" = "Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.";
@@ -539,7 +537,6 @@
 "notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Mentioned you: %1$@";
-"notification_new_messages" = "New Messages";
 "notification_reaction_body" = "Reacted with %1$@";
 "notification_received_while_offline_ios" = "You received one or more notifications while offline.";
 "notification_room_action_mark_as_read" = "Mark as read";
@@ -698,9 +695,7 @@
 "screen_bug_report_send_notification_settings_description" = "If you are having issues with notifications, uploading the notification push rules can help us pinpoint the root cause. Note these rules can contain private information, such as your display name or keywords to be notified for.";
 "screen_bug_report_send_notification_settings_title" = "Send notification settings";
 "screen_bug_report_view_logs" = "View logs";
-"screen_change_account_provider_other" = "Other";
 "screen_change_account_provider_subtitle" = "Use a different account provider, such as your own private server or a work account.";
-"screen_change_account_provider_title" = "Change account provider";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
 "screen_change_server_error_element_pro_required_message" = "The Element Pro app is required on %1$@. Please download it from the store.";
 "screen_change_server_error_element_pro_required_title" = "Element Pro required";
@@ -710,7 +705,6 @@
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ is not allowed to connect to %2$@.";
 "screen_change_server_error_unauthorized_homeserver_content" = "This app has been configured to allow: %1$@.";
 "screen_change_server_error_unauthorized_homeserver_title" = "Account provider %1$@ not allowed.";
-"screen_change_server_form_header" = "Homeserver URL";
 "screen_change_server_form_notice" = "Enter a domain address.";
 "screen_change_server_navigation_title_login" = "Sign in";
 "screen_change_server_navigation_title_register" = "Create account";

@@ -224,22 +224,6 @@
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
 	</dict>
-	<key>notification_compat_summary_line_for_room</key>
-	<dict>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>one</key>
-			<string>%1$@: %2$d üzenet</string>
-			<key>other</key>
-			<string>%1$@: %2$d üzenet</string>
-		</dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-	</dict>
 	<key>notification_compat_summary_title</key>
 	<dict>
 		<key>COUNT</key>
@@ -284,38 +268,6 @@
 			<string>Megosztott %1$d melléklet</string>
 			<key>other</key>
 			<string>Megosztott %1$d melléklet</string>
-		</dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-	</dict>
-	<key>notification_invitations</key>
-	<dict>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>one</key>
-			<string>%d meghívó</string>
-			<key>other</key>
-			<string>%d meghívó</string>
-		</dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-	</dict>
-	<key>notification_new_messages_for_room</key>
-	<dict>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>one</key>
-			<string>%d új üzenet</string>
-			<key>other</key>
-			<string>%d új üzenet</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -716,22 +668,6 @@
 			<string>Letiltotta %1$d felhasználót. Nem fog értesítéseket kapni erről a felhasználóról.</string>
 			<key>other</key>
 			<string>Letiltott %1$d felhasználót. Nem fog értesítéseket kapni ezekről a felhasználókról.</string>
-		</dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-	</dict>
-	<key>troubleshoot_notifications_test_detect_push_provider_success</key>
-	<dict>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>one</key>
-			<string>%1$d leküldéses értesítési szolgáltató találva: %2$@</string>
-			<key>other</key>
-			<string>%1$d leküldéses értesítési szolgáltató találva: %2$@</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

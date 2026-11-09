@@ -203,8 +203,6 @@
 "action_voice_call" = "Voice call";
 "action_yes" = "Ja";
 "action_yes_try_again" = "Ja, försök igen";
-"banner_migrate_to_native_sliding_sync_action" = "Logga ut och uppgradera";
-"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ stöder inte längre det gamla protokollet. Logga ut och logga in igen för att fortsätta använda appen.";
 "banner_new_sound_message" = "Your notification ping has been updated—clearer, quicker, and less disruptive.";
 "banner_new_sound_title" = "We’ve refreshed your sounds";
 "banner_set_up_recovery_content" = "Skapa en ny återställningsnyckel som kan användas för att återställa din krypterade meddelandehistorik om du förlorar åtkomst till dina enheter.";
@@ -539,7 +537,6 @@
 "notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Nämnde dig: %1$@";
-"notification_new_messages" = "Nya meddelanden";
 "notification_reaction_body" = "Reagerade med %1$@";
 "notification_received_while_offline_ios" = "You received one or more notifications while offline.";
 "notification_room_action_mark_as_read" = "Markera som läst";
@@ -698,9 +695,7 @@
 "screen_bug_report_send_notification_settings_description" = "If you are having issues with notifications, uploading the notification push rules can help us pinpoint the root cause. Note these rules can contain private information, such as your display name or keywords to be notified for.";
 "screen_bug_report_send_notification_settings_title" = "Send notification settings";
 "screen_bug_report_view_logs" = "Se loggar";
-"screen_change_account_provider_other" = "Annan";
 "screen_change_account_provider_subtitle" = "Använd en annan kontoleverantör, till exempel din egen privata server eller ett jobbkonto.";
-"screen_change_account_provider_title" = "Byt kontoleverantör";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
 "screen_change_server_error_element_pro_required_message" = "Element Pro-appen krävs på %1$@. Ladda ner den från butiken.";
 "screen_change_server_error_element_pro_required_title" = "Element Pro krävs";
@@ -710,7 +705,6 @@
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ får inte ansluta till %2$@.";
 "screen_change_server_error_unauthorized_homeserver_content" = "Den här appen har konfigurerats för att tillåta: %1$@.";
 "screen_change_server_error_unauthorized_homeserver_title" = "Kontoleverantör %1$@ är inte tillåten.";
-"screen_change_server_form_header" = "Hemserverns URL";
 "screen_change_server_form_notice" = "Ange en domänadress.";
 "screen_change_server_navigation_title_login" = "Sign in";
 "screen_change_server_navigation_title_register" = "Create account";

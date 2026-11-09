@@ -203,8 +203,6 @@
 "action_voice_call" = "Voice call";
 "action_yes" = "Iawn";
 "action_yes_try_again" = "Iawn, ceisiwch eto";
-"banner_migrate_to_native_sliding_sync_action" = "Allgofnodi ac Uwchraddio";
-"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "Nid yw %1$@ bellach yn cefnogi'r hen brotocol. Allgofnodwch a mewngofnodi'n ôl i barhau i ddefnyddio'r ap.";
 "banner_new_sound_message" = "Your notification ping has been updated—clearer, quicker, and less disruptive.";
 "banner_new_sound_title" = "We’ve refreshed your sounds";
 "banner_set_up_recovery_content" = "Adferwch eich hunaniaeth cryptograffig a hanes negeseuon gydag allwedd adfer os ydych wedi colli eich holl ddyfeisiau presennol.";
@@ -539,7 +537,6 @@
 "notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Wedi eich crybwyll: %1$@";
-"notification_new_messages" = "Negeseuon Newydd";
 "notification_reaction_body" = "Wedi ymateb gyda %1$@";
 "notification_received_while_offline_ios" = "You received one or more notifications while offline.";
 "notification_room_action_mark_as_read" = "Marcio fel wedi'i ddarllen";
@@ -698,9 +695,7 @@
 "screen_bug_report_send_notification_settings_description" = "Os ydych chi'n cael problemau gyda hysbysiadau, gall llwytho'r gosodiadau hysbysiadau ein helpu i ddarganfod yr achos gwreiddiol.";
 "screen_bug_report_send_notification_settings_title" = "Anfon gosodiadau hysbysiadau";
 "screen_bug_report_view_logs" = "Gweld logiau";
-"screen_change_account_provider_other" = "Arall";
 "screen_change_account_provider_subtitle" = "Defnyddiwch ddarparwr cyfrif gwahanol, fel eich gweinydd preifat eich hun neu gyfrif gwaith.";
-"screen_change_account_provider_title" = "Newid darparwr cyfrif";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
 "screen_change_server_error_element_pro_required_message" = "Mae angen yr ap Element Pro ar %1$@. Llwythwch ef o'r siop.";
 "screen_change_server_error_element_pro_required_title" = "Mae angen Element Pro";
@@ -710,7 +705,6 @@
 "screen_change_server_error_unauthorized_homeserver" = "Does dim caniatâd i %1$@ gysylltu â %2$@.";
 "screen_change_server_error_unauthorized_homeserver_content" = "Mae'r ap hwn wedi'i ffurfweddu i ganiatáu: %1$@.";
 "screen_change_server_error_unauthorized_homeserver_title" = "Dyw darparwr cyfrif %1$@ dddim yn cael ei ganiatáu.";
-"screen_change_server_form_header" = "URL y Gweinydd Cartref";
 "screen_change_server_form_notice" = "Rhowch gyfeiriad parth.";
 "screen_change_server_navigation_title_login" = "Sign in";
 "screen_change_server_navigation_title_register" = "Create account";

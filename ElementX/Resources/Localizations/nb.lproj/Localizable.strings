@@ -203,8 +203,6 @@
 "action_voice_call" = "Taleanrop";
 "action_yes" = "Ja";
 "action_yes_try_again" = "Ja, prøv igjen";
-"banner_migrate_to_native_sliding_sync_action" = "Logg ut og oppgrader";
-"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ støtter ikke lenger den gamle protokollen. Logg ut og logg inn igjen for å fortsette å bruke appen.";
 "banner_new_sound_message" = "Varslingssignalet ditt er oppdatert – tydeligere, raskere og mindre forstyrrende.";
 "banner_new_sound_title" = "Vi har oppdatert lydene dine";
 "banner_set_up_recovery_content" = "Chattene dine sikkerhetskopieres automatisk med ende-til-ende-kryptering. For å gjenopprette denne sikkerhetskopien og beholde din digitale identitet når du mister tilgang til alle enhetene dine, trenger du gjenopprettingsnøkkelen din.";
@@ -539,7 +537,6 @@
 "notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Nevnte deg: %1$@";
-"notification_new_messages" = "Nye meldinger";
 "notification_reaction_body" = "Reagerte med %1$@";
 "notification_received_while_offline_ios" = "Du mottok ett eller flere varsler mens du var frakoblet.";
 "notification_room_action_mark_as_read" = "Marker som lest";
@@ -698,9 +695,7 @@
 "screen_bug_report_send_notification_settings_description" = "Hvis du har problemer med varsler, kan det å laste opp varslingsinnstillingene hjelpe oss med å finne den underliggende årsaken.";
 "screen_bug_report_send_notification_settings_title" = "Send varslingsinnstillinger";
 "screen_bug_report_view_logs" = "Vis logger";
-"screen_change_account_provider_other" = "Annet";
 "screen_change_account_provider_subtitle" = "Bruk en annen kontotilbyder, for eksempel din egen private server eller en arbeidskonto.";
-"screen_change_account_provider_title" = "Bytt kontotilbyder";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
 "screen_change_server_error_element_pro_required_message" = "Element Pro-appen er nødvendig på %1$@. Last den ned fra butikken.";
 "screen_change_server_error_element_pro_required_title" = "Element Pro kreves";
@@ -710,7 +705,6 @@
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ har ikke lov til å koble seg til %2$@.";
 "screen_change_server_error_unauthorized_homeserver_content" = "Denne appen er konfigurert til å tillate: %1$@.";
 "screen_change_server_error_unauthorized_homeserver_title" = "Kontoleverandør %1$@ er ikke tillatt.";
-"screen_change_server_form_header" = "URL til hjemmeserver";
 "screen_change_server_form_notice" = "Skriv inn en domeneadresse.";
 "screen_change_server_navigation_title_login" = "Sign in";
 "screen_change_server_navigation_title_register" = "Create account";

@@ -254,24 +254,6 @@
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
 	</dict>
-	<key>notification_compat_summary_line_for_room</key>
-	<dict>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>few</key>
-			<string>%1$@: %2$d wiadomości</string>
-			<key>many</key>
-			<string>%1$@: %2$d wiadomości</string>
-			<key>one</key>
-			<string>%1$@: %2$d wiadomość</string>
-		</dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-	</dict>
 	<key>notification_compat_summary_title</key>
 	<dict>
 		<key>COUNT</key>
@@ -322,42 +304,6 @@
 			<string>Udostępnił %1$d załączników</string>
 			<key>one</key>
 			<string>Udostępnił %1$d załącznik</string>
-		</dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-	</dict>
-	<key>notification_invitations</key>
-	<dict>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>few</key>
-			<string>%d zaproszenia</string>
-			<key>many</key>
-			<string>%d zaproszeń</string>
-			<key>one</key>
-			<string>%d zaproszenie</string>
-		</dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-	</dict>
-	<key>notification_new_messages_for_room</key>
-	<dict>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>few</key>
-			<string>%d nowe wiadomości</string>
-			<key>many</key>
-			<string>%d nowych wiadomości</string>
-			<key>one</key>
-			<string>%d nowa wiadomość</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -808,24 +754,6 @@
 			<string>Zablokowano %1$d użytkowników. Nie otrzymasz od nich żadnych powiadomień.</string>
 			<key>one</key>
 			<string>Zablokowano %1$d użytkownika. Nie otrzymasz od niego żadnych powiadomień.</string>
-		</dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-	</dict>
-	<key>troubleshoot_notifications_test_detect_push_provider_success</key>
-	<dict>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>few</key>
-			<string>Znaleziono %1$d dostawców push: %2$@</string>
-			<key>many</key>
-			<string>Znaleziono %1$d dostawców push: %2$@</string>
-			<key>one</key>
-			<string>Znaleziono %1$d dostawcę push: %2$@</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

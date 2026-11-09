@@ -330,30 +330,6 @@
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
 	</dict>
-	<key>notification_compat_summary_line_for_room</key>
-	<dict>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>few</key>
-			<string>%1$@: %2$d رسائل</string>
-			<key>many</key>
-			<string>%1$@: %2$d رسالة</string>
-			<key>one</key>
-			<string>%1$@: %2$d رسالة</string>
-			<key>other</key>
-			<string>%1$@: %2$d رسالة</string>
-			<key>two</key>
-			<string>%1$@: %2$d رسالتان</string>
-			<key>zero</key>
-			<string>%1$@: %2$d رسائل</string>
-		</dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-	</dict>
 	<key>notification_compat_summary_title</key>
 	<dict>
 		<key>COUNT</key>
@@ -422,54 +398,6 @@
 			<string>شارك %1$d مرفق</string>
 			<key>zero</key>
 			<string>شارك %1$d مرفق</string>
-		</dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-	</dict>
-	<key>notification_invitations</key>
-	<dict>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>few</key>
-			<string>%d دعوات</string>
-			<key>many</key>
-			<string>%d دعوات</string>
-			<key>one</key>
-			<string>%d دعوة</string>
-			<key>other</key>
-			<string>%d دعوات</string>
-			<key>two</key>
-			<string>%d دعوات</string>
-			<key>zero</key>
-			<string>%d دعوة</string>
-		</dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-	</dict>
-	<key>notification_new_messages_for_room</key>
-	<dict>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>few</key>
-			<string>%d من الرسائل الجديدة</string>
-			<key>many</key>
-			<string>%d من الرسائل الجديدة</string>
-			<key>one</key>
-			<string>%d رسالة جديدة</string>
-			<key>other</key>
-			<string>%d من الرسائل الجديدة</string>
-			<key>two</key>
-			<string>%d من الرسائل الجديدة</string>
-			<key>zero</key>
-			<string>%d رسالة جديدة</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -1046,30 +974,6 @@
 			<string>لقد حظرت %1$d مستخدمين. لن تتلقى إشعارات لهذين المستخدمين.</string>
 			<key>zero</key>
 			<string>لقد حظرت %1$d مستخدمين. لن تتلقى إشعارات لهؤلاء المستخدمين.</string>
-		</dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-	</dict>
-	<key>troubleshoot_notifications_test_detect_push_provider_success</key>
-	<dict>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>few</key>
-			<string>تم العثور على %1$d من موفّري الإشعارات الفورية: %2$@</string>
-			<key>many</key>
-			<string>تم العثور على %1$d من موفّري الإشعارات الفورية: %2$@</string>
-			<key>one</key>
-			<string>تم العثور على %1$d موفّر إشعارات فورية: %2$@</string>
-			<key>other</key>
-			<string>تم العثور على %1$d من موفّري الإشعارات الفورية: %2$@</string>
-			<key>two</key>
-			<string>تم العثور على %1$d من موفّري الإشعارات الفورية: %2$@</string>
-			<key>zero</key>
-			<string>تم العثور على %1$d من موفّري الإشعارات الفورية: %2$@</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

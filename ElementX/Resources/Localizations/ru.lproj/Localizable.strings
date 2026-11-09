@@ -203,8 +203,6 @@
 "action_voice_call" = "Голосовой звонок";
 "action_yes" = "Да";
 "action_yes_try_again" = "Да, попробовать ещё раз";
-"banner_migrate_to_native_sliding_sync_action" = "Выйти и обновить";
-"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ больше не поддерживает старый протокол. Пожалуйста, выйдите из системы и войдите снова, чтобы продолжить использование приложения.";
 "banner_new_sound_message" = "Ваши уведомления были обновлены — теперь они понятнее, быстрее и менее отвлекающие.";
 "banner_new_sound_title" = "Мы обновили ваши звуки";
 "banner_set_up_recovery_content" = "Ваши чаты автоматически резервируются с использованием сквозного шифрования. Для восстановления этой резервной копии и сохранения вашей цифровой личности в случае потери доступа ко всем вашим устройствам вам потребуется ключ восстановления.";
@@ -539,7 +537,6 @@
 "notification_knock_request_body" = "Хочет присоединиться";
 "notification_live_location_started_body" = "Начал(а) делиться своим текущим местоположением";
 "notification_mentioned_you_body" = "Упомянул(а) вас: %1$@";
-"notification_new_messages" = "Новые сообщения";
 "notification_reaction_body" = "Отреагировал(а) на %1$@";
 "notification_received_while_offline_ios" = "Вы получили одно или несколько уведомлений, пока были офлайн.";
 "notification_room_action_mark_as_read" = "Пометить как прочитанное";
@@ -698,9 +695,7 @@
 "screen_bug_report_send_notification_settings_description" = "Если у Вас возникли проблемы с уведомлениями, загрузка настроек уведомлений может помочь нам определить причину проблемы. Обратите внимание, что эти правила могут содержать конфиденциальную информацию, такую ​​как Ваше отображаемое имя или ключевые слова, по которым должны срабатывать уведомления.";
 "screen_bug_report_send_notification_settings_title" = "Настройки отправки уведомлений";
 "screen_bug_report_view_logs" = "Просмотр журналов";
-"screen_change_account_provider_other" = "Другой";
 "screen_change_account_provider_subtitle" = "Используйте другой сервер, например, собственный частный сервер или рабочую учетную запись.";
-"screen_change_account_provider_title" = "Сменить сервер";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
 "screen_change_server_error_element_pro_required_message" = "Требуется приложение Element Pro для %1$@. Пожалуйста, загрузите его из магазина.";
 "screen_change_server_error_element_pro_required_title" = "Требуется Element Pro";
@@ -710,7 +705,6 @@
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ отказано в подключении к %2$@.";
 "screen_change_server_error_unauthorized_homeserver_content" = "Это приложение настроено таким образом, чтобы разрешить: %1$@.";
 "screen_change_server_error_unauthorized_homeserver_title" = "Сервер %1$@ не разрешен.";
-"screen_change_server_form_header" = "Адрес сервера";
 "screen_change_server_form_notice" = "Введите доменное имя.";
 "screen_change_server_navigation_title_login" = "Войти";
 "screen_change_server_navigation_title_register" = "Создать аккаунт";

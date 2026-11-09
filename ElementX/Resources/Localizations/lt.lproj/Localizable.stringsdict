@@ -232,24 +232,6 @@
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
 	</dict>
-	<key>notification_compat_summary_line_for_room</key>
-	<dict>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>few</key>
-			<string>%1$@: %2$d žinutės</string>
-			<key>one</key>
-			<string>%1$@: %2$d žinutė</string>
-			<key>other</key>
-			<string>%1$@: %2$d žinučių</string>
-		</dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-	</dict>
 	<key>notification_compat_summary_title</key>
 	<dict>
 		<key>COUNT</key>
@@ -296,42 +278,6 @@
 			<string>Shared %1$d attachment</string>
 			<key>other</key>
 			<string>Shared %1$d attachments</string>
-		</dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-	</dict>
-	<key>notification_invitations</key>
-	<dict>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>few</key>
-			<string>%d kvietimai</string>
-			<key>one</key>
-			<string>%d kvietimas</string>
-			<key>other</key>
-			<string>%d kvietimų</string>
-		</dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-	</dict>
-	<key>notification_new_messages_for_room</key>
-	<dict>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>few</key>
-			<string>%d naujos žinutės</string>
-			<key>one</key>
-			<string>%d nauja žinutė</string>
-			<key>other</key>
-			<string>%d naujų žinučių</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -740,22 +686,6 @@
 			<string>You blocked %1$d user. You will not receive notifications for this user.</string>
 			<key>other</key>
 			<string>You blocked %1$d users. You will not receive notifications for these users.</string>
-		</dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-	</dict>
-	<key>troubleshoot_notifications_test_detect_push_provider_success</key>
-	<dict>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>one</key>
-			<string>Found %1$d push provider: %2$@</string>
-			<key>other</key>
-			<string>Found %1$d push providers: %2$@</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

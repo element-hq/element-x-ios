@@ -203,8 +203,6 @@
 "action_voice_call" = "Panggilan suara";
 "action_yes" = "Ya";
 "action_yes_try_again" = "Ya, coba lagi";
-"banner_migrate_to_native_sliding_sync_action" = "Keluar & Tingkatkan";
-"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ tidak lagi mendukung protokol lama. Silakan keluar dan masuk kembali untuk terus menggunakan aplikasi.";
 "banner_new_sound_message" = "Pemberitahuan Anda telah diperbarui—lebih jelas, lebih cepat, dan tidak mengganggu.";
 "banner_new_sound_title" = "Kami telah memperbarui suara Anda.";
 "banner_set_up_recovery_content" = "Buat kunci pemulihan baru yang dapat digunakan untuk memulihkan riwayat pesan terenkripsi Anda jika Anda kehilangan akses ke perangkat Anda.";
@@ -539,7 +537,6 @@
 "notification_knock_request_body" = "Diminta untuk bergabung";
 "notification_live_location_started_body" = "Mulai membagikan lokasi langsung mereka";
 "notification_mentioned_you_body" = "Menyebutkan Anda: %1$@";
-"notification_new_messages" = "Pesan Baru";
 "notification_reaction_body" = "Menghapus dengan %1$@";
 "notification_received_while_offline_ios" = "Anda menerima satu atau lebih pemberitahuan saat sedang offline.";
 "notification_room_action_mark_as_read" = "Tandai sebagai dibaca";
@@ -698,9 +695,7 @@
 "screen_bug_report_send_notification_settings_description" = "Jika Anda mengalami masalah dengan notifikasi, mengunggah aturan push notifikasi dapat membantu kami menemukan penyebab utamanya. Perlu diingat bahwa aturan ini dapat berisi informasi pribadi, seperti nama tampilan Anda atau kata kunci yang ingin Anda terima notifikasinya.";
 "screen_bug_report_send_notification_settings_title" = "Pengaturan notifikasi pengiriman";
 "screen_bug_report_view_logs" = "Tampilkan catatan";
-"screen_change_account_provider_other" = "Lainnya";
 "screen_change_account_provider_subtitle" = "Gunakan penyedia akun yang berbeda, seperti server pribadi Anda sendiri atau akun kerja.";
-"screen_change_account_provider_title" = "Ubah penyedia akun";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
 "screen_change_server_error_element_pro_required_message" = "Aplikasi Element Pro diperlukan di %1$@. Silakan unduh dari App Store.";
 "screen_change_server_error_element_pro_required_title" = "Element Pro diperlukan";
@@ -710,7 +705,6 @@
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ tidak diizinkan untuk terhubung ke %2$@.";
 "screen_change_server_error_unauthorized_homeserver_content" = "Aplikasi ini telah diatur untuk mengizinkan: %1$@.";
 "screen_change_server_error_unauthorized_homeserver_title" = "Penyedia akun %1$@ tidak diizinkan.";
-"screen_change_server_form_header" = "URL Homeserver";
 "screen_change_server_form_notice" = "Masukkan alamat domain.";
 "screen_change_server_navigation_title_login" = "Login";
 "screen_change_server_navigation_title_register" = "Buat akun";

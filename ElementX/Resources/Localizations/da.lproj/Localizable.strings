@@ -203,8 +203,6 @@
 "action_voice_call" = "Voice call";
 "action_yes" = "Ja";
 "action_yes_try_again" = "Ja, prøv igen";
-"banner_migrate_to_native_sliding_sync_action" = "Log ud og opgradér";
-"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ understøtter ikke længere den gamle protokol. Log ud og log ind igen for at fortsætte med at bruge appen.";
 "banner_new_sound_message" = "Dit notifikationsping er blevet opdateret – tydeligere, hurtigere og mindre forstyrrende.";
 "banner_new_sound_title" = "Vi har opdateret dine lyde";
 "banner_set_up_recovery_content" = "Dine chats sikkerhedskopieres automatisk med end-to-end-kryptering. For at kunne gendanne denne sikkerhedskopi og bevare din digitale identitet, hvis du mister adgang til alle dine enheder, får du brug for din gendannelsesnøgle.";
@@ -539,7 +537,6 @@
 "notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Nævnte dig: %1$@";
-"notification_new_messages" = "Nye beskeder";
 "notification_reaction_body" = "Reagerede med%1$@";
 "notification_received_while_offline_ios" = "Du har modtaget en eller flere notifikationer, mens du var offline.";
 "notification_room_action_mark_as_read" = "Marker som læst";
@@ -698,9 +695,7 @@
 "screen_bug_report_send_notification_settings_description" = "Hvis du har problemer med notifikationer, kan upload af notifikationsindstillingerne hjælpe os med at identificere den grundlæggende årsag.";
 "screen_bug_report_send_notification_settings_title" = "Send notifikationsindstillinger";
 "screen_bug_report_view_logs" = "Se logfiler";
-"screen_change_account_provider_other" = "Anden";
 "screen_change_account_provider_subtitle" = "Brug en anden kontoudbyder, f.eks. din egen private server eller en arbejdskonto.";
-"screen_change_account_provider_title" = "Skift kontoudbyder";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
 "screen_change_server_error_element_pro_required_message" = "Element Pro-appen er påkrævet på %1$@ Download den venligst fra din app store.";
 "screen_change_server_error_element_pro_required_title" = "Element Pro kræves";
@@ -710,7 +705,6 @@
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ har ikke tilladelse til at oprette forbindelse til %2$@.";
 "screen_change_server_error_unauthorized_homeserver_content" = "Denne app er konfigureret til at tillade: %1$@.";
 "screen_change_server_error_unauthorized_homeserver_title" = "Kontoudbyder %1$@ er ikke tilladt.";
-"screen_change_server_form_header" = "URL-adressen på din hjemmeserver";
 "screen_change_server_form_notice" = "Indtast en domæneadresse.";
 "screen_change_server_navigation_title_login" = "Sign in";
 "screen_change_server_navigation_title_register" = "Create account";

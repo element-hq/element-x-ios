@@ -252,24 +252,6 @@
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
 	</dict>
-	<key>notification_compat_summary_line_for_room</key>
-	<dict>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>few</key>
-			<string>%1$@: %2$d сообщения</string>
-			<key>many</key>
-			<string>%1$@: %2$d сообщений</string>
-			<key>one</key>
-			<string>%1$@: %2$d сообщение</string>
-		</dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-	</dict>
 	<key>notification_compat_summary_title</key>
 	<dict>
 		<key>COUNT</key>
@@ -320,42 +302,6 @@
 			<string>Поделился(ась) %1$d вложениями</string>
 			<key>one</key>
 			<string>Поделился(ась) %1$d вложением</string>
-		</dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-	</dict>
-	<key>notification_invitations</key>
-	<dict>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>few</key>
-			<string>%d приглашения</string>
-			<key>many</key>
-			<string>%d приглашений</string>
-			<key>one</key>
-			<string>%d приглашение</string>
-		</dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-	</dict>
-	<key>notification_new_messages_for_room</key>
-	<dict>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>few</key>
-			<string>%d новых сообщения</string>
-			<key>many</key>
-			<string>%d новых сообщений</string>
-			<key>one</key>
-			<string>%d новое сообщение</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -804,24 +750,6 @@
 			<string>Вы заблокировали пользователей %1$d. Вы не будете получать уведомления от этих пользователей.</string>
 			<key>one</key>
 			<string>Вы заблокировали пользователя %1$d. Вы не будете получать уведомления от этого пользователей.</string>
-		</dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-	</dict>
-	<key>troubleshoot_notifications_test_detect_push_provider_success</key>
-	<dict>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>few</key>
-			<string>Найдено %1$d push-провайдеров: %2$@</string>
-			<key>many</key>
-			<string>Найдено %1$d push-провайдеров: %2$@</string>
-			<key>one</key>
-			<string>Найден %1$d push-провайдер: %2$@</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

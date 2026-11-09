@@ -203,8 +203,6 @@
 "action_voice_call" = "Hanghívás";
 "action_yes" = "Igen";
 "action_yes_try_again" = "Igen, újrapróbálkozás";
-"banner_migrate_to_native_sliding_sync_action" = "Kijelentkezés és frissítés";
-"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ már nem támogatja a régi protokollt. Kérjük, jelentkezzen ki és jelentkezzen be újra az alkalmazás használatának folytatásához.";
 "banner_new_sound_message" = "Értesítési hangja frissült – tisztább, gyorsabb és kevésbé zavaró lett.";
 "banner_new_sound_title" = "Frissítettük a hangokat";
 "banner_set_up_recovery_content" = "A csevegései automatikusan mentve vannak, végpontok közti titkosítással Ahhoz, hogy az eszközei elvesztése esetén helyre tudja állítani a biztonsági mentést és megtartsa a digitális személyazonosságát, egy helyreállítási kulcsra van szüksége.";
@@ -539,7 +537,6 @@
 "notification_knock_request_body" = "Csatlakozási kérelem benyújtva";
 "notification_live_location_started_body" = "Elkezdték megosztani az élő helyzetüket";
 "notification_mentioned_you_body" = "Megemlítette Önt: %1$@";
-"notification_new_messages" = "Új üzenetek";
 "notification_reaction_body" = "Ezzel reagált: %1$@";
 "notification_received_while_offline_ios" = "Offline állapotban egy vagy több értesítést kapott.";
 "notification_room_action_mark_as_read" = "Megjelölés olvasottként";
@@ -698,9 +695,7 @@
 "screen_bug_report_send_notification_settings_description" = "Ha problémákat tapasztal az értesítésekkel, az értesítési beállítások feltöltése segíthet meghatároznunk a kiváltó okát.";
 "screen_bug_report_send_notification_settings_title" = "Értesítési beállítások küldése";
 "screen_bug_report_view_logs" = "Naplók megtekintése";
-"screen_change_account_provider_other" = "Egyéb";
 "screen_change_account_provider_subtitle" = "Másik fiókszolgáltató, például a saját privát kiszolgáló vagy egy munkahelyi fiók használata.";
-"screen_change_account_provider_title" = "Fiókszolgáltató módosítása";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
 "screen_change_server_error_element_pro_required_message" = "Az Element Pro alkalmazás szükséges a következőn: %1$@. Töltse le az áruházból.";
 "screen_change_server_error_element_pro_required_title" = "Element Pro szükséges";
@@ -710,7 +705,6 @@
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ nem csatlakozhat ide: %2$@.";
 "screen_change_server_error_unauthorized_homeserver_content" = "Ezt az alkalmazást úgy konfigurálták, hogy engedélyezi ezt: %1$@.";
 "screen_change_server_error_unauthorized_homeserver_title" = "A(z) %1$@ fiókszolgáltató nem engedélyezett.";
-"screen_change_server_form_header" = "Matrix-kiszolgáló webcíme";
 "screen_change_server_form_notice" = "Adjon meg egy domaincímet.";
 "screen_change_server_navigation_title_login" = "Bejelentkezés";
 "screen_change_server_navigation_title_register" = "Fiók létrehozása";

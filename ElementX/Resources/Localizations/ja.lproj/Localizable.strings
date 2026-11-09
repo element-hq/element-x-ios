@@ -203,8 +203,6 @@
 "action_voice_call" = "音声通話";
 "action_yes" = "はい";
 "action_yes_try_again" = "再試行する";
-"banner_migrate_to_native_sliding_sync_action" = "ログアウトしてアップグレード";
-"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ は古いプロトコルに非対応になりました。アプリを引き続き使用するには、ログアウトしてから再度ログインしてください。";
 "banner_new_sound_message" = "通知音が更新され、より明確で速く、そして邪魔にならなくなりました。";
 "banner_new_sound_title" = "サウンドを刷新しました";
 "banner_set_up_recovery_content" = "あなたのチャットはエンドツーエンド暗号化を使用して自動的にバックアップされています。すべての端末を使用できない状況で、このバックアップからデジタルIDを復元するには、回復鍵が必要となります。";
@@ -539,7 +537,6 @@
 "notification_knock_request_body" = "参加をリクエスト";
 "notification_live_location_started_body" = "ライブ位置情報の共有を開始";
 "notification_mentioned_you_body" = "%1$@ があなたをメンションしました";
-"notification_new_messages" = "新着メッセージ";
 "notification_reaction_body" = "%1$@へのリアクション";
 "notification_received_while_offline_ios" = "オフラインの間に1つ以上の通知を受け取りました。";
 "notification_room_action_mark_as_read" = "既読にする";
@@ -698,9 +695,7 @@
 "screen_bug_report_send_notification_settings_description" = "通知について問題がある場合は、プッシュ通知の設定を添付することで、原因究明の手がかりになります。この設定には、ユーザーネームや通知のキーワードなどの個人情報が含まれる場合があります。ご注意ください。";
 "screen_bug_report_send_notification_settings_title" = "通知設定を送信";
 "screen_bug_report_view_logs" = "ログを表示";
-"screen_change_account_provider_other" = "その他";
 "screen_change_account_provider_subtitle" = "自身のサーバーや仕事用のアカウントにサインインするには、アカウント提供元を変更してください。";
-"screen_change_account_provider_title" = "アカウント提供元を変更";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
 "screen_change_server_error_element_pro_required_message" = "%1$@ では Element Pro を使用する必要があります。アプリストアよりダウンロードしてください。";
 "screen_change_server_error_element_pro_required_title" = "Element Pro が必要です";
@@ -710,7 +705,6 @@
 "screen_change_server_error_unauthorized_homeserver" = "%2$@ は %1$@ からの接続を許可していません。";
 "screen_change_server_error_unauthorized_homeserver_content" = "このアプリは次のサーバーを許可します: %1$@";
 "screen_change_server_error_unauthorized_homeserver_title" = "アカウント提供元 %1$@ は許可されていません。";
-"screen_change_server_form_header" = "ホームサーバーURL";
 "screen_change_server_form_notice" = "ドメイン名を入力してください";
 "screen_change_server_navigation_title_login" = "サインイン";
 "screen_change_server_navigation_title_register" = "アカウントを作成";

@@ -203,8 +203,6 @@
 "action_voice_call" = "Voice call";
 "action_yes" = "Sim";
 "action_yes_try_again" = "Sim, tentar novamente";
-"banner_migrate_to_native_sliding_sync_action" = "Sair & Atualizar";
-"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ já não suporta o protocolo antigo. Termina a sessão e volta a iniciar sessão para continuares a utilizar a aplicação.";
 "banner_new_sound_message" = "O toque de notificação foi atualizado — mais claro, mais rápido e menos perturbador.";
 "banner_new_sound_title" = "Atualizámos os seus sons";
 "banner_set_up_recovery_content" = "Recupera a tua identidade criptográfica e o histórico de mensagens com uma chave de recuperação se tiveres perdido todos os teus dispositivos existentes.";
@@ -539,7 +537,6 @@
 "notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Mencionou-te: %1$@";
-"notification_new_messages" = "Mensagens novas";
 "notification_reaction_body" = "Reagiu com %1$@";
 "notification_received_while_offline_ios" = "You received one or more notifications while offline.";
 "notification_room_action_mark_as_read" = "Marcar como lida";
@@ -698,9 +695,7 @@
 "screen_bug_report_send_notification_settings_description" = "Se estiveres a ter problemas com as notificações, enviar as configurações pode ajudar-nos a identificar a causa.";
 "screen_bug_report_send_notification_settings_title" = "Enviar configurações de notificação";
 "screen_bug_report_view_logs" = "Ver registos";
-"screen_change_account_provider_other" = "Outro";
 "screen_change_account_provider_subtitle" = "Utiliza um operador de conta diferente, como o teu próprio servidor privado ou uma conta de trabalho.";
-"screen_change_account_provider_title" = "Alterar operador de conta";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
 "screen_change_server_error_element_pro_required_message" = "%1$@ requer a Element Pro. Por favor, descarrega-a da app store.";
 "screen_change_server_error_element_pro_required_title" = "Element Pro necessária";
@@ -710,7 +705,6 @@
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ não se pode ligar a %2$@.";
 "screen_change_server_error_unauthorized_homeserver_content" = "Esta aplicação foi configurada para permitir: %1$@.";
 "screen_change_server_error_unauthorized_homeserver_title" = "Operador de conta %1$@ não permitido.";
-"screen_change_server_form_header" = "URL do servidor";
 "screen_change_server_form_notice" = "Introduz um domínio";
 "screen_change_server_navigation_title_login" = "Sign in";
 "screen_change_server_navigation_title_register" = "Create account";

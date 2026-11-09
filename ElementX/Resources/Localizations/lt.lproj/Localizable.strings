@@ -203,8 +203,6 @@
 "action_voice_call" = "Voice call";
 "action_yes" = "Taip";
 "action_yes_try_again" = "Yes, try again";
-"banner_migrate_to_native_sliding_sync_action" = "Log Out & Upgrade";
-"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ no longer supports the old protocol. Please log out and log back in to continue using the app.";
 "banner_new_sound_message" = "Your notification ping has been updated—clearer, quicker, and less disruptive.";
 "banner_new_sound_title" = "We’ve refreshed your sounds";
 "banner_set_up_recovery_content" = "Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.";
@@ -539,7 +537,6 @@
 "notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Mentioned you: %1$@";
-"notification_new_messages" = "Naujos žinutės";
 "notification_reaction_body" = "Reaguota su %1$@";
 "notification_received_while_offline_ios" = "You received one or more notifications while offline.";
 "notification_room_action_mark_as_read" = "Mark as read";
@@ -698,9 +695,7 @@
 "screen_bug_report_send_notification_settings_description" = "If you are having issues with notifications, uploading the notification push rules can help us pinpoint the root cause. Note these rules can contain private information, such as your display name or keywords to be notified for.";
 "screen_bug_report_send_notification_settings_title" = "Send notification settings";
 "screen_bug_report_view_logs" = "View logs";
-"screen_change_account_provider_other" = "Kitas";
 "screen_change_account_provider_subtitle" = "Naudokite kitą paskyros teikėją, pavyzdžiui, savo privatų serverį arba darbo paskyrą.";
-"screen_change_account_provider_title" = "Keisti paskyros teikėją";
 "screen_change_server_error_element_pro_required_action_ios" = "„App Store“";
 "screen_change_server_error_element_pro_required_message" = "„Element Pro“ programa privaloma teikėjoje %1$@. Atsisiųskite ją iš parduotuvės.";
 "screen_change_server_error_element_pro_required_title" = "„Element Pro“ privaloma";
@@ -710,7 +705,6 @@
 "screen_change_server_error_unauthorized_homeserver" = "„%1$@“ neleidžiama prisijungti prie %2$@.";
 "screen_change_server_error_unauthorized_homeserver_content" = "Ši programa sukonfigūruota, kad leistų %1$@.";
 "screen_change_server_error_unauthorized_homeserver_title" = "Paskyros teikėjas %1$@ neleidžiamas.";
-"screen_change_server_form_header" = "Pagrindinio serverio URL";
 "screen_change_server_form_notice" = "Įveskite domeno adresą.";
 "screen_change_server_navigation_title_login" = "Sign in";
 "screen_change_server_navigation_title_register" = "Create account";

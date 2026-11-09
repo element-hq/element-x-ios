@@ -203,8 +203,6 @@
 "action_voice_call" = "语音通话";
 "action_yes" = "是";
 "action_yes_try_again" = "是，重试";
-"banner_migrate_to_native_sliding_sync_action" = "注销并升级";
-"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ 不再支持旧协议。请注销并重新登录以继续使用该应用程序。";
 "banner_new_sound_message" = "通知提示音已升级：更清晰、更快速、干扰更少。";
 "banner_new_sound_title" = "我们已更新提示音";
 "banner_set_up_recovery_content" = "你的聊天已被端到端加密自动备份。如果你无法访问所有设备，则需要使用恢复密钥恢复备份并保留数字身份。";
@@ -297,7 +295,7 @@
 "common_message_failed_to_send" = "消息发送失败";
 "common_message_layout" = "消息布局";
 "common_message_removed" = "消息已移除";
-"common_moderation_and_safety" = "尺度与安全";
+"common_moderation_and_safety" = "内容审核与安全";
 "common_modern" = "现代";
 "common_mute" = "静音";
 "common_name" = "名称";
@@ -539,7 +537,6 @@
 "notification_knock_request_body" = "已申请加入";
 "notification_live_location_started_body" = "已开始共享其实时位置";
 "notification_mentioned_you_body" = "提到了你：%1$@";
-"notification_new_messages" = "新消息";
 "notification_reaction_body" = "已使用 %1$@ 反应";
 "notification_received_while_offline_ios" = "你在离线期间收到至少 1 条通知。";
 "notification_room_action_mark_as_read" = "设为已读";
@@ -698,9 +695,7 @@
 "screen_bug_report_send_notification_settings_description" = "如果你遭遇通知相关问题，上传通知设置可以帮助我们调查根本原因。请注意：这些规则可能包含私人信息，例如你的显示名称或用于接收通知的关键词。";
 "screen_bug_report_send_notification_settings_title" = "发送通知设置";
 "screen_bug_report_view_logs" = "查看日志";
-"screen_change_account_provider_other" = "其它";
 "screen_change_account_provider_subtitle" = "使用其它账户提供者，例如你自己的私有服务器或工作账户。";
-"screen_change_account_provider_title" = "更改账户提供者";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
 "screen_change_server_error_element_pro_required_message" = "%1$@ 要求 Element Pro。请从应用商店下载。";
 "screen_change_server_error_element_pro_required_title" = "需要 Element Pro";
@@ -710,7 +705,6 @@
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ 不允许连接到 %2$@。";
 "screen_change_server_error_unauthorized_homeserver_content" = "此 app 已配置为允许访问：%1$@。";
 "screen_change_server_error_unauthorized_homeserver_title" = "账户提供者 %1$@ 不被允许。";
-"screen_change_server_form_header" = "主服务器 URL";
 "screen_change_server_form_notice" = "输入域名地址。";
 "screen_change_server_navigation_title_login" = "登录";
 "screen_change_server_navigation_title_register" = "创建账户";
@@ -1473,7 +1467,7 @@
 "screen_search_from_your_messages_header" = "来自消息";
 "screen_search_history_limit_message" = "搜索功能在你的设备上运行，因此你的加密消息将保持私有。\n设备会保留最近 3 个月的消息，因此暂无法搜索到更早的消息。";
 "screen_search_history_limit_title" = "搜索范围涵盖最近 3 个月";
-"screen_search_messages_no_results_message" = "在您最近的消息中，未找到与“%1$@”相关的结果。";
+"screen_search_messages_no_results_message" = "在你最近的消息中，未找到与“%1$@”相关的结果。";
 "screen_search_messages_no_results_title" = "最近 3 个月内没有结果";
 "screen_search_no_results_message" = "未找到与“%1$@”相关的结果。尝试新的搜索关键词。";
 "screen_search_recent_searches" = "最近搜索";

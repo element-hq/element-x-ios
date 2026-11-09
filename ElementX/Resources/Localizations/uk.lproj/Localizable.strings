@@ -203,8 +203,6 @@
 "action_voice_call" = "Голосовий виклик";
 "action_yes" = "Так";
 "action_yes_try_again" = "Так, повторити спробу";
-"banner_migrate_to_native_sliding_sync_action" = "Вийти та оновити";
-"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ більше не підтримує старий протокол. Вийдіть і знов увійдіть, щоб продовжити користуватися застосунком.";
 "banner_new_sound_message" = "Ваш сигнал сповіщень оновлено — він став чіткішим, швидшим і не таким надокучливим.";
 "banner_new_sound_title" = "Ми оновили ваші звуки";
 "banner_set_up_recovery_content" = "Ваші бесіди автоматично резервуються з використанням наскрізного шифрування. Щоб відновити цю резервну копію та зберегти свою цифрову ідентичність у разі втрати доступу до всіх своїх пристроїв, вам знадобиться ключ відновлення.";
@@ -539,7 +537,6 @@
 "notification_knock_request_body" = "Запит на приєднання";
 "notification_live_location_started_body" = "Починає ділитися своїм поточним місцем розташування";
 "notification_mentioned_you_body" = "Вас згадує: %1$@";
-"notification_new_messages" = "Нові повідомлення";
 "notification_reaction_body" = "Реагує з %1$@";
 "notification_received_while_offline_ios" = "Ви отримали одне або декілька сповіщень, поки були не в мережі.";
 "notification_room_action_mark_as_read" = "Позначити прочитаним";
@@ -698,9 +695,7 @@
 "screen_bug_report_send_notification_settings_description" = "Якщо у вас виникають проблеми зі сповіщеннями, надсилання нам правил push-сповіщень допоможе нам визначити першопричину. Зверніть увагу, що ці правила можуть містити приватну інформацію, таку як ваше ім’я користувача або ключові слова, за якими ви отримували сповіщення.";
 "screen_bug_report_send_notification_settings_title" = "Налаштування сповіщень";
 "screen_bug_report_view_logs" = "Переглянути журнали";
-"screen_change_account_provider_other" = "Інше";
 "screen_change_account_provider_subtitle" = "Використати іншого провайдера облікових записів, наприклад, власний приватний сервер або робочий обліковий запис.";
-"screen_change_account_provider_title" = "Змінити провайдера облікового запису";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
 "screen_change_server_error_element_pro_required_message" = "Необхідно встановити застосунок Element Pro на %1$@. Завантажте його з магазину.";
 "screen_change_server_error_element_pro_required_title" = "Потрібен Element Pro";
@@ -710,7 +705,6 @@
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ не дозволено під'єднуватися до %2$@.";
 "screen_change_server_error_unauthorized_homeserver_content" = "Цей застосунок налаштовано так, щоб дозволити: %1$@.";
 "screen_change_server_error_unauthorized_homeserver_title" = "Постачальник облікового запису %1$@ не дозволений.";
-"screen_change_server_form_header" = "URL-адреса домашнього сервера";
 "screen_change_server_form_notice" = "Введіть адресу домену.";
 "screen_change_server_navigation_title_login" = "Увійти";
 "screen_change_server_navigation_title_register" = "Створити обліковий запис";

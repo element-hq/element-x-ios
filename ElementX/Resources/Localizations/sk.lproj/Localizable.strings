@@ -203,8 +203,6 @@
 "action_voice_call" = "Voice call";
 "action_yes" = "Áno";
 "action_yes_try_again" = "Áno, skúsiť to znova";
-"banner_migrate_to_native_sliding_sync_action" = "Odhlásiť sa a aktualizovať";
-"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ už nepodporuje starý protokol. Odhláste sa a znova prihláste, aby ste mohli pokračovať v používaní aplikácie.";
 "banner_new_sound_message" = "Vaše oznámenia boli aktualizované – sú prehľadnejšie, rýchlejšie a menej rušivé.";
 "banner_new_sound_title" = "Obnovili sme vaše zvuky";
 "banner_set_up_recovery_content" = "Vytvorte nový kľúč na obnovenie, ktorý môžete použiť na obnovenie vašej histórie šifrovaných správ v prípade straty prístupu k vašim zariadeniam.";
@@ -539,7 +537,6 @@
 "notification_knock_request_body" = "Požiadal/a o pripojenie";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Spomenul/a vás: %1$@";
-"notification_new_messages" = "Nové správy";
 "notification_reaction_body" = "Reagoval/a s %1$@";
 "notification_received_while_offline_ios" = "You received one or more notifications while offline.";
 "notification_room_action_mark_as_read" = "Označiť ako prečítané";
@@ -698,9 +695,7 @@
 "screen_bug_report_send_notification_settings_description" = "Ak máte problémy s upozorneniami, nahranie pravidiel pre push upozornenia nám môže pomôcť určiť príčinu. Upozorňujeme, že tieto pravidlá môžu obsahovať súkromné ​​informácie, ako napríklad vaše zobrazované meno alebo kľúčové slová, na ktoré sa majú dostávať upozornenia.";
 "screen_bug_report_send_notification_settings_title" = "Nastavenia odosielania upozornení";
 "screen_bug_report_view_logs" = "Zobraziť záznamy";
-"screen_change_account_provider_other" = "Iný";
 "screen_change_account_provider_subtitle" = "Použite iného poskytovateľa účtu, ako napríklad vlastný súkromný server alebo pracovný účet.";
-"screen_change_account_provider_title" = "Zmeniť poskytovateľa účtu";
 "screen_change_server_error_element_pro_required_action_ios" = "Obchod s aplikáciami";
 "screen_change_server_error_element_pro_required_message" = "Aplikácia Element Pro je potrebná na %1$@ Stiahnite si ju z obchodu.";
 "screen_change_server_error_element_pro_required_title" = "Vyžaduje sa Element Pro";
@@ -710,7 +705,6 @@
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ nemá dovolené pripojiť sa k %2$@.";
 "screen_change_server_error_unauthorized_homeserver_content" = "Táto aplikácia bola nastavená tak, aby povoľovala: %1$@.";
 "screen_change_server_error_unauthorized_homeserver_title" = "Poskytovateľ účtu %1$@ nie je povolený.";
-"screen_change_server_form_header" = "Adresa URL domovského servera";
 "screen_change_server_form_notice" = "Zadajte adresu domény.";
 "screen_change_server_navigation_title_login" = "Sign in";
 "screen_change_server_navigation_title_register" = "Create account";

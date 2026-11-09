@@ -203,8 +203,6 @@
 "action_voice_call" = "Appel audio";
 "action_yes" = "Oui";
 "action_yes_try_again" = "Oui, réessayez";
-"banner_migrate_to_native_sliding_sync_action" = "Déconnecter et mettre à niveau";
-"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ ne prend plus en charge l'ancien protocole. Veuillez vous déconnecter puis vous reconnecter pour continuer à utiliser l'application.";
 "banner_new_sound_message" = "Le son des notifications a été modifié: plus clair, plus court et moins perturbateur.";
 "banner_new_sound_title" = "Nous avons rafraîchi les sons";
 "banner_set_up_recovery_content" = "Vos discussions sont automatiquement sauvegardées grâce à un chiffrement de bout en bout. Pour restaurer cette sauvegarde et conserver votre identité numérique en cas de perte d'accès à tous vos appareils, vous aurez besoin de votre clé de récupération.";
@@ -539,7 +537,6 @@
 "notification_knock_request_body" = "A demandé à rejoindre";
 "notification_live_location_started_body" = "A commencé à partager sa position en direct";
 "notification_mentioned_you_body" = "Mentionné(e) : %1$@";
-"notification_new_messages" = "Nouveaux messages";
 "notification_reaction_body" = "A réagi avec %1$@";
 "notification_received_while_offline_ios" = "Vous avez reçu une ou plusieurs notifications alors que vous étiez hors ligne.";
 "notification_room_action_mark_as_read" = "Marquer comme lu";
@@ -698,9 +695,7 @@
 "screen_bug_report_send_notification_settings_description" = "Si vous rencontrez des problèmes avec les notifications, l'envoie des paramètres de notification peut nous aider à identifier la cause du problème.";
 "screen_bug_report_send_notification_settings_title" = "Envoyer les paramètres de notification";
 "screen_bug_report_view_logs" = "Afficher les journaux";
-"screen_change_account_provider_other" = "Autres";
 "screen_change_account_provider_subtitle" = "Utilisez un autre fournisseur de compte, tel que votre propre serveur privé ou un serveur professionnel.";
-"screen_change_account_provider_title" = "Changer de fournisseur de compte";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
 "screen_change_server_error_element_pro_required_message" = "L'application Element Pro est requise sur %1$@. Veuillez la télécharger depuis le store.";
 "screen_change_server_error_element_pro_required_title" = "Element Pro est requis";
@@ -710,7 +705,6 @@
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ n'est pas autorisé à se connecter à %2$@.";
 "screen_change_server_error_unauthorized_homeserver_content" = "Cette application a été configurée pour autoriser: %1$@.";
 "screen_change_server_error_unauthorized_homeserver_title" = "Le fournisseur de compte %1$@ n'est pas autorisé.";
-"screen_change_server_form_header" = "URL du serveur d’accueil";
 "screen_change_server_form_notice" = "Saisissez une adresse de domaine.";
 "screen_change_server_navigation_title_login" = "Se connecter";
 "screen_change_server_navigation_title_register" = "Créer un compte";

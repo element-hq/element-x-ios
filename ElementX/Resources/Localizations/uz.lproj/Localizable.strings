@@ -203,8 +203,6 @@
 "action_voice_call" = "Voice call";
 "action_yes" = "Ha";
 "action_yes_try_again" = "Ha, qayta urinish";
-"banner_migrate_to_native_sliding_sync_action" = "Tizmdan chiqish va yangilash";
-"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ endi eski protokolni qoʻllab-quvvatlamaydi. Iltimos, ilovadan foydalanishni davom ettirish uchun tizimdan chiqing va qayta kiring.";
 "banner_new_sound_message" = "Xabarnoma signali yangilandi — endi u aniqroq, tezroq va kamroq halal beradigan bo‘ldi.";
 "banner_new_sound_title" = "Tovushlaringiz yangilandi";
 "banner_set_up_recovery_content" = "Chatlaringiz avtomatik ravishda boshidan oxirigacha shifrlash bilan zaxiralanadi. Bu zaxirani tiklash va barcha qurilmalaringizdan foydalana olmay qolganingizda raqamli identifikatoringizni saqlab qolish uchun sizga tiklash kaliti kerak bo‘ladi.";
@@ -539,7 +537,6 @@
 "notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "%1$@ sizni eslatib oʻtdi";
-"notification_new_messages" = "Yangi xabarlar";
 "notification_reaction_body" = "%1$@bilan munosabat bildiring";
 "notification_received_while_offline_ios" = "Siz tarmoqda bo‘lmaganingizda bir yoki bir nechta bildirishnoma keldi.";
 "notification_room_action_mark_as_read" = "Oʻqilgan deb belgilash";
@@ -698,9 +695,7 @@
 "screen_bug_report_send_notification_settings_description" = "Agar bildirishnomalar bilan bog‘liq muammolarga duch kelayotgan bo‘lsangiz, bildirishnomalarni yetkazish qoidalarini yuklash bizga asosiy sababni aniqlashda yordam beradi. Shuni yodda tutingki, bu qoidalarda shaxsiy ma’lumotlar, masalan, ko‘rsatiladigan ismingiz yoki bildirishnoma olishingiz kerak bo‘lgan kalit so‘zlar kabi ma’lumotlar bo‘lishi mumkin.";
 "screen_bug_report_send_notification_settings_title" = "Bildirishnoma sozlamalarini yuborish";
 "screen_bug_report_view_logs" = "Jurnallarni ko&#39;rish";
-"screen_change_account_provider_other" = "Boshqa";
 "screen_change_account_provider_subtitle" = "Shaxsiy serveringiz yoki ishchi hisob qaydnomangiz kabi boshqa hisob provayderidan foydalaning.";
-"screen_change_account_provider_title" = "Hisob provayderini o'zgartiring";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
 "screen_change_server_error_element_pro_required_message" = "%1$@ da Element Pro ilovasi talab qilinadi. Iltimos, do‘kondan yuklab oling.";
 "screen_change_server_error_element_pro_required_title" = "Element Pro talab qilinadi";
@@ -710,7 +705,6 @@
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ uchun %2$@ bilan ulanishga ruxsat berilmagan.";
 "screen_change_server_error_unauthorized_homeserver_content" = "Bu ilova quyidagilarga ruxsat berish uchun sozlangan: %1$@ .";
 "screen_change_server_error_unauthorized_homeserver_title" = "Hisob provayderi %1$@ ga ruxsat berilmagan.";
-"screen_change_server_form_header" = "Uy serverining URL manzili";
 "screen_change_server_form_notice" = "Domen manzilini kiriting.";
 "screen_change_server_navigation_title_login" = "Sign in";
 "screen_change_server_navigation_title_register" = "Create account";

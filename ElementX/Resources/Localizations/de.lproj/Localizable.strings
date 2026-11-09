@@ -203,8 +203,6 @@
 "action_voice_call" = "Sprachanruf";
 "action_yes" = "Ja";
 "action_yes_try_again" = "Ja, versuche es noch einmal";
-"banner_migrate_to_native_sliding_sync_action" = "Abmelden und aktualisieren";
-"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ unterstützt das alte Protokoll nicht mehr. Bitte melde dich ab und wieder an, um die App weiter nutzen zu können.";
 "banner_new_sound_message" = "Dein Benachrichtigungs-Ping wurde aktualisiert – klarer, schneller und weniger störend.";
 "banner_new_sound_title" = "Wir haben deine Sounds aktualisiert";
 "banner_set_up_recovery_content" = "Von deinen Chats wird automatisch ein Ende-zu-Ende-verschlüsseltes Backup erstellt. Wenn du den Zugriff auf alle deine Geräte verlierst, brauchst du deinen Wiederherstellungsschlüssel, um dieses Backup wiederherzustellen und deine digitale Identität zu behalten.";
@@ -539,7 +537,6 @@
 "notification_knock_request_body" = "Hat um Beitritt gebeten";
 "notification_live_location_started_body" = "Hat begonnen, den Live-Standort zu teilen";
 "notification_mentioned_you_body" = "Hat dich erwähnt: %1$@";
-"notification_new_messages" = "Neue Nachrichten";
 "notification_reaction_body" = "Reagiert mit %1$@";
 "notification_received_while_offline_ios" = "Du hast eine oder mehrere Nachrichten erhalten, während du offline warst.";
 "notification_room_action_mark_as_read" = "Als gelesen markieren";
@@ -698,9 +695,7 @@
 "screen_bug_report_send_notification_settings_description" = "Wenn du Probleme mit Benachrichtigungen hast, kann das Hochladen der Einstellungen für Benachrichtigungen uns helfen, die Ursache zu finden.";
 "screen_bug_report_send_notification_settings_title" = "Einstellungen für Benachrichtigungen senden";
 "screen_bug_report_view_logs" = "Logs ansehen";
-"screen_change_account_provider_other" = "Sonstige";
 "screen_change_account_provider_subtitle" = "Verwende einen anderen Kontoanbieter, z. B. deinen eigenen privaten Server oder ein Geschäftskonto.";
-"screen_change_account_provider_title" = "Kontoanbieter wechseln";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
 "screen_change_server_error_element_pro_required_message" = "Auf %1$@ ist die Element Pro App erforderlich. Bitte lade diese aus dem Store.";
 "screen_change_server_error_element_pro_required_title" = "Element Pro erforderlich";
@@ -710,7 +705,6 @@
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ darf keine Verbindung zu %2$@ herstellen.";
 "screen_change_server_error_unauthorized_homeserver_content" = "Die App wurde so konfiguriert, dass sie %1$@ zulässt.";
 "screen_change_server_error_unauthorized_homeserver_title" = "Kontoanbieter %1$@ ist nicht zulässig.";
-"screen_change_server_form_header" = "Homeserver-URL";
 "screen_change_server_form_notice" = "Gib eine Domain-Adresse ein.";
 "screen_change_server_navigation_title_login" = "Anmelden";
 "screen_change_server_navigation_title_register" = "Konto erstellen";
