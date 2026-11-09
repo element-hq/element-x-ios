@@ -122,7 +122,12 @@ final class ParticleEmitterLayerView: UIView {
             emitterLayer.emitterShape = .line
             emitterLayer.emitterSize = CGSize(width: bounds.width, height: 1)
             emitterLayer.emitterPosition = CGPoint(x: bounds.midX, y: -20)
-        case .confetti, .hearts, .sparkles:
+        case .confetti, .hearts:
+            // A small area rather than a point, so that every particle fires from a slightly different spot.
+            emitterLayer.emitterShape = .rectangle
+            emitterLayer.emitterSize = CGSize(width: 24, height: 12)
+            emitterLayer.emitterPosition = emitterOrigin.map { convert($0, from: nil) } ?? CGPoint(x: bounds.midX, y: bounds.midY)
+        case .sparkles:
             emitterLayer.emitterShape = .point
             emitterLayer.emitterSize = .zero
             emitterLayer.emitterPosition = emitterOrigin.map { convert($0, from: nil) } ?? CGPoint(x: bounds.midX, y: bounds.midY)
