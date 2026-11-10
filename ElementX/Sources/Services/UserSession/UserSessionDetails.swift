@@ -7,11 +7,21 @@
 
 /// What a flow can know about a signed in account, without access to its session.
 struct UserSessionDetails {
-    let userID: String
+    let userProfile: UserProfile
+    /// The number of unread notifications, as counted for the app badge.
+    let unreadCount: Int
+    /// Loads media through the account's own homeserver, which may not federate with the others.
+    let mediaProvider: MediaProviderProtocol
+    
+    var userID: String {
+        userProfile.id
+    }
 }
 
 extension UserSessionDetails {
     init(userSession: UserSessionProtocol) {
-        userID = userSession.clientProxy.userID
+        userProfile = userSession.clientProxy.userProfilePublisher.value
+        unreadCount = userSession.notificationService.badgeCountPublisher.value
+        mediaProvider = userSession.mediaProvider
     }
 }

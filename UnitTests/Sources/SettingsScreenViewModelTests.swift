@@ -20,7 +20,7 @@ struct SettingsScreenViewModelTests {
     
     // MARK: - User status
     
-    @Test
+    @Test("Picking a status, entering a custom one and cancelling update the status row")
     mutating func statusPickerFlow() {
         // Given a screen where no status has been set.
         setupViewModel()
@@ -53,7 +53,7 @@ struct SettingsScreenViewModelTests {
         #expect(context.viewState.userStatusRowMode == .pickStatusButton)
     }
     
-    @Test
+    @Test("Setting and clearing a status call the matching endpoints")
     mutating func persistingStatus() async throws {
         // Given a screen where no status has been set or removed yet.
         setupViewModel()
@@ -90,7 +90,7 @@ struct SettingsScreenViewModelTests {
         #expect(clientProxy.setUserStatusCallsCount == 1)
     }
     
-    @Test
+    @Test("Clearing a call status calls only the clear endpoint")
     mutating func clearCallStatus() async throws {
         // Given a screen where the user has a call status set.
         let callStatus = UserStatus.mockCall
@@ -113,7 +113,7 @@ struct SettingsScreenViewModelTests {
         #expect(!clientProxy.setUserStatusCalled)
     }
     
-    @Test
+    @Test("An existing status is shown in the status row")
     mutating func showsExistingStatus() throws {
         // Given a screen where the user has a status set.
         let status = UserStatus.mockHoliday
@@ -124,7 +124,7 @@ struct SettingsScreenViewModelTests {
         #expect(context.viewState.userStatusRowMode == .showingStatus(displayedStatus))
     }
     
-    @Test
+    @Test("Selecting a custom status emoji shows it, and cancelling resets it to the default")
     mutating func selectingCustomStatusEmoji() async throws {
         // Given a custom status field showing the default emoji.
         setupViewModel()
@@ -145,7 +145,7 @@ struct SettingsScreenViewModelTests {
         #expect(context.viewState.userStatusRowMode == .customStatusInput(emoji: "😄"))
     }
     
-    @Test
+    @Test("Reporting a bug sends the report bug action")
     mutating func reportBug() async throws {
         setupViewModel()
         
@@ -154,7 +154,7 @@ struct SettingsScreenViewModelTests {
         try await deferred.fulfill()
     }
     
-    @Test
+    @Test("Opening analytics sends the analytics action")
     mutating func analytics() async throws {
         setupViewModel()
         
@@ -163,7 +163,7 @@ struct SettingsScreenViewModelTests {
         try await deferred.fulfill()
     }
     
-    @Test
+    @Test("Logging out sends the logout action")
     mutating func logout() async throws {
         setupViewModel()
         
@@ -174,22 +174,7 @@ struct SettingsScreenViewModelTests {
     
     // MARK: - Add account
     
-    @Test
-    mutating func addAccountButtonFollowsTheFeatureFlag() async throws {
-        let userSettings = UserSettings.mock()
-        setupViewModel(userSettings: userSettings)
-        #expect(!context.viewState.showAddAccountButton)
-        
-        var deferred = deferFulfillment(context.observe(\.viewState.showAddAccountButton)) { $0 }
-        userSettings.app.multiAccountEnabled = true
-        try await deferred.fulfill()
-        
-        deferred = deferFulfillment(context.observe(\.viewState.showAddAccountButton)) { !$0 }
-        userSettings.app.multiAccountEnabled = false
-        try await deferred.fulfill()
-    }
-    
-    @Test
+    @Test("Adding an account sends the add account action")
     mutating func addAccount() async throws {
         setupViewModel()
         
@@ -198,11 +183,48 @@ struct SettingsScreenViewModelTests {
         try await deferred.fulfill()
     }
     
+    // MARK: - Switch accounts
+    
+    @Test("The switch accounts section shows only while multi-account is enabled")
+    mutating func switchAccountsSection() async throws {
+        let userSettings = UserSettings.mock()
+        setupViewModel(userSettings: userSettings)
+        #expect(!context.viewState.showSwitchAccountsSection)
+        
+        var deferred = deferFulfillment(context.observe(\.viewState.showSwitchAccountsSection)) { $0 }
+        userSettings.app.multiAccountEnabled = true
+        try await deferred.fulfill()
+        
+        deferred = deferFulfillment(context.observe(\.viewState.showSwitchAccountsSection)) { !$0 }
+        userSettings.app.multiAccountEnabled = false
+        try await deferred.fulfill()
+    }
+    
+    @Test("The other accounts are every account but this one, most recently used first, kept up to date")
+    mutating func otherAccounts() async throws {
+        let sessionDetails = CurrentValueSubject<[UserSessionDetails], Never>(makeSessionDetails(userIDs: ["@me:matrix.org", "@bob:matrix.org", "@alice:matrix.org"]))
+        setupViewModel(availableSessionsPublisher: sessionDetails.asCurrentValuePublisher())
+        #expect(context.viewState.otherAccounts.map(\.userID) == ["@bob:matrix.org", "@alice:matrix.org"])
+        
+        // E.g. Bob signed out.
+        let deferred = deferFulfillment(context.observe(\.viewState.otherAccounts.count)) { $0 == 1 }
+        sessionDetails.send(makeSessionDetails(userIDs: ["@me:matrix.org", "@alice:matrix.org"]))
+        try await deferred.fulfill()
+        #expect(context.viewState.otherAccounts.map(\.userID) == ["@alice:matrix.org"])
+    }
+    
     // MARK: - Helpers
     
-    private mutating func setupViewModel(status: UserStatus = .init(), userSettings: UserSettings = .mock()) {
-        clientProxy = ClientProxyMock(.init(userID: "", status: status))
+    private func makeSessionDetails(userIDs: [String]) -> [UserSessionDetails] {
+        userIDs.map { UserSessionDetails(userProfile: .init(userID: $0), unreadCount: 0, mediaProvider: MediaProviderMock(.init())) }
+    }
+    
+    private mutating func setupViewModel(status: UserStatus = .init(),
+                                         userSettings: UserSettings = .mock(),
+                                         availableSessionsPublisher: CurrentValuePublisher<[UserSessionDetails], Never> = .init([])) {
+        clientProxy = ClientProxyMock(.init(userID: "@me:matrix.org", status: status))
         viewModel = SettingsScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxy, userSettings: userSettings)),
+                                            availableSessionsPublisher: availableSessionsPublisher,
                                             isBugReportServiceEnabled: true,
                                             isInSecondaryWindow: false,
                                             userIndicatorController: UserIndicatorControllerMock())

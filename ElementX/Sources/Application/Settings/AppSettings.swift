@@ -120,6 +120,10 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: true)
     var hasSeenMultiAccountAnnouncement: Bool
     
+    /// Whether Settings lists the other accounts, rather than only showing their avatars.
+    @UserPreference(defaultValue: true)
+    var hasExpandedAccountPicker: Bool
+    
     /// The initial set of account providers shown to the user in the authentication flow.
     ///
     /// Account provider is the friendly term for the server name. It should not contain an `https` prefix and should

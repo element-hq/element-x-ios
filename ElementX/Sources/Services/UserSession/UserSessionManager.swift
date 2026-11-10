@@ -26,6 +26,8 @@ final class UserSessionManager: UserSessionManagerProtocol {
     private let sessionsSubject = CurrentValueSubject<[UserSessionProtocol], Never>([])
     private let callbacksSubject = PassthroughSubject<UserSessionManagerCallback, Never>()
     private var authErrorsCancellable: AnyCancellable?
+    /// Each account's subscription that republishes the sessions when its profile or unread count changes.
+    private var sessionChangeCancellables: [String: AnyCancellable] = [:]
     /// Whether the services are running, so that the sessions restored meanwhile are resumed too.
     private var areServicesRunning = false
     /// Accounts whose caches were cleared. Their old session stays live until restoring replaces it.
@@ -237,6 +239,7 @@ final class UserSessionManager: UserSessionManagerProtocol {
         
         userSessionStore.logout(userID: userID)
         clearedUserIDs.remove(userID)
+        sessionChangeCancellables[userID] = nil
         accounts.removeValue(forKey: userID)
         notificationManager.remove(userID: userID)
         liveLocationManager.remove(userID: userID)
@@ -251,6 +254,7 @@ final class UserSessionManager: UserSessionManagerProtocol {
         }
         userSessionStore.reset()
         clearedUserIDs.removeAll()
+        sessionChangeCancellables.removeAll()
         accounts.removeAll()
         for userID in removedUserIDs {
             elementCallManager.remove(userID: userID)
@@ -325,6 +329,7 @@ final class UserSessionManager: UserSessionManagerProtocol {
         case .failure(let error):
             MXLog.error("Failed restoring \(userID): \(error)")
             clearedUserIDs.remove(userID)
+            sessionChangeCancellables[userID] = nil
             accounts.removeValue(forKey: userID)
             notificationManager.remove(userID: userID)
             liveLocationManager.remove(userID: userID)
@@ -351,5 +356,17 @@ final class UserSessionManager: UserSessionManagerProtocol {
         notificationManager.add(userSession.notificationService)
         liveLocationManager.add(userSession.liveLocationService)
         elementCallManager.add(userSession.elementCallService)
+        
+        sessionChangeCancellables[userID] = userSession.clientProxy.userProfilePublisher.removeDuplicates()
+            .combineLatest(userSession.notificationService.badgeCountPublisher.removeDuplicates())
+            .dropFirst()
+            .sink { [sessionsSubject] _ in sessionsSubject.send(sessionsSubject.value) }
+        
+        // The home screen loads the active account's profile once its room list has loaded. Other accounts
+        // only get their names from servers that sync profiles, so theirs are loaded here.
+        if userID != activeSession?.clientProxy.userID {
+            // TODO: Retry when this fails (e.g. offline at launch), otherwise the account only shows its ID until relaunch.
+            Task { await userSession.clientProxy.loadUserProfileIfNeeded() }
+        }
     }
 }

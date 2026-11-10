@@ -27,7 +27,7 @@ enum UserSessionManagerError: Error, Equatable {
 protocol UserSessionManagerProtocol: AnyObject {
     /// Every signed in account, most recently active first. Known before any session is live, so use it to count accounts.
     var userIDs: [String] { get }
-    /// The live sessions, in the same order as `userIDs`.
+    /// The live sessions, in the same order as `userIDs`, republished when one of their profiles or unread counts changes.
     var sessionsPublisher: CurrentValuePublisher<[UserSessionProtocol], Never> { get }
     /// The session of the account whose UI is on screen.
     var activeSession: UserSessionProtocol? { get }

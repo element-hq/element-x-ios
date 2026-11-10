@@ -13,12 +13,14 @@ import SwiftUI
 struct SettingsScreen: View {
     @Bindable var context: SettingsScreenViewModel.Context
     
+    private let stackedOtherAccountsLimit = 3
+    
     var body: some View {
         Form {
             userSection
             
-            if context.viewState.showAddAccountButton {
-                addAccountSection
+            if context.viewState.showSwitchAccountsSection {
+                switchAccountsSection
             }
             
             accountSettingsSection
@@ -82,15 +84,99 @@ struct SettingsScreen: View {
         }
     }
     
-    private var addAccountSection: some View {
+    private var switchAccountsSection: some View {
         Section {
-            ListRow(label: .default(title: L10n.screenSettingsAddAccount,
-                                    icon: \.plus),
-                    kind: .navigationLink {
-                        context.send(viewAction: .addAccount)
-                    })
-                    .accessibilityIdentifier(A11yIdentifiers.settingsScreen.addAccount)
+            if context.viewState.otherAccounts.isEmpty {
+                addAccountRow
+            } else {
+                switchAccountsHeader
+                
+                if context.hasExpandedAccountPicker {
+                    ForEach(context.viewState.otherAccounts, id: \.userID) { account in
+                        otherAccountRow(account)
+                    }
+                    
+                    addAccountRow
+                }
+            }
         }
+    }
+    
+    private var switchAccountsHeader: some View {
+        ListRow(label: .plain(title: L10n.commonSwitchAccounts),
+                details: .icon(switchAccountsHeaderAccessories),
+                kind: .button {
+                    withAnimation {
+                        context.hasExpandedAccountPicker.toggle()
+                    }
+                })
+                .accessibilityValue(context.hasExpandedAccountPicker ? L10n.a11yStateExpanded : L10n.a11yStateCollapsed)
+    }
+    
+    private var switchAccountsHeaderAccessories: some View {
+        HStack(spacing: 16) {
+            if !context.hasExpandedAccountPicker {
+                HStack(spacing: 4) {
+                    StackedAvatarsView(overlap: 8,
+                                       lineWidth: 2,
+                                       shouldStackFromLast: true,
+                                       avatars: context.viewState.otherAccounts.prefix(stackedOtherAccountsLimit).map { account in
+                                           .init(url: account.userProfile.avatarURL,
+                                                 name: account.userProfile.displayName,
+                                                 contentID: account.userID,
+                                                 mediaProvider: account.mediaProvider)
+                                       },
+                                       avatarSize: .user(on: .settingsOtherAccountsStack),
+                                       mediaProvider: context.mediaProvider)
+                    
+                    if context.viewState.otherAccounts.count > stackedOtherAccountsLimit {
+                        Text("+\(context.viewState.otherAccounts.count - stackedOtherAccountsLimit)")
+                            .font(.compound.bodySM)
+                            .foregroundStyle(.compound.textPrimary)
+                    }
+                }
+            }
+            
+            CompoundIcon(\.chevronDown, size: .small, relativeTo: .compound.bodyLG)
+                .foregroundStyle(.compound.iconPrimary)
+                .padding(2)
+                .background(.compound.bgCanvasDefault, in: .circle)
+                .overlay {
+                    Circle()
+                        .strokeBorder(.compound.borderInteractiveSecondary, lineWidth: 1)
+                }
+                .rotationEffect(.degrees(context.hasExpandedAccountPicker ? 180 : 0))
+        }
+        .accessibilityHidden(true)
+    }
+    
+    private var addAccountRow: some View {
+        ListRow(label: .default(title: L10n.commonAddAnotherAccount,
+                                icon: \.plus),
+                kind: .navigationLink {
+                    context.send(viewAction: .addAccount)
+                })
+                .accessibilityIdentifier(A11yIdentifiers.settingsScreen.addAccount)
+    }
+    
+    private func otherAccountRow(_ account: UserSessionDetails) -> some View {
+        let profile = account.userProfile
+        var title = profile.displayName ?? profile.id
+        if let emoji = profile.status.displayed?.emoji {
+            title += " \(emoji)"
+        }
+        
+        return ListRow(label: .avatar(title: title,
+                                      description: profile.displayName != nil ? profile.id : nil,
+                                      icon: LoadableAvatarImage(url: profile.avatarURL,
+                                                                name: profile.displayName,
+                                                                contentID: profile.id,
+                                                                avatarSize: .user(on: .settingsOtherAccount),
+                                                                mediaProvider: account.mediaProvider)),
+                       details: account.unreadCount > 0 ? .icon(NotificationCountBadge(count: account.unreadCount)) : nil,
+                       kind: .button {
+                           context.send(viewAction: .switchAccount(userID: account.userID))
+                       })
     }
     
     private var accountSettingsSection: some View {
@@ -293,6 +379,16 @@ private extension AppAppearance {
 struct SettingsScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = makeViewModel()
     static let bugReportDisabledViewModel = makeViewModel(isBugReportServiceEnabled: false)
+    static let twoAccountsViewModel = makeViewModel(otherAccounts: [bob(unreadCount: 3)])
+    static let twoAccountsCollapsedViewModel = makeViewModel(otherAccounts: [bob(unreadCount: 3)],
+                                                             hasExpandedAccountPicker: false)
+    static let threeAccountsViewModel = makeViewModel(otherAccounts: [bob(unreadCount: 5, status: .mockHoliday),
+                                                                      account(userID: "@charlie:element.io")])
+    static let fiveAccountsCollapsedViewModel = makeViewModel(otherAccounts: [bob(unreadCount: 5, status: .mockHoliday),
+                                                                              account(userID: "@charlie:element.io"),
+                                                                              account(userID: "@dan:matrix.org", displayName: "Dan"),
+                                                                              account(userID: "@eve:example.com", displayName: "Eve")],
+                                                              hasExpandedAccountPicker: false)
     
     static var previews: some View {
         ElementNavigationStack {
@@ -310,20 +406,66 @@ struct SettingsScreen_Previews: PreviewProvider, TestablePreview {
         .frame(height: 1250)
         .previewLayout(.sizeThatFits)
         .previewDisplayName("Bug report disabled")
+        
+        ElementNavigationStack {
+            SettingsScreen(context: twoAccountsViewModel.context)
+        }
+        .snapshotPreferences(expect: twoAccountsViewModel.context.observe(\.viewState.accountProfileURL).map { $0 != nil })
+        .frame(height: 1400)
+        .previewLayout(.sizeThatFits)
+        .previewDisplayName("Two accounts")
+        
+        ElementNavigationStack {
+            SettingsScreen(context: twoAccountsCollapsedViewModel.context)
+        }
+        .snapshotPreferences(expect: twoAccountsCollapsedViewModel.context.observe(\.viewState.accountProfileURL).map { $0 != nil })
+        .frame(height: 1300)
+        .previewLayout(.sizeThatFits)
+        .previewDisplayName("Two accounts collapsed")
+        
+        ElementNavigationStack {
+            SettingsScreen(context: threeAccountsViewModel.context)
+        }
+        .snapshotPreferences(expect: threeAccountsViewModel.context.observe(\.viewState.accountProfileURL).map { $0 != nil })
+        .frame(height: 1450)
+        .previewLayout(.sizeThatFits)
+        .previewDisplayName("Three accounts")
+        
+        ElementNavigationStack {
+            SettingsScreen(context: fiveAccountsCollapsedViewModel.context)
+        }
+        .snapshotPreferences(expect: fiveAccountsCollapsedViewModel.context.observe(\.viewState.accountProfileURL).map { $0 != nil })
+        .frame(height: 1300)
+        .previewLayout(.sizeThatFits)
+        .previewDisplayName("Five accounts collapsed")
     }
     
-    static func makeViewModel(isBugReportServiceEnabled: Bool = true) -> SettingsScreenViewModel {
+    static func makeViewModel(isBugReportServiceEnabled: Bool = true,
+                              otherAccounts: [UserSessionDetails] = [],
+                              hasExpandedAccountPicker: Bool = true) -> SettingsScreenViewModel {
         let userSettings = UserSettings.mock()
         userSettings.app.multiAccountEnabled = true
         userSettings.app.linkNewDeviceEnabled = true
+        userSettings.app.hasExpandedAccountPicker = hasExpandedAccountPicker
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@alice:example.com",
                                                                                    deviceID: "AAAAAAAAAAA",
                                                                                    displayName: "Alice Liddell",
                                                                                    status: .mockFocussing)),
                                                 userSettings: userSettings))
         return SettingsScreenViewModel(userSession: userSession,
+                                       availableSessionsPublisher: .init([.init(userSession: userSession)] + otherAccounts),
                                        isBugReportServiceEnabled: isBugReportServiceEnabled,
                                        isInSecondaryWindow: false,
                                        userIndicatorController: UserIndicatorControllerMock())
+    }
+    
+    static func bob(unreadCount: Int, status: UserStatus = .init()) -> UserSessionDetails {
+        account(userID: "@bob:matrix.org", displayName: "Bob", unreadCount: unreadCount, status: status)
+    }
+    
+    static func account(userID: String, displayName: String? = nil, unreadCount: Int = 0, status: UserStatus = .init()) -> UserSessionDetails {
+        UserSessionDetails(userProfile: UserProfile(userID: userID, displayName: displayName, status: status),
+                           unreadCount: unreadCount,
+                           mediaProvider: MediaProviderMock(.init()))
     }
 }
