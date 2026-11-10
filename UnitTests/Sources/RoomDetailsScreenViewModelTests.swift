@@ -36,7 +36,7 @@ struct RoomDetailsScreenViewModelTests {
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()))
     }
     
-    @Test
+    @Test("Tapping leave in a public room shows the public room alert")
     mutating func leaveRoomTappedWhenPublic() async throws {
         let mockedMembers: [RoomMemberProxyMock] = [.mockBob, .mockAlice]
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", members: mockedMembers, joinRule: .public))
@@ -55,7 +55,7 @@ struct RoomDetailsScreenViewModelTests {
         #expect(context.viewState.bindings.leaveRoomAlertItem?.subtitle == L10n.leaveRoomAlertSubtitle)
     }
     
-    @Test
+    @Test("Tapping leave in a private room shows the private room alert")
     mutating func leaveRoomTappedWhenRoomNotPublic() async throws {
         let mockedMembers: [RoomMemberProxyMock] = [.mockBob, .mockAlice]
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", members: mockedMembers))
@@ -75,7 +75,7 @@ struct RoomDetailsScreenViewModelTests {
         #expect(context.viewState.bindings.leaveRoomAlertItem?.subtitle == L10n.leaveRoomAlertPrivateSubtitle)
     }
     
-    @Test
+    @Test("Tapping leave as the last member shows the empty room alert")
     mutating func leaveRoomTappedWithLessThanTwoMembers() {
         let mockedMembers: [RoomMemberProxyMock] = [.mockAlice]
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", members: mockedMembers))
@@ -91,7 +91,7 @@ struct RoomDetailsScreenViewModelTests {
         #expect(context.leaveRoomAlertItem?.subtitle == L10n.leaveRoomAlertEmptySubtitle)
     }
     
-    @Test
+    @Test("Confirming leave leaves the room and reports it")
     func leaveRoomSuccess() async throws {
         roomProxyMock.leaveRoomClosure = {
             .success(())
@@ -113,7 +113,7 @@ struct RoomDetailsScreenViewModelTests {
         #expect(roomProxyMock.leaveRoomCallsCount == 1)
     }
     
-    @Test
+    @Test("A failure to leave the room shows an alert")
     func leaveRoomError() async throws {
         try await confirmation("leaveRoomError") { confirm in
             roomProxyMock.leaveRoomClosure = {
@@ -131,7 +131,7 @@ struct RoomDetailsScreenViewModelTests {
         #expect(roomProxyMock.leaveRoomCallsCount == 1)
     }
     
-    @Test
+    @Test("A DM shows the other member as its recipient")
     mutating func initialDMDetailsState() async throws {
         let recipient = RoomMemberProxyMock.mockDan
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, recipient]
@@ -150,7 +150,7 @@ struct RoomDetailsScreenViewModelTests {
         #expect(context.viewState.dmRecipientInfo?.member == RoomMemberDetails(withProxy: recipient))
     }
     
-    @Test
+    @Test("Ignoring the DM recipient marks them as ignored")
     mutating func ignoreSuccess() async throws {
         let recipient = RoomMemberProxyMock.mockDan
         
@@ -176,7 +176,7 @@ struct RoomDetailsScreenViewModelTests {
         try await deferredIgnored.fulfill()
     }
     
-    @Test
+    @Test("A failure to ignore the DM recipient shows an alert and leaves them unignored")
     mutating func ignoreFailure() async throws {
         let recipient = RoomMemberProxyMock.mockDan
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, recipient]
@@ -206,7 +206,7 @@ struct RoomDetailsScreenViewModelTests {
         #expect(context.alertInfo != nil)
     }
     
-    @Test
+    @Test("Unignoring the DM recipient marks them as no longer ignored")
     mutating func unignoreSuccess() async throws {
         let recipient = RoomMemberProxyMock.mockIgnored
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, recipient]
@@ -231,7 +231,7 @@ struct RoomDetailsScreenViewModelTests {
         try await deferredUnignored.fulfill()
     }
     
-    @Test
+    @Test("A failure to unignore the DM recipient shows an alert and leaves them ignored")
     mutating func unignoreFailure() async throws {
         let recipient = RoomMemberProxyMock.mockIgnored
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, recipient]
@@ -261,7 +261,7 @@ struct RoomDetailsScreenViewModelTests {
         #expect(context.alertInfo != nil)
     }
     
-    @Test
+    @Test("Inviting people isn't offered without permission to invite")
     mutating func cannotInvitePeople() async {
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, .mockAlice]
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test",
@@ -280,7 +280,7 @@ struct RoomDetailsScreenViewModelTests {
         #expect(!context.viewState.canInviteUsers)
     }
     
-    @Test
+    @Test("Tapping invite requests the invite people screen")
     mutating func invitePeople() async {
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, .mockBob, .mockAlice]
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", members: mockedMembers, joinRule: .public))
@@ -312,7 +312,7 @@ struct RoomDetailsScreenViewModelTests {
         #expect(callbackCorrectlyCalled)
     }
     
-    @Test
+    @Test("Only the avatar is editable with permission to change just the avatar")
     mutating func canEditAvatar() async {
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, .mockBob, .mockAlice]
         
@@ -346,7 +346,7 @@ struct RoomDetailsScreenViewModelTests {
         #expect(context.viewState.canEditBaseInfo)
     }
     
-    @Test
+    @Test("Only the name is editable with permission to change just the name")
     mutating func canEditName() async {
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, .mockBob, .mockAlice]
         
@@ -380,7 +380,7 @@ struct RoomDetailsScreenViewModelTests {
         #expect(context.viewState.canEditBaseInfo)
     }
     
-    @Test
+    @Test("Only the topic is editable with permission to change just the topic")
     mutating func canEditTopic() async {
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, .mockBob, .mockAlice]
         
@@ -414,7 +414,7 @@ struct RoomDetailsScreenViewModelTests {
         #expect(context.viewState.canEditBaseInfo)
     }
     
-    @Test
+    @Test("Nothing is editable without permission to change the room")
     mutating func cannotEditRoom() async {
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, .mockBob, .mockAlice]
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: false, members: mockedMembers))
@@ -433,7 +433,7 @@ struct RoomDetailsScreenViewModelTests {
         #expect(!context.viewState.canEditBaseInfo)
     }
     
-    @Test
+    @Test("A DM's details aren't editable, even by an admin")
     mutating func cannotEditDirectRoom() async {
         let mockedMembers: [RoomMemberProxyMock] = [.mockMeAdmin, .mockBob, .mockAlice]
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: true, members: mockedMembers))
@@ -451,7 +451,7 @@ struct RoomDetailsScreenViewModelTests {
     
     // MARK: - Notifications
     
-    @Test
+    @Test("A failure to load the notification settings shows an alert")
     mutating func notificationLoadingSettingsFailure() async throws {
         notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedIsOneToOneThrowableError = NotificationSettingsError.Generic(msg: "error")
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
@@ -479,7 +479,7 @@ struct RoomDetailsScreenViewModelTests {
         #expect(context.viewState.bindings.alertInfo?.message == expectedAlertInfo.message)
     }
     
-    @Test
+    @Test("Default notification settings are labelled Default")
     func notificationDefaultMode() async throws {
         notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .allMessages, isDefault: true))
         
@@ -491,7 +491,7 @@ struct RoomDetailsScreenViewModelTests {
         #expect(context.viewState.notificationSettingsState.label == "Default")
     }
     
-    @Test
+    @Test("Custom notification settings are labelled Custom")
     func notificationCustomMode() async throws {
         notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .allMessages, isDefault: false))
         
@@ -503,7 +503,7 @@ struct RoomDetailsScreenViewModelTests {
         #expect(context.viewState.notificationSettingsState.label == "Custom")
     }
     
-    @Test
+    @Test("A muted room offers to unmute it")
     func notificationRoomMuted() async throws {
         notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .mute, isDefault: false))
         
@@ -518,7 +518,7 @@ struct RoomDetailsScreenViewModelTests {
         #expect(context.viewState.notificationShortcutButtonIcon == \.notificationsOff)
     }
     
-    @Test
+    @Test("A room that isn't muted offers to mute it")
     func notificationRoomNotMuted() async throws {
         notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .mentionsAndKeywordsOnly, isDefault: false))
         
@@ -531,7 +531,7 @@ struct RoomDetailsScreenViewModelTests {
         #expect(context.viewState.notificationShortcutButtonIcon == \.notifications)
     }
     
-    @Test
+    @Test("A failure to unmute the room shows an alert and leaves it muted")
     func unmuteTappedFailure() async throws {
         try await notificationRoomMuted()
         
@@ -558,7 +558,7 @@ struct RoomDetailsScreenViewModelTests {
         #expect(context.viewState.bindings.alertInfo?.message == expectedAlertInfo.message)
     }
     
-    @Test
+    @Test("A failure to mute the room shows an alert and leaves it unmuted")
     func muteTappedFailure() async throws {
         try await notificationRoomNotMuted()
         
@@ -587,7 +587,7 @@ struct RoomDetailsScreenViewModelTests {
         #expect(context.viewState.bindings.alertInfo?.message == expectedAlertInfo.message)
     }
     
-    @Test
+    @Test("Tapping mute mutes the room")
     func muteTapped() async throws {
         try await notificationRoomNotMuted()
         
@@ -621,7 +621,7 @@ struct RoomDetailsScreenViewModelTests {
         }
     }
     
-    @Test
+    @Test("Tapping unmute brings back notifications for all messages")
     func unmuteTapped() async throws {
         try await notificationRoomMuted()
         
@@ -657,7 +657,7 @@ struct RoomDetailsScreenViewModelTests {
     
     // MARK: - Knock Requests
     
-    @Test
+    @Test("Requests to join are counted and tapping them opens the list")
     mutating func knockRequestsCounter() async throws {
         let mockedRequests: [KnockRequestProxyMock] = [.init(), .init()]
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: false, knockRequestsState: .loaded(mockedRequests), joinRule: .knock))
@@ -678,7 +678,7 @@ struct RoomDetailsScreenViewModelTests {
         try await deferredAction.fulfill()
     }
     
-    @Test
+    @Test("Requests to join are shown with a count of zero while loading")
     mutating func knockRequestsCounterIsLoading() async throws {
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: false, knockRequestsState: .loading, joinRule: .knock))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
@@ -695,7 +695,7 @@ struct RoomDetailsScreenViewModelTests {
         try await deferred.fulfill()
     }
     
-    @Test
+    @Test("Requests to join are hidden without permission to invite")
     mutating func knockRequestsCounterIsNotShownIfNoPermissions() async throws {
         let mockedRequests: [KnockRequestProxyMock] = [.init(), .init()]
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test",
@@ -720,7 +720,7 @@ struct RoomDetailsScreenViewModelTests {
         try await deferred.fulfill()
     }
     
-    @Test
+    @Test("Requests to join are hidden in a DM")
     mutating func knockRequestsCounterIsNotShownIfDM() async throws {
         let mockedRequests: [KnockRequestProxyMock] = [.init(), .init()]
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, .mockAlice]
@@ -742,9 +742,57 @@ struct RoomDetailsScreenViewModelTests {
         try await deferred.fulfill()
     }
     
+    // MARK: - Additional Security Rows
+    
+    @Test("No additional Security rows are shown without a hook providing them")
+    func additionalRowsHiddenByDefault() {
+        #expect(!context.viewState.hasAdditionalSecurityRows)
+    }
+    
+    @Test("The additional Security rows from the hook are shown")
+    mutating func additionalRowsShownFromHook() {
+        setupViewModel(roomDetailsScreenHook: RoomDetailsScreenHookMock())
+        
+        #expect(context.viewState.hasAdditionalSecurityRows)
+    }
+    
+    @Test("The additional Security rows are asked for again when the room info changes")
+    mutating func additionalRowsFollowRoomInfo() async throws {
+        let configuration = JoinedRoomProxyMockConfiguration(name: "Test")
+        let infoSubject = CurrentValueSubject<RoomInfoProxyProtocol, Never>(makeRoomInfo(configuration, canSendTopic: false))
+        roomProxyMock = JoinedRoomProxyMock(configuration)
+        roomProxyMock.infoPublisher = infoSubject.asCurrentValuePublisher()
+        
+        setupViewModel(roomDetailsScreenHook: RoomDetailsScreenHookMock { roomProxy in
+            roomProxy.infoPublisher.value.powerLevels?.canOwnUser(sendStateEvent: .roomTopic) == true
+        })
+        #expect(!context.viewState.hasAdditionalSecurityRows)
+        
+        let deferred = deferFulfillment(context.observe(\.viewState.hasAdditionalSecurityRows)) { $0 }
+        infoSubject.send(makeRoomInfo(configuration, canSendTopic: true))
+        try await deferred.fulfill()
+    }
+    
+    @Test("The additional Security rows hide again when the hook stops providing them")
+    mutating func additionalRowsHideAgain() async throws {
+        let configuration = JoinedRoomProxyMockConfiguration(name: "Test")
+        let infoSubject = CurrentValueSubject<RoomInfoProxyProtocol, Never>(makeRoomInfo(configuration, canSendTopic: true))
+        roomProxyMock = JoinedRoomProxyMock(configuration)
+        roomProxyMock.infoPublisher = infoSubject.asCurrentValuePublisher()
+        
+        setupViewModel(roomDetailsScreenHook: RoomDetailsScreenHookMock { roomProxy in
+            roomProxy.infoPublisher.value.powerLevels?.canOwnUser(sendStateEvent: .roomTopic) == true
+        })
+        #expect(context.viewState.hasAdditionalSecurityRows)
+        
+        let deferred = deferFulfillment(context.observe(\.viewState.hasAdditionalSecurityRows)) { !$0 }
+        infoSubject.send(makeRoomInfo(configuration, canSendTopic: false))
+        try await deferred.fulfill()
+    }
+    
     // MARK: - History Sharing
     
-    @Test
+    @Test("Rooms with shared history show the history sharing pill")
     mutating func historySharingPillDisplayed() async throws {
         let configuration = JoinedRoomProxyMockConfiguration(historyVisibility: .shared)
         let infoSubject = CurrentValueSubject<RoomInfoProxyProtocol, Never>(RoomInfoProxyMock(configuration))
@@ -763,5 +811,27 @@ struct RoomDetailsScreenViewModelTests {
             state.details.historySharingState == .shared
         }
         try await deferredShared.fulfill()
+    }
+    
+    // MARK: - Helpers
+    
+    private mutating func setupViewModel(roomDetailsScreenHook: RoomDetailsScreenHookProtocol) {
+        viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
+                                               userSession: UserSessionMock(.init(userHooks: UserHooks(roomDetailsScreenHook: roomDetailsScreenHook))),
+                                               analyticsService: AnalyticsServiceMock(.init()),
+                                               userIndicatorController: UserIndicatorControllerMock(),
+                                               notificationSettingsProxy: notificationSettingsProxyMock,
+                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()))
+    }
+    
+    private func makeRoomInfo(_ configuration: JoinedRoomProxyMockConfiguration, canSendTopic: Bool) -> RoomInfoProxyMock {
+        let powerLevelsProxyMock = RoomPowerLevelsProxyMock(.init())
+        powerLevelsProxyMock.canOwnUserSendStateEventClosure = { event in
+            canSendTopic && event == .roomTopic
+        }
+        
+        let roomInfoProxyMock = RoomInfoProxyMock(configuration)
+        roomInfoProxyMock.powerLevels = powerLevelsProxyMock
+        return roomInfoProxyMock
     }
 }

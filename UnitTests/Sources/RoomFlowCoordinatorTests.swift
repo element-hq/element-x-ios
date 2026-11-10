@@ -25,7 +25,7 @@ final class RoomFlowCoordinatorTests {
         userSettings = UserSettings.mock()
     }
     
-    @Test
+    @Test("A room is shown as the root and clearing the route finishes the flow")
     func roomPresentation() async throws {
         setupRoomFlowCoordinator()
         
@@ -36,7 +36,7 @@ final class RoomFlowCoordinatorTests {
         try await waitForStackToClear()
     }
     
-    @Test
+    @Test("Room details are shown as the root and clearing the route finishes the flow")
     func roomDetailsPresentation() async throws {
         setupRoomFlowCoordinator()
         
@@ -47,7 +47,7 @@ final class RoomFlowCoordinatorTests {
         try await waitForStackToClear()
     }
     
-    @Test
+    @Test("Routing to the room details already shown does nothing")
     func noOp() async throws {
         setupRoomFlowCoordinator()
         
@@ -61,7 +61,7 @@ final class RoomFlowCoordinatorTests {
         #expect(navigationStackCoordinator.rootCoordinator === detailsCoordinator)
     }
     
-    @Test
+    @Test("Room details are pushed on top of the room")
     func pushDetails() async throws {
         setupRoomFlowCoordinator()
         
@@ -74,7 +74,7 @@ final class RoomFlowCoordinatorTests {
         #expect(navigationStackCoordinator.stackCoordinators.first is RoomDetailsScreenCoordinator)
     }
     
-    @Test
+    @Test("Child rooms are pushed on top of the room")
     func childRoomFlow() async throws {
         setupRoomFlowCoordinator()
         
@@ -94,7 +94,7 @@ final class RoomFlowCoordinatorTests {
     }
     
     /// Tests the child flow teardown in isolation of it's parent.
-    @Test
+    @Test("A child room flow leaves its parent to clean up the stack")
     func childFlowTearDown() async throws {
         setupRoomFlowCoordinator(asChildFlow: true)
         navigationStackCoordinator.setRootCoordinator(BlankFormCoordinator())
@@ -112,7 +112,7 @@ final class RoomFlowCoordinatorTests {
         #expect(navigationStackCoordinator.stackCoordinators.last is RoomDetailsScreenCoordinator, "A child room flow should leave its parent to clean up the stack.")
     }
     
-    @Test
+    @Test("Member details are pushed on top of a child room")
     func childRoomMemberDetails() async throws {
         setupRoomFlowCoordinator()
         
@@ -128,7 +128,7 @@ final class RoomFlowCoordinatorTests {
         #expect(navigationStackCoordinator.stackCoordinators.last is RoomMemberDetailsScreenCoordinator)
     }
     
-    @Test
+    @Test("A room isn't pushed as a direct child of itself")
     func childRoomIgnoresDirectDuplicate() async throws {
         setupRoomFlowCoordinator()
         
@@ -150,7 +150,7 @@ final class RoomFlowCoordinatorTests {
         #expect(navigationStackCoordinator.stackCoordinators.last is RoomScreenCoordinator)
     }
     
-    @Test
+    @Test("An invited room shows the join screen until it is joined")
     func roomMembershipInvite() async throws {
         setupRoomFlowCoordinator(roomType: .invited(roomID: "InvitedRoomID"))
         
@@ -177,7 +177,7 @@ final class RoomFlowCoordinatorTests {
         #expect(navigationStackCoordinator.stackCoordinators.isEmpty)
     }
     
-    @Test
+    @Test("An invited child room pushes the join screen until it is joined")
     func childRoomMembershipInvite() async throws {
         setupRoomFlowCoordinator(asChildFlow: true, roomType: .invited(roomID: "InvitedRoomID"))
         navigationStackCoordinator.setRootCoordinator(BlankFormCoordinator())
@@ -211,7 +211,7 @@ final class RoomFlowCoordinatorTests {
         #expect(navigationStackCoordinator.stackCoordinators.last is RoomScreenCoordinator)
     }
     
-    @Test
+    @Test("An event in the same room stays put while one in another room pushes that room")
     func eventRoute() async throws {
         setupRoomFlowCoordinator()
         
@@ -228,7 +228,7 @@ final class RoomFlowCoordinatorTests {
         #expect(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator)
     }
     
-    @Test
+    @Test("Threaded events open in their thread, reusing it when it is already shown")
     func threadedEventRoutes() async throws {
         userSettings.app.threadsEnabled = true
         setupRoomFlowCoordinator()
@@ -310,7 +310,7 @@ final class RoomFlowCoordinatorTests {
         #expect(navigationStackCoordinator.stackCoordinators[4] is RoomScreenCoordinator)
     }
     
-    @Test
+    @Test("Sharing media shows the upload sheet over the room, popping back to it first")
     func shareMediaRoute() async throws {
         setupRoomFlowCoordinator()
         
@@ -337,7 +337,7 @@ final class RoomFlowCoordinatorTests {
         #expect((navigationStackCoordinator.sheetCoordinator as? NavigationStackCoordinator)?.rootCoordinator is MediaUploadPreviewScreenCoordinator)
     }
     
-    @Test
+    @Test("Sharing text doesn't show the upload sheet")
     func shareTextRoute() async throws {
         setupRoomFlowCoordinator()
         
@@ -360,7 +360,7 @@ final class RoomFlowCoordinatorTests {
         #expect(navigationStackCoordinator.sheetCoordinator == nil, "The media upload sheet shouldn't be shown when sharing text.")
     }
     
-    @Test
+    @Test("Leaving the room finishes the flow")
     func leavingRoom() async throws {
         setupRoomFlowCoordinator()
         
@@ -388,7 +388,7 @@ final class RoomFlowCoordinatorTests {
     
     // MARK: - Spaces
     
-    @Test
+    @Test("A space linked from a room is pushed on top of it")
     func spacePermalink() async throws {
         setupRoomFlowCoordinator()
         

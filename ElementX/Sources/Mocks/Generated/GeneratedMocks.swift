@@ -7372,6 +7372,48 @@ nonisolated class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Senda
             return unbanUserReturnValue
         }
     }
+    //MARK: - stateEventContentsPublisher
+
+    private let stateEventContentsPublisherEventTypeCallsCountLock = NSLock()
+    private nonisolated(unsafe) var stateEventContentsPublisherEventTypeUnderlyingCallsCount = 0
+    var stateEventContentsPublisherEventTypeCallsCount: Int {
+        get { stateEventContentsPublisherEventTypeCallsCountLock.withLock { stateEventContentsPublisherEventTypeUnderlyingCallsCount } }
+        set { stateEventContentsPublisherEventTypeCallsCountLock.withLock { stateEventContentsPublisherEventTypeUnderlyingCallsCount = newValue } }
+    }
+    var stateEventContentsPublisherEventTypeCalled: Bool {
+        return stateEventContentsPublisherEventTypeCallsCount > 0
+    }
+    private let stateEventContentsPublisherEventTypeReceivedEventTypeLock = NSLock()
+    private nonisolated(unsafe) var stateEventContentsPublisherEventTypeUnderlyingReceivedEventType: StateEventType?
+    var stateEventContentsPublisherEventTypeReceivedEventType: StateEventType? {
+        get { stateEventContentsPublisherEventTypeReceivedEventTypeLock.withLock { stateEventContentsPublisherEventTypeUnderlyingReceivedEventType } }
+        set { stateEventContentsPublisherEventTypeReceivedEventTypeLock.withLock { stateEventContentsPublisherEventTypeUnderlyingReceivedEventType = newValue } }
+    }
+    private let stateEventContentsPublisherEventTypeReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var stateEventContentsPublisherEventTypeUnderlyingReceivedInvocations: [StateEventType] = []
+    var stateEventContentsPublisherEventTypeReceivedInvocations: [StateEventType] {
+        get { stateEventContentsPublisherEventTypeReceivedInvocationsLock.withLock { stateEventContentsPublisherEventTypeUnderlyingReceivedInvocations } }
+        set { stateEventContentsPublisherEventTypeReceivedInvocationsLock.withLock { stateEventContentsPublisherEventTypeUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let stateEventContentsPublisherEventTypeReturnValueLock = NSLock()
+    private nonisolated(unsafe) var stateEventContentsPublisherEventTypeUnderlyingReturnValue: AnyPublisher<[String: String], Never>!
+    var stateEventContentsPublisherEventTypeReturnValue: AnyPublisher<[String: String], Never>! {
+        get { stateEventContentsPublisherEventTypeReturnValueLock.withLock { stateEventContentsPublisherEventTypeUnderlyingReturnValue } }
+        set { stateEventContentsPublisherEventTypeReturnValueLock.withLock { stateEventContentsPublisherEventTypeUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var stateEventContentsPublisherEventTypeClosure: ((StateEventType) -> AnyPublisher<[String: String], Never>)?
+
+    func stateEventContentsPublisher(eventType: StateEventType) -> AnyPublisher<[String: String], Never> {
+        stateEventContentsPublisherEventTypeCallsCountLock.withLock { stateEventContentsPublisherEventTypeUnderlyingCallsCount += 1 }
+        stateEventContentsPublisherEventTypeReceivedEventType = eventType
+        stateEventContentsPublisherEventTypeReceivedInvocationsLock.withLock { stateEventContentsPublisherEventTypeUnderlyingReceivedInvocations.append(eventType) }
+        if let stateEventContentsPublisherEventTypeClosure = stateEventContentsPublisherEventTypeClosure {
+            return stateEventContentsPublisherEventTypeClosure(eventType)
+        } else {
+            return stateEventContentsPublisherEventTypeReturnValue
+        }
+    }
     //MARK: - elementCallWidgetDriver
 
     private let elementCallWidgetDriverDeviceIDCallsCountLock = NSLock()

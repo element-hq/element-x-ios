@@ -159,6 +159,13 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     func banUser(_ userID: String, reason: String?) async -> Result<Void, RoomProxyError>
     func unbanUser(_ userID: String) async -> Result<Void, RoomProxyError>
     
+    // MARK: - Room State
+    
+    /// Publishes the content JSON of the room's state events of the given type, keyed by state key: the current
+    /// events first, then again after every sync that changes them, delivered on the main actor.
+    /// Only state the sync asked for is available.
+    func stateEventContentsPublisher(eventType: StateEventType) -> AnyPublisher<[String: String], Never>
+    
     // MARK: - Element Call
     
     func elementCallWidgetDriver(deviceID: String) -> ElementCallWidgetDriverProtocol
