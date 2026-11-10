@@ -18,12 +18,10 @@ class UnitTestsAppCoordinator: AppCoordinatorProtocol {
         return Target.tests.configure(logLevel: .info,
                                       traceLogPacks: [],
                                       sentryURL: nil,
-                                      rageshakeURL: targetRageshakeURL,
                                       keychainController: targetKeychainController,
                                       appHooks: targetAppHooks)
     }()
     
-    static let targetRageshakeURL = RemotePreference<RageshakeConfiguration>(.url("bugs.example.com/submit"))
     static let targetKeychainController = KeychainControllerMock(.init())
     static let targetAppHooks = AppHooks()
     

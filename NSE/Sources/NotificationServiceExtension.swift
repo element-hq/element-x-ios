@@ -99,7 +99,6 @@ actor NotificationServiceExtensionActor {
                 state = Target.nse.configure(logLevel: appSettings.logLevel,
                                              traceLogPacks: appSettings.traceLogPacks,
                                              sentryURL: nil,
-                                             rageshakeURL: appSettings.bugReportRageshakeURL,
                                              keychainController: keychainController,
                                              appHooks: appHooks)
             }
@@ -124,6 +123,9 @@ actor NotificationServiceExtensionActor {
                 return contentHandler(.init())
             }
         }
+        
+        // Make sure the target's configuration is kept up-to-date across runs.
+        Self.targetConfiguration.withLock { $0?.context.update() }
         
         guard await !shouldDeliverReceivedWhileOfflineNotification() else {
             // Don't log until the app hooks have been run:

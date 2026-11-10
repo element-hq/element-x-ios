@@ -42,7 +42,6 @@ nonisolated enum Target: String {
     func configure(logLevel: LogLevel,
                    traceLogPacks: Set<TraceLogPack>,
                    sentryURL: URL?,
-                   rageshakeURL: RemotePreference<RageshakeConfiguration>,
                    keychainController: KeychainControllerProtocol,
                    appHooks: AppHooks) -> ConfigurationResult {
         let tracingConfiguration = Tracing.buildConfiguration(logLevel: logLevel,
@@ -64,15 +63,15 @@ nonisolated enum Target: String {
         MXLog.configure(currentTarget: rawValue)
         
         let context = Context(keychainController: keychainController)
-        let hookCancellable = rageshakeURL.publisher
-            .sink { _ in
-                appHooks.tracingHook.update(tracingConfiguration, with: rageshakeURL)
+        let hookCancellable = context.statePublisher
+            .sink { context in
+                appHooks.tracingHook.update(tracingConfiguration, for: context)
             }
         
         return ConfigurationResult(context: context, hookCancellable: hookCancellable)
     }
     
-    /// The result of calling ``configure(logLevel:traceLogPacks:sentryURL:rageshakeURL:keychainController:appHooks:)``.
+    /// The result of calling ``configure(logLevel:traceLogPacks:sentryURL:keychainController:appHooks:)``.
     /// This must be stored - see the docs on the configure method to learn more.
     struct ConfigurationResult {
         let context: Context

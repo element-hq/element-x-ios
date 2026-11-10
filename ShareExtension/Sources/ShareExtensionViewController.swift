@@ -32,11 +32,13 @@ class ShareExtensionViewController: UIViewController {
         appHooks = AppHooks()
         appHooks.setUp()
         
-        if Self.targetConfiguration == nil {
+        if let targetConfiguration = Self.targetConfiguration {
+            // Make sure the target's configuration is kept up-to-date across runs.
+            targetConfiguration.context.update()
+        } else {
             Self.targetConfiguration = Target.shareExtension.configure(logLevel: appSettings.logLevel,
                                                                        traceLogPacks: appSettings.traceLogPacks,
                                                                        sentryURL: nil,
-                                                                       rageshakeURL: appSettings.bugReportRageshakeURL,
                                                                        keychainController: keychainController,
                                                                        appHooks: appHooks)
         }

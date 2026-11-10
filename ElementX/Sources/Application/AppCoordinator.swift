@@ -82,7 +82,6 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
         targetConfiguration = Target.mainApp.configure(logLevel: appSettings.logLevel,
                                                        traceLogPacks: appSettings.traceLogPacks,
                                                        sentryURL: appSettings.bugReportSentryRustURL,
-                                                       rageshakeURL: appSettings.bugReportRageshakeURL,
                                                        keychainController: keychainController,
                                                        appHooks: appHooks)
         
@@ -140,7 +139,11 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
                                                         navigationCoordinator: appLockNavigationCoordinator,
                                                         appSettings: appSettings)
         
-        bugReportService = BugReportService(rageshakeURLPublisher: appSettings.bugReportRageshakeURL.publisher,
+        // Maintain the single-account behaviour for now.
+        let rageshakeURLPublisher = userSessionManager.sessionsPublisher.map { sessions in
+            sessions.first?.userSettings.account.bugReportRageshakeConfiguration.publisher.value ?? appSettings.bundledBugReportRageshakeConfiguration
+        }
+        bugReportService = BugReportService(rageshakeURLPublisher: rageshakeURLPublisher,
                                             applicationID: appSettings.bugReportApplicationID,
                                             sdkGitSHA: sdkGitSha(),
                                             appHooks: appHooks)
