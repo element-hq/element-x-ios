@@ -569,22 +569,25 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
     }
     
     /// Logs out every account, then disables App Lock if requested (e.g. when the user forgot their PIN).
-    private func logoutAllAccounts(disableAppLock: Bool) {
-        Task {
-            await userSessionManager.logoutAll()
-            if disableAppLock {
-                disableAppLockAfterSigningOut()
-            }
+    private func logoutAllAccounts(disableAppLock: Bool) async {
+        await userSessionManager.logoutAll()
+        if disableAppLock {
+            await disableAppLockAfterSigningOut()
         }
     }
     
-    private func disableAppLockAfterSigningOut() {
-        Task {
-            // Ensure the navigation stack has settled.
-            try? await Task.sleep(for: .milliseconds(500))
-            appLockFlowCoordinator.appLockService.disable()
-            windowManager.switchToMain()
+    private func disableAppLockAfterSigningOut() async {
+        // Ensure the navigation stack has settled.
+        try? await Task.sleep(for: .milliseconds(500))
+        
+        // Never unlock while an account remains, its flow would be shown without a PIN.
+        guard userSessionManager.userIDs.isEmpty else {
+            MXLog.error("Not disabling App Lock, an account is still signed in.")
+            return
         }
+        
+        appLockFlowCoordinator.appLockService.disable()
+        windowManager.switchToMain()
     }
     
     private func configureNotificationManager() {
@@ -670,7 +673,7 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
             case .unlockApp:
                 windowManager.switchToMain()
             case .forceLogout:
-                logoutAllAccounts(disableAppLock: true)
+                Task { await logoutAllAccounts(disableAppLock: true) }
             }
         }
         .store(in: &cancellables)
@@ -683,7 +686,7 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
             case .closeSecondaryWindows:
                 windowManager.closeAllSecondaryWindows()
             case .forceLogout:
-                logoutAllAccounts(disableAppLock: true)
+                Task { await logoutAllAccounts(disableAppLock: true) }
             }
         }
         .store(in: &cancellables)

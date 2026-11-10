@@ -30,8 +30,8 @@ final class UserSessionManager: UserSessionManagerProtocol {
     private var areServicesRunning = false
     /// Accounts whose caches were cleared. Their old session stays live until restoring replaces it.
     private var clearedUserIDs: Set<String> = []
-    /// Accounts that are logging out, so that their teardown only runs once.
-    private var loggingOutUserIDs: Set<String> = []
+    /// The teardown of each account that's logging out, so that it only runs once.
+    private var logoutTasks: [String: Task<Void, Never>] = [:]
     /// Restores the signed in accounts.
     private var restorationTask: Task<Void, Never>?
     /// Finishes the `upToDateRoomList` transaction once the active session's room list is up to date.
@@ -196,21 +196,31 @@ final class UserSessionManager: UserSessionManagerProtocol {
             MXLog.error("Tried to log out \(userID), which doesn't have a live session.")
             return
         }
-        guard loggingOutUserIDs.insert(userID).inserted else { return }
-        defer { loggingOutUserIDs.remove(userID) }
         
-        await userSession.clientProxy.pauseServices()
+        // Wait for a teardown that's already in progress, so callers only continue once the account is gone.
+        if let logoutTask = logoutTasks[userID] {
+            await logoutTask.value
+            return
+        }
         
-        // Delete the pusher and stop the live location shares while the session can still reach the server.
-        await userSession.notificationService.tearDown()
-        await userSession.liveLocationService.stopAllLiveLocations()
+        let logoutTask = Task {
+            await userSession.clientProxy.pauseServices()
+            
+            // Delete the pusher and stop the live location shares while the session can still reach the server.
+            await userSession.notificationService.tearDown()
+            await userSession.liveLocationService.stopAllLiveLocations()
+            
+            await userSession.clientProxy.logout()
+            
+            // Remove the user, clearing user data.
+            remove(userID: userID)
+            
+            callbacksSubject.send(.didRemoveAccount(userID: userID, error: error))
+        }
         
-        await userSession.clientProxy.logout()
-        
-        // Remove the user, clearing user data.
-        remove(userID: userID)
-        
-        callbacksSubject.send(.didRemoveAccount(userID: userID, error: error))
+        logoutTasks[userID] = logoutTask
+        await logoutTask.value
+        logoutTasks[userID] = nil
     }
     
     func logoutAll() async {

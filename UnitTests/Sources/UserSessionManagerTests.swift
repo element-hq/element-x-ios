@@ -303,20 +303,56 @@ struct UserSessionManagerTests {
         #expect((manager.activeSession as? UserSessionMock) === bob)
     }
     
-    @Test("Logging out an account that's already logging out is ignored")
+    @Test("Logging out an account that's already logging out waits for the existing logout call to complete")
     func duplicateLogout() async {
         let manager = makeManager(userIDs: ["@alice:matrix.org"])
         let aliceClientProxy = ClientProxyMock(.init(userID: "@alice:matrix.org"))
         manager.addNewSession(UserSessionMock(.init(clientProxy: aliceClientProxy)))
         
-        // Simulate the SDK reporting an auth error while the server logout is in flight.
-        aliceClientProxy.logoutClosure = { await manager.logout(userID: "@alice:matrix.org") }
+        // Simulate the SDK reporting an auth error while the server logout is in flight, which logs out from its own task.
+        var duplicateLogout: Task<Void, Never>?
+        aliceClientProxy.logoutClosure = { duplicateLogout = Task { await manager.logout(userID: "@alice:matrix.org") } }
         
         await manager.logout(userID: "@alice:matrix.org")
+        await duplicateLogout?.value
         
         #expect(aliceClientProxy.logoutCallsCount == 1)
         #expect(userSessionStore.logoutUserIDCallsCount == 1)
         #expect(manager.userIDs.isEmpty)
+    }
+    
+    @Test("Logging out every account waits for a logout of the same account that's already in progress")
+    func logoutAllDuringLogout() async {
+        let manager = makeManager(userIDs: ["@alice:matrix.org"])
+        let aliceClientProxy = ClientProxyMock(.init(userID: "@alice:matrix.org"))
+        manager.addNewSession(UserSessionMock(.init(clientProxy: aliceClientProxy)))
+        let (serverLogoutReleased, serverLogoutReleasedContinuation) = AsyncStream<Void>.makeStream()
+        
+        // Given a logout that's waiting on the server, as on a stalled network.
+        let logout = await waitForConfirmation(timeout: .seconds(1)) { confirmation in
+            aliceClientProxy.logoutClosure = {
+                confirmation()
+                for await _ in serverLogoutReleased {
+                    break
+                }
+            }
+            return Task { await manager.logout(userID: "@alice:matrix.org") }
+        }
+        
+        // When every account is logged out meanwhile (e.g. Forgot PIN on the lock screen).
+        let logoutAll = await waitForConfirmation(timeout: .seconds(1)) { confirmation in
+            Task {
+                confirmation()
+                await manager.logoutAll() // Holds the main actor until it reaches the logout in progress.
+                return manager.userIDs
+            }
+        }
+        serverLogoutReleasedContinuation.yield()
+        let userIDsAfterLogoutAll = await logoutAll.value
+        await logout.value
+        
+        // Then it only returns once the account is gone, as App Lock is disabled straight after it returns.
+        #expect(userIDsAfterLogoutAll.isEmpty)
     }
     
     @Test("Logging out every account removes the live ones and those that aren't live yet, the active one last")
