@@ -543,9 +543,9 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
         }
     }
     
-    /// Resumes the active session's services once it's live, and stops waiting for a restore.
-    private func finishActiveSessionRestoration() {
-        guard stateMachine.state == .restoringSession, userSession != nil else { return }
+    /// Resumes the services once a session is live, and stops waiting for a restore.
+    private func finishSessionRestoration() {
+        guard stateMachine.state == .restoringSession else { return }
         
         Task { await resumeClientServices() }
         stateMachine.processEvent(.restoredSession)
@@ -637,8 +637,8 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
                 guard let self else { return }
                 switch callback {
                 case .didRestoreSession(let userID):
-                    finishActiveSessionRestoration()
                     if let userSession = userSessionManager.session(for: userID) {
+                        finishSessionRestoration()
                         sendStoredInlineReply(from: userSession)
                     }
                 case .didRemoveAccount:
