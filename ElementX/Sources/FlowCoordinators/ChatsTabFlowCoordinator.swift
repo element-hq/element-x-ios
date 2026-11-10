@@ -657,7 +657,7 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
                                                                             userIndicatorController: flowParameters.userIndicatorController,
                                                                             isModallyPresented: true)
         
-        let coordinator = userSession.userHooks.recoveryKeyScreenHook.makeCoordinator(parameters: parameters)
+        let coordinator = userSession.userHooks.recoveryKeyScreenHook.makeCoordinator(parameters: parameters, isCheckingKey: false)
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
             switch action {

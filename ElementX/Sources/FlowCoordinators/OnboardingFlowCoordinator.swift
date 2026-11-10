@@ -296,7 +296,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
                                                                             userIndicatorController: userIndicatorController,
                                                                             isModallyPresented: false)
         
-        let coordinator = userSession.userHooks.recoveryKeyScreenHook.makeCoordinator(parameters: parameters)
+        let coordinator = userSession.userHooks.recoveryKeyScreenHook.makeCoordinator(parameters: parameters, isCheckingKey: false)
         
         coordinator.actions
             .sink { action in
