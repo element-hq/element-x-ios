@@ -114,6 +114,7 @@ struct NativeCallIcons: ElementCallIconRenderingProtocol {
         case .headphones: \.headphonesSolid
         case .bluetooth: \.bluetoothOutput
         case .raisedHand: \.raisedHandSolid
+        case .reaction: \.reactionSolid
         case .userProfile: \.userProfileSolid
         case .overflow: \.overflowHorizontal
         case .preferences: \.preferences

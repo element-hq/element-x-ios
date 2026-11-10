@@ -173,9 +173,15 @@ final nonisolated class SDKMatrixBackend: ElementCallMatrixBackendProtocol {
         }
     }
     
+    /// The SDK bindings lack MSC4195 `get_token` (matrix-org/matrix-rust-sdk#7428): answered as a homeserver
+    /// without it, so only `livekit_service_url` transports join. Element X does not offer the MSC membership
+    /// format, the main user of it.
     func liveKitToken(for request: ElementCallLiveKitTokenRequest) async throws(ElementCallMatrixBackendError) -> String {
-        // Not yet available in the bindings
-        throw ElementCallMatrixBackendError(errorCode: "M_UNRECOGNIZED", statusCode: 404, reason: "The SDK bindings cannot request a LiveKit token from the homeserver")
+        logger?.log(.info, "backend: liveKitToken(\(request.url)), unsupported")
+        throw ElementCallMatrixBackendError(errorCode: "M_UNRECOGNIZED",
+                                            statusCode: 404,
+                                            isPermanent: true,
+                                            reason: "MSC4195 get_token is not exposed by the SDK bindings")
     }
     
     /// The SDK falls back to the well-known when the homeserver lacks the MSC4143 endpoint; neither
