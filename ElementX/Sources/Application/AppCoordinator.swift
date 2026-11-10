@@ -76,10 +76,14 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
         let appSettings = appHooks.appSettingsHook.configure(AppSettings(store: userDefaults))
         self.appSettings = appSettings
         
+        let keychainController = KeychainController(service: .sessions,
+                                                    accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
+        
         targetConfiguration = Target.mainApp.configure(logLevel: appSettings.logLevel,
                                                        traceLogPacks: appSettings.traceLogPacks,
                                                        sentryURL: appSettings.bugReportSentryRustURL,
                                                        rageshakeURL: appSettings.bugReportRageshakeURL,
+                                                       keychainController: keychainController,
                                                        appHooks: appHooks)
         
         let appName = InfoPlistReader.main.bundleDisplayName
@@ -115,13 +119,12 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
         
         navigationRootCoordinator.setRootCoordinator(SplashScreenCoordinator())
         
-        let keychainController = KeychainController(service: .sessions,
-                                                    accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
         let userSessionStore = UserSessionStore(keychainController: keychainController,
                                                 appSettings: appSettings,
                                                 analyticsService: analyticsService,
                                                 appHooks: appHooks,
-                                                networkMonitor: networkMonitor)
+                                                networkMonitor: networkMonitor,
+                                                targetContext: targetConfiguration.context)
         notificationManager = NotificationManager(notificationCenter: UNUserNotificationCenter.current(), appSettings: appSettings)
         userSessionManager = UserSessionManager(userSessionStore: userSessionStore,
                                                 appSettings: appSettings,
@@ -151,7 +154,8 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
                                                   appSettings: appSettings,
                                                   appHooks: appHooks,
                                                   analyticsService: analyticsService,
-                                                  userIndicatorController: userIndicatorController)
+                                                  userIndicatorController: userIndicatorController,
+                                                  targetContext: targetConfiguration.context)
         
         Self.setupSentry(bugReportService: bugReportService, appSettings: appSettings, analytics: analyticsService)
         

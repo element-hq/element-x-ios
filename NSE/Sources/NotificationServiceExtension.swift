@@ -100,6 +100,7 @@ actor NotificationServiceExtensionActor {
                                              traceLogPacks: appSettings.traceLogPacks,
                                              sentryURL: nil,
                                              rageshakeURL: appSettings.bugReportRageshakeURL,
+                                             keychainController: keychainController,
                                              appHooks: appHooks)
             }
         }

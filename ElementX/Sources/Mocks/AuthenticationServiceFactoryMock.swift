@@ -11,6 +11,6 @@ extension AuthenticationServiceFactoryMock {
     convenience init(_ configuration: Configuration) {
         self.init()
         
-        makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksReturnValue = AuthenticationService.mock
+        makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksTargetContextReturnValue = AuthenticationService.mock
     }
 }

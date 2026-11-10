@@ -14,8 +14,9 @@ class UserSessionStore: UserSessionStoreProtocol {
     private let clientFactory: ClientFactoryProtocol
     private let appSettings: AppSettings
     private let analyticsService: AnalyticsServiceProtocol
-    private let networkMonitor: NetworkMonitorProtocol
     private let appHooks: AppHooks
+    private let networkMonitor: NetworkMonitorProtocol
+    private let targetContext: Target.Context
     
     /// Whether or not there are sessions in the store.
     var hasSessions: Bool {
@@ -36,13 +37,15 @@ class UserSessionStore: UserSessionStoreProtocol {
          appSettings: AppSettings,
          analyticsService: AnalyticsServiceProtocol,
          appHooks: AppHooks,
-         networkMonitor: NetworkMonitorProtocol) {
+         networkMonitor: NetworkMonitorProtocol,
+         targetContext: Target.Context) {
         self.keychainController = keychainController
         self.clientFactory = clientFactory
         self.appSettings = appSettings
         self.analyticsService = analyticsService
         self.appHooks = appHooks
         self.networkMonitor = networkMonitor
+        self.targetContext = targetContext
     }
     
     /// Deletes all data stored in the shared container and keychain
@@ -155,7 +158,10 @@ class UserSessionStore: UserSessionStoreProtocol {
             
             MXLog.info("Set up session for user \(credentials.userID) at: \(credentials.restorationToken.sessionDirectories)")
             
-            Task(priority: .low) { await appHooks.remoteSettingsHook.updateCache(using: client) }
+            Task(priority: .low) {
+                await appHooks.remoteSettingsHook.updateCache(using: client)
+                targetContext.update()
+            }
             
             return try await .success(setupProxyForClient(client, userSettings: userSettings))
         } catch UserSessionStoreError.failedSettingUpClientProxy(let error) {

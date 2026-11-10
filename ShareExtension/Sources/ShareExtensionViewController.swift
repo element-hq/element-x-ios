@@ -37,6 +37,7 @@ class ShareExtensionViewController: UIViewController {
                                                                        traceLogPacks: appSettings.traceLogPacks,
                                                                        sentryURL: nil,
                                                                        rageshakeURL: appSettings.bugReportRageshakeURL,
+                                                                       keychainController: keychainController,
                                                                        appHooks: appHooks)
         }
         

@@ -18,6 +18,7 @@ struct AuthenticationServiceTests {
     var encryption: EncryptionSDKMock!
     var userSessionManager: UserSessionManagerMock!
     var encryptionKeyProvider: MockEncryptionKeyProvider!
+    var targetContext: Target.Context!
     var service: AuthenticationService!
     
     @Test
@@ -90,6 +91,26 @@ struct AuthenticationServiceTests {
         #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedArguments?.prompt == expectedPrompt)
     }
     
+    @Test("Resetting the service restores the default login state")
+    mutating func reset() async throws {
+        // Given an authentication service configured with a custom account provider.
+        try await setup(serverNameOrBaseURL: "company.com")
+        try await service.configure(for: "company.com", flow: .register).get()
+        
+        #expect(service.flow == .register)
+        #expect(service.homeserver.value == .mockOAuth)
+        #expect(targetContext.statePublisher.value.authenticationHomeserver == .known("https://matrix.company.com"))
+        
+        // When resetting the service.
+        service.reset()
+        
+        // Then the default state should be restored.
+        #expect(service.flow == .login)
+        #expect(service.homeserver.value == .init(accountProvider: .managed(serverName: "matrix.org", baseURL: "https://matrix-client.matrix.org"),
+                                                  loginMode: .unknown))
+        #expect(targetContext.statePublisher.value.authenticationHomeserver == .unknown)
+    }
+    
     @Test
     mutating func classicAppAccountSecretsBundleIsUsed() async throws {
         // Given an authentication service with an Element Classic account for Alice.
@@ -153,6 +174,7 @@ struct AuthenticationServiceTests {
         
         userSessionManager = UserSessionManagerMock(.init())
         encryptionKeyProvider = MockEncryptionKeyProvider()
+        targetContext = .mock
         
         let classicAppManager = ClassicAppManagerMock(.init(accounts: classicAppAccounts,
                                                             availableSecrets: availableSecrets,
@@ -163,7 +185,8 @@ struct AuthenticationServiceTests {
                                         classicAppManager: classicAppManager,
                                         clientFactory: clientFactory,
                                         appSettings: .volatile(),
-                                        appHooks: AppHooks())
+                                        appHooks: AppHooks(),
+                                        targetContext: targetContext)
         
         if let classicAppAccount = service.classicAppAccount {
             await service.setupClassicAppAccountState()

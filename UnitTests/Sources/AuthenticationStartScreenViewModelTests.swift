@@ -312,7 +312,8 @@ final class AuthenticationStartScreenViewModelTests {
                                                       classicAppManager: classicAppManager,
                                                       clientFactory: clientFactory,
                                                       appSettings: appSettings,
-                                                      appHooks: AppHooks())
+                                                      appHooks: AppHooks(),
+                                                      targetContext: .mock)
         
         await authenticationService.setupClassicAppAccountState()
         

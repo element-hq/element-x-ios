@@ -24,7 +24,8 @@ struct UserSessionStoreTests {
                                  appSettings: appSettings,
                                  analyticsService: AnalyticsServiceMock(.init()),
                                  appHooks: AppHooks(),
-                                 networkMonitor: NetworkMonitorMock(.init()))
+                                 networkMonitor: NetworkMonitorMock(.init()),
+                                 targetContext: .mock)
     }
     
     // MARK: - Accessors

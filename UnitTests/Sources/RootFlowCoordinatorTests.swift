@@ -15,6 +15,7 @@ struct RootFlowCoordinatorTests {
     private let navigationRootCoordinator = NavigationRootCoordinator()
     private let userSessionManager: UserSessionManagerMock
     private let userSessionManagerCallbacks = PassthroughSubject<UserSessionManagerCallback, Never>()
+    private let targetContext = Target.Context.mock
     private let userIndicatorController = UserIndicatorControllerMock()
     private let clientProxy: ClientProxyMock
     private let roomID = "1"
@@ -40,7 +41,8 @@ struct RootFlowCoordinatorTests {
                                                   appSettings: .volatile(),
                                                   appHooks: AppHooks(),
                                                   analyticsService: AnalyticsServiceMock(.init()),
-                                                  userIndicatorController: userIndicatorController)
+                                                  userIndicatorController: userIndicatorController,
+                                                  targetContext: targetContext)
     }
     
     // MARK: Pending routes
@@ -78,6 +80,15 @@ struct RootFlowCoordinatorTests {
         let splitCoordinator = try #require(chatsSplitCoordinator)
         let deferred = deferFailure(splitCoordinator.observe(\.detailRootCoordinatorID), timeout: .seconds(1)) { $0 != nil }
         try await deferred.fulfill()
+    }
+    
+    @Test("The authentication flow's homeserver is unknown when the flow starts")
+    func authenticationHomeserver() {
+        #expect(targetContext.statePublisher.value.authenticationHomeserver == nil)
+        
+        rootFlowCoordinator.handleAppRoute(.authentication, animated: false)
+        
+        #expect(targetContext.statePublisher.value.authenticationHomeserver == .unknown)
     }
     
     // MARK: Session restoration
