@@ -442,7 +442,7 @@ struct UserSessionManagerTests {
     }
     
     @Test("The sessions are republished when one of their profiles or unread counts changes")
-    func sessionsAreRepublishedWhenTheirDetailsChange() async throws {
+    func sessionDetailsChanges() async throws {
         let manager = makeManager(userIDs: [])
         let aliceClientProxy = ClientProxyMock(.init(userID: "@alice:matrix.org"))
         let aliceProfile = CurrentValueSubject<UserProfile, Never>(.init(userID: "@alice:matrix.org", displayName: "Alice"))
@@ -463,20 +463,25 @@ struct UserSessionManagerTests {
         try await unreadCountUpdated.fulfill()
     }
     
-    @Test("Adding a session loads its profile, so the name of every account is known")
-    func addingASessionLoadsItsProfile() async throws {
-        let manager = makeManager(userIDs: [])
-        let clientProxy = ClientProxyMock(.init(userID: "@alice:matrix.org"))
-        let (profileLoads, continuation) = AsyncStream<Void>.makeStream()
-        clientProxy.loadUserProfileIfNeededClosure = {
+    @Test("Restoring loads the profiles of the other accounts, but leaves the active one's to the home screen")
+    func profileLoading() async throws {
+        appSettings.multiAccountEnabled = true
+        let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org"])
+        let aliceClientProxy = ClientProxyMock(.init(userID: "@alice:matrix.org"))
+        let bobClientProxy = ClientProxyMock(.init(userID: "@bob:matrix.org"))
+        let (bobProfileLoads, continuation) = AsyncStream<Void>.makeStream()
+        bobClientProxy.loadUserProfileIfNeededClosure = {
             continuation.yield()
             return .success(())
         }
-        let profileLoaded = deferFulfillment(profileLoads) { _ in true }
+        let sessions = ["@alice:matrix.org": UserSessionMock(.init(clientProxy: aliceClientProxy)), "@bob:matrix.org": UserSessionMock(.init(clientProxy: bobClientProxy))]
+        userSessionStore.restoreUserSessionUserIDClosure = { userID in sessions[userID].map { .success($0) } ?? .failure(.failedRestoringLogin) }
+        let bobProfileLoaded = deferFulfillment(bobProfileLoads) { _ in true }
         
-        manager.addNewSession(UserSessionMock(.init(clientProxy: clientProxy)))
+        await manager.restoreSessions()
         
-        try await profileLoaded.fulfill()
+        try await bobProfileLoaded.fulfill()
+        #expect(!aliceClientProxy.loadUserProfileIfNeededCalled)
     }
     
     // MARK: - Helpers

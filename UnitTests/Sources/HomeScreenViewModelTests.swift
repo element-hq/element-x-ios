@@ -407,7 +407,7 @@ final class HomeScreenViewModelTests {
     }
     
     @Test("Each of the multi-account announcement's actions dismisses it", arguments: [HomeScreenViewAction.dismissMultiAccountAnnouncement, .addAccount])
-    func multiAccountAnnouncementActionsDismissIt(_ action: HomeScreenViewAction) async throws {
+    func multiAccountAnnouncementActions(_ action: HomeScreenViewAction) async throws {
         userSettings.app.multiAccountEnabled = true
         userSettings.app.hasSeenMultiAccountAnnouncement = false
         setupViewModel()
@@ -439,7 +439,7 @@ final class HomeScreenViewModelTests {
     }
     
     @Test("The multi-account announcement is presented on the next appearance once the session is verified")
-    func multiAccountAnnouncementPresentsOnTheNextAppearanceOnceVerified() async throws {
+    func multiAccountAnnouncementAfterVerification() async throws {
         userSettings.app.multiAccountEnabled = true
         userSettings.app.hasSeenMultiAccountAnnouncement = false
         let securityStateSubject = CurrentValueSubject<SessionSecurityState, Never>(.init(verificationState: .unverified, recoveryState: .enabled))
@@ -461,7 +461,7 @@ final class HomeScreenViewModelTests {
     }
     
     @Test("The multi-account announcement is marked as seen without being presented when there are several accounts")
-    func multiAccountAnnouncementIsMarkedSeenWithSeveralAccounts() async throws {
+    func multiAccountAnnouncementWithSeveralAccounts() async throws {
         userSettings.app.multiAccountEnabled = true
         userSettings.app.hasSeenMultiAccountAnnouncement = false
         setupViewModel(otherAccountUserIDs: ["@other:client.com"])
@@ -480,7 +480,7 @@ final class HomeScreenViewModelTests {
     enum MultiAccountAnnouncementHiddenCase: CaseIterable { case flagOff, alreadySeen, unverified, unknownVerificationState }
     
     @Test("The room list mode is set synchronously when the rooms are already loaded")
-    func roomListModeIsSetSynchronouslyOnAWarmLaunch() {
+    func roomListModeWarmLaunch() {
         setupViewModel()
         
         // No awaiting, the mode must not need the subscription's async delivery.
@@ -488,7 +488,7 @@ final class HomeScreenViewModelTests {
     }
     
     @Test("The room list shows skeletons until the rooms have been published")
-    func roomListModeWaitsForTheRoomsToPublish() async throws {
+    func roomListModeSkeletons() async throws {
         let (roomListSubject, stateSubject) = setupViewModelWithManualProvider()
         
         #expect(context.viewState.roomListMode == .skeletons)
@@ -504,7 +504,7 @@ final class HomeScreenViewModelTests {
     }
     
     @Test("An empty filtered room list doesn't keep showing skeletons")
-    func roomListModeDoesntHoldSkeletonsForAnEmptyFilteredResult() async throws {
+    func roomListModeEmptyFilter() async throws {
         let (roomListSubject, stateSubject) = setupViewModelWithManualProvider()
         #expect(context.viewState.roomListMode == .skeletons)
         
@@ -517,7 +517,7 @@ final class HomeScreenViewModelTests {
     }
     
     @Test("A loaded room list goes straight to the cached rooms once they're published")
-    func roomListModeGoesStraightToTheCachedRooms() async throws {
+    func roomListModeCachedRooms() async throws {
         let (roomListSubject, _) = setupViewModelWithManualProvider(state: .loaded(totalNumberOfRooms: 8))
         #expect(context.viewState.roomListMode == .awaitingCachedRooms)
         
@@ -527,7 +527,7 @@ final class HomeScreenViewModelTests {
     }
     
     @Test("Skeletons are shown when the cached rooms are slow to publish")
-    func roomListModeShowsSkeletonsWhenTheCachedRoomsAreSlow() async throws {
+    func roomListModeSlowCachedRooms() async throws {
         _ = setupViewModelWithManualProvider(state: .loaded(totalNumberOfRooms: 8))
         #expect(context.viewState.roomListMode == .awaitingCachedRooms)
         
@@ -536,7 +536,7 @@ final class HomeScreenViewModelTests {
     }
     
     @Test("The room list doesn't return to skeletons when every room is filtered out")
-    func roomListModeDoesntReturnToSkeletonsWhenTheRoomsAreFilteredOut() async throws {
+    func roomListModeFilteredOut() async throws {
         let (roomListSubject, stateSubject) = setupViewModelWithManualProvider()
         
         stateSubject.send(.loaded(totalNumberOfRooms: 8))

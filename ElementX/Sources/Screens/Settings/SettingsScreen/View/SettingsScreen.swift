@@ -91,7 +91,7 @@ struct SettingsScreen: View {
             } else {
                 switchAccountsHeader
                 
-                if context.isOtherAccountsSectionExpanded {
+                if context.hasExpandedAccountPicker {
                     ForEach(context.viewState.otherAccounts, id: \.userID) { account in
                         otherAccountRow(account)
                     }
@@ -107,15 +107,15 @@ struct SettingsScreen: View {
                 details: .icon(switchAccountsHeaderAccessories),
                 kind: .button {
                     withAnimation {
-                        context.isOtherAccountsSectionExpanded.toggle()
+                        context.hasExpandedAccountPicker.toggle()
                     }
                 })
-                .accessibilityValue(context.isOtherAccountsSectionExpanded ? L10n.a11yStateExpanded : L10n.a11yStateCollapsed)
+                .accessibilityValue(context.hasExpandedAccountPicker ? L10n.a11yStateExpanded : L10n.a11yStateCollapsed)
     }
     
     private var switchAccountsHeaderAccessories: some View {
         HStack(spacing: 16) {
-            if !context.isOtherAccountsSectionExpanded {
+            if !context.hasExpandedAccountPicker {
                 HStack(spacing: 4) {
                     StackedAvatarsView(overlap: 8,
                                        lineWidth: 2,
@@ -145,7 +145,7 @@ struct SettingsScreen: View {
                     Circle()
                         .strokeBorder(.compound.borderInteractiveSecondary, lineWidth: 1)
                 }
-                .rotationEffect(.degrees(context.isOtherAccountsSectionExpanded ? 180 : 0))
+                .rotationEffect(.degrees(context.hasExpandedAccountPicker ? 180 : 0))
         }
         .accessibilityHidden(true)
     }
@@ -381,14 +381,14 @@ struct SettingsScreen_Previews: PreviewProvider, TestablePreview {
     static let bugReportDisabledViewModel = makeViewModel(isBugReportServiceEnabled: false)
     static let twoAccountsViewModel = makeViewModel(otherAccounts: [bob(unreadCount: 3)])
     static let twoAccountsCollapsedViewModel = makeViewModel(otherAccounts: [bob(unreadCount: 3)],
-                                                             isOtherAccountsSectionExpanded: false)
+                                                             hasExpandedAccountPicker: false)
     static let threeAccountsViewModel = makeViewModel(otherAccounts: [bob(unreadCount: 5, status: .mockHoliday),
                                                                       account(userID: "@charlie:element.io")])
     static let fiveAccountsCollapsedViewModel = makeViewModel(otherAccounts: [bob(unreadCount: 5, status: .mockHoliday),
                                                                               account(userID: "@charlie:element.io"),
                                                                               account(userID: "@dan:matrix.org", displayName: "Dan"),
                                                                               account(userID: "@eve:example.com", displayName: "Eve")],
-                                                              isOtherAccountsSectionExpanded: false)
+                                                              hasExpandedAccountPicker: false)
     
     static var previews: some View {
         ElementNavigationStack {
@@ -442,11 +442,11 @@ struct SettingsScreen_Previews: PreviewProvider, TestablePreview {
     
     static func makeViewModel(isBugReportServiceEnabled: Bool = true,
                               otherAccounts: [UserSessionDetails] = [],
-                              isOtherAccountsSectionExpanded: Bool = true) -> SettingsScreenViewModel {
+                              hasExpandedAccountPicker: Bool = true) -> SettingsScreenViewModel {
         let userSettings = UserSettings.mock()
         userSettings.app.multiAccountEnabled = true
         userSettings.app.linkNewDeviceEnabled = true
-        userSettings.app.isOtherAccountsSectionExpanded = isOtherAccountsSectionExpanded
+        userSettings.app.hasExpandedAccountPicker = hasExpandedAccountPicker
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@alice:example.com",
                                                                                    deviceID: "AAAAAAAAAAA",
                                                                                    displayName: "Alice Liddell",

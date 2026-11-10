@@ -174,8 +174,19 @@ struct SettingsScreenViewModelTests {
     
     // MARK: - Add account
     
+    @Test("Adding an account sends the add account action")
+    mutating func addAccount() async throws {
+        setupViewModel()
+        
+        let deferred = deferFulfillment(viewModel.actions) { $0.isAddAccount }
+        context.send(viewAction: .addAccount)
+        try await deferred.fulfill()
+    }
+    
+    // MARK: - Switch accounts
+    
     @Test("The switch accounts section shows only while multi-account is enabled")
-    mutating func switchAccountsSectionFollowsTheFeatureFlag() async throws {
+    mutating func switchAccountsSection() async throws {
         let userSettings = UserSettings.mock()
         setupViewModel(userSettings: userSettings)
         #expect(!context.viewState.showSwitchAccountsSection)
@@ -188,17 +199,6 @@ struct SettingsScreenViewModelTests {
         userSettings.app.multiAccountEnabled = false
         try await deferred.fulfill()
     }
-    
-    @Test("Adding an account sends the add account action")
-    mutating func addAccount() async throws {
-        setupViewModel()
-        
-        let deferred = deferFulfillment(viewModel.actions) { $0.isAddAccount }
-        context.send(viewAction: .addAccount)
-        try await deferred.fulfill()
-    }
-    
-    // MARK: - Switch accounts
     
     @Test("The other accounts are every account but this one, most recently used first, kept up to date")
     mutating func otherAccounts() async throws {

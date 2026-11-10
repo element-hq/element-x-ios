@@ -122,7 +122,7 @@ final nonisolated class AppSettings: @unchecked Sendable {
     
     /// Whether Settings lists the other accounts, rather than only showing their avatars.
     @UserPreference(defaultValue: true)
-    var isOtherAccountsSectionExpanded: Bool
+    var hasExpandedAccountPicker: Bool
     
     /// The initial set of account providers shown to the user in the authentication flow.
     ///

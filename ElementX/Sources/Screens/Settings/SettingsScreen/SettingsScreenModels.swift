@@ -47,7 +47,7 @@ struct SettingsScreenViewState: BindableState {
     var showUserStatusInput = false
     var showLinkNewDeviceButton: Bool
     var showSwitchAccountsSection: Bool
-    /// Every signed in account except this one, most recently used first.
+    /// Every other account with a live session, most recently used first.
     var otherAccounts: [UserSessionDetails] = []
     var accountProfileURL: URL?
     var showAccountDeactivation: Bool
@@ -95,9 +95,9 @@ struct SettingsScreenViewStateBindings {
         set { userSettings.app.appAppearance = newValue }
     }
     
-    var isOtherAccountsSectionExpanded: Bool {
-        get { userSettings.app.isOtherAccountsSectionExpanded }
-        set { userSettings.app.isOtherAccountsSectionExpanded = newValue }
+    var hasExpandedAccountPicker: Bool {
+        get { userSettings.app.hasExpandedAccountPicker }
+        set { userSettings.app.hasExpandedAccountPicker = newValue }
     }
     
     init(userSettings: UserSettings) {

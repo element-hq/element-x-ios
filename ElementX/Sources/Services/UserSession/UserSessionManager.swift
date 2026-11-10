@@ -362,8 +362,11 @@ final class UserSessionManager: UserSessionManagerProtocol {
             .dropFirst()
             .sink { [sessionsSubject] _ in sessionsSubject.send(sessionsSubject.value) }
         
-        // Other accounts are listed by name, but only servers that sync profiles would provide it. This
-        // also loads the active account's before the home screen would, once its room list has loaded.
-        Task { await userSession.clientProxy.loadUserProfileIfNeeded() }
+        // The home screen loads the active account's profile once its room list has loaded. Other accounts
+        // only get their names from servers that sync profiles, so theirs are loaded here.
+        if userID != activeSession?.clientProxy.userID {
+            // TODO: Retry when this fails (e.g. offline at launch), otherwise the account only shows its ID until relaunch.
+            Task { await userSession.clientProxy.loadUserProfileIfNeeded() }
+        }
     }
 }
