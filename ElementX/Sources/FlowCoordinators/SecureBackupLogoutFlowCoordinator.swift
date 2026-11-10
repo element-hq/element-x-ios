@@ -145,7 +145,8 @@ class SecureBackupLogoutFlowCoordinator: FlowCoordinatorProtocol {
                                                                             isModallyPresented: false,
                                                                             isCheckingKey: isCheckingKey,
                                                                             presentationContext: .deviceRemoval)
-        let coordinator = userSession.userHooks.recoveryKeyScreenHook.makeCoordinator(parameters: parameters)
+        let coordinator: SecureBackupRecoveryKeyCoordinatorProtocol = userSession.userHooks.recoveryKeyScreenHook.makeCoordinator(parameters: parameters,
+                                                                                                                                  isCheckingKey: isCheckingKey)
         
         coordinator.actions
             .sink { [weak self] action in
