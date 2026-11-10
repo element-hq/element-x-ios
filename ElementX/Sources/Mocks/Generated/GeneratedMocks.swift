@@ -8088,6 +8088,34 @@ nonisolated class KeychainControllerMock: KeychainControllerProtocol, @unchecked
         removeAllRestorationTokensCallsCountLock.withLock { removeAllRestorationTokensUnderlyingCallsCount += 1 }
         removeAllRestorationTokensClosure?()
     }
+    //MARK: - collectSessionHomeservers
+
+    private let collectSessionHomeserversCallsCountLock = NSLock()
+    private nonisolated(unsafe) var collectSessionHomeserversUnderlyingCallsCount = 0
+    var collectSessionHomeserversCallsCount: Int {
+        get { collectSessionHomeserversCallsCountLock.withLock { collectSessionHomeserversUnderlyingCallsCount } }
+        set { collectSessionHomeserversCallsCountLock.withLock { collectSessionHomeserversUnderlyingCallsCount = newValue } }
+    }
+    var collectSessionHomeserversCalled: Bool {
+        return collectSessionHomeserversCallsCount > 0
+    }
+
+    private let collectSessionHomeserversReturnValueLock = NSLock()
+    private nonisolated(unsafe) var collectSessionHomeserversUnderlyingReturnValue: Set<String>!
+    var collectSessionHomeserversReturnValue: Set<String>! {
+        get { collectSessionHomeserversReturnValueLock.withLock { collectSessionHomeserversUnderlyingReturnValue } }
+        set { collectSessionHomeserversReturnValueLock.withLock { collectSessionHomeserversUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var collectSessionHomeserversClosure: (() -> Set<String>)?
+
+    func collectSessionHomeservers() -> Set<String> {
+        collectSessionHomeserversCallsCountLock.withLock { collectSessionHomeserversUnderlyingCallsCount += 1 }
+        if let collectSessionHomeserversClosure = collectSessionHomeserversClosure {
+            return collectSessionHomeserversClosure()
+        } else {
+            return collectSessionHomeserversReturnValue
+        }
+    }
     //MARK: - containsPINCode
 
     nonisolated(unsafe) var containsPINCodeThrowableError: Error?
