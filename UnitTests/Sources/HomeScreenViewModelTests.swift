@@ -261,7 +261,7 @@ final class HomeScreenViewModelTests {
     }
     
     @Test("The set up recovery banner starts creating the recovery key")
-    func setUpRecoveryBannerStartsTheRecoveryKeyFlow() async throws {
+    func setUpRecovery() async throws {
         setupViewModel()
         
         let deferred = deferFulfillment(viewModel.actions) { $0 == .presentRecoveryKeyScreen }
@@ -270,7 +270,7 @@ final class HomeScreenViewModelTests {
     }
     
     @Test("The out of sync banner asks for the recovery key")
-    func outOfSyncRecoveryBannerStartsTheRecoveryKeyFlow() async throws {
+    func confirmRecoveryKey() async throws {
         setupViewModel()
         
         let deferred = deferFulfillment(viewModel.actions) { $0 == .presentRecoveryKeyScreen }
