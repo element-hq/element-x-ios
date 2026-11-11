@@ -609,9 +609,17 @@ class MockScreen: Identifiable {
             
             let timelineControllerFactory = TimelineControllerFactoryMock(.init(timelineController: timelineController))
             
-            let userSession = UserSessionMock(.init(clientProxy: clientProxy, userSettings: userSettings))
+            // Presents a room's call straight away, as the manager does without a native call stack.
+            let callManagerActions = PassthroughSubject<ElementCallManagerAction, Never>()
             let elementCallManager = ElementCallManagerMock()
-            elementCallManager.actionsPublisher = PassthroughSubject().eraseToAnyPublisher()
+            elementCallManager.actionsPublisher = callManagerActions.eraseToAnyPublisher()
+            let elementCallService = ElementCallServiceMock(.init(userID: userID))
+            elementCallService.requestCallRoomProxyIsVoiceCallClosure = { roomProxy, isVoiceCall in
+                let call = RoomCall(roomProxy: roomProxy, isVoiceCall: isVoiceCall)
+                callManagerActions.send(.callScreen(.present(userID: userID, kind: .webView(call))))
+            }
+            
+            let userSession = UserSessionMock(.init(clientProxy: clientProxy, userSettings: userSettings, elementCallService: elementCallService))
             let flowCoordinator = UserSessionFlowCoordinator(isNewLogin: false,
                                                              navigationRootCoordinator: navigationRootCoordinator,
                                                              appLockService: AppLockService(keychainController: KeychainControllerMock(),

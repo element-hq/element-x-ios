@@ -106,7 +106,7 @@ struct UserSessionFlowCoordinatorTests {
                 "A call left ongoing would make every later call count as busy")
     }
     
-    @Test
+    @Test("Presenting another web view call replaces the call screen")
     func presentingAnotherWebCallReplacesTheScreen() throws {
         presentWebCall(roomID: "1")
         let firstCallScreen = try #require(tabCoordinator?.overlayCoordinator as? CallScreenCoordinator)

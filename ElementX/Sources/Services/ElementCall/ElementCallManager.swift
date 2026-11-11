@@ -93,7 +93,7 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
     private var isAudioSessionActive = false
     
     private var presentedCall: PresentedCall?
-    /// A call waiting for its account's service to be added. One at a time, a newer call drops it.
+    /// A call waiting for its account's service to be added. One at a time, a newer call drops it unless it's the same call.
     private var heldCall: RequestedCall?
     
     /// The incoming call while nobody has answered it.
@@ -478,9 +478,8 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
     /// Opens the room's call with its account's service, returning to it when it's already on screen.
     /// Any other call is replaced.
     private func open(_ call: RoomCall, answeredFromCallKit: Bool, service: ElementCallServiceProtocol) {
-        if let heldCall = heldCall.take() {
-            drop(heldCall, because: "a newer call opened")
-        }
+        let heldCallWasAnswered = releaseHeldCall(for: service.userID, roomID: call.roomProxy.id)
+        let answeredFromCallKit = answeredFromCallKit || heldCallWasAnswered
         
         // The native call stack runs the call and reports its screen as `.nativeCallPresentation`.
         if service.handleNativeCallRequest(roomProxy: call.roomProxy, isVoiceCall: call.isVoiceCall, answeredFromCallKit: answeredFromCallKit) {
@@ -502,12 +501,26 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
     }
     
     private func hold(_ call: RequestedCall) {
-        if let replacedCall = heldCall {
-            drop(replacedCall, because: "a newer call replaced it")
-        }
+        let heldCallWasAnswered = releaseHeldCall(for: call.userID, roomID: call.roomID)
         
         MXLog.info("Holding the call in \(call.roomID) until \(call.userID) has a call service")
-        heldCall = call
+        heldCall = RequestedCall(userID: call.userID,
+                                 roomID: call.roomID,
+                                 isVoiceCall: call.isVoiceCall,
+                                 answeredFromCallKit: call.answeredFromCallKit || heldCallWasAnswered)
+    }
+    
+    /// Takes the held call off hold for a newer request. The same call asked for again passes on its answer
+    /// for the newer request to take over, any other call is dropped. Returns whether an answer was passed on.
+    private func releaseHeldCall(for userID: String, roomID: String) -> Bool {
+        guard let heldCall = heldCall.take() else { return false }
+        
+        guard heldCall.userID == userID, heldCall.roomID == roomID else {
+            drop(heldCall, because: "a newer call replaced it")
+            return false
+        }
+        
+        return heldCall.answeredFromCallKit
     }
     
     private func openHeldCall(_ call: RequestedCall) {
