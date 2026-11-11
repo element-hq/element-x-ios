@@ -95,8 +95,7 @@ final class PinnedEventsTimelineScreenCoordinator: CoordinatorProtocol {
             // These other actions will not be handled in this view
             case .displayEmojiPicker, .displayReportContent, .displayCameraPicker, .displayMediaPicker,
                  .displayDocumentPicker, .displayLocationPicker, .displayNewPollForm, .displayEditPollForm, .displayMediaUploadPreviewScreen,
-                 .displayResolveSendFailure, .displayThread, .composer, .hasScrolled, .displayRoom, .displayMediaDetails,
-                 .presentCallScreen:
+                 .displayResolveSendFailure, .displayThread, .composer, .hasScrolled, .displayRoom, .displayMediaDetails:
                 // These actions are not handled in this coordinator
                 break
             }

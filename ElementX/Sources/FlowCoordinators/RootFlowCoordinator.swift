@@ -20,6 +20,7 @@ enum RootFlowCoordinatorAction {
 class RootFlowCoordinator: FlowCoordinatorProtocol {
     private let navigationRootCoordinator: NavigationRootCoordinator
     private let userSessionManager: UserSessionManagerProtocol
+    private let elementCallManager: ElementCallManagerProtocol
     private let appLockService: AppLockServiceProtocol
     private let bugReportService: BugReportServiceProtocol
     private let appMediator: AppMediatorProtocol
@@ -77,6 +78,7 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
     
     init(navigationRootCoordinator: NavigationRootCoordinator,
          userSessionManager: UserSessionManagerProtocol,
+         elementCallManager: ElementCallManagerProtocol,
          appLockService: AppLockServiceProtocol,
          bugReportService: BugReportServiceProtocol,
          appMediator: AppMediatorProtocol,
@@ -87,6 +89,7 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
          authenticationServiceFactory: AuthenticationServiceFactoryProtocol = AuthenticationServiceFactory()) {
         self.navigationRootCoordinator = navigationRootCoordinator
         self.userSessionManager = userSessionManager
+        self.elementCallManager = elementCallManager
         self.appLockService = appLockService
         self.bugReportService = bugReportService
         self.appMediator = appMediator
@@ -137,10 +140,12 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
             } else if let userID = userSessionManager.activeSession?.clientProxy.userID {
                 stateMachine.tryEvent(.startUserSession(userID: userID))
             }
+        case let .call(roomID, isVoiceCall, answeredFromCallKit):
+            handleCallRoute(roomID: roomID, isVoiceCall: isVoiceCall, answeredFromCallKit: answeredFromCallKit, userID: userID)
         case .room, .roomAlias, .childRoom, .childRoomAlias,
              .roomDetails, .roomMemberDetails, .userProfile,
              .event, .eventOnRoomAlias, .childEvent, .childEventOnRoomAlias,
-             .call, .settings, .chatBackupSettings, .share, .transferOwnership, .thread, .search:
+             .settings, .chatBackupSettings, .share, .transferOwnership, .thread, .search:
             switch stateMachine.state {
             case .initial:
                 pendingAppRoute = .init(appRoute: appRoute, userID: userID, awaitsRoom: awaitsRoom)
@@ -382,6 +387,7 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
         let coordinator = UserSessionFlowCoordinator(isNewLogin: isNewLogin,
                                                      navigationRootCoordinator: navigationRootCoordinator,
                                                      appLockService: appLockService,
+                                                     elementCallManager: elementCallManager,
                                                      flowParameters: flowParameters)
         coordinator.actionsPublisher
             .sink { [weak self] action in
@@ -426,6 +432,30 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
         }
         
         userSessionFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
+    }
+    
+    /// Hands the call to the `ElementCallManager`, which keeps it pending until its account's session is live.
+    private func handleCallRoute(roomID: String, isVoiceCall: Bool, answeredFromCallKit: Bool, userID: String?) {
+        switch stateMachine.state {
+        case .initial, .userSessionFlow:
+            break
+        case .authenticationFlow, .clearingCache, .loggingOut:
+            MXLog.info("Ignoring the call in \(roomID), no account's screens are showing.")
+            return
+        }
+        
+        guard let activeUserID = userSessionManager.userIDs.first else {
+            MXLog.info("Ignoring the call in \(roomID), no account is signed in.")
+            return
+        }
+        
+        if let userID, userID != activeUserID {
+            // TODO: Switch to the route's account (element-hq/element-meta#3328).
+            MXLog.info("Ignoring the call for \(userID), it isn't the active account.")
+            return
+        }
+        
+        elementCallManager.requestCall(userID: activeUserID, roomID: roomID, isVoiceCall: isVoiceCall, answeredFromCallKit: answeredFromCallKit)
     }
     
     private func stopUserSessionFlow() {

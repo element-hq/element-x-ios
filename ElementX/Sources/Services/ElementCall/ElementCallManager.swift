@@ -30,6 +30,26 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
         var isNative = false
     }
     
+    /// The call the call screen shows, from when it's presented until its screen goes away.
+    private enum PresentedCall: Equatable {
+        case webView(userID: String, roomID: String)
+        case native(userID: String)
+        
+        var userID: String {
+            switch self {
+            case .webView(let userID, _), .native(let userID): userID
+            }
+        }
+    }
+    
+    /// A call requested by room ID, from CallKit or Recents, whose room still has to be loaded.
+    private struct CallRequest: Equatable {
+        let userID: String
+        let roomID: String
+        let isVoiceCall: Bool
+        let answeredFromCallKit: Bool
+    }
+    
     private let appSettings: AppSettings
     private let pushRegistry: PKPushRegistry
     private let callController: CXCallControllerProtocol
@@ -71,6 +91,10 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
     private var endPendingCallTask: Task<Void, Never>?
     
     private var isAudioSessionActive = false
+    
+    private var presentedCall: PresentedCall?
+    /// A call request waiting for its account's service to be added. One at a time, a newer one drops it unless it's for the same call.
+    private var pendingCallRequest: CallRequest?
     
     /// The incoming call while nobody has answered it.
     private var ringingCallID: CallID? {
@@ -130,6 +154,7 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
         if let replacedService = services[userID], replacedService !== service {
             // While the old service is still registered, so it hears its call is gone.
             endOngoingCall(userID: userID)
+            dismissCallScreen(of: userID)
             replacedService.stopObservingIncomingCall()
         }
         
@@ -157,9 +182,19 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
         if isAudioSessionActive {
             service.systemEventReceived(.audioSessionActivated)
         }
+        
+        if let pendingCallRequest, pendingCallRequest.userID == userID {
+            // Deferred, as the account's screens start in the same step that adds its service.
+            Task { [weak self] in await self?.handlePendingCallRequest(pendingCallRequest) }
+        }
     }
     
     func remove(userID: String) {
+        if let pendingCallRequest, pendingCallRequest.userID == userID {
+            self.pendingCallRequest = nil
+            dropCallRequest(pendingCallRequest, because: "\(userID) isn't signed in any more")
+        }
+        
         if let incomingCallID, incomingCallID.userID == userID {
             // An answered web view call is reported by its hand-over, which then finds nothing to open.
             if !isIncomingCallAnswered {
@@ -174,22 +209,47 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
         }
         
         endOngoingCall(userID: userID)
+        dismissCallScreen(of: userID)
         
         // Last, so the service hears its calls end.
         serviceCancellables[userID] = nil
         services[userID] = nil
     }
     
+    func requestCall(userID: String, roomID: String, isVoiceCall: Bool, answeredFromCallKit: Bool) {
+        let request = CallRequest(userID: userID, roomID: roomID, isVoiceCall: isVoiceCall, answeredFromCallKit: answeredFromCallKit)
+        
+        guard let service = services[userID] else {
+            storePendingCallRequest(request)
+            return
+        }
+        
+        Task { await handleCallRequest(request, service: service) }
+    }
+    
     private func process(_ action: ElementCallServiceAction, from service: ElementCallServiceProtocol) {
         switch action {
+        case .callRequested(let call):
+            presentCallScreen(for: call, answeredFromCallKit: false, service: service)
+        case .callMinimizeRequested:
+            minimizeCall()
+        case .nativeCallPresentation(let presentation):
+            relayNativeCallPresentation(presentation, from: service)
         case let .callSessionStarted(roomID, roomDisplayName, isVideo, kind):
             setupCallSession(roomID: roomID, roomDisplayName: roomDisplayName, isVideo: isVideo, kind: kind, service: service)
         case .callSessionConnected(let roomID):
             reportCallSessionConnected(userID: service.userID, roomID: roomID)
-        case .callSessionEnded(let roomID, .none):
-            tearDownCallSession(userID: service.userID, roomID: roomID)
-        case .callSessionEnded(let roomID, .some(let reason)):
-            reportCallSessionEnded(userID: service.userID, roomID: roomID, reason: reason)
+        case .callSessionEnded(let roomID, let reason):
+            // Only a web view call's screen ends its session as it goes, the native stack dismisses its own.
+            if presentedCall == .webView(userID: service.userID, roomID: roomID) {
+                presentedCall = nil
+            }
+            
+            if let reason {
+                reportCallSessionEnded(userID: service.userID, roomID: roomID, reason: reason)
+            } else {
+                tearDownCallSession(userID: service.userID, roomID: roomID)
+            }
         case let .audioEnabledChanged(enabled, roomID):
             setAudioEnabled(enabled, userID: service.userID, roomID: roomID)
         case let .incomingCallEnded(roomID, reason):
@@ -391,6 +451,141 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
         }
         
         reportEndedCall(incomingCallID: incomingCallID, reason: CXCallEndedReason(reason))
+    }
+    
+    // MARK: - Call screen
+    
+    /// Loads the room of a call requested by room ID, then presents its call screen, unless its account went meanwhile.
+    private func handleCallRequest(_ request: CallRequest, service: ElementCallServiceProtocol) async {
+        let roomProxy = await service.joinedRoom(roomID: request.roomID)
+        
+        guard services[request.userID] === service else {
+            dropCallRequest(request, because: "\(request.userID) left while its room loaded")
+            return
+        }
+        
+        guard let roomProxy else {
+            dropCallRequest(request, because: "it isn't a joined room")
+            return
+        }
+        
+        presentCallScreen(for: .init(roomProxy: roomProxy, isVoiceCall: request.isVoiceCall),
+                          answeredFromCallKit: request.answeredFromCallKit,
+                          service: service)
+    }
+    
+    /// Presents the room's call with its account's service, returning to it when it's already on screen.
+    /// Any other call is replaced.
+    private func presentCallScreen(for call: ElementCallServiceAction.RoomCall, answeredFromCallKit: Bool, service: ElementCallServiceProtocol) {
+        let pendingRequestWasAnswered = takePendingCallRequest(replacedBy: service.userID, roomID: call.roomProxy.id)
+        let answeredFromCallKit = answeredFromCallKit || pendingRequestWasAnswered
+        
+        // The native call stack runs the call and reports its screen as `.nativeCallPresentation`.
+        if service.handleNativeCallRequest(roomProxy: call.roomProxy, isVoiceCall: call.isVoiceCall, answeredFromCallKit: answeredFromCallKit) {
+            return
+        }
+        
+        let userID = service.userID
+        let webCall = PresentedCall.webView(userID: userID, roomID: call.roomProxy.id)
+        
+        guard presentedCall != webCall else {
+            MXLog.info("Returning to the call on screen.")
+            actionsSubject.send(.callScreen(.restore))
+            return
+        }
+        
+        // Set before presenting: the replaced screen hangs up as it goes, which must leave this call alone.
+        presentedCall = webCall
+        actionsSubject.send(.callScreen(.present(userID: userID, kind: .webView(call))))
+    }
+    
+    private func storePendingCallRequest(_ request: CallRequest) {
+        let pendingRequestWasAnswered = takePendingCallRequest(replacedBy: request.userID, roomID: request.roomID)
+        
+        MXLog.info("Keeping the call in \(request.roomID) pending until \(request.userID) has a call service")
+        pendingCallRequest = CallRequest(userID: request.userID,
+                                         roomID: request.roomID,
+                                         isVoiceCall: request.isVoiceCall,
+                                         answeredFromCallKit: request.answeredFromCallKit || pendingRequestWasAnswered)
+    }
+    
+    /// Takes the pending call request for a newer one. The same call asked for again passes on its answer
+    /// for the newer request to take over, any other is dropped. Returns whether an answer was passed on.
+    private func takePendingCallRequest(replacedBy userID: String, roomID: String) -> Bool {
+        guard let pendingCallRequest = pendingCallRequest.take() else { return false }
+        
+        guard pendingCallRequest.userID == userID, pendingCallRequest.roomID == roomID else {
+            dropCallRequest(pendingCallRequest, because: "a newer call replaced it")
+            return false
+        }
+        
+        return pendingCallRequest.answeredFromCallKit
+    }
+    
+    private func handlePendingCallRequest(_ request: CallRequest) async {
+        // Checked again, as the request may have been replaced or its account removed since.
+        guard pendingCallRequest == request, let service = services[request.userID] else { return }
+        pendingCallRequest = nil
+        await handleCallRequest(request, service: service)
+    }
+    
+    private func dropCallRequest(_ request: CallRequest, because reason: String) {
+        MXLog.warning("Dropping the call in \(request.roomID): \(reason)")
+        
+        if request.answeredFromCallKit {
+            dropAnsweredCall(userID: request.userID, roomID: request.roomID)
+        }
+    }
+    
+    /// Passes on the native call stack's screen changes while its call is the one on screen.
+    private func relayNativeCallPresentation(_ presentation: NativeCallPresentation, from service: ElementCallServiceProtocol) {
+        let userID = service.userID
+        let nativeCall = PresentedCall.native(userID: userID)
+        
+        switch presentation {
+        case .present:
+            guard presentedCall != nativeCall else {
+                restoreNativeCall(of: service)
+                return
+            }
+            
+            presentedCall = nativeCall
+            actionsSubject.send(.callScreen(.present(userID: userID, kind: .native)))
+        case .restore:
+            guard presentedCall == nativeCall else { return }
+            restoreNativeCall(of: service)
+        case .minimize:
+            guard presentedCall == nativeCall else { return }
+            actionsSubject.send(.callScreen(.minimize))
+        case .dismiss:
+            guard presentedCall == nativeCall else { return }
+            presentedCall = nil
+            actionsSubject.send(.callScreen(.dismiss))
+        }
+    }
+    
+    private func restoreNativeCall(of service: ElementCallServiceProtocol) {
+        service.restoreNativeCall()
+        actionsSubject.send(.callScreen(.restore))
+    }
+    
+    private func minimizeCall() {
+        switch presentedCall {
+        case .none:
+            break
+        case .native(let userID):
+            // The screen comes down once the stack reports its system window, as `.nativeCallPresentation(.minimize)`.
+            services[userID]?.minimizeNativeCall()
+        case .webView:
+            actionsSubject.send(.callScreen(.minimize))
+        }
+    }
+    
+    /// Takes the account's call off screen, as the account goes or the system ended its web view call.
+    private func dismissCallScreen(of userID: String) {
+        guard presentedCall?.userID == userID else { return }
+        presentedCall = nil
+        actionsSubject.send(.callScreen(.dismiss))
     }
     
     // MARK: - PKPushRegistryDelegate
@@ -608,6 +803,11 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
         if let ongoingCallID, ongoingCallID.callKitID == callKitID {
             services[ongoingCallID.userID]?.systemEventReceived(.endCallRequested(roomID: ongoingCallID.roomID))
             tearDownCallSession(sendEndCallAction: false)
+            
+            // Only the native stack hears the request, so a web view call's screen is taken down here.
+            if presentedCall == .webView(userID: ongoingCallID.userID, roomID: ongoingCallID.roomID) {
+                dismissCallScreen(of: ongoingCallID.userID)
+            }
         }
         
         if let incomingCallID, incomingCallID.callKitID == callKitID {

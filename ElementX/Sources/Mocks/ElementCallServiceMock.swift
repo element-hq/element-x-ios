@@ -21,7 +21,6 @@ extension ElementCallServiceMock {
         userID = configuration.userID
         actionsPublisher = PassthroughSubject().eraseToAnyPublisher()
         nativeCallEventsPublisher = PassthroughSubject().eraseToAnyPublisher()
-        nativeCallPresentationPublisher = PassthroughSubject().eraseToAnyPublisher()
         
         let ongoingCallRoomIDSubject = CurrentValueSubject<String?, Never>(configuration.ongoingCallRoomID)
         ongoingCallRoomIDPublisher = ongoingCallRoomIDSubject.asCurrentValuePublisher()
@@ -30,5 +29,11 @@ extension ElementCallServiceMock {
         }
         
         handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitReturnValue = false
+    }
+}
+
+extension ElementCallServiceAction.RoomCall {
+    static func mock(roomID: String = "!room:example.com", isVoiceCall: Bool = false) -> Self {
+        .init(roomProxy: JoinedRoomProxyMock(.init(id: roomID)), isVoiceCall: isVoiceCall)
     }
 }

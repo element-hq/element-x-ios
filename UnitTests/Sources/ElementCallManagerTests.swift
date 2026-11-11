@@ -13,6 +13,7 @@ import PushKit
 import Testing
 
 @MainActor
+// swiftlint:disable:next type_body_length
 final class ElementCallManagerTests {
     private var appSettings: AppSettings!
     private var callProvider: CXProviderMock!
@@ -23,6 +24,13 @@ final class ElementCallManagerTests {
     private var service: ElementCallServiceMock!
     private var serviceActions: PassthroughSubject<ElementCallServiceAction, Never>!
     private var manager: ElementCallManager!
+    private var callScreens: [CallScreenPresentation] = []
+    private var callScreensCancellable: AnyCancellable?
+    
+    private let aliceID = "@alice:matrix.org"
+    private let bobID = "@bob:matrix.org"
+    private let roomID = "!room:example.com"
+    private let otherRoomID = "!other:example.com"
     
     init() {
         appSettings = AppSettings.volatile()
@@ -42,6 +50,12 @@ final class ElementCallManagerTests {
                                      callController: callController,
                                      timeProvider: TimeProvider(clock: clock, now: dateProvider))
         manager.add(service)
+        
+        callScreensCancellable = manager.actionsPublisher.sink { [weak self] action in
+            if case .callScreen(let presentation) = action {
+                self?.callScreens.append(presentation)
+            }
+        }
     }
     
     isolated deinit {
@@ -1224,7 +1238,269 @@ final class ElementCallManagerTests {
         #expect(!callProvider.reportCallWithEndedAtReasonReceivedInvocations.contains { $0.reason == .unanswered })
     }
     
+    // MARK: - Call screen
+    
+    @Test("A call request without a native call stack presents the web view")
+    func presentWebCall() {
+        serviceActions.send(.callRequested(.mock()))
+        
+        #expect(service.handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitCalled, "The native call stack is asked first")
+        #expect(callScreens == [.present(userID: aliceID, kind: .webView(.mock()))])
+    }
+    
+    @Test("A native call is presented once its call stack asks for it")
+    func presentNativeCall() {
+        service.handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitReturnValue = true
+        serviceActions.send(.callRequested(.mock()))
+        #expect(callScreens.isEmpty, "The stack presents its call once it has started it")
+        
+        serviceActions.send(.nativeCallPresentation(.present))
+        #expect(callScreens == [.present(userID: aliceID, kind: .native)])
+    }
+    
+    @Test("Asking again for the call on screen returns to it")
+    func restoreCall() {
+        serviceActions.send(.callRequested(.mock()))
+        serviceActions.send(.callRequested(.mock()))
+        
+        #expect(callScreens == [.present(userID: aliceID, kind: .webView(.mock())), .restore],
+                "Still loading, before any call session, the same call comes back rather than opening twice")
+    }
+    
+    @Test("A call in another room replaces the one on screen, whose hang-up leaves the new call alone")
+    func replaceCall() {
+        serviceActions.send(.callRequested(.mock()))
+        serviceActions.send(.callRequested(.mock(roomID: otherRoomID)))
+        // The replaced screen hangs up as it goes.
+        serviceActions.send(.callSessionEnded(roomID: roomID, reason: nil))
+        serviceActions.send(.callRequested(.mock(roomID: otherRoomID)))
+        
+        #expect(callScreens == [.present(userID: aliceID, kind: .webView(.mock())),
+                                .present(userID: aliceID, kind: .webView(.mock(roomID: otherRoomID))),
+                                .restore])
+    }
+    
+    @Test("A web view call whose screen went is presented again when asked for")
+    func presentCallAgain() {
+        serviceActions.send(.callRequested(.mock()))
+        serviceActions.send(.callSessionEnded(roomID: roomID, reason: nil))
+        serviceActions.send(.callRequested(.mock()))
+        
+        #expect(callScreens == [.present(userID: aliceID, kind: .webView(.mock())),
+                                .present(userID: aliceID, kind: .webView(.mock()))])
+    }
+    
+    @Test("Minimising a web view call minimises its screen")
+    func minimizeWebCall() {
+        serviceActions.send(.callRequested(.mock()))
+        serviceActions.send(.callMinimizeRequested)
+        
+        #expect(callScreens.last == .minimize)
+    }
+    
+    @Test("Minimising a native call waits for its system window")
+    func minimizeNativeCall() {
+        showNativeCall()
+        
+        serviceActions.send(.callMinimizeRequested)
+        #expect(service.minimizeNativeCallCalled)
+        #expect(callScreens == [.present(userID: aliceID, kind: .native)], "The screen waits for the system window")
+        
+        serviceActions.send(.nativeCallPresentation(.minimize))
+        #expect(callScreens.last == .minimize)
+    }
+    
+    @Test("Minimising without a call on screen does nothing")
+    func minimizeWithoutCall() {
+        serviceActions.send(.callMinimizeRequested)
+        
+        #expect(callScreens.isEmpty)
+        #expect(!service.minimizeNativeCallCalled)
+    }
+    
+    @Test("The native call stack's restore brings its call back")
+    func restoreNativeCall() {
+        showNativeCall()
+        
+        serviceActions.send(.nativeCallPresentation(.restore))
+        
+        #expect(service.restoreNativeCallCalled)
+        #expect(callScreens.last == .restore)
+    }
+    
+    @Test("A dismissed native call no longer counts as on screen")
+    func dismissNativeCall() {
+        showNativeCall()
+        
+        serviceActions.send(.nativeCallPresentation(.dismiss))
+        serviceActions.send(.callMinimizeRequested)
+        
+        #expect(callScreens == [.present(userID: aliceID, kind: .native), .dismiss])
+        #expect(!service.minimizeNativeCallCalled)
+    }
+    
+    @Test("Removing or replacing an account's call service dismisses its call", arguments: [false, true])
+    func removeAccountDuringCall(replacesService: Bool) {
+        serviceActions.send(.callRequested(.mock()))
+        
+        if replacesService {
+            manager.add(makeCallService(userID: aliceID))
+        } else {
+            manager.remove(userID: aliceID)
+        }
+        
+        #expect(callScreens.last == .dismiss)
+    }
+    
+    @Test("Removing an account leaves another account's call on screen")
+    func removeOtherAccountDuringCall() {
+        let bobActions = PassthroughSubject<ElementCallServiceAction, Never>()
+        manager.add(makeCallService(userID: bobID, actions: bobActions))
+        bobActions.send(.callRequested(.mock()))
+        
+        manager.remove(userID: aliceID)
+        
+        #expect(callScreens == [.present(userID: bobID, kind: .webView(.mock()))])
+    }
+    
+    @Test("The system ending a web view call dismisses its screen")
+    func systemEndsWebCall() async throws {
+        await reportIncomingPush(isVoiceCall: false)
+        let callKitID = try await answerReportedCall()
+        serviceActions.send(.callRequested(.mock()))
+        await startCallSession(kind: .webView)
+        
+        manager.endCall(withCallKitID: callKitID)
+        
+        #expect(callScreens.last == .dismiss)
+    }
+    
+    // MARK: - Pending call requests
+    
+    @Test("A call for an account without a call service opens once the service is added")
+    func pendingCallRequest() async {
+        let bob = makeCallService(userID: bobID)
+        bob.joinedRoomRoomIDReturnValue = JoinedRoomProxyMock(.init(id: roomID))
+        manager.requestCall(userID: bobID, roomID: roomID, isVoiceCall: false, answeredFromCallKit: true)
+        
+        await waitForConfirmation { confirmation in
+            bob.handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitClosure = { _, _, _ in
+                confirmation()
+                return true
+            }
+            manager.add(bob)
+            #expect(!bob.joinedRoomRoomIDCalled, "Opened once adding the service is over, as the account's screens start in that step")
+        }
+        
+        #expect(bob.handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitReceivedArguments?.answeredFromCallKit == true)
+    }
+    
+    @Test("A pending call request in another room drops the older one, ending its answer")
+    func replacePendingCallRequest() async throws {
+        let answeredCallID = try await answerNativeCall(receiverID: bobID)
+        manager.requestCall(userID: bobID, roomID: roomID, isVoiceCall: false, answeredFromCallKit: true)
+        
+        manager.requestCall(userID: bobID, roomID: otherRoomID, isVoiceCall: false, answeredFromCallKit: false)
+        
+        #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.uuid == answeredCallID)
+        #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.reason == .failed)
+    }
+    
+    @Test("Asking again for a pending call request keeps its answer for the call to take over")
+    func repeatPendingCallRequest() async throws {
+        let answeredCallID = try await answerNativeCall(receiverID: bobID)
+        manager.requestCall(userID: bobID, roomID: roomID, isVoiceCall: false, answeredFromCallKit: true)
+        manager.requestCall(userID: bobID, roomID: roomID, isVoiceCall: false, answeredFromCallKit: false)
+        #expect(!callProvider.reportCallWithEndedAtReasonReceivedInvocations.contains { $0.uuid == answeredCallID }, "The answered call stays up")
+        
+        let bob = makeCallService(userID: bobID)
+        bob.joinedRoomRoomIDReturnValue = JoinedRoomProxyMock(.init(id: roomID))
+        await waitForConfirmation { confirmation in
+            bob.handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitClosure = { _, _, _ in
+                confirmation()
+                return true
+            }
+            manager.add(bob)
+        }
+        
+        #expect(bob.handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitReceivedArguments?.answeredFromCallKit == true)
+    }
+    
+    @Test("A pending call request is dropped with its account")
+    func removeAccountWithPendingCallRequest() async {
+        let bob = makeCallService(userID: bobID)
+        manager.requestCall(userID: bobID, roomID: roomID, isVoiceCall: false, answeredFromCallKit: false)
+        manager.remove(userID: bobID)
+        
+        await waitForConfirmation(expectedCount: 0, timeout: .milliseconds(500)) { confirmation in
+            bob.joinedRoomRoomIDClosure = { _ in
+                confirmation()
+                return nil
+            }
+            manager.add(bob)
+        }
+    }
+    
+    @Test("Presenting a call in another room drops the pending call request")
+    func presentCallWithPendingCallRequest() async throws {
+        let answeredCallID = try await answerNativeCall(receiverID: bobID)
+        manager.requestCall(userID: bobID, roomID: roomID, isVoiceCall: false, answeredFromCallKit: true)
+        
+        serviceActions.send(.callRequested(.mock(roomID: otherRoomID)))
+        
+        #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.uuid == answeredCallID)
+        #expect(callProvider.reportCallWithEndedAtReasonReceivedArguments?.reason == .failed)
+    }
+    
+    @Test("A call in a room that isn't joined is dropped, ending its answer")
+    func unjoinedRoomCallRequest() async throws {
+        let answeredCallID = try await answerNativeCall()
+        service.joinedRoomRoomIDReturnValue = nil
+        
+        await waitForConfirmation { confirmation in
+            callProvider.reportCallWithEndedAtReasonClosure = { uuid, _, reason in
+                if uuid == answeredCallID, reason == .failed {
+                    confirmation()
+                }
+            }
+            manager.requestCall(userID: aliceID, roomID: roomID, isVoiceCall: false, answeredFromCallKit: true)
+        }
+        
+        #expect(callScreens.isEmpty)
+    }
+    
+    @Test("A call is dropped when its account goes while the room loads")
+    func removeAccountWhileRoomLoads() async {
+        service.joinedRoomRoomIDClosure = { [manager, aliceID] roomID in
+            manager?.remove(userID: aliceID)
+            return JoinedRoomProxyMock(.init(id: roomID))
+        }
+        
+        await waitForConfirmation(expectedCount: 0, timeout: .milliseconds(500)) { confirmation in
+            service.handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitClosure = { _, _, _ in
+                confirmation()
+                return false
+            }
+            manager.requestCall(userID: aliceID, roomID: roomID, isVoiceCall: false, answeredFromCallKit: false)
+        }
+        
+        #expect(callScreens.isEmpty)
+    }
+    
     // MARK: - Helpers
+    
+    private func showNativeCall() {
+        service.handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitReturnValue = true
+        serviceActions.send(.callRequested(.mock()))
+        serviceActions.send(.nativeCallPresentation(.present))
+    }
+    
+    /// Rings and answers a call for the native call stack, which keeps it up until a call takes it over or it's dropped.
+    private func answerNativeCall(receiverID: String = "@alice:matrix.org") async throws -> UUID {
+        appSettings.nativeCallEnabled = true
+        await reportIncomingPush(isVoiceCall: false, receiverID: receiverID)
+        return try await answerReportedCall()
+    }
     
     /// Builds an account's call service whose actions the test sends itself.
     private func makeCallService(userID: String,

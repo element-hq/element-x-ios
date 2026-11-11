@@ -18,6 +18,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private let clientProxy: ClientProxyProtocol
     private let roomProxy: JoinedRoomProxyProtocol
     private let userSettings: UserSettings
+    private let elementCallService: ElementCallServiceProtocol
     private let analyticsService: AnalyticsServiceProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     
@@ -58,6 +59,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         clientProxy = userSession.clientProxy
         self.roomProxy = roomProxy
         userSettings = userSession.userSettings
+        elementCallService = userSession.elementCallService
         self.analyticsService = analyticsService
         self.userIndicatorController = userIndicatorController
         
@@ -75,7 +77,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                    mediaProvider: userSession.mediaProvider)
         
         updateRoomInfo(roomProxy.infoPublisher.value)
-        setupSubscriptions(ongoingCallRoomIDPublisher: userSession.elementCallService.ongoingCallRoomIDPublisher)
+        setupSubscriptions(ongoingCallRoomIDPublisher: elementCallService.ongoingCallRoomIDPublisher)
         
         Task {
             await updateVerificationBadge()
@@ -92,7 +94,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .displayRoomDetails:
             actionsSubject.send(.displayRoomDetails)
         case .displayCall(let isVoiceCall):
-            actionsSubject.send(.displayCall(isVoiceCall: isVoiceCall))
+            elementCallService.requestCall(roomProxy: roomProxy, isVoiceCall: isVoiceCall)
             actionsSubject.send(.removeComposerFocus)
             analyticsService.trackInteraction(name: .MobileRoomCallButton)
         case .footerViewAction(let action):

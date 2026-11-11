@@ -145,7 +145,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         case .processTapRolesAndPermissions:
             actionsSubject.send(.requestRolesAndPermissionsPresentation)
         case .processTapCall(let isVoiceCall):
-            actionsSubject.send(.startCall(isVoiceCall: isVoiceCall))
+            userSession.elementCallService.requestCall(roomProxy: roomProxy, isVoiceCall: isVoiceCall)
         case .processTapPinnedEvents:
             analyticsService.trackInteraction(name: .PinnedMessageRoomInfoButton)
             actionsSubject.send(.displayPinnedEventsTimeline)

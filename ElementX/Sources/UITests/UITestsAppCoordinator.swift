@@ -609,11 +609,20 @@ class MockScreen: Identifiable {
             
             let timelineControllerFactory = TimelineControllerFactoryMock(.init(timelineController: timelineController))
             
-            let userSession = UserSessionMock(.init(clientProxy: clientProxy, userSettings: userSettings))
+            // Presents a room's call straight away, as the manager does without a native call stack.
+            let callManagerActions = PassthroughSubject<ElementCallManagerAction, Never>()
+            let elementCallManager = ElementCallManagerMock(.init(actionsPublisher: callManagerActions.eraseToAnyPublisher()))
+            let elementCallService = ElementCallServiceMock(.init(userID: userID))
+            elementCallService.requestCallRoomProxyIsVoiceCallClosure = { roomProxy, isVoiceCall in
+                callManagerActions.send(.callScreen(.present(userID: userID, kind: .webView(.init(roomProxy: roomProxy, isVoiceCall: isVoiceCall)))))
+            }
+            
+            let userSession = UserSessionMock(.init(clientProxy: clientProxy, userSettings: userSettings, elementCallService: elementCallService))
             let flowCoordinator = UserSessionFlowCoordinator(isNewLogin: false,
                                                              navigationRootCoordinator: navigationRootCoordinator,
                                                              appLockService: AppLockService(keychainController: KeychainControllerMock(),
                                                                                             appSettings: appSettings),
+                                                             elementCallManager: elementCallManager,
                                                              flowParameters: CommonFlowParameters(userSession: userSession,
                                                                                                   availableSessionsPublisher: .init([.init(userSession: userSession)]),
                                                                                                   bugReportService: BugReportServiceMock(.init()),
@@ -659,8 +668,11 @@ class MockScreen: Identifiable {
             let appMediator = AppMediatorMock(.init())
             appMediator.windowManager = windowManager
             
+            let elementCallManager = ElementCallManagerMock(.init())
+            
             let flowCoordinator = RootFlowCoordinator(navigationRootCoordinator: navigationRootCoordinator,
                                                       userSessionManager: userSessionManager,
+                                                      elementCallManager: elementCallManager,
                                                       appLockService: AppLockService(keychainController: KeychainControllerMock(),
                                                                                      appSettings: appSettings),
                                                       bugReportService: BugReportServiceMock(.init()),
