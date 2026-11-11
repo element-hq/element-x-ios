@@ -610,10 +610,13 @@ class MockScreen: Identifiable {
             let timelineControllerFactory = TimelineControllerFactoryMock(.init(timelineController: timelineController))
             
             let userSession = UserSessionMock(.init(clientProxy: clientProxy, userSettings: userSettings))
+            let elementCallManager = ElementCallManagerMock()
+            elementCallManager.actionsPublisher = PassthroughSubject().eraseToAnyPublisher()
             let flowCoordinator = UserSessionFlowCoordinator(isNewLogin: false,
                                                              navigationRootCoordinator: navigationRootCoordinator,
                                                              appLockService: AppLockService(keychainController: KeychainControllerMock(),
                                                                                             appSettings: appSettings),
+                                                             elementCallManager: elementCallManager,
                                                              flowParameters: CommonFlowParameters(userSession: userSession,
                                                                                                   availableSessionsPublisher: .init([.init(userSession: userSession)]),
                                                                                                   bugReportService: BugReportServiceMock(.init()),
@@ -659,8 +662,12 @@ class MockScreen: Identifiable {
             let appMediator = AppMediatorMock(.init())
             appMediator.windowManager = windowManager
             
+            let elementCallManager = ElementCallManagerMock()
+            elementCallManager.actionsPublisher = PassthroughSubject().eraseToAnyPublisher()
+            
             let flowCoordinator = RootFlowCoordinator(navigationRootCoordinator: navigationRootCoordinator,
                                                       userSessionManager: userSessionManager,
+                                                      elementCallManager: elementCallManager,
                                                       appLockService: AppLockService(keychainController: KeychainControllerMock(),
                                                                                      appSettings: appSettings),
                                                       bugReportService: BugReportServiceMock(.init()),

@@ -17,7 +17,6 @@ enum ChatsTabFlowCoordinatorAction {
     case showChatBackupSettings
     case sessionVerification(SessionVerificationScreenFlow)
     case showCallScreen(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool)
-    case hideCallScreenOverlay
     case logout
 }
 
@@ -323,7 +322,7 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
                           detached: false,
                           animated: animated)
         }
-        actionsSubject.send(.hideCallScreenOverlay) // Turn any active call into a PiP so that navigation from a notification is visible to the user.
+        userSession.elementCallService.minimizeCall() // Turn any active call into a PiP so that navigation from a notification is visible to the user.
     }
     
     private func setupObservers() {

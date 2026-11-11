@@ -22,6 +22,7 @@ struct UserSessionFlowCoordinatorTests {
     private let homeserverReachabilitySubject: CurrentValueSubject<HomeserverReachability, Never> = .init(.reachable)
     private let loadingStateSubject: CurrentValueSubject<ClientProxyLoadingState, Never> = .init(.notLoading)
     private let elementCallService = ElementCallServiceMock(.init())
+    private let callManagerActions = PassthroughSubject<ElementCallManagerAction, Never>()
     private var tabCoordinator: NavigationTabCoordinator<UserSessionFlowCoordinator.HomeTab>? {
         rootCoordinator?.rootCoordinator as? NavigationTabCoordinator
     }
@@ -65,9 +66,13 @@ struct UserSessionFlowCoordinatorTests {
                                                   userIndicatorController: userIndicatorController,
                                                   stateMachineFactory: stateMachineFactory)
         
+        let elementCallManager = ElementCallManagerMock()
+        elementCallManager.actionsPublisher = callManagerActions.eraseToAnyPublisher()
+        
         userSessionFlowCoordinator = UserSessionFlowCoordinator(isNewLogin: false,
                                                                 navigationRootCoordinator: rootCoordinator,
                                                                 appLockService: AppLockServiceMock(),
+                                                                elementCallManager: elementCallManager,
                                                                 flowParameters: flowParameters)
         
         userSessionFlowCoordinator.start()
@@ -92,13 +97,25 @@ struct UserSessionFlowCoordinatorTests {
         // E.g. clearing the cache or signing out during a call: the call screen goes with the screens.
         await waitForConfirmation { confirmation in
             elementCallService.setupCallSessionRoomIDRoomDisplayNameIsVideoKindClosure = { _, _, _, _ in confirmation() }
-            userSessionFlowCoordinator.handleAppRoute(.call(roomID: "1", isVoiceCall: false, answeredFromCallKit: false), animated: false)
+            presentWebCall(roomID: "1")
         }
         
         rootCoordinator.setRootCoordinator(nil)
         
         #expect(elementCallService.tearDownCallSessionRoomIDReceivedRoomID == "1",
                 "A call left ongoing would make every later call count as busy")
+    }
+    
+    @Test
+    func presentingAnotherWebCallReplacesTheScreen() throws {
+        presentWebCall(roomID: "1")
+        let firstCallScreen = try #require(tabCoordinator?.overlayCoordinator as? CallScreenCoordinator)
+        
+        presentWebCall(roomID: "2")
+        
+        let secondCallScreen = try #require(tabCoordinator?.overlayCoordinator as? CallScreenCoordinator)
+        #expect(secondCallScreen !== firstCallScreen)
+        #expect(elementCallService.tearDownCallSessionRoomIDReceivedInvocations.contains("1"), "The replaced call has to hang up")
     }
     
     @Test
@@ -291,6 +308,11 @@ struct UserSessionFlowCoordinatorTests {
     }
     
     // MARK: - Helpers
+    
+    private func presentWebCall(roomID: String) {
+        let call = RoomCall(roomProxy: JoinedRoomProxyMock(.init(id: roomID)), isVoiceCall: false)
+        callManagerActions.send(.callScreen(.present(userID: "hi@bob", kind: .webView(call))))
+    }
     
     private func process(route: AppRoute,
                          expectedUserSessionState: UserSessionFlowCoordinator.State? = nil,

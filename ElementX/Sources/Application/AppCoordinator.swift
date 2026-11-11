@@ -58,6 +58,7 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
     /// A reply made from a notification before its account was live.
     private var storedInlineReply: PendingInlineReplyDetails?
     
+    // swiftlint:disable:next function_body_length
     init(appDelegate: AppDelegate) {
         let appHooks = AppHooks()
         appHooks.setUp()
@@ -143,6 +144,7 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
         
         rootFlowCoordinator = RootFlowCoordinator(navigationRootCoordinator: navigationRootCoordinator,
                                                   userSessionManager: userSessionManager,
+                                                  elementCallManager: elementCallManager,
                                                   appLockService: appLockService,
                                                   bugReportService: bugReportService,
                                                   appMediator: appMediator,
@@ -625,6 +627,8 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
                     let animated = appMediator.appState == .active
                     let callRoute = AppRoute.call(roomID: roomID, isVoiceCall: isVoiceCall, answeredFromCallKit: true)
                     Task { await handleAppRoute(callRoute, userID: userID, awaitsRoom: false, windowType: nil, animated: animated) }
+                case .callScreen:
+                    break // Shown by the account's user session flow.
                 }
             }
             .store(in: &cancellables)

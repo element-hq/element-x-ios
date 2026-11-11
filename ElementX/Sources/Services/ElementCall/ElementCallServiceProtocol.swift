@@ -41,8 +41,23 @@ enum ElementCallSessionKind: Equatable {
     case native(takesOverAnsweredCall: Bool)
 }
 
-/// What the service asks of the `ElementCallManager`, which owns CallKit and the VoIP pushes.
+/// A call in a room, compared by the room's ID as room proxies aren't equatable.
+struct RoomCall: Equatable {
+    let roomProxy: JoinedRoomProxyProtocol
+    let isVoiceCall: Bool
+    
+    static func == (lhs: RoomCall, rhs: RoomCall) -> Bool {
+        lhs.roomProxy.id == rhs.roomProxy.id && lhs.isVoiceCall == rhs.isVoiceCall
+    }
+}
+
+/// What the service asks of the `ElementCallManager`, which owns CallKit, the VoIP pushes and the calls.
 enum ElementCallServiceAction: Equatable {
+    /// A room screen asked for the room's call.
+    case callRequested(RoomCall)
+    /// The call screen needs to get out of the way, whichever account's call it shows.
+    case callMinimizeRequested
+    case nativeCallPresentation(NativeCallPresentation)
     case callSessionStarted(roomID: String, roomDisplayName: String, isVideo: Bool, kind: ElementCallSessionKind)
     case callSessionConnected(roomID: String)
     /// A `nil` reason means the call ended here: our hang-up, or the call screen closing.
@@ -65,18 +80,24 @@ protocol ElementCallServiceProtocol: AnyObject {
     /// Replays an active audio session to a new subscriber, so a stack built after CallKit activated it still hears it.
     var nativeCallEventsPublisher: AnyPublisher<NativeCallEvent, Never> { get }
     
-    /// The native call's screen needs presenting, minimizing, restoring or dismissing.
-    var nativeCallPresentationPublisher: AnyPublisher<NativeCallPresentation, Never> { get }
-    
     /// The controller for this account's native call stack, `nil` when native calls are unavailable.
     var nativeCallController: ElementCallController? { get }
+    
+    /// Asks the `ElementCallManager` to open the room's call, or return to it.
+    func requestCall(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool)
+    
+    /// Asks the `ElementCallManager` to minimize the call screen, whichever account's call it shows.
+    func minimizeCall()
+    
+    /// The account's joined room, `nil` when it isn't joined.
+    func joinedRoom(roomID: String) async -> JoinedRoomProxyProtocol?
     
     /// Builds the native call stack while enabled and the setting is on, or releases it, hanging up its call.
     /// Enable it on one service at a time: idle stacks switch proximity monitoring off under the live call.
     func setNativeCallStackEnabled(_ isEnabled: Bool)
     
     /// Starts, or returns to, a native call in the room, driving its screen through
-    /// ``nativeCallPresentationPublisher``. `answeredFromCallKit` takes over that answered call.
+    /// `.nativeCallPresentation` actions. `answeredFromCallKit` takes over that answered call.
     ///
     /// Returns `false` when there's no native call stack and the caller should present the Element
     /// Call web view instead.
@@ -84,7 +105,7 @@ protocol ElementCallServiceProtocol: AnyObject {
     func handleNativeCallRequest(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool, answeredFromCallKit: Bool) -> Bool
     
     /// Asks the native call to minimize. The screen only comes down once a system window has
-    /// started, which arrives through ``nativeCallPresentationPublisher``.
+    /// started, which arrives as a `.nativeCallPresentation(.minimize)` action.
     func minimizeNativeCall()
     
     /// Brings the native call back out of its system window.

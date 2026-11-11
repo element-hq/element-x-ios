@@ -5183,6 +5183,37 @@ nonisolated class ElementCallManagerMock: ElementCallManagerProtocol, @unchecked
         removeUserIDReceivedInvocationsLock.withLock { removeUserIDUnderlyingReceivedInvocations.append(userID) }
         removeUserIDClosure?(userID)
     }
+    //MARK: - requestCall
+
+    private let requestCallUserIDRoomIDIsVoiceCallAnsweredFromCallKitCallsCountLock = NSLock()
+    private nonisolated(unsafe) var requestCallUserIDRoomIDIsVoiceCallAnsweredFromCallKitUnderlyingCallsCount = 0
+    var requestCallUserIDRoomIDIsVoiceCallAnsweredFromCallKitCallsCount: Int {
+        get { requestCallUserIDRoomIDIsVoiceCallAnsweredFromCallKitCallsCountLock.withLock { requestCallUserIDRoomIDIsVoiceCallAnsweredFromCallKitUnderlyingCallsCount } }
+        set { requestCallUserIDRoomIDIsVoiceCallAnsweredFromCallKitCallsCountLock.withLock { requestCallUserIDRoomIDIsVoiceCallAnsweredFromCallKitUnderlyingCallsCount = newValue } }
+    }
+    var requestCallUserIDRoomIDIsVoiceCallAnsweredFromCallKitCalled: Bool {
+        return requestCallUserIDRoomIDIsVoiceCallAnsweredFromCallKitCallsCount > 0
+    }
+    private let requestCallUserIDRoomIDIsVoiceCallAnsweredFromCallKitReceivedArgumentsLock = NSLock()
+    private nonisolated(unsafe) var requestCallUserIDRoomIDIsVoiceCallAnsweredFromCallKitUnderlyingReceivedArguments: (userID: String, roomID: String, isVoiceCall: Bool, answeredFromCallKit: Bool)?
+    var requestCallUserIDRoomIDIsVoiceCallAnsweredFromCallKitReceivedArguments: (userID: String, roomID: String, isVoiceCall: Bool, answeredFromCallKit: Bool)? {
+        get { requestCallUserIDRoomIDIsVoiceCallAnsweredFromCallKitReceivedArgumentsLock.withLock { requestCallUserIDRoomIDIsVoiceCallAnsweredFromCallKitUnderlyingReceivedArguments } }
+        set { requestCallUserIDRoomIDIsVoiceCallAnsweredFromCallKitReceivedArgumentsLock.withLock { requestCallUserIDRoomIDIsVoiceCallAnsweredFromCallKitUnderlyingReceivedArguments = newValue } }
+    }
+    private let requestCallUserIDRoomIDIsVoiceCallAnsweredFromCallKitReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var requestCallUserIDRoomIDIsVoiceCallAnsweredFromCallKitUnderlyingReceivedInvocations: [(userID: String, roomID: String, isVoiceCall: Bool, answeredFromCallKit: Bool)] = []
+    var requestCallUserIDRoomIDIsVoiceCallAnsweredFromCallKitReceivedInvocations: [(userID: String, roomID: String, isVoiceCall: Bool, answeredFromCallKit: Bool)] {
+        get { requestCallUserIDRoomIDIsVoiceCallAnsweredFromCallKitReceivedInvocationsLock.withLock { requestCallUserIDRoomIDIsVoiceCallAnsweredFromCallKitUnderlyingReceivedInvocations } }
+        set { requestCallUserIDRoomIDIsVoiceCallAnsweredFromCallKitReceivedInvocationsLock.withLock { requestCallUserIDRoomIDIsVoiceCallAnsweredFromCallKitUnderlyingReceivedInvocations = newValue } }
+    }
+    nonisolated(unsafe) var requestCallUserIDRoomIDIsVoiceCallAnsweredFromCallKitClosure: ((String, String, Bool, Bool) -> Void)?
+
+    func requestCall(userID: String, roomID: String, isVoiceCall: Bool, answeredFromCallKit: Bool) {
+        requestCallUserIDRoomIDIsVoiceCallAnsweredFromCallKitCallsCountLock.withLock { requestCallUserIDRoomIDIsVoiceCallAnsweredFromCallKitUnderlyingCallsCount += 1 }
+        requestCallUserIDRoomIDIsVoiceCallAnsweredFromCallKitReceivedArguments = (userID: userID, roomID: roomID, isVoiceCall: isVoiceCall, answeredFromCallKit: answeredFromCallKit)
+        requestCallUserIDRoomIDIsVoiceCallAnsweredFromCallKitReceivedInvocationsLock.withLock { requestCallUserIDRoomIDIsVoiceCallAnsweredFromCallKitUnderlyingReceivedInvocations.append((userID: userID, roomID: roomID, isVoiceCall: isVoiceCall, answeredFromCallKit: answeredFromCallKit)) }
+        requestCallUserIDRoomIDIsVoiceCallAnsweredFromCallKitClosure?(userID, roomID, isVoiceCall, answeredFromCallKit)
+    }
     //MARK: - dropAnsweredCall
 
     private let dropAnsweredCallUserIDRoomIDCallsCountLock = NSLock()
@@ -5236,13 +5267,98 @@ nonisolated class ElementCallServiceMock: ElementCallServiceProtocol, @unchecked
         set(value) { underlyingNativeCallEventsPublisher = value }
     }
     nonisolated(unsafe) var underlyingNativeCallEventsPublisher: AnyPublisher<NativeCallEvent, Never>!
-    var nativeCallPresentationPublisher: AnyPublisher<NativeCallPresentation, Never> {
-        get { return underlyingNativeCallPresentationPublisher }
-        set(value) { underlyingNativeCallPresentationPublisher = value }
-    }
-    nonisolated(unsafe) var underlyingNativeCallPresentationPublisher: AnyPublisher<NativeCallPresentation, Never>!
     nonisolated(unsafe) var nativeCallController: ElementCallController?
 
+    //MARK: - requestCall
+
+    private let requestCallRoomProxyIsVoiceCallCallsCountLock = NSLock()
+    private nonisolated(unsafe) var requestCallRoomProxyIsVoiceCallUnderlyingCallsCount = 0
+    var requestCallRoomProxyIsVoiceCallCallsCount: Int {
+        get { requestCallRoomProxyIsVoiceCallCallsCountLock.withLock { requestCallRoomProxyIsVoiceCallUnderlyingCallsCount } }
+        set { requestCallRoomProxyIsVoiceCallCallsCountLock.withLock { requestCallRoomProxyIsVoiceCallUnderlyingCallsCount = newValue } }
+    }
+    var requestCallRoomProxyIsVoiceCallCalled: Bool {
+        return requestCallRoomProxyIsVoiceCallCallsCount > 0
+    }
+    private let requestCallRoomProxyIsVoiceCallReceivedArgumentsLock = NSLock()
+    private nonisolated(unsafe) var requestCallRoomProxyIsVoiceCallUnderlyingReceivedArguments: (roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool)?
+    var requestCallRoomProxyIsVoiceCallReceivedArguments: (roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool)? {
+        get { requestCallRoomProxyIsVoiceCallReceivedArgumentsLock.withLock { requestCallRoomProxyIsVoiceCallUnderlyingReceivedArguments } }
+        set { requestCallRoomProxyIsVoiceCallReceivedArgumentsLock.withLock { requestCallRoomProxyIsVoiceCallUnderlyingReceivedArguments = newValue } }
+    }
+    private let requestCallRoomProxyIsVoiceCallReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var requestCallRoomProxyIsVoiceCallUnderlyingReceivedInvocations: [(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool)] = []
+    var requestCallRoomProxyIsVoiceCallReceivedInvocations: [(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool)] {
+        get { requestCallRoomProxyIsVoiceCallReceivedInvocationsLock.withLock { requestCallRoomProxyIsVoiceCallUnderlyingReceivedInvocations } }
+        set { requestCallRoomProxyIsVoiceCallReceivedInvocationsLock.withLock { requestCallRoomProxyIsVoiceCallUnderlyingReceivedInvocations = newValue } }
+    }
+    nonisolated(unsafe) var requestCallRoomProxyIsVoiceCallClosure: ((JoinedRoomProxyProtocol, Bool) -> Void)?
+
+    func requestCall(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool) {
+        requestCallRoomProxyIsVoiceCallCallsCountLock.withLock { requestCallRoomProxyIsVoiceCallUnderlyingCallsCount += 1 }
+        requestCallRoomProxyIsVoiceCallReceivedArguments = (roomProxy: roomProxy, isVoiceCall: isVoiceCall)
+        requestCallRoomProxyIsVoiceCallReceivedInvocationsLock.withLock { requestCallRoomProxyIsVoiceCallUnderlyingReceivedInvocations.append((roomProxy: roomProxy, isVoiceCall: isVoiceCall)) }
+        requestCallRoomProxyIsVoiceCallClosure?(roomProxy, isVoiceCall)
+    }
+    //MARK: - minimizeCall
+
+    private let minimizeCallCallsCountLock = NSLock()
+    private nonisolated(unsafe) var minimizeCallUnderlyingCallsCount = 0
+    var minimizeCallCallsCount: Int {
+        get { minimizeCallCallsCountLock.withLock { minimizeCallUnderlyingCallsCount } }
+        set { minimizeCallCallsCountLock.withLock { minimizeCallUnderlyingCallsCount = newValue } }
+    }
+    var minimizeCallCalled: Bool {
+        return minimizeCallCallsCount > 0
+    }
+    nonisolated(unsafe) var minimizeCallClosure: (() -> Void)?
+
+    func minimizeCall() {
+        minimizeCallCallsCountLock.withLock { minimizeCallUnderlyingCallsCount += 1 }
+        minimizeCallClosure?()
+    }
+    //MARK: - joinedRoom
+
+    private let joinedRoomRoomIDCallsCountLock = NSLock()
+    private nonisolated(unsafe) var joinedRoomRoomIDUnderlyingCallsCount = 0
+    var joinedRoomRoomIDCallsCount: Int {
+        get { joinedRoomRoomIDCallsCountLock.withLock { joinedRoomRoomIDUnderlyingCallsCount } }
+        set { joinedRoomRoomIDCallsCountLock.withLock { joinedRoomRoomIDUnderlyingCallsCount = newValue } }
+    }
+    var joinedRoomRoomIDCalled: Bool {
+        return joinedRoomRoomIDCallsCount > 0
+    }
+    private let joinedRoomRoomIDReceivedRoomIDLock = NSLock()
+    private nonisolated(unsafe) var joinedRoomRoomIDUnderlyingReceivedRoomID: String?
+    var joinedRoomRoomIDReceivedRoomID: String? {
+        get { joinedRoomRoomIDReceivedRoomIDLock.withLock { joinedRoomRoomIDUnderlyingReceivedRoomID } }
+        set { joinedRoomRoomIDReceivedRoomIDLock.withLock { joinedRoomRoomIDUnderlyingReceivedRoomID = newValue } }
+    }
+    private let joinedRoomRoomIDReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var joinedRoomRoomIDUnderlyingReceivedInvocations: [String] = []
+    var joinedRoomRoomIDReceivedInvocations: [String] {
+        get { joinedRoomRoomIDReceivedInvocationsLock.withLock { joinedRoomRoomIDUnderlyingReceivedInvocations } }
+        set { joinedRoomRoomIDReceivedInvocationsLock.withLock { joinedRoomRoomIDUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let joinedRoomRoomIDReturnValueLock = NSLock()
+    private nonisolated(unsafe) var joinedRoomRoomIDUnderlyingReturnValue: JoinedRoomProxyProtocol?
+    var joinedRoomRoomIDReturnValue: JoinedRoomProxyProtocol? {
+        get { joinedRoomRoomIDReturnValueLock.withLock { joinedRoomRoomIDUnderlyingReturnValue } }
+        set { joinedRoomRoomIDReturnValueLock.withLock { joinedRoomRoomIDUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var joinedRoomRoomIDClosure: ((String) async -> JoinedRoomProxyProtocol?)?
+
+    @concurrent func joinedRoom(roomID: String) async -> JoinedRoomProxyProtocol? {
+        joinedRoomRoomIDCallsCountLock.withLock { joinedRoomRoomIDUnderlyingCallsCount += 1 }
+        joinedRoomRoomIDReceivedRoomID = roomID
+        joinedRoomRoomIDReceivedInvocationsLock.withLock { joinedRoomRoomIDUnderlyingReceivedInvocations.append(roomID) }
+        if let joinedRoomRoomIDClosure = joinedRoomRoomIDClosure {
+            return await joinedRoomRoomIDClosure(roomID)
+        } else {
+            return joinedRoomRoomIDReturnValue
+        }
+    }
     //MARK: - setNativeCallStackEnabled
 
     private let setNativeCallStackEnabledCallsCountLock = NSLock()

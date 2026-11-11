@@ -31,8 +31,12 @@ struct RootFlowCoordinatorTests {
         userSessionManager = UserSessionManagerMock(.init(sessions: [userSession],
                                                           callbacksPublisher: userSessionManagerCallbacks.eraseToAnyPublisher()))
         
+        let elementCallManager = ElementCallManagerMock()
+        elementCallManager.actionsPublisher = PassthroughSubject().eraseToAnyPublisher()
+        
         rootFlowCoordinator = RootFlowCoordinator(navigationRootCoordinator: navigationRootCoordinator,
                                                   userSessionManager: userSessionManager,
+                                                  elementCallManager: elementCallManager,
                                                   appLockService: AppLockServiceMock(),
                                                   bugReportService: BugReportServiceMock(.init()),
                                                   appMediator: AppMediatorMock(.init()),

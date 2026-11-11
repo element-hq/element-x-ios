@@ -210,7 +210,11 @@ final class ElementCallServiceTests {
     func nativeCallStackNeedsSettingAndEnabling() {
         let service = makeNativeCallService()
         var presentations: [NativeCallPresentation] = []
-        let cancellable = service.nativeCallPresentationPublisher.sink { presentations.append($0) }
+        let cancellable = service.actionsPublisher.sink { action in
+            if case .nativeCallPresentation(let presentation) = action {
+                presentations.append(presentation)
+            }
+        }
         defer { cancellable.cancel() }
         
         service.setNativeCallStackEnabled(true)

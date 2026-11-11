@@ -21,7 +21,6 @@ extension ElementCallServiceMock {
         userID = configuration.userID
         actionsPublisher = PassthroughSubject().eraseToAnyPublisher()
         nativeCallEventsPublisher = PassthroughSubject().eraseToAnyPublisher()
-        nativeCallPresentationPublisher = PassthroughSubject().eraseToAnyPublisher()
         
         let ongoingCallRoomIDSubject = CurrentValueSubject<String?, Never>(configuration.ongoingCallRoomID)
         ongoingCallRoomIDPublisher = ongoingCallRoomIDSubject.asCurrentValuePublisher()
