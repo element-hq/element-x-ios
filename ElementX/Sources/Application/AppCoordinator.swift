@@ -139,12 +139,7 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
                                                         navigationCoordinator: appLockNavigationCoordinator,
                                                         appSettings: appSettings)
         
-        // Maintain the single-account behaviour for now.
-        let rageshakeURLPublisher = userSessionManager.sessionsPublisher.map { sessions in
-            sessions.first?.userSettings.account.bugReportRageshakeConfiguration.publisher.value ?? appSettings.bundledBugReportRageshakeConfiguration
-        }
-        bugReportService = BugReportService(rageshakeURLPublisher: rageshakeURLPublisher,
-                                            applicationID: appSettings.bugReportApplicationID,
+        bugReportService = BugReportService(applicationID: appSettings.bugReportApplicationID,
                                             sdkGitSHA: sdkGitSha(),
                                             appHooks: appHooks)
         

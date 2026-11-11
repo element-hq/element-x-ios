@@ -20,10 +20,11 @@ struct BugReportFlowCoordinatorParameters {
         case push(NavigationStackCoordinator)
     }
     
+    let flow: BugReportService.Flow
     let presentationMode: PresentationMode
-    let userIndicatorController: UserIndicatorControllerProtocol
     let bugReportService: BugReportServiceProtocol
-    let userSession: UserSessionProtocol?
+    let bugReportHook: BugReportHookProtocol
+    let userIndicatorController: UserIndicatorControllerProtocol
 }
 
 class BugReportFlowCoordinator: FlowCoordinatorProtocol {
@@ -65,8 +66,9 @@ class BugReportFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: - Private
     
     private func presentBugReportScreen() {
-        let params = BugReportScreenCoordinatorParameters(bugReportService: parameters.bugReportService,
-                                                          userSession: parameters.userSession,
+        let params = BugReportScreenCoordinatorParameters(flow: parameters.flow,
+                                                          bugReportService: parameters.bugReportService,
+                                                          bugReportHook: parameters.bugReportHook,
                                                           userIndicatorController: parameters.userIndicatorController,
                                                           screenshot: nil,
                                                           isModallyPresented: isModallyPresented)

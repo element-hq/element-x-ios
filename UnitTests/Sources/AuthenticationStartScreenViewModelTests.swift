@@ -320,7 +320,6 @@ final class AuthenticationStartScreenViewModelTests {
         viewModel = AuthenticationStartScreenViewModel(authenticationService: authenticationService,
                                                        provisioningParameters: provisioningParameters,
                                                        isAddingAccount: isAddingAccount,
-                                                       isBugReportServiceEnabled: true,
                                                        appMediator: AppMediatorMock(),
                                                        appSettings: appSettings,
                                                        mediaProvider: MediaProviderMock(.init()),

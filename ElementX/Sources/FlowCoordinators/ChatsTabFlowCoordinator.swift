@@ -202,10 +202,11 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
                 dismissSpaceFlow(animated: animated)
                 
             case (.roomList, .feedbackScreen, .feedbackScreen):
-                bugReportFlowCoordinator = BugReportFlowCoordinator(parameters: .init(presentationMode: .sheet(sidebarNavigationStackCoordinator),
-                                                                                      userIndicatorController: flowParameters.userIndicatorController,
+                bugReportFlowCoordinator = BugReportFlowCoordinator(parameters: .init(flow: .userSession(userSession),
+                                                                                      presentationMode: .sheet(sidebarNavigationStackCoordinator),
                                                                                       bugReportService: flowParameters.bugReportService,
-                                                                                      userSession: userSession))
+                                                                                      bugReportHook: userSession.userHooks.bugReportHook,
+                                                                                      userIndicatorController: flowParameters.userIndicatorController))
                 bugReportFlowCoordinator?.actionsPublisher.sink { [weak self] action in
                     switch action {
                     case .complete:

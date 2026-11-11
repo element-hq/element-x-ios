@@ -9,10 +9,15 @@
 import Foundation
 
 nonisolated protocol BugReportHookProtocol: Sendable {
+    @MainActor func update(_ viewState: BugReportScreenViewState) -> BugReportScreenViewState
     func update(_ bugReport: BugReport) -> BugReport
 }
 
 struct DefaultBugReportHook: BugReportHookProtocol {
+    func update(_ viewState: BugReportScreenViewState) -> BugReportScreenViewState {
+        viewState
+    }
+    
     func update(_ bugReport: BugReport) -> BugReport {
         bugReport
     }

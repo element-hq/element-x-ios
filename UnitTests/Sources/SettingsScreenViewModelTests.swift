@@ -225,7 +225,6 @@ struct SettingsScreenViewModelTests {
         clientProxy = ClientProxyMock(.init(userID: "@me:matrix.org", status: status))
         viewModel = SettingsScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxy, userSettings: userSettings)),
                                             availableSessionsPublisher: availableSessionsPublisher,
-                                            isBugReportServiceEnabled: true,
                                             isInSecondaryWindow: false,
                                             userIndicatorController: UserIndicatorControllerMock())
     }

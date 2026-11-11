@@ -1760,11 +1760,6 @@ nonisolated class BannedRoomProxyMock: BannedRoomProxyProtocol, @unchecked Senda
     }
 }
 nonisolated class BugReportServiceMock: BugReportServiceProtocol, @unchecked Sendable {
-    var isEnabled: Bool {
-        get { return underlyingIsEnabled }
-        set(value) { underlyingIsEnabled = value }
-    }
-    nonisolated(unsafe) var underlyingIsEnabled: Bool!
     var lastCrashEventIDSubject: CurrentValueSubject<String?, Never> {
         get { return underlyingLastCrashEventIDSubject }
         set(value) { underlyingLastCrashEventIDSubject = value }
@@ -1773,44 +1768,44 @@ nonisolated class BugReportServiceMock: BugReportServiceProtocol, @unchecked Sen
 
     //MARK: - submitBugReport
 
-    private let submitBugReportProgressListenerCallsCountLock = NSLock()
-    private nonisolated(unsafe) var submitBugReportProgressListenerUnderlyingCallsCount = 0
-    var submitBugReportProgressListenerCallsCount: Int {
-        get { submitBugReportProgressListenerCallsCountLock.withLock { submitBugReportProgressListenerUnderlyingCallsCount } }
-        set { submitBugReportProgressListenerCallsCountLock.withLock { submitBugReportProgressListenerUnderlyingCallsCount = newValue } }
+    private let submitBugReportFlowProgressListenerCallsCountLock = NSLock()
+    private nonisolated(unsafe) var submitBugReportFlowProgressListenerUnderlyingCallsCount = 0
+    var submitBugReportFlowProgressListenerCallsCount: Int {
+        get { submitBugReportFlowProgressListenerCallsCountLock.withLock { submitBugReportFlowProgressListenerUnderlyingCallsCount } }
+        set { submitBugReportFlowProgressListenerCallsCountLock.withLock { submitBugReportFlowProgressListenerUnderlyingCallsCount = newValue } }
     }
-    var submitBugReportProgressListenerCalled: Bool {
-        return submitBugReportProgressListenerCallsCount > 0
+    var submitBugReportFlowProgressListenerCalled: Bool {
+        return submitBugReportFlowProgressListenerCallsCount > 0
     }
-    private let submitBugReportProgressListenerReceivedArgumentsLock = NSLock()
-    private nonisolated(unsafe) var submitBugReportProgressListenerUnderlyingReceivedArguments: (bugReport: BugReport, progressListener: CurrentValueSubject<Double, Never>)?
-    var submitBugReportProgressListenerReceivedArguments: (bugReport: BugReport, progressListener: CurrentValueSubject<Double, Never>)? {
-        get { submitBugReportProgressListenerReceivedArgumentsLock.withLock { submitBugReportProgressListenerUnderlyingReceivedArguments } }
-        set { submitBugReportProgressListenerReceivedArgumentsLock.withLock { submitBugReportProgressListenerUnderlyingReceivedArguments = newValue } }
+    private let submitBugReportFlowProgressListenerReceivedArgumentsLock = NSLock()
+    private nonisolated(unsafe) var submitBugReportFlowProgressListenerUnderlyingReceivedArguments: (bugReport: BugReport, flow: BugReportService.Flow, progressListener: CurrentValueSubject<Double, Never>)?
+    var submitBugReportFlowProgressListenerReceivedArguments: (bugReport: BugReport, flow: BugReportService.Flow, progressListener: CurrentValueSubject<Double, Never>)? {
+        get { submitBugReportFlowProgressListenerReceivedArgumentsLock.withLock { submitBugReportFlowProgressListenerUnderlyingReceivedArguments } }
+        set { submitBugReportFlowProgressListenerReceivedArgumentsLock.withLock { submitBugReportFlowProgressListenerUnderlyingReceivedArguments = newValue } }
     }
-    private let submitBugReportProgressListenerReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var submitBugReportProgressListenerUnderlyingReceivedInvocations: [(bugReport: BugReport, progressListener: CurrentValueSubject<Double, Never>)] = []
-    var submitBugReportProgressListenerReceivedInvocations: [(bugReport: BugReport, progressListener: CurrentValueSubject<Double, Never>)] {
-        get { submitBugReportProgressListenerReceivedInvocationsLock.withLock { submitBugReportProgressListenerUnderlyingReceivedInvocations } }
-        set { submitBugReportProgressListenerReceivedInvocationsLock.withLock { submitBugReportProgressListenerUnderlyingReceivedInvocations = newValue } }
+    private let submitBugReportFlowProgressListenerReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var submitBugReportFlowProgressListenerUnderlyingReceivedInvocations: [(bugReport: BugReport, flow: BugReportService.Flow, progressListener: CurrentValueSubject<Double, Never>)] = []
+    var submitBugReportFlowProgressListenerReceivedInvocations: [(bugReport: BugReport, flow: BugReportService.Flow, progressListener: CurrentValueSubject<Double, Never>)] {
+        get { submitBugReportFlowProgressListenerReceivedInvocationsLock.withLock { submitBugReportFlowProgressListenerUnderlyingReceivedInvocations } }
+        set { submitBugReportFlowProgressListenerReceivedInvocationsLock.withLock { submitBugReportFlowProgressListenerUnderlyingReceivedInvocations = newValue } }
     }
 
-    private let submitBugReportProgressListenerReturnValueLock = NSLock()
-    private nonisolated(unsafe) var submitBugReportProgressListenerUnderlyingReturnValue: Result<SubmitBugReportResponse, BugReportServiceError>!
-    var submitBugReportProgressListenerReturnValue: Result<SubmitBugReportResponse, BugReportServiceError>! {
-        get { submitBugReportProgressListenerReturnValueLock.withLock { submitBugReportProgressListenerUnderlyingReturnValue } }
-        set { submitBugReportProgressListenerReturnValueLock.withLock { submitBugReportProgressListenerUnderlyingReturnValue = newValue } }
+    private let submitBugReportFlowProgressListenerReturnValueLock = NSLock()
+    private nonisolated(unsafe) var submitBugReportFlowProgressListenerUnderlyingReturnValue: Result<SubmitBugReportResponse, BugReportServiceError>!
+    var submitBugReportFlowProgressListenerReturnValue: Result<SubmitBugReportResponse, BugReportServiceError>! {
+        get { submitBugReportFlowProgressListenerReturnValueLock.withLock { submitBugReportFlowProgressListenerUnderlyingReturnValue } }
+        set { submitBugReportFlowProgressListenerReturnValueLock.withLock { submitBugReportFlowProgressListenerUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var submitBugReportProgressListenerClosure: ((BugReport, CurrentValueSubject<Double, Never>) async -> Result<SubmitBugReportResponse, BugReportServiceError>)?
+    nonisolated(unsafe) var submitBugReportFlowProgressListenerClosure: ((BugReport, BugReportService.Flow, CurrentValueSubject<Double, Never>) async -> Result<SubmitBugReportResponse, BugReportServiceError>)?
 
-    @concurrent func submitBugReport(_ bugReport: BugReport, progressListener: CurrentValueSubject<Double, Never>) async -> Result<SubmitBugReportResponse, BugReportServiceError> {
-        submitBugReportProgressListenerCallsCountLock.withLock { submitBugReportProgressListenerUnderlyingCallsCount += 1 }
-        submitBugReportProgressListenerReceivedArguments = (bugReport: bugReport, progressListener: progressListener)
-        submitBugReportProgressListenerReceivedInvocationsLock.withLock { submitBugReportProgressListenerUnderlyingReceivedInvocations.append((bugReport: bugReport, progressListener: progressListener)) }
-        if let submitBugReportProgressListenerClosure = submitBugReportProgressListenerClosure {
-            return await submitBugReportProgressListenerClosure(bugReport, progressListener)
+    @concurrent func submitBugReport(_ bugReport: BugReport, flow: BugReportService.Flow, progressListener: CurrentValueSubject<Double, Never>) async -> Result<SubmitBugReportResponse, BugReportServiceError> {
+        submitBugReportFlowProgressListenerCallsCountLock.withLock { submitBugReportFlowProgressListenerUnderlyingCallsCount += 1 }
+        submitBugReportFlowProgressListenerReceivedArguments = (bugReport: bugReport, flow: flow, progressListener: progressListener)
+        submitBugReportFlowProgressListenerReceivedInvocationsLock.withLock { submitBugReportFlowProgressListenerUnderlyingReceivedInvocations.append((bugReport: bugReport, flow: flow, progressListener: progressListener)) }
+        if let submitBugReportFlowProgressListenerClosure = submitBugReportFlowProgressListenerClosure {
+            return await submitBugReportFlowProgressListenerClosure(bugReport, flow, progressListener)
         } else {
-            return submitBugReportProgressListenerReturnValue
+            return submitBugReportFlowProgressListenerReturnValue
         }
     }
 }
