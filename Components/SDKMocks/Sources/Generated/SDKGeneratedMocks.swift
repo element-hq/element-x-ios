@@ -4668,6 +4668,42 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         try await unignoreUserUserIdClosure?(userId)
     }
 
+    //MARK: - updateDelayedEvent
+
+    open var updateDelayedEventDelayIdActionRequestConfigOverrideThrowableError: Error?
+    private let updateDelayedEventDelayIdActionRequestConfigOverrideCallsCountLock = NSLock()
+    private var updateDelayedEventDelayIdActionRequestConfigOverrideUnderlyingCallsCount = 0
+    open var updateDelayedEventDelayIdActionRequestConfigOverrideCallsCount: Int {
+        get { updateDelayedEventDelayIdActionRequestConfigOverrideCallsCountLock.withLock { updateDelayedEventDelayIdActionRequestConfigOverrideUnderlyingCallsCount } }
+        set { updateDelayedEventDelayIdActionRequestConfigOverrideCallsCountLock.withLock { updateDelayedEventDelayIdActionRequestConfigOverrideUnderlyingCallsCount = newValue } }
+    }
+    open var updateDelayedEventDelayIdActionRequestConfigOverrideCalled: Bool {
+        return updateDelayedEventDelayIdActionRequestConfigOverrideCallsCount > 0
+    }
+    private let updateDelayedEventDelayIdActionRequestConfigOverrideReceivedArgumentsLock = NSLock()
+    private var updateDelayedEventDelayIdActionRequestConfigOverrideUnderlyingReceivedArguments: (delayId: String, action: DelayedEventUpdateAction, requestConfigOverride: RequestConfigOverride?)?
+    open var updateDelayedEventDelayIdActionRequestConfigOverrideReceivedArguments: (delayId: String, action: DelayedEventUpdateAction, requestConfigOverride: RequestConfigOverride?)? {
+        get { updateDelayedEventDelayIdActionRequestConfigOverrideReceivedArgumentsLock.withLock { updateDelayedEventDelayIdActionRequestConfigOverrideUnderlyingReceivedArguments } }
+        set { updateDelayedEventDelayIdActionRequestConfigOverrideReceivedArgumentsLock.withLock { updateDelayedEventDelayIdActionRequestConfigOverrideUnderlyingReceivedArguments = newValue } }
+    }
+    private let updateDelayedEventDelayIdActionRequestConfigOverrideReceivedInvocationsLock = NSLock()
+    private var updateDelayedEventDelayIdActionRequestConfigOverrideUnderlyingReceivedInvocations: [(delayId: String, action: DelayedEventUpdateAction, requestConfigOverride: RequestConfigOverride?)] = []
+    open var updateDelayedEventDelayIdActionRequestConfigOverrideReceivedInvocations: [(delayId: String, action: DelayedEventUpdateAction, requestConfigOverride: RequestConfigOverride?)] {
+        get { updateDelayedEventDelayIdActionRequestConfigOverrideReceivedInvocationsLock.withLock { updateDelayedEventDelayIdActionRequestConfigOverrideUnderlyingReceivedInvocations } }
+        set { updateDelayedEventDelayIdActionRequestConfigOverrideReceivedInvocationsLock.withLock { updateDelayedEventDelayIdActionRequestConfigOverrideUnderlyingReceivedInvocations = newValue } }
+    }
+    open var updateDelayedEventDelayIdActionRequestConfigOverrideClosure: ((String, DelayedEventUpdateAction, RequestConfigOverride?) async throws -> Void)?
+
+    open override func updateDelayedEvent(delayId: String, action: DelayedEventUpdateAction, requestConfigOverride: RequestConfigOverride? = nil) async throws {
+        if let error = updateDelayedEventDelayIdActionRequestConfigOverrideThrowableError {
+            throw error
+        }
+        updateDelayedEventDelayIdActionRequestConfigOverrideCallsCountLock.withLock { updateDelayedEventDelayIdActionRequestConfigOverrideUnderlyingCallsCount += 1 }
+        updateDelayedEventDelayIdActionRequestConfigOverrideReceivedArguments = (delayId: delayId, action: action, requestConfigOverride: requestConfigOverride)
+        updateDelayedEventDelayIdActionRequestConfigOverrideReceivedInvocationsLock.withLock { updateDelayedEventDelayIdActionRequestConfigOverrideUnderlyingReceivedInvocations.append((delayId: delayId, action: action, requestConfigOverride: requestConfigOverride)) }
+        try await updateDelayedEventDelayIdActionRequestConfigOverrideClosure?(delayId, action, requestConfigOverride)
+    }
+
     //MARK: - uploadAvatar
 
     open var uploadAvatarMimeTypeDataThrowableError: Error?
@@ -14020,6 +14056,147 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         withdrawVerificationAndResendUserIdsSendHandleReceivedArguments = (userIds: userIds, sendHandle: sendHandle)
         withdrawVerificationAndResendUserIdsSendHandleReceivedInvocationsLock.withLock { withdrawVerificationAndResendUserIdsSendHandleUnderlyingReceivedInvocations.append((userIds: userIds, sendHandle: sendHandle)) }
         try await withdrawVerificationAndResendUserIdsSendHandleClosure?(userIds, sendHandle)
+    }
+
+    //MARK: - sendDelayedEvent
+
+    open var sendDelayedEventEventTypeContentDelayMsRequestConfigOverrideThrowableError: Error?
+    private let sendDelayedEventEventTypeContentDelayMsRequestConfigOverrideCallsCountLock = NSLock()
+    private var sendDelayedEventEventTypeContentDelayMsRequestConfigOverrideUnderlyingCallsCount = 0
+    open var sendDelayedEventEventTypeContentDelayMsRequestConfigOverrideCallsCount: Int {
+        get { sendDelayedEventEventTypeContentDelayMsRequestConfigOverrideCallsCountLock.withLock { sendDelayedEventEventTypeContentDelayMsRequestConfigOverrideUnderlyingCallsCount } }
+        set { sendDelayedEventEventTypeContentDelayMsRequestConfigOverrideCallsCountLock.withLock { sendDelayedEventEventTypeContentDelayMsRequestConfigOverrideUnderlyingCallsCount = newValue } }
+    }
+    open var sendDelayedEventEventTypeContentDelayMsRequestConfigOverrideCalled: Bool {
+        return sendDelayedEventEventTypeContentDelayMsRequestConfigOverrideCallsCount > 0
+    }
+    private let sendDelayedEventEventTypeContentDelayMsRequestConfigOverrideReceivedArgumentsLock = NSLock()
+    private var sendDelayedEventEventTypeContentDelayMsRequestConfigOverrideUnderlyingReceivedArguments: (eventType: String, content: String, delayMs: UInt64, requestConfigOverride: RequestConfigOverride?)?
+    open var sendDelayedEventEventTypeContentDelayMsRequestConfigOverrideReceivedArguments: (eventType: String, content: String, delayMs: UInt64, requestConfigOverride: RequestConfigOverride?)? {
+        get { sendDelayedEventEventTypeContentDelayMsRequestConfigOverrideReceivedArgumentsLock.withLock { sendDelayedEventEventTypeContentDelayMsRequestConfigOverrideUnderlyingReceivedArguments } }
+        set { sendDelayedEventEventTypeContentDelayMsRequestConfigOverrideReceivedArgumentsLock.withLock { sendDelayedEventEventTypeContentDelayMsRequestConfigOverrideUnderlyingReceivedArguments = newValue } }
+    }
+    private let sendDelayedEventEventTypeContentDelayMsRequestConfigOverrideReceivedInvocationsLock = NSLock()
+    private var sendDelayedEventEventTypeContentDelayMsRequestConfigOverrideUnderlyingReceivedInvocations: [(eventType: String, content: String, delayMs: UInt64, requestConfigOverride: RequestConfigOverride?)] = []
+    open var sendDelayedEventEventTypeContentDelayMsRequestConfigOverrideReceivedInvocations: [(eventType: String, content: String, delayMs: UInt64, requestConfigOverride: RequestConfigOverride?)] {
+        get { sendDelayedEventEventTypeContentDelayMsRequestConfigOverrideReceivedInvocationsLock.withLock { sendDelayedEventEventTypeContentDelayMsRequestConfigOverrideUnderlyingReceivedInvocations } }
+        set { sendDelayedEventEventTypeContentDelayMsRequestConfigOverrideReceivedInvocationsLock.withLock { sendDelayedEventEventTypeContentDelayMsRequestConfigOverrideUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let sendDelayedEventEventTypeContentDelayMsRequestConfigOverrideReturnValueLock = NSLock()
+    open var sendDelayedEventEventTypeContentDelayMsRequestConfigOverrideUnderlyingReturnValue: String!
+    open var sendDelayedEventEventTypeContentDelayMsRequestConfigOverrideReturnValue: String! {
+        get { sendDelayedEventEventTypeContentDelayMsRequestConfigOverrideReturnValueLock.withLock { sendDelayedEventEventTypeContentDelayMsRequestConfigOverrideUnderlyingReturnValue } }
+        set { sendDelayedEventEventTypeContentDelayMsRequestConfigOverrideReturnValueLock.withLock { sendDelayedEventEventTypeContentDelayMsRequestConfigOverrideUnderlyingReturnValue = newValue } }
+    }
+    open var sendDelayedEventEventTypeContentDelayMsRequestConfigOverrideClosure: ((String, String, UInt64, RequestConfigOverride?) async throws -> String)?
+
+    open override func sendDelayedEvent(eventType: String, content: String, delayMs: UInt64, requestConfigOverride: RequestConfigOverride? = nil) async throws -> String {
+        if let error = sendDelayedEventEventTypeContentDelayMsRequestConfigOverrideThrowableError {
+            throw error
+        }
+        sendDelayedEventEventTypeContentDelayMsRequestConfigOverrideCallsCountLock.withLock { sendDelayedEventEventTypeContentDelayMsRequestConfigOverrideUnderlyingCallsCount += 1 }
+        sendDelayedEventEventTypeContentDelayMsRequestConfigOverrideReceivedArguments = (eventType: eventType, content: content, delayMs: delayMs, requestConfigOverride: requestConfigOverride)
+        sendDelayedEventEventTypeContentDelayMsRequestConfigOverrideReceivedInvocationsLock.withLock { sendDelayedEventEventTypeContentDelayMsRequestConfigOverrideUnderlyingReceivedInvocations.append((eventType: eventType, content: content, delayMs: delayMs, requestConfigOverride: requestConfigOverride)) }
+        if let sendDelayedEventEventTypeContentDelayMsRequestConfigOverrideClosure = sendDelayedEventEventTypeContentDelayMsRequestConfigOverrideClosure {
+            return try await sendDelayedEventEventTypeContentDelayMsRequestConfigOverrideClosure(eventType, content, delayMs, requestConfigOverride)
+        } else {
+            return sendDelayedEventEventTypeContentDelayMsRequestConfigOverrideReturnValue
+        }
+    }
+
+    //MARK: - sendDelayedStateEvent
+
+    open var sendDelayedStateEventEventTypeStateKeyContentDelayMsRequestConfigOverrideThrowableError: Error?
+    private let sendDelayedStateEventEventTypeStateKeyContentDelayMsRequestConfigOverrideCallsCountLock = NSLock()
+    private var sendDelayedStateEventEventTypeStateKeyContentDelayMsRequestConfigOverrideUnderlyingCallsCount = 0
+    open var sendDelayedStateEventEventTypeStateKeyContentDelayMsRequestConfigOverrideCallsCount: Int {
+        get { sendDelayedStateEventEventTypeStateKeyContentDelayMsRequestConfigOverrideCallsCountLock.withLock { sendDelayedStateEventEventTypeStateKeyContentDelayMsRequestConfigOverrideUnderlyingCallsCount } }
+        set { sendDelayedStateEventEventTypeStateKeyContentDelayMsRequestConfigOverrideCallsCountLock.withLock { sendDelayedStateEventEventTypeStateKeyContentDelayMsRequestConfigOverrideUnderlyingCallsCount = newValue } }
+    }
+    open var sendDelayedStateEventEventTypeStateKeyContentDelayMsRequestConfigOverrideCalled: Bool {
+        return sendDelayedStateEventEventTypeStateKeyContentDelayMsRequestConfigOverrideCallsCount > 0
+    }
+    private let sendDelayedStateEventEventTypeStateKeyContentDelayMsRequestConfigOverrideReceivedArgumentsLock = NSLock()
+    private var sendDelayedStateEventEventTypeStateKeyContentDelayMsRequestConfigOverrideUnderlyingReceivedArguments: (eventType: String, stateKey: String, content: String, delayMs: UInt64, requestConfigOverride: RequestConfigOverride?)?
+    open var sendDelayedStateEventEventTypeStateKeyContentDelayMsRequestConfigOverrideReceivedArguments: (eventType: String, stateKey: String, content: String, delayMs: UInt64, requestConfigOverride: RequestConfigOverride?)? {
+        get { sendDelayedStateEventEventTypeStateKeyContentDelayMsRequestConfigOverrideReceivedArgumentsLock.withLock { sendDelayedStateEventEventTypeStateKeyContentDelayMsRequestConfigOverrideUnderlyingReceivedArguments } }
+        set { sendDelayedStateEventEventTypeStateKeyContentDelayMsRequestConfigOverrideReceivedArgumentsLock.withLock { sendDelayedStateEventEventTypeStateKeyContentDelayMsRequestConfigOverrideUnderlyingReceivedArguments = newValue } }
+    }
+    private let sendDelayedStateEventEventTypeStateKeyContentDelayMsRequestConfigOverrideReceivedInvocationsLock = NSLock()
+    private var sendDelayedStateEventEventTypeStateKeyContentDelayMsRequestConfigOverrideUnderlyingReceivedInvocations: [(eventType: String, stateKey: String, content: String, delayMs: UInt64, requestConfigOverride: RequestConfigOverride?)] = []
+    open var sendDelayedStateEventEventTypeStateKeyContentDelayMsRequestConfigOverrideReceivedInvocations: [(eventType: String, stateKey: String, content: String, delayMs: UInt64, requestConfigOverride: RequestConfigOverride?)] {
+        get { sendDelayedStateEventEventTypeStateKeyContentDelayMsRequestConfigOverrideReceivedInvocationsLock.withLock { sendDelayedStateEventEventTypeStateKeyContentDelayMsRequestConfigOverrideUnderlyingReceivedInvocations } }
+        set { sendDelayedStateEventEventTypeStateKeyContentDelayMsRequestConfigOverrideReceivedInvocationsLock.withLock { sendDelayedStateEventEventTypeStateKeyContentDelayMsRequestConfigOverrideUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let sendDelayedStateEventEventTypeStateKeyContentDelayMsRequestConfigOverrideReturnValueLock = NSLock()
+    open var sendDelayedStateEventEventTypeStateKeyContentDelayMsRequestConfigOverrideUnderlyingReturnValue: String!
+    open var sendDelayedStateEventEventTypeStateKeyContentDelayMsRequestConfigOverrideReturnValue: String! {
+        get { sendDelayedStateEventEventTypeStateKeyContentDelayMsRequestConfigOverrideReturnValueLock.withLock { sendDelayedStateEventEventTypeStateKeyContentDelayMsRequestConfigOverrideUnderlyingReturnValue } }
+        set { sendDelayedStateEventEventTypeStateKeyContentDelayMsRequestConfigOverrideReturnValueLock.withLock { sendDelayedStateEventEventTypeStateKeyContentDelayMsRequestConfigOverrideUnderlyingReturnValue = newValue } }
+    }
+    open var sendDelayedStateEventEventTypeStateKeyContentDelayMsRequestConfigOverrideClosure: ((String, String, String, UInt64, RequestConfigOverride?) async throws -> String)?
+
+    open override func sendDelayedStateEvent(eventType: String, stateKey: String, content: String, delayMs: UInt64, requestConfigOverride: RequestConfigOverride? = nil) async throws -> String {
+        if let error = sendDelayedStateEventEventTypeStateKeyContentDelayMsRequestConfigOverrideThrowableError {
+            throw error
+        }
+        sendDelayedStateEventEventTypeStateKeyContentDelayMsRequestConfigOverrideCallsCountLock.withLock { sendDelayedStateEventEventTypeStateKeyContentDelayMsRequestConfigOverrideUnderlyingCallsCount += 1 }
+        sendDelayedStateEventEventTypeStateKeyContentDelayMsRequestConfigOverrideReceivedArguments = (eventType: eventType, stateKey: stateKey, content: content, delayMs: delayMs, requestConfigOverride: requestConfigOverride)
+        sendDelayedStateEventEventTypeStateKeyContentDelayMsRequestConfigOverrideReceivedInvocationsLock.withLock { sendDelayedStateEventEventTypeStateKeyContentDelayMsRequestConfigOverrideUnderlyingReceivedInvocations.append((eventType: eventType, stateKey: stateKey, content: content, delayMs: delayMs, requestConfigOverride: requestConfigOverride)) }
+        if let sendDelayedStateEventEventTypeStateKeyContentDelayMsRequestConfigOverrideClosure = sendDelayedStateEventEventTypeStateKeyContentDelayMsRequestConfigOverrideClosure {
+            return try await sendDelayedStateEventEventTypeStateKeyContentDelayMsRequestConfigOverrideClosure(eventType, stateKey, content, delayMs, requestConfigOverride)
+        } else {
+            return sendDelayedStateEventEventTypeStateKeyContentDelayMsRequestConfigOverrideReturnValue
+        }
+    }
+
+    //MARK: - sendStickyDelayedEvent
+
+    open var sendStickyDelayedEventEventTypeContentDelayMsStickyDurationMsRequestConfigOverrideThrowableError: Error?
+    private let sendStickyDelayedEventEventTypeContentDelayMsStickyDurationMsRequestConfigOverrideCallsCountLock = NSLock()
+    private var sendStickyDelayedEventEventTypeContentDelayMsStickyDurationMsRequestConfigOverrideUnderlyingCallsCount = 0
+    open var sendStickyDelayedEventEventTypeContentDelayMsStickyDurationMsRequestConfigOverrideCallsCount: Int {
+        get { sendStickyDelayedEventEventTypeContentDelayMsStickyDurationMsRequestConfigOverrideCallsCountLock.withLock { sendStickyDelayedEventEventTypeContentDelayMsStickyDurationMsRequestConfigOverrideUnderlyingCallsCount } }
+        set { sendStickyDelayedEventEventTypeContentDelayMsStickyDurationMsRequestConfigOverrideCallsCountLock.withLock { sendStickyDelayedEventEventTypeContentDelayMsStickyDurationMsRequestConfigOverrideUnderlyingCallsCount = newValue } }
+    }
+    open var sendStickyDelayedEventEventTypeContentDelayMsStickyDurationMsRequestConfigOverrideCalled: Bool {
+        return sendStickyDelayedEventEventTypeContentDelayMsStickyDurationMsRequestConfigOverrideCallsCount > 0
+    }
+    private let sendStickyDelayedEventEventTypeContentDelayMsStickyDurationMsRequestConfigOverrideReceivedArgumentsLock = NSLock()
+    private var sendStickyDelayedEventEventTypeContentDelayMsStickyDurationMsRequestConfigOverrideUnderlyingReceivedArguments: (eventType: String, content: String, delayMs: UInt64, stickyDurationMs: UInt64, requestConfigOverride: RequestConfigOverride?)?
+    open var sendStickyDelayedEventEventTypeContentDelayMsStickyDurationMsRequestConfigOverrideReceivedArguments: (eventType: String, content: String, delayMs: UInt64, stickyDurationMs: UInt64, requestConfigOverride: RequestConfigOverride?)? {
+        get { sendStickyDelayedEventEventTypeContentDelayMsStickyDurationMsRequestConfigOverrideReceivedArgumentsLock.withLock { sendStickyDelayedEventEventTypeContentDelayMsStickyDurationMsRequestConfigOverrideUnderlyingReceivedArguments } }
+        set { sendStickyDelayedEventEventTypeContentDelayMsStickyDurationMsRequestConfigOverrideReceivedArgumentsLock.withLock { sendStickyDelayedEventEventTypeContentDelayMsStickyDurationMsRequestConfigOverrideUnderlyingReceivedArguments = newValue } }
+    }
+    private let sendStickyDelayedEventEventTypeContentDelayMsStickyDurationMsRequestConfigOverrideReceivedInvocationsLock = NSLock()
+    private var sendStickyDelayedEventEventTypeContentDelayMsStickyDurationMsRequestConfigOverrideUnderlyingReceivedInvocations: [(eventType: String, content: String, delayMs: UInt64, stickyDurationMs: UInt64, requestConfigOverride: RequestConfigOverride?)] = []
+    open var sendStickyDelayedEventEventTypeContentDelayMsStickyDurationMsRequestConfigOverrideReceivedInvocations: [(eventType: String, content: String, delayMs: UInt64, stickyDurationMs: UInt64, requestConfigOverride: RequestConfigOverride?)] {
+        get { sendStickyDelayedEventEventTypeContentDelayMsStickyDurationMsRequestConfigOverrideReceivedInvocationsLock.withLock { sendStickyDelayedEventEventTypeContentDelayMsStickyDurationMsRequestConfigOverrideUnderlyingReceivedInvocations } }
+        set { sendStickyDelayedEventEventTypeContentDelayMsStickyDurationMsRequestConfigOverrideReceivedInvocationsLock.withLock { sendStickyDelayedEventEventTypeContentDelayMsStickyDurationMsRequestConfigOverrideUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let sendStickyDelayedEventEventTypeContentDelayMsStickyDurationMsRequestConfigOverrideReturnValueLock = NSLock()
+    open var sendStickyDelayedEventEventTypeContentDelayMsStickyDurationMsRequestConfigOverrideUnderlyingReturnValue: String!
+    open var sendStickyDelayedEventEventTypeContentDelayMsStickyDurationMsRequestConfigOverrideReturnValue: String! {
+        get { sendStickyDelayedEventEventTypeContentDelayMsStickyDurationMsRequestConfigOverrideReturnValueLock.withLock { sendStickyDelayedEventEventTypeContentDelayMsStickyDurationMsRequestConfigOverrideUnderlyingReturnValue } }
+        set { sendStickyDelayedEventEventTypeContentDelayMsStickyDurationMsRequestConfigOverrideReturnValueLock.withLock { sendStickyDelayedEventEventTypeContentDelayMsStickyDurationMsRequestConfigOverrideUnderlyingReturnValue = newValue } }
+    }
+    open var sendStickyDelayedEventEventTypeContentDelayMsStickyDurationMsRequestConfigOverrideClosure: ((String, String, UInt64, UInt64, RequestConfigOverride?) async throws -> String)?
+
+    open override func sendStickyDelayedEvent(eventType: String, content: String, delayMs: UInt64, stickyDurationMs: UInt64, requestConfigOverride: RequestConfigOverride? = nil) async throws -> String {
+        if let error = sendStickyDelayedEventEventTypeContentDelayMsStickyDurationMsRequestConfigOverrideThrowableError {
+            throw error
+        }
+        sendStickyDelayedEventEventTypeContentDelayMsStickyDurationMsRequestConfigOverrideCallsCountLock.withLock { sendStickyDelayedEventEventTypeContentDelayMsStickyDurationMsRequestConfigOverrideUnderlyingCallsCount += 1 }
+        sendStickyDelayedEventEventTypeContentDelayMsStickyDurationMsRequestConfigOverrideReceivedArguments = (eventType: eventType, content: content, delayMs: delayMs, stickyDurationMs: stickyDurationMs, requestConfigOverride: requestConfigOverride)
+        sendStickyDelayedEventEventTypeContentDelayMsStickyDurationMsRequestConfigOverrideReceivedInvocationsLock.withLock { sendStickyDelayedEventEventTypeContentDelayMsStickyDurationMsRequestConfigOverrideUnderlyingReceivedInvocations.append((eventType: eventType, content: content, delayMs: delayMs, stickyDurationMs: stickyDurationMs, requestConfigOverride: requestConfigOverride)) }
+        if let sendStickyDelayedEventEventTypeContentDelayMsStickyDurationMsRequestConfigOverrideClosure = sendStickyDelayedEventEventTypeContentDelayMsStickyDurationMsRequestConfigOverrideClosure {
+            return try await sendStickyDelayedEventEventTypeContentDelayMsStickyDurationMsRequestConfigOverrideClosure(eventType, content, delayMs, stickyDurationMs, requestConfigOverride)
+        } else {
+            return sendStickyDelayedEventEventTypeContentDelayMsStickyDurationMsRequestConfigOverrideReturnValue
+        }
     }
 
     //MARK: - subscribeToMessageLikeEvents
