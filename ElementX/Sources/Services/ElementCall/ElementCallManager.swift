@@ -42,8 +42,8 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
         }
     }
     
-    /// A call asked for by room, from CallKit or Recents, whose room still has to be loaded.
-    private struct RequestedCall: Equatable {
+    /// A call requested by room ID, from CallKit or Recents, whose room still has to be loaded.
+    private struct CallRequest: Equatable {
         let userID: String
         let roomID: String
         let isVoiceCall: Bool
@@ -93,8 +93,8 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
     private var isAudioSessionActive = false
     
     private var presentedCall: PresentedCall?
-    /// A call waiting for its account's service to be added. One at a time, a newer call drops it unless it's the same call.
-    private var heldCall: RequestedCall?
+    /// A call request waiting for its account's service to be added. One at a time, a newer one drops it unless it's for the same call.
+    private var pendingCallRequest: CallRequest?
     
     /// The incoming call while nobody has answered it.
     private var ringingCallID: CallID? {
@@ -183,16 +183,16 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
             service.systemEventReceived(.audioSessionActivated)
         }
         
-        if let heldCall, heldCall.userID == userID {
+        if let pendingCallRequest, pendingCallRequest.userID == userID {
             // Deferred, as the account's screens start in the same step that adds its service.
-            Task { [weak self] in self?.openHeldCall(heldCall) }
+            Task { [weak self] in await self?.handlePendingCallRequest(pendingCallRequest) }
         }
     }
     
     func remove(userID: String) {
-        if let heldCall, heldCall.userID == userID {
-            self.heldCall = nil
-            drop(heldCall, because: "\(userID) isn't signed in any more")
+        if let pendingCallRequest, pendingCallRequest.userID == userID {
+            self.pendingCallRequest = nil
+            dropCallRequest(pendingCallRequest, because: "\(userID) isn't signed in any more")
         }
         
         if let incomingCallID, incomingCallID.userID == userID {
@@ -217,20 +217,20 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
     }
     
     func requestCall(userID: String, roomID: String, isVoiceCall: Bool, answeredFromCallKit: Bool) {
-        let call = RequestedCall(userID: userID, roomID: roomID, isVoiceCall: isVoiceCall, answeredFromCallKit: answeredFromCallKit)
+        let request = CallRequest(userID: userID, roomID: roomID, isVoiceCall: isVoiceCall, answeredFromCallKit: answeredFromCallKit)
         
         guard let service = services[userID] else {
-            hold(call)
+            storePendingCallRequest(request)
             return
         }
         
-        open(call, service: service)
+        Task { await handleCallRequest(request, service: service) }
     }
     
     private func process(_ action: ElementCallServiceAction, from service: ElementCallServiceProtocol) {
         switch action {
         case .callRequested(let call):
-            open(call, answeredFromCallKit: false, service: service)
+            presentCallScreen(for: call, answeredFromCallKit: false, service: service)
         case .callMinimizeRequested:
             minimizeCall()
         case .nativeCallPresentation(let presentation):
@@ -455,31 +455,30 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
     
     // MARK: - Call screen
     
-    /// Loads the room of a call that comes in by room ID, then opens it, unless its account went meanwhile.
-    private func open(_ call: RequestedCall, service: ElementCallServiceProtocol) {
-        Task { [weak self] in
-            let roomProxy = await service.joinedRoom(roomID: call.roomID)
-            guard let self else { return }
-            
-            guard services[call.userID] === service else {
-                drop(call, because: "\(call.userID) left while its room loaded")
-                return
-            }
-            
-            guard let roomProxy else {
-                drop(call, because: "it isn't a joined room")
-                return
-            }
-            
-            open(RoomCall(roomProxy: roomProxy, isVoiceCall: call.isVoiceCall), answeredFromCallKit: call.answeredFromCallKit, service: service)
+    /// Loads the room of a call requested by room ID, then presents its call screen, unless its account went meanwhile.
+    private func handleCallRequest(_ request: CallRequest, service: ElementCallServiceProtocol) async {
+        let roomProxy = await service.joinedRoom(roomID: request.roomID)
+        
+        guard services[request.userID] === service else {
+            dropCallRequest(request, because: "\(request.userID) left while its room loaded")
+            return
         }
+        
+        guard let roomProxy else {
+            dropCallRequest(request, because: "it isn't a joined room")
+            return
+        }
+        
+        presentCallScreen(for: .init(roomProxy: roomProxy, isVoiceCall: request.isVoiceCall),
+                          answeredFromCallKit: request.answeredFromCallKit,
+                          service: service)
     }
     
-    /// Opens the room's call with its account's service, returning to it when it's already on screen.
+    /// Presents the room's call with its account's service, returning to it when it's already on screen.
     /// Any other call is replaced.
-    private func open(_ call: RoomCall, answeredFromCallKit: Bool, service: ElementCallServiceProtocol) {
-        let heldCallWasAnswered = releaseHeldCall(for: service.userID, roomID: call.roomProxy.id)
-        let answeredFromCallKit = answeredFromCallKit || heldCallWasAnswered
+    private func presentCallScreen(for call: ElementCallServiceAction.RoomCall, answeredFromCallKit: Bool, service: ElementCallServiceProtocol) {
+        let pendingRequestWasAnswered = takePendingCallRequest(replacedBy: service.userID, roomID: call.roomProxy.id)
+        let answeredFromCallKit = answeredFromCallKit || pendingRequestWasAnswered
         
         // The native call stack runs the call and reports its screen as `.nativeCallPresentation`.
         if service.handleNativeCallRequest(roomProxy: call.roomProxy, isVoiceCall: call.isVoiceCall, answeredFromCallKit: answeredFromCallKit) {
@@ -500,41 +499,41 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
         actionsSubject.send(.callScreen(.present(userID: userID, kind: .webView(call))))
     }
     
-    private func hold(_ call: RequestedCall) {
-        let heldCallWasAnswered = releaseHeldCall(for: call.userID, roomID: call.roomID)
+    private func storePendingCallRequest(_ request: CallRequest) {
+        let pendingRequestWasAnswered = takePendingCallRequest(replacedBy: request.userID, roomID: request.roomID)
         
-        MXLog.info("Holding the call in \(call.roomID) until \(call.userID) has a call service")
-        heldCall = RequestedCall(userID: call.userID,
-                                 roomID: call.roomID,
-                                 isVoiceCall: call.isVoiceCall,
-                                 answeredFromCallKit: call.answeredFromCallKit || heldCallWasAnswered)
+        MXLog.info("Keeping the call in \(request.roomID) pending until \(request.userID) has a call service")
+        pendingCallRequest = CallRequest(userID: request.userID,
+                                         roomID: request.roomID,
+                                         isVoiceCall: request.isVoiceCall,
+                                         answeredFromCallKit: request.answeredFromCallKit || pendingRequestWasAnswered)
     }
     
-    /// Takes the held call off hold for a newer request. The same call asked for again passes on its answer
-    /// for the newer request to take over, any other call is dropped. Returns whether an answer was passed on.
-    private func releaseHeldCall(for userID: String, roomID: String) -> Bool {
-        guard let heldCall = heldCall.take() else { return false }
+    /// Takes the pending call request for a newer one. The same call asked for again passes on its answer
+    /// for the newer request to take over, any other is dropped. Returns whether an answer was passed on.
+    private func takePendingCallRequest(replacedBy userID: String, roomID: String) -> Bool {
+        guard let pendingCallRequest = pendingCallRequest.take() else { return false }
         
-        guard heldCall.userID == userID, heldCall.roomID == roomID else {
-            drop(heldCall, because: "a newer call replaced it")
+        guard pendingCallRequest.userID == userID, pendingCallRequest.roomID == roomID else {
+            dropCallRequest(pendingCallRequest, because: "a newer call replaced it")
             return false
         }
         
-        return heldCall.answeredFromCallKit
+        return pendingCallRequest.answeredFromCallKit
     }
     
-    private func openHeldCall(_ call: RequestedCall) {
-        // Checked again, as the call may have been replaced or its account removed since.
-        guard heldCall == call, let service = services[call.userID] else { return }
-        heldCall = nil
-        open(call, service: service)
+    private func handlePendingCallRequest(_ request: CallRequest) async {
+        // Checked again, as the request may have been replaced or its account removed since.
+        guard pendingCallRequest == request, let service = services[request.userID] else { return }
+        pendingCallRequest = nil
+        await handleCallRequest(request, service: service)
     }
     
-    private func drop(_ call: RequestedCall, because reason: String) {
-        MXLog.warning("Dropping the call in \(call.roomID): \(reason)")
+    private func dropCallRequest(_ request: CallRequest, because reason: String) {
+        MXLog.warning("Dropping the call in \(request.roomID): \(reason)")
         
-        if call.answeredFromCallKit {
-            dropAnsweredCall(userID: call.userID, roomID: call.roomID)
+        if request.answeredFromCallKit {
+            dropAnsweredCall(userID: request.userID, roomID: request.roomID)
         }
     }
     

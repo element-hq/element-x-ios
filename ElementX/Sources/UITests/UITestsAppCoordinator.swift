@@ -611,12 +611,10 @@ class MockScreen: Identifiable {
             
             // Presents a room's call straight away, as the manager does without a native call stack.
             let callManagerActions = PassthroughSubject<ElementCallManagerAction, Never>()
-            let elementCallManager = ElementCallManagerMock()
-            elementCallManager.actionsPublisher = callManagerActions.eraseToAnyPublisher()
+            let elementCallManager = ElementCallManagerMock(.init(actionsPublisher: callManagerActions.eraseToAnyPublisher()))
             let elementCallService = ElementCallServiceMock(.init(userID: userID))
             elementCallService.requestCallRoomProxyIsVoiceCallClosure = { roomProxy, isVoiceCall in
-                let call = RoomCall(roomProxy: roomProxy, isVoiceCall: isVoiceCall)
-                callManagerActions.send(.callScreen(.present(userID: userID, kind: .webView(call))))
+                callManagerActions.send(.callScreen(.present(userID: userID, kind: .webView(.init(roomProxy: roomProxy, isVoiceCall: isVoiceCall)))))
             }
             
             let userSession = UserSessionMock(.init(clientProxy: clientProxy, userSettings: userSettings, elementCallService: elementCallService))
@@ -670,8 +668,7 @@ class MockScreen: Identifiable {
             let appMediator = AppMediatorMock(.init())
             appMediator.windowManager = windowManager
             
-            let elementCallManager = ElementCallManagerMock()
-            elementCallManager.actionsPublisher = PassthroughSubject().eraseToAnyPublisher()
+            let elementCallManager = ElementCallManagerMock(.init())
             
             let flowCoordinator = RootFlowCoordinator(navigationRootCoordinator: navigationRootCoordinator,
                                                       userSessionManager: userSessionManager,

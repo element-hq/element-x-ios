@@ -66,13 +66,10 @@ struct UserSessionFlowCoordinatorTests {
                                                   userIndicatorController: userIndicatorController,
                                                   stateMachineFactory: stateMachineFactory)
         
-        let elementCallManager = ElementCallManagerMock()
-        elementCallManager.actionsPublisher = callManagerActions.eraseToAnyPublisher()
-        
         userSessionFlowCoordinator = UserSessionFlowCoordinator(isNewLogin: false,
                                                                 navigationRootCoordinator: rootCoordinator,
                                                                 appLockService: AppLockServiceMock(),
-                                                                elementCallManager: elementCallManager,
+                                                                elementCallManager: ElementCallManagerMock(.init(actionsPublisher: callManagerActions.eraseToAnyPublisher())),
                                                                 flowParameters: flowParameters)
         
         userSessionFlowCoordinator.start()
@@ -107,7 +104,7 @@ struct UserSessionFlowCoordinatorTests {
     }
     
     @Test("Presenting another web view call replaces the call screen")
-    func presentingAnotherWebCallReplacesTheScreen() throws {
+    func replaceWebCall() throws {
         presentWebCall(roomID: "1")
         let firstCallScreen = try #require(tabCoordinator?.overlayCoordinator as? CallScreenCoordinator)
         
@@ -310,8 +307,7 @@ struct UserSessionFlowCoordinatorTests {
     // MARK: - Helpers
     
     private func presentWebCall(roomID: String) {
-        let call = RoomCall(roomProxy: JoinedRoomProxyMock(.init(id: roomID)), isVoiceCall: false)
-        callManagerActions.send(.callScreen(.present(userID: "hi@bob", kind: .webView(call))))
+        callManagerActions.send(.callScreen(.present(userID: "hi@bob", kind: .webView(.mock(roomID: roomID)))))
     }
     
     private func process(route: AppRoute,

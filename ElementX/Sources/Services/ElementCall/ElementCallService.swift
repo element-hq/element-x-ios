@@ -81,7 +81,7 @@ final class ElementCallService: ElementCallServiceProtocol {
     }
     
     func requestCall(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool) {
-        actionsSubject.send(.callRequested(RoomCall(roomProxy: roomProxy, isVoiceCall: isVoiceCall)))
+        actionsSubject.send(.callRequested(.init(roomProxy: roomProxy, isVoiceCall: isVoiceCall)))
     }
     
     func minimizeCall() {

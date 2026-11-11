@@ -19,7 +19,7 @@ enum ElementCallManagerAction: Equatable {
 enum CallScreenPresentation: Equatable {
     enum Kind: Equatable {
         /// The Element Call web view, which needs the room to load the call.
-        case webView(RoomCall)
+        case webView(ElementCallServiceAction.RoomCall)
         /// The account's native call stack, which already knows its call.
         case native
     }
@@ -41,7 +41,7 @@ protocol ElementCallManagerProtocol: AnyObject {
     /// Stops routing the account's calls.
     func remove(userID: String)
     
-    /// Opens the room's call for the account, holding it until the account's service is added.
+    /// Opens the room's call for the account, keeping the request pending until the account's service is added.
     func requestCall(userID: String, roomID: String, isVoiceCall: Bool, answeredFromCallKit: Bool)
     
     /// Forgets a call that was answered but never opened, which would otherwise count as a call in progress.

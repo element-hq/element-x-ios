@@ -41,18 +41,18 @@ enum ElementCallSessionKind: Equatable {
     case native(takesOverAnsweredCall: Bool)
 }
 
-/// A call in a room, compared by the room's ID as room proxies aren't equatable.
-struct RoomCall: Equatable {
-    let roomProxy: JoinedRoomProxyProtocol
-    let isVoiceCall: Bool
-    
-    static func == (lhs: RoomCall, rhs: RoomCall) -> Bool {
-        lhs.roomProxy.id == rhs.roomProxy.id && lhs.isVoiceCall == rhs.isVoiceCall
-    }
-}
-
 /// What the service asks of the `ElementCallManager`, which owns CallKit, the VoIP pushes and the calls.
 enum ElementCallServiceAction: Equatable {
+    /// A call in a room, compared by the room's ID as room proxies aren't equatable.
+    struct RoomCall: Equatable {
+        let roomProxy: JoinedRoomProxyProtocol
+        let isVoiceCall: Bool
+        
+        static func == (lhs: RoomCall, rhs: RoomCall) -> Bool {
+            lhs.roomProxy.id == rhs.roomProxy.id && lhs.isVoiceCall == rhs.isVoiceCall
+        }
+    }
+    
     /// A room screen asked for the room's call.
     case callRequested(RoomCall)
     /// The call screen needs to get out of the way, whichever account's call it shows.
@@ -83,10 +83,10 @@ protocol ElementCallServiceProtocol: AnyObject {
     /// The controller for this account's native call stack, `nil` when native calls are unavailable.
     var nativeCallController: ElementCallController? { get }
     
-    /// Asks the `ElementCallManager` to open the room's call, or return to it.
+    /// Opens the room's call, or returns to it when it's already on screen.
     func requestCall(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool)
     
-    /// Asks the `ElementCallManager` to minimize the call screen, whichever account's call it shows.
+    /// Minimizes the call screen, whichever account's call it shows.
     func minimizeCall()
     
     /// The account's joined room, `nil` when it isn't joined.

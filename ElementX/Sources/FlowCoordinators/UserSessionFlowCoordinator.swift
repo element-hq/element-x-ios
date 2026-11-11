@@ -531,7 +531,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private var callScreenPictureInPictureController: AVPictureInPictureController?
-    private func presentWebCallScreen(for call: RoomCall) {
+    private func presentWebCallScreen(for call: ElementCallServiceAction.RoomCall) {
         let colorScheme: ColorScheme = flowParameters.windowManager.mainWindow.traitCollection.userInterfaceStyle == .light ? .light : .dark
         let configuration = ElementCallConfiguration(roomProxy: call.roomProxy,
                                                      clientProxy: userSession.clientProxy,
@@ -595,7 +595,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func minimizeCallScreen() {
-        // The native call is already in its system window by now.
         if navigationTabCoordinator.overlayCoordinator is NativeCallScreenCoordinator {
             navigationTabCoordinator.setOverlayPresentationMode(.minimized)
             return

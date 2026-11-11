@@ -434,7 +434,7 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
         userSessionFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
     }
     
-    /// Hands the call to the `ElementCallManager`, which holds it until its account's session is live.
+    /// Hands the call to the `ElementCallManager`, which keeps it pending until its account's session is live.
     private func handleCallRoute(roomID: String, isVoiceCall: Bool, answeredFromCallKit: Bool, userID: String?) {
         switch stateMachine.state {
         case .initial, .userSessionFlow:

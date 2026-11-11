@@ -31,3 +31,9 @@ extension ElementCallServiceMock {
         handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitReturnValue = false
     }
 }
+
+extension ElementCallServiceAction.RoomCall {
+    static func mock(roomID: String = "!room:example.com", isVoiceCall: Bool = false) -> Self {
+        .init(roomProxy: JoinedRoomProxyMock(.init(id: roomID)), isVoiceCall: isVoiceCall)
+    }
+}

@@ -78,6 +78,7 @@
 		08547E55DD3686A84550996D /* SeparatorMediaEventsTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13F354AD441E2FD83DED89AF /* SeparatorMediaEventsTimelineView.swift */; };
 		086D01E79C8E8D3F004FAF21 /* AudioPlayerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9104846487244648D32C6D /* AudioPlayerProtocol.swift */; };
 		08CB4BD12CEEDE6AAE4A18DD /* WindowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035177BCD8E8308B098AC3C2 /* WindowManager.swift */; };
+		0956DC22011A4CA1487678BA /* ElementCallManagerMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FEBC55D8E4BAF0177ECF1D /* ElementCallManagerMock.swift */; };
 		095C0ACFC234E0550A6404C5 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC803282F9268D49F4ABF14 /* AppCoordinator.swift */; };
 		095D3906CF2F940C2D2D17CC /* RoomFlowCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FCB2126C091EEF2454B4D56 /* RoomFlowCoordinatorTests.swift */; };
 		09693596AA3CA4E598C0D2F1 /* ThreadTimelineScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73FEE625AB52042049DB9268 /* ThreadTimelineScreenCoordinator.swift */; };
@@ -2830,6 +2831,7 @@
 		A232D9156D225BD9FD1D0C43 /* PhotoLibraryPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLibraryPicker.swift; sourceTree = "<group>"; };
 		A243A6E6207297123E60DE48 /* TimelineItemMacContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineItemMacContextMenu.swift; sourceTree = "<group>"; };
 		A2723A4AF3AB9F5E18D26E49 /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		A2FEBC55D8E4BAF0177ECF1D /* ElementCallManagerMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementCallManagerMock.swift; sourceTree = "<group>"; };
 		A3A4F56855188DAD23E59031 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A3B4B58B79A6FA250B24A1EC /* HomeScreenContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenContent.swift; sourceTree = "<group>"; };
 		A3E3DE6616DCA81AD5F4791B /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -4202,6 +4204,7 @@
 				EC446234C8E5031F36F1BBE2 /* ContentScannerServiceMock.swift */,
 				E858B68153E2C6E5800336AB /* CXCallControllerMock.swift */,
 				86E1BAA7232081635662A83F /* CXProviderMock.swift */,
+				A2FEBC55D8E4BAF0177ECF1D /* ElementCallManagerMock.swift */,
 				E321E840DCC63790049984F4 /* ElementCallServiceMock.swift */,
 				3A21027F05874B1BCC3E452B /* InvitedRoomProxyMock.swift */,
 				867DC9530C42F7B5176BE465 /* JoinedRoomProxyMock.swift */,
@@ -6568,6 +6571,13 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		AFB1778C4EC2CA5F068E5A60 /* .claude */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = .claude;
+			sourceTree = "<group>";
+		};
 		B04B538A859CD012755DC19C /* NSE */ = {
 			isa = PBXGroup;
 			children = (
@@ -7404,6 +7414,7 @@
 				C0937E3B06A8F0E2DB7C8241 /* Other */,
 				2ECFF6B05DAA37EB10DBF7E8 /* UITests */,
 				79654D131C1B234A7D034532 /* AccessibilityTests */,
+				AFB1778C4EC2CA5F068E5A60 /* .claude */,
 				22F9F1514B91803BB4B88894 /* AppHooks */,
 				337015ADFBA3AB96660DB3A6 /* Generated */,
 				31CE4DA53232AA534057F912 /* Mocks */,
@@ -9107,6 +9118,7 @@
 				FE4593FC2A02AAF92E089565 /* ElementAnimations.swift in Sources */,
 				3118D9ABFD4BE5A3492FF88A /* ElementCallConfiguration.swift in Sources */,
 				EB8BB937B48E5855BA148730 /* ElementCallManager.swift in Sources */,
+				0956DC22011A4CA1487678BA /* ElementCallManagerMock.swift in Sources */,
 				D747830D492912EB509AB372 /* ElementCallManagerProtocol.swift in Sources */,
 				5732395A4F71F51F9C754C5A /* ElementCallService.swift in Sources */,
 				3895969759E68FAB90C63EF7 /* ElementCallServiceConstants.swift in Sources */,
