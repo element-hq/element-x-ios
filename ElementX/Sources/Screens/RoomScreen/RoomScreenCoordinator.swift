@@ -41,7 +41,6 @@ enum RoomScreenCoordinatorAction {
     case presentEmojiPicker(selectedEmojis: Set<String>, continuation: EmojiPickerScreenContinuation)
     case presentRoomMemberDetails(userID: String)
     case presentMessageForwarding(forwardingPayload: MessageForwardingPayload)
-    case presentCallScreen(isVoiceCall: Bool)
     case presentPinnedEventsTimeline
     case presentResolveSendFailure(failure: TimelineItemSendFailure.VerifiedUser, sendHandle: SendHandleProxy)
     case presentKnockRequestsList
@@ -158,8 +157,6 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                     roomViewModel.timelineHasScrolled(direction: direction)
                 case .displayRoom(let roomID, let via):
                     actionsSubject.send(.presentRoom(roomID: roomID, via: via))
-                case .presentCallScreen(let isVoiceCall):
-                    actionsSubject.send(.presentCallScreen(isVoiceCall: isVoiceCall))
                 case .viewInRoomTimeline, .displayMediaDetails:
                     fatalError("The action: \(action) should not be sent to this coordinator")
                 }
@@ -185,8 +182,6 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentPinnedEventsTimeline)
                 case .displayRoomDetails:
                     actionsSubject.send(.presentRoomDetails)
-                case .displayCall(let isVoiceCall):
-                    actionsSubject.send(.presentCallScreen(isVoiceCall: isVoiceCall))
                 case .removeComposerFocus:
                     composerViewModel.process(timelineAction: .removeFocus)
                 case .displayKnockRequests:

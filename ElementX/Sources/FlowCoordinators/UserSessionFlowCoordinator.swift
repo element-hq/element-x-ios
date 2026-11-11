@@ -264,8 +264,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     handleAppRoute(.chatBackupSettings, animated: true)
                 case .sessionVerification(let flow):
                     presentSessionVerificationScreen(flow: flow)
-                case .showCallScreen(let roomProxy, let isVoiceCall):
-                    userSession.elementCallService.requestCall(roomProxy: roomProxy, isVoiceCall: isVoiceCall)
                 case .logout:
                     Task { await self.runLogoutFlow() }
                 }
@@ -276,8 +274,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             .sink { [weak self] action in
                 guard let self else { return }
                 switch action {
-                case .presentCallScreen(let roomProxy, let isVoiceCall):
-                    userSession.elementCallService.requestCall(roomProxy: roomProxy, isVoiceCall: isVoiceCall)
                 case .verifyUser(let userID):
                     presentSessionVerificationScreen(flow: .userInitiator(userID: userID))
                 case .showSettings:

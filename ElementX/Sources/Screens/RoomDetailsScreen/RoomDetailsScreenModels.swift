@@ -23,7 +23,6 @@ enum RoomDetailsScreenViewModelAction: Equatable {
     case requestEditDetailsPresentation
     case requestPollsHistoryPresentation
     case requestRolesAndPermissionsPresentation
-    case startCall(isVoiceCall: Bool)
     case displayPinnedEventsTimeline
     case displayMediaEventsTimeline
     case displayKnockingRequests

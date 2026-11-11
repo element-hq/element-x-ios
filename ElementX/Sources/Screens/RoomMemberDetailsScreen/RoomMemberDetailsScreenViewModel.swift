@@ -238,7 +238,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
             showErrorIndicator()
             return
         }
-        actionsSubject.send(.startCall(roomProxy: roomProxy, isVoiceCall: isVoiceCall))
+        userSession.elementCallService.requestCall(roomProxy: roomProxy, isVoiceCall: isVoiceCall)
     }
     
     // MARK: User Indicators

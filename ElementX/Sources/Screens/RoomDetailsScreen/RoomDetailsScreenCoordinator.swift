@@ -28,7 +28,6 @@ enum RoomDetailsScreenCoordinatorAction {
     case presentInviteToNewRoom(invitee: UserProfile)
     case presentPollsHistory
     case presentRolesAndPermissionsScreen
-    case presentCall(isVoiceCall: Bool)
     case presentPinnedEventsTimeline
     case presentMediaEventsTimeline
     case presentKnockingRequestsListScreen
@@ -82,8 +81,6 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentPollsHistory)
                 case .requestRolesAndPermissionsPresentation:
                     actionsSubject.send(.presentRolesAndPermissionsScreen)
-                case .startCall(let isVoiceCall):
-                    actionsSubject.send(.presentCall(isVoiceCall: isVoiceCall))
                 case .displayPinnedEventsTimeline:
                     actionsSubject.send(.presentPinnedEventsTimeline)
                 case .displayMediaEventsTimeline:
