@@ -6571,13 +6571,6 @@
 			path = View;
 			sourceTree = "<group>";
 		};
-		AFB1778C4EC2CA5F068E5A60 /* .claude */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = .claude;
-			sourceTree = "<group>";
-		};
 		B04B538A859CD012755DC19C /* NSE */ = {
 			isa = PBXGroup;
 			children = (
@@ -7414,7 +7407,6 @@
 				C0937E3B06A8F0E2DB7C8241 /* Other */,
 				2ECFF6B05DAA37EB10DBF7E8 /* UITests */,
 				79654D131C1B234A7D034532 /* AccessibilityTests */,
-				AFB1778C4EC2CA5F068E5A60 /* .claude */,
 				22F9F1514B91803BB4B88894 /* AppHooks */,
 				337015ADFBA3AB96660DB3A6 /* Generated */,
 				31CE4DA53232AA534057F912 /* Mocks */,
