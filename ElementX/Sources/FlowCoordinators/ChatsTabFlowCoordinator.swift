@@ -405,8 +405,6 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
                     actionsSubject.send(.showSettings)
                 case .presentFeedbackScreen:
                     stateMachine.processEvent(.feedbackScreen)
-                case .presentSecureBackupSettings:
-                    actionsSubject.send(.showChatBackupSettings)
                 case .presentRecoveryKeyScreen:
                     stateMachine.processEvent(.showRecoveryKeyScreen)
                 case .presentEncryptionResetScreen:
