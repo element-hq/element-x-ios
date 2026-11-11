@@ -1,0 +1,84 @@
+name: Open SDK Update PR
+
+on:
+  schedule:
+    # Tuesday at 05:00 UTC, after matrix-rust-components-swift releases at 01:00
+    # and once the nightly test runs are done.
+    - cron: "0 5 * * 2"
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  open-sdk-update-pr:
+    runs-on: xcode-27
+    timeout-minutes: 30
+
+    # Skip in forks
+    if: github.repository == 'element-hq/element-x-ios'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Find the latest SDK release
+        id: version
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          latest=$(gh release view -R element-hq/matrix-rust-components-swift --json tagName --jq .tagName)
+          current=$(awk '/^  MatrixRustSDK:/ { found = 1 } found && /exactVersion:/ { print $2; exit }' project.yml)
+          echo "Current: $current, latest: $latest"
+          if [[ "$latest" == "$current" ]]; then
+            echo "Already on the latest SDK."
+            exit 0
+          fi
+
+          # Don't overwrite fixes pushed to an open update PR by someone else.
+          authors=$(gh pr list --head sdk/update --state open --json commits --jq '[.[].commits[].authors[].email] | unique | join(" ")')
+          if [[ -n "$authors" && "$authors" != "ci@element.io" ]]; then
+            echo "::notice::The open SDK update PR has commits from $authors, leaving it alone."
+            exit 0
+          fi
+
+          echo "version=$latest" >> "$GITHUB_OUTPUT"
+
+      - name: Setup environment
+        if: steps.version.outputs.version
+        run: |
+          source ci_scripts/ci_common.sh && xcode_select_for_github_actions
+          unset HOMEBREW_NO_INSTALL_FROM_API
+          export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
+          brew install xcodegen sourcery
+
+      - name: Update the SDK
+        if: steps.version.outputs.version
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          sed -i '' "/^  MatrixRustSDK:/,/exactVersion:/ s/exactVersion: .*/exactVersion: $VERSION/" project.yml
+          xcodegen
+          xcodebuild -resolvePackageDependencies -scheme ElementX -project ElementX.xcodeproj
+          swift run -q tools generate-sdk-mocks "$VERSION"
+
+      - name: Create PR for the SDK update
+        if: steps.version.outputs.version
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        with:
+          token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+          author: Element CI <ci@element.io>
+          commit-message: Update the SDK to ${{ steps.version.outputs.version }}
+          title: Update the SDK to ${{ steps.version.outputs.version }}
+          body: |
+            Updates the SDK to [${{ steps.version.outputs.version }}](https://github.com/element-hq/matrix-rust-components-swift/releases/tag/${{ steps.version.outputs.version }}).
+
+            Any breaking API changes need fixing on this branch before merging.
+          labels: pr-misc
+          branch: sdk/update
+          base: develop
+          add-paths: |
+            project.yml
+            ElementX.xcodeproj/project.pbxproj
+            ElementX.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
+            **/SDKGeneratedMocks.swift
