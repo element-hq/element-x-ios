@@ -1363,6 +1363,17 @@ final class ElementCallManagerTests {
         #expect(callScreens == [.present(userID: bobID, kind: .webView(.mock()))])
     }
     
+    @Test("Ending an account's calls dismisses its call and keeps its service")
+    func endAccountCalls() {
+        serviceActions.send(.callRequested(.mock()))
+        
+        manager.endCalls(userID: aliceID)
+        #expect(callScreens.last == .dismiss)
+        
+        serviceActions.send(.callRequested(.mock(roomID: otherRoomID)))
+        #expect(callScreens.last == .present(userID: aliceID, kind: .webView(.mock(roomID: otherRoomID))))
+    }
+    
     @Test("The system ending a web view call dismisses its screen")
     func systemEndsWebCall() async throws {
         await reportIncomingPush(isVoiceCall: false)

@@ -190,9 +190,17 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
     }
     
     func remove(userID: String) {
+        // First, so the service hears its calls end.
+        endCalls(userID: userID)
+        
+        serviceCancellables[userID] = nil
+        services[userID] = nil
+    }
+    
+    func endCalls(userID: String) {
         if let pendingCallRequest, pendingCallRequest.userID == userID {
             self.pendingCallRequest = nil
-            dropCallRequest(pendingCallRequest, because: "\(userID) isn't signed in any more")
+            dropCallRequest(pendingCallRequest, because: "\(userID)'s calls were ended")
         }
         
         if let incomingCallID, incomingCallID.userID == userID {
@@ -210,10 +218,6 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
         
         endOngoingCall(userID: userID)
         dismissCallScreen(of: userID)
-        
-        // Last, so the service hears its calls end.
-        serviceCancellables[userID] = nil
-        services[userID] = nil
     }
     
     func requestCall(userID: String, roomID: String, isVoiceCall: Bool, answeredFromCallKit: Bool) {

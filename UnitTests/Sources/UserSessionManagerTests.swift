@@ -303,6 +303,26 @@ struct UserSessionManagerTests {
         #expect((manager.activeSession as? UserSessionMock) === bob)
     }
     
+    @Test("Logging out or clearing the caches hangs up the account's call before pausing its session", arguments: [false, true])
+    func hangUpBeforePausing(isClearingCaches: Bool) async {
+        let manager = makeManager(userIDs: ["@alice:matrix.org"])
+        let aliceClientProxy = ClientProxyMock(.init(userID: "@alice:matrix.org"))
+        aliceClientProxy.clearCachesReturnValue = .success(())
+        manager.addNewSession(UserSessionMock(.init(clientProxy: aliceClientProxy)))
+        userSessionStore.restoreUserSessionUserIDReturnValue = .failure(.failedRestoringLogin)
+        aliceClientProxy.pauseServicesClosure = { [elementCallManager] in
+            #expect(elementCallManager.endCallsUserIDReceivedInvocations == ["@alice:matrix.org"])
+        }
+        
+        if isClearingCaches {
+            await manager.clearCaches(userID: "@alice:matrix.org")
+        } else {
+            await manager.logout(userID: "@alice:matrix.org")
+        }
+        
+        #expect(aliceClientProxy.pauseServicesCalled)
+    }
+    
     @Test("Logging out an account that's already logging out waits for the existing logout call to complete")
     func duplicateLogout() async {
         let manager = makeManager(userIDs: ["@alice:matrix.org"])

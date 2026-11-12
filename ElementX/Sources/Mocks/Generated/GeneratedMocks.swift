@@ -5211,6 +5211,37 @@ nonisolated class ElementCallManagerMock: ElementCallManagerProtocol, @unchecked
         removeUserIDReceivedInvocationsLock.withLock { removeUserIDUnderlyingReceivedInvocations.append(userID) }
         removeUserIDClosure?(userID)
     }
+    //MARK: - endCalls
+
+    private let endCallsUserIDCallsCountLock = NSLock()
+    private nonisolated(unsafe) var endCallsUserIDUnderlyingCallsCount = 0
+    var endCallsUserIDCallsCount: Int {
+        get { endCallsUserIDCallsCountLock.withLock { endCallsUserIDUnderlyingCallsCount } }
+        set { endCallsUserIDCallsCountLock.withLock { endCallsUserIDUnderlyingCallsCount = newValue } }
+    }
+    var endCallsUserIDCalled: Bool {
+        return endCallsUserIDCallsCount > 0
+    }
+    private let endCallsUserIDReceivedUserIDLock = NSLock()
+    private nonisolated(unsafe) var endCallsUserIDUnderlyingReceivedUserID: String?
+    var endCallsUserIDReceivedUserID: String? {
+        get { endCallsUserIDReceivedUserIDLock.withLock { endCallsUserIDUnderlyingReceivedUserID } }
+        set { endCallsUserIDReceivedUserIDLock.withLock { endCallsUserIDUnderlyingReceivedUserID = newValue } }
+    }
+    private let endCallsUserIDReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var endCallsUserIDUnderlyingReceivedInvocations: [String] = []
+    var endCallsUserIDReceivedInvocations: [String] {
+        get { endCallsUserIDReceivedInvocationsLock.withLock { endCallsUserIDUnderlyingReceivedInvocations } }
+        set { endCallsUserIDReceivedInvocationsLock.withLock { endCallsUserIDUnderlyingReceivedInvocations = newValue } }
+    }
+    nonisolated(unsafe) var endCallsUserIDClosure: ((String) -> Void)?
+
+    func endCalls(userID: String) {
+        endCallsUserIDCallsCountLock.withLock { endCallsUserIDUnderlyingCallsCount += 1 }
+        endCallsUserIDReceivedUserID = userID
+        endCallsUserIDReceivedInvocationsLock.withLock { endCallsUserIDUnderlyingReceivedInvocations.append(userID) }
+        endCallsUserIDClosure?(userID)
+    }
     //MARK: - requestCall
 
     private let requestCallUserIDRoomIDIsVoiceCallAnsweredFromCallKitCallsCountLock = NSLock()
