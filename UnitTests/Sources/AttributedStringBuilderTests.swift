@@ -677,6 +677,26 @@ struct AttributedStringBuilderTests {
         #expect(String(attributedString.characters) == "Hey [img: Smiley face]! How's work[img]?")
     }
     
+    @Test("Custom emoticons are replaced with an image attachment, one per emoticon")
+    func emoticons() throws {
+        let htmlString = "Hey <img data-mx-emoticon src=\"mxc://example.org/wave\" alt=\":wave:\"><img data-mx-emoticon src=\"mxc://example.org/wave\" alt=\":wave:\">!"
+        
+        let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
+        
+        #expect(String(attributedString.characters) == "Hey \u{FFFC}\u{FFFC}!")
+        let emoticons = attributedString.runs.compactMap { $0.suppressedAttachment as? EmoticonTextAttachment }
+        #expect(emoticons.map(\.url) == [URL(string: "mxc://example.org/wave"), URL(string: "mxc://example.org/wave")])
+    }
+    
+    @Test("Emoticons that don't use an mxc:// URL are treated like any other image")
+    func emoticonsWithoutMXCURL() throws {
+        let htmlString = "Hey <img data-mx-emoticon src=\"https://example.org/wave.png\" alt=\":wave:\">!"
+        
+        let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
+        
+        #expect(String(attributedString.characters) == "Hey [img: :wave:]!")
+    }
+    
     @Test
     func listTags() throws {
         let htmlString = "<p>like</p>\n<ul>\n<li>this<br />\ntest</li>\n</ul>\n"

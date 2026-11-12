@@ -60,6 +60,21 @@ enum AllUsersMentionAttribute: AttributedStringKey {
     static let name = "MXAllUsersMentionAttribute"
 }
 
+/// Marks the fallback text of a custom emoticon while parsing. It is replaced before the conversion
+/// to `AttributedString`, which is why it isn't part of ``AttributeScopes/ElementXAttributes``.
+enum EmoticonAttribute: AttributedStringKey {
+    /// A reference type so that adjacent emoticons don't get merged into a single attribute run.
+    final nonisolated class Value: NSObject {
+        let url: URL
+        
+        init(url: URL) {
+            self.url = url
+        }
+    }
+    
+    static let name = "MXEmoticonAttribute"
+}
+
 enum BlockquoteAttribute: AttributedStringKey {
     typealias Value = Bool
     static let name = "MXBlockquoteAttribute"
