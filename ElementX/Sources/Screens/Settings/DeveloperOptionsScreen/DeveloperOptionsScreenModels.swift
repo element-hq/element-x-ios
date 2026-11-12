@@ -64,10 +64,9 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var mentionsFilterEnabled: Bool { get set }
     var prominentInvitesFilterEnabled: Bool { get set }
     
+    var viewSourceEnabled: Bool { get set }
     var linkPreviewsEnabled: Bool { get set }
-    
     var jumpToReadMarkerEnabled: Bool { get set }
-    
     var reactionCelebrationsEnabled: Bool { get set }
     
     var linkNewDeviceEnabled: Bool { get set }
