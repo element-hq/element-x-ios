@@ -363,10 +363,6 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
         guard let roomID = content.roomID else {
             return true
         }
-        // Only the active account's rooms can be on screen.
-        if let receiverID = content.receiverID, receiverID != userSession?.clientProxy.userID {
-            return true
-        }
         return !rootFlowCoordinator.isDisplayingRoomScreen(withRoomID: roomID)
     }
     

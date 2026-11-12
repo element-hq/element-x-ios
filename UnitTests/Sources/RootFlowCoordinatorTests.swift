@@ -241,6 +241,22 @@ struct RootFlowCoordinatorTests {
         #expect(navigationRootCoordinator.overlayCoordinator == nil)
     }
     
+    @Test("A room covered by a full screen call doesn't count as displayed")
+    func roomScreenBehindCall() async throws {
+        rootFlowCoordinator.handleAppRoute(.room(roomID: roomID, via: []), userID: "@alice:matrix.org", awaitsRoom: false, animated: false)
+        rootFlowCoordinator.handleAppRoute(.roomList, animated: false)
+        let splitCoordinator = try #require(chatsSplitCoordinator)
+        let deferred = deferFulfillment(splitCoordinator.observe(\.detailRootCoordinatorID)) { $0 != nil }
+        try await deferred.fulfill()
+        #expect(rootFlowCoordinator.isDisplayingRoomScreen(withRoomID: roomID))
+        
+        presentWebCall(userID: "@alice:matrix.org", roomID: roomID)
+        #expect(!rootFlowCoordinator.isDisplayingRoomScreen(withRoomID: roomID))
+        
+        callManagerActions.send(.callScreen(.dismiss))
+        #expect(rootFlowCoordinator.isDisplayingRoomScreen(withRoomID: roomID))
+    }
+    
     // MARK: - Helpers
     
     /// Signs Bob in alongside Alice, returning his call service.

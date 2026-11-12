@@ -205,6 +205,12 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
     
     func isDisplayingRoomScreen(withRoomID roomID: String) -> Bool {
         guard case .userSessionFlow = stateMachine.state else { return false }
+        
+        // The call screen covers the room.
+        if case .fullScreen = callScreenStateMachine.state {
+            return false
+        }
+        
         return userSessionFlowCoordinator?.isDisplayingRoomScreen(withRoomID: roomID) ?? false
     }
     
