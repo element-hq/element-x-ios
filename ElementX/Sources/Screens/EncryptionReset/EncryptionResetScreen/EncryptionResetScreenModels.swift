@@ -27,10 +27,10 @@ enum EncryptionResetScreenMode {
     case noOptionsWithoutEncryptedRooms
     
     /// - Parameter hasEncryptedRooms: Only evaluated when the user has no confirmation options, as it just chooses between the no options modes.
-    init(hasConfirmationOptions: Bool, hasEncryptedRooms: @autoclosure () -> Bool) {
+    init(hasConfirmationOptions: Bool, hasEncryptedRooms: @MainActor () async -> Bool) async {
         self = if hasConfirmationOptions {
             .hasConfirmationOptions
-        } else if hasEncryptedRooms() {
+        } else if await hasEncryptedRooms() {
             .noOptionsWithEncryptedRooms
         } else {
             .noOptionsWithoutEncryptedRooms

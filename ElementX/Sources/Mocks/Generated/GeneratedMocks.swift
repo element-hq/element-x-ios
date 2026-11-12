@@ -2736,17 +2736,17 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
 
     private let hasEncryptedRoomsReturnValueLock = NSLock()
-    private nonisolated(unsafe) var hasEncryptedRoomsUnderlyingReturnValue: Bool!
-    var hasEncryptedRoomsReturnValue: Bool! {
+    private nonisolated(unsafe) var hasEncryptedRoomsUnderlyingReturnValue: Result<Bool, ClientProxyError>!
+    var hasEncryptedRoomsReturnValue: Result<Bool, ClientProxyError>! {
         get { hasEncryptedRoomsReturnValueLock.withLock { hasEncryptedRoomsUnderlyingReturnValue } }
         set { hasEncryptedRoomsReturnValueLock.withLock { hasEncryptedRoomsUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var hasEncryptedRoomsClosure: (() -> Bool)?
+    nonisolated(unsafe) var hasEncryptedRoomsClosure: (() async -> Result<Bool, ClientProxyError>)?
 
-    func hasEncryptedRooms() -> Bool {
+    @concurrent func hasEncryptedRooms() async -> Result<Bool, ClientProxyError> {
         hasEncryptedRoomsCallsCountLock.withLock { hasEncryptedRoomsUnderlyingCallsCount += 1 }
         if let hasEncryptedRoomsClosure = hasEncryptedRoomsClosure {
-            return hasEncryptedRoomsClosure()
+            return await hasEncryptedRoomsClosure()
         } else {
             return hasEncryptedRoomsReturnValue
         }

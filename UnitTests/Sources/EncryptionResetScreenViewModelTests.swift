@@ -58,13 +58,13 @@ struct EncryptionResetScreenViewModelTests {
     }
     
     @Test
-    func modeWithConfirmationOptionsIgnoresEncryptedRooms() {
+    func modeWithConfirmationOptionsIgnoresEncryptedRooms() async {
         // Encrypted rooms only choose between the no options modes, so skip going through every room when there are options.
         var checkedForRooms = false
-        let mode = EncryptionResetScreenMode(hasConfirmationOptions: true, hasEncryptedRooms: {
+        let mode = await EncryptionResetScreenMode(hasConfirmationOptions: true, hasEncryptedRooms: {
             checkedForRooms = true
             return false
-        }())
+        })
         
         #expect(mode == .hasConfirmationOptions)
         #expect(!mode.isResetTheOnlyOption)
@@ -72,9 +72,9 @@ struct EncryptionResetScreenViewModelTests {
     }
     
     @Test
-    func modeWithoutOptions() {
-        let withEncryptedRooms = EncryptionResetScreenMode(hasConfirmationOptions: false, hasEncryptedRooms: true)
-        let withoutEncryptedRooms = EncryptionResetScreenMode(hasConfirmationOptions: false, hasEncryptedRooms: false)
+    func modeWithoutOptions() async {
+        let withEncryptedRooms = await EncryptionResetScreenMode(hasConfirmationOptions: false, hasEncryptedRooms: { true })
+        let withoutEncryptedRooms = await EncryptionResetScreenMode(hasConfirmationOptions: false, hasEncryptedRooms: { false })
         
         #expect(withEncryptedRooms == .noOptionsWithEncryptedRooms)
         #expect(withEncryptedRooms.isResetTheOnlyOption)

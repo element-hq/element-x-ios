@@ -361,9 +361,13 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func hasEncryptedRooms() -> Bool {
-        // Invites, left rooms and spaces aren't chats the user could lose the history of.
-        client.rooms().contains { $0.membership() == .joined && !$0.isSpace() && $0.encryptionState() == .encrypted }
+    func hasEncryptedRooms() async -> Result<Bool, ClientProxyError> {
+        do {
+            return try await .success(client.hasEncryptedRooms(timeout: 5))
+        } catch {
+            MXLog.error("Failed checking hasEncryptedRooms with error: \(error)")
+            return .failure(.sdkError(error))
+        }
     }
     
     func resumeServices() async {

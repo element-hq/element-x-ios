@@ -258,7 +258,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
                 userSettings.account.hasRunIdentityConfirmationOnboarding = true
                 stateMachine.tryEvent(.nextSkippingIdentityConfirmed)
             case .reset(let hasConfirmationOptions):
-                startEncryptionResetFlow(hasConfirmationOptions: hasConfirmationOptions)
+                Task { await startEncryptionResetFlow(hasConfirmationOptions: hasConfirmationOptions) }
             case .logoutWithoutConfirmation:
                 actionsSubject.send(.logoutWithoutConfirmation)
             }
@@ -310,9 +310,21 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         presentCoordinator(coordinator)
     }
     
-    private func startEncryptionResetFlow(hasConfirmationOptions: Bool) {
-        let mode = EncryptionResetScreenMode(hasConfirmationOptions: hasConfirmationOptions,
-                                             hasEncryptedRooms: userSession.clientProxy.hasEncryptedRooms())
+    /// Treats a failure as the user having encrypted rooms, so the warning is never softer than it should be.
+    private func hasEncryptedRooms() async -> Bool {
+        let indicatorID = "\(Self.self)-EncryptedRooms"
+        userIndicatorController.submitIndicator(.init(id: indicatorID, type: .modal, title: L10n.commonLoading, persistent: true), delay: .milliseconds(200))
+        defer { userIndicatorController.retractIndicatorWithId(indicatorID) }
+        
+        guard case let .success(hasEncryptedRooms) = await userSession.clientProxy.hasEncryptedRooms() else {
+            return true
+        }
+        return hasEncryptedRooms
+    }
+    
+    private func startEncryptionResetFlow(hasConfirmationOptions: Bool) async {
+        let mode = await EncryptionResetScreenMode(hasConfirmationOptions: hasConfirmationOptions,
+                                                   hasEncryptedRooms: hasEncryptedRooms)
         
         let resetNavigationStackCoordinator = NavigationStackCoordinator()
         let coordinator = EncryptionResetFlowCoordinator(parameters: .init(userSession: userSession,
