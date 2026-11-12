@@ -110,6 +110,16 @@
 			<key>UTTypeIdentifier</key>
 			<string>$(PILLS_UT_TYPE_IDENTIFIER)</string>
 		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Custom Emoticons</string>
+			<key>UTTypeIdentifier</key>
+			<string>$(EMOTICONS_UT_TYPE_IDENTIFIER)</string>
+		</dict>
 	</array>
 	<key>appGroupIdentifier</key>
 	<string>$(APP_GROUP_IDENTIFIER)</string>

@@ -33,6 +33,7 @@ nonisolated struct InfoPlistReader {
     
     private enum Values {
         static let mentionPills = "Mention Pills"
+        static let customEmoticons = "Custom Emoticons"
     }
     
     /// Info.plist reader on the bundle object that contains the current executable.
@@ -120,6 +121,19 @@ nonisolated struct InfoPlistReader {
         // that includes one or more uppercase characters, pill rendering breaks. If we lowercase the type identifier
         // the bug is fixed, even though the value used in the fork's Info.plist no longer matches the value returned.
         // Maybe in the future the fork should set their own PILLS_UT_TYPE_IDENTIFIER, but for now this works 🤷‍♂️🤷‍♂️🤷‍♂️
+        return utType.lowercased()
+    }
+    
+    // MARK: - Custom Emoticons
+    
+    /// Custom Emoticons UTType, lowercased for the same reason as ``pillsUTType``.
+    var emoticonsUTType: String {
+        let exportedTypes: [[String: Any]] = infoPlistValue(forKey: Keys.utExportedTypeDeclarationsKey)
+        guard let customEmoticons = exportedTypes.first(where: { $0[Keys.utDescriptionKey] as? String == Values.customEmoticons }),
+              let utType = customEmoticons[Keys.utTypeIdentifierKey] as? String else {
+            fatalError("Add properly \(Values.customEmoticons) exported type into your target's Info.plist")
+        }
+        
         return utType.lowercased()
     }
     
