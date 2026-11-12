@@ -24,8 +24,9 @@ struct ImageDrawingEditor: UIViewControllerRepresentable {
         previewController.delegate = context.coordinator
         previewController.navigationItem.leftBarButtonItem = UIBarButtonItem(systemItem: .cancel, primaryAction: UIAction { _ in onCancel() })
         previewController.navigationItem.rightBarButtonItem = Self.makeSaveButton(primaryAction: UIAction { [coordinator = context.coordinator] _ in
-            coordinator.save()
+            // Saving can call onDrawing right away, which must end the wait that onSave starts.
             onSave()
+            coordinator.save()
         })
         return UINavigationController(rootViewController: previewController)
     }
