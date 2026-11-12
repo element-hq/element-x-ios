@@ -35,6 +35,7 @@ nonisolated extension NSAttributedString.Key {
     static let MatrixAllUsersMention: NSAttributedString.Key = .init(rawValue: AllUsersMentionAttribute.name)
     static let CodeBlock: NSAttributedString.Key = .init(rawValue: CodeBlockAttribute.name)
     static let InlineCode: NSAttributedString.Key = .init(rawValue: InlineCodeAttribute.name)
+    static let MatrixEmoticon: NSAttributedString.Key = .init(rawValue: EmoticonAttribute.name)
 }
 
 nonisolated struct AttributedStringBuilder: AttributedStringBuilderProtocol {
@@ -102,6 +103,7 @@ nonisolated struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         addLinksAndMentions(mutableAttributedString)
         addMatrixEntityPermalinkAttributesTo(mutableAttributedString)
         removeParsingArtefacts(mutableAttributedString)
+        addEmoticons(mutableAttributedString)
         
         let result = try? AttributedString(mutableAttributedString, including: \.elementX)
         Self.cacheValue(result, forKey: originalHTMLString, cacheKey: cacheKey)
@@ -289,10 +291,14 @@ nonisolated struct AttributedStringBuilder: AttributedStringBuilderProtocol {
                 }
                 
             case "img":
-                if let alt = try? childElement.attr("alt"), !alt.isEmpty {
-                    content = NSMutableAttributedString(string: "[img: \(alt)]")
+                let alt = (try? childElement.attr("alt")).flatMap { $0.isEmpty ? nil : $0 }
+                if childElement.hasAttr("data-mx-emoticon"),
+                   let source = try? childElement.attr("src"),
+                   source.hasPrefix("mxc://"),
+                   let url = URL(string: source) {
+                    content = NSMutableAttributedString(string: alt ?? "[img]", attributes: [.MatrixEmoticon: EmoticonAttribute.Value(url: url)])
                 } else {
-                    content = NSMutableAttributedString(string: "[img]")
+                    content = NSMutableAttributedString(string: alt.map { "[img: \($0)]" } ?? "[img]")
                 }
                 
             default:
@@ -487,6 +493,24 @@ nonisolated struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         }
         
         attributedString.addAttribute(.link, value: finalURL, range: range)
+    }
+    
+    /// Replaces the fallback text of custom emoticons with image attachments.
+    ///
+    /// Must be called after the fonts are applied, as the images are sized to match the surrounding text.
+    private func addEmoticons(_ attributedString: NSMutableAttributedString) {
+        attributedString.enumerateAttribute(.MatrixEmoticon,
+                                            in: NSRange(location: 0, length: attributedString.length),
+                                            options: .reverse) { value, range, _ in
+            guard let emoticon = value as? EmoticonAttribute.Value else { return }
+            attributedString.removeAttribute(.MatrixEmoticon, range: range)
+            
+            let attributes = attributedString.attributes(at: range.location, effectiveRange: nil)
+            let font = attributes[.font] as? UIFont ?? .preferredFont(forTextStyle: .body)
+            let emoticonString = NSMutableAttributedString(attachment: EmoticonTextAttachment(url: emoticon.url, font: font))
+            emoticonString.addAttributes(attributes, range: NSRange(location: 0, length: emoticonString.length))
+            attributedString.replaceCharacters(in: range, with: emoticonString)
+        }
     }
     
     private func removeParsingArtefacts(_ attributedString: NSMutableAttributedString) {
