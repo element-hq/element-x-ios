@@ -11,7 +11,7 @@ import SwiftUIIntrospect
 import UIKit
 import WysiwygComposer
 
-protocol PillAttachmentViewProviderDelegate: AnyObject {
+protocol TextAttachmentViewProviderDelegate: AnyObject {
     var timelineContext: TimelineViewModel.Context? { get }
     
     func registerPillView(_ pillView: UIView)
@@ -19,7 +19,7 @@ protocol PillAttachmentViewProviderDelegate: AnyObject {
 }
 
 final class PillAttachmentViewProvider: NSTextAttachmentViewProvider, NSSecureCoding {
-    private weak var delegate: PillAttachmentViewProviderDelegate?
+    private weak var delegate: TextAttachmentViewProviderDelegate?
     
     // MARK: - Override
     
@@ -31,7 +31,7 @@ final class PillAttachmentViewProvider: NSTextAttachmentViewProvider, NSSecureCo
         nonisolated(unsafe) let provider = self
         MainActor.assumeIsolated {
             // Keep a reference to the parent text view for size adjustments and pills flushing.
-            provider.delegate = parentView?.superview as? PillAttachmentViewProviderDelegate
+            provider.delegate = parentView?.superview as? TextAttachmentViewProviderDelegate
         }
         tracksTextAttachmentViewBounds = true
     }
@@ -102,7 +102,7 @@ final class ComposerMentionDisplayHelper: MentionDisplayHelper {
     }
 }
 
-extension WysiwygTextView: PillAttachmentViewProviderDelegate {
+extension WysiwygTextView: TextAttachmentViewProviderDelegate {
     var timelineContext: TimelineViewModel.Context? {
         (mentionDisplayHelper as? ComposerMentionDisplayHelper)?.timelineContext
     }
