@@ -3153,6 +3153,89 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         }
     }
 
+    //MARK: - rtcLivekitDelegateDelayedLeave
+
+    open var rtcLivekitDelegateDelayedLeaveUrlRoomIdSlotIdMemberIdDelayIdThrowableError: Error?
+    private let rtcLivekitDelegateDelayedLeaveUrlRoomIdSlotIdMemberIdDelayIdCallsCountLock = NSLock()
+    private var rtcLivekitDelegateDelayedLeaveUrlRoomIdSlotIdMemberIdDelayIdUnderlyingCallsCount = 0
+    open var rtcLivekitDelegateDelayedLeaveUrlRoomIdSlotIdMemberIdDelayIdCallsCount: Int {
+        get { rtcLivekitDelegateDelayedLeaveUrlRoomIdSlotIdMemberIdDelayIdCallsCountLock.withLock { rtcLivekitDelegateDelayedLeaveUrlRoomIdSlotIdMemberIdDelayIdUnderlyingCallsCount } }
+        set { rtcLivekitDelegateDelayedLeaveUrlRoomIdSlotIdMemberIdDelayIdCallsCountLock.withLock { rtcLivekitDelegateDelayedLeaveUrlRoomIdSlotIdMemberIdDelayIdUnderlyingCallsCount = newValue } }
+    }
+    open var rtcLivekitDelegateDelayedLeaveUrlRoomIdSlotIdMemberIdDelayIdCalled: Bool {
+        return rtcLivekitDelegateDelayedLeaveUrlRoomIdSlotIdMemberIdDelayIdCallsCount > 0
+    }
+    private let rtcLivekitDelegateDelayedLeaveUrlRoomIdSlotIdMemberIdDelayIdReceivedArgumentsLock = NSLock()
+    private var rtcLivekitDelegateDelayedLeaveUrlRoomIdSlotIdMemberIdDelayIdUnderlyingReceivedArguments: (url: String, roomId: String, slotId: String, memberId: String, delayId: String)?
+    open var rtcLivekitDelegateDelayedLeaveUrlRoomIdSlotIdMemberIdDelayIdReceivedArguments: (url: String, roomId: String, slotId: String, memberId: String, delayId: String)? {
+        get { rtcLivekitDelegateDelayedLeaveUrlRoomIdSlotIdMemberIdDelayIdReceivedArgumentsLock.withLock { rtcLivekitDelegateDelayedLeaveUrlRoomIdSlotIdMemberIdDelayIdUnderlyingReceivedArguments } }
+        set { rtcLivekitDelegateDelayedLeaveUrlRoomIdSlotIdMemberIdDelayIdReceivedArgumentsLock.withLock { rtcLivekitDelegateDelayedLeaveUrlRoomIdSlotIdMemberIdDelayIdUnderlyingReceivedArguments = newValue } }
+    }
+    private let rtcLivekitDelegateDelayedLeaveUrlRoomIdSlotIdMemberIdDelayIdReceivedInvocationsLock = NSLock()
+    private var rtcLivekitDelegateDelayedLeaveUrlRoomIdSlotIdMemberIdDelayIdUnderlyingReceivedInvocations: [(url: String, roomId: String, slotId: String, memberId: String, delayId: String)] = []
+    open var rtcLivekitDelegateDelayedLeaveUrlRoomIdSlotIdMemberIdDelayIdReceivedInvocations: [(url: String, roomId: String, slotId: String, memberId: String, delayId: String)] {
+        get { rtcLivekitDelegateDelayedLeaveUrlRoomIdSlotIdMemberIdDelayIdReceivedInvocationsLock.withLock { rtcLivekitDelegateDelayedLeaveUrlRoomIdSlotIdMemberIdDelayIdUnderlyingReceivedInvocations } }
+        set { rtcLivekitDelegateDelayedLeaveUrlRoomIdSlotIdMemberIdDelayIdReceivedInvocationsLock.withLock { rtcLivekitDelegateDelayedLeaveUrlRoomIdSlotIdMemberIdDelayIdUnderlyingReceivedInvocations = newValue } }
+    }
+    open var rtcLivekitDelegateDelayedLeaveUrlRoomIdSlotIdMemberIdDelayIdClosure: ((String, String, String, String, String) async throws -> Void)?
+
+    open override func rtcLivekitDelegateDelayedLeave(url: String, roomId: String, slotId: String, memberId: String, delayId: String) async throws {
+        if let error = rtcLivekitDelegateDelayedLeaveUrlRoomIdSlotIdMemberIdDelayIdThrowableError {
+            throw error
+        }
+        rtcLivekitDelegateDelayedLeaveUrlRoomIdSlotIdMemberIdDelayIdCallsCountLock.withLock { rtcLivekitDelegateDelayedLeaveUrlRoomIdSlotIdMemberIdDelayIdUnderlyingCallsCount += 1 }
+        rtcLivekitDelegateDelayedLeaveUrlRoomIdSlotIdMemberIdDelayIdReceivedArguments = (url: url, roomId: roomId, slotId: slotId, memberId: memberId, delayId: delayId)
+        rtcLivekitDelegateDelayedLeaveUrlRoomIdSlotIdMemberIdDelayIdReceivedInvocationsLock.withLock { rtcLivekitDelegateDelayedLeaveUrlRoomIdSlotIdMemberIdDelayIdUnderlyingReceivedInvocations.append((url: url, roomId: roomId, slotId: slotId, memberId: memberId, delayId: delayId)) }
+        try await rtcLivekitDelegateDelayedLeaveUrlRoomIdSlotIdMemberIdDelayIdClosure?(url, roomId, slotId, memberId, delayId)
+    }
+
+    //MARK: - rtcLivekitGetToken
+
+    open var rtcLivekitGetTokenUrlRoomIdSlotIdMemberIdServerNameThrowableError: Error?
+    private let rtcLivekitGetTokenUrlRoomIdSlotIdMemberIdServerNameCallsCountLock = NSLock()
+    private var rtcLivekitGetTokenUrlRoomIdSlotIdMemberIdServerNameUnderlyingCallsCount = 0
+    open var rtcLivekitGetTokenUrlRoomIdSlotIdMemberIdServerNameCallsCount: Int {
+        get { rtcLivekitGetTokenUrlRoomIdSlotIdMemberIdServerNameCallsCountLock.withLock { rtcLivekitGetTokenUrlRoomIdSlotIdMemberIdServerNameUnderlyingCallsCount } }
+        set { rtcLivekitGetTokenUrlRoomIdSlotIdMemberIdServerNameCallsCountLock.withLock { rtcLivekitGetTokenUrlRoomIdSlotIdMemberIdServerNameUnderlyingCallsCount = newValue } }
+    }
+    open var rtcLivekitGetTokenUrlRoomIdSlotIdMemberIdServerNameCalled: Bool {
+        return rtcLivekitGetTokenUrlRoomIdSlotIdMemberIdServerNameCallsCount > 0
+    }
+    private let rtcLivekitGetTokenUrlRoomIdSlotIdMemberIdServerNameReceivedArgumentsLock = NSLock()
+    private var rtcLivekitGetTokenUrlRoomIdSlotIdMemberIdServerNameUnderlyingReceivedArguments: (url: String, roomId: String, slotId: String, memberId: String, serverName: String?)?
+    open var rtcLivekitGetTokenUrlRoomIdSlotIdMemberIdServerNameReceivedArguments: (url: String, roomId: String, slotId: String, memberId: String, serverName: String?)? {
+        get { rtcLivekitGetTokenUrlRoomIdSlotIdMemberIdServerNameReceivedArgumentsLock.withLock { rtcLivekitGetTokenUrlRoomIdSlotIdMemberIdServerNameUnderlyingReceivedArguments } }
+        set { rtcLivekitGetTokenUrlRoomIdSlotIdMemberIdServerNameReceivedArgumentsLock.withLock { rtcLivekitGetTokenUrlRoomIdSlotIdMemberIdServerNameUnderlyingReceivedArguments = newValue } }
+    }
+    private let rtcLivekitGetTokenUrlRoomIdSlotIdMemberIdServerNameReceivedInvocationsLock = NSLock()
+    private var rtcLivekitGetTokenUrlRoomIdSlotIdMemberIdServerNameUnderlyingReceivedInvocations: [(url: String, roomId: String, slotId: String, memberId: String, serverName: String?)] = []
+    open var rtcLivekitGetTokenUrlRoomIdSlotIdMemberIdServerNameReceivedInvocations: [(url: String, roomId: String, slotId: String, memberId: String, serverName: String?)] {
+        get { rtcLivekitGetTokenUrlRoomIdSlotIdMemberIdServerNameReceivedInvocationsLock.withLock { rtcLivekitGetTokenUrlRoomIdSlotIdMemberIdServerNameUnderlyingReceivedInvocations } }
+        set { rtcLivekitGetTokenUrlRoomIdSlotIdMemberIdServerNameReceivedInvocationsLock.withLock { rtcLivekitGetTokenUrlRoomIdSlotIdMemberIdServerNameUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let rtcLivekitGetTokenUrlRoomIdSlotIdMemberIdServerNameReturnValueLock = NSLock()
+    open var rtcLivekitGetTokenUrlRoomIdSlotIdMemberIdServerNameUnderlyingReturnValue: String!
+    open var rtcLivekitGetTokenUrlRoomIdSlotIdMemberIdServerNameReturnValue: String! {
+        get { rtcLivekitGetTokenUrlRoomIdSlotIdMemberIdServerNameReturnValueLock.withLock { rtcLivekitGetTokenUrlRoomIdSlotIdMemberIdServerNameUnderlyingReturnValue } }
+        set { rtcLivekitGetTokenUrlRoomIdSlotIdMemberIdServerNameReturnValueLock.withLock { rtcLivekitGetTokenUrlRoomIdSlotIdMemberIdServerNameUnderlyingReturnValue = newValue } }
+    }
+    open var rtcLivekitGetTokenUrlRoomIdSlotIdMemberIdServerNameClosure: ((String, String, String, String, String?) async throws -> String)?
+
+    open override func rtcLivekitGetToken(url: String, roomId: String, slotId: String, memberId: String, serverName: String?) async throws -> String {
+        if let error = rtcLivekitGetTokenUrlRoomIdSlotIdMemberIdServerNameThrowableError {
+            throw error
+        }
+        rtcLivekitGetTokenUrlRoomIdSlotIdMemberIdServerNameCallsCountLock.withLock { rtcLivekitGetTokenUrlRoomIdSlotIdMemberIdServerNameUnderlyingCallsCount += 1 }
+        rtcLivekitGetTokenUrlRoomIdSlotIdMemberIdServerNameReceivedArguments = (url: url, roomId: roomId, slotId: slotId, memberId: memberId, serverName: serverName)
+        rtcLivekitGetTokenUrlRoomIdSlotIdMemberIdServerNameReceivedInvocationsLock.withLock { rtcLivekitGetTokenUrlRoomIdSlotIdMemberIdServerNameUnderlyingReceivedInvocations.append((url: url, roomId: roomId, slotId: slotId, memberId: memberId, serverName: serverName)) }
+        if let rtcLivekitGetTokenUrlRoomIdSlotIdMemberIdServerNameClosure = rtcLivekitGetTokenUrlRoomIdSlotIdMemberIdServerNameClosure {
+            return try await rtcLivekitGetTokenUrlRoomIdSlotIdMemberIdServerNameClosure(url, roomId, slotId, memberId, serverName)
+        } else {
+            return rtcLivekitGetTokenUrlRoomIdSlotIdMemberIdServerNameReturnValue
+        }
+    }
+
     //MARK: - runSearchBackfill
 
     private let runSearchBackfillStrategyCallsCountLock = NSLock()
