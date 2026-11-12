@@ -1692,6 +1692,39 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         }
     }
 
+    //MARK: - grantLoginWithQrCodeSupport
+
+    open var grantLoginWithQrCodeSupportThrowableError: Error?
+    private let grantLoginWithQrCodeSupportCallsCountLock = NSLock()
+    private var grantLoginWithQrCodeSupportUnderlyingCallsCount = 0
+    open var grantLoginWithQrCodeSupportCallsCount: Int {
+        get { grantLoginWithQrCodeSupportCallsCountLock.withLock { grantLoginWithQrCodeSupportUnderlyingCallsCount } }
+        set { grantLoginWithQrCodeSupportCallsCountLock.withLock { grantLoginWithQrCodeSupportUnderlyingCallsCount = newValue } }
+    }
+    open var grantLoginWithQrCodeSupportCalled: Bool {
+        return grantLoginWithQrCodeSupportCallsCount > 0
+    }
+
+    private let grantLoginWithQrCodeSupportReturnValueLock = NSLock()
+    open var grantLoginWithQrCodeSupportUnderlyingReturnValue: QrCodeLoginSupport!
+    open var grantLoginWithQrCodeSupportReturnValue: QrCodeLoginSupport! {
+        get { grantLoginWithQrCodeSupportReturnValueLock.withLock { grantLoginWithQrCodeSupportUnderlyingReturnValue } }
+        set { grantLoginWithQrCodeSupportReturnValueLock.withLock { grantLoginWithQrCodeSupportUnderlyingReturnValue = newValue } }
+    }
+    open var grantLoginWithQrCodeSupportClosure: (() async throws -> QrCodeLoginSupport)?
+
+    open override func grantLoginWithQrCodeSupport() async throws -> QrCodeLoginSupport {
+        if let error = grantLoginWithQrCodeSupportThrowableError {
+            throw error
+        }
+        grantLoginWithQrCodeSupportCallsCountLock.withLock { grantLoginWithQrCodeSupportUnderlyingCallsCount += 1 }
+        if let grantLoginWithQrCodeSupportClosure = grantLoginWithQrCodeSupportClosure {
+            return try await grantLoginWithQrCodeSupportClosure()
+        } else {
+            return grantLoginWithQrCodeSupportReturnValue
+        }
+    }
+
     //MARK: - hasEncryptedRooms
 
     open var hasEncryptedRoomsTimeoutThrowableError: Error?
@@ -1925,39 +1958,6 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
             return try await isLivekitRtcSupportedClosure()
         } else {
             return isLivekitRtcSupportedReturnValue
-        }
-    }
-
-    //MARK: - isLoginWithQrCodeSupported
-
-    open var isLoginWithQrCodeSupportedThrowableError: Error?
-    private let isLoginWithQrCodeSupportedCallsCountLock = NSLock()
-    private var isLoginWithQrCodeSupportedUnderlyingCallsCount = 0
-    open var isLoginWithQrCodeSupportedCallsCount: Int {
-        get { isLoginWithQrCodeSupportedCallsCountLock.withLock { isLoginWithQrCodeSupportedUnderlyingCallsCount } }
-        set { isLoginWithQrCodeSupportedCallsCountLock.withLock { isLoginWithQrCodeSupportedUnderlyingCallsCount = newValue } }
-    }
-    open var isLoginWithQrCodeSupportedCalled: Bool {
-        return isLoginWithQrCodeSupportedCallsCount > 0
-    }
-
-    private let isLoginWithQrCodeSupportedReturnValueLock = NSLock()
-    open var isLoginWithQrCodeSupportedUnderlyingReturnValue: Bool!
-    open var isLoginWithQrCodeSupportedReturnValue: Bool! {
-        get { isLoginWithQrCodeSupportedReturnValueLock.withLock { isLoginWithQrCodeSupportedUnderlyingReturnValue } }
-        set { isLoginWithQrCodeSupportedReturnValueLock.withLock { isLoginWithQrCodeSupportedUnderlyingReturnValue = newValue } }
-    }
-    open var isLoginWithQrCodeSupportedClosure: (() async throws -> Bool)?
-
-    open override func isLoginWithQrCodeSupported() async throws -> Bool {
-        if let error = isLoginWithQrCodeSupportedThrowableError {
-            throw error
-        }
-        isLoginWithQrCodeSupportedCallsCountLock.withLock { isLoginWithQrCodeSupportedUnderlyingCallsCount += 1 }
-        if let isLoginWithQrCodeSupportedClosure = isLoginWithQrCodeSupportedClosure {
-            return try await isLoginWithQrCodeSupportedClosure()
-        } else {
-            return isLoginWithQrCodeSupportedReturnValue
         }
     }
 
@@ -2387,6 +2387,39 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         loginWithOauthCallbackCallbackUrlReceivedCallbackUrl = callbackUrl
         loginWithOauthCallbackCallbackUrlReceivedInvocationsLock.withLock { loginWithOauthCallbackCallbackUrlUnderlyingReceivedInvocations.append(callbackUrl) }
         try await loginWithOauthCallbackCallbackUrlClosure?(callbackUrl)
+    }
+
+    //MARK: - loginWithQrCodeSupport
+
+    open var loginWithQrCodeSupportThrowableError: Error?
+    private let loginWithQrCodeSupportCallsCountLock = NSLock()
+    private var loginWithQrCodeSupportUnderlyingCallsCount = 0
+    open var loginWithQrCodeSupportCallsCount: Int {
+        get { loginWithQrCodeSupportCallsCountLock.withLock { loginWithQrCodeSupportUnderlyingCallsCount } }
+        set { loginWithQrCodeSupportCallsCountLock.withLock { loginWithQrCodeSupportUnderlyingCallsCount = newValue } }
+    }
+    open var loginWithQrCodeSupportCalled: Bool {
+        return loginWithQrCodeSupportCallsCount > 0
+    }
+
+    private let loginWithQrCodeSupportReturnValueLock = NSLock()
+    open var loginWithQrCodeSupportUnderlyingReturnValue: QrCodeLoginSupport!
+    open var loginWithQrCodeSupportReturnValue: QrCodeLoginSupport! {
+        get { loginWithQrCodeSupportReturnValueLock.withLock { loginWithQrCodeSupportUnderlyingReturnValue } }
+        set { loginWithQrCodeSupportReturnValueLock.withLock { loginWithQrCodeSupportUnderlyingReturnValue = newValue } }
+    }
+    open var loginWithQrCodeSupportClosure: (() async throws -> QrCodeLoginSupport)?
+
+    open override func loginWithQrCodeSupport() async throws -> QrCodeLoginSupport {
+        if let error = loginWithQrCodeSupportThrowableError {
+            throw error
+        }
+        loginWithQrCodeSupportCallsCountLock.withLock { loginWithQrCodeSupportUnderlyingCallsCount += 1 }
+        if let loginWithQrCodeSupportClosure = loginWithQrCodeSupportClosure {
+            return try await loginWithQrCodeSupportClosure()
+        } else {
+            return loginWithQrCodeSupportReturnValue
+        }
     }
 
     //MARK: - logout
@@ -4980,6 +5013,39 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
             return try userIdServerNameClosure()
         } else {
             return userIdServerNameReturnValue
+        }
+    }
+
+    //MARK: - isLoginWithQrCodeSupported
+
+    open var isLoginWithQrCodeSupportedThrowableError: Error?
+    private let isLoginWithQrCodeSupportedCallsCountLock = NSLock()
+    private var isLoginWithQrCodeSupportedUnderlyingCallsCount = 0
+    open var isLoginWithQrCodeSupportedCallsCount: Int {
+        get { isLoginWithQrCodeSupportedCallsCountLock.withLock { isLoginWithQrCodeSupportedUnderlyingCallsCount } }
+        set { isLoginWithQrCodeSupportedCallsCountLock.withLock { isLoginWithQrCodeSupportedUnderlyingCallsCount = newValue } }
+    }
+    open var isLoginWithQrCodeSupportedCalled: Bool {
+        return isLoginWithQrCodeSupportedCallsCount > 0
+    }
+
+    private let isLoginWithQrCodeSupportedReturnValueLock = NSLock()
+    open var isLoginWithQrCodeSupportedUnderlyingReturnValue: Bool!
+    open var isLoginWithQrCodeSupportedReturnValue: Bool! {
+        get { isLoginWithQrCodeSupportedReturnValueLock.withLock { isLoginWithQrCodeSupportedUnderlyingReturnValue } }
+        set { isLoginWithQrCodeSupportedReturnValueLock.withLock { isLoginWithQrCodeSupportedUnderlyingReturnValue = newValue } }
+    }
+    open var isLoginWithQrCodeSupportedClosure: (() async throws -> Bool)?
+
+    open override func isLoginWithQrCodeSupported() async throws -> Bool {
+        if let error = isLoginWithQrCodeSupportedThrowableError {
+            throw error
+        }
+        isLoginWithQrCodeSupportedCallsCountLock.withLock { isLoginWithQrCodeSupportedUnderlyingCallsCount += 1 }
+        if let isLoginWithQrCodeSupportedClosure = isLoginWithQrCodeSupportedClosure {
+            return try await isLoginWithQrCodeSupportedClosure()
+        } else {
+            return isLoginWithQrCodeSupportedReturnValue
         }
     }
 
