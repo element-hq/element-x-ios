@@ -26,6 +26,22 @@ struct RoomScreen: View {
     /// Set when the user long-presses one of the scroll buttons; the pill anchors to that button.
     @State private var markAsReadSource: MarkAsReadSource?
     
+    private var isMessageSelectionActive: Bool {
+        timelineContext.viewState.messageSelection.isActive
+    }
+    
+    private var isPinnedItemsBannerVisible: Bool {
+        context.viewState.shouldShowPinnedEventsBanner && !isMessageSelectionActive
+    }
+    
+    private var isLiveLocationBannerVisible: Bool {
+        context.viewState.isSharingLiveLocation && !isMessageSelectionActive
+    }
+    
+    private var isKnockRequestsBannerVisible: Bool {
+        context.viewState.shouldSeeKnockRequests && !isMessageSelectionActive
+    }
+    
     init(context: RoomScreenViewModelType.Context,
          timelineContext: TimelineViewModelType.Context,
          composerToolbar: ComposerToolbar) {
@@ -74,23 +90,23 @@ struct RoomScreen: View {
             .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
             .topBanners([
                 TopBannerLayer(verticalBanners: [
-                    TopBannerItem(pinnedItemsBanner, isVisible: context.viewState.shouldShowPinnedEventsBanner && !isVoiceOverEnabled),
-                    TopBannerItem(liveLocationBanner, isVisible: context.viewState.isSharingLiveLocation && !isVoiceOverEnabled)
+                    TopBannerItem(pinnedItemsBanner, isVisible: isPinnedItemsBannerVisible && !isVoiceOverEnabled),
+                    TopBannerItem(liveLocationBanner, isVisible: isLiveLocationBannerVisible && !isVoiceOverEnabled)
                 ]),
                 // This can overlay on top of the stacked banners
-                TopBannerLayer(knockRequestsBanner, isVisible: context.viewState.shouldSeeKnockRequests)
+                TopBannerLayer(knockRequestsBanner, isVisible: isKnockRequestsBannerVisible)
             ], footer: dateBadge)
             .safeAreaInset(edge: .top) {
                 // When VoiceOver is enabled the scroll gestures don't trigger, so the banner never
                 // hides itself and the .overlay layout above would permanently obscure the top of
                 // the timeline. So whenever VoiceOver is enabled we use a safe area inset to
                 // vertically stack it above the timeline instead.
-                if context.viewState.shouldShowPinnedEventsBanner || context.viewState.isSharingLiveLocation, isVoiceOverEnabled {
+                if isPinnedItemsBannerVisible || isLiveLocationBannerVisible, isVoiceOverEnabled {
                     VStack(spacing: 0) {
-                        if context.viewState.shouldShowPinnedEventsBanner {
+                        if isPinnedItemsBannerVisible {
                             pinnedItemsBanner
                         }
-                        if context.viewState.isSharingLiveLocation {
+                        if isLiveLocationBannerVisible {
                             liveLocationBanner
                         }
                     }
@@ -293,10 +309,6 @@ struct RoomScreen: View {
         }
     }
     
-    private var isMessageSelectionActive: Bool {
-        timelineContext.viewState.messageSelection.isActive
-    }
-    
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
         // .principal + .primaryAction works better than .navigation leading + trailing
@@ -353,7 +365,7 @@ struct RoomScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModels = makeViewModels()
     static let readOnlyViewModels = makeViewModels(canSendMessage: false)
     static let tombstonedViewModels = makeViewModels(hasSuccessor: true)
-    static let selectingViewModels = makeViewModels(isSelecting: true)
+    static let selectingViewModels = makeViewModels(hasPinnedEvents: true, isSelecting: true)
     static let composerViewModel = ComposerToolbarViewModel.mock()
     
     static var previews: some View {
@@ -389,10 +401,11 @@ struct RoomScreen_Previews: PreviewProvider, TestablePreview {
         .snapshotPreferences(expect: selectingViewModels.timeline.context.$viewState.map(\.messageSelection.isActive))
     }
     
-    static func makeViewModels(canSendMessage: Bool = true, hasSuccessor: Bool = false, isSelecting: Bool = false) -> ViewModels {
+    static func makeViewModels(canSendMessage: Bool = true, hasSuccessor: Bool = false, hasPinnedEvents: Bool = false, isSelecting: Bool = false) -> ViewModels {
         let roomProxyMock = JoinedRoomProxyMock(.init(id: "stable_id",
                                                       name: "Preview room",
                                                       hasOngoingCall: true,
+                                                      pinnedEventIDs: hasPinnedEvents ? ["$pinned"] : [],
                                                       successor: hasSuccessor ? .init(roomId: UUID().uuidString, reason: nil) : nil,
                                                       powerLevelsConfiguration: .init(canUserSendMessage: canSendMessage)))
         let roomViewModel = RoomScreenViewModel.mock(roomProxyMock: roomProxyMock)
