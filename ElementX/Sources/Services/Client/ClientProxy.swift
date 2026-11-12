@@ -179,7 +179,7 @@ class ClientProxy: ClientProxyProtocol {
         searchService = SearchServiceProxy(searchService: client.searchService(),
                                            timelineItemFactory: RoomTimelineItemFactory(userID: searchUserID,
                                                                                         attributedStringBuilder: AttributedStringBuilder(cacheKey: "search",
-                                                                                                                                         mentionBuilder: PlainMentionBuilder()),
+                                                                                                                                         mentionBuilder: PlainMentionBuilder(), rendersEmoticonsAsImages: false),
                                                                                         stateEventStringBuilder: RoomStateEventStringBuilder(userID: searchUserID)))
         
         capabilities = HomeserverCapabilitiesProxy(underlyingCapabilities: client.homeserverCapabilities())
@@ -1447,7 +1447,7 @@ private struct ClientProxyServices {
         let roomListService = syncService.roomListService()
         
         let roomMessageEventStringBuilder = RoomMessageEventStringBuilder(attributedStringBuilder: AttributedStringBuilder(cacheKey: "roomList",
-                                                                                                                           mentionBuilder: PlainMentionBuilder()),
+                                                                                                                           mentionBuilder: PlainMentionBuilder(), rendersEmoticonsAsImages: false),
                                                                           style: .senderPrefixed)
         
         eventStringBuilder = try RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: client.userId()),

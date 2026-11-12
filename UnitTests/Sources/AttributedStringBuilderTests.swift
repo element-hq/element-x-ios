@@ -688,6 +688,16 @@ struct AttributedStringBuilderTests {
         #expect(emoticons.map(\.url) == [URL(string: "mxc://example.org/wave"), URL(string: "mxc://example.org/wave")])
     }
     
+    @Test("Custom emoticons fall back to their alt text when attachments aren't supported")
+    func emoticonsPlain() throws {
+        let builder = AttributedStringBuilder(cacheKey: "plain", mentionBuilder: PlainMentionBuilder(), rendersEmoticonsAsImages: false)
+        let htmlString = "Hey <img data-mx-emoticon src=\"mxc://example.org/wave\" alt=\":wave:\">!"
+        
+        let attributedString = try #require(builder.fromHTML(htmlString), "Could not build the attributed string")
+        
+        #expect(String(attributedString.characters) == "Hey :wave:!")
+    }
+    
     @Test("Emoticons that don't use an mxc:// URL are treated like any other image")
     func emoticonsWithoutMXCURL() throws {
         let htmlString = "Hey <img data-mx-emoticon src=\"https://example.org/wave.png\" alt=\":wave:\">!"

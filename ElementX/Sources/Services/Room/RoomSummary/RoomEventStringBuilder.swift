@@ -102,7 +102,7 @@ nonisolated struct RoomEventStringBuilder {
     
     static func pinnedEventStringBuilder(userID: String) -> Self {
         RoomEventStringBuilder(stateEventStringBuilder: .init(userID: userID),
-                               messageEventStringBuilder: .init(attributedStringBuilder: AttributedStringBuilder(cacheKey: "pinnedEvents", mentionBuilder: PlainMentionBuilder()),
+                               messageEventStringBuilder: .init(attributedStringBuilder: AttributedStringBuilder(cacheKey: "pinnedEvents", mentionBuilder: PlainMentionBuilder(), rendersEmoticonsAsImages: false),
                                                                 style: .typeBolded),
                                shouldPrefixSenderName: false)
     }
@@ -110,7 +110,7 @@ nonisolated struct RoomEventStringBuilder {
     // periphery:ignore - might be useful to have
     static func threadListEventStringBuilder(userID: String) -> Self {
         RoomEventStringBuilder(stateEventStringBuilder: .init(userID: userID),
-                               messageEventStringBuilder: .init(attributedStringBuilder: AttributedStringBuilder(cacheKey: "threadList", mentionBuilder: PlainMentionBuilder()),
+                               messageEventStringBuilder: .init(attributedStringBuilder: AttributedStringBuilder(cacheKey: "threadList", mentionBuilder: PlainMentionBuilder(), rendersEmoticonsAsImages: false),
                                                                 style: .plain),
                                shouldPrefixSenderName: false)
     }

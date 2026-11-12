@@ -19,7 +19,7 @@ nonisolated struct NotificationContentBuilderTests {
     
     init() async {
         notificationContent = .init()
-        let stringBuilder = RoomMessageEventStringBuilder(attributedStringBuilder: AttributedStringBuilder(mentionBuilder: PlainMentionBuilder()),
+        let stringBuilder = RoomMessageEventStringBuilder(attributedStringBuilder: AttributedStringBuilder(mentionBuilder: PlainMentionBuilder(), rendersEmoticonsAsImages: false),
                                                           style: .plain)
         mediaProvider = MediaProviderMock(.init())
         notificationContentBuilder = await NotificationContentBuilder(messageEventStringBuilder: stringBuilder,
