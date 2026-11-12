@@ -26,6 +26,22 @@ struct RoomScreen: View {
     /// Set when the user long-presses one of the scroll buttons; the pill anchors to that button.
     @State private var markAsReadSource: MarkAsReadSource?
     
+    private var isMessageSelectionActive: Bool {
+        timelineContext.viewState.messageSelection.isActive
+    }
+    
+    private var isPinnedItemsBannerVisible: Bool {
+        context.viewState.shouldShowPinnedEventsBanner && !isMessageSelectionActive
+    }
+    
+    private var isLiveLocationBannerVisible: Bool {
+        context.viewState.isSharingLiveLocation && !isMessageSelectionActive
+    }
+    
+    private var isKnockRequestsBannerVisible: Bool {
+        context.viewState.shouldSeeKnockRequests && !isMessageSelectionActive
+    }
+    
     init(context: RoomScreenViewModelType.Context,
          timelineContext: TimelineViewModelType.Context,
          composerToolbar: ComposerToolbar) {
@@ -291,22 +307,6 @@ struct RoomScreen: View {
                 .background(.ultraThickMaterial)
                 .cornerRadius(8)
         }
-    }
-    
-    private var isMessageSelectionActive: Bool {
-        timelineContext.viewState.messageSelection.isActive
-    }
-    
-    private var isPinnedItemsBannerVisible: Bool {
-        context.viewState.shouldShowPinnedEventsBanner && !isMessageSelectionActive
-    }
-    
-    private var isLiveLocationBannerVisible: Bool {
-        context.viewState.isSharingLiveLocation && !isMessageSelectionActive
-    }
-    
-    private var isKnockRequestsBannerVisible: Bool {
-        context.viewState.shouldSeeKnockRequests && !isMessageSelectionActive
     }
     
     @ToolbarContentBuilder
