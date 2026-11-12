@@ -686,6 +686,7 @@ struct AttributedStringBuilderTests {
         #expect(String(attributedString.characters) == "Hey \u{FFFC}\u{FFFC}!")
         let emoticons = attributedString.runs.compactMap { $0.suppressedAttachment as? EmoticonTextAttachment }
         #expect(emoticons.map(\.url) == [URL(string: "mxc://example.org/wave"), URL(string: "mxc://example.org/wave")])
+        #expect(emoticons.map(\.accessibilityLabel) == [":wave:", ":wave:"])
     }
     
     @Test("Custom emoticons fall back to their alt text when attachments aren't supported")
