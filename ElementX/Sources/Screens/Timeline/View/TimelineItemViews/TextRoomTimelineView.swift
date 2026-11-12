@@ -129,6 +129,11 @@ struct TextRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                             isOutgoing: true,
                                                             senderId: "Anne"))
                 
+                TextRoomTimelineView(timelineItem: itemWith(html: "Custom emoticons <img data-mx-emoticon src=\"\(URL.mockMXCImage)\" alt=\":wave:\"> sit inline with <b>the text <img data-mx-emoticon src=\"\(URL.mockMXCImage)\" alt=\":wave:\"></b>",
+                                                            timestamp: .mock,
+                                                            isOutgoing: false,
+                                                            senderId: "Bob"))
+                
                 // HTML with links for testing
                 TextRoomTimelineView(timelineItem: itemWith(html: "Check out <a href=\"https://www.apple.com\">Apple's website</a> and <a href=\"https://github.com\">GitHub</a>!",
                                                             timestamp: .mock,
