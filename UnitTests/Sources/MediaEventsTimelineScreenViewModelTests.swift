@@ -10,10 +10,10 @@ import Testing
 
 @MainActor
 struct MediaEventsTimelineScreenViewModelTests {
-    @Test
+    @Test("Changing the screen mode switches between the media and files timelines")
     func changingScreenModeSwitchesTimelines() {
-        let mediaTimelineViewModel = makeTimelineViewModel(allowedGalleryItemTypes: [.image, .video])
-        let filesTimelineViewModel = makeTimelineViewModel(allowedGalleryItemTypes: [.file, .audio])
+        let mediaTimelineViewModel = makeTimelineViewModel(timelineController: makeTimelineController(allowedGalleryItemTypes: [.image, .video]))
+        let filesTimelineViewModel = makeTimelineViewModel(timelineController: makeTimelineController(allowedGalleryItemTypes: [.file, .audio]))
         
         let viewModel = MediaEventsTimelineScreenViewModel(mediaTimelineViewModel: mediaTimelineViewModel,
                                                            filesTimelineViewModel: filesTimelineViewModel,
@@ -43,15 +43,56 @@ struct MediaEventsTimelineScreenViewModelTests {
         #expect(allItemsMatchScreenMode(.media, groups: context.viewState.groups))
     }
     
+    @Test("The loading indicator stays visible until the start of the timeline is reached")
+    func backPaginationIndicator() async throws {
+        let timelineController = makeTimelineController(allowedGalleryItemTypes: [.image, .video])
+        let mediaTimelineViewModel = makeTimelineViewModel(timelineController: timelineController)
+        let filesTimelineViewModel = makeTimelineViewModel(timelineController: makeTimelineController(allowedGalleryItemTypes: [.file, .audio]))
+        
+        let viewModel = MediaEventsTimelineScreenViewModel(mediaTimelineViewModel: mediaTimelineViewModel,
+                                                           filesTimelineViewModel: filesTimelineViewModel,
+                                                           mediaProvider: MediaProviderMock(.init()),
+                                                           userIndicatorController: UserIndicatorControllerMock(),
+                                                           appMediator: AppMediatorMock(.init()))
+        let context = viewModel.context
+        
+        // Given a timeline that is loading a page of older items.
+        try await updateBackwardPaginationState(.paginating, of: timelineController, observedBy: mediaTimelineViewModel)
+        #expect(context.viewState.canBackPaginate)
+        
+        // When the page has loaded but there are still older items to load.
+        try await updateBackwardPaginationState(.idle, of: timelineController, observedBy: mediaTimelineViewModel)
+        
+        // Then the loading indicator should remain visible.
+        #expect(context.viewState.canBackPaginate)
+        
+        // When the start of the timeline is reached.
+        try await updateBackwardPaginationState(.endReached, of: timelineController, observedBy: mediaTimelineViewModel)
+        
+        // Then the loading indicator should be hidden.
+        #expect(!context.viewState.canBackPaginate)
+    }
+    
     // MARK: - Helpers
     
     // Both timelines are given the same mixed chunk of items, filtered as they are in the app, so that
     // the filtering of the items is what's under test.
-    private func makeTimelineViewModel(allowedGalleryItemTypes: [TimelineAllowedGalleryItemType]) -> TimelineViewModel {
-        let timelineController = TimelineControllerMock(.init(timelineKind: .media(.mediaFilesScreen),
-                                                              timelineItems: [TimelineFixtures.separator] + TimelineFixtures.mediaChunk,
-                                                              allowedGalleryItemTypes: allowedGalleryItemTypes))
-        return TimelineViewModel.mock(timelineKind: .media(.mediaFilesScreen), timelineController: timelineController)
+    private func makeTimelineController(allowedGalleryItemTypes: [TimelineAllowedGalleryItemType]) -> TimelineControllerMock {
+        TimelineControllerMock(.init(timelineKind: .media(.mediaFilesScreen),
+                                     timelineItems: [TimelineFixtures.separator] + TimelineFixtures.mediaChunk,
+                                     allowedGalleryItemTypes: allowedGalleryItemTypes))
+    }
+    
+    private func makeTimelineViewModel(timelineController: TimelineControllerMock) -> TimelineViewModel {
+        TimelineViewModel.mock(timelineKind: .media(.mediaFilesScreen), timelineController: timelineController)
+    }
+    
+    private func updateBackwardPaginationState(_ backward: PaginationState,
+                                               of timelineController: TimelineControllerMock,
+                                               observedBy timelineViewModel: TimelineViewModel) async throws {
+        let deferred = deferFulfillment(timelineViewModel.context.$viewState) { $0.timelineState.paginationState.backward == backward }
+        timelineController.update(paginationState: .init(backward: backward, forward: .endReached))
+        try await deferred.fulfill()
     }
     
     private func allItemsMatchScreenMode(_ screenMode: MediaEventsTimelineScreenMode, groups: [MediaEventsTimelineGroup]) -> Bool {

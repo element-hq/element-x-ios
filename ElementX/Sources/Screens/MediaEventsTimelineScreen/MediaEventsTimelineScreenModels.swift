@@ -25,7 +25,7 @@ struct MediaEventsTimelineGroup: Identifiable {
 }
 
 struct MediaEventsTimelineScreenViewState: BindableState {
-    var isBackPaginating = false
+    var canBackPaginate = false
     var shouldShowEmptyState = false
     
     var screenMode: MediaEventsTimelineScreenMode

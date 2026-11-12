@@ -135,7 +135,7 @@ struct MediaEventsTimelineScreen: View {
         LazyVStack(spacing: 0) {
             ProgressView()
                 .padding()
-                .opacity(context.viewState.isBackPaginating ? 1 : 0)
+                .opacity(context.viewState.canBackPaginate ? 1 : 0)
                 .scaleEffect(.init(width: 1, height: -1)) // Make sure it spins the right way around 🙃
             
             Rectangle()
