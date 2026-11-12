@@ -1026,6 +1026,7 @@
 "screen_media_details_uploaded_by" = "Uploaded by";
 "screen_media_details_uploaded_on" = "Uploaded on";
 "screen_media_picker_error_failed_selection" = "Failed selecting media, please try again.";
+"screen_media_upload_preview_a11y_draw" = "Draw";
 "screen_media_upload_preview_caption_warning" = "Captions might not be visible to people using older apps.";
 "screen_media_upload_preview_change_video_quality_prompt" = "Tap to change the video upload quality";
 "screen_media_upload_preview_error_could_not_be_uploaded" = "The file could not be uploaded.";

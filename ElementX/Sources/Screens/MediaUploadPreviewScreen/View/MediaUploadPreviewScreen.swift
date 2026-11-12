@@ -202,7 +202,7 @@ struct MediaUploadPreviewScreen: View {
                     Button { context.presentedEditor = .draw(index: currentIndex) } label: {
                         CompoundIcon(\.edit)
                     }
-                    .accessibilityLabel(UntranslatedL10n.screenMediaUploadPreviewA11yDraw)
+                    .accessibilityLabel(L10n.screenMediaUploadPreviewA11yDraw)
                 }
             }
         }
