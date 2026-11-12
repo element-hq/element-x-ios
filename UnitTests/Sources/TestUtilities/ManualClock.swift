@@ -66,13 +66,10 @@ final nonisolated class ManualClock: Clock {
                 switch schedule(id: id, deadline: deadline, continuation: continuation) {
                 case .elapsed:
                     continuation.resume()
+                case .cancelled:
+                    continuation.resume(throwing: CancellationError())
                 case .scheduled(let duration, let observer):
                     observer?.resume(returning: duration)
-                    
-                    // Cancellation that landed while scheduling found nothing to cancel.
-                    if Task.isCancelled {
-                        cancelSleep(id: id)
-                    }
                 }
             }
         } onCancel: {
@@ -127,6 +124,8 @@ final nonisolated class ManualClock: Clock {
     private enum Scheduling {
         /// The deadline had already passed, the sleep doesn't suspend.
         case elapsed
+        /// The task was cancelled before the sleep could be stored, the sleep doesn't suspend.
+        case cancelled
         /// The sleep is now pending, along with the ``waitForScheduledSleep()`` caller to notify.
         case scheduled(Duration, observer: CheckedContinuation<Duration, Never>?)
     }
@@ -137,6 +136,12 @@ final nonisolated class ManualClock: Clock {
         state.withLock { state in
             guard deadline > state.now else {
                 return .elapsed
+            }
+            
+            // Checked under the lock so a cancelled task never occupies the single slot, not even
+            // briefly: its handler either already ran (and the flag is visible here) or will run after.
+            guard !Task.isCancelled else {
+                return .cancelled
             }
             
             precondition(state.sleep == nil, "The clock only supports a single pending sleep.")
