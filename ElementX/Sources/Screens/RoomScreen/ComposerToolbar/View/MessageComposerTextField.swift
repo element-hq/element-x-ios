@@ -207,7 +207,7 @@ private protocol ElementTextViewDelegate: AnyObject {
     func textView(_ textView: UITextView, didReceivePasteWith providers: [NSItemProvider])
 }
 
-private class ElementTextView: UITextView, PillAttachmentViewProviderDelegate {
+private class ElementTextView: UITextView, TextAttachmentViewProviderDelegate {
     private(set) var timelineContext: TimelineViewModel.Context?
     
     weak var elementDelegate: ElementTextViewDelegate?
@@ -298,7 +298,7 @@ private class ElementTextView: UITextView, PillAttachmentViewProviderDelegate {
         elementDelegate?.textView(self, didReceivePasteWith: providers)
     }
     
-    // MARK: PillAttachmentViewProviderDelegate
+    // MARK: TextAttachmentViewProviderDelegate
     
     func invalidateTextAttachmentsDisplay() {
         attributedText.enumerateAttribute(.attachment,
