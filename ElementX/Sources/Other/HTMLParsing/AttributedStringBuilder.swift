@@ -514,7 +514,8 @@ nonisolated struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             
             let attributes = attributedString.attributes(at: range.location, effectiveRange: nil)
             let font = attributes[.font] as? UIFont ?? .preferredFont(forTextStyle: .body)
-            let emoticonString = NSMutableAttributedString(attachment: EmoticonTextAttachment(url: emoticon.url, font: font))
+            let fallbackText = attributedString.attributedSubstring(from: range).string
+            let emoticonString = NSMutableAttributedString(attachment: EmoticonTextAttachment(url: emoticon.url, fallbackText: fallbackText, font: font))
             emoticonString.addAttributes(attributes, range: NSRange(location: 0, length: emoticonString.length))
             attributedString.replaceCharacters(in: range, with: emoticonString)
         }

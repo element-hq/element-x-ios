@@ -14,10 +14,12 @@ final nonisolated class EmoticonTextAttachment: NSTextAttachment {
     private var descender: CGFloat = 0
     private var lineHeight: CGFloat = 0
     
-    convenience init(url: URL, font: UIFont) {
+    /// - Parameter fallbackText: The emoticon's alt text (e.g. `:wave:`), read out by VoiceOver.
+    convenience init(url: URL, fallbackText: String, font: UIFont) {
         // The type must be declared in the Info.plist, UIKit drops undeclared ones and the view provider is never used.
         self.init(data: Data(url.absoluteString.utf8), ofType: InfoPlistReader.main.emoticonsUTType)
         self.url = url
+        accessibilityLabel = fallbackText
         descender = font.descender
         lineHeight = font.lineHeight
     }
