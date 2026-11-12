@@ -41,4 +41,20 @@ class RootFlowCoordinatorUITests: XCTestCase {
         XCTAssertTrue(app.buttons[A11yIdentifiers.authenticationStartScreen.signIn].waitForExistence(timeout: 5.0),
                       "Signing out should replace the user session flow with the authentication flow.")
     }
+    
+    func testElementCall() {
+        let app = Application.launch(.rootFlowSignedIn)
+        
+        let roomName = "Foundation 🔭🪐🌌"
+        app.buttons[A11yIdentifiers.homeScreen.roomName(roomName)].tap()
+        XCTAssert(app.buttons[roomName].waitForExistence(timeout: 5.0))
+        
+        app.buttons[A11yIdentifiers.roomScreen.joinCall].tap()
+        
+        let textField = app.textFields["Display name"]
+        XCTAssert(textField.waitForExistence(timeout: 10))
+        
+        let joinButton = app.buttons["Continue"]
+        XCTAssert(joinButton.waitForExistence(timeout: 10))
+    }
 }

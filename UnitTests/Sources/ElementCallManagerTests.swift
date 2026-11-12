@@ -1480,6 +1480,23 @@ final class ElementCallManagerTests {
         #expect(callScreens.isEmpty)
     }
     
+    @Test("With native calls on, a call for an account without a native call stack is dropped, ending its answer")
+    func callWithoutNativeCallStack() async throws {
+        let answeredCallID = try await answerNativeCall()
+        service.joinedRoomRoomIDClosure = { roomID in JoinedRoomProxyMock(.init(id: roomID)) }
+        
+        await waitForConfirmation { confirmation in
+            callProvider.reportCallWithEndedAtReasonClosure = { uuid, _, reason in
+                if uuid == answeredCallID, reason == .failed {
+                    confirmation()
+                }
+            }
+            manager.requestCall(userID: aliceID, roomID: roomID, isVoiceCall: false, answeredFromCallKit: true)
+        }
+        
+        #expect(callScreens.isEmpty)
+    }
+    
     @Test("A call is dropped when its account goes while the room loads")
     func removeAccountWhileRoomLoads() async {
         service.joinedRoomRoomIDClosure = { [manager, aliceID] roomID in

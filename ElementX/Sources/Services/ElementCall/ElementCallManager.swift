@@ -490,6 +490,14 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
         }
         
         let userID = service.userID
+        
+        // TODO: Give every account a native call stack, until then only the active account has one.
+        guard !appSettings.nativeCallEnabled else {
+            dropCallRequest(.init(userID: userID, roomID: call.roomProxy.id, isVoiceCall: call.isVoiceCall, answeredFromCallKit: answeredFromCallKit),
+                            because: "native calls are on and \(userID) has no native call stack")
+            return
+        }
+        
         let webCall = PresentedCall.webView(userID: userID, roomID: call.roomProxy.id)
         
         guard presentedCall != webCall else {

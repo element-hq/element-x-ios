@@ -623,12 +623,11 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
                 case let .callAnswered(userID, roomID, isVoiceCall):
                     guard let self else { return }
                     
-                    // TODO: Open other accounts' answered calls with their own session (#6387).
                     let animated = appMediator.appState == .active
                     let callRoute = AppRoute.call(roomID: roomID, isVoiceCall: isVoiceCall, answeredFromCallKit: true)
                     Task { await handleAppRoute(callRoute, userID: userID, awaitsRoom: false, windowType: nil, animated: animated) }
                 case .callScreen:
-                    break // Shown by the account's user session flow.
+                    break // Shown by the root flow.
                 }
             }
             .store(in: &cancellables)
