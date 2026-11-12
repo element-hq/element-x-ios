@@ -24,17 +24,21 @@ class EncryptionResetScreenViewModel: EncryptionResetScreenViewModelType, Encryp
     private var identityResetHandle: IdentityResetHandle?
     private var passwordCancellable: AnyCancellable?
     
-    init(clientProxy: ClientProxyProtocol, userIndicatorController: UserIndicatorControllerProtocol) {
+    init(clientProxy: ClientProxyProtocol,
+         mode: EncryptionResetScreenMode = .hasConfirmationOptions,
+         userIndicatorController: UserIndicatorControllerProtocol) {
         self.clientProxy = clientProxy
         self.userIndicatorController = userIndicatorController
         
-        super.init(initialViewState: EncryptionResetScreenViewState(bindings: .init()))
+        super.init(initialViewState: EncryptionResetScreenViewState(mode: mode, bindings: .init()))
     }
     
     // MARK: - Public
     
     override func process(viewAction: EncryptionResetScreenViewAction) {
         switch viewAction {
+        case .reset where state.mode.isResetTheOnlyOption:
+            Task { await startResetFlow() }
         case .reset:
             state.bindings.alertInfo = .init(id: UUID(),
                                              title: L10n.screenResetEncryptionConfirmationAlertTitle,
@@ -45,6 +49,9 @@ class EncryptionResetScreenViewModel: EncryptionResetScreenViewModelType, Encryp
                                              })
         case .cancel:
             actionsSubject.send(.cancel)
+        case .signOut:
+            // Resetting is the only option here so there's nothing to lose by signing out.
+            actionsSubject.send(.logoutWithoutConfirmation)
         }
     }
     

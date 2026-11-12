@@ -361,6 +361,15 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func hasEncryptedRooms() async -> Result<Bool, ClientProxyError> {
+        do {
+            return try await .success(client.hasEncryptedRooms(timeout: 5))
+        } catch {
+            MXLog.error("Failed checking hasEncryptedRooms with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
     func resumeServices() async {
         MXLog.info("Resuming services")
         

@@ -12,15 +12,15 @@ import SwiftUI
 struct EncryptionResetScreen: View {
     @Bindable var context: EncryptionResetScreenViewModel.Context
     
+    private var mode: EncryptionResetScreenMode {
+        context.viewState.mode
+    }
+    
     var body: some View {
         FullscreenDialog {
             mainContent
         } bottomContent: {
-            Button(L10n.screenEncryptionResetActionContinueReset, role: .destructive) {
-                context.send(viewAction: .reset)
-            }
-            .buttonStyle(.compound(.primary))
-            .accessibilityIdentifier(A11yIdentifiers.encryptionResetScreen.continueReset)
+            actionButtons
         }
         .background()
         .backgroundStyle(.compound.bgCanvasDefault)
@@ -34,55 +34,92 @@ struct EncryptionResetScreen: View {
     private var mainContent: some View {
         VStack(spacing: 24) {
             header
-            checkmarkList
-            footer
+            
+            switch mode {
+            case .hasConfirmationOptions:
+                checkmarkList(showsDevicesItem: true)
+                footer
+            case .noOptionsWithEncryptedRooms:
+                checkmarkList(showsDevicesItem: false)
+            case .noOptionsWithoutEncryptedRooms:
+                noRoomsMessage
+            }
         }
     }
     
     private var header: some View {
-        VStack(spacing: 8) {
-            BigIcon(icon: \.errorSolid, style: .alertSolid)
-                .padding(.bottom, 8)
-            
-            Text(L10n.screenEncryptionResetTitle)
-                .font(.compound.headingMDBold)
-                .multilineTextAlignment(.center)
-                .foregroundColor(.compound.textPrimary)
-        }
+        TitleAndIcon(title: mode.isResetTheOnlyOption ? L10n.screenEncryptionResetNoOptionsTitle : L10n.screenEncryptionResetTitle,
+                     subtitle: mode.isResetTheOnlyOption ? L10n.screenEncryptionResetNoOptionsSubtitle : L10n.screenEncryptionResetSubtitle,
+                     icon: \.userProfile,
+                     iconStyle: .defaultSolid)
     }
     
     private var footer: some View {
         Text(L10n.screenEncryptionResetFooter)
-            .font(.compound.bodyMDSemibold)
-            .multilineTextAlignment(.center)
-            .foregroundColor(.compound.textPrimary)
+            .font(.compound.bodyMD)
+            .foregroundColor(.compound.textCriticalPrimary)
+            .padding(16)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(.compound.bgCriticalSubtle, in: .rect(cornerRadius: 12))
     }
     
-    /// The list of re-assurances about analytics.
-    private var checkmarkList: some View {
+    private var noRoomsMessage: some View {
+        VisualListItem(title: L10n.screenEncryptionResetNoChatsMessage, position: .single) {
+            CompoundIcon(\.check)
+                .foregroundColor(.compound.iconAccentPrimary)
+                .alignmentGuide(.top) { _ in 2 }
+        }
+        .environment(\.backgroundStyle, AnyShapeStyle(.compound.bgSubtleSecondary))
+    }
+    
+    private func checkmarkList(showsDevicesItem: Bool) -> some View {
         VStack(alignment: .leading, spacing: 4) {
-            checkMarkItem(title: L10n.screenEncryptionResetBullet1, position: .top, positive: true)
-            checkMarkItem(title: L10n.screenEncryptionResetBullet2, position: .middle, positive: false)
-            checkMarkItem(title: L10n.screenEncryptionResetBullet3, position: .bottom, positive: false)
+            checkMarkItem(title: L10n.screenEncryptionResetBullet1, icon: \.checkCircle, position: .top, positive: true)
+            checkMarkItem(title: L10n.screenEncryptionResetBullet2, icon: \.visibilityOff, position: .middle, positive: false)
+            checkMarkItem(title: L10n.screenEncryptionResetBullet3, icon: \.user, position: showsDevicesItem ? .middle : .bottom, positive: false)
+            if showsDevicesItem {
+                checkMarkItem(title: L10n.screenEncryptionResetBullet4, icon: \.devices, position: .bottom, positive: false)
+            }
         }
         .fixedSize(horizontal: false, vertical: true)
         .frame(maxWidth: .infinity)
         .environment(\.backgroundStyle, AnyShapeStyle(.compound.bgSubtleSecondary))
     }
     
-    private func checkMarkItem(title: String, position: ListPosition, positive: Bool) -> some View {
+    private func checkMarkItem(title: String, icon: KeyPath<CompoundIcons, Image>, position: ListPosition, positive: Bool) -> some View {
         VisualListItem(title: title, position: position) {
-            CompoundIcon(positive ? \.check : \.info)
+            CompoundIcon(icon)
                 .foregroundColor(positive ? .compound.iconAccentPrimary : .compound.iconSecondary)
                 .alignmentGuide(.top) { _ in 2 }
         }
     }
     
+    private var actionButtons: some View {
+        VStack(spacing: 16) {
+            Button(L10n.screenEncryptionResetActionContinueReset, role: mode.isResetTheOnlyOption ? nil : .destructive) {
+                context.send(viewAction: .reset)
+            }
+            .buttonStyle(.compound(.primary))
+            .accessibilityIdentifier(A11yIdentifiers.encryptionResetScreen.continueReset)
+            
+            if mode.isResetTheOnlyOption {
+                Button(L10n.screenIdentityConfirmationSignOut) {
+                    context.send(viewAction: .signOut)
+                }
+                .buttonStyle(.compound(.tertiary))
+                .accessibilityIdentifier(A11yIdentifiers.encryptionResetScreen.signOut)
+            }
+        }
+    }
+    
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
-        ToolbarItem(placement: .cancellationAction) {
-            Button(L10n.actionCancel) {
-                context.send(viewAction: .cancel)
+        if !mode.isResetTheOnlyOption {
+            ToolbarItem(placement: .cancellationAction) {
+                Button(L10n.actionCancel) {
+                    context.send(viewAction: .cancel)
+                }
+                .accessibilityIdentifier(A11yIdentifiers.encryptionResetScreen.cancel)
             }
         }
     }
@@ -91,11 +128,30 @@ struct EncryptionResetScreen: View {
 // MARK: - Previews
 
 struct EncryptionResetScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = EncryptionResetScreenViewModel(clientProxy: ClientProxyMock(.init()),
-                                                          userIndicatorController: UserIndicatorControllerMock())
+    static let hasOptionsViewModel = makeViewModel(mode: .hasConfirmationOptions)
+    static let encryptedRoomsViewModel = makeViewModel(mode: .noOptionsWithEncryptedRooms)
+    static let noRoomsViewModel = makeViewModel(mode: .noOptionsWithoutEncryptedRooms)
+    
     static var previews: some View {
         ElementNavigationStack {
-            EncryptionResetScreen(context: viewModel.context)
+            EncryptionResetScreen(context: hasOptionsViewModel.context)
         }
+        .previewDisplayName("Has confirmation options")
+        
+        ElementNavigationStack {
+            EncryptionResetScreen(context: encryptedRoomsViewModel.context)
+        }
+        .previewDisplayName("No options, encrypted chats")
+        
+        ElementNavigationStack {
+            EncryptionResetScreen(context: noRoomsViewModel.context)
+        }
+        .previewDisplayName("No options, no chats")
+    }
+    
+    static func makeViewModel(mode: EncryptionResetScreenMode) -> EncryptionResetScreenViewModel {
+        EncryptionResetScreenViewModel(clientProxy: ClientProxyMock(.init()),
+                                       mode: mode,
+                                       userIndicatorController: UserIndicatorControllerMock())
     }
 }

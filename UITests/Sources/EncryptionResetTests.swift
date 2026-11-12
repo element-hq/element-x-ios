@@ -21,7 +21,9 @@ class EncryptionResetUITests: XCTestCase {
     func testPasswordFlow() async throws {
         app = Application.launch(.encryptionReset)
         
-        // Starting with the root screen.
+        // Starting with the root screen, where the user is able to go back.
+        XCTAssertTrue(app.buttons[A11yIdentifiers.encryptionResetScreen.cancel].exists)
+        XCTAssertFalse(app.buttons[A11yIdentifiers.encryptionResetScreen.signOut].exists)
         try await app.assertScreenshot(step: Step.resetScreen)
         
         // Confirm the intent to reset.
@@ -37,5 +39,20 @@ class EncryptionResetUITests: XCTestCase {
         passwordField.clearAndTypeText("supersecurepassword", app: app)
         app.buttons[A11yIdentifiers.encryptionResetPasswordScreen.submit].tap()
         try await app.assertScreenshot(step: Step.resetingEncryption)
+    }
+    
+    func testNoOptionsFlowSkipsConfirmation() {
+        app = Application.launch(.encryptionResetNoOptions)
+        
+        // Resetting is the only option, so the user can't go back but they can sign out instead.
+        XCTAssertTrue(app.buttons[A11yIdentifiers.encryptionResetScreen.signOut].waitForExistence(timeout: 10))
+        XCTAssertFalse(app.buttons[A11yIdentifiers.encryptionResetScreen.cancel].exists)
+        
+        // The user has nothing else to try, so the flow carries straight on to the password screen without asking for confirmation.
+        app.buttons[A11yIdentifiers.encryptionResetScreen.continueReset].tap()
+        
+        let passwordField = app.secureTextFields[A11yIdentifiers.encryptionResetPasswordScreen.passwordField]
+        XCTAssertTrue(passwordField.waitForExistence(timeout: 10))
+        XCTAssertFalse(app.buttons[A11yIdentifiers.alertInfo.primaryButton].exists)
     }
 }

@@ -13,7 +13,7 @@ import SwiftState
 enum OnboardingFlowCoordinatorAction {
     case requestPresentation(animated: Bool)
     case dismiss
-    case logoutConfirmed
+    case logoutWithoutConfirmation
 }
 
 class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
@@ -257,10 +257,10 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
             case .skip:
                 userSettings.account.hasRunIdentityConfirmationOnboarding = true
                 stateMachine.tryEvent(.nextSkippingIdentityConfirmed)
-            case .reset:
-                startEncryptionResetFlow()
-            case .logoutConfirmed:
-                actionsSubject.send(.logoutConfirmed)
+            case .reset(let hasConfirmationOptions):
+                Task { await startEncryptionResetFlow(hasConfirmationOptions: hasConfirmationOptions) }
+            case .logoutWithoutConfirmation:
+                actionsSubject.send(.logoutWithoutConfirmation)
             }
         }
         .store(in: &cancellables)
@@ -310,17 +310,36 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         presentCoordinator(coordinator)
     }
     
-    private func startEncryptionResetFlow() {
+    /// Treats a failure as the user having encrypted rooms, so the warning is never softer than it should be.
+    private func hasEncryptedRooms() async -> Bool {
+        let indicatorID = "\(Self.self)-EncryptedRooms"
+        userIndicatorController.submitIndicator(.init(id: indicatorID, type: .modal, title: L10n.commonLoading, persistent: true), delay: .milliseconds(200))
+        defer { userIndicatorController.retractIndicatorWithId(indicatorID) }
+        
+        guard case let .success(hasEncryptedRooms) = await userSession.clientProxy.hasEncryptedRooms() else {
+            return true
+        }
+        return hasEncryptedRooms
+    }
+    
+    private func startEncryptionResetFlow(hasConfirmationOptions: Bool) async {
+        let mode = await EncryptionResetScreenMode(hasConfirmationOptions: hasConfirmationOptions,
+                                                   hasEncryptedRooms: hasEncryptedRooms)
+        
         let resetNavigationStackCoordinator = NavigationStackCoordinator()
         let coordinator = EncryptionResetFlowCoordinator(parameters: .init(userSession: userSession,
                                                                            appMediator: appMediator,
                                                                            userIndicatorController: userIndicatorController,
                                                                            navigationStackCoordinator: resetNavigationStackCoordinator,
-                                                                           windowManger: windowManager))
+                                                                           windowManger: windowManager,
+                                                                           mode: mode))
         
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
             switch action {
+            case .logoutWithoutConfirmation:
+                navigationStackCoordinator.setSheetCoordinator(nil)
+                actionsSubject.send(.logoutWithoutConfirmation)
             case .resetComplete:
                 // Moving to next state is handled by the global session verification listener
                 navigationStackCoordinator.setSheetCoordinator(nil)

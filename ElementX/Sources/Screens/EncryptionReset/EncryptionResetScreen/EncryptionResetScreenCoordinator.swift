@@ -14,10 +14,12 @@ enum EncryptionResetScreenCoordinatorAction {
     case requestPassword(passwordPublisher: PassthroughSubject<String, Never>)
     case resetFinished
     case cancel
+    case logoutWithoutConfirmation
 }
 
 struct EncryptionResetScreenCoordinatorParameters {
     let clientProxy: ClientProxyProtocol
+    let mode: EncryptionResetScreenMode
     let userIndicatorController: UserIndicatorControllerProtocol
 }
 
@@ -33,6 +35,7 @@ final class EncryptionResetScreenCoordinator: CoordinatorProtocol {
     
     init(parameters: EncryptionResetScreenCoordinatorParameters) {
         viewModel = EncryptionResetScreenViewModel(clientProxy: parameters.clientProxy,
+                                                   mode: parameters.mode,
                                                    userIndicatorController: parameters.userIndicatorController)
     }
     
@@ -50,6 +53,8 @@ final class EncryptionResetScreenCoordinator: CoordinatorProtocol {
                 self.actionsSubject.send(.resetFinished)
             case .cancel:
                 self.actionsSubject.send(.cancel)
+            case .logoutWithoutConfirmation:
+                self.actionsSubject.send(.logoutWithoutConfirmation)
             }
         }
         .store(in: &cancellables)
