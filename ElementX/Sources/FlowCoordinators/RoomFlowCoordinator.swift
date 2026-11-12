@@ -933,7 +933,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                             analyticsService: flowParameters.analytics,
                                                             userIndicatorController: flowParameters.userIndicatorController,
                                                             notificationSettings: userSession.clientProxy.notificationSettings,
-                                                            attributedStringBuilder: AttributedStringBuilder(mentionBuilder: PlainMentionBuilder()))
+                                                            attributedStringBuilder: AttributedStringBuilder(mentionBuilder: PlainMentionBuilder(), rendersEmoticonsAsImages: false))
         let coordinator = RoomDetailsScreenCoordinator(parameters: params)
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }

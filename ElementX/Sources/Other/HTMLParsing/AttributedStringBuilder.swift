@@ -43,6 +43,9 @@ nonisolated struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     
     private let cacheKey: String
     private let mentionBuilder: MentionBuilderProtocol
+    /// Whether custom emoticons are rendered as images, which requires a text view that supports
+    /// attachments. When `false` they are shown using their fallback text instead (e.g. `:wave:`).
+    private let rendersEmoticonsAsImages: Bool
     
     private static let attributeMSC4286 = "msc4286-external-payment-details"
     /// Tags whose content already ends in a newline.
@@ -53,9 +56,11 @@ nonisolated struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         caches.withLock { $0.removeAll() }
     }
     
-    init(cacheKey: String = defaultKey, mentionBuilder: MentionBuilderProtocol) {
-        self.cacheKey = cacheKey
+    init(cacheKey: String = defaultKey, mentionBuilder: MentionBuilderProtocol, rendersEmoticonsAsImages: Bool = true) {
+        // Emoticons are baked into the cached strings so builders that differ only by this flag mustn't share them.
+        self.cacheKey = rendersEmoticonsAsImages ? cacheKey : "\(cacheKey)-plainEmoticons"
         self.mentionBuilder = mentionBuilder
+        self.rendersEmoticonsAsImages = rendersEmoticonsAsImages
     }
     
     func fromPlain(_ string: String?) -> AttributedString? {
@@ -504,6 +509,8 @@ nonisolated struct AttributedStringBuilder: AttributedStringBuilderProtocol {
                                             options: .reverse) { value, range, _ in
             guard let emoticon = value as? EmoticonAttribute.Value else { return }
             attributedString.removeAttribute(.MatrixEmoticon, range: range)
+            
+            guard rendersEmoticonsAsImages else { return }
             
             let attributes = attributedString.attributes(at: range.location, effectiveRange: nil)
             let font = attributes[.font] as? UIFont ?? .preferredFont(forTextStyle: .body)

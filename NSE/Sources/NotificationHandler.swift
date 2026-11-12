@@ -35,7 +35,7 @@ nonisolated class NotificationHandler {
         self.notificationContent = notificationContent
         self.tag = tag
         
-        let eventStringBuilder = RoomMessageEventStringBuilder(attributedStringBuilder: AttributedStringBuilder(mentionBuilder: PlainMentionBuilder()),
+        let eventStringBuilder = RoomMessageEventStringBuilder(attributedStringBuilder: AttributedStringBuilder(mentionBuilder: PlainMentionBuilder(), rendersEmoticonsAsImages: false),
                                                                style: .plain)
         
         notificationContentBuilder = NotificationContentBuilder(messageEventStringBuilder: eventStringBuilder,
