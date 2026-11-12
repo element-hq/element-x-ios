@@ -84,6 +84,11 @@ struct DeveloperOptionsScreen: View {
             }
             
             Section("Room") {
+                Toggle(isOn: $context.viewSourceEnabled) {
+                    Text("View source")
+                    Text("Adds an option to view the event source in the message menu.")
+                }
+                
                 Toggle(isOn: $context.linkPreviewsEnabled) {
                     Text("Link previews")
                     Text("Follows the timeline media visibility settings.")
