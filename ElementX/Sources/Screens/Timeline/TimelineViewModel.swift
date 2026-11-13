@@ -106,7 +106,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                        hideTimelineMedia: hideTimelineMedia,
                                                        isViewSourceEnabled: userSettings.app.viewSourceEnabled,
                                                        areThreadsEnabled: userSettings.app.threadsEnabled,
-                                                       linkPreviewsEnabled: userSettings.app.linkPreviewsEnabled,
+                                                       linkPreviewsEnabled: userSettings.app.linkPreviewsMode != .off,
                                                        jumpToReadMarkerEnabled: userSettings.app.jumpToReadMarkerEnabled,
                                                        hasPredecessor: roomProxy.predecessorRoom != nil,
                                                        pinnedEventIDs: roomProxy.infoPublisher.value.pinnedEventIDs,

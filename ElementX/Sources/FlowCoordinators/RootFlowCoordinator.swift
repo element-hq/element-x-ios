@@ -378,7 +378,7 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
                                                   bugReportService: bugReportService,
                                                   timelineControllerFactory: TimelineControllerFactory(userSettings: userSession.userSettings),
                                                   emojiProvider: EmojiProvider(userSettings: userSession.userSettings),
-                                                  linkMetadataProvider: LinkMetadataProvider(),
+                                                  linkMetadataProvider: LinkMetadataProvider(userSession: userSession),
                                                   appMediator: appMediator,
                                                   analytics: analyticsService,
                                                   userIndicatorController: userIndicatorController,

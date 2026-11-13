@@ -84,10 +84,14 @@ struct DeveloperOptionsScreen: View {
             }
             
             Section("Room") {
-                Toggle(isOn: $context.linkPreviewsEnabled) {
+                Picker(selection: $context.linkPreviewsMode) {
+                    Text("Off").tag(LinkPreviewsMode.off)
+                    Text("Homeserver").tag(LinkPreviewsMode.homeserver)
+                    Text("Apple").tag(LinkPreviewsMode.apple)
+                } label: {
                     Text("Link previews")
                     Text("Follows the timeline media visibility settings.")
-                    Text("Can leak the device IP address when loading link metadata.")
+                    Text("Apple leaks the device IP address, the homeserver sees links from encrypted rooms.")
                         .foregroundStyle(.compound.textCriticalPrimary)
                 }
                 
