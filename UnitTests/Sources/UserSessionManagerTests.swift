@@ -308,10 +308,11 @@ struct UserSessionManagerTests {
         let manager = makeManager(userIDs: ["@alice:matrix.org"])
         let aliceClientProxy = ClientProxyMock(.init(userID: "@alice:matrix.org"))
         aliceClientProxy.clearCachesReturnValue = .success(())
-        manager.addNewSession(UserSessionMock(.init(clientProxy: aliceClientProxy)))
+        let aliceCallService = ElementCallServiceMock(.init(userID: "@alice:matrix.org"))
+        manager.addNewSession(UserSessionMock(.init(clientProxy: aliceClientProxy, elementCallService: aliceCallService)))
         userSessionStore.restoreUserSessionUserIDReturnValue = .failure(.failedRestoringLogin)
-        aliceClientProxy.pauseServicesClosure = { [elementCallManager] in
-            #expect(elementCallManager.endCallsUserIDReceivedInvocations == ["@alice:matrix.org"])
+        aliceClientProxy.pauseServicesClosure = {
+            #expect(aliceCallService.endCallsCalled)
         }
         
         if isClearingCaches {

@@ -145,7 +145,7 @@ final class UserSessionManager: UserSessionManagerProtocol {
         guard let userSession = session(for: userID) else { return }
         
         // Hangs up the account's call before its session's data goes.
-        elementCallManager.endCalls(userID: userID)
+        userSession.elementCallService.endCalls()
         await userSession.clientProxy.pauseServices()
         clearedUserIDs.insert(userID) // Marked before clearing, so it is ready to restore after clearing is done.
         await userSession.clientProxy.clearCaches()
@@ -209,7 +209,7 @@ final class UserSessionManager: UserSessionManagerProtocol {
         
         let logoutTask = Task {
             // Hangs up the account's call while its session can still reach the server.
-            elementCallManager.endCalls(userID: userID)
+            userSession.elementCallService.endCalls()
             await userSession.clientProxy.pauseServices()
             
             // Delete the pusher and stop the live location shares while the session can still reach the server.

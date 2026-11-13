@@ -197,7 +197,8 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
         services[userID] = nil
     }
     
-    func endCalls(userID: String) {
+    /// Ends the account's calls and takes their screen down, still routing its calls.
+    private func endCalls(userID: String) {
         if let pendingCallRequest, pendingCallRequest.userID == userID {
             self.pendingCallRequest = nil
             dropCallRequest(pendingCallRequest, because: "\(userID)'s calls were ended")
@@ -237,6 +238,8 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
             presentCallScreen(for: call, answeredFromCallKit: false, service: service)
         case .callMinimizeRequested:
             minimizeCall()
+        case .callsEndRequested:
+            endCalls(userID: service.userID)
         case .nativeCallPresentation(let presentation):
             relayNativeCallPresentation(presentation, from: service)
         case let .callSessionStarted(roomID, roomDisplayName, isVideo, kind):

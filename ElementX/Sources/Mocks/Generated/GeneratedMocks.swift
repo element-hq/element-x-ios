@@ -5211,37 +5211,6 @@ nonisolated class ElementCallManagerMock: ElementCallManagerProtocol, @unchecked
         removeUserIDReceivedInvocationsLock.withLock { removeUserIDUnderlyingReceivedInvocations.append(userID) }
         removeUserIDClosure?(userID)
     }
-    //MARK: - endCalls
-
-    private let endCallsUserIDCallsCountLock = NSLock()
-    private nonisolated(unsafe) var endCallsUserIDUnderlyingCallsCount = 0
-    var endCallsUserIDCallsCount: Int {
-        get { endCallsUserIDCallsCountLock.withLock { endCallsUserIDUnderlyingCallsCount } }
-        set { endCallsUserIDCallsCountLock.withLock { endCallsUserIDUnderlyingCallsCount = newValue } }
-    }
-    var endCallsUserIDCalled: Bool {
-        return endCallsUserIDCallsCount > 0
-    }
-    private let endCallsUserIDReceivedUserIDLock = NSLock()
-    private nonisolated(unsafe) var endCallsUserIDUnderlyingReceivedUserID: String?
-    var endCallsUserIDReceivedUserID: String? {
-        get { endCallsUserIDReceivedUserIDLock.withLock { endCallsUserIDUnderlyingReceivedUserID } }
-        set { endCallsUserIDReceivedUserIDLock.withLock { endCallsUserIDUnderlyingReceivedUserID = newValue } }
-    }
-    private let endCallsUserIDReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var endCallsUserIDUnderlyingReceivedInvocations: [String] = []
-    var endCallsUserIDReceivedInvocations: [String] {
-        get { endCallsUserIDReceivedInvocationsLock.withLock { endCallsUserIDUnderlyingReceivedInvocations } }
-        set { endCallsUserIDReceivedInvocationsLock.withLock { endCallsUserIDUnderlyingReceivedInvocations = newValue } }
-    }
-    nonisolated(unsafe) var endCallsUserIDClosure: ((String) -> Void)?
-
-    func endCalls(userID: String) {
-        endCallsUserIDCallsCountLock.withLock { endCallsUserIDUnderlyingCallsCount += 1 }
-        endCallsUserIDReceivedUserID = userID
-        endCallsUserIDReceivedInvocationsLock.withLock { endCallsUserIDUnderlyingReceivedInvocations.append(userID) }
-        endCallsUserIDClosure?(userID)
-    }
     //MARK: - requestCall
 
     private let requestCallUserIDRoomIDIsVoiceCallAnsweredFromCallKitCallsCountLock = NSLock()
@@ -5375,6 +5344,23 @@ nonisolated class ElementCallServiceMock: ElementCallServiceProtocol, @unchecked
     func minimizeCall() {
         minimizeCallCallsCountLock.withLock { minimizeCallUnderlyingCallsCount += 1 }
         minimizeCallClosure?()
+    }
+    //MARK: - endCalls
+
+    private let endCallsCallsCountLock = NSLock()
+    private nonisolated(unsafe) var endCallsUnderlyingCallsCount = 0
+    var endCallsCallsCount: Int {
+        get { endCallsCallsCountLock.withLock { endCallsUnderlyingCallsCount } }
+        set { endCallsCallsCountLock.withLock { endCallsUnderlyingCallsCount = newValue } }
+    }
+    var endCallsCalled: Bool {
+        return endCallsCallsCount > 0
+    }
+    nonisolated(unsafe) var endCallsClosure: (() -> Void)?
+
+    func endCalls() {
+        endCallsCallsCountLock.withLock { endCallsUnderlyingCallsCount += 1 }
+        endCallsClosure?()
     }
     //MARK: - joinedRoom
 

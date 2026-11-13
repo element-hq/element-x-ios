@@ -167,6 +167,7 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
             }
         case .roomList:
             if case .userSessionFlow = stateMachine.state {
+                minimizeFullScreenCall()
                 userSessionFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
             } else if let userID = userSessionManager.activeSession?.clientProxy.userID {
                 stateMachine.tryEvent(.startUserSession(userID: userID))
@@ -474,6 +475,7 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
             userSession.clientProxy.roomsToAwait.insert(roomID)
         }
         
+        minimizeFullScreenCall()
         userSessionFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
     }
     
@@ -522,6 +524,12 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
         }
         
         elementCallManager.requestCall(userID: callUserID, roomID: roomID, isVoiceCall: isVoiceCall, answeredFromCallKit: answeredFromCallKit)
+    }
+    
+    /// Minimizes a full screen call, which would hide the screen a route leads to.
+    private func minimizeFullScreenCall() {
+        guard case .fullScreen(let callScreen) = callScreenStateMachine.state else { return }
+        userSessionManager.session(for: callScreen.userID)?.elementCallService.minimizeCall()
     }
     
     private func configureCallScreenStateMachine() {

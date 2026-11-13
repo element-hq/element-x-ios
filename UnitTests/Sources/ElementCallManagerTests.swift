@@ -1367,7 +1367,7 @@ final class ElementCallManagerTests {
     func endAccountCalls() {
         serviceActions.send(.callRequested(.mock()))
         
-        manager.endCalls(userID: aliceID)
+        serviceActions.send(.callsEndRequested)
         #expect(callScreens.last == .dismiss)
         
         serviceActions.send(.callRequested(.mock(roomID: otherRoomID)))

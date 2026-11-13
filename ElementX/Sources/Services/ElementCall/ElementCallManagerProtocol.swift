@@ -40,8 +40,6 @@ protocol ElementCallManagerProtocol: AnyObject {
     func add(_ service: ElementCallServiceProtocol)
     /// Stops routing the account's calls.
     func remove(userID: String)
-    /// Ends the account's calls and takes their screen down, still routing its calls.
-    func endCalls(userID: String)
     
     /// Opens the room's call for the account, keeping the request pending until the account's service is added.
     func requestCall(userID: String, roomID: String, isVoiceCall: Bool, answeredFromCallKit: Bool)

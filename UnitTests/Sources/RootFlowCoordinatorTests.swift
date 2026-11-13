@@ -257,6 +257,19 @@ struct RootFlowCoordinatorTests {
         #expect(rootFlowCoordinator.isDisplayingRoomScreen(withRoomID: roomID))
     }
     
+    @Test("A route handed to the shown account's screens minimises a full screen call")
+    func routeDuringCall() throws {
+        rootFlowCoordinator.handleAppRoute(.roomList, animated: false)
+        let aliceCallService = try #require(userSessionManager.session(for: "@alice:matrix.org")?.elementCallService as? ElementCallServiceMock)
+        presentWebCall(userID: "@alice:matrix.org", roomID: roomID)
+        
+        rootFlowCoordinator.handleAppRoute(.search, userID: "@bob:matrix.org", awaitsRoom: false, animated: false)
+        #expect(!aliceCallService.minimizeCallCalled)
+        
+        rootFlowCoordinator.handleAppRoute(.search, userID: "@alice:matrix.org", awaitsRoom: false, animated: false)
+        #expect(aliceCallService.minimizeCallCalled)
+    }
+    
     // MARK: - Helpers
     
     /// Signs Bob in alongside Alice, returning his call service.

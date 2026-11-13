@@ -57,6 +57,8 @@ enum ElementCallServiceAction: Equatable {
     case callRequested(RoomCall)
     /// The call screen needs to get out of the way, whichever account's call it shows.
     case callMinimizeRequested
+    /// The account's calls have to end and their screen come down.
+    case callsEndRequested
     case nativeCallPresentation(NativeCallPresentation)
     case callSessionStarted(roomID: String, roomDisplayName: String, isVideo: Bool, kind: ElementCallSessionKind)
     case callSessionConnected(roomID: String)
@@ -88,6 +90,9 @@ protocol ElementCallServiceProtocol: AnyObject {
     
     /// Minimizes the call screen, whichever account's call it shows.
     func minimizeCall()
+    
+    /// Ends the account's calls and takes their screen down.
+    func endCalls()
     
     /// The account's joined room, `nil` when it isn't joined.
     func joinedRoom(roomID: String) async -> JoinedRoomProxyProtocol?
