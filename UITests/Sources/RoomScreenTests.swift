@@ -69,13 +69,13 @@ class RoomScreenUITests: XCTestCase {
         for _ in 0...5 {
             app.swipeDown()
         }
-        try await app.assertScreenshot() // Assert initial state for comparison.
+        try await app.assertScreenshot(step: 0) // Assert initial state for comparison.
         
         // When a back pagination occurs.
         try await performOperation(.paginate, using: client)
         
         // Then the bottom of the timeline should remain unchanged (with new items having been added above).
-        try await app.assertScreenshot()
+        try await app.assertScreenshot(step: 1)
     }
     
     func testTimelineLayoutAtBottom() async throws {

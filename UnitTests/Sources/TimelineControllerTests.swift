@@ -70,13 +70,24 @@ struct TimelineControllerTests {
         #expect(try await deferred.fulfill())
     }
     
+    @Test("The back pagination indicator stays at the top until the start of the timeline is reached",
+          arguments: [(PaginationState.idle, true), (.paginating, true), (.endReached, false)])
+    func backPaginationIndicator(backwardPaginationState: PaginationState, isShown: Bool) async throws {
+        let paginationState = TimelinePaginationState(backward: backwardPaginationState, forward: .endReached)
+        let controller = makeController(liveTimeline: makeTimeline(eventIDs: ["$event"], paginationState: paginationState))
+        try await waitForTimelineItems(controller)
+        
+        #expect((controller.timelineItems.first is PaginationIndicatorRoomTimelineItem) == isShown)
+    }
+    
     // MARK: - Helpers
     
-    private func makeTimeline(kind: TimelineKind = .live, eventIDs: [String]) -> TimelineProxyMock {
+    private func makeTimeline(kind: TimelineKind = .live,
+                              eventIDs: [String],
+                              paginationState: TimelinePaginationState = TimelinePaginationState(backward: .idle, forward: .endReached)) -> TimelineProxyMock {
         let itemProxies = eventIDs.enumerated().map { index, eventID in
             TimelineItemProxy.event(EventTimelineItemProxy(item: .init(configuration: .init(eventID: eventID)), uniqueID: .init("\(index)")))
         }
-        let paginationState = TimelinePaginationState(backward: .idle, forward: .endReached)
         
         let provider = TimelineItemProviderMock()
         provider.kind = kind
@@ -89,7 +100,7 @@ struct TimelineControllerTests {
     
     /// Without a `focussedTimeline`, focusing on the initial event fails as if it wasn't found.
     private func makeController(liveTimeline: TimelineProxyMock,
-                                initialFocussedEventID: String,
+                                initialFocussedEventID: String? = nil,
                                 focussedTimeline: TimelineProxyMock? = nil) -> TimelineController {
         if let focussedTimeline {
             roomProxy.timelineFocusedOnEventEventIDNumberOfEventsReturnValue = .success(focussedTimeline)
