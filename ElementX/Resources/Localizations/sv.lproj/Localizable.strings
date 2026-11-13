@@ -1026,6 +1026,7 @@
 "screen_media_details_uploaded_by" = "Uppladdad av";
 "screen_media_details_uploaded_on" = "Uppladdad på";
 "screen_media_picker_error_failed_selection" = "Misslyckades att välja media, vänligen pröva igen.";
+"screen_media_upload_preview_a11y_draw" = "Rita";
 "screen_media_upload_preview_caption_warning" = "Bildtexter kanske inte är synliga för personer som använder äldre appar.";
 "screen_media_upload_preview_change_video_quality_prompt" = "Tryck för att ändra videouppladdningskvaliteten";
 "screen_media_upload_preview_error_could_not_be_uploaded" = "Filen kunde inte laddas upp.";
