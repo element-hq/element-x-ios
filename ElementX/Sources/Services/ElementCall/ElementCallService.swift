@@ -88,6 +88,10 @@ final class ElementCallService: ElementCallServiceProtocol {
         actionsSubject.send(.callMinimizeRequested)
     }
     
+    func endCalls() {
+        actionsSubject.send(.callsEndRequested)
+    }
+    
     func joinedRoom(roomID: String) async -> JoinedRoomProxyProtocol? {
         guard case let .joined(roomProxy) = await clientProxy.roomForIdentifier(roomID) else { return nil }
         return roomProxy

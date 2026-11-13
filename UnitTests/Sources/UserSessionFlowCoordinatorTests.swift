@@ -22,7 +22,6 @@ struct UserSessionFlowCoordinatorTests {
     private let homeserverReachabilitySubject: CurrentValueSubject<HomeserverReachability, Never> = .init(.reachable)
     private let loadingStateSubject: CurrentValueSubject<ClientProxyLoadingState, Never> = .init(.notLoading)
     private let elementCallService = ElementCallServiceMock(.init())
-    private let callManagerActions = PassthroughSubject<ElementCallManagerAction, Never>()
     private var tabCoordinator: NavigationTabCoordinator<UserSessionFlowCoordinator.HomeTab>? {
         rootCoordinator?.rootCoordinator as? NavigationTabCoordinator
     }
@@ -50,7 +49,6 @@ struct UserSessionFlowCoordinatorTests {
         networkMonitor.reachabilityPublisher = networkReachabilitySubject.asCurrentValuePublisher()
         let appMediator = AppMediatorMock(.init())
         appMediator.networkMonitor = networkMonitor
-        (appMediator.windowManager as? WindowManagerMock)?.mainWindow = UIWindow()
         
         userIndicatorController = UserIndicatorControllerMock()
         let userSession = UserSessionMock(.init(clientProxy: clientProxy, elementCallService: elementCallService))
@@ -69,7 +67,6 @@ struct UserSessionFlowCoordinatorTests {
         userSessionFlowCoordinator = UserSessionFlowCoordinator(isNewLogin: false,
                                                                 navigationRootCoordinator: rootCoordinator,
                                                                 appLockService: AppLockServiceMock(),
-                                                                elementCallManager: ElementCallManagerMock(.init(actionsPublisher: callManagerActions.eraseToAnyPublisher())),
                                                                 flowParameters: flowParameters)
         
         userSessionFlowCoordinator.start()
@@ -77,52 +74,26 @@ struct UserSessionFlowCoordinatorTests {
     
     // MARK: Navigation
     
-    @Test
+    @Test("The flow starts on the room list without a room")
     func initialState() {
         #expect(chatsSplitCoordinator != nil)
         #expect(detailCoordinator == nil)
     }
     
-    @Test
+    @Test("The settings route presents the settings screen")
     mutating func settingsPresentation() async throws {
         try await process(route: .settings, expectedUserSessionState: .settingsScreen)
         #expect((tabCoordinator?.sheetCoordinator as? NavigationStackCoordinator)?.rootCoordinator is SettingsScreenCoordinator)
     }
     
-    @Test
-    func replacingTheSessionScreensEndsTheWebViewCall() async {
-        // E.g. clearing the cache or signing out during a call: the call screen goes with the screens.
-        await waitForConfirmation { confirmation in
-            elementCallService.setupCallSessionRoomIDRoomDisplayNameIsVideoKindClosure = { _, _, _, _ in confirmation() }
-            presentWebCall(roomID: "1")
-        }
-        
-        rootCoordinator.setRootCoordinator(nil)
-        
-        #expect(elementCallService.tearDownCallSessionRoomIDReceivedRoomID == "1",
-                "A call left ongoing would make every later call count as busy")
-    }
-    
-    @Test("Presenting another web view call replaces the call screen")
-    func replaceWebCall() throws {
-        presentWebCall(roomID: "1")
-        let firstCallScreen = try #require(tabCoordinator?.overlayCoordinator as? CallScreenCoordinator)
-        
-        presentWebCall(roomID: "2")
-        
-        let secondCallScreen = try #require(tabCoordinator?.overlayCoordinator as? CallScreenCoordinator)
-        #expect(secondCallScreen !== firstCallScreen)
-        #expect(elementCallService.tearDownCallSessionRoomIDReceivedInvocations.contains("1"), "The replaced call has to hang up")
-    }
-    
-    @Test
+    @Test("The room route presents the room")
     mutating func roomPresentation() async throws {
         try await process(route: .room(roomID: "1", via: []), expectedChatsState: .roomList(detailState: .room(roomID: "1")))
         #expect(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
         #expect(detailCoordinator != nil)
     }
     
-    @Test
+    @Test("Presenting a room closes the settings screen")
     mutating func roomPresentationClearsSettings() async throws {
         try await process(route: .settings, expectedUserSessionState: .settingsScreen)
         #expect((tabCoordinator?.sheetCoordinator as? NavigationStackCoordinator)?.rootCoordinator is SettingsScreenCoordinator)
@@ -136,7 +107,7 @@ struct UserSessionFlowCoordinatorTests {
         #expect(detailCoordinator != nil)
     }
     
-    @Test
+    @Test("The child room route pushes the room above the current one")
     mutating func childRoomPresentation() async throws {
         try await process(route: .room(roomID: "1", via: []), expectedChatsState: .roomList(detailState: .room(roomID: "1")))
         let detailNavigationStack = try #require(detailNavigationStack, "There must be a navigation stack.")
@@ -152,7 +123,7 @@ struct UserSessionFlowCoordinatorTests {
         #expect(detailNavigationStack.stackCoordinators.first is RoomScreenCoordinator)
     }
     
-    @Test
+    @Test("Sharing media without a room asks which room to share to")
     mutating func shareMediaRouteWithoutRoom() async throws {
         try await process(route: .settings, expectedUserSessionState: .settingsScreen)
         #expect((tabCoordinator?.sheetCoordinator as? NavigationStackCoordinator)?.rootCoordinator is SettingsScreenCoordinator)
@@ -166,7 +137,7 @@ struct UserSessionFlowCoordinatorTests {
         #expect((chatsSplitCoordinator?.sheetCoordinator as? NavigationStackCoordinator)?.rootCoordinator is RoomSelectionScreenCoordinator)
     }
     
-    @Test
+    @Test("Sharing media to a room opens the room with an upload preview")
     mutating func shareMediaRouteWithRoom() async throws {
         try await process(route: .event(eventID: "1", roomID: "1", via: []), expectedChatsState: .roomList(detailState: .room(roomID: "1")))
         #expect(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
@@ -186,7 +157,7 @@ struct UserSessionFlowCoordinatorTests {
         #expect(splitCoordinator.sheetCoordinator is MediaUploadPreviewScreenCoordinator)
     }
     
-    @Test
+    @Test("Sharing text without a room asks which room to share to")
     mutating func shareTextRouteWithoutRoom() async throws {
         try await process(route: .settings, expectedUserSessionState: .settingsScreen)
         #expect((tabCoordinator?.sheetCoordinator as? NavigationStackCoordinator)?.rootCoordinator is SettingsScreenCoordinator)
@@ -200,7 +171,7 @@ struct UserSessionFlowCoordinatorTests {
         #expect((chatsSplitCoordinator?.sheetCoordinator as? NavigationStackCoordinator)?.rootCoordinator is RoomSelectionScreenCoordinator)
     }
     
-    @Test
+    @Test("Sharing text to a room opens the room without an upload preview")
     mutating func shareTextRouteWithRoom() async throws {
         try await process(route: .event(eventID: "1", roomID: "1", via: []), expectedChatsState: .roomList(detailState: .room(roomID: "1")))
         #expect(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
@@ -218,7 +189,7 @@ struct UserSessionFlowCoordinatorTests {
     
     // MARK: Indicators
     
-    @Test
+    @Test("Reachability indicators follow the network and the homeserver")
     func reachabilityIndicators() async throws {
         // Given a flow in its initial state.
         try await Task.sleep(for: .milliseconds(100))
@@ -305,10 +276,6 @@ struct UserSessionFlowCoordinatorTests {
     }
     
     // MARK: - Helpers
-    
-    private func presentWebCall(roomID: String) {
-        callManagerActions.send(.callScreen(.present(userID: "hi@bob", kind: .webView(.mock(roomID: roomID)))))
-    }
     
     private func process(route: AppRoute,
                          expectedUserSessionState: UserSessionFlowCoordinator.State? = nil,

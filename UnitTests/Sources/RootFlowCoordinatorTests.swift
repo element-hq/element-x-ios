@@ -17,6 +17,8 @@ struct RootFlowCoordinatorTests {
     private let userSessionManagerCallbacks = PassthroughSubject<UserSessionManagerCallback, Never>()
     private let userIndicatorController = UserIndicatorControllerMock()
     private let clientProxy: ClientProxyMock
+    private let elementCallManager: ElementCallManagerMock
+    private let callManagerActions = PassthroughSubject<ElementCallManagerAction, Never>()
     private let roomID = "1"
     private let inviteRoomID = "someAwesomeRoomId1"
     
@@ -24,19 +26,25 @@ struct RootFlowCoordinatorTests {
     
     init() {
         clientProxy = ClientProxyMock(.init(userID: "@alice:matrix.org",
+                                            deviceID: "alice-device-id",
                                             roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded([RoomSummary].mockRooms + .mockInvites)))))
         clientProxy.roomPreviewForIdentifierViaReturnValue = .success(RoomPreviewProxyMock.invited())
         
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
         userSessionManager = UserSessionManagerMock(.init(sessions: [userSession],
                                                           callbacksPublisher: userSessionManagerCallbacks.eraseToAnyPublisher()))
+        userSessionManager.sessionForClosure = { userID in userID == "@alice:matrix.org" ? userSession : nil }
+        
+        elementCallManager = ElementCallManagerMock(.init(actionsPublisher: callManagerActions.eraseToAnyPublisher()))
+        let appMediator = AppMediatorMock(.init())
+        (appMediator.windowManager as? WindowManagerMock)?.mainWindow = UIWindow()
         
         rootFlowCoordinator = RootFlowCoordinator(navigationRootCoordinator: navigationRootCoordinator,
                                                   userSessionManager: userSessionManager,
-                                                  elementCallManager: ElementCallManagerMock(.init()),
+                                                  elementCallManager: elementCallManager,
                                                   appLockService: AppLockServiceMock(),
                                                   bugReportService: BugReportServiceMock(.init()),
-                                                  appMediator: AppMediatorMock(.init()),
+                                                  appMediator: appMediator,
                                                   appSettings: .volatile(),
                                                   appHooks: AppHooks(),
                                                   analyticsService: AnalyticsServiceMock(.init()),
@@ -167,7 +175,122 @@ struct RootFlowCoordinatorTests {
         #expect(navigationRootCoordinator.rootCoordinator === rootCoordinator)
     }
     
+    // MARK: Calls
+    
+    @Test("The call route asks for the call as the route's account, when it's signed in")
+    func callRoute() {
+        userSessionManager.userIDs = ["@alice:matrix.org", "@bob:matrix.org"]
+        rootFlowCoordinator.handleAppRoute(.roomList, animated: false)
+        
+        rootFlowCoordinator.handleAppRoute(.call(roomID: roomID, isVoiceCall: false, answeredFromCallKit: true), userID: "@carol:matrix.org", awaitsRoom: false, animated: false)
+        #expect(!elementCallManager.requestCallUserIDRoomIDIsVoiceCallAnsweredFromCallKitCalled)
+        
+        rootFlowCoordinator.handleAppRoute(.call(roomID: roomID, isVoiceCall: false, answeredFromCallKit: true), userID: "@bob:matrix.org", awaitsRoom: false, animated: false)
+        #expect(elementCallManager.requestCallUserIDRoomIDIsVoiceCallAnsweredFromCallKitReceivedArguments?.userID == "@bob:matrix.org")
+    }
+    
+    @Test("Another account's call shows above the shown account's screens, with its own session")
+    func callForAnotherAccount() async {
+        rootFlowCoordinator.handleAppRoute(.roomList, animated: false)
+        let bobCallService = addBob()
+        
+        await waitForConfirmation { confirmation in
+            bobCallService.setupCallSessionRoomIDRoomDisplayNameIsVideoKindClosure = { _, _, _, _ in confirmation() }
+            presentWebCall(userID: "@bob:matrix.org", roomID: roomID)
+        }
+        
+        #expect(navigationRootCoordinator.overlayCoordinator is CallScreenCoordinator)
+        #expect(navigationRootCoordinator.rootCoordinator is NavigationTabCoordinator<UserSessionFlowCoordinator.HomeTab>)
+    }
+    
+    @Test("A call stays on screen when the shown account changes")
+    func callDuringAccountChange() throws {
+        rootFlowCoordinator.handleAppRoute(.roomList, animated: false)
+        let aliceRootCoordinator = navigationRootCoordinator.rootCoordinator
+        _ = addBob()
+        presentWebCall(userID: "@bob:matrix.org", roomID: roomID)
+        let callScreen = try #require(navigationRootCoordinator.overlayCoordinator as? CallScreenCoordinator)
+        
+        userSessionManager.activeSession = userSessionManager.session(for: "@bob:matrix.org")
+        userSessionManagerCallbacks.send(.didRemoveAccount(userID: "@alice:matrix.org", error: nil))
+        
+        #expect(navigationRootCoordinator.rootCoordinator !== aliceRootCoordinator)
+        #expect(navigationRootCoordinator.overlayCoordinator === callScreen)
+    }
+    
+    @Test("Presenting another call replaces the call screen, whose call hangs up")
+    func replaceCall() throws {
+        let aliceCallService = try #require(userSessionManager.session(for: "@alice:matrix.org")?.elementCallService as? ElementCallServiceMock)
+        presentWebCall(userID: "@alice:matrix.org", roomID: "1")
+        let firstCallScreen = try #require(navigationRootCoordinator.overlayCoordinator as? CallScreenCoordinator)
+        
+        presentWebCall(userID: "@alice:matrix.org", roomID: "2")
+        
+        let secondCallScreen = try #require(navigationRootCoordinator.overlayCoordinator as? CallScreenCoordinator)
+        #expect(secondCallScreen !== firstCallScreen)
+        #expect(aliceCallService.tearDownCallSessionRoomIDReceivedInvocations.contains("1"))
+    }
+    
+    @Test("Dismissing the call, or minimising it without picture in picture, takes its screen off the overlay", arguments: [false, true])
+    func callScreenRemoval(isMinimizing: Bool) {
+        presentWebCall(userID: "@alice:matrix.org", roomID: roomID)
+        #expect(navigationRootCoordinator.overlayCoordinator is CallScreenCoordinator)
+        
+        callManagerActions.send(.callScreen(isMinimizing ? .minimize : .dismiss))
+        
+        #expect(navigationRootCoordinator.overlayCoordinator == nil)
+    }
+    
+    @Test("A room covered by a full screen call doesn't count as displayed")
+    func roomScreenBehindCall() async throws {
+        rootFlowCoordinator.handleAppRoute(.room(roomID: roomID, via: []), userID: "@alice:matrix.org", awaitsRoom: false, animated: false)
+        rootFlowCoordinator.handleAppRoute(.roomList, animated: false)
+        let splitCoordinator = try #require(chatsSplitCoordinator)
+        let deferred = deferFulfillment(splitCoordinator.observe(\.detailRootCoordinatorID)) { $0 != nil }
+        try await deferred.fulfill()
+        #expect(rootFlowCoordinator.isDisplayingRoomScreen(withRoomID: roomID))
+        
+        presentWebCall(userID: "@alice:matrix.org", roomID: roomID)
+        #expect(!rootFlowCoordinator.isDisplayingRoomScreen(withRoomID: roomID))
+        
+        callManagerActions.send(.callScreen(.dismiss))
+        #expect(rootFlowCoordinator.isDisplayingRoomScreen(withRoomID: roomID))
+    }
+    
+    @Test("A route handed to the shown account's screens minimises a full screen call")
+    func routeDuringCall() throws {
+        rootFlowCoordinator.handleAppRoute(.roomList, animated: false)
+        let aliceCallService = try #require(userSessionManager.session(for: "@alice:matrix.org")?.elementCallService as? ElementCallServiceMock)
+        presentWebCall(userID: "@alice:matrix.org", roomID: roomID)
+        
+        rootFlowCoordinator.handleAppRoute(.search, userID: "@bob:matrix.org", awaitsRoom: false, animated: false)
+        #expect(!aliceCallService.minimizeCallCalled)
+        
+        rootFlowCoordinator.handleAppRoute(.search, userID: "@alice:matrix.org", awaitsRoom: false, animated: false)
+        #expect(aliceCallService.minimizeCallCalled)
+    }
+    
     // MARK: - Helpers
+    
+    /// Signs Bob in alongside Alice, returning his call service.
+    private func addBob() -> ElementCallServiceMock {
+        let bobCallService = ElementCallServiceMock(.init(userID: "@bob:matrix.org"))
+        let bob = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@bob:matrix.org", deviceID: "bob-device-id")),
+                                        elementCallService: bobCallService))
+        let alice = userSessionManager.session(for: "@alice:matrix.org")
+        userSessionManager.sessionForClosure = { userID in
+            switch userID {
+            case "@alice:matrix.org": alice
+            case "@bob:matrix.org": bob
+            default: nil
+            }
+        }
+        return bobCallService
+    }
+    
+    private func presentWebCall(userID: String, roomID: String) {
+        callManagerActions.send(.callScreen(.present(userID: userID, kind: .webView(.mock(roomID: roomID)))))
+    }
     
     private var chatsSplitCoordinator: NavigationSplitCoordinator? {
         let tabCoordinator = navigationRootCoordinator.rootCoordinator as? NavigationTabCoordinator<UserSessionFlowCoordinator.HomeTab>

@@ -190,9 +190,18 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
     }
     
     func remove(userID: String) {
+        // First, so the service hears its calls end.
+        endCalls(userID: userID)
+        
+        serviceCancellables[userID] = nil
+        services[userID] = nil
+    }
+    
+    /// Ends the account's calls and takes their screen down, still routing its calls.
+    private func endCalls(userID: String) {
         if let pendingCallRequest, pendingCallRequest.userID == userID {
             self.pendingCallRequest = nil
-            dropCallRequest(pendingCallRequest, because: "\(userID) isn't signed in any more")
+            dropCallRequest(pendingCallRequest, because: "\(userID)'s calls were ended")
         }
         
         if let incomingCallID, incomingCallID.userID == userID {
@@ -210,10 +219,6 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
         
         endOngoingCall(userID: userID)
         dismissCallScreen(of: userID)
-        
-        // Last, so the service hears its calls end.
-        serviceCancellables[userID] = nil
-        services[userID] = nil
     }
     
     func requestCall(userID: String, roomID: String, isVoiceCall: Bool, answeredFromCallKit: Bool) {
@@ -233,6 +238,8 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
             presentCallScreen(for: call, answeredFromCallKit: false, service: service)
         case .callMinimizeRequested:
             minimizeCall()
+        case .callsEndRequested:
+            endCalls(userID: service.userID)
         case .nativeCallPresentation(let presentation):
             relayNativeCallPresentation(presentation, from: service)
         case let .callSessionStarted(roomID, roomDisplayName, isVideo, kind):
@@ -486,6 +493,14 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
         }
         
         let userID = service.userID
+        
+        // TODO: Give every account a native call stack, until then only the active account has one.
+        guard !appSettings.nativeCallEnabled else {
+            dropCallRequest(.init(userID: userID, roomID: call.roomProxy.id, isVoiceCall: call.isVoiceCall, answeredFromCallKit: answeredFromCallKit),
+                            because: "native calls are on and \(userID) has no native call stack")
+            return
+        }
+        
         let webCall = PresentedCall.webView(userID: userID, roomID: call.roomProxy.id)
         
         guard presentedCall != webCall else {

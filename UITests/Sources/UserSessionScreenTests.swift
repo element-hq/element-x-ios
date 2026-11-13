@@ -87,21 +87,6 @@ class UserSessionScreenTests: XCTestCase {
         try await app.assertScreenshot(delay: .seconds(1))
     }
     
-    func testElementCall() {
-        let app = Application.launch(.userSessionScreen)
-        
-        app.buttons[A11yIdentifiers.homeScreen.roomName(firstRoomName)].tap()
-        XCTAssert(app.buttons[firstRoomName].waitForExistence(timeout: 5.0))
-        
-        app.buttons[A11yIdentifiers.roomScreen.joinCall].tap()
-        
-        let textField = app.textFields["Display name"]
-        XCTAssert(textField.waitForExistence(timeout: 10))
-        
-        let joinButton = app.buttons["Continue"]
-        XCTAssert(joinButton.waitForExistence(timeout: 10))
-    }
-    
     func testRoomDetails() {
         let app = Application.launch(.userSessionScreen)
         

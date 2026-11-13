@@ -5345,6 +5345,23 @@ nonisolated class ElementCallServiceMock: ElementCallServiceProtocol, @unchecked
         minimizeCallCallsCountLock.withLock { minimizeCallUnderlyingCallsCount += 1 }
         minimizeCallClosure?()
     }
+    //MARK: - endCalls
+
+    private let endCallsCallsCountLock = NSLock()
+    private nonisolated(unsafe) var endCallsUnderlyingCallsCount = 0
+    var endCallsCallsCount: Int {
+        get { endCallsCallsCountLock.withLock { endCallsUnderlyingCallsCount } }
+        set { endCallsCallsCountLock.withLock { endCallsUnderlyingCallsCount = newValue } }
+    }
+    var endCallsCalled: Bool {
+        return endCallsCallsCount > 0
+    }
+    nonisolated(unsafe) var endCallsClosure: (() -> Void)?
+
+    func endCalls() {
+        endCallsCallsCountLock.withLock { endCallsUnderlyingCallsCount += 1 }
+        endCallsClosure?()
+    }
     //MARK: - joinedRoom
 
     private let joinedRoomRoomIDCallsCountLock = NSLock()
