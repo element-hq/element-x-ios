@@ -47,8 +47,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     private var currentUserProxy: RoomMemberProxyProtocol?
     
     private var paginateBackwardsTask: Task<Void, Never>?
-    /// Whether the view asked to paginate backwards again while ``paginateBackwardsTask`` was running.
-    private var hasQueuedBackPagination = false
     private var paginateForwardsTask: Task<Void, Never>?
     @CancellableTask private var particleEffectTask: Task<Void, Never>?
     
@@ -646,7 +644,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     
     private func paginateBackwards() {
         guard paginateBackwardsTask == nil else {
-            hasQueuedBackPagination = true
             return
         }
         
@@ -655,20 +652,13 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                 return
             }
             
-            let result = await timelineController.paginateBackwards(requestSize: Constants.paginationEventLimit)
-            paginateBackwardsTask = nil
-            
-            let hadQueuedBackPagination = hasQueuedBackPagination
-            hasQueuedBackPagination = false
-            
-            switch result {
-            case .success:
-                if hadQueuedBackPagination {
-                    paginateBackwards()
-                }
+            switch await timelineController.paginateBackwards(requestSize: Constants.paginationEventLimit) {
             case .failure:
                 displayErrorToast(L10n.errorFailedLoadingMessages)
+            default:
+                break
             }
+            paginateBackwardsTask = nil
         }
     }
     

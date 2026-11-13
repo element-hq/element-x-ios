@@ -1064,26 +1064,6 @@ final class TimelineViewModelTests {
         try await deferred.fulfill()
     }
     
-    // MARK: - Pagination
-    
-    @Test("A back pagination requested while another one is running runs once that one succeeds")
-    func paginateBackwardsWhilePaginating() async throws {
-        let timelineController = TimelineControllerMock(.init())
-        let paginationRequests = PassthroughSubject<Void, Never>()
-        timelineController.paginateBackwardsRequestSizeClosure = { _ in
-            paginationRequests.send()
-            return .success(())
-        }
-        let viewModel = makeViewModel(timelineController: timelineController)
-        
-        let deferred = deferFulfillment(paginationRequests.scan(0) { count, _ in count + 1 }) { $0 == 2 }
-        viewModel.context.send(viewAction: .paginateBackwards)
-        viewModel.context.send(viewAction: .paginateBackwards)
-        try await deferred.fulfill()
-        
-        #expect(timelineController.paginateBackwardsRequestSizeCallsCount == 2)
-    }
-    
     // MARK: - Helpers
     
     private func makeViewModel(items: [RoomTimelineItemProtocol],
