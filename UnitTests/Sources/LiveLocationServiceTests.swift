@@ -23,7 +23,7 @@ final class LiveLocationServiceTests {
     
     // MARK: - startLiveLocation
     
-    @Test
+    @Test("Starting a share stops any share from another device first, then waits for the server's echo")
     func startLiveLocationWithNoExistingLocalSession() async throws {
         setUp()
         let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
@@ -52,7 +52,7 @@ final class LiveLocationServiceTests {
         #expect(service.isSharingPublisher.value)
     }
     
-    @Test
+    @Test("Starting a share in a room that's already sharing stops the old share first")
     func startLiveLocationWithExistingSessionStopsItFirst() async throws {
         setUp()
         let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
@@ -79,7 +79,7 @@ final class LiveLocationServiceTests {
         #expect(userSettings.account.liveLocationSharingSessionsByRoomID["!room:matrix.org"] != nil)
     }
     
-    @Test
+    @Test("Starting a share leaves the shares in other rooms alone")
     func startLiveLocationDoesNotStopSessionForOtherRoom() async {
         setUp()
         let roomProxy = makeRoomProxy(roomID: "!room1:matrix.org")
@@ -93,7 +93,7 @@ final class LiveLocationServiceTests {
         #expect(userSettings.account.liveLocationSharingSessionsByRoomID["!room2:matrix.org"] != nil)
     }
     
-    @Test
+    @Test("Starting a share fails when the room isn't joined")
     func startLiveLocationWhenRoomNotJoined() async {
         setUp()
         clientProxy.roomForIdentifierClosure = { _ in nil }
@@ -104,7 +104,7 @@ final class LiveLocationServiceTests {
         #expect(userSettings.account.liveLocationSharingSessionsByRoomID["!room:matrix.org"] == nil)
     }
     
-    @Test
+    @Test("Starting a share fails when the room can't start it")
     func startLiveLocationWhenStartShareFails() async {
         setUp()
         let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
@@ -117,7 +117,7 @@ final class LiveLocationServiceTests {
         #expect(userSettings.account.liveLocationSharingSessionsByRoomID["!room:matrix.org"] == nil)
     }
     
-    @Test
+    @Test("A started share remembers its event and when it expires")
     func startLiveLocationStoresTimeoutDate() async throws {
         setUp()
         let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
@@ -134,7 +134,7 @@ final class LiveLocationServiceTests {
     
     // MARK: - stopLiveLocation
     
-    @Test
+    @Test("Stopping a share sends the stop and forgets the share")
     func stopLiveLocationWhenSessionExists() async {
         setUp()
         let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
@@ -148,7 +148,7 @@ final class LiveLocationServiceTests {
         #expect(!service.isSharingPublisher.value)
     }
     
-    @Test
+    @Test("Stopping a room without a local share still sends the stop")
     func stopLiveLocationWhenNoSession() async {
         setUp()
         let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
@@ -159,7 +159,7 @@ final class LiveLocationServiceTests {
         #expect(roomProxy.stopLiveLocationShareCalled)
     }
     
-    @Test
+    @Test("Stopping a share leaves the shares in other rooms alone")
     func stopLiveLocationDoesNotRemoveOtherSessions() async {
         setUp()
         let roomProxy = makeRoomProxy(roomID: "!room1:matrix.org")
@@ -175,7 +175,7 @@ final class LiveLocationServiceTests {
     
     // MARK: - Beacon info updates
     
-    @Test
+    @Test("A new share from another device stops the active share")
     func beaconInfoUpdateFromAnotherDeviceRemovesActiveSession() async throws {
         setUp()
         let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
@@ -192,9 +192,42 @@ final class LiveLocationServiceTests {
         #expect(userSettings.account.liveLocationSharingSessionsByRoomID["!room:matrix.org"] == nil)
     }
     
+    @Test("A stop from another device stops the active share")
+    func beaconInfoStopFromAnotherDeviceRemovesActiveSession() async throws {
+        setUp()
+        let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
+        clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
+        
+        try await service.startLiveLocation(roomID: "!room:matrix.org", duration: .seconds(300)).get()
+        try await simulateBeaconEcho(roomID: "!room:matrix.org", eventID: "$event:matrix.org")
+        
+        let deferred = deferFulfillment(userSettings.account.liveLocationSharingSessionsByRoomIDPublisher) { $0["!room:matrix.org"] == nil }
+        beaconInfoSubject.send(LiveLocationOwnInfoUpdate(roomID: "!room:matrix.org", eventID: "$stop_event:matrix.org", isLive: false))
+        try await deferred.fulfill()
+        
+        #expect(!service.isSharingPublisher.value)
+    }
+    
+    @Test("Sync sending the active share's beacon info again keeps it sharing")
+    func beaconInfoResendKeepsActiveSession() async throws {
+        setUp()
+        let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
+        clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
+        
+        try await service.startLiveLocation(roomID: "!room:matrix.org", duration: .seconds(300)).get()
+        try await simulateBeaconEcho(roomID: "!room:matrix.org", eventID: "$event:matrix.org")
+        
+        let deferred = deferFailure(userSettings.account.liveLocationSharingSessionsByRoomIDPublisher, timeout: .milliseconds(300)) { $0["!room:matrix.org"] == nil }
+        beaconInfoSubject.send(LiveLocationOwnInfoUpdate(roomID: "!room:matrix.org", eventID: "$event:matrix.org", isLive: true))
+        try await deferred.fulfill()
+        
+        #expect(userSettings.account.liveLocationSharingSessionsByRoomID["!room:matrix.org"]?.eventID == "$event:matrix.org")
+        #expect(service.isSharingPublisher.value)
+    }
+    
     // MARK: - Sharing
     
-    @Test
+    @Test("Shares stored before launch count as sharing")
     func sharesStoredBeforeLaunchAreShared() {
         let userSettings = UserSettings.mock()
         userSettings.account.liveLocationSharingSessionsByRoomID["!room:matrix.org"] = LiveLocationSession(eventID: "$event:matrix.org", expirationDate: .distantFuture)
@@ -204,7 +237,7 @@ final class LiveLocationServiceTests {
         #expect(service.isSharingPublisher.value)
     }
     
-    @Test
+    @Test("Location updates are sent to the shared rooms")
     func locationUpdatesAreSentToTheSharedRooms() async {
         setUp()
         let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
@@ -222,7 +255,7 @@ final class LiveLocationServiceTests {
         }
     }
     
-    @Test
+    @Test("Stopping all shares stops every share")
     func stopAllLiveLocationsStopsEveryShare() async {
         setUp()
         let roomProxy = makeRoomProxy(roomID: "!room1:matrix.org")
@@ -239,7 +272,7 @@ final class LiveLocationServiceTests {
     
     // MARK: - Expiry
     
-    @Test
+    @Test("A share stops when it expires, even without location updates")
     func aShareStopsWhenItExpiresWithoutLocationUpdates() async {
         setUp()
         let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
@@ -259,7 +292,7 @@ final class LiveLocationServiceTests {
         #expect(!service.isSharingPublisher.value)
     }
     
-    @Test
+    @Test("A share still stops when the wall clock lags behind the timer")
     func aShareStillStopsWhenTheWallClockLagsBehindTheTimer() async {
         setUp()
         let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
@@ -284,7 +317,7 @@ final class LiveLocationServiceTests {
         #expect(userSettings.account.liveLocationSharingSessionsByRoomID.isEmpty)
     }
     
-    @Test
+    @Test("Only the expired share stops")
     func onlyTheExpiredShareStops() async {
         setUp()
         let roomProxy = makeRoomProxy(roomID: "!room1:matrix.org")
@@ -319,7 +352,7 @@ final class LiveLocationServiceTests {
         #expect(!service.isSharingPublisher.value)
     }
     
-    @Test
+    @Test("Shares that expired before launch are stopped")
     func sharesThatExpiredBeforeLaunchAreStopped() async {
         let userSettings = UserSettings.mock()
         userSettings.account.liveLocationSharingSessionsByRoomID["!room:matrix.org"] = LiveLocationSession(eventID: "$event:matrix.org", expirationDate: currentDate.addingTimeInterval(-60))
@@ -339,7 +372,7 @@ final class LiveLocationServiceTests {
         #expect(userSettings.account.liveLocationSharingSessionsByRoomID.isEmpty)
     }
     
-    @Test
+    @Test("Stopping the last share cancels its expiry timer")
     func stoppingTheLastShareCancelsItsExpiry() async {
         setUp()
         let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
@@ -354,7 +387,7 @@ final class LiveLocationServiceTests {
     
     // MARK: - Authorization
     
-    @Test
+    @Test("The authorization status follows the manager")
     func authorizationStatusFollowsTheManager() {
         setUp()
         
@@ -363,7 +396,7 @@ final class LiveLocationServiceTests {
         #expect(service.authorizationStatus.value == .authorizedAlways)
     }
     
-    @Test
+    @Test("Always authorization is requested until the manager remembers the request")
     func requestingAlwaysAuthorizationAsksTheManagerUntilItRemembersTheRequest() {
         setUp()
         var requestCount = 0
