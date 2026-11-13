@@ -12,10 +12,10 @@ import SwiftUI
 /// Draws on a copy of a picture with QuickLook's Markup. Save writes the drawing back into the picture, Cancel throws it away.
 struct ImageDrawingEditor: UIViewControllerRepresentable {
     let imageURL: URL
-    /// Called when the picture on disk has the saved drawing.
-    let onDrawing: () -> Void
-    /// Called when Save is tapped, which can be before the drawing lands: QuickLook may only write it once the editor is gone.
+    /// Called when Save is tapped. The drawing may land after the editor is gone.
     let onSave: () -> Void
+    /// Called once saving ends, telling whether the picture on disk now has a drawing.
+    let onSaveFinished: (_ didDraw: Bool) -> Void
     let onCancel: () -> Void
     
     func makeUIViewController(context: Context) -> UINavigationController {
@@ -24,7 +24,7 @@ struct ImageDrawingEditor: UIViewControllerRepresentable {
         previewController.delegate = context.coordinator
         previewController.navigationItem.leftBarButtonItem = UIBarButtonItem(systemItem: .cancel, primaryAction: UIAction { _ in onCancel() })
         previewController.navigationItem.rightBarButtonItem = Self.makeSaveButton(primaryAction: UIAction { [coordinator = context.coordinator] _ in
-            // Saving can call onDrawing right away, which must end the wait that onSave starts.
+            // Saving can finish right away, which must come after onSave.
             onSave()
             coordinator.save()
         })
@@ -52,28 +52,29 @@ struct ImageDrawingEditor: UIViewControllerRepresentable {
     }
     
     static func dismantleUIViewController(_ uiViewController: UINavigationController, coordinator: Coordinator) {
-        coordinator.finish()
+        coordinator.dismantle()
     }
     
     func makeCoordinator() -> Coordinator {
-        Coordinator(imageURL: imageURL, onDrawing: onDrawing)
+        Coordinator(imageURL: imageURL, onSaveFinished: onSaveFinished)
     }
     
     final class Coordinator: NSObject, QLPreviewControllerDataSource, QLPreviewControllerDelegate, NSFilePresenter {
         private let imageURL: URL
         private let copyURL: URL?
-        private let onDrawing: () -> Void
+        private let onSaveFinished: (_ didDraw: Bool) -> Void
         private var copyModificationDate: Date?
         private var isSaving = false
+        private var isFinished = false
         
         nonisolated let presentedItemURL: URL?
         nonisolated var presentedItemOperationQueue: OperationQueue {
             .main
         }
         
-        init(imageURL: URL, onDrawing: @escaping () -> Void) {
+        init(imageURL: URL, onSaveFinished: @escaping (_ didDraw: Bool) -> Void) {
             self.imageURL = imageURL
-            self.onDrawing = onDrawing
+            self.onSaveFinished = onSaveFinished
             copyURL = Self.makeCopy(of: imageURL)
             presentedItemURL = copyURL
             copyModificationDate = copyURL.flatMap(Self.modificationDate(ofFileAt:))
@@ -83,19 +84,23 @@ struct ImageDrawingEditor: UIViewControllerRepresentable {
         
         func save() {
             isSaving = true
+            guard copyURL != nil else { return finish(didDraw: false) }
             saveDrawingIfCopyChanged()
+            guard !isFinished else { return }
+            
+            // Saving while still in Markup writes the drawing into the copy after the editor is gone, without calling the delegate.
+            // ponytail: fixed wait, QuickLook has no API to say when it is done. Raise it if slow devices drop drawings.
+            Task {
+                try? await Task.sleep(for: .seconds(3))
+                saveDrawingIfCopyChanged() // Catches writes that didn't notify the presenter.
+                finish(didDraw: false)
+            }
         }
         
-        /// Closing while still in Markup writes the drawing into the copy after the editor is gone, without calling the delegate,
-        /// so keep watching the copy for a little while.
-        func finish() {
-            Task {
-                try? await Task.sleep(for: .seconds(5))
-                NSFileCoordinator.removeFilePresenter(self)
-                if let copyURL {
-                    try? FileManager.default.removeItem(at: copyURL.deletingLastPathComponent())
-                }
-            }
+        /// Stops watching the copy and removes it, unless a save is still waiting for the drawing.
+        func dismantle() {
+            guard !isSaving else { return }
+            finish(didDraw: false)
         }
         
         // MARK: QLPreviewControllerDataSource
@@ -114,7 +119,7 @@ struct ImageDrawingEditor: UIViewControllerRepresentable {
             copyURL == nil ? .disabled : .updateContents
         }
         
-        /// QuickLook calls this from a background queue.
+        // QuickLook calls this from a background queue.
         nonisolated func previewController(_ controller: QLPreviewController, didUpdateContentsOf previewItem: QLPreviewItem) {
             Task { @MainActor [weak self] in
                 self?.saveDrawingIfCopyChanged()
@@ -132,16 +137,28 @@ struct ImageDrawingEditor: UIViewControllerRepresentable {
         // MARK: Private
         
         private func saveDrawingIfCopyChanged() {
-            guard isSaving, let copyURL else { return }
+            guard isSaving, !isFinished, let copyURL else { return }
             let newModificationDate = Self.modificationDate(ofFileAt: copyURL)
             guard newModificationDate != copyModificationDate else { return }
             copyModificationDate = newModificationDate
             
             do {
                 try Data(contentsOf: copyURL).write(to: imageURL, options: .atomic)
-                onDrawing()
+                finish(didDraw: true)
             } catch {
                 MXLog.error("Failed saving the drawing with error: \(error)")
+            }
+        }
+        
+        private func finish(didDraw: Bool) {
+            guard !isFinished else { return }
+            isFinished = true
+            NSFileCoordinator.removeFilePresenter(self)
+            if let copyURL {
+                try? FileManager.default.removeItem(at: copyURL.deletingLastPathComponent())
+            }
+            if isSaving {
+                onSaveFinished(didDraw)
             }
         }
         

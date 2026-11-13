@@ -54,6 +54,6 @@ enum MediaUploadPreviewScreenViewAction {
     case send
     case cancel
     case editedMedia(image: UIImage, index: Int)
-    case drewOnMedia(index: Int)
     case savingDrawing
+    case savedDrawing(index: Int, didDraw: Bool)
 }

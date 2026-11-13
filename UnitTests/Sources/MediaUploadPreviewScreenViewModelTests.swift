@@ -317,41 +317,11 @@ final class MediaUploadPreviewScreenViewModelTests {
         
         // When QuickLook has saved a drawing into the picture.
         let preparedAgain = deferFulfillment(startsStream) { $0 == 2 }
-        context.send(viewAction: .drewOnMedia(index: 0))
+        context.send(viewAction: .savedDrawing(index: 0, didDraw: true))
         
         // Then the preview reloads and the picture is prepared again.
         #expect(context.viewState.mediaEditVersion == 1)
         try await preparedAgain.fulfill()
-    }
-    
-    @Test
-    func sendWaitsForAPictureDrawnOnWhileItWasPreparing() async throws {
-        // Given a picture whose first preparation is still running.
-        let (startedStream, startedContinuation) = AsyncStream<Void>.makeStream()
-        let (resumeStream, resumeContinuation) = AsyncStream<Void>.makeStream()
-        defer { resumeContinuation.finish() }
-        
-        var preparations = 0
-        let preparationStarted = deferFulfillment(startedStream) { _ in true }
-        setUpViewModel(urls: [assertResourceURL(filename: "test_image.png")], expectedCaption: nil, imageDrawingEnabled: true) {
-            preparations += 1
-            if preparations == 1 {
-                startedContinuation.yield()
-                var iterator = resumeStream.makeAsyncIterator()
-                _ = await iterator.next() // Only returns once this preparation is cancelled.
-            }
-            return .success(100 * 1024 * 1024)
-        }
-        try await preparationStarted.fulfill()
-        
-        // When Send is tapped, and a drawing lands on the picture before its preparation finishes.
-        let dismissed = deferFulfillment(viewModel.actions) { $0 == .dismiss }
-        context.send(viewAction: .send)
-        context.send(viewAction: .drewOnMedia(index: 0))
-        
-        // Then the picture is sent once its new preparation finishes.
-        try await dismissed.fulfill()
-        #expect(timelineProxy.sendImageUrlThumbnailURLImageInfoCaptionRequestHandleCallsCount == 1)
     }
     
     @Test
@@ -368,12 +338,12 @@ final class MediaUploadPreviewScreenViewModelTests {
         #expect(userIndicatorController.submitIndicatorDelayCallsCount == 0)
         
         // When the drawing lands, then the screen is unblocked.
-        context.send(viewAction: .drewOnMedia(index: 0))
+        context.send(viewAction: .savedDrawing(index: 0, didDraw: true))
         #expect(!context.viewState.shouldDisableInteraction)
     }
     
     @Test
-    func savingWithoutADrawingUnblocksSendingShortly() async throws {
+    func savingWithoutADrawingUnblocksSending() {
         // Given a picture that can be drawn on.
         setUpViewModel(urls: [assertResourceURL(filename: "test_image.png")], expectedCaption: nil, imageDrawingEnabled: true)
         
@@ -381,9 +351,9 @@ final class MediaUploadPreviewScreenViewModelTests {
         context.send(viewAction: .savingDrawing)
         #expect(context.viewState.shouldDisableInteraction)
         
-        // Then the screen is unblocked after a short wait.
-        let unblocked = deferFulfillment(context.observe(\.viewState.shouldDisableInteraction)) { !$0 }
-        try await unblocked.fulfill()
+        // When the editor finishes without a drawing, then the screen is unblocked and nothing reloads.
+        context.send(viewAction: .savedDrawing(index: 0, didDraw: false))
+        #expect(!context.viewState.shouldDisableInteraction)
         #expect(context.viewState.mediaEditVersion == 0)
     }
     

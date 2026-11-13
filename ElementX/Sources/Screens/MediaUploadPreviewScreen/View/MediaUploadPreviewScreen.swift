@@ -76,10 +76,10 @@ struct MediaUploadPreviewScreen: View {
             .alert(item: $context.alertInfo)
         case .draw(let index):
             ImageDrawingEditor(imageURL: context.viewState.mediaURLs[index]) {
-                context.send(viewAction: .drewOnMedia(index: index))
-            } onSave: {
                 context.send(viewAction: .savingDrawing)
                 context.presentedEditor = nil
+            } onSaveFinished: { didDraw in
+                context.send(viewAction: .savedDrawing(index: index, didDraw: didDraw))
             } onCancel: {
                 context.presentedEditor = nil
             }
