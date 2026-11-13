@@ -2406,6 +2406,8 @@ internal nonisolated enum L10n {
   internal static var screenMediaDetailsUploadedOn: String { return L10n.tr("Localizable", "screen_media_details_uploaded_on") }
   /// Failed selecting media, please try again.
   internal static var screenMediaPickerErrorFailedSelection: String { return L10n.tr("Localizable", "screen_media_picker_error_failed_selection") }
+  /// Draw
+  internal static var screenMediaUploadPreviewA11yDraw: String { return L10n.tr("Localizable", "screen_media_upload_preview_a11y_draw") }
   /// Captions might not be visible to people using older apps.
   internal static var screenMediaUploadPreviewCaptionWarning: String { return L10n.tr("Localizable", "screen_media_upload_preview_caption_warning") }
   /// Tap to change the video upload quality

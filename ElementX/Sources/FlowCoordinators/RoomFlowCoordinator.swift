@@ -1095,8 +1095,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                  caption: NSAttributedString?,
                                                  timelineController: TimelineControllerProtocol,
                                                  animated: Bool) {
-        let stackCoordinator = NavigationStackCoordinator()
-        
         let title: String? = if mediaURLs.count == 1 {
             mediaURLs.first?.lastPathComponent
         } else {
@@ -1108,6 +1106,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                        title: title,
                                                                        shouldShowCaptionWarning: userSession.userSettings.app.shouldShowMediaCaptionWarning,
                                                                        galleryEnabled: userSession.userSettings.app.galleryEnabled,
+                                                                       imageDrawingEnabled: userSession.userSettings.app.imageDrawingEnabled,
                                                                        mediaUploadingPreprocessor: MediaUploadingPreprocessor(userSettings: userSession.userSettings),
                                                                        timelineController: timelineController,
                                                                        clientProxy: userSession.clientProxy,
@@ -1126,9 +1125,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             }
             .store(in: &cancellables)
         
-        stackCoordinator.setRootCoordinator(mediaUploadPreviewScreenCoordinator)
-        
-        navigationStackCoordinator.setSheetCoordinator(stackCoordinator, animated: animated) { [weak self] in
+        navigationStackCoordinator.setSheetCoordinator(mediaUploadPreviewScreenCoordinator, animated: animated) { [weak self] in
             self?.stateMachine.tryEvent(.dismissMediaUploadPreview)
         }
     }

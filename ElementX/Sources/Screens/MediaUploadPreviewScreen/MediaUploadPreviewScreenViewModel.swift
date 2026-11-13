@@ -7,8 +7,10 @@
 //
 
 import Combine
+import ImageIO
 import MatrixRustSDK
 import SwiftUI
+import UniformTypeIdentifiers
 
 typealias MediaUploadPreviewScreenViewModelType = StateStoreViewModelV2<MediaUploadPreviewScreenViewState, MediaUploadPreviewScreenViewAction>
 
@@ -35,6 +37,7 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
          title: String?,
          shouldShowCaptionWarning: Bool,
          galleryEnabled: Bool,
+         imageDrawingEnabled: Bool,
          mediaUploadingPreprocessor: MediaUploadingPreprocessor,
          timelineController: TimelineControllerProtocol,
          clientProxy: ClientProxyProtocol,
@@ -49,9 +52,13 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
         // Start processing the media whilst the user is reviewing it/adding a caption.
         processingTask = Self.processMedia(at: mediaURLs, preprocessor: mediaUploadingPreprocessor, clientProxy: clientProxy)
         
+        let canDrawOnMedia = imageDrawingEnabled && !ProcessInfo.processInfo.isiOSAppOnMac
+        let drawableMediaIndices = canDrawOnMedia ? Set(mediaURLs.indices.filter { Self.canDraw(onMediaAt: mediaURLs[$0]) }) : []
+        
         super.init(initialViewState: MediaUploadPreviewScreenViewState(mediaURLs: mediaURLs,
                                                                        title: title,
                                                                        shouldShowCaptionWarning: shouldShowCaptionWarning,
+                                                                       drawableMediaIndices: drawableMediaIndices,
                                                                        bindings: .init(caption: caption ?? NSAttributedString())))
     }
     
@@ -61,6 +68,8 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
         
         switch viewAction {
         case .send:
+            guard !state.shouldDisableInteraction else { return }
+            
             startLoading()
             
             Task { [processingTask] in
@@ -112,14 +121,16 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
             
             do {
                 try data.write(to: mediaURLs[index], options: .atomic)
-                
-                state.mediaEditVersion += 1
-                
-                processingTask.cancel()
-                processingTask = Self.processMedia(at: mediaURLs, preprocessor: mediaUploadingPreprocessor, clientProxy: clientProxy)
+                reloadEditedMedia()
             } catch {
                 MXLog.error("Failed writing cropped image with error: \(error)")
             }
+        case .savingDrawing:
+            state.shouldDisableInteraction = true
+        case .savedDrawing(let index, let didDraw):
+            state.shouldDisableInteraction = false
+            guard didDraw, mediaURLs.indices.contains(index) else { return }
+            reloadEditedMedia()
         }
     }
     
@@ -161,6 +172,23 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
     }
     
     // MARK: - Private
+    
+    /// Reloads the preview and prepares the media again after a picture was changed on disk.
+    private func reloadEditedMedia() {
+        state.mediaEditVersion += 1
+        
+        processingTask.cancel()
+        processingTask = Self.processMedia(at: mediaURLs, preprocessor: mediaUploadingPreprocessor, clientProxy: clientProxy)
+    }
+    
+    /// Whether the media is a still picture. Markup would flatten an animated image to a single frame.
+    private static func canDraw(onMediaAt url: URL) -> Bool {
+        guard UTType(filenameExtension: url.pathExtension)?.conforms(to: .image) == true,
+              let source = CGImageSourceCreateWithURL(url as CFURL, nil) else {
+            return false
+        }
+        return CGImageSourceGetCount(source) == 1
+    }
     
     private static func processMedia(at urls: [URL],
                                      preprocessor: MediaUploadingPreprocessor,
