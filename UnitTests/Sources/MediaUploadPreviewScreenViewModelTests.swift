@@ -34,7 +34,7 @@ final class MediaUploadPreviewScreenViewModelTests {
         userIndicatorController = UserIndicatorControllerMock()
     }
     
-    @Test
+    @Test("Cancelling while send waits for preparation sends nothing and shows no error")
     func cancelWhileSendWaitsForPreparation() async throws {
         // Given a screen whose media preparation is still running.
         let (startedStream, startedContinuation) = AsyncStream<Void>.makeStream()
@@ -63,21 +63,21 @@ final class MediaUploadPreviewScreenViewModelTests {
         #expect(context.viewState.bindings.alertInfo == nil)
     }
     
-    @Test
+    @Test("An image is sent without a caption")
     func imageUploadWithoutCaption() async throws {
         setUpViewModel(urls: [imageURL], expectedCaption: nil)
         context.caption = .init("")
         try await send()
     }
     
-    @Test
+    @Test("An image with a blank caption is sent without a caption")
     func imageUploadWithBlankCaption() async throws {
         setUpViewModel(urls: [imageURL], expectedCaption: nil)
         context.caption = .init("     ")
         try await send()
     }
     
-    @Test
+    @Test("An image is sent with its caption")
     func imageUploadWithCaption() async throws {
         let caption = "This is a really great image!"
         setUpViewModel(urls: [imageURL], expectedCaption: caption)
@@ -85,7 +85,7 @@ final class MediaUploadPreviewScreenViewModelTests {
         try await send()
     }
     
-    @Test(.timeLimit(.minutes(2))) // Transcoding videos can be slow on a busy CI runner.
+    @Test("A video is sent without a caption", .timeLimit(.minutes(2))) // Transcoding videos can be slow on a busy CI runner.
     func videoUploadWithoutCaption() async throws {
         setUpViewModel(urls: [videoURL], expectedCaption: nil)
         context.caption = .init("")
@@ -93,7 +93,7 @@ final class MediaUploadPreviewScreenViewModelTests {
         try await send(timeout: .seconds(60))
     }
     
-    @Test(.timeLimit(.minutes(2))) // Transcoding videos can be slow on a busy CI runner.
+    @Test("A video is sent with its caption", .timeLimit(.minutes(2))) // Transcoding videos can be slow on a busy CI runner.
     func videoUploadWithCaption() async throws {
         let caption = "Check out this video!"
         setUpViewModel(urls: [videoURL], expectedCaption: caption)
@@ -102,14 +102,14 @@ final class MediaUploadPreviewScreenViewModelTests {
         try await send(timeout: .seconds(60))
     }
     
-    @Test
+    @Test("An audio file is sent without a caption")
     func audioUploadWithoutCaption() async throws {
         setUpViewModel(urls: [audioURL], expectedCaption: nil)
         context.caption = .init("")
         try await send()
     }
     
-    @Test
+    @Test("An audio file is sent with its caption")
     func audioUploadWithCaption() async throws {
         let caption = "Listen to this!"
         setUpViewModel(urls: [audioURL], expectedCaption: caption)
@@ -117,14 +117,14 @@ final class MediaUploadPreviewScreenViewModelTests {
         try await send()
     }
     
-    @Test
+    @Test("A file is sent without a caption")
     func fileUploadWithoutCaption() async throws {
         setUpViewModel(urls: [fileURL], expectedCaption: nil)
         context.caption = .init("")
         try await send()
     }
     
-    @Test
+    @Test("A file is sent with its caption")
     func fileUploadWithCaption() async throws {
         let caption = "Please will you check my article."
         setUpViewModel(urls: [fileURL], expectedCaption: caption)
@@ -132,7 +132,7 @@ final class MediaUploadPreviewScreenViewModelTests {
         try await send()
     }
     
-    @Test
+    @Test("A processing failure keeps the screen visible and shows an error")
     func processingFailure() async throws {
         // Given an upload screen for a non-existent file.
         setUpViewModel(urls: [badImageURL], expectedCaption: nil)
@@ -154,7 +154,7 @@ final class MediaUploadPreviewScreenViewModelTests {
         #expect(userIndicatorController.submitIndicatorDelayCallsCount == 2, "An error indicator should be shown.")
     }
     
-    @Test
+    @Test("An unknown max upload size shows an alert and retrying sends the media")
     func uploadWithUnknownMaxUploadSize() async throws {
         // Given an upload screen that is unable to fetch the max upload size.
         setUpViewModel(urls: [imageURL], expectedCaption: nil, maxUploadSizeResult: .failure(.sdkError(ClientProxyMockError.generic)))
@@ -186,7 +186,7 @@ final class MediaUploadPreviewScreenViewModelTests {
         try await deferredDismiss.fulfill()
     }
     
-    @Test
+    @Test("Media larger than the max upload size shows an alert")
     func uploadExceedingMaxUploadSize() async throws {
         // Given an upload screen with a really small max upload size.
         setUpViewModel(urls: [imageURL], expectedCaption: nil, maxUploadSizeResult: .success(100))
@@ -208,7 +208,7 @@ final class MediaUploadPreviewScreenViewModelTests {
         #expect(context.alertInfo?.id == .maxUploadSizeExceeded(limit: 100))
     }
     
-    @Test
+    @Test("Multiple media are sent as a single gallery")
     func gallery() async throws {
         // Given an upload screen with multiple media files.
         setUpViewModel(urls: [fileURL, imageURL, fileURL], expectedCaption: nil)
@@ -231,7 +231,7 @@ final class MediaUploadPreviewScreenViewModelTests {
         #expect(userIndicatorController.submitIndicatorDelayCallsCount == 1, "Only a loading indicator should be shown.")
     }
     
-    @Test
+    @Test("A gallery processing failure keeps the screen visible and shows an error")
     func galleryWithProcessingFailure() async throws {
         // Given an upload screen for a non-existent file.
         setUpViewModel(urls: [imageURL, fileURL, badImageURL], expectedCaption: nil)
@@ -253,7 +253,7 @@ final class MediaUploadPreviewScreenViewModelTests {
         #expect(userIndicatorController.submitIndicatorDelayCallsCount == 2, "An error indicator should be shown.")
     }
     
-    @Test
+    @Test("A gallery send failure dismisses the screen and shows an error")
     func galleryWithSendFailure() async throws {
         // Given an upload screen with multiple media files where the gallery send fails.
         setUpViewModel(urls: [fileURL, imageURL, imageURL, fileURL], expectedCaption: nil, simulateGallerySendFailure: true)
@@ -273,7 +273,7 @@ final class MediaUploadPreviewScreenViewModelTests {
         #expect(userIndicatorController.submitIndicatorDelayCallsCount == 2, "An error indicator should be shown.")
     }
     
-    @Test
+    @Test("With galleries disabled each media is sent as its own message")
     func galleryDisabledSendsIndividualMessages() async throws {
         // Given an upload screen with multiple media files and gallery sending disabled.
         setUpViewModel(urls: [fileURL, imageURL, fileURL], expectedCaption: nil, galleryEnabled: false)
@@ -290,7 +290,7 @@ final class MediaUploadPreviewScreenViewModelTests {
         #expect(timelineProxy.sendImageUrlThumbnailURLImageInfoCaptionRequestHandleCallsCount == 1)
     }
     
-    @Test
+    @Test("Only still pictures can be drawn on, and only when drawing is enabled")
     func onlyStillPicturesCanBeDrawnOn() {
         // Given a still picture, an animated GIF, a video and a PDF.
         let urls = [assertResourceURL(filename: "test_image.png"), imageURL, videoURL, fileURL]
@@ -304,7 +304,7 @@ final class MediaUploadPreviewScreenViewModelTests {
         #expect(context.viewState.drawableMediaIndices.isEmpty)
     }
     
-    @Test
+    @Test("Saving a drawing reloads the preview and prepares the pictures again")
     func drawingReloadsThePreviewAndPreparesThePicturesAgain() async throws {
         // Given a picture whose preparation has started once.
         let (startsStream, startsContinuation) = AsyncStream<Int>.makeStream()
@@ -324,7 +324,7 @@ final class MediaUploadPreviewScreenViewModelTests {
         try await preparedAgain.fulfill()
     }
     
-    @Test
+    @Test("Saving a drawing blocks sending until it lands")
     func savingADrawingBlocksSendingUntilItLands() {
         // Given a picture that can be drawn on.
         setUpViewModel(urls: [assertResourceURL(filename: "test_image.png")], expectedCaption: nil, imageDrawingEnabled: true)
@@ -342,7 +342,7 @@ final class MediaUploadPreviewScreenViewModelTests {
         #expect(!context.viewState.shouldDisableInteraction)
     }
     
-    @Test
+    @Test("Saving without a drawing unblocks sending without reloading")
     func savingWithoutADrawingUnblocksSending() {
         // Given a picture that can be drawn on.
         setUpViewModel(urls: [assertResourceURL(filename: "test_image.png")], expectedCaption: nil, imageDrawingEnabled: true)
