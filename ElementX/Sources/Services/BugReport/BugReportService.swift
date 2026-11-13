@@ -43,7 +43,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
             fatalError("No bug report URL set, the screen should not be shown in this case.")
         }
         
-        var bugReport = appHooks.bugReportHook.update(bugReport)
+        var bugReport = appHooks.bugReportHook.update(bugReport, for: flow)
         
         var params = [
             MultipartFormData(key: "text", type: .text(value: bugReport.text)),

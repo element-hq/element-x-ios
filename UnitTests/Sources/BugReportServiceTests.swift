@@ -27,7 +27,7 @@ final class BugReportServiceTests {
     @Test("The mock service returns a report URL")
     func submitBugReportWithMockService() async throws {
         let response = try await bugReportService.submitBugReport(.mock(logFiles: [URL(filePath: "/logs/1.log"), URL(filePath: "/logs/2.log")]),
-                                                                  flow: .authentication(.url("https://example.com/submit")),
+                                                                  flow: .authentication(.volatile()),
                                                                   progressListener: CurrentValueSubject<Double, Never>(0.0)).get()
         let reportURL = try #require(response.reportURL)
         #expect(!reportURL.isEmpty)
@@ -39,17 +39,22 @@ final class BugReportServiceTests {
         #expect(service.lastCrashEventIDSubject.value == nil)
     }
     
-    @Test("A report during authentication is sent to the given rageshake server")
-    func submitBugReportDuringAuthentication() async throws {
+    @Test("A report from the authentication start screen is sent to the bundled rageshake server")
+    func submitBugReportForAuthentication() async throws {
         let service = makeService()
+        let appSettings = AppSettings.volatile()
+        guard case .url(let rageshakeURL) = appSettings.bundledBugReportRageshakeConfiguration else {
+            Issue.record("The bundled rageshake server is missing.")
+            return
+        }
         
-        let response = try await service.submitBugReport(.mock(), flow: .authentication(.url("https://example.com/submit")), progressListener: CurrentValueSubject<Double, Never>(0.0)).get()
+        let response = try await service.submitBugReport(.mock(), flow: .authentication(appSettings), progressListener: CurrentValueSubject<Double, Never>(0.0)).get()
         
-        #expect(response.reportURL == "https://example.com/123")
+        #expect(response.reportURL == rageshakeURL.deletingLastPathComponent().appending(path: "123").absoluteString)
     }
     
-    @Test("A report from a user session is sent to the account's rageshake server")
-    func submitBugReportWithSession() async throws {
+    @Test("A report for a specific user session is sent to the account's rageshake server")
+    func submitBugReportForUserSession() async throws {
         let service = makeService()
         let userSession = UserSessionMock(.init())
         userSession.userSettings.account.bugReportRageshakeConfiguration.applyRemoteValue(.url("https://bugs.server.net/submit"))

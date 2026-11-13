@@ -421,7 +421,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: - Bug Report
     
     private func startBugReportFlow() {
-        let coordinator = BugReportFlowCoordinator(parameters: .init(flow: .authentication(appSettings.bundledBugReportRageshakeConfiguration),
+        let coordinator = BugReportFlowCoordinator(parameters: .init(flow: .authentication(appSettings),
                                                                      presentationMode: .sheet(navigationStackCoordinator),
                                                                      bugReportService: bugReportService,
                                                                      bugReportHook: appHooks.bugReportHook,

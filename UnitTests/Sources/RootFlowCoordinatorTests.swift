@@ -71,8 +71,12 @@ struct RootFlowCoordinatorTests {
     
     @Test("A route that needs a session is ignored when not signed in")
     func routeDuringAuthentication() async throws {
+        #expect(navigationRootCoordinator.rootCoordinator == nil)
+        #expect(targetContext.statePublisher.value.authenticationHomeserver == nil)
+        
         rootFlowCoordinator.handleAppRoute(.authentication, animated: false)
         #expect(navigationRootCoordinator.rootCoordinator is NavigationStackCoordinator)
+        #expect(targetContext.statePublisher.value.authenticationHomeserver == .undiscovered)
         
         rootFlowCoordinator.handleAppRoute(.room(roomID: roomID, via: []), animated: false)
         rootFlowCoordinator.handleAppRoute(.roomList, animated: false)
@@ -80,15 +84,6 @@ struct RootFlowCoordinatorTests {
         let splitCoordinator = try #require(chatsSplitCoordinator)
         let deferred = deferFailure(splitCoordinator.observe(\.detailRootCoordinatorID), timeout: .seconds(1)) { $0 != nil }
         try await deferred.fulfill()
-    }
-    
-    @Test("The authentication flow's homeserver is unknown when the flow starts")
-    func authenticationHomeserver() {
-        #expect(targetContext.statePublisher.value.authenticationHomeserver == nil)
-        
-        rootFlowCoordinator.handleAppRoute(.authentication, animated: false)
-        
-        #expect(targetContext.statePublisher.value.authenticationHomeserver == .unknown)
     }
     
     // MARK: Session restoration

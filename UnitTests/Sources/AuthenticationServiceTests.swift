@@ -21,7 +21,7 @@ struct AuthenticationServiceTests {
     var targetContext: Target.Context!
     var service: AuthenticationService!
     
-    @Test
+    @Test("A server without OAuth can be logged in to with a password")
     mutating func passwordLogin() async throws {
         try await setup(serverNameOrBaseURL: "example.com")
         
@@ -45,7 +45,7 @@ struct AuthenticationServiceTests {
         }
     }
     
-    @Test
+    @Test("Configuring a server that supports OAuth for login")
     mutating func configureLoginWithOAuth() async throws {
         try await setup()
         
@@ -55,7 +55,7 @@ struct AuthenticationServiceTests {
         #expect(service.homeserver.value == .mockMatrixDotOrg)
     }
     
-    @Test
+    @Test("Configuring a server that supports OAuth for registration")
     mutating func configureRegisterWithOAuth() async throws {
         try await setup()
         
@@ -65,7 +65,7 @@ struct AuthenticationServiceTests {
         #expect(service.homeserver.value == .mockMatrixDotOrg)
     }
     
-    @Test
+    @Test("Configuring a server that doesn't support registration fails and keeps the default login state")
     mutating func configureRegisterNoSupport() async throws {
         let serverNameOrBaseURL = "example.com"
         try await setup(serverNameOrBaseURL: serverNameOrBaseURL)
@@ -79,7 +79,8 @@ struct AuthenticationServiceTests {
                                                   loginMode: .unknown))
     }
     
-    @Test(arguments: [("matrix.org", AuthenticationFlow.login, OAuthPrompt.consent),
+    @Test("The OAuth prompt depends on the server and the authentication flow",
+          arguments: [("matrix.org", AuthenticationFlow.login, OAuthPrompt.consent),
                       ("matrix.org", .register, .create),
                       ("company.com", .register, .consent)])
     mutating func oAuthPrompt(serverName: String, flow: AuthenticationFlow, expectedPrompt: OAuthPrompt) async throws {
@@ -99,7 +100,7 @@ struct AuthenticationServiceTests {
         
         #expect(service.flow == .register)
         #expect(service.homeserver.value == .mockOAuth)
-        #expect(targetContext.statePublisher.value.authenticationHomeserver == .known("https://matrix.company.com"))
+        #expect(targetContext.statePublisher.value.authenticationHomeserver == .discovered("https://matrix.company.com"))
         
         // When resetting the service.
         service.reset()
@@ -108,10 +109,10 @@ struct AuthenticationServiceTests {
         #expect(service.flow == .login)
         #expect(service.homeserver.value == .init(accountProvider: .managed(serverName: "matrix.org", baseURL: "https://matrix-client.matrix.org"),
                                                   loginMode: .unknown))
-        #expect(targetContext.statePublisher.value.authenticationHomeserver == .unknown)
+        #expect(targetContext.statePublisher.value.authenticationHomeserver == .undiscovered)
     }
     
-    @Test
+    @Test("A Classic app account's secrets are imported when logging in as that user")
     mutating func classicAppAccountSecretsBundleIsUsed() async throws {
         // Given an authentication service with an Element Classic account for Alice.
         try await setup(classicAppAccounts: [.mockAlice])
@@ -127,7 +128,7 @@ struct AuthenticationServiceTests {
         #expect(encryption.importSecretsBundleSecretsBundleCalled)
     }
     
-    @Test
+    @Test("A Classic app account's secrets aren't imported when they're unavailable")
     mutating func classicAppAccountSecretsBundleIsIgnoredWhenUnavailable() async throws {
         // Given an authentication service with an Element Classic account for Alice
         // which isn't configured with any available secrets.
@@ -144,7 +145,7 @@ struct AuthenticationServiceTests {
         #expect(!encryption.importSecretsBundleSecretsBundleCalled)
     }
     
-    @Test
+    @Test("A Classic app account's secrets aren't imported when logging in as a different user")
     mutating func classicAppAccountSecretsBundleIsIgnoredForDifferentUser() async throws {
         // Given an authentication service with an Element Classic account for Dan.
         try await setup(classicAppAccounts: [.mockDan])

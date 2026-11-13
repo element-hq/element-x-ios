@@ -40,7 +40,7 @@ class BugReportScreenViewModel: BugReportScreenViewModelType, BugReportScreenVie
                                                  screenshot: screenshot,
                                                  bindings: bindings,
                                                  isModallyPresented: isModallyPresented)
-        super.init(initialViewState: bugReportHook.update(viewState))
+        super.init(initialViewState: bugReportHook.update(viewState, for: flow))
     }
     
     // MARK: - Public

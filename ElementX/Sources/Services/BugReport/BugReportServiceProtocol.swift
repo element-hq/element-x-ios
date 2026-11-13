@@ -50,7 +50,7 @@ enum BugReportServiceError: LocalizedError {
 extension BugReportService {
     /// The flow a bug report is being sent from.
     enum Flow {
-        case authentication(RageshakeConfiguration)
+        case authentication(AppSettings)
         case userSession(UserSessionProtocol)
         
         var userSession: UserSessionProtocol? {
@@ -62,7 +62,7 @@ extension BugReportService {
         
         var rageshakeConfiguration: RageshakeConfiguration {
             switch self {
-            case .authentication(let rageshakeConfiguration): rageshakeConfiguration
+            case .authentication(let appSettings): appSettings.bundledBugReportRageshakeConfiguration
             case .userSession(let userSession): userSession.userSettings.account.bugReportRageshakeConfiguration.publisher.value
             }
         }

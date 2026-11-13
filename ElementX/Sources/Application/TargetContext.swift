@@ -32,17 +32,17 @@ extension Target {
             stateSubject.send(State(sessionHomeservers: keychainController.collectSessionHomeservers(), authenticationHomeserver: authenticationHomeserver))
         }
         
-        /// Marks the authentication flow as shown, before it has built a client.
+        /// Updates the context for a new authentication flow.
         func startAuthentication() {
-            authenticationHomeserver = .unknown
+            authenticationHomeserver = .undiscovered
         }
         
-        /// Sets the homeserver of the client that the authentication flow has built.
+        /// Updates the context with the state of the authentication flow.
         func updateAuthentication(homeserver: String) {
-            authenticationHomeserver = .known(homeserver)
+            authenticationHomeserver = .discovered(homeserver)
         }
         
-        /// Marks the authentication flow as no longer shown.
+        /// Updates the context for a finished authentication flow.
         func finishAuthentication() {
             authenticationHomeserver = nil
         }
@@ -53,10 +53,8 @@ extension Target.Context {
     nonisolated struct State: Equatable, Sendable {
         /// The homeserver of the authentication flow.
         nonisolated enum AuthenticationHomeserver: Equatable, Sendable {
-            /// The flow hasn't built a client yet.
-            case unknown
-            /// The flow has built a client for this homeserver.
-            case known(String)
+            case undiscovered
+            case discovered(String)
         }
         
         /// The homeservers of the sessions in the keychain.
