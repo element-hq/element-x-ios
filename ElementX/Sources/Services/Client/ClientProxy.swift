@@ -783,6 +783,18 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func urlPreview(for url: URL) async -> Result<URLPreview, ClientProxyError> {
+        do {
+            guard let json = try await client.getUrlPreview(url: url.absoluteString, ts: nil) else {
+                return .failure(.urlPreviewUnavailable)
+            }
+            return try .success(JSONDecoder().decode(URLPreview.self, from: Data(json.utf8)))
+        } catch {
+            MXLog.error("Failed fetching URL preview with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
     func clearCaches() async -> Result<Void, ClientProxyError> {
         do {
             return try await .success(client.clearCaches(syncService: syncService))
