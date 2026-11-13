@@ -54,8 +54,37 @@ class LinkMetadataProvider: LinkMetadataProviderProtocol {
            let typeIdentifier = CGImageSourceGetType(imageSource) as String? {
             // LinkPresentation silently drops images registered under a generic type such as public.image.
             metadata.imageProvider = NSItemProvider(item: data as NSData, typeIdentifier: typeIdentifier)
+            return await preloaded(metadata, imageSize: data.count)
         }
         
+        return metadata
+    }
+    
+    /// Loads the image in a hidden link view and returns the resulting metadata, which link views render synchronously.
+    ///
+    /// LinkPresentation drops an image load whenever any other link view is given metadata in the meantime,
+    /// leaving that preview spinning forever. Metadata with an already loaded image never takes that path.
+    private func preloaded(_ metadata: LPLinkMetadata, imageSize: Int) async -> LPLinkMetadata {
+        let loader = LPLinkView(metadata: metadata)
+        
+        // Polls for up to 2 seconds, falling back to the unloaded metadata for huge or undecodable images.
+        for attempt in 1...20 {
+            try? await Task.sleep(for: .milliseconds(100))
+            
+            // Loaded metadata archives the image itself, unloaded metadata only references its provider.
+            let loadedMetadata = loader.metadata
+            if let archive = try? NSKeyedArchiver.archivedData(withRootObject: loadedMetadata, requiringSecureCoding: true),
+               archive.count >= imageSize {
+                return loadedMetadata
+            }
+            
+            // The loader can lose the same race, so restart its load every now and then.
+            if attempt.isMultiple(of: 5) {
+                loader.metadata = metadata
+            }
+        }
+        
+        MXLog.error("Failed preloading the link preview image")
         return metadata
     }
 }
