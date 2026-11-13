@@ -398,7 +398,8 @@ struct ServerSelectionScreenViewModelTests {
                                         classicAppManager: nil,
                                         clientFactory: clientFactory,
                                         appSettings: appSettings,
-                                        appHooks: AppHooks())
+                                        appHooks: AppHooks(),
+                                        targetContext: .mock)
         
         viewModel = ServerSelectionScreenViewModel(authenticationService: service,
                                                    mode: mode,

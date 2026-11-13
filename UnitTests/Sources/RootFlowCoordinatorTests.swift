@@ -15,6 +15,7 @@ struct RootFlowCoordinatorTests {
     private let navigationRootCoordinator = NavigationRootCoordinator()
     private let userSessionManager: UserSessionManagerMock
     private let userSessionManagerCallbacks = PassthroughSubject<UserSessionManagerCallback, Never>()
+    private let targetContext = Target.Context.mock
     private let userIndicatorController = UserIndicatorControllerMock()
     private let clientProxy: ClientProxyMock
     private let roomID = "1"
@@ -40,7 +41,8 @@ struct RootFlowCoordinatorTests {
                                                   appSettings: .volatile(),
                                                   appHooks: AppHooks(),
                                                   analyticsService: AnalyticsServiceMock(.init()),
-                                                  userIndicatorController: userIndicatorController)
+                                                  userIndicatorController: userIndicatorController,
+                                                  targetContext: targetContext)
     }
     
     // MARK: Pending routes
@@ -69,8 +71,12 @@ struct RootFlowCoordinatorTests {
     
     @Test("A route that needs a session is ignored when not signed in")
     func routeDuringAuthentication() async throws {
+        #expect(navigationRootCoordinator.rootCoordinator == nil)
+        #expect(targetContext.statePublisher.value.authenticationHomeserver == nil)
+        
         rootFlowCoordinator.handleAppRoute(.authentication, animated: false)
         #expect(navigationRootCoordinator.rootCoordinator is NavigationStackCoordinator)
+        #expect(targetContext.statePublisher.value.authenticationHomeserver == .undiscovered)
         
         rootFlowCoordinator.handleAppRoute(.room(roomID: roomID, via: []), animated: false)
         rootFlowCoordinator.handleAppRoute(.roomList, animated: false)

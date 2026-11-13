@@ -266,7 +266,6 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         let parameters = AuthenticationStartScreenParameters(authenticationService: authenticationService,
                                                              provisioningParameters: provisioningParameters,
                                                              isAddingAccount: isAddingAccount,
-                                                             isBugReportServiceEnabled: bugReportService.isEnabled,
                                                              appMediator: appMediator,
                                                              appSettings: appSettings,
                                                              mediaProvider: mediaProvider,
@@ -422,10 +421,11 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: - Bug Report
     
     private func startBugReportFlow() {
-        let coordinator = BugReportFlowCoordinator(parameters: .init(presentationMode: .sheet(navigationStackCoordinator),
-                                                                     userIndicatorController: userIndicatorController,
+        let coordinator = BugReportFlowCoordinator(parameters: .init(flow: .authentication(appSettings),
+                                                                     presentationMode: .sheet(navigationStackCoordinator),
                                                                      bugReportService: bugReportService,
-                                                                     userSession: nil))
+                                                                     bugReportHook: appHooks.bugReportHook,
+                                                                     userIndicatorController: userIndicatorController))
         coordinator.actionsPublisher.sink { [weak self] action in
             switch action {
             case .complete:

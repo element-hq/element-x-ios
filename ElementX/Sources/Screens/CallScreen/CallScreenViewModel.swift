@@ -144,7 +144,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
             } else {
                 nil
             }
-            let rageshakeURL: String? = if case let .url(baseURL) = userSettings.app.bugReportRageshakeURL.publisher.value {
+            let rageshakeURL: String? = if case let .url(baseURL) = userSettings.account.bugReportRageshakeConfiguration.publisher.value {
                 baseURL.absoluteString
             } else {
                 nil

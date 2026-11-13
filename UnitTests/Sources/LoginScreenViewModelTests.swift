@@ -235,7 +235,8 @@ struct LoginScreenViewModelTests {
                                         classicAppManager: nil,
                                         clientFactory: clientFactory,
                                         appSettings: appSettings,
-                                        appHooks: AppHooks())
+                                        appHooks: AppHooks(),
+                                        targetContext: .mock)
         
         guard case .success = await service
             .configure(for: serverNameOrBaseURL, flow: .login) else {

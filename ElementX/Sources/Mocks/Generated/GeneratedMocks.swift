@@ -1672,44 +1672,44 @@ nonisolated class AuthenticationServiceFactoryMock: AuthenticationServiceFactory
 
     //MARK: - makeAuthenticationService
 
-    private let makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksCallsCountLock = NSLock()
-    private nonisolated(unsafe) var makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksUnderlyingCallsCount = 0
-    var makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksCallsCount: Int {
-        get { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksCallsCountLock.withLock { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksUnderlyingCallsCount } }
-        set { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksCallsCountLock.withLock { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksUnderlyingCallsCount = newValue } }
+    private let makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksTargetContextCallsCountLock = NSLock()
+    private nonisolated(unsafe) var makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksTargetContextUnderlyingCallsCount = 0
+    var makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksTargetContextCallsCount: Int {
+        get { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksTargetContextCallsCountLock.withLock { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksTargetContextUnderlyingCallsCount } }
+        set { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksTargetContextCallsCountLock.withLock { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksTargetContextUnderlyingCallsCount = newValue } }
     }
-    var makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksCalled: Bool {
-        return makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksCallsCount > 0
+    var makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksTargetContextCalled: Bool {
+        return makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksTargetContextCallsCount > 0
     }
-    private let makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksReceivedArgumentsLock = NSLock()
-    private nonisolated(unsafe) var makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksUnderlyingReceivedArguments: (userSessionManager: UserSessionManagerProtocol, encryptionKeyProvider: EncryptionKeyProviderProtocol, classicAppManager: ClassicAppManagerProtocol?, appSettings: AppSettings, appHooks: AppHooks)?
-    var makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksReceivedArguments: (userSessionManager: UserSessionManagerProtocol, encryptionKeyProvider: EncryptionKeyProviderProtocol, classicAppManager: ClassicAppManagerProtocol?, appSettings: AppSettings, appHooks: AppHooks)? {
-        get { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksReceivedArgumentsLock.withLock { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksUnderlyingReceivedArguments } }
-        set { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksReceivedArgumentsLock.withLock { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksUnderlyingReceivedArguments = newValue } }
+    private let makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksTargetContextReceivedArgumentsLock = NSLock()
+    private nonisolated(unsafe) var makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksTargetContextUnderlyingReceivedArguments: (userSessionManager: UserSessionManagerProtocol, encryptionKeyProvider: EncryptionKeyProviderProtocol, classicAppManager: ClassicAppManagerProtocol?, appSettings: AppSettings, appHooks: AppHooks, targetContext: Target.Context)?
+    var makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksTargetContextReceivedArguments: (userSessionManager: UserSessionManagerProtocol, encryptionKeyProvider: EncryptionKeyProviderProtocol, classicAppManager: ClassicAppManagerProtocol?, appSettings: AppSettings, appHooks: AppHooks, targetContext: Target.Context)? {
+        get { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksTargetContextReceivedArgumentsLock.withLock { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksTargetContextUnderlyingReceivedArguments } }
+        set { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksTargetContextReceivedArgumentsLock.withLock { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksTargetContextUnderlyingReceivedArguments = newValue } }
     }
-    private let makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksUnderlyingReceivedInvocations: [(userSessionManager: UserSessionManagerProtocol, encryptionKeyProvider: EncryptionKeyProviderProtocol, classicAppManager: ClassicAppManagerProtocol?, appSettings: AppSettings, appHooks: AppHooks)] = []
-    var makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksReceivedInvocations: [(userSessionManager: UserSessionManagerProtocol, encryptionKeyProvider: EncryptionKeyProviderProtocol, classicAppManager: ClassicAppManagerProtocol?, appSettings: AppSettings, appHooks: AppHooks)] {
-        get { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksReceivedInvocationsLock.withLock { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksUnderlyingReceivedInvocations } }
-        set { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksReceivedInvocationsLock.withLock { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksUnderlyingReceivedInvocations = newValue } }
+    private let makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksTargetContextReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksTargetContextUnderlyingReceivedInvocations: [(userSessionManager: UserSessionManagerProtocol, encryptionKeyProvider: EncryptionKeyProviderProtocol, classicAppManager: ClassicAppManagerProtocol?, appSettings: AppSettings, appHooks: AppHooks, targetContext: Target.Context)] = []
+    var makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksTargetContextReceivedInvocations: [(userSessionManager: UserSessionManagerProtocol, encryptionKeyProvider: EncryptionKeyProviderProtocol, classicAppManager: ClassicAppManagerProtocol?, appSettings: AppSettings, appHooks: AppHooks, targetContext: Target.Context)] {
+        get { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksTargetContextReceivedInvocationsLock.withLock { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksTargetContextUnderlyingReceivedInvocations } }
+        set { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksTargetContextReceivedInvocationsLock.withLock { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksTargetContextUnderlyingReceivedInvocations = newValue } }
     }
 
-    private let makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksReturnValueLock = NSLock()
-    private nonisolated(unsafe) var makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksUnderlyingReturnValue: AuthenticationServiceProtocol!
-    var makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksReturnValue: AuthenticationServiceProtocol! {
-        get { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksReturnValueLock.withLock { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksUnderlyingReturnValue } }
-        set { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksReturnValueLock.withLock { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksUnderlyingReturnValue = newValue } }
+    private let makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksTargetContextReturnValueLock = NSLock()
+    private nonisolated(unsafe) var makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksTargetContextUnderlyingReturnValue: AuthenticationServiceProtocol!
+    var makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksTargetContextReturnValue: AuthenticationServiceProtocol! {
+        get { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksTargetContextReturnValueLock.withLock { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksTargetContextUnderlyingReturnValue } }
+        set { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksTargetContextReturnValueLock.withLock { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksTargetContextUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksClosure: ((UserSessionManagerProtocol, EncryptionKeyProviderProtocol, ClassicAppManagerProtocol?, AppSettings, AppHooks) -> AuthenticationServiceProtocol)?
+    nonisolated(unsafe) var makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksTargetContextClosure: ((UserSessionManagerProtocol, EncryptionKeyProviderProtocol, ClassicAppManagerProtocol?, AppSettings, AppHooks, Target.Context) -> AuthenticationServiceProtocol)?
 
-    func makeAuthenticationService(userSessionManager: UserSessionManagerProtocol, encryptionKeyProvider: EncryptionKeyProviderProtocol, classicAppManager: ClassicAppManagerProtocol?, appSettings: AppSettings, appHooks: AppHooks) -> AuthenticationServiceProtocol {
-        makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksCallsCountLock.withLock { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksUnderlyingCallsCount += 1 }
-        makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksReceivedArguments = (userSessionManager: userSessionManager, encryptionKeyProvider: encryptionKeyProvider, classicAppManager: classicAppManager, appSettings: appSettings, appHooks: appHooks)
-        makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksReceivedInvocationsLock.withLock { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksUnderlyingReceivedInvocations.append((userSessionManager: userSessionManager, encryptionKeyProvider: encryptionKeyProvider, classicAppManager: classicAppManager, appSettings: appSettings, appHooks: appHooks)) }
-        if let makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksClosure = makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksClosure {
-            return makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksClosure(userSessionManager, encryptionKeyProvider, classicAppManager, appSettings, appHooks)
+    func makeAuthenticationService(userSessionManager: UserSessionManagerProtocol, encryptionKeyProvider: EncryptionKeyProviderProtocol, classicAppManager: ClassicAppManagerProtocol?, appSettings: AppSettings, appHooks: AppHooks, targetContext: Target.Context) -> AuthenticationServiceProtocol {
+        makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksTargetContextCallsCountLock.withLock { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksTargetContextUnderlyingCallsCount += 1 }
+        makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksTargetContextReceivedArguments = (userSessionManager: userSessionManager, encryptionKeyProvider: encryptionKeyProvider, classicAppManager: classicAppManager, appSettings: appSettings, appHooks: appHooks, targetContext: targetContext)
+        makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksTargetContextReceivedInvocationsLock.withLock { makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksTargetContextUnderlyingReceivedInvocations.append((userSessionManager: userSessionManager, encryptionKeyProvider: encryptionKeyProvider, classicAppManager: classicAppManager, appSettings: appSettings, appHooks: appHooks, targetContext: targetContext)) }
+        if let makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksTargetContextClosure = makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksTargetContextClosure {
+            return makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksTargetContextClosure(userSessionManager, encryptionKeyProvider, classicAppManager, appSettings, appHooks, targetContext)
         } else {
-            return makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksReturnValue
+            return makeAuthenticationServiceUserSessionManagerEncryptionKeyProviderClassicAppManagerAppSettingsAppHooksTargetContextReturnValue
         }
     }
 }
@@ -1760,11 +1760,6 @@ nonisolated class BannedRoomProxyMock: BannedRoomProxyProtocol, @unchecked Senda
     }
 }
 nonisolated class BugReportServiceMock: BugReportServiceProtocol, @unchecked Sendable {
-    var isEnabled: Bool {
-        get { return underlyingIsEnabled }
-        set(value) { underlyingIsEnabled = value }
-    }
-    nonisolated(unsafe) var underlyingIsEnabled: Bool!
     var lastCrashEventIDSubject: CurrentValueSubject<String?, Never> {
         get { return underlyingLastCrashEventIDSubject }
         set(value) { underlyingLastCrashEventIDSubject = value }
@@ -1773,44 +1768,44 @@ nonisolated class BugReportServiceMock: BugReportServiceProtocol, @unchecked Sen
 
     //MARK: - submitBugReport
 
-    private let submitBugReportProgressListenerCallsCountLock = NSLock()
-    private nonisolated(unsafe) var submitBugReportProgressListenerUnderlyingCallsCount = 0
-    var submitBugReportProgressListenerCallsCount: Int {
-        get { submitBugReportProgressListenerCallsCountLock.withLock { submitBugReportProgressListenerUnderlyingCallsCount } }
-        set { submitBugReportProgressListenerCallsCountLock.withLock { submitBugReportProgressListenerUnderlyingCallsCount = newValue } }
+    private let submitBugReportFlowProgressListenerCallsCountLock = NSLock()
+    private nonisolated(unsafe) var submitBugReportFlowProgressListenerUnderlyingCallsCount = 0
+    var submitBugReportFlowProgressListenerCallsCount: Int {
+        get { submitBugReportFlowProgressListenerCallsCountLock.withLock { submitBugReportFlowProgressListenerUnderlyingCallsCount } }
+        set { submitBugReportFlowProgressListenerCallsCountLock.withLock { submitBugReportFlowProgressListenerUnderlyingCallsCount = newValue } }
     }
-    var submitBugReportProgressListenerCalled: Bool {
-        return submitBugReportProgressListenerCallsCount > 0
+    var submitBugReportFlowProgressListenerCalled: Bool {
+        return submitBugReportFlowProgressListenerCallsCount > 0
     }
-    private let submitBugReportProgressListenerReceivedArgumentsLock = NSLock()
-    private nonisolated(unsafe) var submitBugReportProgressListenerUnderlyingReceivedArguments: (bugReport: BugReport, progressListener: CurrentValueSubject<Double, Never>)?
-    var submitBugReportProgressListenerReceivedArguments: (bugReport: BugReport, progressListener: CurrentValueSubject<Double, Never>)? {
-        get { submitBugReportProgressListenerReceivedArgumentsLock.withLock { submitBugReportProgressListenerUnderlyingReceivedArguments } }
-        set { submitBugReportProgressListenerReceivedArgumentsLock.withLock { submitBugReportProgressListenerUnderlyingReceivedArguments = newValue } }
+    private let submitBugReportFlowProgressListenerReceivedArgumentsLock = NSLock()
+    private nonisolated(unsafe) var submitBugReportFlowProgressListenerUnderlyingReceivedArguments: (bugReport: BugReport, flow: BugReportService.Flow, progressListener: CurrentValueSubject<Double, Never>)?
+    var submitBugReportFlowProgressListenerReceivedArguments: (bugReport: BugReport, flow: BugReportService.Flow, progressListener: CurrentValueSubject<Double, Never>)? {
+        get { submitBugReportFlowProgressListenerReceivedArgumentsLock.withLock { submitBugReportFlowProgressListenerUnderlyingReceivedArguments } }
+        set { submitBugReportFlowProgressListenerReceivedArgumentsLock.withLock { submitBugReportFlowProgressListenerUnderlyingReceivedArguments = newValue } }
     }
-    private let submitBugReportProgressListenerReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var submitBugReportProgressListenerUnderlyingReceivedInvocations: [(bugReport: BugReport, progressListener: CurrentValueSubject<Double, Never>)] = []
-    var submitBugReportProgressListenerReceivedInvocations: [(bugReport: BugReport, progressListener: CurrentValueSubject<Double, Never>)] {
-        get { submitBugReportProgressListenerReceivedInvocationsLock.withLock { submitBugReportProgressListenerUnderlyingReceivedInvocations } }
-        set { submitBugReportProgressListenerReceivedInvocationsLock.withLock { submitBugReportProgressListenerUnderlyingReceivedInvocations = newValue } }
+    private let submitBugReportFlowProgressListenerReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var submitBugReportFlowProgressListenerUnderlyingReceivedInvocations: [(bugReport: BugReport, flow: BugReportService.Flow, progressListener: CurrentValueSubject<Double, Never>)] = []
+    var submitBugReportFlowProgressListenerReceivedInvocations: [(bugReport: BugReport, flow: BugReportService.Flow, progressListener: CurrentValueSubject<Double, Never>)] {
+        get { submitBugReportFlowProgressListenerReceivedInvocationsLock.withLock { submitBugReportFlowProgressListenerUnderlyingReceivedInvocations } }
+        set { submitBugReportFlowProgressListenerReceivedInvocationsLock.withLock { submitBugReportFlowProgressListenerUnderlyingReceivedInvocations = newValue } }
     }
 
-    private let submitBugReportProgressListenerReturnValueLock = NSLock()
-    private nonisolated(unsafe) var submitBugReportProgressListenerUnderlyingReturnValue: Result<SubmitBugReportResponse, BugReportServiceError>!
-    var submitBugReportProgressListenerReturnValue: Result<SubmitBugReportResponse, BugReportServiceError>! {
-        get { submitBugReportProgressListenerReturnValueLock.withLock { submitBugReportProgressListenerUnderlyingReturnValue } }
-        set { submitBugReportProgressListenerReturnValueLock.withLock { submitBugReportProgressListenerUnderlyingReturnValue = newValue } }
+    private let submitBugReportFlowProgressListenerReturnValueLock = NSLock()
+    private nonisolated(unsafe) var submitBugReportFlowProgressListenerUnderlyingReturnValue: Result<SubmitBugReportResponse, BugReportServiceError>!
+    var submitBugReportFlowProgressListenerReturnValue: Result<SubmitBugReportResponse, BugReportServiceError>! {
+        get { submitBugReportFlowProgressListenerReturnValueLock.withLock { submitBugReportFlowProgressListenerUnderlyingReturnValue } }
+        set { submitBugReportFlowProgressListenerReturnValueLock.withLock { submitBugReportFlowProgressListenerUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var submitBugReportProgressListenerClosure: ((BugReport, CurrentValueSubject<Double, Never>) async -> Result<SubmitBugReportResponse, BugReportServiceError>)?
+    nonisolated(unsafe) var submitBugReportFlowProgressListenerClosure: ((BugReport, BugReportService.Flow, CurrentValueSubject<Double, Never>) async -> Result<SubmitBugReportResponse, BugReportServiceError>)?
 
-    @concurrent func submitBugReport(_ bugReport: BugReport, progressListener: CurrentValueSubject<Double, Never>) async -> Result<SubmitBugReportResponse, BugReportServiceError> {
-        submitBugReportProgressListenerCallsCountLock.withLock { submitBugReportProgressListenerUnderlyingCallsCount += 1 }
-        submitBugReportProgressListenerReceivedArguments = (bugReport: bugReport, progressListener: progressListener)
-        submitBugReportProgressListenerReceivedInvocationsLock.withLock { submitBugReportProgressListenerUnderlyingReceivedInvocations.append((bugReport: bugReport, progressListener: progressListener)) }
-        if let submitBugReportProgressListenerClosure = submitBugReportProgressListenerClosure {
-            return await submitBugReportProgressListenerClosure(bugReport, progressListener)
+    @concurrent func submitBugReport(_ bugReport: BugReport, flow: BugReportService.Flow, progressListener: CurrentValueSubject<Double, Never>) async -> Result<SubmitBugReportResponse, BugReportServiceError> {
+        submitBugReportFlowProgressListenerCallsCountLock.withLock { submitBugReportFlowProgressListenerUnderlyingCallsCount += 1 }
+        submitBugReportFlowProgressListenerReceivedArguments = (bugReport: bugReport, flow: flow, progressListener: progressListener)
+        submitBugReportFlowProgressListenerReceivedInvocationsLock.withLock { submitBugReportFlowProgressListenerUnderlyingReceivedInvocations.append((bugReport: bugReport, flow: flow, progressListener: progressListener)) }
+        if let submitBugReportFlowProgressListenerClosure = submitBugReportFlowProgressListenerClosure {
+            return await submitBugReportFlowProgressListenerClosure(bugReport, flow, progressListener)
         } else {
-            return submitBugReportProgressListenerReturnValue
+            return submitBugReportFlowProgressListenerReturnValue
         }
     }
 }
@@ -8087,6 +8082,34 @@ nonisolated class KeychainControllerMock: KeychainControllerProtocol, @unchecked
     func removeAllRestorationTokens() {
         removeAllRestorationTokensCallsCountLock.withLock { removeAllRestorationTokensUnderlyingCallsCount += 1 }
         removeAllRestorationTokensClosure?()
+    }
+    //MARK: - collectSessionHomeservers
+
+    private let collectSessionHomeserversCallsCountLock = NSLock()
+    private nonisolated(unsafe) var collectSessionHomeserversUnderlyingCallsCount = 0
+    var collectSessionHomeserversCallsCount: Int {
+        get { collectSessionHomeserversCallsCountLock.withLock { collectSessionHomeserversUnderlyingCallsCount } }
+        set { collectSessionHomeserversCallsCountLock.withLock { collectSessionHomeserversUnderlyingCallsCount = newValue } }
+    }
+    var collectSessionHomeserversCalled: Bool {
+        return collectSessionHomeserversCallsCount > 0
+    }
+
+    private let collectSessionHomeserversReturnValueLock = NSLock()
+    private nonisolated(unsafe) var collectSessionHomeserversUnderlyingReturnValue: Set<String>!
+    var collectSessionHomeserversReturnValue: Set<String>! {
+        get { collectSessionHomeserversReturnValueLock.withLock { collectSessionHomeserversUnderlyingReturnValue } }
+        set { collectSessionHomeserversReturnValueLock.withLock { collectSessionHomeserversUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var collectSessionHomeserversClosure: (() -> Set<String>)?
+
+    func collectSessionHomeservers() -> Set<String> {
+        collectSessionHomeserversCallsCountLock.withLock { collectSessionHomeserversUnderlyingCallsCount += 1 }
+        if let collectSessionHomeserversClosure = collectSessionHomeserversClosure {
+            return collectSessionHomeserversClosure()
+        } else {
+            return collectSessionHomeserversReturnValue
+        }
     }
     //MARK: - containsPINCode
 

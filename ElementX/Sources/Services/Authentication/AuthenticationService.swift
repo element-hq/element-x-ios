@@ -20,6 +20,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
     private let clientFactory: ClientFactoryProtocol
     private let appSettings: AppSettings
     private let appHooks: AppHooks
+    private let targetContext: Target.Context
     
     private let homeserverSubject: CurrentValueSubject<LoginHomeserver, Never>
     /// The currently configured homeserver.
@@ -38,7 +39,8 @@ class AuthenticationService: AuthenticationServiceProtocol {
          classicAppManager: ClassicAppManagerProtocol?,
          clientFactory: ClientFactoryProtocol = ClientFactory(),
          appSettings: AppSettings,
-         appHooks: AppHooks) {
+         appHooks: AppHooks,
+         targetContext: Target.Context) {
         sessionDirectories = .init()
         passphrase = encryptionKeyProvider.generateKey()
         
@@ -47,6 +49,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
         self.clientFactory = clientFactory
         self.appSettings = appSettings
         self.appHooks = appHooks
+        self.targetContext = targetContext
         
         do {
             if appSettings.hasSignedInBefore {
@@ -259,6 +262,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
         homeserverSubject.send(LoginHomeserver(accountProvider: appSettings.defaultAccountProvider, loginMode: .unknown))
         flow = .login
         client = nil
+        targetContext.startAuthentication()
     }
     
     // MARK: - Private
@@ -275,6 +279,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
                                                                       appSettings: appSettings,
                                                                       appHooks: appHooks)
         try await appHooks.remoteSettingsHook.initializeCache(using: client, applyingTo: appSettings).get()
+        targetContext.updateAuthentication(homeserver: client.homeserver())
         
         return await appHooks.clientFactoryHook.updateAuthenticationClient(client)
     }
@@ -412,6 +417,7 @@ extension AuthenticationService {
                               classicAppManager: classicAppManager,
                               clientFactory: ClientFactoryMock(.init()),
                               appSettings: .volatile(),
-                              appHooks: AppHooks())
+                              appHooks: AppHooks(),
+                              targetContext: .mock)
     }
 }

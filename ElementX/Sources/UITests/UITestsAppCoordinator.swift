@@ -286,8 +286,9 @@ class MockScreen: Identifiable {
             let navigationStackCoordinator = NavigationStackCoordinator()
             let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
             let userSession = UserSessionMock(.init(clientProxy: clientProxy))
-            let coordinator = BugReportScreenCoordinator(parameters: .init(bugReportService: BugReportServiceMock(.init()),
-                                                                           userSession: userSession,
+            let coordinator = BugReportScreenCoordinator(parameters: .init(flow: .userSession(userSession),
+                                                                           bugReportService: BugReportServiceMock(.init()),
+                                                                           bugReportHook: DefaultBugReportHook(),
                                                                            userIndicatorController: nil,
                                                                            screenshot: nil,
                                                                            isModallyPresented: true))
@@ -681,6 +682,7 @@ class MockScreen: Identifiable {
                                                       appHooks: AppHooks(),
                                                       analyticsService: analytics,
                                                       userIndicatorController: UserIndicatorControllerMock(),
+                                                      targetContext: .mock,
                                                       authenticationServiceFactory: AuthenticationServiceFactoryMock(.init()))
             
             flowCoordinator.handleAppRoute(id == .rootFlowSignedIn ? .roomList : .authentication, animated: false)

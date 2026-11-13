@@ -18,11 +18,12 @@ struct BugReportScreenViewModelTests {
         case testError
     }
     
-    @Test
+    @Test("The screen starts empty with logs included")
     func initialState() {
         let clientProxy = ClientProxyMock(.init(userID: "@mock.client.com"))
-        let viewModel = BugReportScreenViewModel(bugReportService: BugReportServiceMock(),
-                                                 clientProxy: clientProxy,
+        let viewModel = BugReportScreenViewModel(flow: .userSession(UserSessionMock(.init(clientProxy: clientProxy))),
+                                                 bugReportService: BugReportServiceMock(),
+                                                 bugReportHook: DefaultBugReportHook(),
                                                  logFiles: logFiles,
                                                  screenshot: nil,
                                                  isModallyPresented: false)
@@ -30,14 +31,15 @@ struct BugReportScreenViewModelTests {
         
         #expect(context.reportText == "")
         #expect(context.viewState.screenshot == nil)
-        #expect(context.sendingLogsEnabled)
+        #expect(context.includeLogs)
     }
     
-    @Test
+    @Test("Removing the screenshot clears it")
     func clearScreenshot() {
         let clientProxy = ClientProxyMock(.init(userID: "@mock.client.com"))
-        let viewModel = BugReportScreenViewModel(bugReportService: BugReportServiceMock(),
-                                                 clientProxy: clientProxy,
+        let viewModel = BugReportScreenViewModel(flow: .userSession(UserSessionMock(.init(clientProxy: clientProxy))),
+                                                 bugReportService: BugReportServiceMock(),
+                                                 bugReportHook: DefaultBugReportHook(),
                                                  logFiles: logFiles,
                                                  screenshot: UIImage.actions,
                                                  isModallyPresented: false)
@@ -47,11 +49,12 @@ struct BugReportScreenViewModelTests {
         #expect(context.viewState.screenshot == nil)
     }
     
-    @Test
+    @Test("Attaching a screenshot sets it")
     func attachScreenshot() {
         let clientProxy = ClientProxyMock(.init(userID: "@mock.client.com"))
-        let viewModel = BugReportScreenViewModel(bugReportService: BugReportServiceMock(),
-                                                 clientProxy: clientProxy,
+        let viewModel = BugReportScreenViewModel(flow: .userSession(UserSessionMock(.init(clientProxy: clientProxy))),
+                                                 bugReportService: BugReportServiceMock(),
+                                                 bugReportHook: DefaultBugReportHook(),
                                                  logFiles: logFiles,
                                                  screenshot: nil,
                                                  isModallyPresented: false)
@@ -61,10 +64,10 @@ struct BugReportScreenViewModelTests {
         #expect(context.viewState.screenshot == UIImage.actions)
     }
     
-    @Test
+    @Test("A successful submission sends the session's details and logs")
     func sendReportWithSuccess() async throws {
         let mockService = BugReportServiceMock()
-        mockService.submitBugReportProgressListenerClosure = { _, _ in
+        mockService.submitBugReportFlowProgressListenerClosure = { _, _, _ in
             await Task.yield()
             return .success(SubmitBugReportResponse(reportURL: "https://test.test"))
         }
@@ -73,8 +76,9 @@ struct BugReportScreenViewModelTests {
         clientProxy.ed25519Base64ReturnValue = "THEEDKEYKEY"
         clientProxy.curve25519Base64ReturnValue = "THECURVEKEYKEY"
         
-        let viewModel = BugReportScreenViewModel(bugReportService: mockService,
-                                                 clientProxy: clientProxy,
+        let viewModel = BugReportScreenViewModel(flow: .userSession(UserSessionMock(.init(clientProxy: clientProxy))),
+                                                 bugReportService: mockService,
+                                                 bugReportHook: DefaultBugReportHook(),
                                                  logFiles: logFiles,
                                                  screenshot: nil,
                                                  isModallyPresented: false)
@@ -93,28 +97,29 @@ struct BugReportScreenViewModelTests {
         context.send(viewAction: .submit)
         try await deferred.fulfill()
         
-        #expect(mockService.submitBugReportProgressListenerCallsCount == 1)
-        #expect(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.userID == "@mock.client.com")
-        #expect(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.deviceID == "ABCDEFGH")
-        #expect(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.curve25519 == "THECURVEKEYKEY")
-        #expect(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.ed25519 == "THEEDKEYKEY")
-        #expect(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.text == "This will succeed")
-        #expect(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.logFiles == logFiles)
-        #expect(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.canContact == false)
-        #expect(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.githubLabels == [])
-        #expect(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.files == [])
+        #expect(mockService.submitBugReportFlowProgressListenerCallsCount == 1)
+        #expect(mockService.submitBugReportFlowProgressListenerReceivedArguments?.bugReport.userID == "@mock.client.com")
+        #expect(mockService.submitBugReportFlowProgressListenerReceivedArguments?.bugReport.deviceID == "ABCDEFGH")
+        #expect(mockService.submitBugReportFlowProgressListenerReceivedArguments?.bugReport.curve25519 == "THECURVEKEYKEY")
+        #expect(mockService.submitBugReportFlowProgressListenerReceivedArguments?.bugReport.ed25519 == "THEEDKEYKEY")
+        #expect(mockService.submitBugReportFlowProgressListenerReceivedArguments?.bugReport.text == "This will succeed")
+        #expect(mockService.submitBugReportFlowProgressListenerReceivedArguments?.bugReport.logFiles == logFiles)
+        #expect(mockService.submitBugReportFlowProgressListenerReceivedArguments?.bugReport.canContact == false)
+        #expect(mockService.submitBugReportFlowProgressListenerReceivedArguments?.bugReport.githubLabels == [])
+        #expect(mockService.submitBugReportFlowProgressListenerReceivedArguments?.bugReport.files == [])
     }
     
-    @Test
+    @Test("A failed submission keeps the report so the user can retry")
     func sendReportWithError() async throws {
         let mockService = BugReportServiceMock()
-        mockService.submitBugReportProgressListenerClosure = { _, _ in
+        mockService.submitBugReportFlowProgressListenerClosure = { _, _, _ in
             .failure(.uploadFailure(TestError.testError))
         }
         
         let clientProxy = ClientProxyMock(.init(userID: "@mock.client.com"))
-        let viewModel = BugReportScreenViewModel(bugReportService: mockService,
-                                                 clientProxy: clientProxy,
+        let viewModel = BugReportScreenViewModel(flow: .userSession(UserSessionMock(.init(clientProxy: clientProxy))),
+                                                 bugReportService: mockService,
+                                                 bugReportHook: DefaultBugReportHook(),
                                                  screenshot: nil, isModallyPresented: false)
         let context = viewModel.context
         context.reportText = "This will fail"
@@ -131,7 +136,7 @@ struct BugReportScreenViewModelTests {
         context.send(viewAction: .submit)
         try await deferred.fulfill()
         
-        #expect(mockService.submitBugReportProgressListenerCallsCount == 1)
+        #expect(mockService.submitBugReportFlowProgressListenerCallsCount == 1)
         #expect(context.reportText == "This will fail", "The bug report should remain in place so the user can retry.")
         #expect(!context.viewState.shouldDisableInteraction, "The user should be able to retry.")
     }

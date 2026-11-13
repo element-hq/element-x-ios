@@ -217,7 +217,6 @@ struct AuthenticationStartScreen_Previews: PreviewProvider, TestablePreview {
         return AuthenticationStartScreenViewModel(authenticationService: AuthenticationService.mock(classicAppManager: classicAppManager),
                                                   provisioningParameters: provisionedServerName.map { .init(accountProvider: $0, loginHint: nil) },
                                                   isAddingAccount: isAddingAccount,
-                                                  isBugReportServiceEnabled: true,
                                                   appMediator: AppMediatorMock(),
                                                   appSettings: .volatile(),
                                                   mediaProvider: MediaProviderMock(.init()),

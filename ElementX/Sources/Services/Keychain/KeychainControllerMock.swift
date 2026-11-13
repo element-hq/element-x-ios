@@ -17,6 +17,7 @@ extension KeychainControllerMock {
         self.init()
         
         restorationTokensReturnValue = configuration.restorationTokens
+        collectSessionHomeserversReturnValue = Set(configuration.restorationTokens.map(\.restorationToken.session.homeserverUrl))
     }
 }
 
