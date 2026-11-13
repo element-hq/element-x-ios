@@ -53,7 +53,8 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
         // Start processing the media whilst the user is reviewing it/adding a caption.
         processingTask = Self.processMedia(at: mediaURLs, preprocessor: mediaUploadingPreprocessor, clientProxy: clientProxy)
         
-        let drawableMediaIndices = imageDrawingEnabled ? Set(mediaURLs.indices.filter { Self.canDraw(onMediaAt: mediaURLs[$0]) }) : []
+        let canDrawOnMedia = imageDrawingEnabled && !ProcessInfo.processInfo.isiOSAppOnMac
+        let drawableMediaIndices = canDrawOnMedia ? Set(mediaURLs.indices.filter { Self.canDraw(onMediaAt: mediaURLs[$0]) }) : []
         
         super.init(initialViewState: MediaUploadPreviewScreenViewState(mediaURLs: mediaURLs,
                                                                        title: title,

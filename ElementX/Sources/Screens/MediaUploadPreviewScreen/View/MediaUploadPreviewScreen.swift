@@ -223,7 +223,7 @@ struct MediaUploadPreviewScreen: View {
     }
     
     private var isCurrentMediaDrawable: Bool {
-        !ProcessInfo.processInfo.isiOSAppOnMac && context.viewState.drawableMediaIndices.contains(currentIndex)
+        context.viewState.drawableMediaIndices.contains(currentIndex)
     }
     
     private func handleKeyPress(_ key: UIKeyboardHIDUsage) {
