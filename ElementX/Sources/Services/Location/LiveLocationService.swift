@@ -173,6 +173,11 @@ final class LiveLocationService: LiveLocationServiceProtocol {
     }
     
     private func handleBeaconInfoUpdate(_ update: LiveLocationOwnInfoUpdate) {
+        // Sync sends the active share's beacon info again on a new connection or when the room is opened.
+        if update.isLive, userSettings.account.liveLocationSharingSessionsByRoomID[update.roomID]?.eventID == update.eventID {
+            return
+        }
+        
         // A new beaconInfo has been received in a room with existing active session.
         // This is either a new start or a new stop from a different device, so we
         // should remove the session from the current local one.
