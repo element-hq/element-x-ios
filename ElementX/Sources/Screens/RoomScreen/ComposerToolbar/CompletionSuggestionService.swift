@@ -33,9 +33,15 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
          roomListPublisher: AnyPublisher<[RoomSummary], Never>) {
         self.roomProxy = roomProxy
         
+        // Search keys are built once per members or rooms update, not on every keystroke.
+        let searchableMembersPublisher = roomProxy.membersPublisher
+            .map { members in members.map { SearchableMember(member: $0) } }
+        let searchableRoomsPublisher = roomListPublisher
+            .map { roomSummaries in roomSummaries.compactMap { SearchableRoom(summary: $0) } }
+        
         suggestionsPublisher = suggestionTriggerSubject
-            .combineLatest(roomProxy.membersPublisher, roomListPublisher)
-            .map { [weak self, ownUserID = roomProxy.ownUserID] suggestionTrigger, members, roomSummaries -> [SuggestionItem] in
+            .combineLatest(searchableMembersPublisher, searchableRoomsPublisher)
+            .map { [weak self, ownUserID = roomProxy.ownUserID] suggestionTrigger, members, rooms -> [SuggestionItem] in
                 guard let self,
                       let suggestionTrigger else {
                     return []
@@ -45,7 +51,7 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
                 case .user:
                     return membersSuggestions(suggestionTrigger: suggestionTrigger, members: members, ownUserID: ownUserID)
                 case .room:
-                    return roomSuggestions(suggestionTrigger: suggestionTrigger, roomSummaries: roomSummaries)
+                    return roomSuggestions(suggestionTrigger: suggestionTrigger, rooms: rooms)
                 }
             }
             // We only debounce if the suggestion is nil
@@ -90,22 +96,29 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
     }
     
     private func membersSuggestions(suggestionTrigger: SuggestionTrigger,
-                                    members: [RoomMemberProxyProtocol],
+                                    members: [SearchableMember],
                                     ownUserID: String) -> [SuggestionItem] {
+        let query = SearchKey(suggestionTrigger.text)
+        
         var membersSuggestion = members
-            .compactMap { member -> SuggestionItem? in
-                guard member.userID != ownUserID,
-                      member.membership == .join,
-                      Self.shouldIncludeMember(userID: member.userID, displayName: member.displayName, searchText: suggestionTrigger.text) else {
+            .filter { $0.member.userID != ownUserID && $0.member.membership == .join }
+            .enumerated()
+            .compactMap { index, searchableMember -> (rank: (Int, Int, Int), item: SuggestionItem)? in
+                guard let match = searchableMember.match(query) else {
                     return nil
                 }
-                return .init(suggestionType: .user(.init(id: member.userID, displayName: member.displayName, avatarURL: member.avatarURL, status: member.status)),
-                             range: suggestionTrigger.range, rawSuggestionText: suggestionTrigger.text)
+                let member = searchableMember.member
+                return ((match.offset, match.keyWeight, index),
+                        .init(suggestionType: .user(.init(id: member.userID, displayName: member.displayName, avatarURL: member.avatarURL, status: member.status)),
+                              range: suggestionTrigger.range, rawSuggestionText: suggestionTrigger.text))
             }
+            .sorted { $0.rank < $1.rank }
+            .map(\.item)
         
+        let allUsersKeys = [SearchKey(PillUtilities.everyone), SearchKey(String(PillUtilities.atRoom.dropFirst()))]
         if canMentionAllUsers,
            !roomProxy.infoPublisher.value.isDM,
-           Self.shouldIncludeMember(userID: PillUtilities.atRoom, displayName: PillUtilities.everyone, searchText: suggestionTrigger.text) {
+           query.isEmpty || allUsersKeys.contains(where: { $0.offset(of: query) != nil }) {
             membersSuggestion
                 .insert(SuggestionItem(suggestionType: .allUsers(roomProxy.details.avatar), range: suggestionTrigger.range, rawSuggestionText: suggestionTrigger.text), at: 0)
         }
@@ -114,19 +127,17 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
     }
     
     private func roomSuggestions(suggestionTrigger: SuggestionTrigger,
-                                 roomSummaries: [RoomSummary]) -> [SuggestionItem] {
-        roomSummaries
-            .compactMap { roomSummary -> SuggestionItem? in
-                guard let canonicalAlias = roomSummary.canonicalAlias,
-                      Self.shouldIncludeRoom(roomName: roomSummary.name, roomAlias: canonicalAlias, searchText: suggestionTrigger.text) else {
-                    return nil
-                }
-                
-                return .init(suggestionType: .room(.init(id: roomSummary.id,
-                                                         canonicalAlias: canonicalAlias,
-                                                         name: roomSummary.name,
-                                                         avatar: roomSummary.avatar)),
-                             range: suggestionTrigger.range, rawSuggestionText: suggestionTrigger.text)
+                                 rooms: [SearchableRoom]) -> [SuggestionItem] {
+        let query = SearchKey(suggestionTrigger.text)
+        
+        return rooms
+            .filter { $0.matches(query) }
+            .map { room in
+                SuggestionItem(suggestionType: .room(.init(id: room.summary.id,
+                                                           canonicalAlias: room.canonicalAlias,
+                                                           name: room.summary.name,
+                                                           avatar: room.summary.avatar)),
+                               range: suggestionTrigger.range, rawSuggestionText: suggestionTrigger.text)
             }
     }
     
@@ -156,35 +167,79 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
             return nil
         }
     }
-    
-    private static func shouldIncludeMember(userID: String, displayName: String?, searchText: String) -> Bool {
-        // If the search text is empty give back all the results
-        guard !searchText.isEmpty else {
-            return true
-        }
-        let containedInUserID = userID.localizedStandardContains(searchText)
-        
-        let containedInDisplayName: Bool
-        if let displayName {
-            containedInDisplayName = displayName.localizedStandardContains(searchText)
-        } else {
-            containedInDisplayName = false
-        }
-        
-        return containedInUserID || containedInDisplayName
-    }
-    
-    private static func shouldIncludeRoom(roomName: String, roomAlias: String, searchText: String) -> Bool {
-        // If the search text is empty give back all the results
-        guard !searchText.isEmpty else {
-            return true
-        }
-        return roomName.localizedStandardContains(searchText) || roomAlias.localizedStandardContains(searchText)
-    }
 }
 
 extension PillUtilities {
     static var everyone: String {
         L10n.commonEveryone
+    }
+}
+
+// MARK: - Search
+
+/// Text normalised like Element Web's autocomplete: case, diacritics and whitespace are ignored,
+/// so "janeqdoe" finds "Jane Q Doe". Matches are ranked by where they start, like on Web.
+private struct SearchKey {
+    let value: String
+    
+    var isEmpty: Bool {
+        value.isEmpty
+    }
+    
+    init(_ text: String) {
+        value = text.folding(options: [.caseInsensitive, .diacriticInsensitive], locale: nil).filter { !$0.isWhitespace }
+    }
+    
+    /// Where the query starts in this key, or `nil` if it isn't in it.
+    func offset(of query: SearchKey) -> Int? {
+        guard let range = value.range(of: query.value) else {
+            return nil
+        }
+        return value.distance(from: value.startIndex, to: range.lowerBound)
+    }
+}
+
+private struct SearchableMember {
+    let member: RoomMemberProxyProtocol
+    let displayNameKey: SearchKey?
+    let userIDKey: SearchKey
+    
+    init(member: RoomMemberProxyProtocol) {
+        self.member = member
+        displayNameKey = member.displayName.map { SearchKey($0) }
+        userIDKey = SearchKey(String(member.userID.dropFirst()))
+    }
+    
+    /// The earliest match, preferring the display name over the user ID when both start at the same offset.
+    func match(_ query: SearchKey) -> (offset: Int, keyWeight: Int)? {
+        guard !query.isEmpty else {
+            return (0, 0)
+        }
+        let displayNameMatch = displayNameKey?.offset(of: query).map { (offset: $0, keyWeight: 0) }
+        let userIDMatch = userIDKey.offset(of: query).map { (offset: $0, keyWeight: 1) }
+        return [displayNameMatch, userIDMatch]
+            .compactMap { $0 }
+            .min { ($0.offset, $0.keyWeight) < ($1.offset, $1.keyWeight) }
+    }
+}
+
+private struct SearchableRoom {
+    let summary: RoomSummary
+    let canonicalAlias: String
+    let nameKey: SearchKey
+    let aliasKey: SearchKey
+    
+    init?(summary: RoomSummary) {
+        guard let canonicalAlias = summary.canonicalAlias else {
+            return nil
+        }
+        self.summary = summary
+        self.canonicalAlias = canonicalAlias
+        nameKey = SearchKey(summary.name)
+        aliasKey = SearchKey(canonicalAlias)
+    }
+    
+    func matches(_ query: SearchKey) -> Bool {
+        query.isEmpty || nameKey.offset(of: query) != nil || aliasKey.offset(of: query) != nil
     }
 }
