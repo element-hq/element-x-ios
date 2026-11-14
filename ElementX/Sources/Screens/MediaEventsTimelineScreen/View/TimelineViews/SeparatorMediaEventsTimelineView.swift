@@ -18,6 +18,7 @@ struct SeparatorMediaEventsTimelineView: View {
             .foregroundColor(.compound.textPrimary)
             .frame(alignment: .center)
             .padding(.vertical, 16)
+            .accessibilityAddTraits(.isHeader)
     }
 }
 
