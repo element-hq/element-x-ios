@@ -481,6 +481,7 @@
 "dialog_video_quality_selector_subtitle_file_size" = "Suurim lubatud failisuurus on: %1$@";
 "dialog_video_quality_selector_subtitle_no_file_size" = "Vali üleslaaditava video kvaliteet.";
 "dialog_video_quality_selector_title" = "Vali video kvaliteet.";
+"emoji_picker_a11y_backspace" = "Kustuta kursori ees olev tähemärk";
 "emoji_picker_category_activity" = "Tegevused";
 "emoji_picker_category_flags" = "Lipud";
 "emoji_picker_category_foods" = "Toit ja jook";
@@ -557,6 +558,7 @@
 "preference_rageshake" = "Veast teatamiseks raputa nutiseadet ägedalt";
 "rageshake_detection_dialog_content" = "Tundub, et sa raputad oma nutiseadet ägedalt. Kas sa soovid saata meile veateadet?";
 "rich_text_editor_a11y_add_attachment" = "Lisa manus";
+"rich_text_editor_a11y_add_emoji" = "Lisa emoji";
 "rich_text_editor_bullet_list" = "Lülita mummudega loend sisse/välja";
 "rich_text_editor_close_formatting_options" = "Katkesta ja sulge tekstivorminduse valikud";
 "rich_text_editor_code_block" = "Lülita lähtekoodi lõik sisse/välja";
@@ -851,7 +853,7 @@
 "screen_identity_confirmation_cannot_confirm" = "Kas kinnitamine pole võimalik?";
 "screen_identity_confirmation_create_new_recovery_key" = "Loo uus taastevõti";
 "screen_identity_confirmation_sign_out" = "Logi välja";
-"screen_identity_confirmation_subtitle" = "Turvalise sõnumside seadistamiseks vali verifitseerimise viis.";
+"screen_identity_confirmation_subtitle" = "Turvalise sõnumiside seadistamiseks vali verifitseerimise viis.";
 "screen_identity_confirmation_title" = "Kinnita oma digitaalne identiteet";
 "screen_identity_confirmation_use_another_device" = "Kasuta teist seadet";
 "screen_identity_confirmation_use_recovery_key" = "Kasuta taastevõtit";
@@ -1026,6 +1028,7 @@
 "screen_media_details_uploaded_by" = "Üleslaadija";
 "screen_media_details_uploaded_on" = "Üleslaaditud";
 "screen_media_picker_error_failed_selection" = "Meediafaili valimine ei õnnestunud. Palun proovi uuesti.";
+"screen_media_upload_preview_a11y_draw" = "Joonista";
 "screen_media_upload_preview_caption_warning" = "Selgitused ja alapealkirjad ei pruugi olla nähtavad vanemate rakenduste kasutajatele.";
 "screen_media_upload_preview_change_video_quality_prompt" = "Klõpsa üleslaaditava video kvaliteedi muutmiseks";
 "screen_media_upload_preview_error_could_not_be_uploaded" = "Faili üleslaadimine ei õnnestunud.";
@@ -1173,7 +1176,7 @@
 "screen_qr_code_login_initial_state_item_3" = "Vali %1$@";
 "screen_qr_code_login_initial_state_item_3_action" = "„Seo uus seade“";
 "screen_qr_code_login_initial_state_item_4" = "Skaneeri QR-koodi selle seadmega";
-"screen_qr_code_login_initial_state_subtitle" = "See funktsionaalsus on sadaval vaid siis, kui sinu teenusepakkuja seda toetab.";
+"screen_qr_code_login_initial_state_subtitle" = "See funktsionaalsus on saadaval vaid siis, kui sinu teenusepakkuja seda toetab.";
 "screen_qr_code_login_initial_state_title" = "QR-koodi saamiseks ava %1$@ oma teises seadmes";
 "screen_qr_code_login_invalid_scan_state_description" = "Kasuta teises seadmes näidatavat QR-koodi";
 "screen_qr_code_login_invalid_scan_state_retry_button" = "Proovi uuesti";

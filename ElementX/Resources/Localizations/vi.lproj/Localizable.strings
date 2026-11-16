@@ -481,6 +481,7 @@
 "dialog_video_quality_selector_subtitle_file_size" = "Kích thước tệp tối đa cho phép là: %1$@";
 "dialog_video_quality_selector_subtitle_no_file_size" = "Chọn chất lượng video bạn muốn tải lên.";
 "dialog_video_quality_selector_title" = "Chọn chất lượng tải lên video";
+"emoji_picker_a11y_backspace" = "Delete the character before the cursor";
 "emoji_picker_category_activity" = "Hoạt động";
 "emoji_picker_category_flags" = "Cờ";
 "emoji_picker_category_foods" = "Thực phẩm và đồ uống";
@@ -557,6 +558,7 @@
 "preference_rageshake" = "Lắc điện thoại để báo cáo lỗi";
 "rageshake_detection_dialog_content" = "Có vẻ như bạn đang lắc điện thoại vì bực bội. Bạn có muốn mở màn hình báo cáo lỗi không?";
 "rich_text_editor_a11y_add_attachment" = "Thêm tệp đính kèm";
+"rich_text_editor_a11y_add_emoji" = "Add emoji";
 "rich_text_editor_bullet_list" = "Chuyển đổi danh sách dấu đầu dòng";
 "rich_text_editor_close_formatting_options" = "Hủy và đóng định dạng văn bản";
 "rich_text_editor_code_block" = "Bật/tắt khối mã";
@@ -1026,6 +1028,7 @@
 "screen_media_details_uploaded_by" = "Uploaded by";
 "screen_media_details_uploaded_on" = "Uploaded on";
 "screen_media_picker_error_failed_selection" = "Không thể chọn tệp phương tiện. Vui lòng thử lại.";
+"screen_media_upload_preview_a11y_draw" = "Draw";
 "screen_media_upload_preview_caption_warning" = "Captions might not be visible to people using older apps.";
 "screen_media_upload_preview_change_video_quality_prompt" = "Tap to change the video upload quality";
 "screen_media_upload_preview_error_could_not_be_uploaded" = "The file could not be uploaded.";

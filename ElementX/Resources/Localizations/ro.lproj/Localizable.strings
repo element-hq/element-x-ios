@@ -481,6 +481,7 @@
 "dialog_video_quality_selector_subtitle_file_size" = "Dimensiunea maximă permisă pentru fișiere este: %1$@";
 "dialog_video_quality_selector_subtitle_no_file_size" = "Selectați calitatea videoclipului pe care doriți să îl încărcați.";
 "dialog_video_quality_selector_title" = "Selectați calitatea de încărcare a videoclipurilor";
+"emoji_picker_a11y_backspace" = "Delete the character before the cursor";
 "emoji_picker_category_activity" = "Activități";
 "emoji_picker_category_flags" = "Steaguri";
 "emoji_picker_category_foods" = "Mâncare și băutură";
@@ -557,6 +558,7 @@
 "preference_rageshake" = "Rageshake pentru a raporta erori";
 "rageshake_detection_dialog_content" = "Se pare că scuturați telefonul de frustrare. Doriți să deschideți ecranul de raportare a unei erori?";
 "rich_text_editor_a11y_add_attachment" = "Adăugați un atașament";
+"rich_text_editor_a11y_add_emoji" = "Add emoji";
 "rich_text_editor_bullet_list" = "Comutați lista cu puncte";
 "rich_text_editor_close_formatting_options" = "Anulați și închideți opțiunile de formatare";
 "rich_text_editor_code_block" = "Comutați blocul de cod";
@@ -1026,6 +1028,7 @@
 "screen_media_details_uploaded_by" = "Încărcat de";
 "screen_media_details_uploaded_on" = "Încărcat la";
 "screen_media_picker_error_failed_selection" = "Nu s-au putut selecta fișierele media, încercați din nou.";
+"screen_media_upload_preview_a11y_draw" = "Draw";
 "screen_media_upload_preview_caption_warning" = "Este posibil ca descrierile să nu fie vizibile pentru persoanele care folosesc aplicații mai vechi.";
 "screen_media_upload_preview_change_video_quality_prompt" = "Atingeți pentru a modifica calitatea încărcării videoclipului";
 "screen_media_upload_preview_error_could_not_be_uploaded" = "Fișierul nu a putut fi încărcat.";

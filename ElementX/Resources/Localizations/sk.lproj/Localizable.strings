@@ -481,6 +481,7 @@
 "dialog_video_quality_selector_subtitle_file_size" = "Maximálna povolená veľkosť súboru je: %1$@";
 "dialog_video_quality_selector_subtitle_no_file_size" = "Vyberte kvalitu videa, ktoré chcete nahrať.";
 "dialog_video_quality_selector_title" = "Vyberte kvalitu nahrávania videa";
+"emoji_picker_a11y_backspace" = "Delete the character before the cursor";
 "emoji_picker_category_activity" = "Aktivity";
 "emoji_picker_category_flags" = "Vlajky";
 "emoji_picker_category_foods" = "Jedlo a nápoje";
@@ -557,6 +558,7 @@
 "preference_rageshake" = "Zúrivo potriasť pre nahlásenie chyby";
 "rageshake_detection_dialog_content" = "Zdá sa, že zúrivo trasiete telefónom. Chcete otvoriť obrazovku s hlásením chýb?";
 "rich_text_editor_a11y_add_attachment" = "Pridať prílohu";
+"rich_text_editor_a11y_add_emoji" = "Add emoji";
 "rich_text_editor_bullet_list" = "Prepnúť zoznam odrážok";
 "rich_text_editor_close_formatting_options" = "Zrušiť a zatvoriť formátovanie textu";
 "rich_text_editor_code_block" = "Prepnúť blok kódu";
@@ -1026,6 +1028,7 @@
 "screen_media_details_uploaded_by" = "Nahrané používateľom";
 "screen_media_details_uploaded_on" = "Nahrané dňa";
 "screen_media_picker_error_failed_selection" = "Nepodarilo sa vybrať médium, skúste to prosím znova.";
+"screen_media_upload_preview_a11y_draw" = "Draw";
 "screen_media_upload_preview_caption_warning" = "Titulky nemusia byť viditeľné pre ľudí používajúcich staršie aplikácie.";
 "screen_media_upload_preview_change_video_quality_prompt" = "Ťuknutím zmeníte kvalitu nahratého videa";
 "screen_media_upload_preview_error_could_not_be_uploaded" = "Súbor sa nepodarilo nahrať.";

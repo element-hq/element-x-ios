@@ -481,6 +481,7 @@
 "dialog_video_quality_selector_subtitle_file_size" = "La dimensione massima consentita per il file è: %1$@";
 "dialog_video_quality_selector_subtitle_no_file_size" = "Seleziona la qualità del video che vuoi caricare.";
 "dialog_video_quality_selector_title" = "Seleziona la qualità di caricamento del video";
+"emoji_picker_a11y_backspace" = "Delete the character before the cursor";
 "emoji_picker_category_activity" = "Attività";
 "emoji_picker_category_flags" = "Bandiere";
 "emoji_picker_category_foods" = "Cibi & Bevande";
@@ -557,6 +558,7 @@
 "preference_rageshake" = "Scuoti per segnalare un problema";
 "rageshake_detection_dialog_content" = "Sembra che tu stia scuotendo il telefono per la frustrazione. Vuoi aprire la schermata di segnalazione dei problemi?";
 "rich_text_editor_a11y_add_attachment" = "Aggiungi allegato";
+"rich_text_editor_a11y_add_emoji" = "Add emoji";
 "rich_text_editor_bullet_list" = "Attiva/disattiva l'elenco puntato";
 "rich_text_editor_close_formatting_options" = "Annullare e chiudere la formattazione del testo";
 "rich_text_editor_code_block" = "Attiva/disattiva il blocco di codice";
@@ -1026,6 +1028,7 @@
 "screen_media_details_uploaded_by" = "Caricato da";
 "screen_media_details_uploaded_on" = "Caricato il";
 "screen_media_picker_error_failed_selection" = "Selezione del file multimediale fallita, riprova.";
+"screen_media_upload_preview_a11y_draw" = "Draw";
 "screen_media_upload_preview_caption_warning" = "Le didascalie potrebbero non essere visibili agli utenti di app meno recenti.";
 "screen_media_upload_preview_change_video_quality_prompt" = "Tocca per modificare la qualità di caricamento del video";
 "screen_media_upload_preview_error_could_not_be_uploaded" = "Impossibile caricare il file.";

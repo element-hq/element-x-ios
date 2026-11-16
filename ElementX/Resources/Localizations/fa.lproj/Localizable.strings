@@ -481,6 +481,7 @@
 "dialog_video_quality_selector_subtitle_file_size" = "حداکثر اندازه فایل مجاز: %1$@";
 "dialog_video_quality_selector_subtitle_no_file_size" = "کیفیت ویدیویی که می‌خواهید آپلود کنید را انتخاب کنید.";
 "dialog_video_quality_selector_title" = "کیفیت آپلود ویدیو را انتخاب کنید";
+"emoji_picker_a11y_backspace" = "Delete the character before the cursor";
 "emoji_picker_category_activity" = "فعّالیت‌ها";
 "emoji_picker_category_flags" = "پرچم‌ها";
 "emoji_picker_category_foods" = "غذا و نوشیدنی";
@@ -557,6 +558,7 @@
 "preference_rageshake" = "Rageshake برای گزارش اشکال";
 "rageshake_detection_dialog_content" = "به نظر می‌رسد دارید گوشی خود را به دلیل کار نکردن تکان می‌دهید! آیا می‌خواهید یک اشکال در برنامه گزارش نمایید؟";
 "rich_text_editor_a11y_add_attachment" = "افزودن پیوست";
+"rich_text_editor_a11y_add_emoji" = "Add emoji";
 "rich_text_editor_bullet_list" = "تغییر وضعیت سیاههٔ گلوله‌ای";
 "rich_text_editor_close_formatting_options" = "لغو و بستن قالب‌بندی متن";
 "rich_text_editor_code_block" = "تغییر حالت بلوک کد";
@@ -1026,6 +1028,7 @@
 "screen_media_details_uploaded_by" = "بارگذاشته به دست";
 "screen_media_details_uploaded_on" = "بارگذاشته در";
 "screen_media_picker_error_failed_selection" = "گزینش رسانه شکست خورد. لطفاً دوباره تلاش کنید.";
+"screen_media_upload_preview_a11y_draw" = "Draw";
 "screen_media_upload_preview_caption_warning" = "ممکن است زیرنویس‌ها برای افرادی که از برنامه‌های قدیمی‌تر استفاده می‌کنند قابل مشاهده نباشند.";
 "screen_media_upload_preview_change_video_quality_prompt" = "برای تغییر کیفیت آپلود ویدیو، ضربه بزنید";
 "screen_media_upload_preview_error_could_not_be_uploaded" = "فایل قابل آپلود نبود.";

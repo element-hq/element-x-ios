@@ -481,6 +481,7 @@
 "dialog_video_quality_selector_subtitle_file_size" = "Максимально допустимый размер файла: %1$@";
 "dialog_video_quality_selector_subtitle_no_file_size" = "Выберите качество видео, которое Вы хотите загрузить.";
 "dialog_video_quality_selector_title" = "Выберите качество загружаемого видео";
+"emoji_picker_a11y_backspace" = "Delete the character before the cursor";
 "emoji_picker_category_activity" = "Активности";
 "emoji_picker_category_flags" = "Флаги";
 "emoji_picker_category_foods" = "Еда и напитки";
@@ -557,6 +558,7 @@
 "preference_rageshake" = "Встряхните устройство, чтобы сообщить об ошибке";
 "rageshake_detection_dialog_content" = "Похоже, что Вы трясете телефон в раздражении. Хотите открыть экран сообщения об ошибке?";
 "rich_text_editor_a11y_add_attachment" = "Прикрепить файл";
+"rich_text_editor_a11y_add_emoji" = "Add emoji";
 "rich_text_editor_bullet_list" = "Переключить маркированный список";
 "rich_text_editor_close_formatting_options" = "Отменить и закрыть параметры форматирования";
 "rich_text_editor_code_block" = "Переключить блок кода";
@@ -1026,6 +1028,7 @@
 "screen_media_details_uploaded_by" = "Загружено";
 "screen_media_details_uploaded_on" = "Загружено";
 "screen_media_picker_error_failed_selection" = "Не удалось выбрать медиа, попробуйте ещё раз.";
+"screen_media_upload_preview_a11y_draw" = "Draw";
 "screen_media_upload_preview_caption_warning" = "Подпись может быть не видна пользователям старых приложений.";
 "screen_media_upload_preview_change_video_quality_prompt" = "Нажмите, чтобы изменить качество загружаемого видео.";
 "screen_media_upload_preview_error_could_not_be_uploaded" = "Файл не может быть загружен.";

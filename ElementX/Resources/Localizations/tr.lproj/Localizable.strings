@@ -481,6 +481,7 @@
 "dialog_video_quality_selector_subtitle_file_size" = "The max file size allowed is: %1$@";
 "dialog_video_quality_selector_subtitle_no_file_size" = "Select the quality of the video you want to upload.";
 "dialog_video_quality_selector_title" = "Select video upload quality";
+"emoji_picker_a11y_backspace" = "Delete the character before the cursor";
 "emoji_picker_category_activity" = "Aktiviteler";
 "emoji_picker_category_flags" = "Bayraklar";
 "emoji_picker_category_foods" = "Yiyecek ve İçecek";
@@ -557,6 +558,7 @@
 "preference_rageshake" = "Hata bildirmek için Rageshake";
 "rageshake_detection_dialog_content" = "Sinirden telefonu sallıyor gibi görünüyorsunuz. Hata raporu ekranını açmak ister misiniz?";
 "rich_text_editor_a11y_add_attachment" = "Ek ekle";
+"rich_text_editor_a11y_add_emoji" = "Add emoji";
 "rich_text_editor_bullet_list" = "Madde işaretli listeyi aç/kapat";
 "rich_text_editor_close_formatting_options" = "İptal et ve biçimlendirme seçeneklerini kapat";
 "rich_text_editor_code_block" = "Kod Bloğunu Aç/Kapat";
@@ -1026,6 +1028,7 @@
 "screen_media_details_uploaded_by" = "Yükleyen:";
 "screen_media_details_uploaded_on" = "Yüklendi";
 "screen_media_picker_error_failed_selection" = "Medya seçilemedi, lütfen tekrar deneyin.";
+"screen_media_upload_preview_a11y_draw" = "Draw";
 "screen_media_upload_preview_caption_warning" = "Açıklamalar, eski uygulamaları kullanan kişiler tarafından görülemeyebilir.";
 "screen_media_upload_preview_change_video_quality_prompt" = "Tap to change the video upload quality";
 "screen_media_upload_preview_error_could_not_be_uploaded" = "The file could not be uploaded.";

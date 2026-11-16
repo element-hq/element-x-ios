@@ -481,6 +481,7 @@
 "dialog_video_quality_selector_subtitle_file_size" = "允许的最大文件大小为：%1$@";
 "dialog_video_quality_selector_subtitle_no_file_size" = "选择你要上传的视频的质量。";
 "dialog_video_quality_selector_title" = "选择视频上传质量";
+"emoji_picker_a11y_backspace" = "删除光标前面的字符";
 "emoji_picker_category_activity" = "节假日";
 "emoji_picker_category_flags" = "旗帜";
 "emoji_picker_category_foods" = "饮食";
@@ -557,6 +558,7 @@
 "preference_rageshake" = "摇一摇以报告 bug";
 "rageshake_detection_dialog_content" = "你似乎愤怒地摇晃了手机。是否打开 Bug 报告页面？";
 "rich_text_editor_a11y_add_attachment" = "添加附件";
+"rich_text_editor_a11y_add_emoji" = "添加 Emoji";
 "rich_text_editor_bullet_list" = "切换符号列表";
 "rich_text_editor_close_formatting_options" = "取消并关闭文本格式";
 "rich_text_editor_code_block" = "切换代码块";
@@ -1026,6 +1028,7 @@
 "screen_media_details_uploaded_by" = "上传者：";
 "screen_media_details_uploaded_on" = "上传于";
 "screen_media_picker_error_failed_selection" = "选择媒体失败，请重试。";
+"screen_media_upload_preview_a11y_draw" = "绘画";
 "screen_media_upload_preview_caption_warning" = "使用旧版应用程序的用户可能无法看到字幕。";
 "screen_media_upload_preview_change_video_quality_prompt" = "点按以更改视频上传质量";
 "screen_media_upload_preview_error_could_not_be_uploaded" = "无法上传该文件。";

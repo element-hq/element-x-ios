@@ -481,6 +481,7 @@
 "dialog_video_quality_selector_subtitle_file_size" = "Den maksimalt tilladte filstørrelse er: %1$@";
 "dialog_video_quality_selector_subtitle_no_file_size" = "Vælg den kvalitet, du ønsker at uploade videoen i.";
 "dialog_video_quality_selector_title" = "Vælg kvalitet for video-overførsel";
+"emoji_picker_a11y_backspace" = "Delete the character before the cursor";
 "emoji_picker_category_activity" = "Aktiviteter";
 "emoji_picker_category_flags" = "Flag";
 "emoji_picker_category_foods" = "Mad og drikke";
@@ -557,6 +558,7 @@
 "preference_rageshake" = "Ryst enheden i frustration for at anmelde en fejl";
 "rageshake_detection_dialog_content" = "Det ser ud til, at du ryster telefonen i frustration. Vil du åbne fejlrapporteringsskærmen?";
 "rich_text_editor_a11y_add_attachment" = "Tilføj vedhæftet fil";
+"rich_text_editor_a11y_add_emoji" = "Add emoji";
 "rich_text_editor_bullet_list" = "Slå punktopstilling til/fra";
 "rich_text_editor_close_formatting_options" = "Annullér og luk tekstformatering";
 "rich_text_editor_code_block" = "Slå kodeblok til/fra";
@@ -1026,6 +1028,7 @@
 "screen_media_details_uploaded_by" = "Uploadet af";
 "screen_media_details_uploaded_on" = "Uploadet på";
 "screen_media_picker_error_failed_selection" = "Det lykkedes ikke at vælge medie. Prøv igen.";
+"screen_media_upload_preview_a11y_draw" = "Draw";
 "screen_media_upload_preview_caption_warning" = "Billedtekster er muligvis ikke synlige for personer, der bruger ældre apps.";
 "screen_media_upload_preview_change_video_quality_prompt" = "Tryk for at ændre videokvaliteten i uploadet";
 "screen_media_upload_preview_error_could_not_be_uploaded" = "Filen kunne ikke uploades.";

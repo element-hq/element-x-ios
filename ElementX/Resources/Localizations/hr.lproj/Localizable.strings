@@ -481,6 +481,7 @@
 "dialog_video_quality_selector_subtitle_file_size" = "Maksimalna dopuštena veličina datoteke je: %1$@";
 "dialog_video_quality_selector_subtitle_no_file_size" = "Odaberite kvalitetu videozapisa koji želite prenijeti.";
 "dialog_video_quality_selector_title" = "Odaberi kvalitetu prijenosa videozapisa";
+"emoji_picker_a11y_backspace" = "Delete the character before the cursor";
 "emoji_picker_category_activity" = "Aktivnosti";
 "emoji_picker_category_flags" = "Zastave";
 "emoji_picker_category_foods" = "Hrana i piće";
@@ -557,6 +558,7 @@
 "preference_rageshake" = "Snažno protresi za prijavu pogreške";
 "rageshake_detection_dialog_content" = "Čini se da ljutito treseš telefon. Želiš li otvoriti zaslon s izvješćem o pogrešci?";
 "rich_text_editor_a11y_add_attachment" = "Dodaj privitak";
+"rich_text_editor_a11y_add_emoji" = "Add emoji";
 "rich_text_editor_bullet_list" = "Uključi/isključi popis s grafičkim oznakama";
 "rich_text_editor_close_formatting_options" = "Otkaži i zatvori oblikovanje teksta";
 "rich_text_editor_code_block" = "Uključi/isključi blok koda";
@@ -1026,6 +1028,7 @@
 "screen_media_details_uploaded_by" = "Prenio/la";
 "screen_media_details_uploaded_on" = "Preneseno na";
 "screen_media_picker_error_failed_selection" = "Odabir medija nije uspio, pokušajte ponovno.";
+"screen_media_upload_preview_a11y_draw" = "Draw";
 "screen_media_upload_preview_caption_warning" = "Opisi možda neće biti vidljivi osobama koji se služe starijim aplikacijama.";
 "screen_media_upload_preview_change_video_quality_prompt" = "Dodirnite za promjenu kvalitete prijenosa videozapisa";
 "screen_media_upload_preview_error_could_not_be_uploaded" = "Datoteka se nije mogla prenijeti.";

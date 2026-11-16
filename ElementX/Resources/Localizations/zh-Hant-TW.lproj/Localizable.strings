@@ -481,6 +481,7 @@
 "dialog_video_quality_selector_subtitle_file_size" = "最大允許的檔案大小為：%1$@";
 "dialog_video_quality_selector_subtitle_no_file_size" = "選取您要上傳的視訊的品質。";
 "dialog_video_quality_selector_title" = "選取視訊上傳品質";
+"emoji_picker_a11y_backspace" = "Delete the character before the cursor";
 "emoji_picker_category_activity" = "活動";
 "emoji_picker_category_flags" = "旗幟";
 "emoji_picker_category_foods" = "食物與飲料";
@@ -557,6 +558,7 @@
 "preference_rageshake" = "憤怒搖晃以回報臭蟲";
 "rageshake_detection_dialog_content" = "您似乎正在沮喪地搖晃手機。您要開啟臭蟲回報畫面嗎？";
 "rich_text_editor_a11y_add_attachment" = "新增附件";
+"rich_text_editor_a11y_add_emoji" = "Add emoji";
 "rich_text_editor_bullet_list" = "切換項目編號";
 "rich_text_editor_close_formatting_options" = "取消並關閉關閉文字格式化";
 "rich_text_editor_code_block" = "切換程式碼區塊";
@@ -1026,6 +1028,7 @@
 "screen_media_details_uploaded_by" = "上傳者：";
 "screen_media_details_uploaded_on" = "上傳於";
 "screen_media_picker_error_failed_selection" = "選取媒體失敗，請再試一次。";
+"screen_media_upload_preview_a11y_draw" = "Draw";
 "screen_media_upload_preview_caption_warning" = "使用舊應用程式的使用者可能看不到標題。";
 "screen_media_upload_preview_change_video_quality_prompt" = "輕點即可變更影片上傳品質";
 "screen_media_upload_preview_error_could_not_be_uploaded" = "無法上傳檔案。";

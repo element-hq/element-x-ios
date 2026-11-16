@@ -481,6 +481,7 @@
 "dialog_video_quality_selector_subtitle_file_size" = "The max file size allowed is: %1$@";
 "dialog_video_quality_selector_subtitle_no_file_size" = "Select the quality of the video you want to upload.";
 "dialog_video_quality_selector_title" = "Select video upload quality";
+"emoji_picker_a11y_backspace" = "Delete the character before the cursor";
 "emoji_picker_category_activity" = "Veikla";
 "emoji_picker_category_flags" = "Vėliavos";
 "emoji_picker_category_foods" = "Maistas ir Gėrimai";
@@ -557,6 +558,7 @@
 "preference_rageshake" = "Papurtykite, kad praneštumėte apie klaidą";
 "rageshake_detection_dialog_content" = "Atrodo, kad nusivylęs purtote telefoną. Ar norėtumėte atidaryti pranešimo apie klaidas ekraną?";
 "rich_text_editor_a11y_add_attachment" = "Pridėti priedą";
+"rich_text_editor_a11y_add_emoji" = "Add emoji";
 "rich_text_editor_bullet_list" = "Perjungti punktų sąrašą";
 "rich_text_editor_close_formatting_options" = "Cancel and close text formatting";
 "rich_text_editor_code_block" = "Kodo blokas";
@@ -1026,6 +1028,7 @@
 "screen_media_details_uploaded_by" = "Uploaded by";
 "screen_media_details_uploaded_on" = "Uploaded on";
 "screen_media_picker_error_failed_selection" = "Nepavyko pasirinkti laikmenos, pabandykite dar kartą.";
+"screen_media_upload_preview_a11y_draw" = "Draw";
 "screen_media_upload_preview_caption_warning" = "Captions might not be visible to people using older apps.";
 "screen_media_upload_preview_change_video_quality_prompt" = "Tap to change the video upload quality";
 "screen_media_upload_preview_error_could_not_be_uploaded" = "The file could not be uploaded.";

@@ -481,6 +481,7 @@
 "dialog_video_quality_selector_subtitle_file_size" = "Suurin sallittu tiedostokoko on: %1$@";
 "dialog_video_quality_selector_subtitle_no_file_size" = "Valitse lähetettävän videon laatu.";
 "dialog_video_quality_selector_title" = "Valitse videon lähetyslaatu";
+"emoji_picker_a11y_backspace" = "Delete the character before the cursor";
 "emoji_picker_category_activity" = "Aktiviteetit";
 "emoji_picker_category_flags" = "Liput";
 "emoji_picker_category_foods" = "Ruoka ja juoma";
@@ -557,6 +558,7 @@
 "preference_rageshake" = "Raivostunut ravistaminen ilmoittaa virheestä";
 "rageshake_detection_dialog_content" = "Näytät ravistelevan puhelinta turhautuneena. Haluatko avata vikailmoitusnäytön?";
 "rich_text_editor_a11y_add_attachment" = "Lisää liite";
+"rich_text_editor_a11y_add_emoji" = "Add emoji";
 "rich_text_editor_bullet_list" = "Numeroimaton luettelo päälle/pois";
 "rich_text_editor_close_formatting_options" = "Peruuta ja sulje muotoiluasetukset";
 "rich_text_editor_code_block" = "Koodilohko päälle/pois";
@@ -1026,6 +1028,7 @@
 "screen_media_details_uploaded_by" = "Lähettäjä";
 "screen_media_details_uploaded_on" = "Lähetetty";
 "screen_media_picker_error_failed_selection" = "Median valinta epäonnistui, yritä uudelleen.";
+"screen_media_upload_preview_a11y_draw" = "Draw";
 "screen_media_upload_preview_caption_warning" = "Kuvatekstit eivät välttämättä näy ihmisille, jotka käyttävät vanhempia sovelluksia.";
 "screen_media_upload_preview_change_video_quality_prompt" = "Napauta muuttaaksesi videon lähetyslaatua";
 "screen_media_upload_preview_error_could_not_be_uploaded" = "Tiedostoa ei voitu lähettää.";
