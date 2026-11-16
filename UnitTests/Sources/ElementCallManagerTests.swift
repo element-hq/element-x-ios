@@ -1242,7 +1242,7 @@ final class ElementCallManagerTests {
     
     // MARK: - Call screen
     
-    @Test("A call request without a native call stack presents the web view")
+    @Test("A call request the service doesn't run natively presents the web view")
     func presentWebCall() {
         serviceActions.send(.callRequested(.mock()))
         
@@ -1479,23 +1479,6 @@ final class ElementCallManagerTests {
     func unjoinedRoomCallRequest() async throws {
         let answeredCallID = try await answerNativeCall()
         service.joinedRoomRoomIDReturnValue = nil
-        
-        await waitForConfirmation { confirmation in
-            callProvider.reportCallWithEndedAtReasonClosure = { uuid, _, reason in
-                if uuid == answeredCallID, reason == .failed {
-                    confirmation()
-                }
-            }
-            manager.requestCall(userID: aliceID, roomID: roomID, isVoiceCall: false, answeredFromCallKit: true)
-        }
-        
-        #expect(callScreens.isEmpty)
-    }
-    
-    @Test("With native calls on, a call for an account without a native call stack is dropped, ending its answer")
-    func callWithoutNativeCallStack() async throws {
-        let answeredCallID = try await answerNativeCall()
-        service.joinedRoomRoomIDClosure = { roomID in JoinedRoomProxyMock(.init(id: roomID)) }
         
         await waitForConfirmation { confirmation in
             callProvider.reportCallWithEndedAtReasonClosure = { uuid, _, reason in

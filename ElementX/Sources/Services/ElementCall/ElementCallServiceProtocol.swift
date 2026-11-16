@@ -97,15 +97,11 @@ protocol ElementCallServiceProtocol: AnyObject {
     /// The account's joined room, `nil` when it isn't joined.
     func joinedRoom(roomID: String) async -> JoinedRoomProxyProtocol?
     
-    /// Builds the native call stack while enabled and the setting is on, or releases it, hanging up its call.
-    /// Enable it on one service at a time: idle stacks switch proximity monitoring off under the live call.
-    func setNativeCallStackEnabled(_ isEnabled: Bool)
-    
     /// Starts, or returns to, a native call in the room, driving its screen through
     /// `.nativeCallPresentation` actions. `answeredFromCallKit` takes over that answered call.
     ///
-    /// Returns `false` when there's no native call stack and the caller should present the Element
-    /// Call web view instead.
+    /// Returns `false` when native calls are off and the caller should present the Element Call
+    /// web view instead.
     @discardableResult
     func handleNativeCallRequest(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool, answeredFromCallKit: Bool) -> Bool
     

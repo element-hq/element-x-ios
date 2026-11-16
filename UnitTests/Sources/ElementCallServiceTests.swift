@@ -209,9 +209,12 @@ final class ElementCallServiceTests {
         #expect(await eventsHeardWhileSettingUp(isAccepted: true).isEmpty)
     }
     
-    @Test
-    func nativeCallStackNeedsSettingAndEnabling() {
+    @Test("The native call stack follows the native calls setting")
+    func nativeCallStackFollowsSetting() {
+        appSettings.nativeCallEnabled = true
         let service = makeNativeCallService()
+        #expect(service.nativeCallController != nil, "Built with the service, nothing has to enable it")
+        
         var presentations: [NativeCallPresentation] = []
         let cancellable = service.actionsPublisher.sink { action in
             if case .nativeCallPresentation(let presentation) = action {
@@ -220,41 +223,23 @@ final class ElementCallServiceTests {
         }
         defer { cancellable.cancel() }
         
-        service.setNativeCallStackEnabled(true)
-        #expect(service.nativeCallController == nil, "Enabling alone doesn't build a stack")
-        
-        service.setNativeCallStackEnabled(false)
-        appSettings.nativeCallEnabled = true
-        #expect(service.nativeCallController == nil, "The setting alone doesn't build a stack")
-        
-        service.setNativeCallStackEnabled(true)
-        #expect(service.nativeCallController != nil)
-        
-        service.setNativeCallStackEnabled(false)
-        #expect(service.nativeCallController == nil, "Disabling has to release the stack's to-device subscription")
-        #expect(presentations == [.dismiss])
-    }
-    
-    @Test
-    func settingTurnedOnBuildsEnabledStack() {
-        let service = makeNativeCallService()
-        service.setNativeCallStackEnabled(true)
+        appSettings.nativeCallEnabled = false
         #expect(service.nativeCallController == nil)
+        #expect(presentations == [.dismiss])
         
         // The backend is built on demand, so the setting takes effect without an app restart.
         appSettings.nativeCallEnabled = true
         #expect(service.nativeCallController != nil)
     }
     
-    @Test
-    func callsFallBackToWebViewWithoutStack() {
+    @Test("With native calls off a call falls back to the web view")
+    func nativeCallsOffFallBackToWebView() {
         let service = makeNativeCallService()
         let roomProxy = JoinedRoomProxyMock(.init(id: "!room:example.com"))
         
         #expect(!service.handleNativeCallRequest(roomProxy: roomProxy, isVoiceCall: false, answeredFromCallKit: false))
         
         appSettings.nativeCallEnabled = true
-        service.setNativeCallStackEnabled(true)
         
         #expect(service.handleNativeCallRequest(roomProxy: roomProxy, isVoiceCall: false, answeredFromCallKit: false))
     }
