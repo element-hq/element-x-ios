@@ -253,6 +253,43 @@ struct UserSessionManagerTests {
         #expect(manager.sessionsPublisher.value.map(\.clientProxy.userID) == ["@carol:matrix.org"])
     }
     
+    @Test("Selecting an account makes it the active one")
+    func selectAccount() async throws {
+        let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org"])
+        let alice = makeUserSession(userID: "@alice:matrix.org")
+        let bob = makeUserSession(userID: "@bob:matrix.org")
+        manager.addNewSession(alice)
+        manager.addNewSession(bob)
+        #expect(manager.userIDs == ["@alice:matrix.org", "@bob:matrix.org"])
+        #expect((manager.activeSession as? UserSessionMock) === alice)
+        #expect(bob.userSettings.account.lastSelectedDate == nil)
+        
+        let deferred = deferFulfillment(manager.callbacksPublisher) { $0 == .didSelectAccount(userID: "@bob:matrix.org") }
+        manager.selectAccount(userID: "@bob:matrix.org")
+        try await deferred.fulfill()
+        
+        #expect(manager.userIDs == ["@bob:matrix.org", "@alice:matrix.org"])
+        #expect((manager.activeSession as? UserSessionMock) === bob)
+        #expect(bob.userSettings.account.lastSelectedDate != nil)
+        #expect(manager.sessionsPublisher.value.map(\.clientProxy.userID) == ["@bob:matrix.org", "@alice:matrix.org"])
+    }
+    
+    @Test("Selecting the active account only updates when it was last selected")
+    func selectActiveAccount() async throws {
+        let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org"])
+        let alice = makeUserSession(userID: "@alice:matrix.org")
+        manager.addNewSession(alice)
+        #expect((manager.activeSession as? UserSessionMock) === alice)
+        #expect(alice.userSettings.account.lastSelectedDate == nil)
+        
+        let deferred = deferFailure(manager.callbacksPublisher, timeout: .seconds(1)) { _ in true }
+        manager.selectAccount(userID: "@alice:matrix.org")
+        try await deferred.fulfill()
+        
+        #expect(alice.userSettings.account.lastSelectedDate != nil)
+        #expect(manager.userIDs == ["@alice:matrix.org", "@bob:matrix.org"])
+    }
+    
     @Test("Removing an account deletes it")
     func removeAccount() {
         let manager = makeManager(userIDs: ["@alice:matrix.org"])

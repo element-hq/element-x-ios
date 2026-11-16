@@ -637,6 +637,8 @@ class MockScreen: Identifiable {
             userSettings.account.hasRunIdentityConfirmationOnboarding = true
             userSettings.app.hasRunNotificationPermissionsOnboarding = true
             userSettings.app.analyticsConsentState = .optedOut
+            userSettings.app.multiAccountEnabled = true
+            userSettings.app.hasSeenMultiAccountAnnouncement = true
             
             let clientProxy = ClientProxyMock(.init(userID: userID,
                                                     deviceID: "MOCKCLIENT",
@@ -650,20 +652,44 @@ class MockScreen: Identifiable {
             }
             
             let userSession = UserSessionMock(.init(clientProxy: clientProxy, userSettings: userSettings, elementCallService: elementCallService))
+            
+            let bobUserID = "@bob:client.com"
+            let bobUserSettings = appSettings.userSettings(for: bobUserID)
+            bobUserSettings.account.hasRunIdentityConfirmationOnboarding = true
+            let bobClientProxy = ClientProxyMock(.init(userID: bobUserID,
+                                                       deviceID: "MOCKCLIENT",
+                                                       displayName: "Bob",
+                                                       roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
+            let bobUserSession = UserSessionMock(.init(clientProxy: bobClientProxy, userSettings: bobUserSettings))
+            
             let userSessionManagerCallbacks = PassthroughSubject<UserSessionManagerCallback, Never>()
-            let userSessionManager = UserSessionManagerMock(.init(sessions: id == .rootFlowSignedIn ? [userSession] : [],
-                                                                  callbacksPublisher: userSessionManagerCallbacks.eraseToAnyPublisher()))
-            userSessionManager.sessionForReturnValue = userSession
-            // Logging out removes the only account, as the real manager would.
+            let userSessionManager = UserSessionManagerMock(.init(callbacksPublisher: userSessionManagerCallbacks.eraseToAnyPublisher()))
+            // Keeps the accounts in order with the first one active, as the real manager does.
+            @MainActor func setSessions(_ sessions: [UserSessionProtocol]) {
+                userSessionManager.activeSession = sessions.first
+                userSessionManager.sessionsPublisher = .init(sessions)
+                userSessionManager.userIDs = sessions.map(\.clientProxy.userID)
+            }
+            @MainActor func sessions(excluding userID: String) -> [UserSessionProtocol] {
+                userSessionManager.sessionsPublisher.value.filter { $0.clientProxy.userID != userID }
+            }
+            
+            setSessions(id == .rootFlowSignedIn ? [userSession, bobUserSession] : [])
+            userSessionManager.sessionForClosure = { userID in
+                userSessionManager.sessionsPublisher.value.first { $0.clientProxy.userID == userID }
+            }
+            userSessionManager.selectAccountUserIDClosure = { userID in
+                guard let selectedSession = userSessionManager.session(for: userID) else { return }
+                setSessions([selectedSession] + sessions(excluding: userID))
+                userSessionManagerCallbacks.send(.didSelectAccount(userID: userID))
+            }
             userSessionManager.logoutUserIDClosure = { @MainActor userID in
-                userSessionManager.activeSession = nil
-                userSessionManager.sessionsPublisher = .init([])
+                setSessions(sessions(excluding: userID))
                 userSessionManagerCallbacks.send(.didRemoveAccount(userID: userID, error: nil))
             }
             // The signed in session is a bare mock, use the populated one instead.
             userSessionManager.addNewSessionClosure = { _ in
-                userSessionManager.activeSession = userSession
-                userSessionManager.sessionsPublisher = .init([userSession])
+                setSessions([userSession] + sessions(excluding: userID))
             }
             
             let appMediator = AppMediatorMock(.init())
@@ -683,7 +709,7 @@ class MockScreen: Identifiable {
                                                       targetContext: .mock,
                                                       authenticationServiceFactory: AuthenticationServiceFactoryMock(.init()))
             
-            flowCoordinator.handleAppRoute(id == .rootFlowSignedIn ? .roomList : .authentication, animated: false)
+            flowCoordinator.handleAppRoute(id == .rootFlow ? .authentication : .roomList, animated: false)
             
             retainedState.append(flowCoordinator)
             

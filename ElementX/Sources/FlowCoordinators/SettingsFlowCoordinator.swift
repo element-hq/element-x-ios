@@ -11,6 +11,8 @@ import SwiftUI
 
 enum SettingsFlowCoordinatorAction {
     case addAccount
+    case switchAccount(userID: String)
+    
     case dismiss
     case clearCache
     case runLogoutFlow
@@ -99,6 +101,8 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                     
                 case .addAccount:
                     actionsSubject.send(.addAccount)
+                case .switchAccount(let userID):
+                    actionsSubject.send(.switchAccount(userID: userID))
                     
                 case let .manageAccount(url):
                     presentAccountManagementURL(url)

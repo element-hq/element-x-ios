@@ -320,6 +320,8 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
                 switch callback {
                 case .didRestoreSession(let userID):
                     handleRestoredSession(userID: userID)
+                case .didSelectAccount(let userID):
+                    handleSelectedAccount(userID: userID)
                 case .didRemoveAccount(let userID, let error):
                     handleRemovedAccount(userID: userID, error: error)
                 }
@@ -342,6 +344,14 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
         default:
             break
         }
+    }
+    
+    private func handleSelectedAccount(userID: String) {
+        guard case .userSessionFlow = stateMachine.state else {
+            return // Wait for the next user session flow, which will show the selected account.
+        }
+        
+        stateMachine.tryEvent(.startUserSession(userID: userID))
     }
     
     private func handleRemovedAccount(userID: String, error: UserSessionManagerError?) {
@@ -468,6 +478,8 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
                 switch action {
                 case .addAccount:
                     stateMachine.tryEvent(.startAuthentication(isAddingAccount: true))
+                case .switchAccount(let userID):
+                    userSessionManager.selectAccount(userID: userID)
                 case .logout, .accountDeactivated:
                     stateMachine.tryEvent(.logout)
                 case .clearCache:
@@ -512,6 +524,7 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func stopUserSessionFlow() {
+        actionsSubject.send(.closeSecondaryWindows)
         userIndicatorController.retractAllIndicators()
         userSessionFlowCoordinator?.stop()
         userSessionFlowCoordinator = nil

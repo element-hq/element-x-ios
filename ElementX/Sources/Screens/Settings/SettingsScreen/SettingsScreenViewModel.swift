@@ -120,9 +120,8 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             
         case .addAccount:
             actionsSubject.send(.addAccount)
-        case .switchAccount:
-            // TODO: Switch to the account (element-meta#3328).
-            break
+        case .switchAccount(let userID):
+            actionsSubject.send(.switchAccount(userID: userID))
             
         case let .manageAccount(url):
             actionsSubject.send(.manageAccount(url: url))

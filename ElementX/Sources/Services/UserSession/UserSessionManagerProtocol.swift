@@ -12,6 +12,8 @@ import MatrixRustSDK
 enum UserSessionManagerCallback: Equatable {
     /// An account's session was restored and is now live.
     case didRestoreSession(userID: String)
+    /// An account with a live session was selected and is now the active one.
+    case didSelectAccount(userID: String)
     /// An account was removed along with all of its data, with an error when the user didn't ask for it.
     case didRemoveAccount(userID: String, error: UserSessionManagerError?)
 }
@@ -56,6 +58,10 @@ protocol UserSessionManagerProtocol: AnyObject {
     /// Registers the session of an account that has just signed in, making a new account the active one.
     /// The session is resumed if the services are running.
     func addNewSession(_ userSession: UserSessionProtocol)
+    /// Makes an account with a live session the active one, reported with `didSelectAccount`.
+    ///
+    /// Callers must check the account has a live session first, wait for `didRestoreSession` when it doesn't.
+    func selectAccount(userID: String)
     /// Logs an account out of the server, then removes it.
     func logout(userID: String) async
     /// Logs out every account.
