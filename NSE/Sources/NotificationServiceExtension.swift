@@ -164,7 +164,7 @@ actor NotificationServiceExtensionActor {
         }
         
         let homeserverURL = credentials.restorationToken.session.homeserverUrl
-        await appHooks.remoteSettingsHook.loadCache(forHomeserver: homeserverURL, applyingTo: appSettings)
+        await appHooks.remoteSettingsHook.loadCache(forHomeserver: homeserverURL)
         
         guard let mutableContent = request.content.mutableCopy() as? UNMutableNotificationContent else {
             return contentHandler(request.content)

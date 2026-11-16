@@ -654,9 +654,9 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
     private func handleAccountRemoval() {
         #warning("Make sure to test this but it may well move.")
         if let activeSession = userSessionManager.activeSession {
-            appHooks.remoteSettingsHook.loadCache(forHomeserver: activeSession.clientProxy.homeserver, applyingTo: appSettings)
+            appHooks.remoteSettingsHook.loadCache(forHomeserver: activeSession.clientProxy.homeserver)
         } else {
-            appHooks.remoteSettingsHook.reset(appSettings)
+            appHooks.remoteSettingsHook.reset()
         }
         
         // Signed in accounts that aren't live yet still count.

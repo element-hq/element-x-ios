@@ -15,11 +15,11 @@ enum RemoteSettingsError: Error {
 
 protocol RemoteSettingsHookProtocol: Sendable {
     #if IS_MAIN_APP
-    @MainActor func initializeCache(using client: ClientProtocol, applyingTo appSettings: AppSettings) async -> Result<Void, RemoteSettingsError>
+    @MainActor func initializeCache(using client: ClientProtocol) async -> Result<Void, RemoteSettingsError>
     func updateCache(using client: ClientProtocol) async
-    @MainActor func reset(_ appSettings: AppSettings)
+    @MainActor func reset()
     #endif
-    @MainActor func loadCache(forHomeserver homeserver: String, applyingTo appSettings: AppSettings)
+    @MainActor func loadCache(forHomeserver homeserver: String)
 }
 
 struct DefaultRemoteSettingsHook: RemoteSettingsHookProtocol {
@@ -27,7 +27,7 @@ struct DefaultRemoteSettingsHook: RemoteSettingsHookProtocol {
     /// A best effort implementation to let Element X advertise to users when they should be using
     /// Element Pro. In an ideal world the backend would be able to validate the client's requests
     /// instead of relying on it to check a well-known file for this.
-    func initializeCache(using client: ClientProtocol, applyingTo appSettings: AppSettings) async -> Result<Void, RemoteSettingsError> {
+    func initializeCache(using client: ClientProtocol) async -> Result<Void, RemoteSettingsError> {
         guard case let .success(wellKnownData) = await client.elementWellKnown() else {
             // Nothing to check, carry on as normal.
             return .success(())
@@ -49,10 +49,10 @@ struct DefaultRemoteSettingsHook: RemoteSettingsHookProtocol {
     }
     
     func updateCache(using client: ClientProtocol) async { }
-    func reset(_ appSettings: AppSettings) { }
+    func reset() { }
     #endif
     
-    func loadCache(forHomeserver homeserver: String, applyingTo appSettings: AppSettings) { }
+    func loadCache(forHomeserver homeserver: String) { }
 }
 
 private struct ElementWellKnown: Decodable {
