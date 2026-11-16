@@ -481,6 +481,7 @@
 "dialog_video_quality_selector_subtitle_file_size" = "The max file size allowed is: %1$@";
 "dialog_video_quality_selector_subtitle_no_file_size" = "Select the quality of the video you want to upload.";
 "dialog_video_quality_selector_title" = "Select video upload quality";
+"emoji_picker_a11y_backspace" = "Delete the character before the cursor";
 "emoji_picker_category_activity" = "Activitats";
 "emoji_picker_category_flags" = "Banderes";
 "emoji_picker_category_foods" = "Menjar & begudes";
@@ -557,6 +558,7 @@
 "preference_rageshake" = "Sacseja per informar d'errors";
 "rageshake_detection_dialog_content" = "Sembla que sacseges el telèfon amb frustració. Vols obrir la pantalla d'informe d'errors?";
 "rich_text_editor_a11y_add_attachment" = "Afegeix fitxer adjunt";
+"rich_text_editor_a11y_add_emoji" = "Add emoji";
 "rich_text_editor_bullet_list" = "Activa/desactiva la llista amb punts";
 "rich_text_editor_close_formatting_options" = "Cancel·la i tanca el format de text";
 "rich_text_editor_code_block" = "Activa/desactiva bloc de codi";
@@ -1026,6 +1028,7 @@
 "screen_media_details_uploaded_by" = "Pujat per";
 "screen_media_details_uploaded_on" = "Pujat el";
 "screen_media_picker_error_failed_selection" = "No s'ha pogut seleccionar el contingut. Torna-ho a provar.";
+"screen_media_upload_preview_a11y_draw" = "Draw";
 "screen_media_upload_preview_caption_warning" = "És possible que les llegendes no siguin visibles pels que utilitzin aplicacions antigues.";
 "screen_media_upload_preview_change_video_quality_prompt" = "Tap to change the video upload quality";
 "screen_media_upload_preview_error_could_not_be_uploaded" = "The file could not be uploaded.";

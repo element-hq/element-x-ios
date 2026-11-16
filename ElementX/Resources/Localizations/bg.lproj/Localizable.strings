@@ -481,6 +481,7 @@
 "dialog_video_quality_selector_subtitle_file_size" = "The max file size allowed is: %1$@";
 "dialog_video_quality_selector_subtitle_no_file_size" = "Select the quality of the video you want to upload.";
 "dialog_video_quality_selector_title" = "Select video upload quality";
+"emoji_picker_a11y_backspace" = "Delete the character before the cursor";
 "emoji_picker_category_activity" = "Дейности";
 "emoji_picker_category_flags" = "Знамена";
 "emoji_picker_category_foods" = "Храна & Напитки";
@@ -557,6 +558,7 @@
 "preference_rageshake" = "Rageshake to report bug";
 "rageshake_detection_dialog_content" = "You seem to be shaking the phone in frustration. Would you like to open the bug report screen?";
 "rich_text_editor_a11y_add_attachment" = "Прикачване на файл";
+"rich_text_editor_a11y_add_emoji" = "Add emoji";
 "rich_text_editor_bullet_list" = "Toggle bullet list";
 "rich_text_editor_close_formatting_options" = "Отказ и затваряне на форматирането на текст";
 "rich_text_editor_code_block" = "Превключване на кодов блок";
@@ -1026,6 +1028,7 @@
 "screen_media_details_uploaded_by" = "Uploaded by";
 "screen_media_details_uploaded_on" = "Uploaded on";
 "screen_media_picker_error_failed_selection" = "Неуспешен избор на мултимедия, моля, опитайте отново.";
+"screen_media_upload_preview_a11y_draw" = "Draw";
 "screen_media_upload_preview_caption_warning" = "Captions might not be visible to people using older apps.";
 "screen_media_upload_preview_change_video_quality_prompt" = "Докоснете, за да промените качеството на качване на видео";
 "screen_media_upload_preview_error_could_not_be_uploaded" = "Файлът не можа да бъде качен.";

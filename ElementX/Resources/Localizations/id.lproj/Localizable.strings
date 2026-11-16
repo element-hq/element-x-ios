@@ -481,6 +481,7 @@
 "dialog_video_quality_selector_subtitle_file_size" = "Ukuran file maksimum yang diizinkan adalah: %1$@";
 "dialog_video_quality_selector_subtitle_no_file_size" = "Pilih kualitas video yang ingin Anda unggah.";
 "dialog_video_quality_selector_title" = "Pilih kualitas unggahan video";
+"emoji_picker_a11y_backspace" = "Delete the character before the cursor";
 "emoji_picker_category_activity" = "Aktivitas";
 "emoji_picker_category_flags" = "Bendera";
 "emoji_picker_category_foods" = "Makanan & Minuman";
@@ -557,6 +558,7 @@
 "preference_rageshake" = "Rageshake untuk melaporkan kutu";
 "rageshake_detection_dialog_content" = "Anda tampaknya mengguncang telepon karena frustrasi. Apakah Anda ingin membuka layar laporan kutu?";
 "rich_text_editor_a11y_add_attachment" = "Tambahkan lampiran";
+"rich_text_editor_a11y_add_emoji" = "Add emoji";
 "rich_text_editor_bullet_list" = "Alihkan daftar poin";
 "rich_text_editor_close_formatting_options" = "Batalkan dan tutup pemformatan teks";
 "rich_text_editor_code_block" = "Alihkan blok kode";
@@ -1026,6 +1028,7 @@
 "screen_media_details_uploaded_by" = "Diunggah oleh";
 "screen_media_details_uploaded_on" = "Diunggah pada";
 "screen_media_picker_error_failed_selection" = "Gagal memilih media, silakan coba lagi.";
+"screen_media_upload_preview_a11y_draw" = "Draw";
 "screen_media_upload_preview_caption_warning" = "Keterangan mungkin tidak terlihat oleh orang yang menggunakan aplikasi lama.";
 "screen_media_upload_preview_change_video_quality_prompt" = "Ketuk untuk mengubah kualitas unggahan video";
 "screen_media_upload_preview_error_could_not_be_uploaded" = "Dokumen tidak dapat diunggah.";

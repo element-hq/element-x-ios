@@ -481,6 +481,7 @@
 "dialog_video_quality_selector_subtitle_file_size" = "La taille maximale de fichier autorisée est: %1$@";
 "dialog_video_quality_selector_subtitle_no_file_size" = "Sélectionnez la qualité des vidéos que vous souhaitez envoyer.";
 "dialog_video_quality_selector_title" = "Sélectionnez la qualité d'envoi des vidéos";
+"emoji_picker_a11y_backspace" = "Delete the character before the cursor";
 "emoji_picker_category_activity" = "Activités";
 "emoji_picker_category_flags" = "Drapeaux";
 "emoji_picker_category_foods" = "Nourriture et boissons";
@@ -557,6 +558,7 @@
 "preference_rageshake" = "Rageshake pour signaler un problème";
 "rageshake_detection_dialog_content" = "Vous semblez secouez votre téléphone avec frustration. Souhaitez-vous ouvrir le formulaire pour reporter un problème ?";
 "rich_text_editor_a11y_add_attachment" = "Ajouter une pièce jointe";
+"rich_text_editor_a11y_add_emoji" = "Add emoji";
 "rich_text_editor_bullet_list" = "Afficher une liste à puces";
 "rich_text_editor_close_formatting_options" = "Annuler et fermer les options de formatage";
 "rich_text_editor_code_block" = "Afficher le bloc de code";
@@ -607,8 +609,8 @@
 "screen_advanced_settings_share_presence_description" = "Si cette option est désactivée, vous ne pourrez ni envoyer ni recevoir de confirmations de lecture ni de notifications de saisie.";
 "screen_advanced_settings_show_media_timeline_always_hide" = "Toujours cacher";
 "screen_advanced_settings_show_media_timeline_always_show" = "Toujours montrer";
-"screen_advanced_settings_show_media_timeline_private_rooms" = "Show in private rooms";
-"screen_advanced_settings_show_media_timeline_subtitle" = "Hidden media can always be shown by tapping on it.";
+"screen_advanced_settings_show_media_timeline_private_rooms" = "Dans les salons privés";
+"screen_advanced_settings_show_media_timeline_subtitle" = "Un média caché peut toujours être affiché en cliquant dessus";
 "screen_advanced_settings_show_media_timeline_title" = "Afficher les médias dans les discussions.";
 "screen_advanced_settings_view_source_description" = "Activer cette option pour pouvoir voir la source des messages dans la discussion.";
 "screen_analytics_prompt_data_usage" = "Nous n’enregistrerons ni ne profilerons aucune donnée personnelle";
@@ -762,7 +764,7 @@
 "screen_create_room_private_option_description" = "Seules les personnes invitées peuvent joindre.";
 "screen_create_room_private_option_title" = "Privé";
 "screen_create_room_public_option_description" = "N'importe qui peut trouver ce salon.\nVous pouvez modifier cela à tout moment dans les paramètres du salon.";
-"screen_create_room_public_option_short_description" = "Tout le monde peut joindre";
+"screen_create_room_public_option_short_description" = "Tout le monde peut joindre y compris les personnes hors de votre organisation";
 "screen_create_room_public_option_title" = "Public";
 "screen_create_room_room_access_section_knocking_option_description" = "Tout le monde peut demander à joindre, mais un administrateur ou un modérateur devra accepter la demande";
 "screen_create_room_room_access_section_knocking_option_title" = "Autoriser la demande à joindre";
@@ -770,7 +772,7 @@
 "screen_create_room_room_access_section_knocking_restricted_option_title" = "Demander à joindre";
 "screen_create_room_room_access_section_private_option_description" = "Seules les personnes invitées peuvent joindre.";
 "screen_create_room_room_access_section_private_option_title" = "Privé";
-"screen_create_room_room_access_section_public_option_description" = "Tout le monde peut joindre";
+"screen_create_room_room_access_section_public_option_description" = "Tout le monde peut joindre y compris les personnes hors de votre organisation";
 "screen_create_room_room_access_section_public_option_title" = "Public";
 "screen_create_room_room_access_section_restricted_option_description" = "Toute membre de %1$@ peut joindre le salon.";
 "screen_create_room_room_access_section_restricted_option_title" = "Standard";
@@ -942,7 +944,7 @@
 "screen_knock_requests_list_title" = "Demandes en attente";
 "screen_labs_enable_gallery" = "Gallerie d'images";
 "screen_labs_enable_gallery_description" = "Envoyez plusieurs images ou vidéos en un seul message. Fonctionne parfaitement sur mobile, mais pas encore supporté sur le web.";
-"screen_labs_enable_knocking" = "Ask to join";
+"screen_labs_enable_knocking" = "Demander à rejoindre";
 "screen_labs_enable_knocking_description" = "Les utilisateurs peuvent demander l'accès à un salon privé. Stable sur mobile, une version web existe mais est encore expérimentale.";
 "screen_labs_enable_threads" = "Activez les fils de discussion.";
 "screen_labs_enable_threads_description" = "Un changement entraînera le redémarrage de l'application.";
@@ -1026,6 +1028,7 @@
 "screen_media_details_uploaded_by" = "Envoyé par";
 "screen_media_details_uploaded_on" = "Envoyé le";
 "screen_media_picker_error_failed_selection" = "Échec de la sélection du média, veuillez réessayer.";
+"screen_media_upload_preview_a11y_draw" = "Draw";
 "screen_media_upload_preview_caption_warning" = "Les légendes peuvent ne pas être visibles pour les utilisateurs d'anciennes applications.";
 "screen_media_upload_preview_change_video_quality_prompt" = "Cliquez pour modifier la qualité d'envoi de la vidéo";
 "screen_media_upload_preview_error_could_not_be_uploaded" = "Le fichier n'a pas pu être envoyé.";
@@ -1447,7 +1450,7 @@
 "screen_roomlist_filter_low_priority" = "Priorité basse";
 "screen_roomlist_filter_low_priority_empty_state_title" = "Vous n'avez pas encore de salon à priorité basse";
 "screen_roomlist_filter_mention" = "Mention";
-"screen_roomlist_filter_mention_empty_state_title" = "You don’t have any unread mentions";
+"screen_roomlist_filter_mention_empty_state_title" = "Vous n'avez aucune mention non lue";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Veuillez désélectionner des filtres pour voir vos discussions";
 "screen_roomlist_filter_mixed_empty_state_title" = "Vous n’avez pas de discussions pour cette sélection";
 "screen_roomlist_filter_people" = "Personnes";
@@ -1484,7 +1487,7 @@
 "screen_security_and_privacy_encryption_section_footer" = "Une fois activé, le chiffrement ne peut pas être désactivé.";
 "screen_security_and_privacy_encryption_section_header" = "Chiffrement";
 "screen_security_and_privacy_encryption_toggle_title" = "Activer le chiffrement de bout en bout";
-"screen_security_and_privacy_room_access_anyone_option_description" = "Tout le monde peut rejoindre.";
+"screen_security_and_privacy_room_access_anyone_option_description" = "Tout le monde peut joindre y compris les personnes hors de votre organisation";
 "screen_security_and_privacy_room_access_anyone_option_title" = "Tout le monde";
 "screen_security_and_privacy_room_access_footer" = "Choisissez les espaces dont les membres peuvent rejoindre ce salon sans invitation. %1$@";
 "screen_security_and_privacy_room_access_footer_manage_spaces_action" = "Gérer les espaces";

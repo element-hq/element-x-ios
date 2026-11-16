@@ -481,6 +481,7 @@
 "dialog_video_quality_selector_subtitle_file_size" = "Το μέγιστο επιτρεπόμενο μέγεθος αρχείου είναι: %1$@";
 "dialog_video_quality_selector_subtitle_no_file_size" = "Επιλέξτε την ποιότητα του βίντεο που θέλετε να ανεβάσετε.";
 "dialog_video_quality_selector_title" = "Επιλέξτε την ποιότητα μεταφόρτωσης βίντεο";
+"emoji_picker_a11y_backspace" = "Delete the character before the cursor";
 "emoji_picker_category_activity" = "Δραστηριότητες";
 "emoji_picker_category_flags" = "Σημαίες";
 "emoji_picker_category_foods" = "Φαγητό & Ποτό";
@@ -557,6 +558,7 @@
 "preference_rageshake" = "Κούνησε δυνατά τη συσκευή σου για να αναφέρεις κάποιο σφάλμα";
 "rageshake_detection_dialog_content" = "Φαίνεται να κουνάς το τηλέφωνο με σύγχυση. Θες να ανοίξεις την οθόνη αναφοράς σφαλμάτων;";
 "rich_text_editor_a11y_add_attachment" = "Προσθήκη συνημμένου";
+"rich_text_editor_a11y_add_emoji" = "Add emoji";
 "rich_text_editor_bullet_list" = "Διακόπτης λίστας κουκκίδων";
 "rich_text_editor_close_formatting_options" = "Ακύρωση και κλείσιμο μορφοποίησης κειμένου";
 "rich_text_editor_code_block" = "Διακόπτης μπλοκ κώδικα";
@@ -1026,6 +1028,7 @@
 "screen_media_details_uploaded_by" = "Μεταφορτώθηκε από";
 "screen_media_details_uploaded_on" = "Μεταφορτώθηκε στις";
 "screen_media_picker_error_failed_selection" = "Αποτυχία επιλογής πολυμέσου, δοκίμασε ξανά.";
+"screen_media_upload_preview_a11y_draw" = "Draw";
 "screen_media_upload_preview_caption_warning" = "Οι λεζάντες ενδέχεται να μην είναι ορατές σε άτομα που χρησιμοποιούν παλαιότερες εφαρμογές.";
 "screen_media_upload_preview_change_video_quality_prompt" = "Πατήστε για να αλλάξετε την ποιότητα μεταφόρτωσης βίντεο";
 "screen_media_upload_preview_error_could_not_be_uploaded" = "Δεν ήταν δυνατή η μεταφόρτωση του αρχείου.";

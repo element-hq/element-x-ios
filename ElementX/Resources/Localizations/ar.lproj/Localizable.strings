@@ -480,6 +480,7 @@
 "dialog_video_quality_selector_subtitle_file_size" = "الحد الأقصى المسموح به لحجم الملف هو: %1$@";
 "dialog_video_quality_selector_subtitle_no_file_size" = "اختر جودة الفيديو الذي تريد رفعه.";
 "dialog_video_quality_selector_title" = "اختر جودة رفع الفيديو";
+"emoji_picker_a11y_backspace" = "Delete the character before the cursor";
 "emoji_picker_category_activity" = "أنشطة";
 "emoji_picker_category_flags" = "أعلام";
 "emoji_picker_category_foods" = "أكل وشرب";
@@ -556,6 +557,7 @@
 "preference_rageshake" = "رجّ الهاتف للإبلاغ عن خطأ";
 "rageshake_detection_dialog_content" = "يظهر أنك تهز الهاتز بسرعة. أتودّ فتح شاشة الإبلاغ عن عطل؟";
 "rich_text_editor_a11y_add_attachment" = "إضافة مرفق";
+"rich_text_editor_a11y_add_emoji" = "Add emoji";
 "rich_text_editor_bullet_list" = "تبديل قائمة النقاط";
 "rich_text_editor_close_formatting_options" = "إلغاء وإغلاق خيارات تنسيق النص";
 "rich_text_editor_code_block" = "تبديل كتلة التعليمات البرمجية";
@@ -1025,6 +1027,7 @@
 "screen_media_details_uploaded_by" = "تم الرفع بواسطة";
 "screen_media_details_uploaded_on" = "تم الرفع في";
 "screen_media_picker_error_failed_selection" = "تعذّر اختيار الوسائط، يرجى المحاولة مجدداً.";
+"screen_media_upload_preview_a11y_draw" = "Draw";
 "screen_media_upload_preview_caption_warning" = "قد لا تكون التعليقات التوضيحية مرئية للأشخاص الذين يستخدمون تطبيقات أقدم.";
 "screen_media_upload_preview_change_video_quality_prompt" = "اضغط لتغيير جودة رفع الفيديو";
 "screen_media_upload_preview_error_could_not_be_uploaded" = "تعذّر رفع الملف.";

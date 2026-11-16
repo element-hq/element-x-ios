@@ -481,6 +481,7 @@
 "dialog_video_quality_selector_subtitle_file_size" = "Y maint ffeil mwyaf sy'n cael ei ganiatáu yw: %1$@";
 "dialog_video_quality_selector_subtitle_no_file_size" = "Dewiswch ansawdd y fideo rydych chi am ei llwytho.";
 "dialog_video_quality_selector_title" = "Dewiswch ansawdd llwytho fideo";
+"emoji_picker_a11y_backspace" = "Delete the character before the cursor";
 "emoji_picker_category_activity" = "Gweithgareddau";
 "emoji_picker_category_flags" = "Baneri";
 "emoji_picker_category_foods" = "Bwyd a Diod";
@@ -557,6 +558,7 @@
 "preference_rageshake" = "Rageshake i adrodd gwall";
 "rageshake_detection_dialog_content" = "Mae'n ymddangos eich bod yn ysgwyd y ffôn mewn rhwystredigaeth. Hoffech chi agor y sgrin adrodd gwallau?";
 "rich_text_editor_a11y_add_attachment" = "Ychwanegu atodiad";
+"rich_text_editor_a11y_add_emoji" = "Add emoji";
 "rich_text_editor_bullet_list" = "Toglo'r rhestr fwledi";
 "rich_text_editor_close_formatting_options" = "Cau'r dewisiadau fformatio";
 "rich_text_editor_code_block" = "Toglo'r bloc cod";
@@ -1026,6 +1028,7 @@
 "screen_media_details_uploaded_by" = "Llwythwyd gan";
 "screen_media_details_uploaded_on" = "Llwythwyd i fyny ar";
 "screen_media_picker_error_failed_selection" = "Wedi methu dewis cyfrwng, ceisiwch eto.";
+"screen_media_upload_preview_a11y_draw" = "Draw";
 "screen_media_upload_preview_caption_warning" = "Efallai na fydd capsiynau yn weladwy i bobl sy'n defnyddio apiau hŷn.";
 "screen_media_upload_preview_change_video_quality_prompt" = "Tapiwch i newid ansawdd llwytho'r fideo";
 "screen_media_upload_preview_error_could_not_be_uploaded" = "Nid oedd modd llwytho'r ffeil.";

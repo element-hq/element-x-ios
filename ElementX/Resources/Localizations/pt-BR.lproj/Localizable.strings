@@ -481,6 +481,7 @@
 "dialog_video_quality_selector_subtitle_file_size" = "O tamanho máximo permitido de arquivos é: %1$@";
 "dialog_video_quality_selector_subtitle_no_file_size" = "Selecione a qualidade do vídeo que quer enviar.";
 "dialog_video_quality_selector_title" = "Selecione a qualidade de envio dos vídeos";
+"emoji_picker_a11y_backspace" = "Delete the character before the cursor";
 "emoji_picker_category_activity" = "Atividades";
 "emoji_picker_category_flags" = "Bandeiras";
 "emoji_picker_category_foods" = "Comida & Bebida";
@@ -557,6 +558,7 @@
 "preference_rageshake" = "Agitar agressivamente para relatar um bug";
 "rageshake_detection_dialog_content" = "Você parece estar sacudindo o telefone com frustração. Você gostaria de abrir a tela de relatório de bugs?";
 "rich_text_editor_a11y_add_attachment" = "Adicionar anexo";
+"rich_text_editor_a11y_add_emoji" = "Add emoji";
 "rich_text_editor_bullet_list" = "Habilitar lista de objetivos";
 "rich_text_editor_close_formatting_options" = "Cancelar e fechar opções de formatação";
 "rich_text_editor_code_block" = "Habilitar bloco de código";
@@ -1026,6 +1028,7 @@
 "screen_media_details_uploaded_by" = "Enviado por";
 "screen_media_details_uploaded_on" = "Enviado em";
 "screen_media_picker_error_failed_selection" = "Falha ao selecionar a mídia, tente novamente.";
+"screen_media_upload_preview_a11y_draw" = "Draw";
 "screen_media_upload_preview_caption_warning" = "As legendas podem não ser visíveis para pessoas que usam apps mais antigos.";
 "screen_media_upload_preview_change_video_quality_prompt" = "Toque para alterar a qualidade do envio do vídeo";
 "screen_media_upload_preview_error_could_not_be_uploaded" = "O arquivo não pôde ser enviado.";

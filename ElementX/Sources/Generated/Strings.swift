@@ -1114,6 +1114,8 @@ internal nonisolated enum L10n {
   internal static var dialogVideoQualitySelectorSubtitleNoFileSize: String { return L10n.tr("Localizable", "dialog_video_quality_selector_subtitle_no_file_size") }
   /// Select video upload quality
   internal static var dialogVideoQualitySelectorTitle: String { return L10n.tr("Localizable", "dialog_video_quality_selector_title") }
+  /// Delete the character before the cursor
+  internal static var emojiPickerA11yBackspace: String { return L10n.tr("Localizable", "emoji_picker_a11y_backspace") }
   /// Activities
   internal static var emojiPickerCategoryActivity: String { return L10n.tr("Localizable", "emoji_picker_category_activity") }
   /// Flags
@@ -1322,6 +1324,8 @@ internal nonisolated enum L10n {
   internal static var rageshakeDetectionDialogContent: String { return L10n.tr("Localizable", "rageshake_detection_dialog_content") }
   /// Add attachment
   internal static var richTextEditorA11yAddAttachment: String { return L10n.tr("Localizable", "rich_text_editor_a11y_add_attachment") }
+  /// Add emoji
+  internal static var richTextEditorA11yAddEmoji: String { return L10n.tr("Localizable", "rich_text_editor_a11y_add_emoji") }
   /// Toggle bullet list
   internal static var richTextEditorBulletList: String { return L10n.tr("Localizable", "rich_text_editor_bullet_list") }
   /// Cancel and close text formatting

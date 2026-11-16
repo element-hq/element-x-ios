@@ -481,6 +481,7 @@
 "dialog_video_quality_selector_subtitle_file_size" = "Ruxsat etilgan maksimal fayl hajmi: %1$@";
 "dialog_video_quality_selector_subtitle_no_file_size" = "Yuklanadigan video sifatini tanlang.";
 "dialog_video_quality_selector_title" = "Video yuklash sifatini tanlang";
+"emoji_picker_a11y_backspace" = "Delete the character before the cursor";
 "emoji_picker_category_activity" = "Faoliyatlar";
 "emoji_picker_category_flags" = "Bayroqlar";
 "emoji_picker_category_foods" = "Oziq-ovqat va ichimliklar";
@@ -557,6 +558,7 @@
 "preference_rageshake" = "Xato haqida xabar berish uchun G'azablanish";
 "rageshake_detection_dialog_content" = "Siz hafsalasi pir bo'lib telefonni silkitayotganga o'xshaysiz. Xatolar haqida hisobot ekranini ochmoqchimisiz?";
 "rich_text_editor_a11y_add_attachment" = "Biriktirma qo'shing";
+"rich_text_editor_a11y_add_emoji" = "Add emoji";
 "rich_text_editor_bullet_list" = "Belgilar roʻyxatini almashtirish";
 "rich_text_editor_close_formatting_options" = "Formatlash parametrlarini yoping";
 "rich_text_editor_code_block" = "Kod blokini almashtirish";
@@ -1026,6 +1028,7 @@
 "screen_media_details_uploaded_by" = "Tomonidan yuklangan";
 "screen_media_details_uploaded_on" = "Yuklangan";
 "screen_media_picker_error_failed_selection" = "Media tanlash jarayonida xatolik yuz berdi, qayta urinib ko'ring";
+"screen_media_upload_preview_a11y_draw" = "Draw";
 "screen_media_upload_preview_caption_warning" = "Taglavhalar eski ilovalardan foydalanuvchilarga ko‘rinmasligi mumkin.";
 "screen_media_upload_preview_change_video_quality_prompt" = "Video yuklash sifatini oʻzgartirish uchun bosing";
 "screen_media_upload_preview_error_could_not_be_uploaded" = "Faylni yuklab boʻlmadi.";

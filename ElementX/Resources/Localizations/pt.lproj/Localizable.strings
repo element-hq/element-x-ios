@@ -481,6 +481,7 @@
 "dialog_video_quality_selector_subtitle_file_size" = "O tamanho máximo de ficheiro permitido é: %1$@";
 "dialog_video_quality_selector_subtitle_no_file_size" = "Seleciona a qualidade do vídeo que pretendes carregar.";
 "dialog_video_quality_selector_title" = "Seleciona a qualidade de carregamento do vídeo";
+"emoji_picker_a11y_backspace" = "Delete the character before the cursor";
 "emoji_picker_category_activity" = "Atividades";
 "emoji_picker_category_flags" = "Bandeiras";
 "emoji_picker_category_foods" = "Comidas e Bebidas";
@@ -557,6 +558,7 @@
 "preference_rageshake" = "Agita o dispositivo em fúria para comunicar um problema";
 "rageshake_detection_dialog_content" = "Parece que estás a abanar o telefone em sinal de frustração. Gostarias de abrir o painel de relatório de erros?";
 "rich_text_editor_a11y_add_attachment" = "Adicionar anexo";
+"rich_text_editor_a11y_add_emoji" = "Add emoji";
 "rich_text_editor_bullet_list" = "Ativar/desativar lista de pontos";
 "rich_text_editor_close_formatting_options" = "Cancelar e fechar opções de formatação";
 "rich_text_editor_code_block" = "Ativar/desativar bloco de código";
@@ -1026,6 +1028,7 @@
 "screen_media_details_uploaded_by" = "Enviado por";
 "screen_media_details_uploaded_on" = "Enviado a";
 "screen_media_picker_error_failed_selection" = "Falha ao selecionar multimédia, por favor tente novamente.";
+"screen_media_upload_preview_a11y_draw" = "Draw";
 "screen_media_upload_preview_caption_warning" = "As legendas poderão não ser visíveis em versões mais antigas da aplicação.";
 "screen_media_upload_preview_change_video_quality_prompt" = "Toca para alterar a qualidade de carregamento do vídeo";
 "screen_media_upload_preview_error_could_not_be_uploaded" = "Não foi possível enviar o ficheiro";

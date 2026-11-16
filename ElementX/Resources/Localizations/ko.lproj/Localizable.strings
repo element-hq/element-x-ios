@@ -481,6 +481,7 @@
 "dialog_video_quality_selector_subtitle_file_size" = "허용되는 최대 파일 크기: %1$@\n";
 "dialog_video_quality_selector_subtitle_no_file_size" = "업로드할 비디오의 품질을 선택하세요.";
 "dialog_video_quality_selector_title" = "비디오 업로드 품질 선택";
+"emoji_picker_a11y_backspace" = "Delete the character before the cursor";
 "emoji_picker_category_activity" = "활동";
 "emoji_picker_category_flags" = "깃발";
 "emoji_picker_category_foods" = "음식 & 음료";
@@ -557,6 +558,7 @@
 "preference_rageshake" = "강하게 흔들어서 오류 보고하기";
 "rageshake_detection_dialog_content" = "휴대폰을 강하게 흔드셨습니다. 버그 보고 화면을 여시겠어요?";
 "rich_text_editor_a11y_add_attachment" = "첨부파일 추가";
+"rich_text_editor_a11y_add_emoji" = "Add emoji";
 "rich_text_editor_bullet_list" = "글머리 기호 목록 전환";
 "rich_text_editor_close_formatting_options" = "텍스트 서식 취소 및 닫기";
 "rich_text_editor_code_block" = "코드 블록 전환";
@@ -1026,6 +1028,7 @@
 "screen_media_details_uploaded_by" = "에 의해 업로드됨";
 "screen_media_details_uploaded_on" = "에 업로드됨";
 "screen_media_picker_error_failed_selection" = "미디어 선택에 실패했습니다. 다시 시도해 주세요.";
+"screen_media_upload_preview_a11y_draw" = "Draw";
 "screen_media_upload_preview_caption_warning" = "캡션은 오래된 앱을 사용하는 사용자에게 표시되지 않을 수 있습니다.";
 "screen_media_upload_preview_change_video_quality_prompt" = "비디오 업로드 품질을 변경하려면 탭하세요";
 "screen_media_upload_preview_error_could_not_be_uploaded" = "파일을 업로드할 수 없습니다.";
