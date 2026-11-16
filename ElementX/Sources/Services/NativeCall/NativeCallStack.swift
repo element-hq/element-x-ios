@@ -65,11 +65,13 @@ final class NativeCallStack {
         Self.installRTCLogBridge()
     }
     
-    /// Hangs up any call in progress.
-    func stop() {
-        MXLog.info("\(Self.logPrefix) Stopping the native call stack, in a call: \(controller.isInCall)")
+    /// Hangs up the call in progress, closes a failed call's screen and drops the call queued behind it.
+    func endCall() {
+        MXLog.info("\(Self.logPrefix) Ending the native call, holds a room: \(controller.room != nil)")
         
-        if controller.isInCall {
+        pendingCallRequest = nil
+        
+        if controller.room != nil {
             controller.hangUp()
         }
     }

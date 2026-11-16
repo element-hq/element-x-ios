@@ -5507,6 +5507,23 @@ nonisolated class ElementCallServiceMock: ElementCallServiceProtocol, @unchecked
         restoreNativeCallCallsCountLock.withLock { restoreNativeCallUnderlyingCallsCount += 1 }
         restoreNativeCallClosure?()
     }
+    //MARK: - endNativeCall
+
+    private let endNativeCallCallsCountLock = NSLock()
+    private nonisolated(unsafe) var endNativeCallUnderlyingCallsCount = 0
+    var endNativeCallCallsCount: Int {
+        get { endNativeCallCallsCountLock.withLock { endNativeCallUnderlyingCallsCount } }
+        set { endNativeCallCallsCountLock.withLock { endNativeCallUnderlyingCallsCount = newValue } }
+    }
+    var endNativeCallCalled: Bool {
+        return endNativeCallCallsCount > 0
+    }
+    nonisolated(unsafe) var endNativeCallClosure: (() -> Void)?
+
+    func endNativeCall() {
+        endNativeCallCallsCountLock.withLock { endNativeCallUnderlyingCallsCount += 1 }
+        endNativeCallClosure?()
+    }
     //MARK: - setupCallSession
 
     private let setupCallSessionRoomIDRoomDisplayNameIsVideoKindCallsCountLock = NSLock()

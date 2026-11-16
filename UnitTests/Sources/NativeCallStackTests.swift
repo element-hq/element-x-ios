@@ -48,7 +48,7 @@ final class NativeCallStackTests {
         #expect(stack.controller.callData?.isStartingCall == true)
         #expect(stack.controller.callData?.isAudioCall == true)
         
-        stack.stop()
+        stack.endCall()
         
         let joining = NativeCallStack(backend: ElementCallFakeMatrixBackend(),
                                       system: NativeCallSystem(service: service),
@@ -104,6 +104,21 @@ final class NativeCallStackTests {
         
         try await waitForPresentations([.dismiss])
         #expect(stack.controller.room == nil, "The controller is reset so the next call starts clean")
+    }
+    
+    @Test("Ending the call drops the one queued behind it")
+    func endCallDropsQueuedCall() async throws {
+        stack.handleCallRequest(roomProxy: roomProxy(id: "!first:example.com"), isVoiceCall: false, answeredFromCallKit: false)
+        stack.handleCallRequest(roomProxy: roomProxy(id: "!second:example.com"), isVoiceCall: false, answeredFromCallKit: false)
+        presentations.removeAll()
+        
+        let dismissed = deferFulfillment(stack.actions) { $0 == .dismiss }
+        stack.endCall()
+        try await dismissed.fulfill()
+        
+        let nothingElse = deferFailure(stack.actions, timeout: .milliseconds(100)) { _ in true }
+        try await nothingElse.fulfill()
+        #expect(presentations == [.dismiss])
     }
     
     // MARK: - Helpers

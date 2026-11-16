@@ -116,6 +116,9 @@ protocol ElementCallServiceProtocol: AnyObject {
     /// Brings the native call back out of its system window.
     func restoreNativeCall()
     
+    /// Hangs up the account's native call, if it has one.
+    func endNativeCall()
+    
     /// Registers the call with CallKit, taking over the account's answered incoming call for the room if there is one.
     /// Returns once the manager has set the call up.
     func setupCallSession(roomID: String, roomDisplayName: String, isVideo: Bool, kind: ElementCallSessionKind) async

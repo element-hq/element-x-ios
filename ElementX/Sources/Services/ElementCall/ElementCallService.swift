@@ -125,6 +125,10 @@ final class ElementCallService: ElementCallServiceProtocol {
         nativeCallStack?.restore()
     }
     
+    func endNativeCall() {
+        nativeCallStack?.endCall()
+    }
+    
     func setupCallSession(roomID: String, roomDisplayName: String, isVideo: Bool, kind: ElementCallSessionKind) async {
         await withCheckedContinuation { continuation in
             if let staleContinuation = callSessionSetUpContinuations.removeValue(forKey: roomID) {
@@ -251,7 +255,7 @@ final class ElementCallService: ElementCallServiceProtocol {
         self.nativeCallStack = nil
         nativeCallCancellable = nil
         
-        nativeCallStack.stop()
+        nativeCallStack.endCall()
         actionsSubject.send(.nativeCallPresentation(.dismiss))
     }
     

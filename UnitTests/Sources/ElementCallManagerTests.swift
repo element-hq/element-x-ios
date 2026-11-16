@@ -1164,7 +1164,8 @@ final class ElementCallManagerTests {
         
         #expect(bob.ongoingCallRoomIDPublisher.value == nil, "Bob hears the call is gone before its service is dropped")
         #expect(callProvider.reportCallWithEndedAtReasonReceivedInvocations.contains { $0.reason == .failed } == (kind != .webView))
-        #expect(bob.systemEventReceivedReceivedInvocations.contains(.endCallRequested(roomID: "!room:example.com")) == (kind != .webView))
+        #expect(bob.endNativeCallCallsCount == 1)
+        #expect(!bob.systemEventReceivedReceivedInvocations.contains(.endCallRequested(roomID: "!room:example.com")), "One hang-up, through the service")
         
         await reportIncomingPush(isVoiceCall: false, roomID: "!other:example.com", rtcNotificationID: "$111")
         #expect(!callProvider.reportCallWithEndedAtReasonReceivedInvocations.contains { $0.reason == .unanswered })
@@ -1232,7 +1233,8 @@ final class ElementCallManagerTests {
         
         #expect(oldBob.ongoingCallRoomIDPublisher.value == nil, "The old service hears nil before it's swapped out")
         #expect(callProvider.reportCallWithEndedAtReasonReceivedInvocations.contains { $0.reason == .failed } == (kind != .webView))
-        #expect(oldBob.systemEventReceivedReceivedInvocations.contains(.endCallRequested(roomID: "!room:example.com")) == (kind != .webView))
+        #expect(oldBob.endNativeCallCallsCount == 1)
+        #expect(!oldBob.systemEventReceivedReceivedInvocations.contains(.endCallRequested(roomID: "!room:example.com")), "One hang-up, through the service")
         
         await reportIncomingPush(isVoiceCall: false, roomID: "!other:example.com", rtcNotificationID: "$111")
         #expect(!callProvider.reportCallWithEndedAtReasonReceivedInvocations.contains { $0.reason == .unanswered })
@@ -1372,6 +1374,16 @@ final class ElementCallManagerTests {
         
         serviceActions.send(.callRequested(.mock(roomID: otherRoomID)))
         #expect(callScreens.last == .present(userID: aliceID, kind: .webView(.mock(roomID: otherRoomID))))
+    }
+    
+    @Test("Ending an account's calls hangs up its native call")
+    func endAccountNativeCall() {
+        showNativeCall()
+        
+        serviceActions.send(.callsEndRequested)
+        
+        #expect(service.endNativeCallCallsCount == 1)
+        #expect(callScreens.last == .dismiss)
     }
     
     @Test("The system ending a web view call dismisses its screen")

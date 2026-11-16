@@ -154,6 +154,7 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
         if let replacedService = services[userID], replacedService !== service {
             // While the old service is still registered, so it hears its call is gone.
             endOngoingCall(userID: userID)
+            replacedService.endNativeCall()
             dismissCallScreen(of: userID)
             replacedService.stopObservingIncomingCall()
         }
@@ -218,6 +219,7 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
         }
         
         endOngoingCall(userID: userID)
+        services[userID]?.endNativeCall()
         dismissCallScreen(of: userID)
     }
     
@@ -909,12 +911,10 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
     private func endOngoingCall(userID: String) {
         guard let ongoingCallID, ongoingCallID.userID == userID else { return }
         
-        // A backstop: the flow's `stop()` or the native stack's hang-up normally gets there first.
-        MXLog.warning("Ending the ongoing call of an account whose call service is going, native: \(ongoingCallID.isNative)")
+        MXLog.info("Ending the ongoing call of an account whose call service is going, native: \(ongoingCallID.isNative)")
         
         if ongoingCallID.isNative {
             callProvider.reportCall(with: ongoingCallID.callKitID, endedAt: nil, reason: .failed)
-            services[userID]?.systemEventReceived(.endCallRequested(roomID: ongoingCallID.roomID))
         }
         
         self.ongoingCallID = nil
