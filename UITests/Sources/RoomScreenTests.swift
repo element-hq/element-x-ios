@@ -6,6 +6,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import SnapshotTesting
 import XCTest
 
 @MainActor
@@ -69,13 +70,14 @@ class RoomScreenUITests: XCTestCase {
         for _ in 0...5 {
             app.swipeDown()
         }
-        try await app.assertScreenshot() // Assert initial state for comparison.
+        let initialScreenshot = try await app.assertScreenshot(step: 0) // Assert initial state for comparison.
         
         // When a back pagination occurs.
         try await performOperation(.paginate, using: client)
         
         // Then the bottom of the timeline should remain unchanged (with new items having been added above).
-        try await app.assertScreenshot()
+        let paginatedScreenshot = try await app.assertScreenshot(step: 1)
+        assertBottomHalvesMatch(initialScreenshot, paginatedScreenshot)
     }
     
     func testTimelineLayoutAtBottom() async throws {
@@ -166,5 +168,15 @@ class RoomScreenUITests: XCTestCase {
     private func tapMessageComposer(in app: XCUIApplication) async throws {
         app.textViews.element.tap()
         try await Task.sleep(for: .seconds(10)) // Allow the animations to complete
+    }
+    
+    /// Fails the test if the bottom halves of two screenshots differ, using the same tolerance as the snapshots.
+    private func assertBottomHalvesMatch(_ first: UIImage, _ second: UIImage) {
+        let topHalfInsets = UIEdgeInsets(top: first.size.height / 2, left: 0, bottom: 0, right: 0)
+        let diffing = Diffing<UIImage>.image(precision: 0.99, perceptualPrecision: 0.98)
+        guard let difference = diffing.diffV2(first.inset(by: topHalfInsets), second.inset(by: topHalfInsets)) else { return }
+        
+        let (message, _) = difference
+        XCTFail("The bottom of the timeline moved: \(message)")
     }
 }

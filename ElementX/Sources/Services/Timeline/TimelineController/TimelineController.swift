@@ -570,11 +570,11 @@ class TimelineController: TimelineControllerProtocol {
             return newTimelineItems
         }.value
         
-        // Check if we need to add anything to the top of the timeline.
+        // Kept while idle too, so the indicator doesn't flash between pages until the start of the timeline.
         switch paginationState.backward {
-        case .paginating:
+        case .idle, .paginating:
             newTimelineItems.insert(PaginationIndicatorRoomTimelineItem(position: .start), at: 0)
-        case .idle, .endReached:
+        case .endReached:
             break
         }
         
