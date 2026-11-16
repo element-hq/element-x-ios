@@ -80,7 +80,6 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     private func presentSettingsScreen(animated: Bool) {
         let settingsScreenCoordinator = SettingsScreenCoordinator(parameters: .init(userSession: flowParameters.userSession,
                                                                                     availableSessionsPublisher: flowParameters.availableSessionsPublisher,
-                                                                                    isBugReportServiceEnabled: flowParameters.bugReportService.isEnabled,
                                                                                     isInSecondaryWindow: isInSecondaryWindow,
                                                                                     userIndicatorController: flowParameters.userIndicatorController))
         
@@ -111,10 +110,11 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                 case .moderationAndSafety:
                     presentModerationAndSafetySettings()
                 case .bugReport:
-                    bugReportFlowCoordinator = BugReportFlowCoordinator(parameters: .init(presentationMode: .push(navigationStackCoordinator),
-                                                                                          userIndicatorController: flowParameters.userIndicatorController,
+                    bugReportFlowCoordinator = BugReportFlowCoordinator(parameters: .init(flow: .userSession(flowParameters.userSession),
+                                                                                          presentationMode: .push(navigationStackCoordinator),
                                                                                           bugReportService: flowParameters.bugReportService,
-                                                                                          userSession: flowParameters.userSession))
+                                                                                          bugReportHook: flowParameters.userSession.userHooks.bugReportHook,
+                                                                                          userIndicatorController: flowParameters.userIndicatorController))
                     bugReportFlowCoordinator?.start()
                     
                 case .logout:

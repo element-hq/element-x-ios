@@ -19,6 +19,7 @@ enum BugReportScreenViewModelAction {
 
 struct BugReportScreenViewState: BindableState {
     let canSendLogFiles: Bool
+    var canChangeIncludeLogs = true
     var screenshot: UIImage?
     var bindings: BugReportScreenViewStateBindings
     let isModallyPresented: Bool
@@ -27,7 +28,7 @@ struct BugReportScreenViewState: BindableState {
 
 struct BugReportScreenViewStateBindings {
     var reportText: String
-    var sendingLogsEnabled: Bool
+    var includeLogs: Bool
     var canContact: Bool
 }
 

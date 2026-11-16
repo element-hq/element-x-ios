@@ -296,6 +296,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     // perphery: ignore - used in release mode
     func presentCrashedLastRunAlert() {
+        guard userSettings.account.bugReportRageshakeConfiguration.publisher.value.isEnabled else { return }
+        
         // Delay setting the alert otherwise it automatically gets dismissed. Same as the force logout one.
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [self] in
             state.bindings.alertInfo = AlertInfo(id: UUID(),

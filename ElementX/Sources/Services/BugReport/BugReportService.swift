@@ -13,7 +13,6 @@ import Sentry
 import UIKit
 
 class BugReportService: NSObject, BugReportServiceProtocol {
-    private var rageshakeURL: RageshakeConfiguration
     private let applicationID: String
     private let sdkGitSHA: String
     private let session: URLSession
@@ -22,40 +21,29 @@ class BugReportService: NSObject, BugReportServiceProtocol {
     private let progressSubject = PassthroughSubject<Double, Never>()
     private var cancellables = Set<AnyCancellable>()
     
-    var isEnabled: Bool {
-        rageshakeURL != .disabled
-    }
-    
     let lastCrashEventIDSubject = CurrentValueSubject<String?, Never>(nil)
     
-    init(rageshakeURLPublisher: CurrentValuePublisher<RageshakeConfiguration, Never>,
-         applicationID: String,
+    init(applicationID: String,
          sdkGitSHA: String,
          session: URLSession = .shared,
          appHooks: AppHooks) {
-        rageshakeURL = rageshakeURLPublisher.value
         self.applicationID = applicationID
         self.sdkGitSHA = sdkGitSHA
         self.session = session
         self.appHooks = appHooks
-        
-        super.init()
-        
-        rageshakeURLPublisher
-            .weakAssign(to: \.rageshakeURL, on: self)
-            .store(in: &cancellables)
     }
     
     // MARK: - BugReportServiceProtocol
     
     // swiftlint:disable:next cyclomatic_complexity
     func submitBugReport(_ bugReport: BugReport,
+                         flow: Flow,
                          progressListener: CurrentValueSubject<Double, Never>) async -> Result<SubmitBugReportResponse, BugReportServiceError> {
-        guard case let .url(rageshakeURL) = rageshakeURL else {
+        guard case let .url(rageshakeURL) = flow.rageshakeConfiguration else {
             fatalError("No bug report URL set, the screen should not be shown in this case.")
         }
         
-        var bugReport = appHooks.bugReportHook.update(bugReport)
+        var bugReport = appHooks.bugReportHook.update(bugReport, for: flow)
         
         var params = [
             MultipartFormData(key: "text", type: .text(value: bugReport.text)),

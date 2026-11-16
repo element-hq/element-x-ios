@@ -312,14 +312,14 @@ final class AuthenticationStartScreenViewModelTests {
                                                       classicAppManager: classicAppManager,
                                                       clientFactory: clientFactory,
                                                       appSettings: appSettings,
-                                                      appHooks: AppHooks())
+                                                      appHooks: AppHooks(),
+                                                      targetContext: .mock)
         
         await authenticationService.setupClassicAppAccountState()
         
         viewModel = AuthenticationStartScreenViewModel(authenticationService: authenticationService,
                                                        provisioningParameters: provisioningParameters,
                                                        isAddingAccount: isAddingAccount,
-                                                       isBugReportServiceEnabled: true,
                                                        appMediator: AppMediatorMock(),
                                                        appSettings: appSettings,
                                                        mediaProvider: MediaProviderMock(.init()),

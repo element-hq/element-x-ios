@@ -16,7 +16,7 @@ nonisolated struct BugReport: Equatable {
     let ed25519: String?
     let curve25519: String?
     let text: String
-    let logFiles: [URL]?
+    var logFiles: [URL]?
     let canContact: Bool
     var githubLabels: [String]
     let files: [URL]
@@ -47,12 +47,33 @@ enum BugReportServiceError: LocalizedError {
     }
 }
 
+extension BugReportService {
+    /// The flow a bug report is being sent from.
+    enum Flow {
+        case authentication(AppSettings)
+        case userSession(UserSessionProtocol)
+        
+        var userSession: UserSessionProtocol? {
+            switch self {
+            case .authentication: nil
+            case .userSession(let userSession): userSession
+            }
+        }
+        
+        var rageshakeConfiguration: RageshakeConfiguration {
+            switch self {
+            case .authentication(let appSettings): appSettings.bundledBugReportRageshakeConfiguration
+            case .userSession(let userSession): userSession.userSettings.account.bugReportRageshakeConfiguration.publisher.value
+            }
+        }
+    }
+}
+
 // sourcery: AutoMockable
 protocol BugReportServiceProtocol: AnyObject {
-    var isEnabled: Bool { get }
-    
     var lastCrashEventIDSubject: CurrentValueSubject<String?, Never> { get }
     
     func submitBugReport(_ bugReport: BugReport,
+                         flow: BugReportService.Flow,
                          progressListener: CurrentValueSubject<Double, Never>) async -> Result<SubmitBugReportResponse, BugReportServiceError>
 }

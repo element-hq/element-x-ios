@@ -11,7 +11,8 @@ protocol AuthenticationServiceFactoryProtocol {
                                    encryptionKeyProvider: EncryptionKeyProviderProtocol,
                                    classicAppManager: ClassicAppManagerProtocol?,
                                    appSettings: AppSettings,
-                                   appHooks: AppHooks) -> AuthenticationServiceProtocol
+                                   appHooks: AppHooks,
+                                   targetContext: Target.Context) -> AuthenticationServiceProtocol
 }
 
 /// A wrapper around `AuthenticationService` to allow for mocked services to be injected into tests.
@@ -20,11 +21,13 @@ struct AuthenticationServiceFactory: AuthenticationServiceFactoryProtocol {
                                    encryptionKeyProvider: EncryptionKeyProviderProtocol,
                                    classicAppManager: ClassicAppManagerProtocol?,
                                    appSettings: AppSettings,
-                                   appHooks: AppHooks) -> AuthenticationServiceProtocol {
+                                   appHooks: AppHooks,
+                                   targetContext: Target.Context) -> AuthenticationServiceProtocol {
         AuthenticationService(userSessionManager: userSessionManager,
                               encryptionKeyProvider: encryptionKeyProvider,
                               classicAppManager: classicAppManager,
                               appSettings: appSettings,
-                              appHooks: appHooks)
+                              appHooks: appHooks,
+                              targetContext: targetContext)
     }
 }

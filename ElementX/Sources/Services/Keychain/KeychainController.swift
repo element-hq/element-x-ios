@@ -99,6 +99,14 @@ final nonisolated class KeychainController: KeychainControllerProtocol {
         }
     }
     
+    func collectSessionHomeservers() -> Set<String> {
+        // Any unreadable tokens are left to be logged and removed after logging is configured.
+        Set(restorationTokenKeychain.allKeys().compactMap { username in
+            guard let tokenData = try? restorationTokenKeychain.getData(username) else { return nil }
+            return try? JSONDecoder().decode(RestorationToken.self, from: tokenData).session.homeserverUrl
+        })
+    }
+    
     // MARK: - ClientSessionDelegate
     
     func retrieveSessionFromKeychain(userId: String) throws -> Session {

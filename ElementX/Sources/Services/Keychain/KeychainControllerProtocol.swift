@@ -23,6 +23,11 @@ nonisolated protocol KeychainControllerProtocol: ClientSessionDelegate {
     func removeRestorationTokenForUsername(_ username: String)
     func removeAllRestorationTokens()
     
+    /// Collects the homeservers of the sessions stored in the restoration tokens, skipping any tokens that can't be read.
+    ///
+    /// Unlike ``restorationTokens()`` this is non-destructive and doesn't log, so is safe to call before logging is configured.
+    func collectSessionHomeservers() -> Set<String>
+    
     // MARK: App Secrets
     
     /// Whether or not an App Lock PIN code has been set.

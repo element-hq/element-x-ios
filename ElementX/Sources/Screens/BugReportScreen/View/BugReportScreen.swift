@@ -65,7 +65,8 @@ struct BugReportScreen: View {
         Section {
             if canSendLogFiles {
                 ListRow(label: .plain(title: L10n.screenBugReportIncludeLogs),
-                        kind: .toggle($context.sendingLogsEnabled))
+                        kind: .toggle($context.includeLogs))
+                    .disabled(!context.viewState.canChangeIncludeLogs)
                     .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.sendLogs)
             }
             ListRow(label: .plain(title: L10n.screenBugReportViewLogs),
@@ -165,18 +166,18 @@ struct BugReportScreen: View {
 struct BugReportScreen_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         ElementNavigationStack {
-            let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
-            BugReportScreen(context: BugReportScreenViewModel(bugReportService: BugReportServiceMock(.init()),
-                                                              clientProxy: clientProxy,
+            BugReportScreen(context: BugReportScreenViewModel(flow: .userSession(UserSessionMock(.init())),
+                                                              bugReportService: BugReportServiceMock(.init()),
+                                                              bugReportHook: DefaultBugReportHook(),
                                                               screenshot: nil,
                                                               isModallyPresented: false).context)
         }
         .previewDisplayName("Without Screenshot")
         
         ElementNavigationStack {
-            let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
-            BugReportScreen(context: BugReportScreenViewModel(bugReportService: BugReportServiceMock(.init()),
-                                                              clientProxy: clientProxy,
+            BugReportScreen(context: BugReportScreenViewModel(flow: .userSession(UserSessionMock(.init())),
+                                                              bugReportService: BugReportServiceMock(.init()),
+                                                              bugReportHook: DefaultBugReportHook(),
                                                               screenshot: Asset.Images.appLogo.image,
                                                               isModallyPresented: false).context)
         }

@@ -9,14 +9,12 @@
 import Foundation
 
 extension BugReportServiceMock {
-    struct Configuration {
-        var isEnabled = true
-    }
+    struct Configuration { }
     
     convenience init(_ configuration: Configuration) {
         self.init()
         
-        isEnabled = configuration.isEnabled
         lastCrashEventIDSubject = .init(nil)
+        submitBugReportFlowProgressListenerReturnValue = .success(SubmitBugReportResponse(reportURL: "https://example.com/123"))
     }
 }

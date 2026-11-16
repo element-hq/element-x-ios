@@ -18,6 +18,7 @@ nonisolated struct UserHooks: Sendable {
     let inviteUsersScreenHook: InviteUsersScreenHookProtocol
     let securityAndPrivacyScreenHook: SecurityAndPrivacyScreenHookProtocol
     let oAuthAccountSettingsPresenterHook: OAuthAccountSettingsPresenterHookProtocol
+    let bugReportHook: BugReportHookProtocol
     let developerOptionsScreenHook: DeveloperOptionsScreenHookProtocol
     
     init(roomScreenHook: RoomScreenHookProtocol = DefaultRoomScreenHook(),
@@ -30,6 +31,7 @@ nonisolated struct UserHooks: Sendable {
          inviteUsersScreenHook: InviteUsersScreenHookProtocol = DefaultInviteUsersScreenHook(),
          securityAndPrivacyScreenHook: SecurityAndPrivacyScreenHookProtocol = DefaultSecurityAndPrivacyScreenHook(),
          oAuthAccountSettingsPresenterHook: OAuthAccountSettingsPresenterHookProtocol = DefaultOAuthAccountSettingsPresenterHook(),
+         bugReportHook: BugReportHookProtocol = DefaultBugReportHook(),
          developerOptionsScreenHook: DeveloperOptionsScreenHookProtocol = DefaultDeveloperOptionsScreenHook()) {
         self.roomScreenHook = roomScreenHook
         self.roomDetailsScreenHook = roomDetailsScreenHook
@@ -41,6 +43,7 @@ nonisolated struct UserHooks: Sendable {
         self.inviteUsersScreenHook = inviteUsersScreenHook
         self.securityAndPrivacyScreenHook = securityAndPrivacyScreenHook
         self.oAuthAccountSettingsPresenterHook = oAuthAccountSettingsPresenterHook
+        self.bugReportHook = bugReportHook
         self.developerOptionsScreenHook = developerOptionsScreenHook
     }
 }

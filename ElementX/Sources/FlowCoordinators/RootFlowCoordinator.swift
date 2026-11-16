@@ -29,6 +29,7 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
     private let appHooks: AppHooks
     private let analyticsService: AnalyticsServiceProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
+    private let targetContext: Target.Context
     private let authenticationServiceFactory: AuthenticationServiceFactoryProtocol
     
     private var authenticationFlowCoordinator: AuthenticationFlowCoordinator?
@@ -115,6 +116,7 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
          appHooks: AppHooks,
          analyticsService: AnalyticsServiceProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
+         targetContext: Target.Context,
          authenticationServiceFactory: AuthenticationServiceFactoryProtocol = AuthenticationServiceFactory()) {
         self.navigationRootCoordinator = navigationRootCoordinator
         self.userSessionManager = userSessionManager
@@ -126,6 +128,7 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
         self.appHooks = appHooks
         self.analyticsService = analyticsService
         self.userIndicatorController = userIndicatorController
+        self.targetContext = targetContext
         self.authenticationServiceFactory = authenticationServiceFactory
         
         stateMachine = .init(state: .initial)
@@ -268,6 +271,7 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
             case (.authenticationFlow, .startUserSession, .userSessionFlow):
                 // TODO: Restore the settings screen when cancelling with isAddingAccount == true.
                 authenticationFlowCoordinator = nil
+                targetContext.finishAuthentication()
                 startUserSessionFlow(isNewLogin: true)
             case (.userSessionFlow, .clearCache, .clearingCache(let userID)):
                 stopUserSessionFlow()
@@ -329,6 +333,8 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func handleRemovedAccount(userID: String, error: UserSessionManagerError?) {
+        targetContext.update()
+        
         switch stateMachine.state {
         case .initial:
             if userSessionManager.userIDs.isEmpty {
@@ -363,12 +369,15 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func startAuthenticationFlow(isAddingAccount: Bool) {
+        targetContext.startAuthentication()
+        
         let navigationStackCoordinator = NavigationStackCoordinator()
         let authenticationService = authenticationServiceFactory.makeAuthenticationService(userSessionManager: userSessionManager,
                                                                                            encryptionKeyProvider: EncryptionKeyProvider(),
                                                                                            classicAppManager: ClassicAppManager(),
                                                                                            appSettings: appSettings,
-                                                                                           appHooks: appHooks)
+                                                                                           appHooks: appHooks,
+                                                                                           targetContext: targetContext)
         Task { await authenticationService.setupClassicAppAccountState() }
         
         let coordinator = AuthenticationFlowCoordinator(authenticationService: authenticationService,

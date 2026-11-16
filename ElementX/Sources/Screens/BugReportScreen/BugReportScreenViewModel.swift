@@ -12,8 +12,8 @@ import SwiftUI
 typealias BugReportScreenViewModelType = StateStoreViewModelV2<BugReportScreenViewState, BugReportScreenViewAction>
 
 class BugReportScreenViewModel: BugReportScreenViewModelType, BugReportScreenViewModelProtocol {
+    private let flow: BugReportService.Flow
     private let bugReportService: BugReportServiceProtocol
-    private let clientProxy: ClientProxyProtocol?
     
     private let logFiles: [URL]
     
@@ -24,21 +24,23 @@ class BugReportScreenViewModel: BugReportScreenViewModelType, BugReportScreenVie
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(bugReportService: BugReportServiceProtocol,
-         clientProxy: ClientProxyProtocol?,
+    init(flow: BugReportService.Flow,
+         bugReportService: BugReportServiceProtocol,
+         bugReportHook: BugReportHookProtocol,
          logFiles: [URL] = Tracing.logFiles,
          screenshot: UIImage?,
          isModallyPresented: Bool) {
+        self.flow = flow
         self.bugReportService = bugReportService
-        self.clientProxy = clientProxy
         self.logFiles = logFiles
         
         let canSendLogFiles = Self.validate(logFiles)
-        let bindings = BugReportScreenViewStateBindings(reportText: "", sendingLogsEnabled: canSendLogFiles, canContact: false)
-        super.init(initialViewState: BugReportScreenViewState(canSendLogFiles: canSendLogFiles,
-                                                              screenshot: screenshot,
-                                                              bindings: bindings,
-                                                              isModallyPresented: isModallyPresented))
+        let bindings = BugReportScreenViewStateBindings(reportText: "", includeLogs: canSendLogFiles, canContact: false)
+        let viewState = BugReportScreenViewState(canSendLogFiles: canSendLogFiles,
+                                                 screenshot: screenshot,
+                                                 bindings: bindings,
+                                                 isModallyPresented: isModallyPresented)
+        super.init(initialViewState: bugReportHook.update(viewState, for: flow))
     }
     
     // MARK: - Public
@@ -98,17 +100,19 @@ class BugReportScreenViewModel: BugReportScreenViewModelType, BugReportScreenVie
             }
         }
         
+        let clientProxy = flow.userSession?.clientProxy
         let bugReport = await BugReport(userID: clientProxy?.userID,
                                         deviceID: clientProxy?.deviceID,
                                         ed25519: clientProxy?.ed25519Base64(),
                                         curve25519: clientProxy?.curve25519Base64(),
                                         text: context.reportText,
-                                        logFiles: context.sendingLogsEnabled ? logFiles : nil,
+                                        logFiles: context.includeLogs ? logFiles : nil,
                                         canContact: context.canContact,
                                         githubLabels: [],
                                         files: files)
         
         switch await bugReportService.submitBugReport(bugReport,
+                                                      flow: flow,
                                                       progressListener: progressSubject) {
         case .success(let response):
             MXLog.info("Submission uploaded: \(response.reportURL ?? "The server didn't generate a report URL")")

@@ -14,4 +14,8 @@ nonisolated enum RageshakeConfiguration: Equatable, Codable {
     case url(URL)
     /// Rageshakes are disabled.
     case disabled
+    
+    var isEnabled: Bool {
+        self != .disabled
+    }
 }

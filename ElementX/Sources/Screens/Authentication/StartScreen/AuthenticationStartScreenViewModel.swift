@@ -28,7 +28,6 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
     init(authenticationService: AuthenticationServiceProtocol,
          provisioningParameters: AccountProvisioningParameters?,
          isAddingAccount: Bool,
-         isBugReportServiceEnabled: Bool,
          appMediator: AppMediatorProtocol,
          appSettings: AppSettings,
          mediaProvider: MediaProviderProtocol?,
@@ -38,7 +37,7 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
         self.provisioningParameters = provisioningParameters
         self.appMediator = appMediator
         self.userIndicatorController = userIndicatorController
-        canReportProblem = isBugReportServiceEnabled
+        canReportProblem = appSettings.bundledBugReportRageshakeConfiguration.isEnabled
         
         let isQRCodeScanningSupported = !ProcessInfo.processInfo.isiOSAppOnMac
         

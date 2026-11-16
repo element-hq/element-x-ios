@@ -64,10 +64,17 @@ final nonisolated class AccountSettings: @unchecked Sendable {
     /// The MapTiler configuration used to build map URLs, which the homeserver can configure remotely.
     let mapTilerConfiguration: RemotePreference<MapTilerConfiguration>
     
-    init(userID: String, store: UserDefaultsProtocol, bundledMapTilerConfiguration: MapTilerConfiguration) {
+    /// Where this account's bug reports are sent, which the homeserver can configure remotely.
+    let bugReportRageshakeConfiguration: RemotePreference<RageshakeConfiguration>
+    
+    init(userID: String,
+         store: UserDefaultsProtocol,
+         bundledMapTilerConfiguration: MapTilerConfiguration,
+         bundledBugReportRageshakeConfiguration: RageshakeConfiguration) {
         self.store = .init(userID: userID, store: store)
         self.userID = userID
         mapTilerConfiguration = .init(bundledMapTilerConfiguration)
+        bugReportRageshakeConfiguration = .init(bundledBugReportRageshakeConfiguration)
     }
     
     func migrateAppSettingsValue(_ keyPath: KeyPath<AccountSettings, UserPreferenceKey>) {

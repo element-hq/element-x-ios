@@ -24,7 +24,6 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
     
     init(userSession: UserSessionProtocol,
          availableSessionsPublisher: CurrentValuePublisher<[UserSessionDetails], Never>,
-         isBugReportServiceEnabled: Bool,
          isInSecondaryWindow: Bool,
          userIndicatorController: UserIndicatorControllerProtocol) {
         userSettings = userSession.userSettings
@@ -38,7 +37,7 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
                                            showAccountDeactivation: userSession.clientProxy.canDeactivateAccount,
                                            showDeveloperOptions: userSettings.app.developerOptionsEnabled,
                                            showAnalyticsSettings: userSettings.app.canPromptForAnalytics,
-                                           isBugReportServiceEnabled: isBugReportServiceEnabled,
+                                           isBugReportServiceEnabled: userSettings.account.bugReportRageshakeConfiguration.publisher.value.isEnabled,
                                            navigationBarVisibility: isInSecondaryWindow ? .hidden : .automatic,
                                            bindings: .init(userSettings: userSettings)),
                    mediaProvider: userSession.mediaProvider)

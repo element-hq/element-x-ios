@@ -12,7 +12,6 @@ import SwiftUI
 struct SettingsScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
     let availableSessionsPublisher: CurrentValuePublisher<[UserSessionDetails], Never>
-    let isBugReportServiceEnabled: Bool
     let isInSecondaryWindow: Bool
     let userIndicatorController: UserIndicatorControllerProtocol
 }
@@ -60,7 +59,6 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
     init(parameters: SettingsScreenCoordinatorParameters) {
         viewModel = SettingsScreenViewModel(userSession: parameters.userSession,
                                             availableSessionsPublisher: parameters.availableSessionsPublisher,
-                                            isBugReportServiceEnabled: parameters.isBugReportServiceEnabled,
                                             isInSecondaryWindow: parameters.isInSecondaryWindow,
                                             userIndicatorController: parameters.userIndicatorController)
         
