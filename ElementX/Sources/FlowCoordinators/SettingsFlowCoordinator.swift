@@ -10,6 +10,7 @@ import Combine
 import SwiftUI
 
 enum SettingsFlowCoordinatorAction {
+    case addAccount
     case dismiss
     case clearCache
     case runLogoutFlow
@@ -97,7 +98,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                     presentEmojiPicker(emojiPickerContinuation: continuation)
                     
                 case .addAccount:
-                    break // Nothing to present until the add account flow exists.
+                    actionsSubject.send(.addAccount)
                     
                 case let .manageAccount(url):
                     presentAccountManagementURL(url)

@@ -53,6 +53,8 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
         case startAuthentication(isAddingAccount: Bool)
         /// Request presentation of the given account's user session flow.
         case startUserSession(userID: String)
+        /// Return to the given account's settings flow after cancelling adding another account.
+        case cancelAddingAccount(userID: String)
         /// Request clearing the active account's caches.
         case clearCache
         /// Request logging out the active account.
@@ -230,6 +232,10 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
                 
             case (.authenticationFlow, .startUserSession(let userID)):
                 .userSessionFlow(userID: userID)
+            case (.authenticationFlow(isAddingAccount: true), .cancelAddingAccount(let userID)):
+                .userSessionFlow(userID: userID)
+            case (.authenticationFlow(isAddingAccount: true), .startAuthentication(isAddingAccount: false)):
+                .authenticationFlow(isAddingAccount: false)
                 
             case (.userSessionFlow, .startAuthentication(let isAddingAccount)):
                 .authenticationFlow(isAddingAccount: isAddingAccount)
@@ -269,10 +275,16 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
             case (.initial, .startUserSession, .userSessionFlow):
                 startUserSessionFlow(isAppLaunch: true, isNewLogin: false)
             case (.authenticationFlow, .startUserSession, .userSessionFlow):
-                // TODO: Restore the settings screen when cancelling with isAddingAccount == true.
                 authenticationFlowCoordinator = nil
                 targetContext.finishAuthentication()
                 startUserSessionFlow(isNewLogin: true)
+            case (.authenticationFlow, .cancelAddingAccount, .userSessionFlow):
+                authenticationFlowCoordinator = nil
+                targetContext.finishAuthentication()
+                startUserSessionFlow(isNewLogin: false, showing: .settings)
+            case (.authenticationFlow, .startAuthentication(isAddingAccount: false), .authenticationFlow):
+                authenticationFlowCoordinator = nil
+                startAuthenticationFlow(isAddingAccount: false)
             case (.userSessionFlow, .clearCache, .clearingCache(let userID)):
                 stopUserSessionFlow()
                 clearCache(userID: userID)
@@ -396,6 +408,13 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
                 case .signInComplete(let userSession):
                     userSessionManager.addNewSession(userSession)
                     stateMachine.tryEvent(.startUserSession(userID: userSession.clientProxy.userID))
+                case .cancelAddingAccount:
+                    if let userID = userSessionManager.activeSession?.clientProxy.userID {
+                        stateMachine.tryEvent(.cancelAddingAccount(userID: userID))
+                    } else {
+                        MXLog.error("Cancelled adding account without a session to return to.")
+                        stateMachine.tryEvent(.startAuthentication(isAddingAccount: false))
+                    }
                 }
             }
             .store(in: &cancellables)
@@ -414,7 +433,7 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func startUserSessionFlow(isAppLaunch: Bool = false, isNewLogin: Bool) {
+    private func startUserSessionFlow(isAppLaunch: Bool = false, isNewLogin: Bool, showing appRoute: AppRoute? = nil) {
         guard let userSession = userSessionManager.activeSession else {
             fatalError("User session not setup")
         }
@@ -447,6 +466,8 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
                 guard let self else { return }
                 
                 switch action {
+                case .addAccount:
+                    stateMachine.tryEvent(.startAuthentication(isAddingAccount: true))
                 case .logout, .accountDeactivated:
                     stateMachine.tryEvent(.logout)
                 case .clearCache:
@@ -460,7 +481,9 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
         userSessionFlowCoordinator = coordinator
         coordinator.start()
         
-        if let pending = pendingAppRoute.take() {
+        if let appRoute {
+            userSessionFlowCoordinator?.handleAppRoute(appRoute, animated: false)
+        } else if let pending = pendingAppRoute.take() {
             if pending.appRoute.isAuthenticationRoute {
                 // TODO: Start a flow to add a new account?
             } else {

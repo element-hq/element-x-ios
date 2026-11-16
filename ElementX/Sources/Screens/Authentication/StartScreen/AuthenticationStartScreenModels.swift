@@ -16,6 +16,8 @@ enum AuthenticationStartScreenViewModelAction: Equatable {
     case loginDirectlyWithOAuth(data: OAuthAuthorizationDataProxy, window: UIWindow)
     case loginDirectlyWithPassword(loginHint: String?)
     
+    case cancelAddingAccount
+    
     case reportProblem
     case developerOptions
 }
@@ -92,4 +94,6 @@ enum AuthenticationStartScreenViewAction {
     case otherOptions(ClassicAppAccount)
     case closeOtherOptions(ClassicAppAccount)
     case openClassicApp
+    
+    case cancelAddingAccount
 }

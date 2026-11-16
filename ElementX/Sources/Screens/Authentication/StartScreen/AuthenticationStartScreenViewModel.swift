@@ -121,6 +121,8 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
         case .openClassicApp:
             guard let classicAppDeepLinkURL = InfoPlistReader.main.classicAppDeepLinkURL else { return }
             appMediator.open(classicAppDeepLinkURL)
+        case .cancelAddingAccount:
+            actionsSubject.send(.cancelAddingAccount)
         }
     }
     
