@@ -35,6 +35,8 @@ enum AuthenticationServiceError: Error, Equatable {
     case accountDeactivated
     case failedLoggingIn
     case sessionTokenRefreshNotSupported
+    /// The user logged in to an account that is already logged in on this device.
+    case accountAlreadyLoggedIn(userID: String)
 }
 
 protocol AuthenticationServiceProtocol: QRCodeLoginServiceProtocol {
