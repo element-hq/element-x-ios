@@ -64,6 +64,22 @@ jobs:
               failures.push("Please add a `pr-` label to categorise the changelog entry.");
             }
 
+            const isInternalContributor = ["MEMBER", "OWNER"].includes(pr.author_association);
+            const allowedStrings = new Set([
+              "ElementX/Resources/Localizations/en.lproj/Untranslated.strings",
+              "ElementX/Resources/Localizations/en.lproj/Untranslated.stringsdict"
+            ]);
+
+            if (!isInternalContributor && files.some(file =>
+              [file.filename, file.previous_filename].some(path =>
+                path &&
+                /(^|\/)[^/]+\.lproj\/.*\.strings(dict)?$/i.test(path) &&
+                !allowedStrings.has(path)
+              )
+            )) {
+              failures.push("Changes to translated strings detected. Please make these through Localazy.");
+            }
+
             warnings.forEach(warning => core.warning(warning));
             failures.forEach(failure => core.error(failure));
 
