@@ -114,3 +114,15 @@ extension XCUIApplication {
         Locale.current.language.region?.identifier ?? ""
     }
 }
+
+extension UIImage {
+    /// Adjusts the image by cropping it with the given edge insets.
+    func inset(by insets: UIEdgeInsets) -> UIImage {
+        let insetRect = CGRect(origin: .zero, size: size).inset(by: insets)
+        let renderer = UIGraphicsImageRenderer(size: insetRect.size)
+        
+        return renderer.image { _ in
+            draw(at: CGPoint(x: -insets.left, y: -insets.top))
+        }
+    }
+}

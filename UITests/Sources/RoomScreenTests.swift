@@ -77,7 +77,7 @@ class RoomScreenUITests: XCTestCase {
         
         // Then the bottom of the timeline should remain unchanged (with new items having been added above).
         let paginatedScreenshot = try await app.assertScreenshot(step: 1)
-        try assertBottomHalvesMatch(initialScreenshot, paginatedScreenshot)
+        assertBottomHalvesMatch(initialScreenshot, paginatedScreenshot)
     }
     
     func testTimelineLayoutAtBottom() async throws {
@@ -171,17 +171,12 @@ class RoomScreenUITests: XCTestCase {
     }
     
     /// Fails the test if the bottom halves of two screenshots differ, using the same tolerance as the snapshots.
-    private func assertBottomHalvesMatch(_ first: UIImage, _ second: UIImage) throws {
+    private func assertBottomHalvesMatch(_ first: UIImage, _ second: UIImage) {
+        let topHalfInsets = UIEdgeInsets(top: first.size.height / 2, left: 0, bottom: 0, right: 0)
         let diffing = Diffing<UIImage>.image(precision: 0.99, perceptualPrecision: 0.98)
-        guard let difference = try diffing.diffV2(bottomHalf(of: first), bottomHalf(of: second)) else { return }
+        guard let difference = diffing.diffV2(first.inset(by: topHalfInsets), second.inset(by: topHalfInsets)) else { return }
         
         let (message, _) = difference
         XCTFail("The bottom of the timeline moved: \(message)")
-    }
-    
-    private func bottomHalf(of image: UIImage) throws -> UIImage {
-        let cgImage = try XCTUnwrap(image.cgImage)
-        let rect = CGRect(x: 0, y: cgImage.height / 2, width: cgImage.width, height: cgImage.height - cgImage.height / 2)
-        return try UIImage(cgImage: XCTUnwrap(cgImage.cropping(to: rect)), scale: image.scale, orientation: image.imageOrientation)
     }
 }
