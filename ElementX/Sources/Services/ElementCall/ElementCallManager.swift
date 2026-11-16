@@ -93,7 +93,8 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
     private var isAudioSessionActive = false
     
     private var presentedCall: PresentedCall?
-    /// A call request waiting for its account's service to be added. One at a time, a newer one drops it unless it's for the same call.
+    /// A call request waiting for its account's service to be added, or for another account's native call to end.
+    /// One at a time, a newer one drops it unless it's for the same call.
     private var pendingCallRequest: CallRequest?
     
     /// The incoming call while nobody has answered it.
@@ -227,6 +228,7 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
         let request = CallRequest(userID: userID, roomID: roomID, isVoiceCall: isVoiceCall, answeredFromCallKit: answeredFromCallKit)
         
         guard let service = services[userID] else {
+            MXLog.info("Keeping the call in \(roomID) pending until \(userID) has a call service")
             storePendingCallRequest(request)
             return
         }
@@ -486,15 +488,23 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
     /// Presents the room's call with its account's service, returning to it when it's already on screen.
     /// Any other call is replaced.
     private func presentCallScreen(for call: ElementCallServiceAction.RoomCall, answeredFromCallKit: Bool, service: ElementCallServiceProtocol) {
-        let pendingRequestWasAnswered = takePendingCallRequest(replacedBy: service.userID, roomID: call.roomProxy.id)
+        let userID = service.userID
+        let pendingRequestWasAnswered = takePendingCallRequest(replacedBy: userID, roomID: call.roomProxy.id)
         let answeredFromCallKit = answeredFromCallKit || pendingRequestWasAnswered
+        
+        // Every account has its own native call stack and only one call runs at a time, so another account's native call ends first.
+        if case .native(let liveUserID) = presentedCall, liveUserID != userID, let liveService = services[liveUserID] {
+            MXLog.info("Keeping the call in \(call.roomProxy.id) pending until \(liveUserID)'s native call has ended")
+            storePendingCallRequest(.init(userID: userID, roomID: call.roomProxy.id, isVoiceCall: call.isVoiceCall, answeredFromCallKit: answeredFromCallKit))
+            liveService.endNativeCall()
+            return
+        }
         
         // The native call stack runs the call and reports its screen as `.nativeCallPresentation`.
         if service.handleNativeCallRequest(roomProxy: call.roomProxy, isVoiceCall: call.isVoiceCall, answeredFromCallKit: answeredFromCallKit) {
             return
         }
         
-        let userID = service.userID
         let webCall = PresentedCall.webView(userID: userID, roomID: call.roomProxy.id)
         
         guard presentedCall != webCall else {
@@ -511,7 +521,6 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
     private func storePendingCallRequest(_ request: CallRequest) {
         let pendingRequestWasAnswered = takePendingCallRequest(replacedBy: request.userID, roomID: request.roomID)
         
-        MXLog.info("Keeping the call in \(request.roomID) pending until \(request.userID) has a call service")
         pendingCallRequest = CallRequest(userID: request.userID,
                                          roomID: request.roomID,
                                          isVoiceCall: request.isVoiceCall,
@@ -570,6 +579,7 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
             guard presentedCall == nativeCall else { return }
             presentedCall = nil
             actionsSubject.send(.callScreen(.dismiss))
+            resumePendingCallRequest()
         }
     }
     
@@ -595,6 +605,13 @@ final class ElementCallManager: NSObject, ElementCallManagerProtocol, PKPushRegi
         guard presentedCall?.userID == userID else { return }
         presentedCall = nil
         actionsSubject.send(.callScreen(.dismiss))
+        resumePendingCallRequest()
+    }
+    
+    /// Starts the call that waited for another account's native call, now that its screen is gone.
+    private func resumePendingCallRequest() {
+        guard let pendingCallRequest, services[pendingCallRequest.userID] != nil else { return }
+        Task { [weak self] in await self?.handlePendingCallRequest(pendingCallRequest) }
     }
     
     // MARK: - PKPushRegistryDelegate

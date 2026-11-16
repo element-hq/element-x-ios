@@ -1510,12 +1510,73 @@ final class ElementCallManagerTests {
         #expect(callScreens.isEmpty)
     }
     
+    @Test("A call for another account waits for the running native call to hang up")
+    func replaceOtherAccountsNativeCall() async {
+        let bobActions = PassthroughSubject<ElementCallServiceAction, Never>()
+        let bob = makeCallService(userID: bobID, actions: bobActions)
+        manager.add(bob)
+        showNativeCall(service: bob, actions: bobActions)
+        service.joinedRoomRoomIDClosure = { roomID in JoinedRoomProxyMock(.init(id: roomID)) }
+        
+        // Asked twice, as a second tap while the other call hangs up.
+        serviceActions.send(.callRequested(.mock(roomID: otherRoomID)))
+        serviceActions.send(.callRequested(.mock(roomID: otherRoomID)))
+        
+        #expect(bob.endNativeCallCallsCount == 2)
+        #expect(!service.handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitCalled, "Alice's call waits")
+        
+        await waitForConfirmation(timeout: .seconds(1)) { confirmation in
+            service.handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitClosure = { _, _, _ in
+                confirmation()
+                return true
+            }
+            bobActions.send(.nativeCallPresentation(.dismiss))
+        }
+        
+        #expect(service.handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitCallsCount == 1, "Asked twice, started once")
+        #expect(service.handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitReceivedArguments?.roomProxy.id == otherRoomID)
+        #expect(callScreens == [.present(userID: bobID, kind: .native), .dismiss])
+    }
+    
+    @Test("A waiting call starts when the other account is removed or its call service replaced", arguments: [false, true])
+    func removeAccountBeforeWaitingCall(replacesService: Bool) async {
+        let bobActions = PassthroughSubject<ElementCallServiceAction, Never>()
+        let bob = makeCallService(userID: bobID, actions: bobActions)
+        manager.add(bob)
+        showNativeCall(service: bob, actions: bobActions)
+        service.joinedRoomRoomIDClosure = { roomID in JoinedRoomProxyMock(.init(id: roomID)) }
+        serviceActions.send(.callRequested(.mock(roomID: otherRoomID)))
+        
+        await waitForConfirmation(timeout: .seconds(1)) { confirmation in
+            service.handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitClosure = { _, _, _ in
+                confirmation()
+                return true
+            }
+            
+            if replacesService {
+                // E.g. a cache clear, which rebuilds the account's session.
+                manager.add(makeCallService(userID: bobID))
+            } else {
+                manager.remove(userID: bobID)
+            }
+        }
+        
+        #expect(service.handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitReceivedArguments?.roomProxy.id == otherRoomID)
+    }
+    
     // MARK: - Helpers
     
-    private func showNativeCall() {
-        service.handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitReturnValue = true
-        serviceActions.send(.callRequested(.mock()))
-        serviceActions.send(.nativeCallPresentation(.present))
+    /// Shows a native call the way its stack does. Defaults to Alice's service and actions.
+    private func showNativeCall(service: ElementCallServiceMock? = nil,
+                                actions: PassthroughSubject<ElementCallServiceAction, Never>? = nil) {
+        guard let callService = service ?? self.service, let callActions = actions ?? serviceActions else {
+            Issue.record("Missing a service to show the native call with")
+            return
+        }
+        
+        callService.handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitReturnValue = true
+        callActions.send(.callRequested(.mock()))
+        callActions.send(.nativeCallPresentation(.present))
     }
     
     /// Rings and answers a call for the native call stack, which keeps it up until a call takes it over or it's dropped.
