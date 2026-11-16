@@ -58,8 +58,9 @@ extension XCUIApplication {
     /// - Parameter testName: The current test name, first part of the resulting snapshot filename.
     /// - Parameter step: An optional integer that can be used to take multiple snapshots per test identifier
     /// - Parameter delay: How much to wait before taking the snapshot
-    @MainActor
-    func assertScreenshot(fileName: String = #file, testName: String = #function, step: Int? = nil, delay: Duration = .seconds(0.5)) async throws {
+    /// - Returns: The screenshot that was compared, for tests that need to check it further.
+    @MainActor @discardableResult
+    func assertScreenshot(fileName: String = #file, testName: String = #function, step: Int? = nil, delay: Duration = .seconds(0.5)) async throws -> UIImage {
         // Sometimes the CI might be too slow to load the content so let's wait the delay time
         try await Task.sleep(for: delay)
         
@@ -86,6 +87,8 @@ extension XCUIApplication {
         if let failure {
             XCTFail(failure)
         }
+        
+        return snapshot
     }
     
     private var deviceName: String {

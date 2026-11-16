@@ -6,6 +6,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import SnapshotTesting
 import XCTest
 
 @MainActor
@@ -69,13 +70,14 @@ class RoomScreenUITests: XCTestCase {
         for _ in 0...5 {
             app.swipeDown()
         }
-        try await app.assertScreenshot(step: 0) // Assert initial state for comparison.
+        let initialScreenshot = try await app.assertScreenshot(step: 0) // Assert initial state for comparison.
         
         // When a back pagination occurs.
         try await performOperation(.paginate, using: client)
         
         // Then the bottom of the timeline should remain unchanged (with new items having been added above).
-        try await app.assertScreenshot(step: 1)
+        let paginatedScreenshot = try await app.assertScreenshot(step: 1)
+        try assertBottomHalvesMatch(initialScreenshot, paginatedScreenshot)
     }
     
     func testTimelineLayoutAtBottom() async throws {
@@ -166,5 +168,20 @@ class RoomScreenUITests: XCTestCase {
     private func tapMessageComposer(in app: XCUIApplication) async throws {
         app.textViews.element.tap()
         try await Task.sleep(for: .seconds(10)) // Allow the animations to complete
+    }
+    
+    /// Fails the test if the bottom halves of two screenshots differ, using the same tolerance as the snapshots.
+    private func assertBottomHalvesMatch(_ first: UIImage, _ second: UIImage) throws {
+        let diffing = Diffing<UIImage>.image(precision: 0.99, perceptualPrecision: 0.98)
+        guard let difference = try diffing.diffV2(bottomHalf(of: first), bottomHalf(of: second)) else { return }
+        
+        let (message, _) = difference
+        XCTFail("The bottom of the timeline moved: \(message)")
+    }
+    
+    private func bottomHalf(of image: UIImage) throws -> UIImage {
+        let cgImage = try XCTUnwrap(image.cgImage)
+        let rect = CGRect(x: 0, y: cgImage.height / 2, width: cgImage.width, height: cgImage.height - cgImage.height / 2)
+        return try UIImage(cgImage: XCTUnwrap(cgImage.cropping(to: rect)), scale: image.scale, orientation: image.imageOrientation)
     }
 }
