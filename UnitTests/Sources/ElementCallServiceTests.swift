@@ -33,7 +33,7 @@ final class ElementCallServiceTests {
     
     // MARK: - Ringing call
     
-    @Test
+    @Test("The caller hanging up ends the ringing")
     func remoteHangUpEndsRinging() async throws {
         await service.observeIncomingCall(roomID: "!room:example.com", rtcNotificationID: "$000")
         
@@ -42,7 +42,7 @@ final class ElementCallServiceTests {
         try await deferred.fulfill()
     }
     
-    @Test
+    @Test("Joining the call on another device ends the ringing")
     func joinElsewhereEndsRinging() async throws {
         await service.observeIncomingCall(roomID: "!room:example.com", rtcNotificationID: "$000")
         
@@ -51,7 +51,7 @@ final class ElementCallServiceTests {
         try await deferred.fulfill()
     }
     
-    @Test
+    @Test("Our own decline on another device ends the ringing, another member's doesn't")
     func declineElsewhereEndsRinging() async throws {
         await service.observeIncomingCall(roomID: "!room:example.com", rtcNotificationID: "$000")
         let listener = try #require(roomProxy.subscribeToCallDeclineEventsRtcNotificationEventIDListenerReceivedArguments?.listener)
@@ -66,7 +66,7 @@ final class ElementCallServiceTests {
         try await deferred.fulfill()
     }
     
-    @Test
+    @Test("A stopped watch ignores the room's updates")
     func stoppedWatchIgnoresRoom() async throws {
         await service.observeIncomingCall(roomID: "!room:example.com", rtcNotificationID: "$000")
         service.stopObservingIncomingCall()
@@ -76,7 +76,7 @@ final class ElementCallServiceTests {
         try await deferredFailure.fulfill()
     }
     
-    @Test
+    @Test("Declining a call sends the decline to its room")
     func declineCallSendsDecline() async {
         await service.declineCall(roomID: "!room:example.com", rtcNotificationID: "$000")
         
@@ -86,7 +86,7 @@ final class ElementCallServiceTests {
     
     // MARK: - Call sessions
     
-    @Test(arguments: [false, true])
+    @Test("A call session's set-up returns once the manager has replied", arguments: [false, true])
     func callSetupWaitsForManager(repliesLater: Bool) async {
         var order: [String] = []
         let cancellable = service.actionsPublisher.sink { [service] action in
@@ -111,7 +111,7 @@ final class ElementCallServiceTests {
         #expect(order == ["sent", "set up", "returned"])
     }
     
-    @Test
+    @Test("A second set-up for a room releases the first")
     func secondSetupReleasesFirst() async throws {
         var returned: [String] = []
         
@@ -137,7 +137,7 @@ final class ElementCallServiceTests {
         #expect(returned == ["first", "second"])
     }
     
-    @Test
+    @Test("What a call screen reports reaches the manager")
     func callScreenReportsReachManager() {
         var actions: [ElementCallServiceAction] = []
         let cancellable = service.actionsPublisher.sink { actions.append($0) }
@@ -154,7 +154,7 @@ final class ElementCallServiceTests {
                             .audioEnabledChanged(false, roomID: "!room:example.com")])
     }
     
-    @Test
+    @Test("The ongoing call's room is published")
     func ongoingCallIsPublished() {
         service.ongoingCallChanged(roomID: "!room:example.com")
         #expect(service.ongoingCallRoomIDPublisher.value == "!room:example.com")
@@ -165,7 +165,7 @@ final class ElementCallServiceTests {
     
     // MARK: - Native calls
     
-    @Test
+    @Test("System events reach the native call in order")
     func systemEventsReachNativeCall() {
         var events: [NativeCallEvent] = []
         let cancellable = service.nativeCallEventsPublisher.sink { events.append($0) }

@@ -33,16 +33,16 @@ final class NativeCallStackTests {
             .store(in: &cancellables)
     }
     
-    @Test
-    func startingACallAsksForItsScreen() {
+    @Test("Starting a call asks for its screen")
+    func startCall() {
         stack.handleCallRequest(roomProxy: roomProxy(id: "!room:example.com"), isVoiceCall: false, answeredFromCallKit: false)
         
         #expect(presentations == [.present])
         #expect(stack.controller.room?.roomID == "!room:example.com")
     }
     
-    @Test
-    func aCallStartsARoomWithoutOneAndJoinsARoomWithOne() {
+    @Test("A call starts a room without one and joins a room with one")
+    func startOrJoinCall() {
         stack.handleCallRequest(roomProxy: roomProxy(id: "!empty:example.com", hasOngoingCall: false), isVoiceCall: true, answeredFromCallKit: false)
         // Starting rings the room; joining one already running happens quietly.
         #expect(stack.controller.callData?.isStartingCall == true)
@@ -59,8 +59,8 @@ final class NativeCallStackTests {
         #expect(joining.controller.callData?.isStartingCall == false)
     }
     
-    @Test
-    func askingForTheCallYouAreAlreadyInRestoresItsScreen() {
+    @Test("Asking for the call you are already in restores its screen")
+    func restoreRunningCall() {
         let roomProxy = roomProxy(id: "!room:example.com")
         stack.handleCallRequest(roomProxy: roomProxy, isVoiceCall: false, answeredFromCallKit: false)
         presentations.removeAll()
@@ -71,8 +71,8 @@ final class NativeCallStackTests {
         #expect(presentations == [.restore])
     }
     
-    @Test
-    func aCallInAnotherRoomWaitsForTheRunningOneToEnd() async throws {
+    @Test("A call in another room waits for the running one to end")
+    func queueCallInAnotherRoom() async throws {
         stack.handleCallRequest(roomProxy: roomProxy(id: "!first:example.com"), isVoiceCall: false, answeredFromCallKit: false)
         presentations.removeAll()
         
@@ -95,8 +95,8 @@ final class NativeCallStackTests {
         #expect(system.answeredFromCallKit)
     }
     
-    @Test
-    func endingACallDismissesItsScreen() async throws {
+    @Test("A call that ends dismisses its screen")
+    func callEndDismissesScreen() async throws {
         stack.handleCallRequest(roomProxy: roomProxy(id: "!room:example.com"), isVoiceCall: false, answeredFromCallKit: false)
         presentations.removeAll()
         
