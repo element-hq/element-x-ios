@@ -161,7 +161,7 @@ class UserSessionStore: UserSessionStoreProtocol {
             MXLog.info("Set up session for user \(credentials.userID) at: \(credentials.restorationToken.sessionDirectories)")
             
             Task(priority: .low) {
-                await appHooks.remoteSettingsHook.updateCache(using: client)
+                await appHooks.userSessionHook.updateRestoredClient(client)
                 targetContext.update()
             }
             

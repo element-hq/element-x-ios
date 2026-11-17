@@ -10,6 +10,7 @@ import MatrixRustSDK
 nonisolated protocol UserSessionHookProtocol: Sendable {
     #if IS_MAIN_APP
     @MainActor func makeUserHooks(for clientProxy: ClientProxyProtocol) -> UserHooks
+    func updateRestoredClient(_ client: ClientProtocol) async
     #endif
     
     func configure(_ userSettings: UserSettings, forHomeserver homeserver: String) -> UserSettings
@@ -20,6 +21,8 @@ nonisolated struct DefaultUserSessionHook: UserSessionHookProtocol {
     func makeUserHooks(for clientProxy: ClientProxyProtocol) -> UserHooks {
         UserHooks()
     }
+    
+    func updateRestoredClient(_ client: ClientProtocol) async { }
     #endif
     
     func configure(_ userSettings: UserSettings, forHomeserver homeserver: String) -> UserSettings {

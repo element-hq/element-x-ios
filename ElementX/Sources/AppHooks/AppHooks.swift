@@ -24,9 +24,6 @@ final nonisolated class AppHooks: AppHooksProtocol {
     @AppHook(default: DefaultAuthenticationServiceHook())
     var authenticationServiceHook: AuthenticationServiceHookProtocol
     
-    @AppHook(default: DefaultRemoteSettingsHook())
-    var remoteSettingsHook: RemoteSettingsHookProtocol
-    
     @AppHook(default: DefaultBugReportHook())
     var bugReportHook: BugReportHookProtocol
     
