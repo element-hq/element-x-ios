@@ -112,7 +112,7 @@ struct SecureBackupRecoveryKeyScreen: View {
     }
     
     private var checkActionButtons: some View {
-        Button(L10n.actionConfirm) {
+        Button(L10n.actionContinue) {
             context.send(viewAction: .submitCheckedKey)
         }
         .buttonStyle(.compound(.primary))
