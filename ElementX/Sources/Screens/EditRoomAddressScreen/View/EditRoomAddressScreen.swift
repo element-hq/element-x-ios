@@ -32,12 +32,10 @@ struct EditRoomAddressScreen: View {
                     if let errorDescription = context.viewState.aliasErrors.errorDescription {
                         Label(errorDescription, icon: \.errorSolid, iconSize: .xSmall, relativeTo: .compound.bodySM)
                             .foregroundStyle(.compound.textCriticalPrimary)
-                            .font(.compound.bodySM)
                     }
                     Text(L10n.screenEditRoomAddressRoomAddressSectionFooter)
-                        .compoundListSectionFooter()
-                        .font(.compound.bodySM)
                 }
+                .compoundListSectionFooter()
             }
         }
         .compoundList()

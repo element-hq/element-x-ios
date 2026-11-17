@@ -651,16 +651,8 @@ final class MediaUploadingPreprocessorTests {
     
     /// Generates a HEIC with an HDR gain map on its first image and GPS metadata (on both the images and the gain map) in a unique temporary directory.
     private func makeHDRImageWithLocation(imageCount: Int = 1) throws -> URL {
-        let image = CIImage(color: .gray).cropped(to: CGRect(x: 0, y: 0, width: 64, height: 64))
-        let gainMap = CIImage(color: .white).cropped(to: CGRect(x: 0, y: 0, width: 32, height: 32))
-        let colorSpace = try #require(CGColorSpace(name: CGColorSpace.displayP3))
-        let hdrData = try #require(CIContext().heifRepresentation(of: image, format: .RGBA8, colorSpace: colorSpace, options: [.hdrGainMapImage: gainMap]))
-        let hdrSource = try #require(CGImageSourceCreateWithData(hdrData as NSData, nil))
-        var gainMapInfo = try #require(CGImageSourceCopyAuxiliaryDataInfoAtIndex(hdrSource, 0, kCGImageAuxiliaryDataTypeHDRGainMap) as? [CFString: Any])
-        let gainMapMetadataWithLocation = try #require(CGImageMetadataCreateMutableCopy(gainMapMetadata(from: hdrSource)))
-        try #require(CGImageMetadataSetValueWithPath(gainMapMetadataWithLocation, nil, "exif:GPSLatitude" as CFString, "51,30.0N" as CFString))
-        try #require(CGImageMetadataSetValueWithPath(gainMapMetadataWithLocation, nil, "exif:GPSLongitude" as CFString, "0,6.0W" as CFString))
-        gainMapInfo[kCGImageAuxiliaryDataInfoMetadata] = gainMapMetadataWithLocation
+        let extent = CGRect(x: 0, y: 0, width: 64, height: 64)
+        let image = try #require(CIContext().createCGImage(CIImage(color: .gray).cropped(to: extent), from: extent))
         
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent("\(Self.self)-\(UUID().uuidString)")
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
@@ -668,10 +660,10 @@ final class MediaUploadingPreprocessorTests {
         
         let destination = try #require(CGImageDestinationCreateWithURL(url as NSURL, UTType.heic.identifier as CFString, imageCount, nil))
         let location = [kCGImagePropertyGPSDictionary: [kCGImagePropertyGPSLatitude: 51.5, kCGImagePropertyGPSLongitude: 0.1]]
-        CGImageDestinationAddImageFromSource(destination, hdrSource, 0, location as NSDictionary)
-        CGImageDestinationAddAuxiliaryDataInfo(destination, kCGImageAuxiliaryDataTypeHDRGainMap, gainMapInfo as NSDictionary)
+        CGImageDestinationAddImage(destination, image, location as NSDictionary)
+        CGImageDestinationAddAuxiliaryDataInfo(destination, kCGImageAuxiliaryDataTypeHDRGainMap, makeGainMapInfoWithLocation(size: 32))
         for _ in 1..<imageCount {
-            CGImageDestinationAddImageFromSource(destination, hdrSource, 0, location as NSDictionary)
+            CGImageDestinationAddImage(destination, image, location as NSDictionary)
         }
         try #require(CGImageDestinationFinalize(destination))
         
@@ -716,15 +708,10 @@ final class MediaUploadingPreprocessorTests {
         
         let roles = [kCGImagePropertyGroupImageIsMonoscopicImage, kCGImagePropertyGroupImageIsRightImage, kCGImagePropertyGroupImageIsLeftImage]
         let destination = try #require(CGImageDestinationCreateWithURL(url as NSURL, UTType.heic.identifier as CFString, roles.count, nil))
-        let colorSpace = try #require(CGColorSpace(name: CGColorSpace.displayP3))
+        let extent = CGRect(x: 0, y: 0, width: 64, height: 64)
+        let image = try #require(CIContext().createCGImage(CIImage(color: .gray).cropped(to: extent), from: extent))
         
         for (index, role) in roles.enumerated() {
-            let image = CIImage(color: .gray).cropped(to: CGRect(x: 0, y: 0, width: 64, height: 64))
-            let gainMap = CIImage(color: .white).cropped(to: CGRect(x: 0, y: 0, width: 16 + 8 * index, height: 16 + 8 * index))
-            let hdrData = try #require(CIContext().heifRepresentation(of: image, format: .RGBA8, colorSpace: colorSpace, options: [.hdrGainMapImage: gainMap]))
-            let hdrSource = try #require(CGImageSourceCreateWithData(hdrData as NSData, nil))
-            let gainMapInfo = try #require(CGImageSourceCopyAuxiliaryDataInfoAtIndex(hdrSource, 0, kCGImageAuxiliaryDataTypeHDRGainMap))
-            
             var properties: [CFString: Any] = [kCGImagePropertyGPSDictionary: [kCGImagePropertyGPSLatitude: 51.5, kCGImagePropertyGPSLongitude: 0.1],
                                                kCGImagePropertyGroups: [kCGImagePropertyGroupIndex: 0,
                                                                         kCGImagePropertyGroupType: kCGImagePropertyGroupTypeStereoPair,
@@ -736,8 +723,8 @@ final class MediaUploadingPreprocessorTests {
                                                                                                  kIIOCameraExtrinsics_Rotation: [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]],
                                                               kIIOMetadata_CameraModelKey: [kIIOCameraModel_Intrinsics: [1000.0, 0.0, 32.0, 0.0, 1000.0, 32.0, 0.0, 0.0, 1.0]]]
             }
-            CGImageDestinationAddImageFromSource(destination, hdrSource, 0, properties as NSDictionary)
-            CGImageDestinationAddAuxiliaryDataInfo(destination, kCGImageAuxiliaryDataTypeHDRGainMap, gainMapInfo)
+            CGImageDestinationAddImage(destination, image, properties as NSDictionary)
+            CGImageDestinationAddAuxiliaryDataInfo(destination, kCGImageAuxiliaryDataTypeHDRGainMap, makeGainMapInfoWithLocation(size: 16 + 8 * index))
         }
         try #require(CGImageDestinationFinalize(destination))
         
@@ -745,6 +732,22 @@ final class MediaUploadingPreprocessorTests {
         try #require(stereoGroup(of: imageSource) != nil)
         
         return url
+    }
+    
+    /// Builds a square HDR gain map with GPS metadata for ImageIO to attach to an image.
+    private func makeGainMapInfoWithLocation(size: Int) -> NSDictionary {
+        // Built by hand as Core Image's `.hdrGainMapImage` export option writes no gain map since iOS 27.2.
+        let metadata = CGImageMetadataCreateMutable()
+        CGImageMetadataRegisterNamespaceForPrefix(metadata, "http://ns.apple.com/HDRGainMap/1.0/" as CFString, "HDRGainMap" as CFString, nil)
+        CGImageMetadataSetValueWithPath(metadata, nil, "HDRGainMap:HDRGainMapVersion" as CFString, 65536 as CFNumber)
+        CGImageMetadataSetValueWithPath(metadata, nil, "HDRGainMap:HDRGainMapHeadroom" as CFString, 2.0 as CFNumber)
+        CGImageMetadataSetValueWithPath(metadata, nil, "exif:GPSLatitude" as CFString, "51,30.0N" as CFString)
+        CGImageMetadataSetValueWithPath(metadata, nil, "exif:GPSLongitude" as CFString, "0,6.0W" as CFString)
+        
+        let description: [String: Any] = ["Width": size, "Height": size, "BytesPerRow": size, "PixelFormat": kCVPixelFormatType_OneComponent8]
+        return [kCGImageAuxiliaryDataInfoData: Data(repeating: 255, count: size * size) as NSData,
+                kCGImageAuxiliaryDataInfoDataDescription: description,
+                kCGImageAuxiliaryDataInfoMetadata: metadata]
     }
     
     /// The stereo pair group of a spatial photo, which ImageIO reports on the whole image rather than on each of its images.

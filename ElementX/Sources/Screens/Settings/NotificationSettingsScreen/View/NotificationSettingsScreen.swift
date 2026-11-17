@@ -178,6 +178,7 @@ struct NotificationSettingsScreen: View {
             .foregroundStyle(.compound.textPrimary)
             .listRowBackground(Color.compound.bgCanvasDefaultLevel1)
             .listRowSeparatorTint(ListRowColor.separatorTint)
+            .listRowInsets(ListRowPadding.insets)
         } header: {
             Text(L10n.screenNotificationSettingsSoundSectionTitle)
                 .compoundListSectionHeader()

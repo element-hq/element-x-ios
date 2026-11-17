@@ -130,6 +130,7 @@ struct BugReportScreen: View {
                     }
                     .padding(.vertical, 16)
                     .padding(.horizontal, 16)
+                    .listRowInsets(ListRowPadding.insets)
             }
         }
     }

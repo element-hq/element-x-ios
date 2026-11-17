@@ -9,6 +9,8 @@ import Compound
 import SwiftUI
 
 struct ToolbarButton: View {
+    @Environment(\.isEnabled) private var isEnabled
+    
     enum Role {
         static let cancel = Role.cancel(title: L10n.actionCancel)
         static let done = Role.confirm(title: L10n.actionDone)
@@ -27,17 +29,19 @@ struct ToolbarButton: View {
         }
         
         @ViewBuilder
-        var icon: some View {
+        func icon(isEnabled: Bool) -> some View {
             switch self {
             case .cancel:
                 CompoundIcon(\.close)
                     .foregroundStyle(.compound.iconPrimary)
             case .confirm:
                 CompoundIcon(\.check)
-                    .foregroundStyle(.compound.iconOnSolidPrimary)
+                    // Doesn't agree with the Figma but Apple no longer tints disabled buttons (iOS 27.2).
+                    .foregroundStyle(isEnabled ? .compound.iconOnSolidPrimary : .compound.iconDisabled)
             case .destructive:
                 CompoundIcon(\.delete)
-                    .foregroundStyle(.compound.iconOnSolidPrimary)
+                    // Doesn't agree with the Figma but Apple no longer tints disabled buttons (iOS 27.2).
+                    .foregroundStyle(isEnabled ? .compound.iconOnSolidPrimary : .compound.iconDisabled)
             }
         }
         
@@ -72,7 +76,7 @@ struct ToolbarButton: View {
     
     private var glassButton: some View {
         Button(action: action) {
-            role.icon
+            role.icon(isEnabled: isEnabled)
                 .accessibilityLabel(role.title)
         }
     }
@@ -84,19 +88,43 @@ struct ToolbarButton: View {
 
 struct ToolbarButton_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        ElementNavigationStack {
-            Color.clear
-                .toolbar {
-                    ToolbarItem(placement: .confirmationAction) {
-                        ToolbarButton(role: .done) { }
-                    }
-                    ToolbarItem(placement: .cancellationAction) {
-                        ToolbarButton(role: .cancel) { }
-                    }
-                    ToolbarItem(placement: .primaryAction) {
-                        ToolbarButton(role: .destructive(title: L10n.actionRemove)) { }
-                    }
-                }
+        VStack(spacing: 0) {
+            ElementNavigationStack {
+                Color.clear
+                    .toolbar { toolbarButtons }
+            }
+            
+            ElementNavigationStack {
+                Color.clear
+                    .toolbar { toolbarButtons }
+                    .disabled(true)
+            }
+            
+            ElementNavigationStack {
+                Color.clear
+                    .toolbar { toolbarButtons }
+            }
+            .colorScheme(.dark)
+            
+            ElementNavigationStack {
+                Color.clear
+                    .toolbar { toolbarButtons }
+                    .disabled(true)
+            }
+            .colorScheme(.dark)
+        }
+    }
+    
+    @ToolbarContentBuilder
+    static var toolbarButtons: some ToolbarContent {
+        ToolbarItem(placement: .confirmationAction) {
+            ToolbarButton(role: .done) { }
+        }
+        ToolbarItem(placement: .cancellationAction) {
+            ToolbarButton(role: .cancel) { }
+        }
+        ToolbarItem(placement: .primaryAction) {
+            ToolbarButton(role: .destructive(title: L10n.actionRemove)) { }
         }
     }
 }
