@@ -85,7 +85,7 @@ final class NativeCallStackTests {
     }
     
     @Test("An answered call queued behind a running one still starts as an answer")
-    func queuedAnswerStartsAsAnswer() async throws {
+    func queueAnsweredCall() async throws {
         stack.handleCallRequest(roomProxy: roomProxy(id: "!first:example.com"), isVoiceCall: false, answeredFromCallKit: false)
         presentations.removeAll()
         
@@ -96,7 +96,7 @@ final class NativeCallStackTests {
     }
     
     @Test("A call that ends dismisses its screen")
-    func callEndDismissesScreen() async throws {
+    func hangUp() async throws {
         stack.handleCallRequest(roomProxy: roomProxy(id: "!room:example.com"), isVoiceCall: false, answeredFromCallKit: false)
         presentations.removeAll()
         
@@ -107,7 +107,7 @@ final class NativeCallStackTests {
     }
     
     @Test("Ending the call drops the one queued behind it")
-    func endCallDropsQueuedCall() async throws {
+    func endCallWithQueuedCall() async throws {
         stack.handleCallRequest(roomProxy: roomProxy(id: "!first:example.com"), isVoiceCall: false, answeredFromCallKit: false)
         stack.handleCallRequest(roomProxy: roomProxy(id: "!second:example.com"), isVoiceCall: false, answeredFromCallKit: false)
         presentations.removeAll()
