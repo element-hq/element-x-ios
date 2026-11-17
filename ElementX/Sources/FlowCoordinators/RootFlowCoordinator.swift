@@ -392,6 +392,7 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
     
     private func startAuthenticationFlow(isAddingAccount: Bool) {
         targetContext.startAuthentication()
+        appHooks.rootFlowHook.configure(for: .authentication)
         
         let navigationStackCoordinator = NavigationStackCoordinator()
         let authenticationService = authenticationServiceFactory.makeAuthenticationService(userSessionManager: userSessionManager,
@@ -447,6 +448,8 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
         guard let userSession = userSessionManager.activeSession else {
             fatalError("User session not setup")
         }
+        
+        appHooks.rootFlowHook.configure(for: .userSession(userSession))
         
         if let serverName = userSession.clientProxy.userIDServerName {
             analyticsService.signpost.addGlobalTag(.homeserver, value: serverName)

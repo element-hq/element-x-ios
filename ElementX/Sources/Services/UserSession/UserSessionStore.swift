@@ -152,8 +152,6 @@ class UserSessionStore: UserSessionStoreProtocol {
             return .failure(.failedRestoringLogin)
         }
         
-        appHooks.remoteSettingsHook.loadCache(forHomeserver: credentials.restorationToken.session.homeserverUrl, applyingTo: appSettings)
-        
         do {
             let client = try await clientFactory.makeAppClient(credentials: credentials,
                                                                clientSessionDelegate: keychainController,

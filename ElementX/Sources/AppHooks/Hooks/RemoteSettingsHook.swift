@@ -14,16 +14,11 @@ enum RemoteSettingsError: Error {
 }
 
 protocol RemoteSettingsHookProtocol: Sendable {
-    #if IS_MAIN_APP
     @MainActor func initializeCache(using client: ClientProtocol) async -> Result<Void, RemoteSettingsError>
     func updateCache(using client: ClientProtocol) async
-    @MainActor func reset()
-    #endif
-    @MainActor func loadCache(forHomeserver homeserver: String)
 }
 
 struct DefaultRemoteSettingsHook: RemoteSettingsHookProtocol {
-    #if IS_MAIN_APP
     /// A best effort implementation to let Element X advertise to users when they should be using
     /// Element Pro. In an ideal world the backend would be able to validate the client's requests
     /// instead of relying on it to check a well-known file for this.
@@ -49,10 +44,6 @@ struct DefaultRemoteSettingsHook: RemoteSettingsHookProtocol {
     }
     
     func updateCache(using client: ClientProtocol) async { }
-    func reset() { }
-    #endif
-    
-    func loadCache(forHomeserver homeserver: String) { }
 }
 
 private struct ElementWellKnown: Decodable {

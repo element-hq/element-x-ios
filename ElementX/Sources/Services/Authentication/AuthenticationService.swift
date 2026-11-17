@@ -278,10 +278,11 @@ class AuthenticationService: AuthenticationServiceProtocol {
                                                                       clientSessionDelegate: userSessionManager.clientSessionDelegate,
                                                                       appSettings: appSettings,
                                                                       appHooks: appHooks)
-        try await appHooks.remoteSettingsHook.initializeCache(using: client, applyingTo: appSettings).get()
+        try await appHooks.remoteSettingsHook.initializeCache(using: client).get()
         targetContext.updateAuthentication(homeserver: client.homeserver())
         
-        return await appHooks.clientFactoryHook.updateAuthenticationClient(client)
+        let updatedClient = await appHooks.clientFactoryHook.updateAuthenticationClient(client)
+        return appHooks.authenticationServiceHook.updateClient(updatedClient)
     }
     
     private func rotateSessionDirectory() {
