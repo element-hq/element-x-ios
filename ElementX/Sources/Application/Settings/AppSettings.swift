@@ -377,8 +377,12 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: false)
     var focusEventOnNotificationTap: Bool
     
+    /// Link previews in unencrypted rooms, which always come from the homeserver.
     @UserPreference(defaultValue: false)
-    var linkPreviewsEnabled: Bool
+    var unencryptedRoomsLinkPreviewsEnabled: Bool
+    
+    @UserPreference(defaultValue: LinkPreviewMode.off)
+    var encryptedRoomsLinkPreviewsMode: LinkPreviewMode
     
     /// Enables *sending* gallery messages (multiple media in a single message).
     /// Received galleries are always rendered regardless of this flag.

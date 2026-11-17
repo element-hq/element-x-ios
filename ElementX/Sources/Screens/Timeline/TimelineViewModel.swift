@@ -106,7 +106,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                        hideTimelineMedia: hideTimelineMedia,
                                                        isViewSourceEnabled: userSettings.app.viewSourceEnabled,
                                                        areThreadsEnabled: userSettings.app.threadsEnabled,
-                                                       linkPreviewsEnabled: userSettings.app.linkPreviewsEnabled,
+                                                       linkPreviewsMode: LinkPreviewMode(isRoomEncrypted: !roomProxy.infoPublisher.value.isNotEncrypted, appSettings: userSettings.app),
                                                        jumpToReadMarkerEnabled: userSettings.app.jumpToReadMarkerEnabled,
                                                        hasPredecessor: roomProxy.predecessorRoom != nil,
                                                        pinnedEventIDs: roomProxy.infoPublisher.value.pinnedEventIDs,
@@ -455,6 +455,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     private func updateRoomInfo(_ roomInfo: RoomInfoProxyProtocol) {
         state.pinnedEventIDs = roomInfo.pinnedEventIDs
         state.isDM = roomInfo.isDM
+        state.linkPreviewsMode = LinkPreviewMode(isRoomEncrypted: !roomInfo.isNotEncrypted, appSettings: userSettings.app)
         state.timelineState.fullyReadEventID = roomInfo.fullyReadEventID
         
         if let powerLevels = roomInfo.powerLevels {

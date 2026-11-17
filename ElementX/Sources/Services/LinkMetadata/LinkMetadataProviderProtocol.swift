@@ -16,5 +16,5 @@ struct LinkMetadataProviderItem {
 protocol LinkMetadataProviderProtocol {
     var metadataItems: [URL: LinkMetadataProviderItem] { get }
     
-    func fetchMetadataFor(url: URL) async -> Result<LinkMetadataProviderItem, Error>
+    func fetchMetadataFor(url: URL, mode: LinkPreviewMode) async -> Result<LinkMetadataProviderItem, Error>
 }

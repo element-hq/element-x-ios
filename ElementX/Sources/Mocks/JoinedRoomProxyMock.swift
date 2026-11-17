@@ -151,6 +151,7 @@ extension RoomInfoProxyMock {
         
         id = configuration.id
         isEncrypted = configuration.isEncrypted
+        isNotEncrypted = !configuration.isEncrypted
         displayName = configuration.name
         topic = configuration.topic
         avatarURL = configuration.avatarURL
