@@ -90,9 +90,14 @@ extension NSItemProvider {
             return nil
         }
         
-        let sourceFilename = await loadSourceFilename()
-        let filename = if let sourceFilename, (sourceFilename as NSString).hasPathExtension {
-            sourceFilename
+        let sourceFilename = await loadSourceFilename() as NSString?
+        let filename = if let sourceFilename,
+                          sourceFilename.hasPathExtension,
+                          UTType(filenameExtension: sourceFilename.pathExtension)?.conforms(to: contentType.type) == true {
+            sourceFilename as String
+        } else if let sourceFilename, sourceFilename.hasPathExtension {
+            // The loaded representation can differ from the source file (e.g. JPEG data for a HEIC photo).
+            "\(sourceFilename.deletingPathExtension).\(contentType.fileExtension)"
         } else if let sourceFilename {
             "\(sourceFilename).\(contentType.fileExtension)"
         } else {
@@ -107,7 +112,7 @@ extension NSItemProvider {
     
     /// The item's name at its source: the suggested name, or else the name of the file it was shared from.
     private func loadSourceFilename() async -> String? {
-        if let suggestedName {
+        if let suggestedName, !suggestedName.isEmpty {
             return suggestedName
         }
         
@@ -144,8 +149,9 @@ extension NSItemProvider {
                                               withinAppGroupContainer: Bool,
                                               providerDescription: String) async -> URL? {
         do {
+            // A slash would turn the name into a path that leaves the unique folder.
             let newURL = try FileManager.default.createUniqueTemporaryDirectory(withinAppGroupContainer: withinAppGroupContainer)
-                .appending(component: filename)
+                .appending(component: filename.replacing("/", with: "-"))
             try data.write(to: newURL)
             return newURL
         } catch {

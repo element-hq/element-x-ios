@@ -30,7 +30,12 @@ enum ShareExtensionPayload: Hashable, Codable {
         switch self {
         case .mediaFiles(let roomID, let mediaFiles):
             return try .mediaFiles(roomID: roomID, mediaFiles: mediaFiles.map { mediaFile in
-                let folderURL = mediaFile.url.deletingLastPathComponent()
+                let folderURL = mediaFile.url.standardizedFileURL.deletingLastPathComponent()
+                // Any app can open the share URL, so only move folders the share extension created.
+                guard folderURL.deletingLastPathComponent().pathComponents == URL.appGroupTemporaryDirectory.pathComponents else {
+                    throw ShareExtensionPayloadError.fileOutsideAppGroupTemporaryDirectory
+                }
+                
                 let newFolderURL = URL.temporaryDirectory.appending(component: folderURL.lastPathComponent, directoryHint: .isDirectory)
                 
                 try? FileManager.default.removeItem(at: newFolderURL)
@@ -42,6 +47,10 @@ enum ShareExtensionPayload: Hashable, Codable {
             return self
         }
     }
+}
+
+enum ShareExtensionPayloadError: Error {
+    case fileOutsideAppGroupTemporaryDirectory
 }
 
 struct ShareExtensionMediaFile: Hashable, Codable {

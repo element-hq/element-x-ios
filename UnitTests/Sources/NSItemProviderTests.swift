@@ -96,6 +96,37 @@ struct NSItemProviderTests {
         #expect(try Data(contentsOf: storedURL) == data)
     }
     
+    @Test("An empty suggested name falls back to the original file name")
+    func emptySuggestedName() async throws {
+        let provider = try makeImageProvider()
+        provider.suggestedName = ""
+        
+        let storedURL = try #require(await provider.storeData())
+        
+        #expect(storedURL.lastPathComponent == "test_image.png")
+    }
+    
+    @Test("A name whose extension doesn't match the loaded type gets the type's extension")
+    func mismatchedExtension() async throws {
+        let provider = try makeImageProvider()
+        provider.suggestedName = "IMG_0001.HEIC"
+        
+        let storedURL = try #require(await provider.storeData())
+        
+        #expect(storedURL.lastPathComponent == "IMG_0001.png")
+    }
+    
+    @Test("Slashes in a name are replaced so the file stays in its own folder")
+    func slashInName() async throws {
+        let provider = try makeImageProvider()
+        provider.suggestedName = "Element / Matrix.png"
+        
+        let storedURL = try #require(await provider.storeData())
+        
+        #expect(storedURL.lastPathComponent == "Element - Matrix.png")
+        #expect(FileManager.default.fileExists(atPath: storedURL.path(percentEncoded: false)))
+    }
+    
     // MARK: - Helpers
     
     private func makeImageProvider() throws -> NSItemProvider {
