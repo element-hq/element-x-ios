@@ -110,11 +110,27 @@ enum CallScreenJavaScriptMessageName: String, CaseIterable {
         case .forwardLogs:
             """
             (function() {
+                // JSON.stringify reduces an Error to {}, since its properties are not
+                // enumerable, and the stack on this engine does not include the message.
+                function describe(a, depth = 0) {
+                    try {
+                        if (a instanceof Error) {
+                            let s = String(a);
+                            if (typeof a.stack === 'string' && a.stack) s = a.stack.startsWith(s) ? a.stack : s + '\\n' + a.stack;
+                            if (depth < 5) {
+                                if (a.cause !== undefined) s += '\\n  caused by: ' + describe(a.cause, depth + 1);
+                                if (Array.isArray(a.errors)) s += a.errors.map(e => '\\n  - ' + describe(e, depth + 1)).join('');
+                            }
+                            return s;
+                        }
+                        if (typeof a === 'object') return JSON.stringify(a, (k, v) => v instanceof Error ? describe(v, depth + 1) : v);
+                        return String(a);
+                    } catch (e) {
+                        try { return String(a); } catch (e2) { return '[unprintable]'; }
+                    }
+                }
                 function forwardLog(level, args) {
-                    const message = Array.from(args).map(a => {
-                        try { return typeof a === 'object' ? JSON.stringify(a) : String(a); }
-                        catch(e) { return String(a); }
-                    }).join(' ');
+                    const message = Array.from(args).map(a => describe(a)).join(' ');
                     window.webkit.messageHandlers.\(rawValue).postMessage({ level: level, message: message });
                 }
                 ['log', 'debug', 'info', 'warn', 'error'].forEach(function(level) {
