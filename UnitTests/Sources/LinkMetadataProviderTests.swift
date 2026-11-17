@@ -45,6 +45,33 @@ struct LinkMetadataProviderTests {
         #expect(!clientProxy.urlPreviewForCalled)
     }
     
+    @Test("A link without a homeserver preview isn't fetched again")
+    func failureIsCached() async {
+        clientProxy.urlPreviewForReturnValue = .failure(.urlPreviewUnavailable)
+        let provider = makeProvider()
+        
+        _ = await provider.fetchMetadataFor(url: url, mode: .homeserver)
+        _ = await provider.fetchMetadataFor(url: url, mode: .homeserver)
+        
+        #expect(clientProxy.urlPreviewForCallsCount == 1)
+        #expect(provider.failedURLs.contains(url))
+    }
+    
+    @Test("A cancelled fetch isn't remembered as a failure or a preview")
+    func cancelledFetch() async {
+        clientProxy.urlPreviewForClosure = { _ in
+            withUnsafeCurrentTask { $0?.cancel() }
+            return .success(.init(title: "Element", imageURL: nil))
+        }
+        let provider = makeProvider()
+        
+        let result = await Task { await provider.fetchMetadataFor(url: url, mode: .homeserver) }.value
+        
+        #expect(throws: CancellationError.self) { try result.get() }
+        #expect(provider.metadataItems[url] == nil)
+        #expect(!provider.failedURLs.contains(url))
+    }
+    
     @Test("An invalid preview image keeps the rest of the preview")
     func invalidImage() throws {
         let json = #"{"og:title": "Element", "og:image": ""}"#

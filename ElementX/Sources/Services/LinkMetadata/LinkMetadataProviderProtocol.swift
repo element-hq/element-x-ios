@@ -15,6 +15,8 @@ struct LinkMetadataProviderItem {
 
 protocol LinkMetadataProviderProtocol {
     var metadataItems: [URL: LinkMetadataProviderItem] { get }
+    /// Links without a preview, which aren't fetched again.
+    var failedURLs: Set<URL> { get }
     
     func fetchMetadataFor(url: URL, mode: LinkPreviewMode) async -> Result<LinkMetadataProviderItem, Error>
 }

@@ -71,8 +71,14 @@ struct TextRoomTimelineView: View, TextBasedRoomTimelineViewProtocol {
     
     @MainActor
     private func fetchLinkPreview(for url: URL, mode: LinkPreviewMode) async {
-        if case let .success(metadata) = await context?.viewState.linkMetadataProvider?.fetchMetadataFor(url: url, mode: mode) {
+        switch await context?.viewState.linkMetadataProvider?.fetchMetadataFor(url: url, mode: mode) {
+        case .success(let metadata):
             linkMetadata[url] = metadata
+        case .failure:
+            // Drops the loading placeholder, which would otherwise spin forever.
+            linkMetadata[url] = nil
+        case nil:
+            break
         }
     }
 }
