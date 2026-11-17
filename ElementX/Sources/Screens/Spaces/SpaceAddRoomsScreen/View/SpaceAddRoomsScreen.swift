@@ -87,6 +87,7 @@ struct SpaceAddRoomsScreen: View {
             case .suggestions:
                 if let sectionTitle = context.viewState.roomsSection.title {
                     Text(sectionTitle)
+                        .compoundListSectionHeader()
                 }
             }
         } footer: {

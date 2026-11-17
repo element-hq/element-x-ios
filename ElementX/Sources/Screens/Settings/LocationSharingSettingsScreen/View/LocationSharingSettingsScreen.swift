@@ -66,11 +66,12 @@ struct LocationSharingSettingsScreen: View {
         } header: {
             VStack(alignment: .leading, spacing: 4) {
                 Text(L10n.screenAdvancedSettingsLiveLocationSectionTitle)
-                    .compoundListSectionHeader()
+                
                 Text(L10n.screenAdvancedSettingsLiveLocationSectionDescription)
                     .font(.compound.bodyMD)
                     .foregroundStyle(.compound.textSecondary)
             }
+            .compoundListSectionHeader()
         } footer: {
             Text(context.viewState.liveLocationUpdateFooterAttributedString)
                 .compoundListSectionFooter()
