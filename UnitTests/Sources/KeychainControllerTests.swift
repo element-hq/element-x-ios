@@ -9,6 +9,7 @@
 @testable import ElementX
 import Foundation
 import KeychainAccess
+import MatrixRustSDK
 import Testing
 
 struct KeychainControllerTests {
@@ -20,6 +21,8 @@ struct KeychainControllerTests {
         keychain.removeAllRestorationTokens()
         keychain.resetSecrets()
     }
+    
+    // MARK: - Restoration Tokens
     
     @Test("A restoration token can be stored and retrieved")
     func addRestorationToken() {
@@ -117,6 +120,33 @@ struct KeychainControllerTests {
         #expect(underlyingKeychain.allKeys().isEmpty, "The keychain should be empty again.")
     }
     
+    @Test("Session changes from the same device update the stored restoration token")
+    func saveSession() {
+        // Given a keychain with a stored restoration token.
+        let restorationToken = RestorationToken.mock()
+        keychain.setRestorationToken(restorationToken, forUsername: restorationToken.session.userId)
+        
+        // When saving a refreshed session from the same device.
+        let session = Session.mock(accessToken: "newAccessToken", deviceID: restorationToken.session.deviceId)
+        keychain.saveSessionInKeychain(session: session)
+        
+        // Then the stored session should be updated.
+        #expect(keychain.restorationTokenForUsername(session.userId)?.session == session)
+    }
+    
+    @Test("Session changes from a different device don't overwrite the stored restoration token")
+    func saveSessionFromDifferentDevice() {
+        // Given a keychain with a stored restoration token.
+        let restorationToken = RestorationToken.mock()
+        keychain.setRestorationToken(restorationToken, forUsername: restorationToken.session.userId)
+        
+        // When saving a refreshed session for the same user from a different device.
+        keychain.saveSessionInKeychain(session: .mock(accessToken: "newAccessToken", deviceID: "otherDeviceID"))
+        
+        // Then the stored restoration token should be untouched.
+        #expect(keychain.restorationTokenForUsername(restorationToken.session.userId) == restorationToken)
+    }
+    
     @Test("The homeservers of the stored sessions are collected once each")
     func collectSessionHomeservers() {
         // Given a keychain with two accounts on one homeserver and another account on a different homeserver.
@@ -158,6 +188,8 @@ struct KeychainControllerTests {
         #expect(homeservers == ["https://matrix.example.com"])
         #expect(underlyingKeychain.allKeys().count == 2, "The unsupported token should only be removed once it can be logged.")
     }
+    
+    // MARK: - App Secrets
     
     @Test("A PIN code can be stored and retrieved")
     func addPINCode() throws {
@@ -255,15 +287,23 @@ struct KeychainControllerTests {
 
 private extension RestorationToken {
     static func mock(homeserverURL: String = "homeserverUrl") -> RestorationToken {
-        RestorationToken(session: .init(accessToken: "accessToken",
-                                        refreshToken: "refreshToken",
-                                        userId: "userId",
-                                        deviceId: "deviceId",
-                                        homeserverUrl: homeserverURL,
-                                        oauthData: "oauthData",
-                                        slidingSyncVersion: .native),
+        RestorationToken(session: .mock(homeserverURL: homeserverURL),
                          sessionDirectories: .init(),
                          passphrase: RestorationTokenFixtures.passphrase,
                          pusherNotificationClientIdentifier: "pusherClientID")
+    }
+}
+
+private extension Session {
+    static func mock(accessToken: String = "accessToken",
+                     deviceID: String = "deviceId",
+                     homeserverURL: String = "homeserverUrl") -> Session {
+        Session(accessToken: accessToken,
+                refreshToken: "refreshToken",
+                userId: "userId",
+                deviceId: deviceID,
+                homeserverUrl: homeserverURL,
+                oauthData: "oauthData",
+                slidingSyncVersion: .native)
     }
 }
