@@ -177,6 +177,7 @@ struct SettingsScreen: View {
                        kind: .button {
                            context.send(viewAction: .switchAccount(userID: account.userID))
                        })
+                       .accessibilityIdentifier(A11yIdentifiers.settingsScreen.otherAccount(account.userID))
     }
     
     private var accountSettingsSection: some View {

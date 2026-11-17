@@ -290,6 +290,21 @@ class AuthenticationService: AuthenticationServiceProtocol {
     }
     
     private func userSession(for client: ClientProtocol) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
+        let userID: String
+        do {
+            userID = try client.userId()
+        } catch {
+            MXLog.error("Failed getting the user ID after logging in: \(error)")
+            return .failure(.failedLoggingIn)
+        }
+        
+        if userSessionManager.userIDs.contains(userID) {
+            MXLog.warning("There's already an account logged in as \(userID), logging out the new session.")
+            _ = try? await client.logout()
+            rotateSessionDirectory()
+            return .failure(.accountAlreadyLoggedIn(userID: userID))
+        }
+        
         switch await userSessionManager.userSession(for: client, sessionDirectories: sessionDirectories, passphrase: passphrase) {
         case .success(let clientProxy):
             return .success(clientProxy)

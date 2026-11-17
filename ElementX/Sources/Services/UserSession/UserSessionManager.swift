@@ -191,6 +191,24 @@ final class UserSessionManager: UserSessionManagerProtocol {
         }
     }
     
+    func selectAccount(userID: String) {
+        guard let userSession = session(for: userID) else {
+            fatalError("Tried to select \(userID), which doesn't have a live session.")
+        }
+        
+        userSession.userSettings.account.lastSelectedDate = .now
+        
+        guard userID != activeSession?.clientProxy.userID else { return }
+        
+        // Reordered on a copy so the sessions are only published once.
+        var accounts = accounts
+        accounts.removeValue(forKey: userID)
+        accounts.updateValue(userSession, forKey: userID, insertingAt: 0)
+        self.accounts = accounts
+        
+        callbacksSubject.send(.didSelectAccount(userID: userID))
+    }
+    
     func logout(userID: String) async {
         await logout(userID: userID, error: nil)
     }

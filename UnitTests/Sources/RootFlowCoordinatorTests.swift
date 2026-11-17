@@ -181,6 +181,36 @@ struct RootFlowCoordinatorTests {
         #expect(navigationRootCoordinator.rootCoordinator === rootCoordinator)
     }
     
+    // MARK: Authentication
+    
+    @Test("Starting authentication from a user session flow closes its secondary windows")
+    func authenticationFromUserSession() async throws {
+        rootFlowCoordinator.handleAppRoute(.roomList, animated: false)
+        #expect(navigationRootCoordinator.rootCoordinator is NavigationTabCoordinator<UserSessionFlowCoordinator.HomeTab>)
+        
+        let deferred = deferFulfillment(rootFlowCoordinator.actionsPublisher) { action in
+            guard case .closeSecondaryWindows = action else { return false }
+            return true
+        }
+        rootFlowCoordinator.handleAppRoute(.authentication, animated: false)
+        try await deferred.fulfill()
+        
+        #expect(navigationRootCoordinator.rootCoordinator is NavigationStackCoordinator)
+    }
+    
+    // MARK: Account selection
+    
+    @Test("Selecting an account during authentication leaves it in place")
+    func accountSelectionDuringAuthentication() {
+        rootFlowCoordinator.handleAppRoute(.authentication, animated: false)
+        let authenticationRootCoordinator = navigationRootCoordinator.rootCoordinator
+        #expect(authenticationRootCoordinator is NavigationStackCoordinator)
+        
+        userSessionManagerCallbacks.send(.didSelectAccount(userID: "@alice:matrix.org"))
+        
+        #expect(navigationRootCoordinator.rootCoordinator === authenticationRootCoordinator)
+    }
+    
     // MARK: Calls
     
     @Test("The call route asks for the call as the route's account, when it's signed in")

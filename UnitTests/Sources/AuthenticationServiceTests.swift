@@ -45,6 +45,33 @@ struct AuthenticationServiceTests {
         }
     }
     
+    @Test("Logging in with a password to an account that is already logged in fails and logs out the new session")
+    mutating func passwordLoginWithExistingAccount() async throws {
+        try await setup(serverNameOrBaseURL: "example.com")
+        userSessionManager.userIDs = ["@alice:example.com"]
+        try await service.configure(for: "example.com", flow: .login).get()
+        
+        let result = await service.login(username: "alice", password: "12345678", initialDeviceName: nil, deviceID: nil)
+        
+        #expect(throws: AuthenticationServiceError.accountAlreadyLoggedIn(userID: "@alice:example.com")) { try result.get() }
+        #expect(client.logoutCallsCount == 1)
+        #expect(!userSessionManager.userSessionForSessionDirectoriesPassphraseCalled)
+    }
+    
+    @Test("Logging in with OAuth to an account that is already logged in fails and logs out the new session")
+    mutating func oAuthLoginWithExistingAccount() async throws {
+        try await setup()
+        userSessionManager.userIDs = ["@alice:matrix.org"]
+        client.userIdReturnValue = "@alice:matrix.org"
+        try await service.configure(for: "matrix.org", flow: .login).get()
+        
+        let result = await service.loginWithOAuthCallback("https://example.com/callback")
+        
+        #expect(throws: AuthenticationServiceError.accountAlreadyLoggedIn(userID: "@alice:matrix.org")) { try result.get() }
+        #expect(client.logoutCallsCount == 1)
+        #expect(!userSessionManager.userSessionForSessionDirectoriesPassphraseCalled)
+    }
+    
     @Test("Configuring a server that supports OAuth for login")
     mutating func configureLoginWithOAuth() async throws {
         try await setup()

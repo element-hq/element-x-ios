@@ -264,6 +264,12 @@ enum A11yIdentifiers {
         let done = "settings-done"
         let account = "settings-account"
         let addAccount = "settings-add_account"
+        
+        let otherAccountPrefix = "settings-other_account"
+        func otherAccount(_ userID: String) -> String {
+            "\(otherAccountPrefix):\(userID)"
+        }
+        
         let secureBackup = "settings-secure_backup"
         let notifications = "settings-notifications"
         let analytics = "settings-analytics"

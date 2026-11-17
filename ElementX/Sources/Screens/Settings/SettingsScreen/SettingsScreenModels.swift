@@ -15,6 +15,7 @@ enum SettingsScreenViewModelAction {
     case userStatusEmojiPicker(EmojiPickerScreenContinuation)
     
     case addAccount
+    case switchAccount(userID: String)
     
     case manageAccount(url: URL)
     case linkNewDevice

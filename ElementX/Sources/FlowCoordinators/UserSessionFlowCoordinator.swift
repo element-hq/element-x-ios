@@ -12,6 +12,9 @@ import SwiftState
 import SwiftUI
 
 enum UserSessionFlowCoordinatorAction {
+    case addAccount
+    case switchAccount(userID: String)
+    
     case logout
     case clearCache
     /// Logout without any confirmation. The account was deactivated.
@@ -400,6 +403,11 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             guard let self else { return }
             
             switch action {
+            case .addAccount:
+                actionsSubject.send(.addAccount)
+            case .switchAccount(let userID):
+                actionsSubject.send(.switchAccount(userID: userID))
+                
             case .dismiss:
                 navigationTabCoordinator.setSheetCoordinator(nil)
             case .clearCache:

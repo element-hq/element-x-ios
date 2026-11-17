@@ -642,6 +642,8 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
                         finishSessionRestoration()
                         sendStoredInlineReply(from: userSession)
                     }
+                case .didSelectAccount:
+                    break
                 case .didRemoveAccount:
                     handleAccountRemoval()
                 }

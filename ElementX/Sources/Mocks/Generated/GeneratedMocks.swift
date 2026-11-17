@@ -15849,6 +15849,37 @@ nonisolated class UserSessionManagerMock: UserSessionManagerProtocol, @unchecked
         addNewSessionReceivedInvocationsLock.withLock { addNewSessionUnderlyingReceivedInvocations.append(userSession) }
         addNewSessionClosure?(userSession)
     }
+    //MARK: - selectAccount
+
+    private let selectAccountUserIDCallsCountLock = NSLock()
+    private nonisolated(unsafe) var selectAccountUserIDUnderlyingCallsCount = 0
+    var selectAccountUserIDCallsCount: Int {
+        get { selectAccountUserIDCallsCountLock.withLock { selectAccountUserIDUnderlyingCallsCount } }
+        set { selectAccountUserIDCallsCountLock.withLock { selectAccountUserIDUnderlyingCallsCount = newValue } }
+    }
+    var selectAccountUserIDCalled: Bool {
+        return selectAccountUserIDCallsCount > 0
+    }
+    private let selectAccountUserIDReceivedUserIDLock = NSLock()
+    private nonisolated(unsafe) var selectAccountUserIDUnderlyingReceivedUserID: String?
+    var selectAccountUserIDReceivedUserID: String? {
+        get { selectAccountUserIDReceivedUserIDLock.withLock { selectAccountUserIDUnderlyingReceivedUserID } }
+        set { selectAccountUserIDReceivedUserIDLock.withLock { selectAccountUserIDUnderlyingReceivedUserID = newValue } }
+    }
+    private let selectAccountUserIDReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var selectAccountUserIDUnderlyingReceivedInvocations: [String] = []
+    var selectAccountUserIDReceivedInvocations: [String] {
+        get { selectAccountUserIDReceivedInvocationsLock.withLock { selectAccountUserIDUnderlyingReceivedInvocations } }
+        set { selectAccountUserIDReceivedInvocationsLock.withLock { selectAccountUserIDUnderlyingReceivedInvocations = newValue } }
+    }
+    nonisolated(unsafe) var selectAccountUserIDClosure: ((String) -> Void)?
+
+    func selectAccount(userID: String) {
+        selectAccountUserIDCallsCountLock.withLock { selectAccountUserIDUnderlyingCallsCount += 1 }
+        selectAccountUserIDReceivedUserID = userID
+        selectAccountUserIDReceivedInvocationsLock.withLock { selectAccountUserIDUnderlyingReceivedInvocations.append(userID) }
+        selectAccountUserIDClosure?(userID)
+    }
     //MARK: - logout
 
     private let logoutUserIDCallsCountLock = NSLock()

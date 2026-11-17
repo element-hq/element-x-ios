@@ -124,6 +124,13 @@ final nonisolated class KeychainController: KeychainControllerProtocol {
             MXLog.error("Failed retrieving the restoration token for \(session.userId)")
             fatalError("Something has gone mega wrong, all bets are off.")
         }
+        
+        guard session.deviceId == oldToken.session.deviceId else {
+            // Unlikely but protects against a duplicate login attempting to overwrite the existing account's session before it gets automatically logged out.
+            MXLog.error("Received session for \(session.userId) (\(oldToken.session.deviceId)) with a different device ID (\(session.deviceId)). Dropping.")
+            return
+        }
+        
         let restorationToken = RestorationToken(session: session,
                                                 sessionDirectories: oldToken.sessionDirectories,
                                                 passphrase: oldToken.passphrase,

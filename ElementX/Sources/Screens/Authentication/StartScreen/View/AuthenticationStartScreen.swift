@@ -173,6 +173,14 @@ struct AuthenticationStartScreen: View {
     
     @ToolbarContentBuilder
     var toolbar: some ToolbarContent {
+        ToolbarItem(placement: .cancellationAction) {
+            if context.viewState.mode == .addAccount {
+                Button(L10n.actionCancel) {
+                    context.send(viewAction: .cancelAddingAccount)
+                }
+            }
+        }
+        
         ToolbarItem(placement: .primaryAction) {
             if case let .classicAppOtherOptions(classicAppAccount) = context.viewState.mode {
                 ToolbarButton(role: .close) {
