@@ -25,7 +25,7 @@ struct SessionVerificationViewModelTests {
         context = viewModel.context
     }
     
-    @Test
+    @Test("Requesting verification asks the other device to verify")
     func requestVerification() async throws {
         #expect(context.viewState.verificationState == .initial)
         
@@ -36,7 +36,7 @@ struct SessionVerificationViewModelTests {
         #expect(context.viewState.verificationState == .requestingVerification)
     }
     
-    @Test
+    @Test("Stopping cancels the verification, and restarting goes back to the start")
     func verificationCancellation() async throws {
         #expect(context.viewState.verificationState == .initial)
         
@@ -62,12 +62,12 @@ struct SessionVerificationViewModelTests {
         #expect(sessionVerificationController.cancelVerificationCallsCount == 1)
     }
     
-    @Test
+    @Test("The emojis are shown once the other device starts SAS verification")
     mutating func receiveChallenge() async throws {
         try await setupChallengeReceived()
     }
     
-    @Test
+    @Test("Accepting the challenge verifies the session")
     mutating func acceptChallenge() async throws {
         try await setupChallengeReceived()
         
@@ -87,7 +87,7 @@ struct SessionVerificationViewModelTests {
         #expect(sessionVerificationController.approveVerificationCallsCount == 1)
     }
     
-    @Test
+    @Test("Declining the challenge cancels the verification")
     mutating func declineChallenge() async throws {
         try await setupChallengeReceived()
         
@@ -105,6 +105,21 @@ struct SessionVerificationViewModelTests {
         
         #expect(context.viewState.verificationState == .cancelled)
         #expect(sessionVerificationController.declineVerificationCallsCount == 1)
+    }
+    
+    @Test("While waiting for the other side to match, the screen keeps the challenge's subtitle", arguments: [false, true])
+    func acceptingChallengeState(isUserVerification: Bool) {
+        let flow: SessionVerificationScreenFlow = isUserVerification ? .userInitiator(userID: "@bob:matrix.org") : .deviceInitiator
+        var viewState = SessionVerificationScreenViewState(flow: flow,
+                                                           learnMoreURL: "https://example.org/encryption",
+                                                           verificationState: .showingChallenge(emojis: SessionVerificationControllerProxyMock.emojis))
+        let challengeMessage = viewState.message
+        #expect(!viewState.isWaiting)
+        
+        viewState.verificationState = .acceptingChallenge(emojis: SessionVerificationControllerProxyMock.emojis)
+        
+        #expect(viewState.isWaiting)
+        #expect(viewState.message == challengeMessage)
     }
     
     // MARK: - Private
