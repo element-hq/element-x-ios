@@ -120,6 +120,7 @@ class TimelineMediaPreviewController: QLPreviewController {
         ])
         
         dismissGestureDelegate.previewController = self
+        dismissGestureDelegate.captionView = captionView
         dismissGestureRecognizer.delegate = dismissGestureDelegate
         dismissGestureRecognizer.addTarget(self, action: #selector(handleDismissGesture))
         view.addGestureRecognizer(dismissGestureRecognizer)
@@ -355,8 +356,9 @@ class TimelineMediaPreviewController: QLPreviewController {
         case .ended:
             let translation = gestureRecognizer.translation(in: view).y
             let velocity = gestureRecognizer.velocity(in: view).y
-            if abs(translation) > 100 || abs(velocity) > 800 {
-                dismiss(animated: true)
+            // As with a loaded item, moving the finger back up before letting go cancels the dismissal.
+            if velocity >= 0, translation > 100 || velocity > 800 {
+                dismissPreview()
             } else {
                 resetDismissGestureOffset()
             }
@@ -364,6 +366,17 @@ class TimelineMediaPreviewController: QLPreviewController {
             resetDismissGestureOffset()
         default:
             break
+        }
+    }
+    
+    /// QuickLook doesn't call `previewControllerDidDismiss` when the preview is dismissed programmatically,
+    /// so tell the delegate once the dismissal has finished, letting the presenter clean up its state.
+    private func dismissPreview() {
+        // Captured up front as the delegate is no longer set once the dismissal has finished.
+        let delegate = delegate
+        dismiss(animated: true) { [weak self] in
+            guard let self else { return }
+            delegate?.previewControllerDidDismiss?(self)
         }
     }
     
@@ -593,12 +606,14 @@ private struct DownloadIndicatorView: View {
 
 // MARK: - Helpers
 
-/// Lets a vertical swipe dismiss the preview while the current item has nothing to show (still downloading,
+/// Lets a downward swipe dismiss the preview while the current item has nothing to show (still downloading,
 /// failed or loading more), as QuickLook only provides that gesture once an item's file has loaded.
 ///
 /// A separate object so that QuickLook's own gesture recognizer delegate methods aren't overridden.
 private final class EmptyItemDismissGestureDelegate: NSObject, UIGestureRecognizerDelegate {
     weak var previewController: QLPreviewController?
+    /// The caption scrolls by itself, so drags that start on it are left alone.
+    weak var captionView: UIView?
     
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         guard let previewController,
@@ -607,8 +622,14 @@ private final class EmptyItemDismissGestureDelegate: NSObject, UIGestureRecogniz
             return false
         }
         
+        // Only a downward swipe, matching QuickLook's own gesture for a loaded item.
         let velocity = panGestureRecognizer.velocity(in: previewController.view)
-        return abs(velocity.y) > abs(velocity.x)
+        return velocity.y > abs(velocity.x)
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        guard let captionView, !captionView.isHidden else { return true }
+        return !captionView.bounds.contains(touch.location(in: captionView))
     }
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
