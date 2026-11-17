@@ -434,6 +434,16 @@ final nonisolated class AppSettings: @unchecked Sendable {
                                                                bundledBugReportRageshakeConfiguration: bundledBugReportRageshakeConfiguration))
     }
     
+    /// Carries the old link previews toggle over to the per room type settings.
+    func migrateLinkPreviewsSetting() {
+        let linkPreviewsEnabled: Bool? = store["linkPreviewsEnabled"]
+        guard linkPreviewsEnabled == true else { return }
+        
+        // The old toggle used Apple everywhere, unencrypted rooms now only use the homeserver.
+        unencryptedRoomsLinkPreviewsEnabled = true
+        encryptedRoomsLinkPreviewsMode = .apple
+    }
+    
     static func volatile() -> AppSettings {
         AppSettings(store: VolatileUserDefaults())
     }
