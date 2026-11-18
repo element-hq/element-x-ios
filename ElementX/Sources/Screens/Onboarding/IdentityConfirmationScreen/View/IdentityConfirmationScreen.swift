@@ -72,8 +72,10 @@ struct IdentityConfirmationScreen: View {
     private var actionButtons: some View {
         VStack(spacing: 16) {
             if let availableActions = context.viewState.availableActions {
-                Button(L10n.screenIdentityConfirmationUseAnotherDevice) {
+                Button {
                     context.send(viewAction: .otherDevice)
+                } label: {
+                    Label(L10n.screenIdentityConfirmationUseAnotherDevice, icon: \.devices)
                 }
                 .buttonStyle(.compound(.primary))
                 .disabled(!availableActions.contains(.interactiveVerification))
