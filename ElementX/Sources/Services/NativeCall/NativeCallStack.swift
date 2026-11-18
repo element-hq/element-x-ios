@@ -12,9 +12,7 @@ import Foundation
 /// The call package's stack for one logged-in session, turning what the call does into the
 /// navigation the host owes it.
 ///
-/// Built with the session rather than with the first call: the core's to-device subscription has no
-/// catch-up, so a stack that starts only once a call does can miss the keys sent while it was
-/// joining.
+/// Built with the session and kept for its life, as the call package expects of its controller.
 @MainActor
 final class NativeCallStack {
     /// The call itself, for the screen that is built from it. Everything else asks this type.
@@ -65,11 +63,13 @@ final class NativeCallStack {
         Self.installRTCLogBridge()
     }
     
-    /// Hangs up any call in progress.
-    func stop() {
-        MXLog.info("\(Self.logPrefix) Stopping the native call stack, in a call: \(controller.isInCall)")
+    /// Hangs up the call in progress, closes a failed call's screen and drops the call queued behind it.
+    func endCall() {
+        MXLog.info("\(Self.logPrefix) Ending the native call, holds a room: \(controller.room != nil)")
         
-        if controller.isInCall {
+        pendingCallRequest = nil
+        
+        if controller.room != nil {
             controller.hangUp()
         }
     }

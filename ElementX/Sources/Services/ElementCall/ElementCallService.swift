@@ -38,8 +38,7 @@ final class ElementCallService: ElementCallServiceProtocol {
         ongoingCallRoomIDSubject.asCurrentValuePublisher()
     }
     
-    /// Kept for stacks built later, as a call answered from the lock screen gets its stack after CallKit
-    /// activated the audio.
+    /// Kept for a stack built later, when the setting is turned on after CallKit activated the audio.
     private let isAudioSessionActiveSubject = CurrentValueSubject<Bool, Never>(false)
     private let callEventsSubject = PassthroughSubject<NativeCallEvent, Never>()
     var nativeCallEventsPublisher: AnyPublisher<NativeCallEvent, Never> {
@@ -51,10 +50,9 @@ final class ElementCallService: ElementCallServiceProtocol {
             .eraseToAnyPublisher()
     }
     
-    /// The native call stack, while enabled and the setting is on.
+    /// The native call stack, while the setting is on.
     private var nativeCallStack: NativeCallStack?
     private var nativeCallCancellable: AnyCancellable?
-    private var isNativeCallStackEnabled = false
     
     var nativeCallController: ElementCallController? {
         nativeCallStack?.controller
@@ -102,15 +100,14 @@ final class ElementCallService: ElementCallServiceProtocol {
         return roomProxy
     }
     
-    func setNativeCallStackEnabled(_ isEnabled: Bool) {
-        isNativeCallStackEnabled = isEnabled
-        updateNativeCallStack()
-    }
-    
     @discardableResult
     func handleNativeCallRequest(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool, answeredFromCallKit: Bool) -> Bool {
-        guard let nativeCallStack else {
+        guard userSettings.app.nativeCallEnabled else {
             return false
+        }
+        
+        guard let nativeCallStack else {
+            fatalError("Native calls are on but the account has no native call stack.")
         }
         
         nativeCallStack.handleCallRequest(roomProxy: roomProxy, isVoiceCall: isVoiceCall, answeredFromCallKit: answeredFromCallKit)
@@ -123,6 +120,10 @@ final class ElementCallService: ElementCallServiceProtocol {
     
     func restoreNativeCall() {
         nativeCallStack?.restore()
+    }
+    
+    func endNativeCall() {
+        nativeCallStack?.endCall()
     }
     
     func setupCallSession(roomID: String, roomDisplayName: String, isVideo: Bool, kind: ElementCallSessionKind) async {
@@ -209,9 +210,9 @@ final class ElementCallService: ElementCallServiceProtocol {
     
     // MARK: - Native calls
     
-    /// Builds or releases the call stack to match the toggle and the setting.
+    /// Builds or releases the call stack to match the setting.
     private func updateNativeCallStack() {
-        guard userSettings.app.nativeCallEnabled, isNativeCallStackEnabled else {
+        guard userSettings.app.nativeCallEnabled else {
             stopNativeCallStack()
             return
         }
@@ -251,7 +252,7 @@ final class ElementCallService: ElementCallServiceProtocol {
         self.nativeCallStack = nil
         nativeCallCancellable = nil
         
-        nativeCallStack.stop()
+        nativeCallStack.endCall()
         actionsSubject.send(.nativeCallPresentation(.dismiss))
     }
     

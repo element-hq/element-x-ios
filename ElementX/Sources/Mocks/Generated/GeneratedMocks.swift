@@ -5399,37 +5399,6 @@ nonisolated class ElementCallServiceMock: ElementCallServiceProtocol, @unchecked
             return joinedRoomRoomIDReturnValue
         }
     }
-    //MARK: - setNativeCallStackEnabled
-
-    private let setNativeCallStackEnabledCallsCountLock = NSLock()
-    private nonisolated(unsafe) var setNativeCallStackEnabledUnderlyingCallsCount = 0
-    var setNativeCallStackEnabledCallsCount: Int {
-        get { setNativeCallStackEnabledCallsCountLock.withLock { setNativeCallStackEnabledUnderlyingCallsCount } }
-        set { setNativeCallStackEnabledCallsCountLock.withLock { setNativeCallStackEnabledUnderlyingCallsCount = newValue } }
-    }
-    var setNativeCallStackEnabledCalled: Bool {
-        return setNativeCallStackEnabledCallsCount > 0
-    }
-    private let setNativeCallStackEnabledReceivedIsEnabledLock = NSLock()
-    private nonisolated(unsafe) var setNativeCallStackEnabledUnderlyingReceivedIsEnabled: Bool?
-    var setNativeCallStackEnabledReceivedIsEnabled: Bool? {
-        get { setNativeCallStackEnabledReceivedIsEnabledLock.withLock { setNativeCallStackEnabledUnderlyingReceivedIsEnabled } }
-        set { setNativeCallStackEnabledReceivedIsEnabledLock.withLock { setNativeCallStackEnabledUnderlyingReceivedIsEnabled = newValue } }
-    }
-    private let setNativeCallStackEnabledReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var setNativeCallStackEnabledUnderlyingReceivedInvocations: [Bool] = []
-    var setNativeCallStackEnabledReceivedInvocations: [Bool] {
-        get { setNativeCallStackEnabledReceivedInvocationsLock.withLock { setNativeCallStackEnabledUnderlyingReceivedInvocations } }
-        set { setNativeCallStackEnabledReceivedInvocationsLock.withLock { setNativeCallStackEnabledUnderlyingReceivedInvocations = newValue } }
-    }
-    nonisolated(unsafe) var setNativeCallStackEnabledClosure: ((Bool) -> Void)?
-
-    func setNativeCallStackEnabled(_ isEnabled: Bool) {
-        setNativeCallStackEnabledCallsCountLock.withLock { setNativeCallStackEnabledUnderlyingCallsCount += 1 }
-        setNativeCallStackEnabledReceivedIsEnabled = isEnabled
-        setNativeCallStackEnabledReceivedInvocationsLock.withLock { setNativeCallStackEnabledUnderlyingReceivedInvocations.append(isEnabled) }
-        setNativeCallStackEnabledClosure?(isEnabled)
-    }
     //MARK: - handleNativeCallRequest
 
     private let handleNativeCallRequestRoomProxyIsVoiceCallAnsweredFromCallKitCallsCountLock = NSLock()
@@ -5506,6 +5475,23 @@ nonisolated class ElementCallServiceMock: ElementCallServiceProtocol, @unchecked
     func restoreNativeCall() {
         restoreNativeCallCallsCountLock.withLock { restoreNativeCallUnderlyingCallsCount += 1 }
         restoreNativeCallClosure?()
+    }
+    //MARK: - endNativeCall
+
+    private let endNativeCallCallsCountLock = NSLock()
+    private nonisolated(unsafe) var endNativeCallUnderlyingCallsCount = 0
+    var endNativeCallCallsCount: Int {
+        get { endNativeCallCallsCountLock.withLock { endNativeCallUnderlyingCallsCount } }
+        set { endNativeCallCallsCountLock.withLock { endNativeCallUnderlyingCallsCount = newValue } }
+    }
+    var endNativeCallCalled: Bool {
+        return endNativeCallCallsCount > 0
+    }
+    nonisolated(unsafe) var endNativeCallClosure: (() -> Void)?
+
+    func endNativeCall() {
+        endNativeCallCallsCountLock.withLock { endNativeCallUnderlyingCallsCount += 1 }
+        endNativeCallClosure?()
     }
     //MARK: - setupCallSession
 

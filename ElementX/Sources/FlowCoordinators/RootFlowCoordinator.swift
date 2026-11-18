@@ -526,7 +526,6 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
     private func stopUserSessionFlow() {
         actionsSubject.send(.closeSecondaryWindows)
         userIndicatorController.retractAllIndicators()
-        userSessionFlowCoordinator?.stop()
         userSessionFlowCoordinator = nil
     }
     

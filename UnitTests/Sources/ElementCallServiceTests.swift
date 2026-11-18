@@ -33,8 +33,8 @@ final class ElementCallServiceTests {
     
     // MARK: - Ringing call
     
-    @Test
-    func remoteHangUpEndsRinging() async throws {
+    @Test("The caller hanging up ends the ringing")
+    func remoteHangUp() async throws {
         await service.observeIncomingCall(roomID: "!room:example.com", rtcNotificationID: "$000")
         
         let deferred = deferFulfillment(service.actionsPublisher) { $0 == .incomingCallEnded(roomID: "!room:example.com", reason: .remoteEnded) }
@@ -42,8 +42,8 @@ final class ElementCallServiceTests {
         try await deferred.fulfill()
     }
     
-    @Test
-    func joinElsewhereEndsRinging() async throws {
+    @Test("Joining the call on another device ends the ringing")
+    func joinElsewhere() async throws {
         await service.observeIncomingCall(roomID: "!room:example.com", rtcNotificationID: "$000")
         
         let deferred = deferFulfillment(service.actionsPublisher) { $0 == .incomingCallEnded(roomID: "!room:example.com", reason: .answeredElsewhere) }
@@ -51,8 +51,8 @@ final class ElementCallServiceTests {
         try await deferred.fulfill()
     }
     
-    @Test
-    func declineElsewhereEndsRinging() async throws {
+    @Test("Our own decline on another device ends the ringing, another member's doesn't")
+    func declineElsewhere() async throws {
         await service.observeIncomingCall(roomID: "!room:example.com", rtcNotificationID: "$000")
         let listener = try #require(roomProxy.subscribeToCallDeclineEventsRtcNotificationEventIDListenerReceivedArguments?.listener)
         #expect(roomProxy.subscribeToCallDeclineEventsRtcNotificationEventIDListenerReceivedArguments?.rtcNotificationEventID == "$000")
@@ -66,8 +66,8 @@ final class ElementCallServiceTests {
         try await deferred.fulfill()
     }
     
-    @Test
-    func stoppedWatchIgnoresRoom() async throws {
+    @Test("A stopped watch ignores the room's updates")
+    func stopWatching() async throws {
         await service.observeIncomingCall(roomID: "!room:example.com", rtcNotificationID: "$000")
         service.stopObservingIncomingCall()
         
@@ -76,8 +76,8 @@ final class ElementCallServiceTests {
         try await deferredFailure.fulfill()
     }
     
-    @Test
-    func declineCallSendsDecline() async {
+    @Test("Declining a call sends the decline to its room")
+    func declineCall() async {
         await service.declineCall(roomID: "!room:example.com", rtcNotificationID: "$000")
         
         #expect(clientProxy.roomForIdentifierReceivedIdentifier == "!room:example.com")
@@ -86,8 +86,8 @@ final class ElementCallServiceTests {
     
     // MARK: - Call sessions
     
-    @Test(arguments: [false, true])
-    func callSetupWaitsForManager(repliesLater: Bool) async {
+    @Test("A call session's set-up returns once the manager has replied", arguments: [false, true])
+    func callSetup(repliesLater: Bool) async {
         var order: [String] = []
         let cancellable = service.actionsPublisher.sink { [service] action in
             guard case let .callSessionStarted(roomID, _, _, _) = action else { return }
@@ -111,8 +111,8 @@ final class ElementCallServiceTests {
         #expect(order == ["sent", "set up", "returned"])
     }
     
-    @Test
-    func secondSetupReleasesFirst() async throws {
+    @Test("A second set-up for a room releases the first")
+    func secondCallSetup() async throws {
         var returned: [String] = []
         
         let firstStarted = deferFulfillment(service.actionsPublisher) { $0 == .callSessionStarted(roomID: "!room:example.com", roomDisplayName: "first", isVideo: true, kind: .native(takesOverAnsweredCall: false)) }
@@ -137,8 +137,8 @@ final class ElementCallServiceTests {
         #expect(returned == ["first", "second"])
     }
     
-    @Test
-    func callScreenReportsReachManager() {
+    @Test("What a call screen reports reaches the manager")
+    func callScreenReports() {
         var actions: [ElementCallServiceAction] = []
         let cancellable = service.actionsPublisher.sink { actions.append($0) }
         defer { cancellable.cancel() }
@@ -154,8 +154,8 @@ final class ElementCallServiceTests {
                             .audioEnabledChanged(false, roomID: "!room:example.com")])
     }
     
-    @Test
-    func ongoingCallIsPublished() {
+    @Test("The ongoing call's room is published")
+    func ongoingCall() {
         service.ongoingCallChanged(roomID: "!room:example.com")
         #expect(service.ongoingCallRoomIDPublisher.value == "!room:example.com")
         
@@ -165,8 +165,8 @@ final class ElementCallServiceTests {
     
     // MARK: - Native calls
     
-    @Test
-    func systemEventsReachNativeCall() {
+    @Test("System events reach the native call in order")
+    func systemEvents() {
         var events: [NativeCallEvent] = []
         let cancellable = service.nativeCallEventsPublisher.sink { events.append($0) }
         defer { cancellable.cancel() }
@@ -185,33 +185,36 @@ final class ElementCallServiceTests {
     }
     
     @Test("A native call stack built after CallKit activated the audio hears it is active")
-    func lateSubscriberHearsActiveAudio() {
+    func lateSubscriberWithActiveAudio() {
         #expect(eventsHeardByLateSubscriber(after: [.audioSessionActivated]) == [.audioSessionActivated])
     }
     
     @Test("A native call stack built after the audio session ended hears nothing")
-    func lateSubscriberMissesEndedAudio() {
+    func lateSubscriberAfterEndedAudio() {
         #expect(eventsHeardByLateSubscriber(after: [.audioSessionActivated, .audioSessionDeactivated]).isEmpty)
     }
     
     @Test("Mutes and hang-ups aren't replayed to a later native call stack")
-    func muteAndEndNotReplayed() {
+    func lateSubscriberAfterMuteAndEnd() {
         #expect(eventsHeardByLateSubscriber(after: [.microphoneMuteChanged(isMuted: true), .endCallRequested(roomID: "!room:example.com")]).isEmpty)
     }
     
     @Test("A refused set-up asks the native call to end")
-    func refusalEndsNativeCall() async {
+    func refusedSetup() async {
         #expect(await eventsHeardWhileSettingUp(isAccepted: false) == [.endCallRequested(roomID: "!room:example.com")])
     }
     
     @Test("An accepted set-up leaves the native call running")
-    func acceptKeepsNativeCall() async {
+    func acceptedSetup() async {
         #expect(await eventsHeardWhileSettingUp(isAccepted: true).isEmpty)
     }
     
-    @Test
-    func nativeCallStackNeedsSettingAndEnabling() {
+    @Test("The native call stack follows the native calls setting")
+    func nativeCallsSetting() {
+        appSettings.nativeCallEnabled = true
         let service = makeNativeCallService()
+        #expect(service.nativeCallController != nil, "Built with the service, nothing has to enable it")
+        
         var presentations: [NativeCallPresentation] = []
         let cancellable = service.actionsPublisher.sink { action in
             if case .nativeCallPresentation(let presentation) = action {
@@ -220,41 +223,23 @@ final class ElementCallServiceTests {
         }
         defer { cancellable.cancel() }
         
-        service.setNativeCallStackEnabled(true)
-        #expect(service.nativeCallController == nil, "Enabling alone doesn't build a stack")
-        
-        service.setNativeCallStackEnabled(false)
-        appSettings.nativeCallEnabled = true
-        #expect(service.nativeCallController == nil, "The setting alone doesn't build a stack")
-        
-        service.setNativeCallStackEnabled(true)
-        #expect(service.nativeCallController != nil)
-        
-        service.setNativeCallStackEnabled(false)
-        #expect(service.nativeCallController == nil, "Disabling has to release the stack's to-device subscription")
-        #expect(presentations == [.dismiss])
-    }
-    
-    @Test
-    func settingTurnedOnBuildsEnabledStack() {
-        let service = makeNativeCallService()
-        service.setNativeCallStackEnabled(true)
+        appSettings.nativeCallEnabled = false
         #expect(service.nativeCallController == nil)
+        #expect(presentations == [.dismiss])
         
         // The backend is built on demand, so the setting takes effect without an app restart.
         appSettings.nativeCallEnabled = true
         #expect(service.nativeCallController != nil)
     }
     
-    @Test
-    func callsFallBackToWebViewWithoutStack() {
+    @Test("With native calls off a call falls back to the web view")
+    func nativeCallsOff() {
         let service = makeNativeCallService()
         let roomProxy = JoinedRoomProxyMock(.init(id: "!room:example.com"))
         
         #expect(!service.handleNativeCallRequest(roomProxy: roomProxy, isVoiceCall: false, answeredFromCallKit: false))
         
         appSettings.nativeCallEnabled = true
-        service.setNativeCallStackEnabled(true)
         
         #expect(service.handleNativeCallRequest(roomProxy: roomProxy, isVoiceCall: false, answeredFromCallKit: false))
     }
