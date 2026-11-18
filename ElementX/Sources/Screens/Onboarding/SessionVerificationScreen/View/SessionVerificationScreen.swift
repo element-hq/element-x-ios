@@ -85,10 +85,12 @@ struct SessionVerificationScreen: View {
             switch context.viewState.flow {
             case .deviceResponder(let details):
                 SessionVerificationRequestDetailsView(details: details,
+                                                      ownProfile: context.viewState.ownProfile,
                                                       isUserVerification: false,
                                                       mediaProvider: context.mediaProvider)
             case .userResponder(let details):
                 SessionVerificationRequestDetailsView(details: details,
+                                                      ownProfile: context.viewState.ownProfile,
                                                       isUserVerification: true,
                                                       mediaProvider: context.mediaProvider)
             case .userInitiator:
