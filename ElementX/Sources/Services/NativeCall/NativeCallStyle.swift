@@ -125,6 +125,9 @@ struct NativeCallIcons: ElementCallIconRenderingProtocol {
         case .error: \.errorSolid
         case .spinner: \.spinner
         case .keyOff: \.keyOffSolid
+        case .settings: \.settingsSolid
+        case .developerOptions: \.advancedSettings
+        case .check: \.check
         }
     }
     
