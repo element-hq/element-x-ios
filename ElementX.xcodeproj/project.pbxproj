@@ -11202,7 +11202,7 @@
 			repositoryURL = "https://github.com/maplibre/maplibre-gl-native-distribution";
 			requirement = {
 				kind = exactVersion;
-				version = 6.31.0;
+				version = 7.0.0;
 			};
 		};
 		24D50023D92B93BBFF6E14FD /* XCRemoteSwiftPackageReference "element-call-ios" */ = {

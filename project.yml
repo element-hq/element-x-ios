@@ -148,7 +148,7 @@ packages:
     exactVersion: 3.1.1
   MapLibre:
     url: https://github.com/maplibre/maplibre-gl-native-distribution
-    exactVersion: 6.31.0
+    exactVersion: 7.0.0
   PostHog:
     url: https://github.com/PostHog/posthog-ios
     exactVersion: 3.94.3
