@@ -15,6 +15,7 @@ final class NativeCallStackTests {
     private let service = ElementCallServiceMock(.init())
     private let system: NativeCallSystem
     private let stack: NativeCallStack
+    private let analytics = ElementCallFakeAnalytics()
     private var presentations: [NativeCallPresentation] = []
     private var cancellables = Set<AnyCancellable>()
     
@@ -24,7 +25,8 @@ final class NativeCallStackTests {
                                 system: system,
                                 options: ElementCallOptions(),
                                 style: .stock,
-                                permissions: ElementCallFakeMediaPermissions())
+                                permissions: ElementCallFakeMediaPermissions(),
+                                analytics: analytics)
         
         stack.actions
             .sink { [weak self] presentation in
@@ -33,14 +35,15 @@ final class NativeCallStackTests {
             .store(in: &cancellables)
     }
     
-    @Test("Starting a call asks for its screen")
+    @Test("Starting a call asks for its screen and reports the attempt to the analytics")
     func startCall() {
         stack.handleCallRequest(roomProxy: roomProxy(id: "!room:example.com"), isVoiceCall: false, answeredFromCallKit: false)
-        
+
         #expect(presentations == [.present])
         #expect(stack.controller.room?.roomID == "!room:example.com")
+        #expect(analytics.events.first?.name == "CallJoinAttempted")
     }
-    
+
     @Test("A call starts a room without one and joins a room with one")
     func startOrJoinCall() {
         stack.handleCallRequest(roomProxy: roomProxy(id: "!empty:example.com", hasOngoingCall: false), isVoiceCall: true, answeredFromCallKit: false)
@@ -54,7 +57,8 @@ final class NativeCallStackTests {
                                       system: NativeCallSystem(service: service),
                                       options: ElementCallOptions(),
                                       style: .stock,
-                                      permissions: ElementCallFakeMediaPermissions())
+                                      permissions: ElementCallFakeMediaPermissions(),
+                                      analytics: nil)
         joining.handleCallRequest(roomProxy: roomProxy(id: "!busy:example.com", hasOngoingCall: true), isVoiceCall: true, answeredFromCallKit: false)
         #expect(joining.controller.callData?.isStartingCall == false)
     }

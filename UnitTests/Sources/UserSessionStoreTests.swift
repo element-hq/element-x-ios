@@ -23,6 +23,7 @@ struct UserSessionStoreTests {
                                  clientFactory: clientFactory,
                                  appSettings: appSettings,
                                  analyticsService: AnalyticsServiceMock(.init()),
+                                 nativeCallAnalytics: nil,
                                  appHooks: AppHooks(),
                                  networkMonitor: NetworkMonitorMock(.init()),
                                  targetContext: .mock)

@@ -23,6 +23,7 @@ final class ElementCallService: ElementCallServiceProtocol {
     private let mediaProvider: MediaProviderProtocol
     private let userSettings: UserSettings
     private let nativeCallPermissions: ElementCallMediaPermissionsProtocol
+    private let nativeCallAnalytics: (any ElementCallAnalyticsProtocol)?
     
     var userID: String {
         clientProxy.userID
@@ -70,11 +71,13 @@ final class ElementCallService: ElementCallServiceProtocol {
     init(clientProxy: ClientProxyProtocol,
          mediaProvider: MediaProviderProtocol,
          userSettings: UserSettings,
-         nativeCallPermissions: ElementCallMediaPermissionsProtocol) {
+         nativeCallPermissions: ElementCallMediaPermissionsProtocol,
+         nativeCallAnalytics: (any ElementCallAnalyticsProtocol)?) {
         self.clientProxy = clientProxy
         self.mediaProvider = mediaProvider
         self.userSettings = userSettings
         self.nativeCallPermissions = nativeCallPermissions
+        self.nativeCallAnalytics = nativeCallAnalytics
         
         userSettings.app.nativeCallEnabledPublisher
             .sink { [weak self] _ in
@@ -236,7 +239,8 @@ final class ElementCallService: ElementCallServiceProtocol {
                                     system: NativeCallSystem(service: self),
                                     options: options,
                                     style: style,
-                                    permissions: nativeCallPermissions)
+                                    permissions: nativeCallPermissions,
+                                    analytics: nativeCallAnalytics)
         nativeCallStack = stack
         
         nativeCallCancellable = stack.actions
