@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/devicekit/DeviceKit",
       "state" : {
-        "revision" : "19528aa07e1426626ea9fb2c4a161edf43c4f9e8",
-        "version" : "5.9.0"
+        "revision" : "fab82bd988405367c915143e293479f481e93ba0",
+        "version" : "5.10.0"
       }
     },
     {
@@ -104,8 +104,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/onevcat/Kingfisher",
       "state" : {
-        "revision" : "3feb743b5c92c2b443614d10a00e605212a2b4b1",
-        "version" : "8.14.0"
+        "revision" : "80e7d020ea0a76b65431ebba839046cea2e7ea8e",
+        "version" : "8.15.0"
       }
     },
     {
@@ -212,8 +212,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/PostHog/posthog-ios",
       "state" : {
-        "revision" : "252a24f3d5b34d09eccc1f8b3afe3ea0504264aa",
-        "version" : "3.92.6"
+        "revision" : "d237d54a4a411966d99f95e54d7149e0d9ba1932",
+        "version" : "3.94.3"
       }
     },
     {
@@ -221,8 +221,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getsentry/sentry-apple-binaries",
       "state" : {
-        "revision" : "9a3f411fdbf069903a9fed21290373a2964257ac",
-        "version" : "9.31.0"
+        "revision" : "d25405c4f0d1327017f85407a91464a13e5e5a85",
+        "version" : "9.33.0"
       }
     },
     {
@@ -257,8 +257,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-collections",
       "state" : {
-        "revision" : "f96b909e1a9e469620bc5037c1e24e00153f376f",
-        "version" : "1.7.5"
+        "revision" : "88754449ab766a739610b660e117762115fabc9c",
+        "version" : "1.7.6"
       }
     },
     {
