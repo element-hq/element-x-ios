@@ -115,10 +115,10 @@ packages:
     exactVersion: 1.1.7
   Collections:
     url: https://github.com/apple/swift-collections
-    exactVersion: 1.7.5
+    exactVersion: 1.7.6
   DeviceKit:
     url: https://github.com/devicekit/DeviceKit
-    exactVersion: 5.9.0
+    exactVersion: 5.10.0
   DSWaveformImage:
     url: https://github.com/dmrschmidt/DSWaveformImage
     exactVersion: 14.5.0
@@ -133,7 +133,7 @@ packages:
     exactVersion: 4.2.2
   Kingfisher:
     url: https://github.com/onevcat/Kingfisher
-    exactVersion: 8.14.0
+    exactVersion: 8.15.0
   KZFileWatchers:
     url: https://github.com/krzysztofzablocki/KZFileWatchers
     exactVersion: 1.2.0
@@ -151,10 +151,10 @@ packages:
     exactVersion: 6.31.0
   PostHog:
     url: https://github.com/PostHog/posthog-ios
-    exactVersion: 3.92.6
+    exactVersion: 3.94.3
   Sentry:
     url: https://github.com/getsentry/sentry-apple-binaries
-    exactVersion: 9.31.0
+    exactVersion: 9.33.0
   SnapshotTesting:
     url: https://github.com/pointfreeco/swift-snapshot-testing
     exactVersion: 1.19.7
