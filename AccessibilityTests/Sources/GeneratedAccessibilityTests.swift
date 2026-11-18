@@ -7,6 +7,10 @@
 
 extension AccessibilityTests {
 
+    func testAccountInfoCardView() async throws {
+        try await performAccessibilityAudit(named: "AccountInfoCardView_Previews")
+    }
+
     func testActiveCallTimelineItemView() async throws {
         try await performAccessibilityAudit(named: "ActiveCallTimelineItemView_Previews")
     }
