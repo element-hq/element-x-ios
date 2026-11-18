@@ -154,19 +154,13 @@ struct SessionVerificationScreen: View {
                 .buttonStyle(.compound(.primary))
             }
             
-        case .showingChallenge:
+        case .showingChallenge, .acceptingChallenge, .decliningChallenge:
             VStack(spacing: 16) {
-                Button(L10n.screenSessionVerificationTheyMatch) {
-                    context.send(viewAction: .accept)
-                }
-                .buttonStyle(.compound(.primary))
-                .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.acceptChallenge)
+                acceptChallengeButton
                 
-                Button(L10n.screenSessionVerificationTheyDontMatch) {
-                    context.send(viewAction: .decline)
-                }
-                .buttonStyle(.compound(.tertiary))
-                .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.declineChallenge)
+                declineChallengeButton
+                    .opacity(context.viewState.isWaiting ? 0 : 1) // Keeps the space so the accept button doesn't move.
+                    .disabled(context.viewState.isWaiting)
             }
             
         default:
@@ -204,6 +198,32 @@ struct SessionVerificationScreen: View {
         case .deviceResponder, .userResponder:
             A11yIdentifiers.sessionVerificationScreen.acceptVerificationRequest
         }
+    }
+    
+    private var acceptChallengeButton: some View {
+        Button {
+            context.send(viewAction: .accept)
+        } label: {
+            Label {
+                Text(context.viewState.isWaiting ? L10n.screenSessionVerificationPositiveButtonVerifyingOngoing : L10n.screenSessionVerificationTheyMatch)
+            } icon: {
+                if context.viewState.isWaiting {
+                    ProgressView()
+                        .tint(.compound.iconOnSolidPrimary)
+                }
+            }
+        }
+        .buttonStyle(.compound(.primary))
+        .disabled(context.viewState.isWaiting)
+        .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.acceptChallenge)
+    }
+    
+    private var declineChallengeButton: some View {
+        Button(L10n.screenSessionVerificationTheyDontMatch) {
+            context.send(viewAction: .decline)
+        }
+        .buttonStyle(.compound(.tertiary))
+        .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.declineChallenge)
     }
     
     struct EmojiView: View {

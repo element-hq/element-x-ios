@@ -41,12 +41,8 @@ struct SessionVerificationScreenViewState: BindableState {
             case .userInitiator, .userResponder:
                 return (\.userProfileSolid, .defaultSolid)
             }
-        case .showingChallenge:
-            return (\.reaction, .defaultSolid)
-        case .acceptingChallenge:
-            return (\.reaction, .defaultSolid)
-        case .decliningChallenge:
-            return (\.reaction, .defaultSolid)
+        case .showingChallenge, .acceptingChallenge, .decliningChallenge:
+            return (\.reactionSolid, .defaultSolid)
         case .verified:
             return (\.checkCircleSolid, .successSolid)
         case .cancelled:
@@ -104,11 +100,7 @@ struct SessionVerificationScreenViewState: BindableState {
             case .userResponder:
                 return L10n.screenSessionVerificationUserResponderSubtitle
             }
-        case .acceptingChallenge:
-            return L10n.screenSessionVerificationCompareEmojisSubtitle
-        case .decliningChallenge:
-            return L10n.screenSessionVerificationCompareEmojisSubtitle
-        case .showingChallenge:
+        case .showingChallenge, .acceptingChallenge, .decliningChallenge:
             switch flow {
             case .deviceInitiator, .deviceResponder:
                 return L10n.screenSessionVerificationCompareEmojisSubtitle
@@ -131,7 +123,7 @@ struct SessionVerificationScreenViewState: BindableState {
     var isWaiting: Bool {
         switch verificationState {
         case .acceptingVerificationRequest, .requestingVerification, .verificationRequestAccepted,
-             .startingSasVerification, .sasVerificationStarted, .cancelling:
+             .startingSasVerification, .sasVerificationStarted, .acceptingChallenge, .decliningChallenge, .cancelling:
             true
         default:
             false
