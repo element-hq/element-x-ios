@@ -53,24 +53,40 @@ final nonisolated class SDKMatrixBackend: ElementCallMatrixBackendProtocol {
         }
     }
     
-    /// The bindings have no delayed events (matrix-rust-sdk#6973), so this answers as a homeserver
-    /// without MSC4140: the core joins without a dead man's switch, never asks again this session, and
-    /// shortens the membership's lifetime instead.
+    /// The SDK sends delayed events (MSC4140) on their dedicated endpoint, which Synapse serves from
+    /// v1.164.0. An older homeserver answers it as unrecognized, and the core then joins without a
+    /// dead man's switch, as it does on any homeserver without MSC4140.
     func sendDelayedStateEvent(roomID: String, eventType: String, stateKey: String, contentJSON: String, delay: Duration) async throws(ElementCallMatrixBackendError) -> String {
-        throw Self.delayedEventsNotSupported
+        try await send("sendDelayedStateEvent(\(eventType))") {
+            try await room(roomID).sendDelayedStateEvent(eventType: eventType,
+                                                         stateKey: stateKey,
+                                                         content: contentJSON,
+                                                         delayMs: UInt64(delay / .milliseconds(1)),
+                                                         requestConfigOverride: Self.noRetry)
+        }
     }
     
     func sendDelayedStickyEvent(roomID: String, eventType: String, contentJSON: String, stickyDuration: Duration, delay: Duration) async throws(ElementCallMatrixBackendError) -> String {
-        throw Self.delayedEventsNotSupported
+        try await send("sendDelayedStickyEvent(\(eventType))") {
+            try await room(roomID).sendStickyDelayedEvent(eventType: eventType,
+                                                          content: contentJSON,
+                                                          delayMs: UInt64(delay / .milliseconds(1)),
+                                                          stickyDurationMs: UInt64(stickyDuration / .milliseconds(1)),
+                                                          requestConfigOverride: Self.noRetry)
+        }
     }
     
-    // Never called: no delayed event was ever scheduled.
+    /// A delayed event is the client's, not the room's: the room is only for the log.
     func restartDelayedEvent(roomID: String, delayID: String) async throws(ElementCallMatrixBackendError) {
-        throw Self.delayedEventsNotSupported
+        try await send("restartDelayedEvent(\(roomID))") {
+            try await client.updateDelayedEvent(delayId: delayID, action: .restart, requestConfigOverride: Self.noRetry)
+        }
     }
     
     func cancelDelayedEvent(roomID: String, delayID: String) async throws(ElementCallMatrixBackendError) {
-        throw Self.delayedEventsNotSupported
+        try await send("cancelDelayedEvent(\(roomID))") {
+            try await client.updateDelayedEvent(delayId: delayID, action: .cancel, requestConfigOverride: Self.noRetry)
+        }
     }
     
     func sendStateEvent(roomID: String, eventType: String, stateKey: String, contentJSON: String) async throws(ElementCallMatrixBackendError) -> String {
@@ -173,15 +189,15 @@ final nonisolated class SDKMatrixBackend: ElementCallMatrixBackendProtocol {
         }
     }
     
-    /// The SDK bindings lack MSC4195 `get_token` (matrix-org/matrix-rust-sdk#7428): answered as a homeserver
-    /// without it, so only `livekit_service_url` transports join. Element X does not offer the MSC membership
-    /// format, the main user of it.
+    /// MSC4195 `get_token`, through the homeserver.
     func liveKitToken(for request: ElementCallLiveKitTokenRequest) async throws(ElementCallMatrixBackendError) -> String {
-        logger?.log(.info, "backend: liveKitToken(\(request.url)), unsupported")
-        throw ElementCallMatrixBackendError(errorCode: "M_UNRECOGNIZED",
-                                            statusCode: 404,
-                                            isPermanent: true,
-                                            reason: "MSC4195 get_token is not exposed by the SDK bindings")
+        try await send("liveKitToken(\(request.url))") {
+            try await client.rtcLivekitGetToken(url: request.url,
+                                                roomId: request.roomID,
+                                                slotId: request.slotID,
+                                                memberId: request.memberID,
+                                                serverName: request.serverName)
+        }
     }
     
     /// The SDK falls back to the well-known when the homeserver lacks the MSC4143 endpoint; neither
@@ -193,9 +209,6 @@ final nonisolated class SDKMatrixBackend: ElementCallMatrixBackendProtocol {
     }
     
     // MARK: - Private
-    
-    private static let delayedEventsNotSupported = ElementCallMatrixBackendError(errorCode: "M_UNRECOGNIZED",
-                                                                                 reason: "Delayed events are not exposed by the SDK bindings")
     
     /// Taken per send rather than kept: a handle is cheap, and one held across calls outlives the
     /// room if we leave it.
