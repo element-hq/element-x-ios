@@ -11298,7 +11298,7 @@
 			repositoryURL = "https://github.com/getsentry/sentry-apple-binaries";
 			requirement = {
 				kind = exactVersion;
-				version = 9.31.0;
+				version = 9.33.0;
 			};
 		};
 		8213398B60F9B660D9216ADF /* XCRemoteSwiftPackageReference "element-call-swift" */ = {
@@ -11322,7 +11322,7 @@
 			repositoryURL = "https://github.com/PostHog/posthog-ios";
 			requirement = {
 				kind = exactVersion;
-				version = 3.92.6;
+				version = 3.94.3;
 			};
 		};
 		AB8E808A59756170682BEC20 /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
@@ -11354,7 +11354,7 @@
 			repositoryURL = "https://github.com/onevcat/Kingfisher";
 			requirement = {
 				kind = exactVersion;
-				version = 8.14.0;
+				version = 8.15.0;
 			};
 		};
 		D5F7D47BBAAE0CF1DDEB3034 /* XCRemoteSwiftPackageReference "DeviceKit" */ = {
@@ -11362,7 +11362,7 @@
 			repositoryURL = "https://github.com/devicekit/DeviceKit";
 			requirement = {
 				kind = exactVersion;
-				version = 5.9.0;
+				version = 5.10.0;
 			};
 		};
 		E025F19D013D9BA6C58B37F4 /* XCRemoteSwiftPackageReference "swift-algorithms" */ = {
@@ -11418,7 +11418,7 @@
 			repositoryURL = "https://github.com/apple/swift-collections";
 			requirement = {
 				kind = exactVersion;
-				version = 1.7.5;
+				version = 1.7.6;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
