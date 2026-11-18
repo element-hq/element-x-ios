@@ -130,6 +130,10 @@ import SwiftUI
         var transaction = Transaction()
         transaction.disablesAnimations = !animated
         
+        if presentationMode == .fullScreen {
+            endEditingBelowOverlay()
+        }
+        
         withTransaction(transaction) {
             overlayPresentationMode = presentationMode
             overlayModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
@@ -143,6 +147,10 @@ import SwiftUI
     func setOverlayPresentationMode(_ mode: OverlayPresentationMode, animated: Bool = true) {
         var transaction = Transaction()
         transaction.disablesAnimations = !animated
+        
+        if mode == .fullScreen {
+            endEditingBelowOverlay()
+        }
         
         withTransaction(transaction) {
             overlayPresentationMode = mode
@@ -166,6 +174,13 @@ import SwiftUI
     }
     
     // MARK: - Private
+    
+    /// The overlay is drawn over the root in the same window rather than presented, so a text field
+    /// underneath (e.g. the room's composer) keeps first responder and its keyboard stays on top of
+    /// the overlay, which has nothing to dismiss it with.
+    private func endEditingBelowOverlay() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
     
     private func logPresentationChange(_ change: String, _ module: NavigationModule) {
         if let coordinator = module.coordinator {
