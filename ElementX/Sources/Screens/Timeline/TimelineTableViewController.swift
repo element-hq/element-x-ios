@@ -6,6 +6,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Algorithms
 import Combine
 import Compound
 import MatrixRustSDK
@@ -159,6 +160,9 @@ class TimelineTableViewController: UIViewController {
     
     /// The table's diffable data source.
     private var dataSource: UITableViewDiffableDataSource<TimelineSection, TimelineItemIdentifier.UniqueID>?
+    /// The IDs of the pagination indicators, which aren't part of the timeline's content.
+    private static let paginationIndicatorIDs: Set<TimelineItemIdentifier.UniqueID> = [PaginationIndicatorRoomTimelineItem(position: .start).id.uniqueID,
+                                                                                       PaginationIndicatorRoomTimelineItem(position: .end).id.uniqueID]
     private var cancellables = Set<AnyCancellable>()
     
     /// A publisher used to throttle back pagination requests.
@@ -358,9 +362,10 @@ class TimelineTableViewController: UIViewController {
         let currentSnapshot = dataSource.snapshot()
         
         // We only animate when new items come at the end of a live timeline, ignoring transitions through empty.
-        let newestItemIdentifier = snapshot.mainItemIdentifiers.first
-        let currentNewestItemIdentifier = currentSnapshot.mainItemIdentifiers.first
-        let newestItemIDChanged = snapshot.numberOfMainItems > 0 && currentSnapshot.numberOfMainItems > 0 && newestItemIdentifier != currentNewestItemIdentifier
+        // A timeline that only shows its pagination indicators is still empty, its first items aren't new messages.
+        let snapshotMainItemIDs = snapshot.mainItemIdentifiers.trimming { Self.paginationIndicatorIDs.contains($0) }
+        let currentMainItemIDs = currentSnapshot.mainItemIdentifiers.trimming { Self.paginationIndicatorIDs.contains($0) }
+        let newestItemIDChanged = !snapshotMainItemIDs.isEmpty && !currentMainItemIDs.isEmpty && snapshotMainItemIDs.first != currentMainItemIDs.first
         let animated = isLive && !isSwitchingTimelines && newestItemIDChanged
         
         let layout: Layout? = if !isLive, newestItemIDChanged {
@@ -701,11 +706,6 @@ extension TimelineTableViewController {
 }
 
 private extension NSDiffableDataSourceSnapshot<TimelineTableViewController.TimelineSection, TimelineItemIdentifier.UniqueID> {
-    var numberOfMainItems: Int {
-        guard sectionIdentifiers.contains(.main) else { return 0 }
-        return numberOfItems(inSection: .main)
-    }
-    
     var mainItemIdentifiers: [TimelineItemIdentifier.UniqueID] {
         guard sectionIdentifiers.contains(.main) else { return [] }
         return itemIdentifiers(inSection: .main)
