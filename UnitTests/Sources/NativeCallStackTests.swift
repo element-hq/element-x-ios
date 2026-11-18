@@ -15,6 +15,7 @@ final class NativeCallStackTests {
     private let service = ElementCallServiceMock(.init())
     private let system: NativeCallSystem
     private let stack: NativeCallStack
+    private let analytics = ElementCallFakeAnalytics()
     private var presentations: [NativeCallPresentation] = []
     private var cancellables = Set<AnyCancellable>()
     
@@ -24,7 +25,8 @@ final class NativeCallStackTests {
                                 system: system,
                                 options: ElementCallOptions(),
                                 style: .stock,
-                                permissions: ElementCallFakeMediaPermissions())
+                                permissions: ElementCallFakeMediaPermissions(),
+                                analytics: analytics)
         
         stack.actions
             .sink { [weak self] presentation in
@@ -42,6 +44,13 @@ final class NativeCallStackTests {
     }
     
     @Test
+    func startingACallReportsItsAttemptToTheAnalytics() {
+        stack.handleCallRequest(roomProxy: roomProxy(id: "!room:example.com"), isVoiceCall: false, answeredFromCallKit: false)
+        
+        #expect(analytics.events.first?.name == "CallJoinAttempted")
+    }
+    
+    @Test
     func aCallStartsARoomWithoutOneAndJoinsARoomWithOne() {
         stack.handleCallRequest(roomProxy: roomProxy(id: "!empty:example.com", hasOngoingCall: false), isVoiceCall: true, answeredFromCallKit: false)
         // Starting rings the room; joining one already running happens quietly.
@@ -54,7 +63,8 @@ final class NativeCallStackTests {
                                       system: NativeCallSystem(service: service),
                                       options: ElementCallOptions(),
                                       style: .stock,
-                                      permissions: ElementCallFakeMediaPermissions())
+                                      permissions: ElementCallFakeMediaPermissions(),
+                                      analytics: nil)
         joining.handleCallRequest(roomProxy: roomProxy(id: "!busy:example.com", hasOngoingCall: true), isVoiceCall: true, answeredFromCallKit: false)
         #expect(joining.controller.callData?.isStartingCall == false)
     }

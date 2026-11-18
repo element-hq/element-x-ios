@@ -44,14 +44,16 @@ final class NativeCallStack {
          system: NativeCallSystem,
          options: ElementCallOptions,
          style: ElementCallStyle,
-         permissions: ElementCallMediaPermissionsProtocol) {
+         permissions: ElementCallMediaPermissionsProtocol,
+         analytics: (any ElementCallAnalyticsProtocol)?) {
         self.system = system
         controller = ElementCallController(backend: backend,
                                            system: system,
                                            options: options,
                                            style: style,
                                            logger: Logger(),
-                                           permissions: permissions)
+                                           permissions: permissions,
+                                           analytics: analytics)
         
         controller.actions
             .receive(on: DispatchQueue.main)
