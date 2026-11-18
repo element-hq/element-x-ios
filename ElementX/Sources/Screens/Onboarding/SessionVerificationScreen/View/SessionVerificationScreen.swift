@@ -158,13 +158,9 @@ struct SessionVerificationScreen: View {
             VStack(spacing: 16) {
                 acceptChallengeButton
                 
-                if context.viewState.isWaiting {
-                    // Keeps the space so the accept button doesn't move.
-                    declineChallengeButton
-                        .hidden()
-                } else {
-                    declineChallengeButton
-                }
+                declineChallengeButton
+                    .opacity(context.viewState.isWaiting ? 0 : 1) // Keeps the space so the accept button doesn't move.
+                    .disabled(context.viewState.isWaiting)
             }
             
         default:
