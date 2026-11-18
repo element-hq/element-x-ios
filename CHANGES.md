@@ -1,3 +1,32 @@
+## Changes in 26.11.3 (2026-11-18)
+
+### What's Changed
+
+🙌 Improvements
+* Add the devices icon to the "Use another device" button by @mxandreas in https://github.com/element-hq/element-x-ios/pull/6528
+
+🐛 Bugfixes
+* Fix the timeline bumping when opening a room by @Velin92 in https://github.com/element-hq/element-x-ios/pull/6540
+
+🦻 Accessibility
+* Expose timeline date separators as headings to VoiceOver by @wykeenjenga in https://github.com/element-hq/element-x-ios/pull/6511
+
+🧱 Build
+* Switch to using Xcode 27.2. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/6525
+* Bump the calendar version ready for the next release by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/6522
+
+🚧 In development 🚧
+* Hook up the actions for adding/switching accounts. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/6521
+
+Others
+* Forward Error objects from the call webview in a readable way by @Johennes in https://github.com/element-hq/element-x-ios/pull/6524
+* Update peter-evans/create-pull-request action to v8.1.3 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/6527
+
+### New Contributors
+* @wykeenjenga made their first contribution in https://github.com/element-hq/element-x-ios/pull/6511
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/26.11.2...release/26.11.3
+
 ## Changes in 26.11.2 (2026-11-17)
 
 ### What's Changed
