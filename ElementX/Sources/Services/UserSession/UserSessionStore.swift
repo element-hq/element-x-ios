@@ -6,6 +6,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import ElementCall
 import Foundation
 import MatrixRustSDK
 
@@ -139,7 +140,10 @@ class UserSessionStore: UserSessionStoreProtocol {
                            voiceMessageMediaManager: voiceMessageMediaManager,
                            liveLocationService: liveLocationService,
                            notificationService: notificationService,
-                           elementCallService: ElementCallService(clientProxy: clientProxy, mediaProvider: mediaProvider, userSettings: userSettings))
+                           elementCallService: ElementCallService(clientProxy: clientProxy,
+                                                                  mediaProvider: mediaProvider,
+                                                                  userSettings: userSettings,
+                                                                  nativeCallPermissions: ElementCallSystemMediaPermissions()))
     }
     
     private func restorePreviousLogin(_ credentials: KeychainCredentials, userSettings: UserSettings) async -> Result<ClientProxyProtocol, UserSessionStoreError> {

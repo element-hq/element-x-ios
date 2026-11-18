@@ -23,7 +23,8 @@ final class NativeCallStackTests {
         stack = NativeCallStack(backend: ElementCallFakeMatrixBackend(),
                                 system: system,
                                 options: ElementCallOptions(),
-                                style: .stock)
+                                style: .stock,
+                                permissions: ElementCallFakeMediaPermissions())
         
         stack.actions
             .sink { [weak self] presentation in
@@ -52,7 +53,8 @@ final class NativeCallStackTests {
         let joining = NativeCallStack(backend: ElementCallFakeMatrixBackend(),
                                       system: NativeCallSystem(service: service),
                                       options: ElementCallOptions(),
-                                      style: .stock)
+                                      style: .stock,
+                                      permissions: ElementCallFakeMediaPermissions())
         joining.handleCallRequest(roomProxy: roomProxy(id: "!busy:example.com", hasOngoingCall: true), isVoiceCall: true, answeredFromCallKit: false)
         #expect(joining.controller.callData?.isStartingCall == false)
     }

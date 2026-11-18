@@ -25,7 +25,10 @@ final class ElementCallServiceTests {
         roomProxy.declineCallNotificationIDReturnValue = .success(())
         clientProxy.roomForIdentifierClosure = { [roomProxy] _ in .joined(roomProxy) }
         
-        service = ElementCallService(clientProxy: clientProxy, mediaProvider: MediaProviderMock(.init()), userSettings: appSettings.userSettings(for: clientProxy.userID))
+        service = ElementCallService(clientProxy: clientProxy,
+                                     mediaProvider: MediaProviderMock(.init()),
+                                     userSettings: appSettings.userSettings(for: clientProxy.userID),
+                                     nativeCallPermissions: ElementCallFakeMediaPermissions())
     }
     
     // MARK: - Ringing call
@@ -262,7 +265,10 @@ final class ElementCallServiceTests {
     private func makeNativeCallService() -> ElementCallService {
         let clientProxy = ClientProxyMock(.init())
         clientProxy.makeNativeCallBackendReturnValue = ElementCallFakeMatrixBackend()
-        return ElementCallService(clientProxy: clientProxy, mediaProvider: MediaProviderMock(.init()), userSettings: appSettings.userSettings(for: clientProxy.userID))
+        return ElementCallService(clientProxy: clientProxy,
+                                  mediaProvider: MediaProviderMock(.init()),
+                                  userSettings: appSettings.userSettings(for: clientProxy.userID),
+                                  nativeCallPermissions: ElementCallFakeMediaPermissions())
     }
     
     /// What a native call stack built after these system events hears, as the replay arrives during `sink`.
