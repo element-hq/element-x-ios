@@ -137,7 +137,7 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             actionsSubject.send(.reportBug)
             
         case .logout:
-            actionsSubject.send(.logout)
+            Task { await logout() }
         case .deactivateAccount:
             actionsSubject.send(.deactivateAccount)
             
@@ -201,7 +201,23 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         }
     }
     
+    private func logout() async {
+        showLoadingIndicator(delay: .milliseconds(200))
+        defer { hideLoadingIndicator() }
+        
+        guard case let .success(hasOtherVerifiedDevice) = await clientProxy.hasDevicesToVerifyAgainst() else {
+            userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+            return
+        }
+        
+        actionsSubject.send(.logout(hasOtherVerifiedDevice: hasOtherVerifiedDevice))
+    }
+    
     // MARK: - Indicators
+    
+    private static var loadingIndicatorID: String {
+        "\(Self.self)-Loading"
+    }
     
     private static var savingIndicatorID: String {
         "\(Self.self)-Saving"
@@ -209,6 +225,18 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
     
     private static var failureIndicatorID: String {
         "\(Self.self)-Failure"
+    }
+    
+    private func showLoadingIndicator(delay: Duration? = nil) {
+        userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorID,
+                                                              type: .modal,
+                                                              title: L10n.commonLoading,
+                                                              persistent: true),
+                                                delay: delay)
+    }
+    
+    private func hideLoadingIndicator() {
+        userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorID)
     }
     
     private func showSavingIndicator() {

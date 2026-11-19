@@ -31,6 +31,7 @@ enum A11yIdentifiers {
     static let roomRolesAndPermissionsScreen = RoomRolesAndPermissionsScreen()
     static let secureBackupScreen = SecureBackupScreen()
     static let secureBackupKeyBackupScreen = SecureBackupKeyBackupScreen()
+    static let secureBackupLogoutConfirmationScreen = SecureBackupLogoutConfirmationScreen()
     static let secureBackupRecoveryKeyScreen = SecureBackupRecoveryKeyScreen()
     static let serverConfirmationScreen = ServerConfirmationScreen()
     static let sessionVerificationScreen = SessionVerificationScreen()
@@ -234,6 +235,10 @@ enum A11yIdentifiers {
     
     struct SecureBackupKeyBackupScreen {
         let deleteKeyStorage = "secure_backup_key_backup-delete_key_storage"
+    }
+    
+    struct SecureBackupLogoutConfirmationScreen {
+        let logout = "secure_backup_logout_confirmation-logout"
     }
     
     struct SecureBackupRecoveryKeyScreen {

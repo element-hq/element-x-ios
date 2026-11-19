@@ -14,10 +14,8 @@ import SwiftUI
 enum ChatsTabFlowCoordinatorAction {
     case switchToChatsTab
     case showSettings
-    case showChatBackupSettings
     case sessionVerification(SessionVerificationScreenFlow)
     case addAccount
-    case logout
 }
 
 class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
@@ -163,9 +161,7 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
             } else {
                 stateMachine.processEvent(.presentTransferOwnershipScreen(roomID: roomID))
             }
-        case .chatBackupSettings:
-            actionsSubject.send(.showChatBackupSettings)
-        case .authentication, .accountProvisioningLink, .oAuthCallback, .settings, .call, .search:
+        case .authentication, .accountProvisioningLink, .oAuthCallback, .settings, .chatBackupSettings, .call, .search:
             break // These routes cannot be handled.
         }
     }
@@ -412,8 +408,6 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.processEvent(.startStartChatFlow)
                 case .addAccount:
                     actionsSubject.send(.addAccount)
-                case .logout:
-                    actionsSubject.send(.logout)
                 case .presentDeclineAndBlock(let userID, let roomID):
                     stateMachine.processEvent(.presentDeclineAndBlockScreen(userID: userID, roomID: roomID))
                 case .transferOwnership(let roomIdentifier):

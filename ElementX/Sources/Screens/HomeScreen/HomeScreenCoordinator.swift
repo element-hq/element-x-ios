@@ -33,7 +33,6 @@ enum HomeScreenCoordinatorAction {
     case presentEncryptionResetScreen
     case presentStartChatScreen
     case addAccount
-    case logout
 }
 
 final class HomeScreenCoordinator: CoordinatorProtocol {
@@ -85,8 +84,6 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentStartChatScreen)
                 case .addAccount:
                     actionsSubject.send(.addAccount)
-                case .logout:
-                    actionsSubject.send(.logout)
                 case .transferOwnership(let roomIdentifier):
                     actionsSubject.send(.transferOwnership(roomIdentifier: roomIdentifier))
                 }

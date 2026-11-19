@@ -38,6 +38,7 @@ struct SecureBackupLogoutConfirmationScreen: View {
         .toolbar { toolbar }
         .background()
         .backgroundStyle(.compound.bgCanvasDefault)
+        .toolbarVisibility(.visible, for: .navigationBar)
         .onGeometryChange(for: CGFloat.self) { $0.safeAreaInsets.top } action: { navigationBarHeight = $0 }
         .presentationDetents(mode.isInitial ? [.height(fittedSheetHeight)] : [.large])
         .alert(item: $context.alertInfo)
@@ -45,13 +46,20 @@ struct SecureBackupLogoutConfirmationScreen: View {
     
     private var content: some View {
         VStack(spacing: 16) {
-            TitleAndIcon(title: context.viewState.title,
-                         subtitle: context.viewState.subtitle,
-                         icon: context.viewState.icon.keyPath,
-                         iconStyle: context.viewState.icon.style,
-                         button: learnMoreButton)
-                .padding(.horizontal, 8)
-                .readHeight($contentHeight)
+            VStack(spacing: 24) {
+                TitleAndIcon(title: context.viewState.title,
+                             subtitle: context.viewState.subtitle,
+                             icon: context.viewState.icon.keyPath,
+                             iconStyle: context.viewState.icon.style,
+                             button: learnMoreButton)
+                    .padding(.horizontal, 8)
+                
+                if mode.isInitial {
+                    AccountInfoCardView(userProfile: context.viewState.userProfile,
+                                        mediaProvider: context.mediaProvider)
+                }
+            }
+            .readHeight($contentHeight)
             
             backupProgress
         }
@@ -82,6 +90,44 @@ struct SecureBackupLogoutConfirmationScreen: View {
     private var buttons: some View {
         VStack(spacing: 16) {
             switch mode {
+            case .otherVerifiedDevice:
+                Button(L10n.actionRemove, role: .destructive) {
+                    context.send(viewAction: .logout)
+                }
+                .buttonStyle(.compound(.primary))
+                .accessibilityIdentifier(A11yIdentifiers.secureBackupLogoutConfirmationScreen.logout)
+                
+                Button(L10n.actionCancel) {
+                    context.send(viewAction: .cancel)
+                }
+                .buttonStyle(.compound(.tertiary))
+            case .saveRecoveryKey:
+                Button(L10n.screenSignoutSaveRecoveryKeyActionContinue, role: .destructive) {
+                    context.send(viewAction: .logout)
+                }
+                .buttonStyle(.compound(.primary))
+                .accessibilityIdentifier(A11yIdentifiers.secureBackupLogoutConfirmationScreen.logout)
+                
+                Button(L10n.screenSignoutSaveRecoveryKeyActionCheck) {
+                    context.send(viewAction: .checkRecoveryKey)
+                }
+                .buttonStyle(.compound(.secondary))
+                
+                Button(L10n.screenSignoutSaveRecoveryKeyActionGenerate) {
+                    context.send(viewAction: .generateRecoveryKey)
+                }
+                .buttonStyle(.compound(.tertiary))
+            case .noBackup:
+                Button(L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) {
+                    context.send(viewAction: .logout)
+                }
+                .buttonStyle(.compound(.primary))
+                .accessibilityIdentifier(A11yIdentifiers.secureBackupLogoutConfirmationScreen.logout)
+                
+                Button(L10n.commonSettings) {
+                    context.send(viewAction: .chatBackupSettings)
+                }
+                .buttonStyle(.compound(.secondary))
             case .noRecovery:
                 Button {
                     context.send(viewAction: .generateRecoveryKey)
@@ -94,26 +140,13 @@ struct SecureBackupLogoutConfirmationScreen: View {
                     context.send(viewAction: .logout)
                 }
                 .buttonStyle(.compound(.tertiary))
-            case .saveRecoveryKey:
-                Button(L10n.screenSignoutSaveRecoveryKeyActionContinue, role: .destructive) {
-                    context.send(viewAction: .logout)
-                }
-                .buttonStyle(.compound(.primary))
-                
-                Button(L10n.screenSignoutSaveRecoveryKeyActionCheck) {
-                    context.send(viewAction: .checkRecoveryKey)
-                }
-                .buttonStyle(.compound(.secondary))
-                
-                Button(L10n.screenSignoutSaveRecoveryKeyActionGenerate) {
-                    context.send(viewAction: .generateRecoveryKey)
-                }
-                .buttonStyle(.compound(.tertiary))
+                .accessibilityIdentifier(A11yIdentifiers.secureBackupLogoutConfirmationScreen.logout)
             case .waitingToStart, .backupOngoing, .offline:
                 Button(L10n.actionSignout, role: .destructive) {
                     context.send(viewAction: .logout)
                 }
                 .buttonStyle(.compound(.primary))
+                .accessibilityIdentifier(A11yIdentifiers.secureBackupLogoutConfirmationScreen.logout)
             }
         }
         .readHeight($buttonsHeight)
@@ -121,8 +154,10 @@ struct SecureBackupLogoutConfirmationScreen: View {
     
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
-        ToolbarItem(placement: .cancellationAction) {
-            ToolbarButton(role: .close) { context.send(viewAction: .cancel) }
+        if mode.showsCloseButton {
+            ToolbarItem(placement: .cancellationAction) {
+                ToolbarButton(role: .close) { context.send(viewAction: .cancel) }
+            }
         }
     }
 }
@@ -131,7 +166,9 @@ struct SecureBackupLogoutConfirmationScreen: View {
 
 @available(iOS 26.0, *)
 struct SecureBackupLogoutConfirmationScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = makeViewModel(mode: .saveRecoveryKey)
+    static let viewModel = makeViewModel(mode: .otherVerifiedDevice)
+    static let saveRecoveryKeyViewModel = makeViewModel(mode: .saveRecoveryKey)
+    static let noBackupViewModel = makeViewModel(mode: .noBackup)
     static let noRecoveryViewModel = makeViewModel(mode: .noRecovery)
     static let waitingViewModel = makeViewModel(mode: .waitingToStart(hasStalled: false))
     static let ongoingViewModel = makeViewModel(mode: .backupOngoing(progress: 0.5))
@@ -142,6 +179,16 @@ struct SecureBackupLogoutConfirmationScreen_Previews: PreviewProvider, TestableP
             SecureBackupLogoutConfirmationScreen(context: viewModel.context)
         }
         .previewDisplayName("Confirmation")
+        
+        ElementNavigationStack {
+            SecureBackupLogoutConfirmationScreen(context: saveRecoveryKeyViewModel.context)
+        }
+        .previewDisplayName("Save Recovery Key")
+        
+        ElementNavigationStack {
+            SecureBackupLogoutConfirmationScreen(context: noBackupViewModel.context)
+        }
+        .previewDisplayName("No Backup")
         
         ElementNavigationStack {
             SecureBackupLogoutConfirmationScreen(context: noRecoveryViewModel.context)
@@ -175,6 +222,7 @@ struct SecureBackupLogoutConfirmationScreen_Previews: PreviewProvider, TestableP
     }
     
     static func makeViewModel(mode: SecureBackupLogoutConfirmationScreenViewMode) -> SecureBackupLogoutConfirmationScreenViewModel {
+        let clientProxy = ClientProxyMock(.init(homeserverReachability: mode == .offline ? .unreachable : .reachable))
         let secureBackupController = SecureBackupControllerMock()
         secureBackupController.keyBackupState = CurrentValueSubject<SecureBackupKeyBackupState, Never>(.enabled).asCurrentValuePublisher()
         
@@ -185,13 +233,10 @@ struct SecureBackupLogoutConfirmationScreen_Previews: PreviewProvider, TestableP
             
             return .success(())
         }
-        
-        let reachability: HomeserverReachability = mode == .offline ? .unreachable : .reachable
+        clientProxy.secureBackupController = secureBackupController
         
         // The later modes are reached by attempting to log out from the first one.
-        let viewModel = SecureBackupLogoutConfirmationScreenViewModel(secureBackupController: secureBackupController,
-                                                                      homeserverReachabilityPublisher: .init(reachability),
-                                                                      learnMoreURL: UserSettings.mock().app.encryptionURL,
+        let viewModel = SecureBackupLogoutConfirmationScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                                       mode: mode.isInitial ? mode : .saveRecoveryKey)
         
         if !mode.isInitial {
