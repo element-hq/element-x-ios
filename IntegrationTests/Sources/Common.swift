@@ -126,9 +126,9 @@ extension XCUIApplication {
         logoutButton.tap(.center)
         
         // Confirm logout (Remove this device)
-        let alertLogoutButton = alerts.firstMatch.buttons[A11yIdentifiers.alertInfo.primaryButton].firstMatch
-        XCTAssertTrue(alertLogoutButton.waitForExistence(timeout: 10.0))
-        alertLogoutButton.tap(.center)
+        let confirmLogoutButton = buttons[A11yIdentifiers.secureBackupLogoutConfirmationScreen.logout]
+        XCTAssertTrue(confirmLogoutButton.waitForExistence(timeout: 10.0))
+        confirmLogoutButton.tap(.center)
         
         // Check that we're back on the login screen
         let getStartedButton = buttons[A11yIdentifiers.authenticationStartScreen.signIn]

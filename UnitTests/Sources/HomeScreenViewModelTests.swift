@@ -697,8 +697,6 @@ extension HomeScreenViewModelAction: @MainActor @retroactive Equatable {
             true
         case (.addAccount, .addAccount):
             true
-        case (.logout, .logout):
-            true
         default:
             false
         }

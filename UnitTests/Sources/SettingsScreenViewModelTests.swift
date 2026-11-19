@@ -13,6 +13,7 @@ import Testing
 @MainActor
 struct SettingsScreenViewModelTests {
     private var clientProxy: ClientProxyMock!
+    private var userIndicatorController: UserIndicatorControllerMock!
     private var viewModel: SettingsScreenViewModelProtocol!
     private var context: SettingsScreenViewModelType.Context {
         viewModel.context
@@ -163,13 +164,33 @@ struct SettingsScreenViewModelTests {
         try await deferred.fulfill()
     }
     
-    @Test("Logging out sends the logout action")
-    mutating func logout() async throws {
+    @Test("Logging out sends the logout action with whether there is another verified device", arguments: [true, false])
+    mutating func logout(hasOtherVerifiedDevice: Bool) async throws {
         setupViewModel()
+        clientProxy.hasDevicesToVerifyAgainstReturnValue = .success(hasOtherVerifiedDevice)
         
         let deferred = deferFulfillment(viewModel.actions) { $0.isLogout }
         context.send(viewAction: .logout)
+        guard case let .logout(receivedValue) = try await deferred.fulfill() else {
+            Issue.record("Expected a logout action.")
+            return
+        }
+        
+        #expect(receivedValue == hasOtherVerifiedDevice)
+        #expect(userIndicatorController.retractIndicatorWithIdCallsCount == 1)
+    }
+    
+    @Test("Failing to check for other devices shows an error instead of logging out")
+    mutating func logoutFailure() async throws {
+        setupViewModel()
+        clientProxy.hasDevicesToVerifyAgainstReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
+        
+        let deferred = deferFailure(viewModel.actions, timeout: .seconds(1)) { $0.isLogout }
+        context.send(viewAction: .logout)
         try await deferred.fulfill()
+        
+        #expect(userIndicatorController.submitIndicatorDelayReceivedInvocations.last?.indicator.title == L10n.errorUnknown)
+        #expect(userIndicatorController.retractIndicatorWithIdCallsCount == 1)
     }
     
     // MARK: - Add account
@@ -234,10 +255,11 @@ struct SettingsScreenViewModelTests {
                                          userSettings: UserSettings = .mock(),
                                          availableSessionsPublisher: CurrentValuePublisher<[UserSessionDetails], Never> = .init([])) {
         clientProxy = ClientProxyMock(.init(userID: "@me:matrix.org", status: status))
+        userIndicatorController = UserIndicatorControllerMock()
         viewModel = SettingsScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxy, userSettings: userSettings)),
                                             availableSessionsPublisher: availableSessionsPublisher,
                                             isInSecondaryWindow: false,
-                                            userIndicatorController: UserIndicatorControllerMock())
+                                            userIndicatorController: userIndicatorController)
     }
     
     /// Shows the emoji picker and selects the provided emoji through its continuation.

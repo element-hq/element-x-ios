@@ -108,6 +108,9 @@ class RootFlowCoordinatorUITests: XCTestCase {
     private func signOut(_ app: XCUIApplication) {
         app.swipeUp() // Make sure the sign out button is visible.
         app.buttons[A11yIdentifiers.settingsScreen.logout].tap()
-        app.alerts.element.buttons[A11yIdentifiers.alertInfo.primaryButton].firstMatch.tap()
+        
+        let confirmLogoutButton = app.buttons[A11yIdentifiers.secureBackupLogoutConfirmationScreen.logout]
+        XCTAssertTrue(confirmLogoutButton.waitForExistence(timeout: 2.0))
+        confirmLogoutButton.tap()
     }
 }
