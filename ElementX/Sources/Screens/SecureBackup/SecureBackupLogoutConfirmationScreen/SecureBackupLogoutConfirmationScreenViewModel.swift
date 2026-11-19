@@ -29,14 +29,20 @@ class SecureBackupLogoutConfirmationScreenViewModel: SecureBackupLogoutConfirmat
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(secureBackupController: SecureBackupControllerProtocol,
-         homeserverReachabilityPublisher: CurrentValuePublisher<HomeserverReachability, Never>,
-         learnMoreURL: URL,
+    init(userSession: UserSessionProtocol,
          mode: SecureBackupLogoutConfirmationScreenViewMode = .saveRecoveryKey) {
-        self.secureBackupController = secureBackupController
-        self.homeserverReachabilityPublisher = homeserverReachabilityPublisher
+        secureBackupController = userSession.clientProxy.secureBackupController
+        homeserverReachabilityPublisher = userSession.clientProxy.homeserverReachabilityPublisher
         
-        super.init(initialViewState: .init(learnMoreURL: learnMoreURL, mode: mode))
+        super.init(initialViewState: .init(learnMoreURL: userSession.userSettings.app.encryptionURL,
+                                           mode: mode,
+                                           userProfile: userSession.clientProxy.userProfilePublisher.value),
+                   mediaProvider: userSession.mediaProvider)
+        
+        userSession.clientProxy.userProfilePublisher
+            .receive(on: DispatchQueue.main)
+            .weakAssign(to: \.state.userProfile, on: self)
+            .store(in: &cancellables)
         
         backupUploadStateSubject.combineLatest(homeserverReachabilityPublisher)
             .receive(on: DispatchQueue.main)
@@ -60,6 +66,8 @@ class SecureBackupLogoutConfirmationScreenViewModel: SecureBackupLogoutConfirmat
             requestRecoveryKey { .checkRecoveryKey($0) }
         case .generateRecoveryKey:
             requestRecoveryKey { .generateRecoveryKey($0) }
+        case .chatBackupSettings:
+            actionsSubject.send(.chatBackupSettings)
         case .logout:
             attemptLogout()
         }

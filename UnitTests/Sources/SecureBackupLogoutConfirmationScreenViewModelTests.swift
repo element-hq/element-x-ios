@@ -17,6 +17,7 @@ struct SecureBackupLogoutConfirmationScreenViewModelTests {
         viewModel.context
     }
     
+    private var clientProxy: ClientProxyMock
     private var secureBackupController: SecureBackupControllerMock
     private var reachabilitySubject: CurrentValueSubject<HomeserverReachability, Never>
     
@@ -26,9 +27,11 @@ struct SecureBackupLogoutConfirmationScreenViewModelTests {
         
         reachabilitySubject = CurrentValueSubject<HomeserverReachability, Never>(.reachable)
         
-        viewModel = SecureBackupLogoutConfirmationScreenViewModel(secureBackupController: secureBackupController,
-                                                                  homeserverReachabilityPublisher: reachabilitySubject.asCurrentValuePublisher(),
-                                                                  learnMoreURL: "https://example.org/encryption",
+        clientProxy = ClientProxyMock(.init())
+        clientProxy.secureBackupController = secureBackupController
+        clientProxy.homeserverReachabilityPublisher = reachabilitySubject.asCurrentValuePublisher()
+        
+        viewModel = SecureBackupLogoutConfirmationScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                                   mode: .saveRecoveryKey)
     }
     
@@ -92,7 +95,7 @@ struct SecureBackupLogoutConfirmationScreenViewModelTests {
     @Test
     func titleSubtitleAndIconFollowTheMode() {
         func state(_ mode: SecureBackupLogoutConfirmationScreenViewMode) -> SecureBackupLogoutConfirmationScreenViewState {
-            .init(learnMoreURL: "https://example.org/encryption", mode: mode)
+            .init(learnMoreURL: "https://example.org/encryption", mode: mode, userProfile: .mockAlice)
         }
         
         #expect(state(.saveRecoveryKey).title == L10n.screenSignoutSaveRecoveryKeyTitle)
@@ -112,9 +115,7 @@ struct SecureBackupLogoutConfirmationScreenViewModelTests {
     
     @Test
     func noRecoveryLogsOutStraightAway() async throws {
-        let viewModel = SecureBackupLogoutConfirmationScreenViewModel(secureBackupController: secureBackupController,
-                                                                      homeserverReachabilityPublisher: reachabilitySubject.asCurrentValuePublisher(),
-                                                                      learnMoreURL: "https://example.org/encryption",
+        let viewModel = SecureBackupLogoutConfirmationScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                                       mode: .noRecovery)
         #expect(viewModel.context.viewState.mode == .noRecovery)
         
@@ -174,9 +175,7 @@ struct SecureBackupLogoutConfirmationScreenViewModelTests {
     
     @Test
     func continuingWithANewRecoveryKeyWaitsForTheBackupFirst() async throws {
-        let viewModel = SecureBackupLogoutConfirmationScreenViewModel(secureBackupController: secureBackupController,
-                                                                      homeserverReachabilityPublisher: reachabilitySubject.asCurrentValuePublisher(),
-                                                                      learnMoreURL: "https://example.org/encryption",
+        let viewModel = SecureBackupLogoutConfirmationScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                                       mode: .noRecovery)
         secureBackupController.waitForKeyBackupUploadUploadStateSubjectClosure = { _ in .success(()) }
         
