@@ -63,8 +63,8 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
         let appHooks = AppHooks()
         appHooks.setUp()
         
-        // Override colours before we start building any UI components.
-        appHooks.compoundHook.override(colors: Color.compound, uiColors: UIColor.compound)
+        // Let the hook do its thing before we start building any components.
+        appHooks.appCoordinatorHook.configure()
         
         windowManager = WindowManager(appDelegate: appDelegate)
         let networkMonitor = NetworkMonitor()
@@ -652,13 +652,6 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
     }
     
     private func handleAccountRemoval() {
-        #warning("Make sure to test this but it may well move.")
-        if let activeSession = userSessionManager.activeSession {
-            appHooks.remoteSettingsHook.loadCache(forHomeserver: activeSession.clientProxy.homeserver, applyingTo: appSettings)
-        } else {
-            appHooks.remoteSettingsHook.reset(appSettings)
-        }
-        
         // Signed in accounts that aren't live yet still count.
         guard userSessionManager.userIDs.isEmpty else { return }
         

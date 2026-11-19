@@ -108,7 +108,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
         } catch ClientBuildError.SlidingSyncVersion(let error) {
             MXLog.info("User entered a homeserver that isn't configured for sliding sync: \(error)")
             return .failure(.slidingSyncNotAvailable)
-        } catch RemoteSettingsError.elementProRequired(let serverName) {
+        } catch ClientFactoryError.elementProRequired(let serverName) {
             return .failure(.elementProRequired(serverName: serverName))
         } catch {
             MXLog.error("Failed configuring a server: \(error)")
@@ -247,7 +247,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
             } catch let error as HumanQrLoginError {
                 MXLog.error("QRCode login error: \(error)")
                 progressSubject.send(completion: .failure(error.serviceError))
-            } catch RemoteSettingsError.elementProRequired(let serverName) {
+            } catch ClientFactoryError.elementProRequired(let serverName) {
                 progressSubject.send(completion: .failure(.elementProRequired(serverName: serverName)))
             } catch {
                 MXLog.error("QRCode login unknown error: \(error)")
@@ -278,10 +278,11 @@ class AuthenticationService: AuthenticationServiceProtocol {
                                                                       clientSessionDelegate: userSessionManager.clientSessionDelegate,
                                                                       appSettings: appSettings,
                                                                       appHooks: appHooks)
-        try await appHooks.remoteSettingsHook.initializeCache(using: client, applyingTo: appSettings).get()
+        try await appHooks.clientFactoryHook.validateAuthenticationHomeserver(for: client)
         targetContext.updateAuthentication(homeserver: client.homeserver())
+        let updatedClient = await appHooks.clientFactoryHook.updateAuthenticationClient(client)
         
-        return await appHooks.clientFactoryHook.updateAuthenticationClient(client)
+        return appHooks.authenticationServiceHook.updateClient(updatedClient)
     }
     
     private func rotateSessionDirectory() {

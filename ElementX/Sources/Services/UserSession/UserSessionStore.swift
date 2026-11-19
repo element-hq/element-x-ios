@@ -152,8 +152,6 @@ class UserSessionStore: UserSessionStoreProtocol {
             return .failure(.failedRestoringLogin)
         }
         
-        appHooks.remoteSettingsHook.loadCache(forHomeserver: credentials.restorationToken.session.homeserverUrl, applyingTo: appSettings)
-        
         do {
             let client = try await clientFactory.makeAppClient(credentials: credentials,
                                                                clientSessionDelegate: keychainController,
@@ -163,7 +161,7 @@ class UserSessionStore: UserSessionStoreProtocol {
             MXLog.info("Set up session for user \(credentials.userID) at: \(credentials.restorationToken.sessionDirectories)")
             
             Task(priority: .low) {
-                await appHooks.remoteSettingsHook.updateCache(using: client)
+                await appHooks.userSessionHook.updateRestoredClient(client)
                 targetContext.update()
             }
             

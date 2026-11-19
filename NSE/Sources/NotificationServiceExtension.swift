@@ -128,43 +128,30 @@ actor NotificationServiceExtensionActor {
         Self.targetConfiguration.withLock { $0?.context.update() }
         
         guard await !shouldDeliverReceivedWhileOfflineNotification() else {
-            // Don't log until the app hooks have been run:
-            // swiftlint:disable:next print_deprecation
-            print("Device is unlocked but may have missed notifications while offline.")
+            MXLog.info("Device is unlocked but may have missed notifications while offline.")
             deliverReceivedWhileOfflineNotification(for: request)
             return contentHandler(.init())
         }
         
         guard let roomID = request.content.roomID else {
-            // Don't log until the app hooks have been run:
-            // swiftlint:disable:next print_deprecation
-            print("Missing roomID, bailing out.")
+            MXLog.error("Missing roomID, bailing out.")
             return contentHandler(request.content)
         }
         
         guard let eventID = request.content.eventID else {
-            // Don't log until the app hooks have been run:
-            // swiftlint:disable:next print_deprecation
-            print("Missing eventID, bailing out.")
+            MXLog.error("Missing eventID, bailing out.")
             return contentHandler(request.content)
         }
         
         guard let clientID = request.content.pusherNotificationClientIdentifier else {
-            // Don't log until the app hooks have been run:
-            // swiftlint:disable:next print_deprecation
-            print("Missing clientID, bailing out.")
+            MXLog.error("Missing clientID, bailing out.")
             return contentHandler(request.content)
         }
         
         guard let credentials = keychainController.restorationTokens().first(where: { $0.restorationToken.pusherNotificationClientIdentifier == clientID }) else {
-            // Don't log until the app hooks have been run:
-            // swiftlint:disable:next print_deprecation
-            print("Credentials not found, bailing out.")
+            MXLog.error("Credentials not found, bailing out.")
             return contentHandler(request.content)
         }
-        
-        let homeserverURL = credentials.restorationToken.session.homeserverUrl
-        await appHooks.remoteSettingsHook.loadCache(forHomeserver: homeserverURL, applyingTo: appSettings)
         
         guard let mutableContent = request.content.mutableCopy() as? UNMutableNotificationContent else {
             return contentHandler(request.content)
@@ -254,7 +241,7 @@ actor NotificationServiceExtensionActor {
     /// Note: it is safe to call this method multiple times as it simply replaces any existing instance of the notification
     /// with a fresh copy, meaning it won't queue multiple copies but will still re-play the notification sound.
     private func deliverReceivedWhileOfflineNotification(for originalRequest: UNNotificationRequest) {
-        // This is intended to be called before the app hooks have been run, so don't log:
+        // This can be called before the target has been configured, so don't log:
         // swiftlint:disable:next print_deprecation
         print("Delivering the 'received while offline' notification.")
         

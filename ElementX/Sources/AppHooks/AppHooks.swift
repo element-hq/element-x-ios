@@ -15,8 +15,14 @@ final nonisolated class AppHooks: AppHooksProtocol {
     @AppHook(default: DefaultAppSettingsHook())
     var appSettingsHook: AppSettingsHookProtocol
     
-    @AppHook(default: DefaultCompoundHook())
-    var compoundHook: CompoundHookProtocol
+    @AppHook(default: DefaultAppCoordinatorHook())
+    var appCoordinatorHook: AppCoordinatorHookProtocol
+    
+    @AppHook(default: DefaultRootFlowHook())
+    var rootFlowHook: RootFlowHookProtocol
+    
+    @AppHook(default: DefaultAuthenticationServiceHook())
+    var authenticationServiceHook: AuthenticationServiceHookProtocol
     
     @AppHook(default: DefaultBugReportHook())
     var bugReportHook: BugReportHookProtocol
@@ -33,9 +39,6 @@ final nonisolated class AppHooks: AppHooksProtocol {
     
     @AppHook(default: DefaultClientFactoryHook())
     var clientFactoryHook: ClientFactoryHookProtocol
-    
-    @AppHook(default: DefaultRemoteSettingsHook())
-    var remoteSettingsHook: RemoteSettingsHookProtocol
     
     @AppHook(default: DefaultUserSessionHook())
     var userSessionHook: UserSessionHookProtocol
