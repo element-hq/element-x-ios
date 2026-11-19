@@ -16,7 +16,6 @@ enum ChatsTabFlowCoordinatorAction {
     case showSettings
     case showChatBackupSettings
     case sessionVerification(SessionVerificationScreenFlow)
-    case logout
 }
 
 class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
@@ -409,8 +408,6 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.processEvent(.startEncryptionResetFlow)
                 case .presentStartChatScreen:
                     stateMachine.processEvent(.startStartChatFlow)
-                case .logout:
-                    actionsSubject.send(.logout)
                 case .presentDeclineAndBlock(let userID, let roomID):
                     stateMachine.processEvent(.presentDeclineAndBlockScreen(userID: userID, roomID: roomID))
                 case .transferOwnership(let roomIdentifier):

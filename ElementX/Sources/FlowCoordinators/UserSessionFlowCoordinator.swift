@@ -255,8 +255,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     handleAppRoute(.chatBackupSettings, animated: true)
                 case .sessionVerification(let flow):
                     presentSessionVerificationScreen(flow: flow)
-                case .logout:
-                    Task { await self.runLogoutFlow() }
                 }
             }
             .store(in: &cancellables)
