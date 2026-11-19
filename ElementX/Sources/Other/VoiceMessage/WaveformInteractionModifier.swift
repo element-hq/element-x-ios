@@ -9,8 +9,18 @@
 import SwiftUI
 
 extension View {
-    func waveformInteraction(isDragging: Binding<Bool>, progress: Double, showCursor: Bool, onSeek: @escaping (Double) -> Void) -> some View {
-        modifier(WaveformInteractionModifier(isDragging: isDragging, progress: progress, showCursor: showCursor, onSeek: onSeek))
+    /// - Parameter shouldStartScrubbing: Checked whenever a drag starts, so that scrubbing can be prevented
+    ///   (e.g. whilst selecting messages, as the selection overlay doesn't block UIKit gesture recognisers).
+    func waveformInteraction(isDragging: Binding<Bool>,
+                             progress: Double,
+                             showCursor: Bool,
+                             shouldStartScrubbing: @escaping () -> Bool = { true },
+                             onSeek: @escaping (Double) -> Void) -> some View {
+        modifier(WaveformInteractionModifier(isDragging: isDragging,
+                                             progress: progress,
+                                             showCursor: showCursor,
+                                             shouldStartScrubbing: shouldStartScrubbing,
+                                             onSeek: onSeek))
     }
 }
 
@@ -28,6 +38,7 @@ private struct WaveformInteractionModifier: ViewModifier {
     @Binding var isDragging: Bool
     let progress: Double
     let showCursor: Bool
+    let shouldStartScrubbing: () -> Bool
     let onSeek: (Double) -> Void
     
     @ScaledMetric private var cursorVisibleWidth = 2.0
@@ -47,12 +58,13 @@ private struct WaveformInteractionModifier: ViewModifier {
                         .allowsHitTesting(false)
                 }
                 .contentShape(Rectangle())
-                .gesture(SpatialTapGesture()
+                // Simultaneous, otherwise scrubbing waits for the tap to fail, which only happens once the finger is lifted.
+                .simultaneousGesture(SpatialTapGesture()
                     .onEnded { tapGesture in
                         seek(to: tapGesture.location.x, width: geometry.size.width)
                     })
                 // Scrub from anywhere on the waveform, not just from the cursor.
-                .gesture(WaveformScrubGestureRepresentable { state, location in
+                .gesture(WaveformScrubGestureRepresentable(shouldBegin: shouldStartScrubbing) { state, location in
                     switch state {
                     case .began, .changed:
                         isDragging = true
@@ -75,6 +87,7 @@ private struct WaveformInteractionModifier: ViewModifier {
 /// A pan for scrubbing the waveform that only begins when the drag is mostly horizontal, so that vertical
 /// drags still scroll the timeline. Other horizontal pans (e.g. swipe to reply) wait for it to fail first.
 private struct WaveformScrubGestureRepresentable: UIGestureRecognizerRepresentable {
+    var shouldBegin: () -> Bool
     var handle: (UIGestureRecognizer.State, CGPoint) -> Void
     
     func makeCoordinator(converter: CoordinateSpaceConverter) -> Coordinator {
@@ -84,7 +97,12 @@ private struct WaveformScrubGestureRepresentable: UIGestureRecognizerRepresentab
     func makeUIGestureRecognizer(context: Context) -> UIPanGestureRecognizer {
         let gesture = UIPanGestureRecognizer()
         gesture.delegate = context.coordinator
+        context.coordinator.shouldBegin = shouldBegin
         return gesture
+    }
+    
+    func updateUIGestureRecognizer(_ recognizer: UIPanGestureRecognizer, context: Context) {
+        context.coordinator.shouldBegin = shouldBegin
     }
     
     func handleUIGestureRecognizerAction(_ recognizer: UIPanGestureRecognizer, context: Context) {
@@ -92,8 +110,10 @@ private struct WaveformScrubGestureRepresentable: UIGestureRecognizerRepresentab
     }
     
     class Coordinator: NSObject, UIGestureRecognizerDelegate {
+        var shouldBegin: () -> Bool = { true }
+        
         func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-            guard let panRecognizer = gestureRecognizer as? UIPanGestureRecognizer else { return false }
+            guard shouldBegin(), let panRecognizer = gestureRecognizer as? UIPanGestureRecognizer else { return false }
             
             let velocity = panRecognizer.velocity(in: gestureRecognizer.view)
             return abs(velocity.x) > abs(velocity.y)
