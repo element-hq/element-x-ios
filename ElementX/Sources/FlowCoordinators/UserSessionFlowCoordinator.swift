@@ -251,8 +251,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     navigationTabCoordinator.selectedTab = .chats
                 case .showSettings:
                     handleAppRoute(.settings, animated: true)
-                case .showChatBackupSettings:
-                    handleAppRoute(.chatBackupSettings, animated: true)
                 case .sessionVerification(let flow):
                     presentSessionVerificationScreen(flow: flow)
                 }
@@ -524,7 +522,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     navigationTabCoordinator.setSheetCoordinator(nil)
                 case .chatBackupSettings:
                     navigationTabCoordinator.setSheetCoordinator(nil)
-                    chatsTabFlowCoordinator.handleAppRoute(.chatBackupSettings, animated: true)
+                    handleAppRoute(.chatBackupSettings, animated: true)
                 case .logout:
                     actionsSubject.send(.logout)
                 }
