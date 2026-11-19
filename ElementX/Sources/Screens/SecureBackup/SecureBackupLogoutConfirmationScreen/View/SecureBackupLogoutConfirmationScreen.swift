@@ -95,6 +95,7 @@ struct SecureBackupLogoutConfirmationScreen: View {
                     context.send(viewAction: .logout)
                 }
                 .buttonStyle(.compound(.primary))
+                .accessibilityIdentifier(A11yIdentifiers.secureBackupLogoutConfirmationScreen.logout)
                 
                 Button(L10n.actionCancel) {
                     context.send(viewAction: .cancel)
@@ -105,6 +106,7 @@ struct SecureBackupLogoutConfirmationScreen: View {
                     context.send(viewAction: .logout)
                 }
                 .buttonStyle(.compound(.primary))
+                .accessibilityIdentifier(A11yIdentifiers.secureBackupLogoutConfirmationScreen.logout)
                 
                 Button(L10n.screenSignoutSaveRecoveryKeyActionCheck) {
                     context.send(viewAction: .checkRecoveryKey)
@@ -120,6 +122,7 @@ struct SecureBackupLogoutConfirmationScreen: View {
                     context.send(viewAction: .logout)
                 }
                 .buttonStyle(.compound(.primary))
+                .accessibilityIdentifier(A11yIdentifiers.secureBackupLogoutConfirmationScreen.logout)
                 
                 Button(L10n.commonSettings) {
                     context.send(viewAction: .chatBackupSettings)
@@ -137,11 +140,13 @@ struct SecureBackupLogoutConfirmationScreen: View {
                     context.send(viewAction: .logout)
                 }
                 .buttonStyle(.compound(.tertiary))
+                .accessibilityIdentifier(A11yIdentifiers.secureBackupLogoutConfirmationScreen.logout)
             case .waitingToStart, .backupOngoing, .offline:
                 Button(L10n.actionSignout, role: .destructive) {
                     context.send(viewAction: .logout)
                 }
                 .buttonStyle(.compound(.primary))
+                .accessibilityIdentifier(A11yIdentifiers.secureBackupLogoutConfirmationScreen.logout)
             }
         }
         .readHeight($buttonsHeight)
