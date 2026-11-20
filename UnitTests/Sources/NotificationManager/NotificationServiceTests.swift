@@ -27,12 +27,12 @@ final class NotificationServiceTests {
     
     // MARK: - Pushers
     
-    @Test
-    func registeringSetsThePusher() async throws {
+    @Test("Registering sets the pusher")
+    func register() async throws {
         let service = makeService()
         let deviceToken = Data("1234".utf8)
         
-        await service.register(deviceToken: deviceToken)
+        await service.register(.init(deviceToken: deviceToken, appendsPusher: false))
         
         let defaultPayload = APNSPayload(aps: APSInfo(mutableContent: 1,
                                                       alert: APSAlert(locKey: "Notification", locArgs: [])),
@@ -49,23 +49,37 @@ final class NotificationServiceTests {
         #expect(clientProxy.setPusherWithReceivedInvocations == [expectedConfiguration])
     }
     
-    @Test
-    func pushersAppendWithMultipleAccounts() async throws {
-        appSettings.multiAccountEnabled = true
+    @Test("Registering appends the pusher when the registration parameters ask for it")
+    func registerAppendingPusher() async throws {
         let service = makeService()
         
-        await service.register(deviceToken: Data())
+        await service.register(.init(deviceToken: Data(), appendsPusher: true))
         
         let configuration = try #require(clientProxy.setPusherWithReceivedInvocations.first)
         #expect(configuration.append)
     }
     
-    @Test
-    func registeringWhileTurnedOffDeletesThePusher() async throws {
+    @Test("Updating the registration parameters changes whether the pusher is appended the next time it's set")
+    func updateRegistrationParameters() async throws {
+        let service = makeService(isEnabled: false)
+        await service.register(.init(deviceToken: Data(), appendsPusher: false))
+        
+        service.updateRegistrationParameters(appendsPusher: true)
+        await waitForConfirmation("The pusher should be set", timeout: .seconds(10)) { confirm in
+            clientProxy.setPusherWithClosure = { _ in confirm() }
+            userSettings.account.enableNotifications = true
+        }
+        
+        let configuration = try #require(clientProxy.setPusherWithReceivedInvocations.first)
+        #expect(configuration.append)
+    }
+    
+    @Test("Registering while notifications are off deletes the pusher")
+    func registerWithNotificationsDisabled() async throws {
         let service = makeService(isEnabled: false)
         let deviceToken = Data("1234".utf8)
         
-        await service.register(deviceToken: deviceToken)
+        await service.register(.init(deviceToken: deviceToken, appendsPusher: false))
         
         #expect(!clientProxy.setPusherWithCalled)
         let identifiers = try #require(clientProxy.deletePusherWithReceivedIdentifiers)
@@ -75,10 +89,10 @@ final class NotificationServiceTests {
     
     // MARK: - Switch
     
-    @Test
-    func turningOffDeletesThePusher() async {
+    @Test("Turning notifications off deletes the pusher")
+    func disableNotifications() async {
         let service = makeService()
-        await service.register(deviceToken: Data("1234".utf8))
+        await service.register(.init(deviceToken: Data("1234".utf8), appendsPusher: false))
         
         await waitForConfirmation("The pusher should be deleted", timeout: .seconds(10)) { confirm in
             clientProxy.deletePusherWithClosure = { _ in confirm() }
@@ -88,10 +102,10 @@ final class NotificationServiceTests {
         #expect(!service.isEnabled)
     }
     
-    @Test
-    func turningOnSetsThePusherAndAsksForPermission() async {
+    @Test("Turning notifications on sets the pusher and asks for permission")
+    func enableNotifications() async {
         let service = makeService(isEnabled: false)
-        await service.register(deviceToken: Data("1234".utf8))
+        await service.register(.init(deviceToken: Data("1234".utf8), appendsPusher: false))
         
         await waitForConfirmation("The pusher should be set", timeout: .seconds(10)) { confirm in
             clientProxy.setPusherWithClosure = { _ in confirm() }
@@ -102,8 +116,8 @@ final class NotificationServiceTests {
         #expect(isRequestAuthorization(actions.last))
     }
     
-    @Test
-    func turningOnBeforeRegisteringOnlyAsksForPermission() {
+    @Test("Turning notifications on before registering only asks for permission")
+    func enableNotificationsBeforeRegistering() {
         let service = makeService(isEnabled: false)
         
         userSettings.account.enableNotifications = true
@@ -113,8 +127,8 @@ final class NotificationServiceTests {
         #expect(isRequestAuthorization(actions.last))
     }
     
-    @Test
-    func requestingAuthorizationAsksTheManager() {
+    @Test("Requesting authorization asks the manager")
+    func requestAuthorization() {
         let service = makeService()
         
         service.requestAuthorization()
@@ -124,8 +138,8 @@ final class NotificationServiceTests {
     
     // MARK: - Badge
     
-    @Test
-    func badgeCountStartsFromTheUnreadCount() {
+    @Test("The badge count starts from the unread count")
+    func initialBadgeCount() {
         clientProxy.totalUnreadNotifications = 3
         
         let service = makeService()
@@ -133,8 +147,8 @@ final class NotificationServiceTests {
         #expect(service.badgeCountPublisher.value == 3)
     }
     
-    @Test
-    func roomListChangesUpdateTheBadgeCount() async throws {
+    @Test("Room list changes update the badge count")
+    func badgeCountUpdates() async throws {
         let roomListSubject = CurrentValueSubject<[RoomSummary], Never>([])
         let roomSummaryProvider = RoomSummaryProviderMock(.init())
         roomSummaryProvider.roomListPublisher = roomListSubject.asCurrentValuePublisher()
@@ -147,8 +161,8 @@ final class NotificationServiceTests {
         try await deferred.fulfill()
     }
     
-    @Test
-    func roomListChangesRepublishAnUnchangedBadgeCount() async throws {
+    @Test("Room list changes republish an unchanged badge count")
+    func unchangedBadgeCount() async throws {
         let roomListSubject = CurrentValueSubject<[RoomSummary], Never>([])
         let roomSummaryProvider = RoomSummaryProviderMock(.init())
         roomSummaryProvider.roomListPublisher = roomListSubject.asCurrentValuePublisher()
@@ -164,8 +178,8 @@ final class NotificationServiceTests {
     
     // MARK: - Delivered notifications
     
-    @Test
-    func clearingARoomOnlyMatchesThatRoom() throws {
+    @Test("Clearing a room's notifications only matches that room")
+    func removeRoomNotifications() throws {
         let service = makeService()
         
         service.removeDeliveredMessageNotifications(for: "!room:example.com")
@@ -175,8 +189,8 @@ final class NotificationServiceTests {
         #expect(try !rule(notification(roomID: "!other:example.com")))
     }
     
-    @Test
-    func clearingFullyReadRoomsOnlyMatchesReadNotifications() throws {
+    @Test("Clearing fully read rooms only matches the notifications that were read")
+    func removeFullyReadRoomNotifications() throws {
         let room = RoomSummary(room: RoomSDKMock(), id: "!room:matrix.org", settingsMode: .allMessages,
                                hasUnreadMessages: false, hasUnreadMentions: false, hasUnreadNotifications: false)
         let lastMessageDate = try #require(room.lastMessageDate)
@@ -197,8 +211,8 @@ final class NotificationServiceTests {
         #expect(try !rule(notification(roomID: "!other:example.com")))
     }
     
-    @Test
-    func clearingWithoutFullyReadRoomsAsksNothing() {
+    @Test("Clearing without any fully read rooms asks nothing of the manager")
+    func removeWithoutFullyReadRooms() {
         let room = RoomSummary(room: RoomSDKMock(), id: "!room:matrix.org", settingsMode: .allMessages,
                                hasUnreadMessages: true, hasUnreadMentions: false, hasUnreadNotifications: true)
         let service = makeService()
@@ -208,10 +222,10 @@ final class NotificationServiceTests {
         #expect(removalRules.isEmpty)
     }
     
-    @Test
-    func tearingDownDeletesThePusherAndRemovesEveryNotification() async throws {
+    @Test("Tearing down deletes the pusher and removes every notification")
+    func tearDown() async throws {
         let service = makeService()
-        await service.register(deviceToken: Data())
+        await service.register(.init(deviceToken: Data(), appendsPusher: false))
         
         await service.tearDown()
         
