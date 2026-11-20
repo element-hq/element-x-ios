@@ -47,7 +47,7 @@ struct SettingsScreenViewState: BindableState {
     var userProfile: UserProfile
     var showUserStatusInput = false
     var showLinkNewDeviceButton: Bool
-    var showSwitchAccountsSection: Bool
+    var showAddAccountRow: Bool
     /// Every other account with a live session, most recently used first.
     var otherAccounts: [UserSessionDetails] = []
     var accountProfileURL: URL?
@@ -73,6 +73,10 @@ struct SettingsScreenViewState: BindableState {
         } else {
             .pickStatusButton
         }
+    }
+    
+    var showSwitchAccountsSection: Bool {
+        showAddAccountRow || !otherAccounts.isEmpty
     }
 }
 

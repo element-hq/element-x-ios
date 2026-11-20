@@ -45,7 +45,7 @@ protocol UserSessionManagerProtocol: AnyObject {
     /// Restores every account that isn't live, or whose caches were cleared, most recently selected first and one after the other.
     ///
     /// Each session is migrated, added, reported with `didRestoreSession`, then resumed if the services are running.
-    /// An account that fails is removed (the store deletes its data). Without `multiAccountEnabled` only one account is ever live.
+    /// An account that fails is removed (the store deletes its data).
     func restoreSessions() async
     /// Clears an account's caches, then restores it to replace its session
     ///

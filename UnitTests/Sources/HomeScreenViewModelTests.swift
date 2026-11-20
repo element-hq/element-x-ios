@@ -424,8 +424,8 @@ final class HomeScreenViewModelTests {
         try await deferredReappearance.fulfill()
     }
     
-    @Test("Each of the multi-account announcement's actions dismisses it", arguments: [HomeScreenViewAction.dismissMultiAccountAnnouncement, .addAccount])
-    func multiAccountAnnouncementActions(_ action: HomeScreenViewAction) async throws {
+    @Test("The multi-account announcement's close button dismisses it")
+    func multiAccountAnnouncementDismiss() async throws {
         userSettings.app.multiAccountEnabled = true
         userSettings.app.hasSeenMultiAccountAnnouncement = false
         setupViewModel()
@@ -434,7 +434,23 @@ final class HomeScreenViewModelTests {
         context.send(viewAction: .screenAppeared)
         try await deferred.fulfill()
         
-        context.send(viewAction: action)
+        context.send(viewAction: .dismissMultiAccountAnnouncement)
+        #expect(!context.viewState.bindings.isPresentingMultiAccountAnnouncement)
+    }
+    
+    @Test("The multi-account announcement's add account button dismisses it and starts the add account flow")
+    func multiAccountAnnouncementAddAccount() async throws {
+        userSettings.app.multiAccountEnabled = true
+        userSettings.app.hasSeenMultiAccountAnnouncement = false
+        setupViewModel()
+        
+        let deferred = deferFulfillment(context.$viewState) { $0.bindings.isPresentingMultiAccountAnnouncement }
+        context.send(viewAction: .screenAppeared)
+        try await deferred.fulfill()
+        
+        let deferredAction = deferFulfillment(viewModel.actions) { $0 == .addAccount }
+        context.send(viewAction: .addAccount)
+        try await deferredAction.fulfill()
         #expect(!context.viewState.bindings.isPresentingMultiAccountAnnouncement)
     }
     
@@ -678,6 +694,8 @@ extension HomeScreenViewModelAction: @MainActor @retroactive Equatable {
         case (.presentFeedbackScreen, .presentFeedbackScreen):
             true
         case (.presentStartChatScreen, .presentStartChatScreen):
+            true
+        case (.addAccount, .addAccount):
             true
         case (.logout, .logout):
             true

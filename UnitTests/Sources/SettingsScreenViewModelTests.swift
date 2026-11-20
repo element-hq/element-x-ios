@@ -185,19 +185,30 @@ struct SettingsScreenViewModelTests {
     
     // MARK: - Switch accounts
     
-    @Test("The switch accounts section shows only while multi-account is enabled")
+    @Test("Without other accounts, the switch accounts section and its add account row show only while multi-account is enabled")
     mutating func switchAccountsSection() async throws {
         let userSettings = UserSettings.mock()
         setupViewModel(userSettings: userSettings)
         #expect(!context.viewState.showSwitchAccountsSection)
+        #expect(!context.viewState.showAddAccountRow)
         
-        var deferred = deferFulfillment(context.observe(\.viewState.showSwitchAccountsSection)) { $0 }
+        var deferred = deferFulfillment(context.observe(\.viewState.showAddAccountRow)) { $0 }
         userSettings.app.multiAccountEnabled = true
         try await deferred.fulfill()
+        #expect(context.viewState.showSwitchAccountsSection)
         
-        deferred = deferFulfillment(context.observe(\.viewState.showSwitchAccountsSection)) { !$0 }
+        deferred = deferFulfillment(context.observe(\.viewState.showAddAccountRow)) { !$0 }
         userSettings.app.multiAccountEnabled = false
         try await deferred.fulfill()
+        #expect(!context.viewState.showSwitchAccountsSection)
+    }
+    
+    @Test("With other accounts, the switch accounts section shows even while multi-account is disabled, but without the add account row")
+    mutating func switchAccountsSectionWithOtherAccounts() {
+        setupViewModel(availableSessionsPublisher: .init(makeSessionDetails(userIDs: ["@me:matrix.org", "@bob:matrix.org"])))
+        
+        #expect(context.viewState.showSwitchAccountsSection)
+        #expect(!context.viewState.showAddAccountRow)
     }
     
     @Test("The other accounts are every account but this one, most recently used first, kept up to date")

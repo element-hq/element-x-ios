@@ -16,8 +16,8 @@ final class NotificationService: NotificationServiceProtocol {
     private let clientProxy: ClientProxyProtocol
     private let userSettings: UserSettings
     
-    /// The APNs token, unknown until the app registers for remote notifications.
-    private var deviceToken: Data?
+    /// Unknown until the app registers with APNs for remote notifications.
+    private var registrationParameters: RegistrationParameters?
     private var cancellables = Set<AnyCancellable>()
     
     private let actionsSubject = PassthroughSubject<NotificationServiceAction, Never>()
@@ -46,10 +46,14 @@ final class NotificationService: NotificationServiceProtocol {
         setupSubscriptions()
     }
     
-    func register(deviceToken: Data) async {
-        self.deviceToken = deviceToken
+    func register(_ parameters: RegistrationParameters) async {
+        registrationParameters = parameters
         // A failure is retried on the next launch, which registers the token again.
         await updatePusher(isEnabled: isEnabled)
+    }
+    
+    func updateRegistrationParameters(appendsPusher: Bool) {
+        registrationParameters?.appendsPusher = appendsPusher
     }
     
     func requestAuthorization() {
@@ -123,12 +127,12 @@ final class NotificationService: NotificationServiceProtocol {
     
     /// Sets the pusher when enabled and deletes it otherwise. Nothing to update until the device token is known.
     private func updatePusher(isEnabled: Bool) async {
-        guard let deviceToken else { return }
+        guard let registrationParameters else { return }
         
-        let identifiers = PusherIdentifiers(pushkey: deviceToken.base64EncodedString(), appId: userSettings.app.pusherAppID)
+        let identifiers = PusherIdentifiers(pushkey: registrationParameters.deviceToken.base64EncodedString(), appId: userSettings.app.pusherAppID)
         do {
             if isEnabled {
-                try await clientProxy.setPusher(with: pusherConfiguration(for: identifiers))
+                try await clientProxy.setPusher(with: pusherConfiguration(for: identifiers, appendsPusher: registrationParameters.appendsPusher))
                 MXLog.info("Set pusher succeeded")
             } else {
                 try await clientProxy.deletePusher(with: identifiers)
@@ -139,7 +143,7 @@ final class NotificationService: NotificationServiceProtocol {
         }
     }
     
-    private func pusherConfiguration(for identifiers: PusherIdentifiers) throws -> PusherConfiguration {
+    private func pusherConfiguration(for identifiers: PusherIdentifiers, appendsPusher: Bool) throws -> PusherConfiguration {
         let defaultPayload = APNSPayload(aps: APSInfo(mutableContent: 1,
                                                       alert: APSAlert(locKey: "Notification",
                                                                       locArgs: [])),
@@ -153,7 +157,6 @@ final class NotificationService: NotificationServiceProtocol {
                                        deviceDisplayName: UIDevice.current.name,
                                        profileTag: nil,
                                        lang: Bundle.app.preferredLocalizations.first ?? "en",
-                                       // Otherwise accounts on the same homeserver delete each other's pusher.
-                                       append: userSettings.app.multiAccountEnabled)
+                                       append: appendsPusher)
     }
 }

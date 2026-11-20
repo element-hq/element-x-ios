@@ -9710,34 +9710,65 @@ nonisolated class NotificationServiceMock: NotificationServiceProtocol, @uncheck
 
     //MARK: - register
 
-    private let registerDeviceTokenCallsCountLock = NSLock()
-    private nonisolated(unsafe) var registerDeviceTokenUnderlyingCallsCount = 0
-    var registerDeviceTokenCallsCount: Int {
-        get { registerDeviceTokenCallsCountLock.withLock { registerDeviceTokenUnderlyingCallsCount } }
-        set { registerDeviceTokenCallsCountLock.withLock { registerDeviceTokenUnderlyingCallsCount = newValue } }
+    private let registerCallsCountLock = NSLock()
+    private nonisolated(unsafe) var registerUnderlyingCallsCount = 0
+    var registerCallsCount: Int {
+        get { registerCallsCountLock.withLock { registerUnderlyingCallsCount } }
+        set { registerCallsCountLock.withLock { registerUnderlyingCallsCount = newValue } }
     }
-    var registerDeviceTokenCalled: Bool {
-        return registerDeviceTokenCallsCount > 0
+    var registerCalled: Bool {
+        return registerCallsCount > 0
     }
-    private let registerDeviceTokenReceivedDeviceTokenLock = NSLock()
-    private nonisolated(unsafe) var registerDeviceTokenUnderlyingReceivedDeviceToken: Data?
-    var registerDeviceTokenReceivedDeviceToken: Data? {
-        get { registerDeviceTokenReceivedDeviceTokenLock.withLock { registerDeviceTokenUnderlyingReceivedDeviceToken } }
-        set { registerDeviceTokenReceivedDeviceTokenLock.withLock { registerDeviceTokenUnderlyingReceivedDeviceToken = newValue } }
+    private let registerReceivedParametersLock = NSLock()
+    private nonisolated(unsafe) var registerUnderlyingReceivedParameters: NotificationService.RegistrationParameters?
+    var registerReceivedParameters: NotificationService.RegistrationParameters? {
+        get { registerReceivedParametersLock.withLock { registerUnderlyingReceivedParameters } }
+        set { registerReceivedParametersLock.withLock { registerUnderlyingReceivedParameters = newValue } }
     }
-    private let registerDeviceTokenReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var registerDeviceTokenUnderlyingReceivedInvocations: [Data] = []
-    var registerDeviceTokenReceivedInvocations: [Data] {
-        get { registerDeviceTokenReceivedInvocationsLock.withLock { registerDeviceTokenUnderlyingReceivedInvocations } }
-        set { registerDeviceTokenReceivedInvocationsLock.withLock { registerDeviceTokenUnderlyingReceivedInvocations = newValue } }
+    private let registerReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var registerUnderlyingReceivedInvocations: [NotificationService.RegistrationParameters] = []
+    var registerReceivedInvocations: [NotificationService.RegistrationParameters] {
+        get { registerReceivedInvocationsLock.withLock { registerUnderlyingReceivedInvocations } }
+        set { registerReceivedInvocationsLock.withLock { registerUnderlyingReceivedInvocations = newValue } }
     }
-    nonisolated(unsafe) var registerDeviceTokenClosure: ((Data) async -> Void)?
+    nonisolated(unsafe) var registerClosure: ((NotificationService.RegistrationParameters) async -> Void)?
 
-    @concurrent func register(deviceToken: Data) async {
-        registerDeviceTokenCallsCountLock.withLock { registerDeviceTokenUnderlyingCallsCount += 1 }
-        registerDeviceTokenReceivedDeviceToken = deviceToken
-        registerDeviceTokenReceivedInvocationsLock.withLock { registerDeviceTokenUnderlyingReceivedInvocations.append(deviceToken) }
-        await registerDeviceTokenClosure?(deviceToken)
+    @concurrent func register(_ parameters: NotificationService.RegistrationParameters) async {
+        registerCallsCountLock.withLock { registerUnderlyingCallsCount += 1 }
+        registerReceivedParameters = parameters
+        registerReceivedInvocationsLock.withLock { registerUnderlyingReceivedInvocations.append(parameters) }
+        await registerClosure?(parameters)
+    }
+    //MARK: - updateRegistrationParameters
+
+    private let updateRegistrationParametersAppendsPusherCallsCountLock = NSLock()
+    private nonisolated(unsafe) var updateRegistrationParametersAppendsPusherUnderlyingCallsCount = 0
+    var updateRegistrationParametersAppendsPusherCallsCount: Int {
+        get { updateRegistrationParametersAppendsPusherCallsCountLock.withLock { updateRegistrationParametersAppendsPusherUnderlyingCallsCount } }
+        set { updateRegistrationParametersAppendsPusherCallsCountLock.withLock { updateRegistrationParametersAppendsPusherUnderlyingCallsCount = newValue } }
+    }
+    var updateRegistrationParametersAppendsPusherCalled: Bool {
+        return updateRegistrationParametersAppendsPusherCallsCount > 0
+    }
+    private let updateRegistrationParametersAppendsPusherReceivedAppendsPusherLock = NSLock()
+    private nonisolated(unsafe) var updateRegistrationParametersAppendsPusherUnderlyingReceivedAppendsPusher: Bool?
+    var updateRegistrationParametersAppendsPusherReceivedAppendsPusher: Bool? {
+        get { updateRegistrationParametersAppendsPusherReceivedAppendsPusherLock.withLock { updateRegistrationParametersAppendsPusherUnderlyingReceivedAppendsPusher } }
+        set { updateRegistrationParametersAppendsPusherReceivedAppendsPusherLock.withLock { updateRegistrationParametersAppendsPusherUnderlyingReceivedAppendsPusher = newValue } }
+    }
+    private let updateRegistrationParametersAppendsPusherReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var updateRegistrationParametersAppendsPusherUnderlyingReceivedInvocations: [Bool] = []
+    var updateRegistrationParametersAppendsPusherReceivedInvocations: [Bool] {
+        get { updateRegistrationParametersAppendsPusherReceivedInvocationsLock.withLock { updateRegistrationParametersAppendsPusherUnderlyingReceivedInvocations } }
+        set { updateRegistrationParametersAppendsPusherReceivedInvocationsLock.withLock { updateRegistrationParametersAppendsPusherUnderlyingReceivedInvocations = newValue } }
+    }
+    nonisolated(unsafe) var updateRegistrationParametersAppendsPusherClosure: ((Bool) -> Void)?
+
+    func updateRegistrationParameters(appendsPusher: Bool) {
+        updateRegistrationParametersAppendsPusherCallsCountLock.withLock { updateRegistrationParametersAppendsPusherUnderlyingCallsCount += 1 }
+        updateRegistrationParametersAppendsPusherReceivedAppendsPusher = appendsPusher
+        updateRegistrationParametersAppendsPusherReceivedInvocationsLock.withLock { updateRegistrationParametersAppendsPusherUnderlyingReceivedInvocations.append(appendsPusher) }
+        updateRegistrationParametersAppendsPusherClosure?(appendsPusher)
     }
     //MARK: - requestAuthorization
 
