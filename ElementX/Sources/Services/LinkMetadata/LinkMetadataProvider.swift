@@ -80,7 +80,7 @@ class LinkMetadataProvider: LinkMetadataProviderProtocol {
     /// leaving that preview spinning forever. Metadata with an already loaded image never takes that path.
     private func preloaded(_ metadata: LPLinkMetadata) async throws -> LPLinkMetadata {
         // Unloaded metadata only references its image provider, loaded metadata archives the image itself.
-        let unloadedSize = archiveSize(of: metadata)
+        let unloadedSize = metadata.archiveSize
         let loader = LPLinkView(metadata: metadata)
         
         // Polls for up to 2 seconds, falling back to no image for huge or undecodable ones.
@@ -88,7 +88,7 @@ class LinkMetadataProvider: LinkMetadataProviderProtocol {
             try await Task.sleep(for: .milliseconds(100))
             
             let loadedMetadata = loader.metadata
-            if archiveSize(of: loadedMetadata) > unloadedSize {
+            if loadedMetadata.archiveSize > unloadedSize {
                 return loadedMetadata
             }
             
@@ -103,8 +103,10 @@ class LinkMetadataProvider: LinkMetadataProviderProtocol {
         metadata.imageProvider = nil
         return metadata
     }
-    
-    private func archiveSize(of metadata: LPLinkMetadata) -> Int {
-        (try? NSKeyedArchiver.archivedData(withRootObject: metadata, requiringSecureCoding: true).count) ?? 0
+}
+
+private extension LPLinkMetadata {
+    var archiveSize: Int {
+        (try? NSKeyedArchiver.archivedData(withRootObject: self, requiringSecureCoding: true).count) ?? 0
     }
 }
