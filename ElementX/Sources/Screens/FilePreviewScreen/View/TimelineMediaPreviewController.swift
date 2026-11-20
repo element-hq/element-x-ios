@@ -34,6 +34,11 @@ class TimelineMediaPreviewController: QLPreviewController {
     /// The content offset that the page scroll view rests at when showing the current item.
     private var pageScrollViewRestingOffset: CGFloat = 0
     
+    private let dismissGestureRecognizer = UIPanGestureRecognizer()
+    private let dismissGestureDelegate = EmptyItemDismissGestureDelegate()
+    /// The dismissal driven by the dismiss gesture, from the moment it starts until it has settled.
+    private var interactiveDismissal: InteractiveDismissal?
+    
     private var cancellables: Set<AnyCancellable> = []
     
     private var navigationBar: UINavigationBar? {
@@ -113,6 +118,12 @@ class TimelineMediaPreviewController: QLPreviewController {
             downloadIndicatorHostingController.view.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             downloadIndicatorHostingController.view.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
+        
+        dismissGestureDelegate.previewController = self
+        dismissGestureDelegate.captionView = captionView
+        dismissGestureRecognizer.delegate = dismissGestureDelegate
+        dismissGestureRecognizer.addTarget(self, action: #selector(handleDismissGesture))
+        view.addGestureRecognizer(dismissGestureRecognizer)
         
         // Observation of currentPreviewItem doesn't work, so use the index instead.
         publisher(for: \.currentPreviewItemIndex)
@@ -246,6 +257,8 @@ class TimelineMediaPreviewController: QLPreviewController {
     }
     
     private func updateOverlayPosition() {
+        // The overlay follows the finger whilst the preview is being dismissed.
+        guard interactiveDismissal == nil else { return }
         guard let pageScrollView, let overlayView = downloadIndicatorHostingController.view else { return }
         
         let pageWidth = pageScrollView.bounds.width
@@ -330,6 +343,66 @@ class TimelineMediaPreviewController: QLPreviewController {
             if isDisplayedMediaAwaitingRefresh || isDisplayedPlaceholderStale {
                 refreshCurrentPreviewItem() // This will trigger loadCurrentItem automatically.
             }
+        }
+    }
+    
+    // MARK: Dismiss gesture
+    
+    @objc private func handleDismissGesture(_ gestureRecognizer: UIPanGestureRecognizer) {
+        let translation = gestureRecognizer.translation(in: view)
+        
+        switch gestureRecognizer.state {
+        case .began:
+            beginInteractiveDismissal()
+        case .changed:
+            interactiveDismissal?.update(translation: translation)
+        case .ended:
+            let velocity = gestureRecognizer.velocity(in: view)
+            // As with a loaded item, moving the finger back up before letting go cancels the dismissal.
+            if velocity.y >= 0, translation.y > 100 || velocity.y > 800 {
+                interactiveDismissal?.finish(velocity: velocity)
+            } else {
+                interactiveDismissal?.cancel(velocity: velocity)
+            }
+        case .cancelled, .failed:
+            interactiveDismissal?.cancel()
+        default:
+            break
+        }
+    }
+    
+    /// Starts dismissing the preview under the user's finger, mirroring QuickLook's own gesture for a loaded item.
+    private func beginInteractiveDismissal() {
+        guard interactiveDismissal == nil, let contentView = downloadIndicatorHostingController.view else { return }
+        
+        let chromeViews = [navigationBar, bottomBarItemsContainer, captionView].compactMap { $0 }
+        let dismissal = InteractiveDismissal(previewController: self, contentView: contentView, chromeViews: chromeViews)
+        dismissal.onCompletion = { [weak self] didDismiss in
+            self?.endInteractiveDismissal(didDismiss: didDismiss)
+        }
+        
+        interactiveDismissal = dismissal
+        // Don't page between items whilst the preview follows the finger.
+        pageScrollView?.isScrollEnabled = false
+        
+        dismissal.begin()
+    }
+    
+    private func endInteractiveDismissal(didDismiss: Bool) {
+        guard didDismiss else {
+            interactiveDismissal = nil
+            pageScrollView?.isScrollEnabled = true
+            updateOverlayPosition()
+            return
+        }
+        
+        // Everything has already animated away, so remove the preview without QuickLook's own animation. QuickLook doesn't
+        // call `previewControllerDidDismiss` when dismissed programmatically, so tell the delegate (captured up front as
+        // QuickLook clears it whilst dismissing), letting the presenter clean up its state.
+        let delegate = delegate
+        dismiss(animated: false) { [weak self] in
+            guard let self else { return }
+            delegate?.previewControllerDidDismiss?(self)
         }
     }
     
@@ -551,6 +624,166 @@ private struct DownloadIndicatorView: View {
 }
 
 // MARK: - Helpers
+
+/// Lets a downward swipe dismiss the preview while the current item has nothing to show (still downloading,
+/// failed or loading more), as QuickLook only provides that gesture once an item's file has loaded.
+///
+/// A separate object so that QuickLook's own gesture recognizer delegate methods aren't overridden.
+private final class EmptyItemDismissGestureDelegate: NSObject, UIGestureRecognizerDelegate {
+    weak var previewController: QLPreviewController?
+    /// The caption scrolls by itself, so drags that start on it are left alone.
+    weak var captionView: UIView?
+    
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        guard let previewController,
+              previewController.currentPreviewItem?.previewItemURL == nil,
+              let panGestureRecognizer = gestureRecognizer as? UIPanGestureRecognizer else {
+            return false
+        }
+        
+        // Only a downward swipe, matching QuickLook's own gesture for a loaded item.
+        let velocity = panGestureRecognizer.velocity(in: previewController.view)
+        return velocity.y > abs(velocity.x)
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        guard let captionView, !captionView.isHidden else { return true }
+        return !captionView.bounds.contains(touch.location(in: captionView))
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        // Recognise alongside the page scroll view, which receives the touch first.
+        true
+    }
+}
+
+/// Dismisses the preview under the user's finger, the way QuickLook does for a loaded item: the content follows the finger
+/// and shrinks whilst everything else fades away to reveal what's underneath. Letting go either carries the content away
+/// with the finger's momentum or springs everything back into place.
+///
+/// QuickLook doesn't honour a custom transitioning delegate, so this does by hand what UIKit does for an interactive
+/// dismissal: whilst the gesture is in progress, the presenter's view (which a full screen presentation removes) is put
+/// back underneath the preview so that it can be revealed.
+@MainActor
+private final class InteractiveDismissal {
+    private weak var previewController: UIViewController?
+    /// The view that follows the finger.
+    private let contentView: UIView
+    /// The bars and caption, which fade out quickly as soon as the content is moved.
+    private let chromeViews: [UIView]
+    
+    /// Called once the content has animated away (`true`) or back into place (`false`).
+    var onCompletion: ((_ didDismiss: Bool) -> Void)?
+    
+    /// The views that make up the preview's backdrop, which fade proportionally to how far the content has moved.
+    private var backdropViews: [UIView] = []
+    /// How opaque the backdrop and chrome were beforehand, to fade from and restore if the dismissal is cancelled.
+    private var originalAlphas: [UIView: CGFloat] = [:]
+    private var previewBackgroundColor: UIColor?
+    /// The presenter's view, when it was added back underneath the preview to be revealed.
+    private var revealedView: UIView?
+    private var translation: CGPoint = .zero
+    /// Whether the finger has been lifted, in which case the content is settling.
+    private var isSettling = false
+    
+    private var previewView: UIView? {
+        previewController?.view
+    }
+    
+    /// How far along the dismissal is, reaching the end once the finger has travelled half the screen down.
+    private var progress: CGFloat {
+        guard let height = previewView?.bounds.height, height > 0 else { return 0 }
+        return min(max(translation.y / (height / 2), 0), 1)
+    }
+    
+    init(previewController: UIViewController, contentView: UIView, chromeViews: [UIView]) {
+        self.previewController = previewController
+        self.contentView = contentView
+        self.chromeViews = chromeViews
+    }
+    
+    func begin() {
+        guard let previewView else { return }
+        backdropViews = previewView.subviews.filter { $0 !== contentView && !chromeViews.contains($0) }
+        originalAlphas = Dictionary((backdropViews + chromeViews).map { ($0, $0.alpha) }) { first, _ in first }
+        previewBackgroundColor = previewView.backgroundColor
+        
+        if let presenterView = previewController?.presentingViewController?.view,
+           presenterView.window == nil,
+           let containerView = previewView.superview {
+            containerView.insertSubview(presenterView, belowSubview: previewView)
+            revealedView = presenterView
+        }
+        
+        UIView.animate(withDuration: 0.2) {
+            self.chromeViews.forEach { $0.alpha = 0 }
+        }
+    }
+    
+    func update(translation: CGPoint) {
+        guard !isSettling else { return }
+        self.translation = translation
+        
+        let progress = progress
+        setBackdropOpacity(1 - progress)
+        contentView.transform = contentTransform(translation: translation, progress: progress)
+    }
+    
+    func finish(velocity: CGPoint) {
+        guard !isSettling else { return }
+        isSettling = true
+        
+        // Carry on in the direction of the finger so the content leaves with its momentum.
+        let finalTranslation = CGPoint(x: translation.x + velocity.x * 0.2,
+                                       y: translation.y + max(velocity.y * 0.2, 200))
+        let animator = UIViewPropertyAnimator(duration: 0.3, curve: .easeOut) {
+            self.setBackdropOpacity(0)
+            self.contentView.transform = self.contentTransform(translation: finalTranslation, progress: 1)
+            self.contentView.alpha = 0
+        }
+        animator.addCompletion { _ in
+            self.onCompletion?(true)
+        }
+        animator.startAnimation()
+    }
+    
+    func cancel(velocity: CGPoint = .zero) {
+        guard !isSettling else { return }
+        isSettling = true
+        
+        // Pick up from the finger's speed so that letting go mid-movement flows straight into the spring back.
+        let distance = -translation.y
+        let relativeVelocity = abs(distance) > 1 ? velocity.y / distance : 0
+        let timingParameters = UISpringTimingParameters(dampingRatio: 0.8, initialVelocity: CGVector(dx: relativeVelocity, dy: 0))
+        let animator = UIViewPropertyAnimator(duration: 0.45, timingParameters: timingParameters)
+        animator.addAnimations {
+            self.setBackdropOpacity(1)
+            self.chromeViews.forEach { $0.alpha = self.originalAlphas[$0] ?? 1 }
+            self.contentView.transform = .identity
+        }
+        animator.addCompletion { _ in
+            self.previewView?.backgroundColor = self.previewBackgroundColor
+            self.revealedView?.removeFromSuperview()
+            self.onCompletion?(false)
+        }
+        animator.startAnimation()
+    }
+    
+    // MARK: Private
+    
+    private func setBackdropOpacity(_ opacity: CGFloat) {
+        backdropViews.forEach { $0.alpha = (originalAlphas[$0] ?? 1) * opacity }
+        let backgroundAlpha = previewBackgroundColor?.cgColor.alpha ?? 1
+        previewView?.backgroundColor = previewBackgroundColor?.withAlphaComponent(backgroundAlpha * opacity)
+    }
+    
+    /// Follows the finger, with resistance when pulled upwards, shrinking a little the further down it goes.
+    private func contentTransform(translation: CGPoint, progress: CGFloat) -> CGAffineTransform {
+        let y = translation.y >= 0 ? translation.y : translation.y / 3
+        let scale = UIAccessibility.isReduceMotionEnabled ? 1 : 1 - 0.25 * progress
+        return CGAffineTransform(translationX: translation.x, y: y).scaledBy(x: scale, y: scale)
+    }
+}
 
 /// An invisible view that reports when it is added to or removed from a window.
 private struct WindowTrackingView: UIViewRepresentable {
