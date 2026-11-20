@@ -346,6 +346,8 @@ Tests use **Swift Testing**. XCUI targets (UITests, AccessibilityTests, Integrat
 - Function name = short title, like old XCTest name minus `test` (e.g. `initialState`, `removeLastAccount`, `unlockFailure`).
 - Touch test file? Update existing tests to match: add missing display names, rename functions to match.
 
+New test? Check suite first. Assertions belong in existing test's behaviour? Extend that test. Separate behaviour → new test.
+
 ### Test Types
 
 | Type | Location | Purpose |
