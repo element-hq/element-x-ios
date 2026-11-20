@@ -70,11 +70,6 @@ final class UserSessionManager: UserSessionManagerProtocol {
         userSessionStore.clientSessionDelegate
     }
     
-    /// Whether an account has a session that's live and up to date (its caches weren't cleared).
-    private var hasLiveSession: Bool {
-        accounts.contains { userID, userSession in userSession != nil && !clearedUserIDs.contains(userID) }
-    }
-    
     init(userSessionStore: UserSessionStoreProtocol,
          appSettings: AppSettings,
          notificationManager: NotificationManagerProtocol,
@@ -154,8 +149,6 @@ final class UserSessionManager: UserSessionManagerProtocol {
     
     private func restoreAccounts() async {
         for userID in accounts.keys where session(for: userID) == nil || clearedUserIDs.contains(userID) {
-            // Every live session syncs, so without multi-account only one account is ever made live.
-            guard appSettings.multiAccountEnabled || !hasLiveSession else { return }
             // Skip any account that was removed while restoring those before it.
             guard accounts.keys.contains(userID), let userSession = await restoreUserSession(userID: userID) else { continue }
             
