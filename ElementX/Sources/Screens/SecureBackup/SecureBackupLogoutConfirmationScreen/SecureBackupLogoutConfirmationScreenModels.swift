@@ -16,12 +16,17 @@ enum SecureBackupLogoutConfirmationScreenViewModelAction {
     case cancel
     case checkRecoveryKey(SecureBackupLogoutConfirmationScreenRecoveryKeyContinuation)
     case generateRecoveryKey(SecureBackupLogoutConfirmationScreenRecoveryKeyContinuation)
+    case chatBackupSettings
     case logout
 }
 
 nonisolated enum SecureBackupLogoutConfirmationScreenViewMode: Equatable {
+    /// The user has other devices, show a friendly confirmation prompt.
+    case otherVerifiedDevice
     /// The user has a recovery key but this is their only verified device.
     case saveRecoveryKey
+    /// The user has a recovery key but key backup is disabled.
+    case noBackup
     /// The user has no recovery key and this is their only verified device.
     case noRecovery
     case waitingToStart(hasStalled: Bool)
@@ -30,20 +35,48 @@ nonisolated enum SecureBackupLogoutConfirmationScreenViewMode: Equatable {
     
     /// Whether the user is still being asked about removing the device, as opposed to the removal being underway.
     var isInitial: Bool {
-        self == .saveRecoveryKey || self == .noRecovery
+        switch self {
+        case .otherVerifiedDevice, .saveRecoveryKey, .noBackup, .noRecovery: true
+        default: false
+        }
+    }
+    
+    /// Whether the toolbar shows a button to close the screen.
+    var showsCloseButton: Bool {
+        switch self {
+        case .otherVerifiedDevice, .noBackup: false
+        default: true
+        }
+    }
+    
+    /// Returns the initial mode the screen should use, based on the user's recovery options after the device has been removed.
+    init(hasOtherVerifiedDevice: Bool, recoveryState: SecureBackupRecoveryState, keyBackupState: SecureBackupKeyBackupState) {
+        self = if hasOtherVerifiedDevice {
+            .otherVerifiedDevice
+        } else {
+            switch (recoveryState, keyBackupState) {
+            case (.enabled, .enabled): .saveRecoveryKey
+            case (.enabled, _): .noBackup
+            default: .noRecovery
+            }
+        }
     }
 }
 
 struct SecureBackupLogoutConfirmationScreenViewState: BindableState {
     let learnMoreURL: URL
     var mode: SecureBackupLogoutConfirmationScreenViewMode
+    var userProfile: UserProfile
+    
     var bindings = SecureBackupLogoutConfirmationScreenBindings()
     
     var icon: (keyPath: KeyPath<CompoundIcons, Image>, style: BigIcon.Style) {
         switch mode {
+        case .otherVerifiedDevice:
+            (\.mobile, .defaultSolid)
         case .saveRecoveryKey:
             (\.info, .defaultSolid)
-        case .noRecovery:
+        case .noBackup, .noRecovery:
             (\.errorSolid, .alertSolid)
         case .waitingToStart, .backupOngoing, .offline:
             (\.keyOffSolid, .defaultSolid)
@@ -52,6 +85,10 @@ struct SecureBackupLogoutConfirmationScreenViewState: BindableState {
     
     var title: String {
         switch mode {
+        case .otherVerifiedDevice:
+            L10n.screenSignoutOtherVerifiedDeviceDialogTitle
+        case .noBackup:
+            L10n.screenSignoutKeyBackupDisabledTitle
         case .saveRecoveryKey:
             L10n.screenSignoutSaveRecoveryKeyTitle
         case .noRecovery:
@@ -63,8 +100,12 @@ struct SecureBackupLogoutConfirmationScreenViewState: BindableState {
         }
     }
     
-    var subtitle: String {
+    var subtitle: String? {
         switch mode {
+        case .otherVerifiedDevice:
+            nil
+        case .noBackup:
+            L10n.screenSignoutKeyBackupDisabledSubtitle
         case .saveRecoveryKey:
             L10n.screenSignoutSaveRecoveryKeySubtitle
         case .noRecovery:
@@ -89,5 +130,6 @@ enum SecureBackupLogoutConfirmationScreenViewAction {
     case cancel
     case checkRecoveryKey
     case generateRecoveryKey
+    case chatBackupSettings
     case logout
 }

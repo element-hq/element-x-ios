@@ -32,7 +32,7 @@ enum SettingsScreenCoordinatorAction {
     case moderationAndSafety
     case bugReport
     
-    case logout
+    case logout(hasOtherVerifiedDevice: Bool)
     case deactivateAccount
     
     case mediaUploadQuality
@@ -94,8 +94,8 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
                 case .reportBug:
                     actionsSubject.send(.bugReport)
                     
-                case .logout:
-                    actionsSubject.send(.logout)
+                case .logout(let hasOtherVerifiedDevice):
+                    actionsSubject.send(.logout(hasOtherVerifiedDevice: hasOtherVerifiedDevice))
                 case .deactivateAccount:
                     actionsSubject.send(.deactivateAccount)
                     

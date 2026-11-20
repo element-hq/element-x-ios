@@ -24,7 +24,7 @@ enum SettingsScreenViewModelAction {
     case moderationAndSafety
     case reportBug
     
-    case logout
+    case logout(hasOtherVerifiedDevice: Bool)
     case deactivateAccount
     
     case mediaUploadQuality

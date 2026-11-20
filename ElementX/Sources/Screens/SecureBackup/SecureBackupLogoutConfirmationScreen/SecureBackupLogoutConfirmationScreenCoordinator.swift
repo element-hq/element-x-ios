@@ -10,9 +10,7 @@ import Combine
 import SwiftUI
 
 struct SecureBackupLogoutConfirmationScreenCoordinatorParameters {
-    let secureBackupController: SecureBackupControllerProtocol
-    let homeserverReachabilityPublisher: CurrentValuePublisher<HomeserverReachability, Never>
-    let learnMoreURL: URL
+    let userSession: UserSessionProtocol
     let mode: SecureBackupLogoutConfirmationScreenViewMode
 }
 
@@ -20,6 +18,7 @@ enum SecureBackupLogoutConfirmationScreenCoordinatorAction {
     case cancel
     case checkRecoveryKey(SecureBackupLogoutConfirmationScreenRecoveryKeyContinuation)
     case generateRecoveryKey(SecureBackupLogoutConfirmationScreenRecoveryKeyContinuation)
+    case chatBackupSettings
     case logout
 }
 
@@ -33,10 +32,7 @@ final class SecureBackupLogoutConfirmationScreenCoordinator: CoordinatorProtocol
     }
     
     init(parameters: SecureBackupLogoutConfirmationScreenCoordinatorParameters) {
-        viewModel = SecureBackupLogoutConfirmationScreenViewModel(secureBackupController: parameters.secureBackupController,
-                                                                  homeserverReachabilityPublisher: parameters.homeserverReachabilityPublisher,
-                                                                  learnMoreURL: parameters.learnMoreURL,
-                                                                  mode: parameters.mode)
+        viewModel = SecureBackupLogoutConfirmationScreenViewModel(userSession: parameters.userSession, mode: parameters.mode)
     }
     
     func start() {
@@ -52,6 +48,8 @@ final class SecureBackupLogoutConfirmationScreenCoordinator: CoordinatorProtocol
                 actionsSubject.send(.checkRecoveryKey(continuation))
             case .generateRecoveryKey(let continuation):
                 actionsSubject.send(.generateRecoveryKey(continuation))
+            case .chatBackupSettings:
+                actionsSubject.send(.chatBackupSettings)
             case .logout:
                 actionsSubject.send(.logout)
             }

@@ -679,8 +679,6 @@ extension HomeScreenViewModelAction: @MainActor @retroactive Equatable {
             true
         case (.presentStartChatScreen, .presentStartChatScreen):
             true
-        case (.logout, .logout):
-            true
         default:
             false
         }

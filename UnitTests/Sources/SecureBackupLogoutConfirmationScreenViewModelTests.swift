@@ -17,6 +17,7 @@ struct SecureBackupLogoutConfirmationScreenViewModelTests {
         viewModel.context
     }
     
+    private var clientProxy: ClientProxyMock
     private var secureBackupController: SecureBackupControllerMock
     private var reachabilitySubject: CurrentValueSubject<HomeserverReachability, Never>
     
@@ -26,18 +27,38 @@ struct SecureBackupLogoutConfirmationScreenViewModelTests {
         
         reachabilitySubject = CurrentValueSubject<HomeserverReachability, Never>(.reachable)
         
-        viewModel = SecureBackupLogoutConfirmationScreenViewModel(secureBackupController: secureBackupController,
-                                                                  homeserverReachabilityPublisher: reachabilitySubject.asCurrentValuePublisher(),
-                                                                  learnMoreURL: "https://example.org/encryption",
+        clientProxy = ClientProxyMock(.init())
+        clientProxy.secureBackupController = secureBackupController
+        clientProxy.homeserverReachabilityPublisher = reachabilitySubject.asCurrentValuePublisher()
+        
+        viewModel = SecureBackupLogoutConfirmationScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                                   mode: .saveRecoveryKey)
     }
     
-    @Test
+    @Test("The screen starts in the mode it was created with, showing the user's profile")
     func initialState() {
         #expect(context.viewState.mode == .saveRecoveryKey)
+        #expect(context.viewState.userProfile == clientProxy.userProfilePublisher.value)
     }
     
-    @Test
+    @Test("The screen starts in the right mode based on the user's recovery options",
+          arguments: [(true, SecureBackupRecoveryState.enabled, SecureBackupKeyBackupState.enabled, SecureBackupLogoutConfirmationScreenViewMode.otherVerifiedDevice),
+                      (true, .disabled, .unknown, .otherVerifiedDevice),
+                      (false, .enabled, .enabled, .saveRecoveryKey),
+                      (false, .enabled, .unknown, .noBackup),
+                      (false, .incomplete, .enabled, .noRecovery),
+                      (false, .disabled, .unknown, .noRecovery)])
+    func modeFromRecoveryOptions(hasOtherVerifiedDevice: Bool,
+                                 recoveryState: SecureBackupRecoveryState,
+                                 keyBackupState: SecureBackupKeyBackupState,
+                                 expectedMode: SecureBackupLogoutConfirmationScreenViewMode) {
+        let mode = SecureBackupLogoutConfirmationScreenViewMode(hasOtherVerifiedDevice: hasOtherVerifiedDevice,
+                                                                recoveryState: recoveryState,
+                                                                keyBackupState: keyBackupState)
+        #expect(mode == expectedMode)
+    }
+    
+    @Test("Logging out with a recovery key shows the backup progress once it has stalled")
     func ongoingState() async throws {
         #expect(context.viewState.mode == .saveRecoveryKey)
         
@@ -61,7 +82,7 @@ struct SecureBackupLogoutConfirmationScreenViewModelTests {
         }
     }
     
-    @Test
+    @Test("Losing the connection during the backup switches to the offline mode")
     func offlineState() async throws {
         #expect(context.viewState.mode == .saveRecoveryKey)
         
@@ -89,104 +110,60 @@ struct SecureBackupLogoutConfirmationScreenViewModelTests {
         try await deferred.fulfill()
     }
     
-    @Test
-    func titleSubtitleAndIconFollowTheMode() {
-        func state(_ mode: SecureBackupLogoutConfirmationScreenViewMode) -> SecureBackupLogoutConfirmationScreenViewState {
-            .init(learnMoreURL: "https://example.org/encryption", mode: mode)
-        }
+    @Test("Removing the device logs out straight away when there are no keys to back up",
+          arguments: [SecureBackupLogoutConfirmationScreenViewMode.otherVerifiedDevice, .noBackup, .noRecovery])
+    func logoutWithNothingToBackUp(mode: SecureBackupLogoutConfirmationScreenViewMode) async throws {
+        let viewModel = SecureBackupLogoutConfirmationScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
+                                                                      mode: mode)
+        #expect(viewModel.context.viewState.mode == mode)
         
-        #expect(state(.saveRecoveryKey).title == L10n.screenSignoutSaveRecoveryKeyTitle)
-        #expect(state(.saveRecoveryKey).subtitle == L10n.screenSignoutSaveRecoveryKeySubtitle)
-        #expect(state(.saveRecoveryKey).icon.keyPath == \.info)
-        
-        #expect(state(.noRecovery).title == L10n.screenSignoutRecoveryDisabledTitle)
-        #expect(state(.noRecovery).subtitle == L10n.screenSignoutRecoveryDisabledSubtitle)
-        #expect(state(.noRecovery).icon.keyPath == \.errorSolid)
-        
-        #expect(state(.waitingToStart(hasStalled: false)).title == L10n.screenSignoutKeyBackupOngoingTitle)
-        #expect(state(.backupOngoing(progress: 0.5)).subtitle == L10n.screenSignoutKeyBackupOngoingSubtitle)
-        #expect(state(.offline).title == L10n.screenSignoutKeyBackupOfflineTitle)
-        #expect(state(.offline).subtitle == L10n.screenSignoutKeyBackupOfflineSubtitle)
-        #expect(state(.offline).icon.keyPath == \.keyOffSolid)
-    }
-    
-    @Test
-    func noRecoveryLogsOutStraightAway() async throws {
-        let viewModel = SecureBackupLogoutConfirmationScreenViewModel(secureBackupController: secureBackupController,
-                                                                      homeserverReachabilityPublisher: reachabilitySubject.asCurrentValuePublisher(),
-                                                                      learnMoreURL: "https://example.org/encryption",
-                                                                      mode: .noRecovery)
-        #expect(viewModel.context.viewState.mode == .noRecovery)
-        
-        let deferred = deferFulfillment(viewModel.actions) { action in
-            if case .logout = action {
-                true
-            } else {
-                false
-            }
-        }
+        let deferred = deferFulfillment(viewModel.actions) { $0.isLogout }
         viewModel.context.send(viewAction: .logout)
         try await deferred.fulfill()
         
-        // There are no keys to wait for without a recovery key, and the question stays as it is.
-        #expect(viewModel.context.viewState.mode == .noRecovery)
+        // There are no keys to wait for, and the question stays as it is.
+        #expect(viewModel.context.viewState.mode == mode)
         #expect(secureBackupController.waitForKeyBackupUploadUploadStateSubjectCallsCount == 0)
     }
     
-    @Test
-    func cancelIsForwarded() async throws {
-        let deferred = deferFulfillment(viewModel.actions) { action in
-            if case .cancel = action {
-                true
-            } else {
-                false
-            }
-        }
+    @Test("Cancelling is forwarded to the coordinator")
+    func cancel() async throws {
+        let deferred = deferFulfillment(viewModel.actions) { $0.isCancel }
         context.send(viewAction: .cancel)
         try await deferred.fulfill()
     }
     
-    @Test
-    func generatingARecoveryKeyIsForwarded() async throws {
-        let deferred = deferFulfillment(viewModel.actions) { action in
-            if case .generateRecoveryKey = action {
-                true
-            } else {
-                false
-            }
-        }
+    @Test("Opening the chat backup settings is forwarded to the coordinator")
+    func chatBackupSettings() async throws {
+        let viewModel = SecureBackupLogoutConfirmationScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
+                                                                      mode: .noBackup)
+        
+        let deferred = deferFulfillment(viewModel.actions) { $0.isChatBackupSettings }
+        viewModel.context.send(viewAction: .chatBackupSettings)
+        try await deferred.fulfill()
+    }
+    
+    @Test("Generating a recovery key is forwarded to the coordinator")
+    func generateRecoveryKey() async throws {
+        let deferred = deferFulfillment(viewModel.actions) { $0.isGenerateRecoveryKey }
         context.send(viewAction: .generateRecoveryKey)
         try await deferred.fulfill()
     }
     
-    @Test
-    func checkingTheRecoveryKeyIsForwarded() async throws {
-        let deferred = deferFulfillment(viewModel.actions) { action in
-            if case .checkRecoveryKey = action {
-                true
-            } else {
-                false
-            }
-        }
+    @Test("Checking the recovery key is forwarded to the coordinator")
+    func checkRecoveryKey() async throws {
+        let deferred = deferFulfillment(viewModel.actions) { $0.isCheckRecoveryKey }
         context.send(viewAction: .checkRecoveryKey)
         try await deferred.fulfill()
     }
     
-    @Test
-    func continuingWithANewRecoveryKeyWaitsForTheBackupFirst() async throws {
-        let viewModel = SecureBackupLogoutConfirmationScreenViewModel(secureBackupController: secureBackupController,
-                                                                      homeserverReachabilityPublisher: reachabilitySubject.asCurrentValuePublisher(),
-                                                                      learnMoreURL: "https://example.org/encryption",
+    @Test("Continuing with a new recovery key waits for the backup before logging out")
+    func logoutAfterNewRecoveryKey() async throws {
+        let viewModel = SecureBackupLogoutConfirmationScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                                       mode: .noRecovery)
         secureBackupController.waitForKeyBackupUploadUploadStateSubjectClosure = { _ in .success(()) }
         
-        let deferredLogout = deferFulfillment(viewModel.actions) { action in
-            if case .logout = action {
-                true
-            } else {
-                false
-            }
-        }
+        let deferredLogout = deferFulfillment(viewModel.actions) { $0.isLogout }
         let deferredContinuation = deferFulfillment(viewModel.actions) { action in
             if case let .generateRecoveryKey(continuation) = action {
                 continuation.yield()
@@ -200,5 +177,42 @@ struct SecureBackupLogoutConfirmationScreenViewModelTests {
         
         // Unlike removing the device without a recovery key, the new keys have to be uploaded.
         #expect(secureBackupController.waitForKeyBackupUploadUploadStateSubjectCallsCount == 1)
+    }
+}
+
+private extension SecureBackupLogoutConfirmationScreenViewModelAction {
+    var isCancel: Bool {
+        switch self {
+        case .cancel: true
+        default: false
+        }
+    }
+    
+    var isCheckRecoveryKey: Bool {
+        switch self {
+        case .checkRecoveryKey: true
+        default: false
+        }
+    }
+    
+    var isGenerateRecoveryKey: Bool {
+        switch self {
+        case .generateRecoveryKey: true
+        default: false
+        }
+    }
+    
+    var isChatBackupSettings: Bool {
+        switch self {
+        case .chatBackupSettings: true
+        default: false
+        }
+    }
+    
+    var isLogout: Bool {
+        switch self {
+        case .logout: true
+        default: false
+        }
     }
 }

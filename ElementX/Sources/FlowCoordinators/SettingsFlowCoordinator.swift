@@ -15,7 +15,7 @@ enum SettingsFlowCoordinatorAction {
     
     case dismiss
     case clearCache
-    case runLogoutFlow
+    case runLogoutFlow(hasOtherVerifiedDevice: Bool)
     /// Logout without a confirmation. The account was deactivated.
     case accountDeactivated
     /// Logout without a confirmation. The user forgot their PIN.
@@ -122,8 +122,8 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                                                                                           userIndicatorController: flowParameters.userIndicatorController))
                     bugReportFlowCoordinator?.start()
                     
-                case .logout:
-                    actionsSubject.send(.runLogoutFlow)
+                case .logout(let hasOtherVerifiedDevice):
+                    actionsSubject.send(.runLogoutFlow(hasOtherVerifiedDevice: hasOtherVerifiedDevice))
                 case .deactivateAccount:
                     presentDeactivateAccount()
                     
