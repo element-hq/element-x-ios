@@ -40,6 +40,19 @@ nonisolated enum SecureBackupLogoutConfirmationScreenViewMode: Equatable {
         default: false
         }
     }
+    
+    /// Returns the initial mode the screen should use, based on the user's recovery options after the device has been removed.
+    init(hasOtherVerifiedDevice: Bool, recoveryState: SecureBackupRecoveryState, keyBackupState: SecureBackupKeyBackupState) {
+        self = if hasOtherVerifiedDevice {
+            .otherVerifiedDevice
+        } else {
+            switch (recoveryState, keyBackupState) {
+            case (.enabled, .enabled): .saveRecoveryKey
+            case (.enabled, _): .noBackup
+            default: .noRecovery
+            }
+        }
+    }
 }
 
 struct SecureBackupLogoutConfirmationScreenViewState: BindableState {

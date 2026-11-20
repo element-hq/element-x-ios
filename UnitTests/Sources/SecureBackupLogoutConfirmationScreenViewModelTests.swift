@@ -41,6 +41,23 @@ struct SecureBackupLogoutConfirmationScreenViewModelTests {
         #expect(context.viewState.userProfile == clientProxy.userProfilePublisher.value)
     }
     
+    @Test("The screen starts in the right mode based on the user's recovery options",
+          arguments: [(true, SecureBackupRecoveryState.enabled, SecureBackupKeyBackupState.enabled, SecureBackupLogoutConfirmationScreenViewMode.otherVerifiedDevice),
+                      (true, .disabled, .unknown, .otherVerifiedDevice),
+                      (false, .enabled, .enabled, .saveRecoveryKey),
+                      (false, .enabled, .unknown, .noBackup),
+                      (false, .incomplete, .enabled, .noRecovery),
+                      (false, .disabled, .unknown, .noRecovery)])
+    func modeFromRecoveryOptions(hasOtherVerifiedDevice: Bool,
+                                 recoveryState: SecureBackupRecoveryState,
+                                 keyBackupState: SecureBackupKeyBackupState,
+                                 expectedMode: SecureBackupLogoutConfirmationScreenViewMode) {
+        let mode = SecureBackupLogoutConfirmationScreenViewMode(hasOtherVerifiedDevice: hasOtherVerifiedDevice,
+                                                                recoveryState: recoveryState,
+                                                                keyBackupState: keyBackupState)
+        #expect(mode == expectedMode)
+    }
+    
     @Test("Logging out with a recovery key shows the backup progress once it has stalled")
     func ongoingState() async throws {
         #expect(context.viewState.mode == .saveRecoveryKey)

@@ -401,11 +401,9 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 navigationTabCoordinator.setSheetCoordinator(nil)
             case .clearCache:
                 actionsSubject.send(.clearCache)
-            case .runLogoutFlow:
-                Task {
-                    self.navigationTabCoordinator.setSheetCoordinator(nil)
-                    await self.runLogoutFlow()
-                }
+            case .runLogoutFlow(let hasOtherVerifiedDevice):
+                navigationTabCoordinator.setSheetCoordinator(nil)
+                startSecureBackupLogoutFlow(hasOtherVerifiedDevice: hasOtherVerifiedDevice)
             case .accountDeactivated:
                 actionsSubject.send(.accountDeactivated)
             case .forceLogout:
@@ -486,32 +484,12 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     // MARK: - Logout
     
-    private func runLogoutFlow() async {
-        let secureBackupController = userSession.clientProxy.secureBackupController
-        
-        guard case let .success(hasOtherVerifiedDevice) = await userSession.clientProxy.hasDevicesToVerifyAgainst() else {
-            flowParameters.userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
-            return
-        }
-        
-        switch AvailableRecoveryOptions(hasOtherVerifiedDevice: hasOtherVerifiedDevice, recoveryState: secureBackupController.recoveryState.value) {
-        case .otherVerifiedDevice:
-            presentSecureBackupLogoutConfirmationScreen(mode: .otherVerifiedDevice)
-        case .recoveryKeyOnly where secureBackupController.keyBackupState.value == .enabled:
-            presentSecureBackupLogoutConfirmationScreen(mode: .saveRecoveryKey)
-        case .recoveryKeyOnly:
-            presentSecureBackupLogoutConfirmationScreen(mode: .noBackup)
-        case .noOptions:
-            presentSecureBackupLogoutConfirmationScreen(mode: .noRecovery)
-        }
-    }
-    
-    private func presentSecureBackupLogoutConfirmationScreen(mode: SecureBackupLogoutConfirmationScreenViewMode) {
+    private func startSecureBackupLogoutFlow(hasOtherVerifiedDevice: Bool) {
         let sheetNavigationStackCoordinator = NavigationStackCoordinator()
         let coordinator = SecureBackupLogoutFlowCoordinator(parameters: .init(userSession: userSession,
                                                                               userIndicatorController: flowParameters.userIndicatorController,
                                                                               navigationStackCoordinator: sheetNavigationStackCoordinator,
-                                                                              mode: mode))
+                                                                              hasOtherVerifiedDevice: hasOtherVerifiedDevice))
         
         coordinator.actionsPublisher
             .sink { [weak self] action in
