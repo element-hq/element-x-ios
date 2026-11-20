@@ -42,7 +42,7 @@ struct ChatsTabFlowCoordinatorTests {
                                                   bugReportService: BugReportServiceMock(.init()),
                                                   timelineControllerFactory: timelineControllerFactory,
                                                   emojiProvider: EmojiProvider(userSettings: userSession.userSettings),
-                                                  linkMetadataProvider: LinkMetadataProvider(),
+                                                  linkMetadataProvider: LinkMetadataProvider(userSession: UserSessionMock(.init())),
                                                   appMediator: AppMediatorMock(.init()),
                                                   analytics: AnalyticsServiceMock(.init()),
                                                   userIndicatorController: UserIndicatorControllerMock(),

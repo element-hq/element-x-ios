@@ -25,7 +25,7 @@ struct OnboardingFlowCoordinatorTests {
                                                   bugReportService: BugReportServiceMock(.init()),
                                                   timelineControllerFactory: TimelineControllerFactoryMock(.init()),
                                                   emojiProvider: EmojiProvider(userSettings: userSession.userSettings),
-                                                  linkMetadataProvider: LinkMetadataProvider(),
+                                                  linkMetadataProvider: LinkMetadataProvider(userSession: UserSessionMock(.init())),
                                                   appMediator: AppMediatorMock(.init()),
                                                   analytics: AnalyticsServiceMock(.init()),
                                                   userIndicatorController: UserIndicatorControllerMock(),

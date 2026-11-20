@@ -58,7 +58,7 @@ struct UserSessionFlowCoordinatorTests {
                                                   bugReportService: BugReportServiceMock(.init()),
                                                   timelineControllerFactory: TimelineControllerFactoryMock(.init()),
                                                   emojiProvider: EmojiProvider(userSettings: userSession.userSettings),
-                                                  linkMetadataProvider: LinkMetadataProvider(),
+                                                  linkMetadataProvider: LinkMetadataProvider(userSession: UserSessionMock(.init())),
                                                   appMediator: appMediator,
                                                   analytics: AnalyticsServiceMock(.init()),
                                                   userIndicatorController: userIndicatorController,

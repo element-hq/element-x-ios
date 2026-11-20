@@ -302,7 +302,7 @@ final class TimelineViewModelTests {
                                           appMediator: AppMediatorMock(.init()),
                                           analyticsService: AnalyticsServiceMock(.init()),
                                           emojiProvider: EmojiProvider(userSettings: .mock()),
-                                          linkMetadataProvider: LinkMetadataProvider(),
+                                          linkMetadataProvider: LinkMetadataProvider(userSession: UserSessionMock(.init())),
                                           timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         return (viewModel, roomProxy, timelineProxy, timelineController)
     }
@@ -327,7 +327,7 @@ final class TimelineViewModelTests {
                                           appMediator: AppMediatorMock(.init()),
                                           analyticsService: AnalyticsServiceMock(.init()),
                                           emojiProvider: EmojiProvider(userSettings: .mock()),
-                                          linkMetadataProvider: LinkMetadataProvider(),
+                                          linkMetadataProvider: LinkMetadataProvider(userSession: UserSessionMock(.init())),
                                           timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         
         let deferred = deferFulfillment(viewModel.context.$viewState) { value in
@@ -351,7 +351,7 @@ final class TimelineViewModelTests {
                                           appMediator: AppMediatorMock(.init()),
                                           analyticsService: AnalyticsServiceMock(.init()),
                                           emojiProvider: EmojiProvider(userSettings: .mock()),
-                                          linkMetadataProvider: LinkMetadataProvider(),
+                                          linkMetadataProvider: LinkMetadataProvider(userSession: UserSessionMock(.init())),
                                           timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         
         var deferred = deferFulfillment(viewModel.context.$viewState) { value in
@@ -387,7 +387,7 @@ final class TimelineViewModelTests {
                                           appMediator: AppMediatorMock(.init()),
                                           analyticsService: AnalyticsServiceMock(.init()),
                                           emojiProvider: EmojiProvider(userSettings: .mock()),
-                                          linkMetadataProvider: LinkMetadataProvider(),
+                                          linkMetadataProvider: LinkMetadataProvider(userSession: UserSessionMock(.init())),
                                           timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         
         var deferredState = deferFulfillment(viewModel.context.$viewState) { value in
@@ -423,7 +423,7 @@ final class TimelineViewModelTests {
                                           appMediator: AppMediatorMock(.init()),
                                           analyticsService: AnalyticsServiceMock(.init()),
                                           emojiProvider: EmojiProvider(userSettings: .mock()),
-                                          linkMetadataProvider: LinkMetadataProvider(),
+                                          linkMetadataProvider: LinkMetadataProvider(userSession: UserSessionMock(.init())),
                                           timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         
         var deferredState = deferFulfillment(viewModel.context.$viewState) { value in
@@ -465,7 +465,7 @@ final class TimelineViewModelTests {
                                           appMediator: AppMediatorMock(.init()),
                                           analyticsService: AnalyticsServiceMock(.init()),
                                           emojiProvider: EmojiProvider(userSettings: .mock()),
-                                          linkMetadataProvider: LinkMetadataProvider(),
+                                          linkMetadataProvider: LinkMetadataProvider(userSession: UserSessionMock(.init())),
                                           timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         #expect(configuration.pinnedEventIDs == viewModel.context.viewState.pinnedEventIDs)
         
@@ -493,7 +493,7 @@ final class TimelineViewModelTests {
                                           appMediator: AppMediatorMock(.init()),
                                           analyticsService: AnalyticsServiceMock(.init()),
                                           emojiProvider: EmojiProvider(userSettings: .mock()),
-                                          linkMetadataProvider: LinkMetadataProvider(),
+                                          linkMetadataProvider: LinkMetadataProvider(userSession: UserSessionMock(.init())),
                                           timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         
         var deferred = deferFulfillment(viewModel.context.$viewState) { value in
@@ -1110,7 +1110,7 @@ final class TimelineViewModelTests {
                           appMediator: appMediator,
                           analyticsService: AnalyticsServiceMock(.init()),
                           emojiProvider: EmojiProvider(userSettings: .mock()),
-                          linkMetadataProvider: LinkMetadataProvider(),
+                          linkMetadataProvider: LinkMetadataProvider(userSession: UserSessionMock(.init())),
                           timelineControllerFactory: TimelineControllerFactoryMock(.init()))
     }
     

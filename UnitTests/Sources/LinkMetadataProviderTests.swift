@@ -29,8 +29,6 @@ struct LinkMetadataProviderTests {
     
     @Test("The homeserver mode uses the homeserver preview")
     func homeserverMode() async throws {
-        clientProxy.urlPreviewForReturnValue = .success(.init(title: "Element", description: nil, imageURL: nil))
-        
         let item = try await makeProvider().fetchMetadataFor(url: url, mode: .homeserver).get()
         
         #expect(item.metadata?.title == "Element")

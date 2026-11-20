@@ -11,16 +11,14 @@ import LinkPresentation
 
 enum LinkMetadataProviderError: Error {
     case previouslyFailed
-    case missingUserSession
 }
 
 class LinkMetadataProvider: LinkMetadataProviderProtocol {
-    /// The session to fetch homeserver previews with, `nil` in previews and UI tests which only fetch on device.
-    private let userSession: UserSessionProtocol?
+    private let userSession: UserSessionProtocol
     private(set) var metadataItems = [URL: LinkMetadataProviderItem]()
     private(set) var failedURLs = Set<URL>()
     
-    init(userSession: UserSessionProtocol? = nil) {
+    init(userSession: UserSessionProtocol) {
         self.userSession = userSession
     }
     
@@ -34,13 +32,10 @@ class LinkMetadataProvider: LinkMetadataProviderProtocol {
         }
         
         do {
-            let metadata: LPLinkMetadata
-            if mode == .homeserver {
-                // Never fall back to the device fetch, it would expose the device IP address instead.
-                guard let userSession else { throw LinkMetadataProviderError.missingUserSession }
-                metadata = try await homeserverMetadata(for: url, userSession: userSession)
+            let metadata = if mode == .homeserver {
+                try await homeserverMetadata(for: url, userSession: userSession)
             } else {
-                metadata = try await LPMetadataProvider().startFetchingMetadata(for: url)
+                try await LPMetadataProvider().startFetchingMetadata(for: url)
             }
             // A cancelled fetch can still return, for example without the image it was downloading.
             try Task.checkCancellation()

@@ -219,7 +219,7 @@ struct TimelineInteractionHandlerTests {
                                           appMediator: AppMediatorMock(.init()),
                                           analyticsService: AnalyticsServiceMock(.init()),
                                           emojiProvider: EmojiProvider(userSettings: .mock()),
-                                          linkMetadataProvider: LinkMetadataProvider(),
+                                          linkMetadataProvider: LinkMetadataProvider(userSession: UserSessionMock(.init())),
                                           timelineControllerFactory: TimelineControllerFactoryMock(.init()))
     }
     
