@@ -124,8 +124,12 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
                                                 appHooks: appHooks,
                                                 networkMonitor: networkMonitor,
                                                 targetContext: targetConfiguration.context)
-        notificationManager = NotificationManager(notificationCenter: UNUserNotificationCenter.current(), appSettings: appSettings)
+        let userIDsSubject = CurrentValueSubject<[String], Never>([])
+        notificationManager = NotificationManager(notificationCenter: UNUserNotificationCenter.current(),
+                                                  userIDsPublisher: userIDsSubject.asCurrentValuePublisher(),
+                                                  appSettings: appSettings)
         userSessionManager = UserSessionManager(userSessionStore: userSessionStore,
+                                                userIDsSubject: userIDsSubject,
                                                 appSettings: appSettings,
                                                 notificationManager: notificationManager,
                                                 liveLocationManager: LiveLocationManager(appSettings: appSettings),

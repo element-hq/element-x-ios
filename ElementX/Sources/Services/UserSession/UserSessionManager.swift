@@ -23,6 +23,7 @@ final class UserSessionManager: UserSessionManagerProtocol {
     private let userSessionMigrator: UserSessionMigratorProtocol
     private let signposter: Signposter
     
+    private let userIDsSubject: CurrentValueSubject<[String], Never>
     private let sessionsSubject = CurrentValueSubject<[UserSessionProtocol], Never>([])
     private let callbacksSubject = PassthroughSubject<UserSessionManagerCallback, Never>()
     private var authErrorsCancellable: AnyCancellable?
@@ -43,6 +44,7 @@ final class UserSessionManager: UserSessionManagerProtocol {
     /// Assigning `nil` removes an account rather than clearing its session.
     private var accounts: OrderedDictionary<String, UserSessionProtocol?> = [:] {
         didSet {
+            userIDsSubject.send(Array(accounts.keys))
             sessionsSubject.send(accounts.values.compactMap { $0 })
             if accounts.isEmpty {
                 loadingStateCancellable = nil
@@ -71,6 +73,7 @@ final class UserSessionManager: UserSessionManagerProtocol {
     }
     
     init(userSessionStore: UserSessionStoreProtocol,
+         userIDsSubject: CurrentValueSubject<[String], Never>,
          appSettings: AppSettings,
          notificationManager: NotificationManagerProtocol,
          liveLocationManager: LiveLocationManagerProtocol,
@@ -78,6 +81,7 @@ final class UserSessionManager: UserSessionManagerProtocol {
          userSessionMigrator: UserSessionMigratorProtocol,
          signposter: Signposter) {
         self.userSessionStore = userSessionStore
+        self.userIDsSubject = userIDsSubject
         self.appSettings = appSettings
         self.notificationManager = notificationManager
         self.liveLocationManager = liveLocationManager
@@ -98,6 +102,7 @@ final class UserSessionManager: UserSessionManagerProtocol {
             }
             .map(\.userID)
         accounts = OrderedDictionary(uniqueKeysWithValues: userIDs.map { ($0, UserSessionProtocol?.none) })
+        userIDsSubject.send(userIDs) // Manually run `accounts`'s didSet for userIDs.
         
         authErrorsCancellable = sessionsSubject
             .map { userSessions in
