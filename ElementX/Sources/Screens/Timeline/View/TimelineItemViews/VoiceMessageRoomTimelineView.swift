@@ -33,6 +33,8 @@ struct VoiceMessageRoomTimelineContent: View {
         ContentScanningView(contentScannerService: context?.contentScannerService,
                             mediaSource: timelineItem.content.source) {
             VoiceMessageRoomPlaybackView(playerState: playerState,
+                                         // The selection overlay doesn't block scrubbing, so prevent it whilst selecting messages.
+                                         shouldStartScrubbing: { !(context?.viewState.messageSelection.isActive ?? false) },
                                          onPlayPause: onPlaybackPlayPause,
                                          onSeek: { onPlaybackSeek($0) },
                                          onScrubbing: { onPlaybackScrubbing($0) },
