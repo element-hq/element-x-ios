@@ -1066,21 +1066,25 @@ final class TimelineViewModelTests {
     
     // MARK: - Link previews
     
-    @Test("A room's link previews only use the unencrypted rooms' setting once it's known to be unencrypted")
-    func linkPreviewsModeFollowsKnownEncryption() throws {
+    @Test("A room's link previews stay off until its encryption state is known")
+    func linkPreviewsModeWaitsForEncryptionState() {
         let userSettings = UserSettings.mock()
         userSettings.app.unencryptedRoomsLinkPreviewsEnabled = true
         userSettings.app.encryptedRoomsLinkPreviewsMode = .apple
         
-        let unencryptedRoomProxy = JoinedRoomProxyMock(.init(name: "", isEncrypted: false))
-        let unknownRoomProxy = JoinedRoomProxyMock(.init(name: "", isEncrypted: false))
-        try #require(unknownRoomProxy.infoPublisher.value as? RoomInfoProxyMock).isNotEncrypted = false
-        
-        let unencryptedViewModel = makeViewModel(roomProxy: unencryptedRoomProxy, timelineController: TimelineControllerMock(.init(timelineItems: [])), userSettings: userSettings)
-        let unknownViewModel = makeViewModel(roomProxy: unknownRoomProxy, timelineController: TimelineControllerMock(.init(timelineItems: [])), userSettings: userSettings)
+        let unencryptedViewModel = makeViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "", isEncrypted: false)),
+                                                 timelineController: TimelineControllerMock(.init(timelineItems: [])),
+                                                 userSettings: userSettings)
+        let encryptedViewModel = makeViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "", isEncrypted: true)),
+                                               timelineController: TimelineControllerMock(.init(timelineItems: [])),
+                                               userSettings: userSettings)
+        let unknownViewModel = makeViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "", isEncryptionStateKnown: false)),
+                                             timelineController: TimelineControllerMock(.init(timelineItems: [])),
+                                             userSettings: userSettings)
         
         #expect(unencryptedViewModel.context.viewState.linkPreviewsMode == .homeserver)
-        #expect(unknownViewModel.context.viewState.linkPreviewsMode == .apple)
+        #expect(encryptedViewModel.context.viewState.linkPreviewsMode == .apple)
+        #expect(unknownViewModel.context.viewState.linkPreviewsMode == .off)
     }
     
     // MARK: - Helpers

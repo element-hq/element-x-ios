@@ -14,17 +14,17 @@ struct LinkMetadataProviderTests {
     private let clientProxy = ClientProxyMock(.init())
     private let userSettings = UserSettings.mock()
     
-    @Test("Unencrypted rooms only ever use the homeserver while encrypted rooms follow their own setting")
+    @Test("Unencrypted rooms only ever use the homeserver, encrypted rooms follow their own setting and unknown ones get none")
     func roomModes() {
-        let appSettings = userSettings.app
-        #expect(LinkPreviewMode(isRoomEncrypted: false, appSettings: appSettings) == .off)
-        #expect(LinkPreviewMode(isRoomEncrypted: true, appSettings: appSettings) == .off)
+        #expect(LinkPreviewMode(isRoomEncrypted: false, userSettings: userSettings) == .off)
+        #expect(LinkPreviewMode(isRoomEncrypted: true, userSettings: userSettings) == .off)
         
-        appSettings.unencryptedRoomsLinkPreviewsEnabled = true
-        appSettings.encryptedRoomsLinkPreviewsMode = .apple
+        userSettings.app.unencryptedRoomsLinkPreviewsEnabled = true
+        userSettings.app.encryptedRoomsLinkPreviewsMode = .apple
         
-        #expect(LinkPreviewMode(isRoomEncrypted: false, appSettings: appSettings) == .homeserver)
-        #expect(LinkPreviewMode(isRoomEncrypted: true, appSettings: appSettings) == .apple)
+        #expect(LinkPreviewMode(isRoomEncrypted: false, userSettings: userSettings) == .homeserver)
+        #expect(LinkPreviewMode(isRoomEncrypted: true, userSettings: userSettings) == .apple)
+        #expect(LinkPreviewMode(isRoomEncrypted: nil, userSettings: userSettings) == .off)
     }
     
     @Test("The homeserver mode uses the homeserver preview")

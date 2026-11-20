@@ -37,8 +37,7 @@ nonisolated protocol RoomInfoProxyProtocol: BaseRoomInfoProxyProtocol {
     var avatarURL: URL? { get }
     
     var isEncrypted: Bool { get }
-    /// Whether the room is known to be unencrypted, `false` while its encryption state is still unknown.
-    var isNotEncrypted: Bool { get }
+    var isKnownUnencrypted: Bool { get }
     var isDirect: Bool { get }
     var isDM: Bool { get }
     var isSpace: Bool { get }

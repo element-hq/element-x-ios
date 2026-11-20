@@ -49,7 +49,8 @@ struct TextRoomTimelineView: View, TextBasedRoomTimelineViewProtocol {
                 }
             }
         }
-        .task { await fetchLinkPreviews() }
+        // Fetches again once the room's encryption state is known and its mode changes.
+        .task(id: context?.viewState.linkPreviewsMode) { await fetchLinkPreviews() }
     }
     
     private func fetchLinkPreviews() async {

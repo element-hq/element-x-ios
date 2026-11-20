@@ -106,7 +106,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                        hideTimelineMedia: hideTimelineMedia,
                                                        isViewSourceEnabled: userSettings.app.viewSourceEnabled,
                                                        areThreadsEnabled: userSettings.app.threadsEnabled,
-                                                       linkPreviewsMode: LinkPreviewMode(isRoomEncrypted: !roomProxy.infoPublisher.value.isNotEncrypted, appSettings: userSettings.app),
+                                                       linkPreviewsMode: LinkPreviewMode(roomInfo: roomProxy.infoPublisher.value, userSettings: userSettings),
                                                        jumpToReadMarkerEnabled: userSettings.app.jumpToReadMarkerEnabled,
                                                        hasPredecessor: roomProxy.predecessorRoom != nil,
                                                        pinnedEventIDs: roomProxy.infoPublisher.value.pinnedEventIDs,
@@ -455,7 +455,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     private func updateRoomInfo(_ roomInfo: RoomInfoProxyProtocol) {
         state.pinnedEventIDs = roomInfo.pinnedEventIDs
         state.isDM = roomInfo.isDM
-        state.linkPreviewsMode = LinkPreviewMode(isRoomEncrypted: !roomInfo.isNotEncrypted, appSettings: userSettings.app)
+        state.linkPreviewsMode = LinkPreviewMode(roomInfo: roomInfo, userSettings: userSettings)
         state.timelineState.fullyReadEventID = roomInfo.fullyReadEventID
         
         if let powerLevels = roomInfo.powerLevels {
@@ -1392,4 +1392,17 @@ extension EnvironmentValues {
 
 private enum SlashCommand: String, CaseIterable {
     case join = "/join "
+}
+
+private extension LinkPreviewMode {
+    init(roomInfo: RoomInfoProxyProtocol, userSettings: UserSettings) {
+        let isRoomEncrypted: Bool? = if roomInfo.isEncrypted {
+            true
+        } else if roomInfo.isKnownUnencrypted {
+            false
+        } else {
+            nil
+        }
+        self.init(isRoomEncrypted: isRoomEncrypted, userSettings: userSettings)
+    }
 }

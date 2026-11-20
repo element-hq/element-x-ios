@@ -11017,11 +11017,11 @@ nonisolated class RoomInfoProxyMock: RoomInfoProxyProtocol, @unchecked Sendable 
         set(value) { underlyingIsEncrypted = value }
     }
     nonisolated(unsafe) var underlyingIsEncrypted: Bool!
-    var isNotEncrypted: Bool {
-        get { return underlyingIsNotEncrypted }
-        set(value) { underlyingIsNotEncrypted = value }
+    var isKnownUnencrypted: Bool {
+        get { return underlyingIsKnownUnencrypted }
+        set(value) { underlyingIsKnownUnencrypted = value }
     }
-    nonisolated(unsafe) var underlyingIsNotEncrypted: Bool!
+    nonisolated(unsafe) var underlyingIsKnownUnencrypted: Bool!
     var isDirect: Bool {
         get { return underlyingIsDirect }
         set(value) { underlyingIsDirect = value }

@@ -23,6 +23,7 @@ struct JoinedRoomProxyMockConfiguration {
     var isDirect = false
     var isSpace = false
     var isEncrypted = true
+    var isEncryptionStateKnown = true
     var hasOngoingCall = true
     var activeRoomCallParticipants: [String] = []
     var canonicalAlias: String?
@@ -150,8 +151,8 @@ extension RoomInfoProxyMock {
         self.init()
         
         id = configuration.id
-        isEncrypted = configuration.isEncrypted
-        isNotEncrypted = !configuration.isEncrypted
+        isEncrypted = configuration.isEncryptionStateKnown && configuration.isEncrypted
+        isKnownUnencrypted = configuration.isEncryptionStateKnown && !configuration.isEncrypted
         displayName = configuration.name
         topic = configuration.topic
         avatarURL = configuration.avatarURL

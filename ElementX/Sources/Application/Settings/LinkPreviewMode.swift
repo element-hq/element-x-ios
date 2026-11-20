@@ -14,11 +14,15 @@ nonisolated enum LinkPreviewMode: Codable {
     case apple
     
     /// The mode for a room, unencrypted rooms only ever use the homeserver.
-    init(isRoomEncrypted: Bool, appSettings: AppSettings) {
-        if isRoomEncrypted {
-            self = appSettings.encryptedRoomsLinkPreviewsMode
-        } else {
-            self = appSettings.unencryptedRoomsLinkPreviewsEnabled ? .homeserver : .off
+    /// - Parameter isRoomEncrypted: `nil` while the room's encryption state is unknown, which turns previews off.
+    init(isRoomEncrypted: Bool?, userSettings: UserSettings) {
+        switch isRoomEncrypted {
+        case true:
+            self = userSettings.app.encryptedRoomsLinkPreviewsMode
+        case false:
+            self = userSettings.app.unencryptedRoomsLinkPreviewsEnabled ? .homeserver : .off
+        case nil:
+            self = .off
         }
     }
 }

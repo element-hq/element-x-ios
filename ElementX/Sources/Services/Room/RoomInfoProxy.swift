@@ -50,7 +50,7 @@ nonisolated struct RoomInfoProxy: RoomInfoProxyProtocol {
         roomInfo.encryptionState == .encrypted
     }
     
-    var isNotEncrypted: Bool {
+    var isKnownUnencrypted: Bool {
         roomInfo.encryptionState == .notEncrypted
     }
     
