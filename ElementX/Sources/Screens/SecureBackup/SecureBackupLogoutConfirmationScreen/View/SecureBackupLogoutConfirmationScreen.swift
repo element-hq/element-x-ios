@@ -154,7 +154,7 @@ struct SecureBackupLogoutConfirmationScreen: View {
     
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
-        if mode != .otherVerifiedDevice, mode != .noBackup {
+        if mode.showsCloseButton {
             ToolbarItem(placement: .cancellationAction) {
                 ToolbarButton(role: .close) { context.send(viewAction: .cancel) }
             }

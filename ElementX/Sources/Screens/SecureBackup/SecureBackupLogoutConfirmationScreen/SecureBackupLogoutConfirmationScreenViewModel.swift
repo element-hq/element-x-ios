@@ -29,8 +29,7 @@ class SecureBackupLogoutConfirmationScreenViewModel: SecureBackupLogoutConfirmat
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(userSession: UserSessionProtocol,
-         mode: SecureBackupLogoutConfirmationScreenViewMode = .saveRecoveryKey) {
+    init(userSession: UserSessionProtocol, mode: SecureBackupLogoutConfirmationScreenViewMode) {
         secureBackupController = userSession.clientProxy.secureBackupController
         homeserverReachabilityPublisher = userSession.clientProxy.homeserverReachabilityPublisher
         

@@ -41,6 +41,14 @@ nonisolated enum SecureBackupLogoutConfirmationScreenViewMode: Equatable {
         }
     }
     
+    /// Whether the toolbar shows a button to close the screen.
+    var showsCloseButton: Bool {
+        switch self {
+        case .otherVerifiedDevice, .noBackup: false
+        default: true
+        }
+    }
+    
     /// Returns the initial mode the screen should use, based on the user's recovery options after the device has been removed.
     init(hasOtherVerifiedDevice: Bool, recoveryState: SecureBackupRecoveryState, keyBackupState: SecureBackupKeyBackupState) {
         self = if hasOtherVerifiedDevice {
