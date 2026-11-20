@@ -21,7 +21,7 @@ struct IdentityConfirmationScreen: View {
     }
     
     var body: some View {
-        FullscreenDialog(topPadding: UIConstants.startScreenBreakerScreenTopPadding) {
+        FullscreenDialog {
             if context.viewState.isUnverified {
                 screenHeader
             }
@@ -46,26 +46,18 @@ struct IdentityConfirmationScreen: View {
     
     private var screenHeader: some View {
         VStack(spacing: 0) {
-            BigIcon(icon: \.lockSolid)
-                .padding(.bottom, 16)
+            TitleAndIcon(title: L10n.screenIdentityConfirmationTitle,
+                         subtitle: L10n.screenIdentityConfirmationSubtitle,
+                         icon: \.lockSolid,
+                         iconStyle: .defaultSolid,
+                         button: .init(title: L10n.actionLearnMore, action: {
+                             UIApplication.shared.open(context.viewState.learnMoreURL)
+                         }))
+                         .padding(.horizontal, 8)
+                         .padding(.bottom, 24)
             
-            Text(L10n.screenIdentityConfirmationTitle)
-                .font(.compound.headingMDBold)
-                .multilineTextAlignment(.center)
-                .foregroundColor(.compound.textPrimary)
-                .padding(.bottom, 8)
-                .accessibilityAddTraits(.isHeader)
-            
-            Text(L10n.screenIdentityConfirmationSubtitle)
-                .font(.compound.bodyMD)
-                .multilineTextAlignment(.center)
-                .foregroundColor(.compound.textSecondary)
-            
-            Button(L10n.actionLearnMore) {
-                UIApplication.shared.open(context.viewState.learnMoreURL)
-            }
-            .buttonStyle(.compound(.tertiary, size: .small))
-            .padding(.top, 16)
+            AccountInfoCardView(userProfile: context.viewState.userProfile,
+                                mediaProvider: context.mediaProvider)
         }
     }
     

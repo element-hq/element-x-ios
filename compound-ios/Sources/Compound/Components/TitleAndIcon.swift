@@ -54,6 +54,7 @@ public struct TitleAndIcon: View {
                     .foregroundColor(.compound.textPrimary)
                     .font(.compound.headingMDBold)
                     .multilineTextAlignment(.center)
+                    .accessibilityAddTraits(.isHeader)
                 
                 if let subtitle {
                     Text(subtitle)

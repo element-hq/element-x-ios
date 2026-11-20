@@ -34,6 +34,7 @@ class SessionVerificationScreenViewModel: SessionVerificationViewModelType, Sess
         
         super.init(initialViewState: .init(flow: flow,
                                            learnMoreURL: userSession.userSettings.app.encryptionURL,
+                                           ownProfile: userSession.clientProxy.userProfilePublisher.value,
                                            verificationState: verificationState),
                    mediaProvider: userSession.mediaProvider)
         
@@ -66,6 +67,11 @@ class SessionVerificationScreenViewModel: SessionVerificationViewModelType, Sess
                     self.stateMachine.processEvent(.didFail)
                 }
             }
+            .store(in: &cancellables)
+        
+        userSession.clientProxy.userProfilePublisher
+            .receive(on: DispatchQueue.main)
+            .weakAssign(to: \.state.ownProfile, on: self)
             .store(in: &cancellables)
         
         switch flow {

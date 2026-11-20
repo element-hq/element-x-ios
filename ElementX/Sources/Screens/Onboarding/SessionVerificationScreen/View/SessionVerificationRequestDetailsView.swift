@@ -7,14 +7,11 @@
 //
 
 import Compound
-import MatrixRustSDK
 import SwiftUI
 
 struct SessionVerificationRequestDetailsView: View {
-    @ScaledMetric private var iconSize = 30.0
-    private let outerShape = RoundedRectangle(cornerRadius: 8)
-    
     let details: SessionVerificationRequestDetails
+    let ownProfile: UserProfile
     let isUserVerification: Bool
     let mediaProvider: MediaProviderProtocol?
     
@@ -27,80 +24,18 @@ struct SessionVerificationRequestDetailsView: View {
     }
     
     private var userRequestDetails: some View {
-        HStack(spacing: 12) {
-            LoadableAvatarImage(url: details.senderProfile.avatarURL,
-                                name: details.senderProfile.displayName,
-                                contentID: details.senderProfile.id,
-                                avatarSize: .user(on: .sessionVerification),
-                                mediaProvider: mediaProvider)
-                .accessibilityHidden(true)
-            
-            VStack(alignment: .leading, spacing: 0) {
-                Text(details.senderProfile.displayName ?? details.senderProfile.id)
-                    .font(.compound.bodySM)
-                    .foregroundColor(.compound.textSecondary)
-                
-                if details.senderProfile.displayName != nil {
-                    Text(details.senderProfile.id)
-                        .font(.compound.bodyMD)
-                        .foregroundColor(.compound.textPrimary)
-                }
-            }
-        }
-        .accessibilityElement(children: .combine)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(12)
-        .background(.compound.bgSubtleSecondary)
-        .clipShape(outerShape)
+        AccountInfoCardView(userProfile: ownProfile,
+                            style: .userVerification(senderProfile: details.senderProfile),
+                            mediaProvider: mediaProvider)
     }
     
     private var deviceRequestDetails: some View {
         VStack(spacing: 24) {
-            VStack(alignment: .leading, spacing: 12) {
-                HStack(spacing: 16) {
-                    CompoundIcon(\.devices)
-                        .frame(width: iconSize, height: iconSize)
-                        .foregroundColor(.compound.iconSecondary)
-                        .padding(6)
-                        .background(.compound.bgSubtleSecondary)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                    
-                    let displayName = isUserVerification ? details.senderProfile.displayName : details.deviceDisplayName
-                    Text(displayName ?? details.senderProfile.id)
-                        .font(.compound.bodyMDSemibold)
-                        .foregroundColor(.compound.textPrimary)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                
-                HStack(spacing: 40) {
-                    VStack(alignment: .leading, spacing: 0) {
-                        Text(L10n.screenSessionVerificationRequestDetailsTimestamp)
-                            .font(.compound.bodySM)
-                            .foregroundColor(.compound.textSecondary)
-                        Text(details.firstSeenDate.formattedMinimal())
-                            .font(.compound.bodyMD)
-                            .foregroundColor(.compound.textPrimary)
-                    }
-                    
-                    VStack(alignment: .leading, spacing: 0) {
-                        Text(L10n.commonDeviceId)
-                            .font(.compound.bodySM)
-                            .foregroundColor(.compound.textSecondary)
-                        Text(details.deviceID)
-                            .font(.compound.bodyMD)
-                            .foregroundColor(.compound.textPrimary)
-                    }
-                }
-            }
-            .padding(24)
-            .clipShape(outerShape)
-            .overlay {
-                outerShape
-                    .inset(by: 0.25)
-                    .stroke(.compound.borderDisabled)
-            }
-            
-            .font(.compound.bodyMDSemibold)
+            AccountInfoCardView(userProfile: ownProfile,
+                                style: .deviceVerification(.init(deviceID: details.deviceID,
+                                                                 displayName: details.deviceDisplayName ?? details.senderProfile.id,
+                                                                 firstSeenDate: details.firstSeenDate)),
+                                mediaProvider: mediaProvider)
             
             Text(L10n.screenSessionVerificationRequestFooter)
                 .font(.compound.bodyMDSemibold)
@@ -120,12 +55,14 @@ struct SessionVerificationRequestDetailsView_Previews: PreviewProvider, Testable
     
     static var previews: some View {
         SessionVerificationRequestDetailsView(details: details,
+                                              ownProfile: .mockCharlie,
                                               isUserVerification: true,
                                               mediaProvider: MediaProviderMock(.init()))
             .padding()
             .previewDisplayName("User")
         
         SessionVerificationRequestDetailsView(details: details,
+                                              ownProfile: .mockCharlie,
                                               isUserVerification: false,
                                               mediaProvider: MediaProviderMock(.init()))
             .padding()

@@ -27,6 +27,7 @@ enum SessionVerificationScreenViewAction {
 struct SessionVerificationScreenViewState: BindableState {
     let flow: SessionVerificationScreenFlow
     let learnMoreURL: URL
+    var ownProfile: UserProfile
     
     var verificationState: SessionVerificationScreenStateMachine.State
     

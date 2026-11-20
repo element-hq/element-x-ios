@@ -68,6 +68,7 @@ enum UserAvatarSizeOnScreen {
     case settings
     case settingsOtherAccount
     case settingsOtherAccountsStack
+    case accountInfoCard
     case roomDetails
     case roomMembersList
     case roomChangeRoles
@@ -105,7 +106,7 @@ enum UserAvatarSizeOnScreen {
             24
         case .knockingUsersBannerStack:
             28
-        case .chatsCompact, .spacesCompact, .map,
+        case .chatsCompact, .spacesCompact, .accountInfoCard, .map,
              .timeline, .readReceiptSheet, .completionSuggestions,
              .blockedUsers, .roomMembersList, .knockingUserBanner, .settingsOtherAccount:
             32
