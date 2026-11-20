@@ -24,6 +24,7 @@ enum HomeScreenViewModelAction {
     case presentSettingsScreen
     case presentFeedbackScreen
     case presentStartChatScreen
+    case addAccount
     case logout
 }
 

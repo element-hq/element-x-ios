@@ -255,6 +255,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     handleAppRoute(.chatBackupSettings, animated: true)
                 case .sessionVerification(let flow):
                     presentSessionVerificationScreen(flow: flow)
+                case .addAccount:
+                    actionsSubject.send(.addAccount)
                 case .logout:
                     Task { await self.runLogoutFlow() }
                 }
