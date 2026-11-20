@@ -29,7 +29,7 @@ struct LinkMetadataProviderTests {
     
     @Test("The homeserver mode uses the homeserver preview")
     func homeserverMode() async throws {
-        clientProxy.urlPreviewForReturnValue = .success(.init(title: "Element", imageURL: nil))
+        clientProxy.urlPreviewForReturnValue = .success(.init(title: "Element", description: nil, imageURL: nil))
         
         let item = try await makeProvider().fetchMetadataFor(url: url, mode: .homeserver).get()
         
@@ -61,7 +61,7 @@ struct LinkMetadataProviderTests {
     func cancelledFetch() async {
         clientProxy.urlPreviewForClosure = { _ in
             withUnsafeCurrentTask { $0?.cancel() }
-            return .success(.init(title: "Element", imageURL: nil))
+            return .success(.init(title: "Element", description: nil, imageURL: nil))
         }
         let provider = makeProvider()
         
@@ -74,11 +74,12 @@ struct LinkMetadataProviderTests {
     
     @Test("An invalid preview image keeps the rest of the preview")
     func invalidImage() throws {
-        let json = #"{"og:title": "Element", "og:image": ""}"#
+        let json = #"{"og:title": "Element", "og:description": "Secure collaboration", "og:image": ""}"#
         
         let preview = try JSONDecoder().decode(URLPreview.self, from: Data(json.utf8))
         
         #expect(preview.title == "Element")
+        #expect(preview.description == "Secure collaboration")
         #expect(preview.imageURL == nil)
     }
     
