@@ -4025,6 +4025,48 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return isAliasAvailableReturnValue
         }
     }
+    //MARK: - urlPreview
+
+    private let urlPreviewForCallsCountLock = NSLock()
+    private nonisolated(unsafe) var urlPreviewForUnderlyingCallsCount = 0
+    var urlPreviewForCallsCount: Int {
+        get { urlPreviewForCallsCountLock.withLock { urlPreviewForUnderlyingCallsCount } }
+        set { urlPreviewForCallsCountLock.withLock { urlPreviewForUnderlyingCallsCount = newValue } }
+    }
+    var urlPreviewForCalled: Bool {
+        return urlPreviewForCallsCount > 0
+    }
+    private let urlPreviewForReceivedUrlLock = NSLock()
+    private nonisolated(unsafe) var urlPreviewForUnderlyingReceivedUrl: URL?
+    var urlPreviewForReceivedUrl: URL? {
+        get { urlPreviewForReceivedUrlLock.withLock { urlPreviewForUnderlyingReceivedUrl } }
+        set { urlPreviewForReceivedUrlLock.withLock { urlPreviewForUnderlyingReceivedUrl = newValue } }
+    }
+    private let urlPreviewForReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var urlPreviewForUnderlyingReceivedInvocations: [URL] = []
+    var urlPreviewForReceivedInvocations: [URL] {
+        get { urlPreviewForReceivedInvocationsLock.withLock { urlPreviewForUnderlyingReceivedInvocations } }
+        set { urlPreviewForReceivedInvocationsLock.withLock { urlPreviewForUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let urlPreviewForReturnValueLock = NSLock()
+    private nonisolated(unsafe) var urlPreviewForUnderlyingReturnValue: Result<URLPreview, ClientProxyError>!
+    var urlPreviewForReturnValue: Result<URLPreview, ClientProxyError>! {
+        get { urlPreviewForReturnValueLock.withLock { urlPreviewForUnderlyingReturnValue } }
+        set { urlPreviewForReturnValueLock.withLock { urlPreviewForUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var urlPreviewForClosure: ((URL) async -> Result<URLPreview, ClientProxyError>)?
+
+    @concurrent func urlPreview(for url: URL) async -> Result<URLPreview, ClientProxyError> {
+        urlPreviewForCallsCountLock.withLock { urlPreviewForUnderlyingCallsCount += 1 }
+        urlPreviewForReceivedUrl = url
+        urlPreviewForReceivedInvocationsLock.withLock { urlPreviewForUnderlyingReceivedInvocations.append(url) }
+        if let urlPreviewForClosure = urlPreviewForClosure {
+            return await urlPreviewForClosure(url)
+        } else {
+            return urlPreviewForReturnValue
+        }
+    }
     //MARK: - clearCaches
 
     private let clearCachesCallsCountLock = NSLock()
@@ -10961,6 +11003,11 @@ nonisolated class RoomInfoProxyMock: RoomInfoProxyProtocol, @unchecked Sendable 
         set(value) { underlyingIsEncrypted = value }
     }
     nonisolated(unsafe) var underlyingIsEncrypted: Bool!
+    var isNotEncrypted: Bool {
+        get { return underlyingIsNotEncrypted }
+        set(value) { underlyingIsNotEncrypted = value }
+    }
+    nonisolated(unsafe) var underlyingIsNotEncrypted: Bool!
     var isDirect: Bool {
         get { return underlyingIsDirect }
         set(value) { underlyingIsDirect = value }

@@ -377,8 +377,12 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: false)
     var focusEventOnNotificationTap: Bool
     
+    /// Link previews in unencrypted rooms, which always come from the homeserver.
     @UserPreference(defaultValue: false)
-    var linkPreviewsEnabled: Bool
+    var unencryptedRoomsLinkPreviewsEnabled: Bool
+    
+    @UserPreference(defaultValue: LinkPreviewMode.off)
+    var encryptedRoomsLinkPreviewsMode: LinkPreviewMode
     
     /// Enables *sending* gallery messages (multiple media in a single message).
     /// Received galleries are always rendered regardless of this flag.
@@ -424,6 +428,16 @@ final nonisolated class AppSettings: @unchecked Sendable {
                                                                store: store,
                                                                bundledMapTilerConfiguration: bundledMapTilerConfiguration,
                                                                bundledBugReportRageshakeConfiguration: bundledBugReportRageshakeConfiguration))
+    }
+    
+    /// Carries the old link previews toggle over to the per room type settings.
+    func migrateLinkPreviewsSetting() {
+        let linkPreviewsEnabled: Bool? = store["linkPreviewsEnabled"]
+        guard linkPreviewsEnabled == true else { return }
+        
+        // The old toggle used Apple everywhere, unencrypted rooms now only use the homeserver.
+        unencryptedRoomsLinkPreviewsEnabled = true
+        encryptedRoomsLinkPreviewsMode = .apple
     }
     
     static func volatile() -> AppSettings {
