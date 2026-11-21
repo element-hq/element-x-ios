@@ -90,11 +90,16 @@ extension NSItemProvider {
             return nil
         }
         
-        let filename = if let suggestedName = suggestedName as NSString?,
-                          suggestedName.hasPathExtension {
-            suggestedName as String
-        } else if let suggestedName {
-            "\(suggestedName).\(contentType.fileExtension)"
+        let sourceFilename = await loadSourceFilename() as NSString?
+        let filename = if let sourceFilename,
+                          sourceFilename.hasPathExtension,
+                          UTType(filenameExtension: sourceFilename.pathExtension)?.conforms(to: contentType.type) == true {
+            sourceFilename as String
+        } else if let sourceFilename, sourceFilename.hasPathExtension {
+            // The loaded representation can differ from the source file (e.g. JPEG data for a HEIC photo).
+            "\(sourceFilename.deletingPathExtension).\(contentType.fileExtension)"
+        } else if let sourceFilename {
+            "\(sourceFilename).\(contentType.fileExtension)"
         } else {
             "\(UUID().uuidString).\(contentType.fileExtension)"
         }
@@ -103,6 +108,22 @@ extension NSItemProvider {
                                     filename: filename,
                                     withinAppGroupContainer: withinAppGroupContainer,
                                     providerDescription: providerDescription)
+    }
+    
+    /// The item's name at its source: the suggested name, or else the name of the file it was shared from.
+    private func loadSourceFilename() async -> String? {
+        if let suggestedName, !suggestedName.isEmpty {
+            return suggestedName
+        }
+        
+        // Apps sharing a file (e.g. Files) often leave `suggestedName` empty, but the file URL still has the name.
+        guard registeredContentTypes.contains(where: { $0.conforms(to: .fileURL) }),
+              let fileURL = await loadTransferable(type: URL.self),
+              fileURL.isFileURL else {
+            return nil
+        }
+        
+        return fileURL.lastPathComponent
     }
     
     // The next 2 methods are static as NSItemProvider isn't Sendable.
@@ -122,14 +143,17 @@ extension NSItemProvider {
                                providerDescription: providerDescription)
     }
     
+    /// Writes the data into a new unique folder, so it never clashes with a file of the same name that is waiting to be cleaned up.
     @concurrent private static func writeData(_ data: Data,
                                               filename: String,
                                               withinAppGroupContainer: Bool,
                                               providerDescription: String) async -> URL? {
         do {
-            return try FileManager.default.writeDataToTemporaryDirectory(data: data,
-                                                                         fileName: filename,
-                                                                         withinAppGroupContainer: withinAppGroupContainer)
+            // A slash would turn the name into a path that leaves the unique folder.
+            let newURL = try FileManager.default.createUniqueTemporaryDirectory(withinAppGroupContainer: withinAppGroupContainer)
+                .appending(component: filename.replacing("/", with: "-"))
+            try data.write(to: newURL)
+            return newURL
         } catch {
             MXLog.error("Failed storing NSItemProvider data \(providerDescription) with error: \(error)")
             return nil
