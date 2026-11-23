@@ -175,6 +175,14 @@ struct TimelineReactionButton: View {
     let showReactionSummary: (String) -> Void
     @ScaledMetric(relativeTo: .subheadline) private var lineHeight = 20
     
+    @Environment(\.shouldAutomaticallyLoadImages) private var shouldAutomaticallyLoadImages
+    @State private var isImageRevealed = false
+    
+    /// A hidden custom image is revealed by the first tap instead of toggling the reaction.
+    private var hidesImage: Bool {
+        reaction.imageURL != nil && !shouldAutomaticallyLoadImages && !isImageRevealed
+    }
+    
     private var accessibilityLabel: String {
         if reaction.isHighlighted {
             return reaction.count > 1 ? L10n.tr("Localizable", "screen_room_timeline_reaction_including_you_a11y", reaction.count - 1, reaction.displayKey) : L10n.screenRoomTimelineReactionYouA11y(reaction.displayKey)
@@ -189,7 +197,11 @@ struct TimelineReactionButton: View {
     var body: some View {
         label
             .onTapGesture {
-                toggleReaction(reaction.key)
+                if hidesImage {
+                    isImageRevealed = true
+                } else {
+                    toggleReaction(reaction.key)
+                }
             }
             .longPressWithFeedback {
                 showReactionSummary(reaction.key)
@@ -210,6 +222,7 @@ struct TimelineReactionButton: View {
                 // to the count text and the lineHeight/padding in the designs.
                 ReactionKeyView(reaction: reaction, mediaProvider: mediaProvider, size: lineHeight)
                     .font(.compound.bodySM)
+                    .environment(\.shouldAutomaticallyLoadImages, shouldAutomaticallyLoadImages || isImageRevealed)
                 Text(String(reaction.count))
                     .font(.compound.bodyMD)
                     .foregroundColor(textColor)
@@ -231,6 +244,8 @@ struct ReactionKeyView: View {
     let mediaProvider: MediaProviderProtocol?
     let size: CGFloat
     
+    @Environment(\.shouldAutomaticallyLoadImages) private var shouldAutomaticallyLoadImages
+    
     var body: some View {
         // Reaction keys carry no mimetype, so always hint `image/gif` to take LoadableImage's animated path. Kingfisher sniffs the actual format, so static images still render (full size, no thumbnail).
         if let imageURL = reaction.imageURL, let mediaSource = try? MediaSourceProxy(url: imageURL, mimeType: "image/gif") {
@@ -238,8 +253,19 @@ struct ReactionKeyView: View {
                           size: CGSize(width: size, height: size),
                           mediaProvider: mediaProvider,
                           transformer: { $0.scaledToFit() },
-                          placeholder: { Color.clear })
-                .frame(width: size, height: size)
+                          placeholder: {
+                              Group {
+                                  if shouldAutomaticallyLoadImages {
+                                      Color.clear
+                                  } else {
+                                      Image.compound.image
+                                          .resizable()
+                                          .scaledToFit()
+                                          .foregroundStyle(.compound.iconSecondary)
+                                  }
+                              }
+                          })
+                          .frame(width: size, height: size)
         } else {
             Text(reaction.displayKey)
         }
