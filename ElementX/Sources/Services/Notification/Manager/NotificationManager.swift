@@ -7,6 +7,7 @@
 //
 
 import Combine
+import MatrixRustSDK
 import SwiftUI
 import UserNotifications
 
@@ -20,16 +21,30 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
     private var deviceToken: Data?
     private var services: [String: NotificationServiceProtocol] = [:]
     private var serviceCancellables: [String: Set<AnyCancellable>] = [:]
+    /// Every signed in account, including those without a live session yet.
+    private let userIDsPublisher: CurrentValuePublisher<[String], Never>
     private var cancellables = Set<AnyCancellable>()
     
     private var isAnyAccountEnabled: Bool {
         services.values.contains { $0.isEnabled }
     }
     
-    init(notificationCenter: UserNotificationCenterProtocol, appSettings: AppSettings) {
+    init(notificationCenter: UserNotificationCenterProtocol,
+         userIDsPublisher: CurrentValuePublisher<[String], Never>,
+         appSettings: AppSettings) {
         self.notificationCenter = notificationCenter
+        self.userIDsPublisher = userIDsPublisher
         self.appSettings = appSettings
         super.init()
+        
+        userIDsPublisher
+            .sink { [weak self] _ in
+                guard let self else { return }
+                for service in services.values {
+                    service.updateRegistrationParameters(appendsPusher: shouldAppendPusher(for: service.userID))
+                }
+            }
+            .store(in: &cancellables)
     }
     
     // MARK: NotificationManagerProtocol
@@ -67,7 +82,7 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
     func register(with deviceToken: Data) async {
         self.deviceToken = deviceToken
         for service in services.values {
-            await service.register(deviceToken: deviceToken)
+            await service.register(makeRegistrationParameters(for: service.userID, deviceToken: deviceToken))
         }
     }
     
@@ -105,7 +120,7 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
         ]
         
         if let deviceToken {
-            Task { await service.register(deviceToken: deviceToken) }
+            Task { await service.register(makeRegistrationParameters(for: userID, deviceToken: deviceToken)) }
         } else {
             registerForRemoteNotificationsIfAuthorized()
         }
@@ -168,6 +183,22 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
             guard await notificationCenter.authorizationStatus() == .authorized else { return }
             delegate?.registerForRemoteNotifications()
         }
+    }
+    
+    private func makeRegistrationParameters(for userID: String, deviceToken: Data) -> NotificationService.RegistrationParameters {
+        .init(deviceToken: deviceToken, appendsPusher: shouldAppendPusher(for: userID))
+    }
+    
+    /// Whether the account's pusher should be added alongside other users' pushers for this device, rather than replacing them.
+    ///
+    /// Only `true` when the app has another signed in account on the same server, so its pusher is kept. Otherwise `false` to
+    /// remove any pushers left behind by failed logouts.
+    ///
+    /// **Note:** Pushers left behind by failed logouts aren't removed while another account shares the server.
+    /// This is a known limitation of the current implementation that can't be solved with the CS APIs available.
+    private func shouldAppendPusher(for userID: String) -> Bool {
+        guard let serverName = try? serverNameFromUserId(userId: userID) else { return false }
+        return userIDsPublisher.value.contains { $0 != userID && (try? serverNameFromUserId(userId: $0)) == serverName }
     }
     
     private func updateAppBadgeCount() {

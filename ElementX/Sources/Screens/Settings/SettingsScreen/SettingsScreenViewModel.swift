@@ -33,7 +33,7 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         super.init(initialViewState: .init(deviceID: userSession.clientProxy.deviceID,
                                            userProfile: userSession.clientProxy.userProfilePublisher.value,
                                            showLinkNewDeviceButton: userSettings.app.linkNewDeviceEnabled,
-                                           showSwitchAccountsSection: userSettings.app.multiAccountEnabled,
+                                           showAddAccountRow: userSettings.app.multiAccountEnabled,
                                            showAccountDeactivation: userSession.clientProxy.canDeactivateAccount,
                                            showDeveloperOptions: userSettings.app.developerOptionsEnabled,
                                            showAnalyticsSettings: userSettings.app.canPromptForAnalytics,
@@ -51,7 +51,7 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             .store(in: &cancellables)
         
         userSettings.app.multiAccountEnabledPublisher
-            .weakAssign(to: \.state.showSwitchAccountsSection, on: self)
+            .weakAssign(to: \.state.showAddAccountRow, on: self)
             .store(in: &cancellables)
         
         let userID = userSession.clientProxy.userID

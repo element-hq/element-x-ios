@@ -23,6 +23,7 @@ final class UserSessionManager: UserSessionManagerProtocol {
     private let userSessionMigrator: UserSessionMigratorProtocol
     private let signposter: Signposter
     
+    private let userIDsSubject: CurrentValueSubject<[String], Never>
     private let sessionsSubject = CurrentValueSubject<[UserSessionProtocol], Never>([])
     private let callbacksSubject = PassthroughSubject<UserSessionManagerCallback, Never>()
     private var authErrorsCancellable: AnyCancellable?
@@ -43,6 +44,7 @@ final class UserSessionManager: UserSessionManagerProtocol {
     /// Assigning `nil` removes an account rather than clearing its session.
     private var accounts: OrderedDictionary<String, UserSessionProtocol?> = [:] {
         didSet {
+            userIDsSubject.send(Array(accounts.keys))
             sessionsSubject.send(accounts.values.compactMap { $0 })
             if accounts.isEmpty {
                 loadingStateCancellable = nil
@@ -70,12 +72,8 @@ final class UserSessionManager: UserSessionManagerProtocol {
         userSessionStore.clientSessionDelegate
     }
     
-    /// Whether an account has a session that's live and up to date (its caches weren't cleared).
-    private var hasLiveSession: Bool {
-        accounts.contains { userID, userSession in userSession != nil && !clearedUserIDs.contains(userID) }
-    }
-    
     init(userSessionStore: UserSessionStoreProtocol,
+         userIDsSubject: CurrentValueSubject<[String], Never>,
          appSettings: AppSettings,
          notificationManager: NotificationManagerProtocol,
          liveLocationManager: LiveLocationManagerProtocol,
@@ -83,6 +81,7 @@ final class UserSessionManager: UserSessionManagerProtocol {
          userSessionMigrator: UserSessionMigratorProtocol,
          signposter: Signposter) {
         self.userSessionStore = userSessionStore
+        self.userIDsSubject = userIDsSubject
         self.appSettings = appSettings
         self.notificationManager = notificationManager
         self.liveLocationManager = liveLocationManager
@@ -103,6 +102,7 @@ final class UserSessionManager: UserSessionManagerProtocol {
             }
             .map(\.userID)
         accounts = OrderedDictionary(uniqueKeysWithValues: userIDs.map { ($0, UserSessionProtocol?.none) })
+        userIDsSubject.send(userIDs) // Manually run `accounts`'s didSet for userIDs.
         
         authErrorsCancellable = sessionsSubject
             .map { userSessions in
@@ -154,8 +154,6 @@ final class UserSessionManager: UserSessionManagerProtocol {
     
     private func restoreAccounts() async {
         for userID in accounts.keys where session(for: userID) == nil || clearedUserIDs.contains(userID) {
-            // Every live session syncs, so without multi-account only one account is ever made live.
-            guard appSettings.multiAccountEnabled || !hasLiveSession else { return }
             // Skip any account that was removed while restoring those before it.
             guard accounts.keys.contains(userID), let userSession = await restoreUserSession(userID: userID) else { continue }
             

@@ -96,7 +96,9 @@ struct SettingsScreen: View {
                         otherAccountRow(account)
                     }
                     
-                    addAccountRow
+                    if context.viewState.showAddAccountRow {
+                        addAccountRow
+                    }
                 }
             }
         }

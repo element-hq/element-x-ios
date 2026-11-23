@@ -15,6 +15,14 @@ enum NotificationServiceAction {
     case requestAuthorization
 }
 
+extension NotificationService {
+    struct RegistrationParameters {
+        let deviceToken: Data
+        /// Whether to keep pushers registered to this device against other user IDs.
+        var appendsPusher: Bool
+    }
+}
+
 // sourcery: AutoMockable
 protocol NotificationServiceProtocol: AnyObject {
     var userID: String { get }
@@ -26,7 +34,9 @@ protocol NotificationServiceProtocol: AnyObject {
     var badgeCountPublisher: CurrentValuePublisher<Int, Never> { get }
     
     /// Sets the pusher when notifications are on, otherwise deletes it. The pusher follows the switch from then on.
-    func register(deviceToken: Data) async
+    func register(_ parameters: NotificationService.RegistrationParameters) async
+    /// Updates the registration parameters used next time a pusher is set.
+    func updateRegistrationParameters(appendsPusher: Bool)
     func requestAuthorization()
     func removeDeliveredMessageNotifications(for roomID: String)
     /// Deletes the pusher and this account's delivered notifications, before signing out.

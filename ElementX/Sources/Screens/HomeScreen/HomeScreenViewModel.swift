@@ -223,8 +223,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         case .multiAccountAnnouncementAppeared:
             MXLog.info("The multi-account announcement has been seen.")
             userSettings.app.hasSeenMultiAccountAnnouncement = true
-        case .dismissMultiAccountAnnouncement, .addAccount: // There is no add account flow to start yet.
+        case .dismissMultiAccountAnnouncement:
             state.bindings.isPresentingMultiAccountAnnouncement = false
+        case .addAccount:
+            state.bindings.isPresentingMultiAccountAnnouncement = false
+            actionsSubject.send(.addAccount)
         case .updateVisibleItemRange(let range):
             roomSummaryProvider?.updateVisibleRange(range)
         case .startChat:

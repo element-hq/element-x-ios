@@ -17,6 +17,7 @@ struct UserSessionManagerTests {
     let notificationManager = NotificationManagerMock()
     let liveLocationManager = LiveLocationManagerMock()
     let elementCallManager = ElementCallManagerMock()
+    let userIDsSubject = CurrentValueSubject<[String], Never>([])
     
     @Test("Accounts are ordered by when they were last selected")
     func accountOrder() {
@@ -68,22 +69,8 @@ struct UserSessionManagerTests {
         #expect(recorder.restoredUserIDs.isEmpty)
     }
     
-    @Test("Restoring makes only one account live without multi-account")
-    func restoreSingleAccount() async {
-        let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org"])
-        let sessions = ["@alice:matrix.org": makeUserSession(userID: "@alice:matrix.org"), "@bob:matrix.org": makeUserSession(userID: "@bob:matrix.org")]
-        userSessionStore.restoreUserSessionUserIDClosure = { userID in sessions[userID].map { .success($0) } ?? .failure(.failedRestoringLogin) }
-        
-        await manager.restoreSessions()
-        
-        #expect(userSessionStore.restoreUserSessionUserIDReceivedInvocations == ["@alice:matrix.org"])
-        #expect(manager.userIDs == ["@alice:matrix.org", "@bob:matrix.org"])
-        #expect(manager.sessionsPublisher.value.map(\.clientProxy.userID) == ["@alice:matrix.org"])
-    }
-    
-    @Test("Restoring makes every account live with multi-account")
-    func restoreMultiAccount() async {
-        appSettings.multiAccountEnabled = true
+    @Test("Restoring makes every account live")
+    func restoreMultipleAccounts() async {
         let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org"])
         let aliceClientProxy = ClientProxyMock(.init(userID: "@alice:matrix.org"))
         let bobClientProxy = ClientProxyMock(.init(userID: "@bob:matrix.org"))
@@ -101,9 +88,20 @@ struct UserSessionManagerTests {
         #expect(manager.activeSession?.clientProxy.userID == "@alice:matrix.org")
     }
     
+    @Test("The accounts are published from the start and kept up to date")
+    func userIDsPublishing() {
+        let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org"])
+        #expect(userIDsSubject.value == ["@alice:matrix.org", "@bob:matrix.org"])
+        
+        manager.addNewSession(makeUserSession(userID: "@carol:matrix.org"))
+        #expect(userIDsSubject.value == ["@carol:matrix.org", "@alice:matrix.org", "@bob:matrix.org"])
+        
+        manager.remove(userID: "@alice:matrix.org")
+        #expect(userIDsSubject.value == ["@carol:matrix.org", "@bob:matrix.org"])
+    }
+    
     @Test("Restoring skips accounts that are already live")
     func restoreSkipsLiveAccounts() async {
-        appSettings.multiAccountEnabled = true
         let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org"])
         manager.addNewSession(makeUserSession(userID: "@alice:matrix.org"))
         userSessionStore.restoreUserSessionUserIDReturnValue = .success(makeUserSession(userID: "@bob:matrix.org"))
@@ -154,7 +152,6 @@ struct UserSessionManagerTests {
     
     @Test("Clearing the caches pauses the account's session and replaces it by restoring the account")
     func clearCachesReplacesSession() async {
-        appSettings.multiAccountEnabled = true
         let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org"])
         let aliceClientProxy = ClientProxyMock(.init(userID: "@alice:matrix.org"))
         aliceClientProxy.clearCachesReturnValue = .success(())
@@ -185,7 +182,6 @@ struct UserSessionManagerTests {
     
     @Test("Restoring after clearing the caches falls back to a live account")
     func restoreAfterClearingCaches() async {
-        appSettings.multiAccountEnabled = true
         let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org"])
         let aliceClientProxy = ClientProxyMock(.init(userID: "@alice:matrix.org"))
         aliceClientProxy.clearCachesReturnValue = .success(())
@@ -203,7 +199,6 @@ struct UserSessionManagerTests {
     
     @Test("Logging out an account mid-restore doesn't stop the other accounts restoring")
     func logoutDuringRestore() async {
-        appSettings.multiAccountEnabled = true
         let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org", "@carol:matrix.org"])
         manager.addNewSession(makeUserSession(userID: "@alice:matrix.org"))
         let sessions = ["@bob:matrix.org": makeUserSession(userID: "@bob:matrix.org"), "@carol:matrix.org": makeUserSession(userID: "@carol:matrix.org")]
@@ -222,7 +217,6 @@ struct UserSessionManagerTests {
     
     @Test("An account removed while it's restoring isn't added back")
     func removalDuringRestore() async {
-        appSettings.multiAccountEnabled = true
         let manager = makeManager(userIDs: ["@alice:matrix.org"])
         let aliceClientProxy = ClientProxyMock(.init(userID: "@alice:matrix.org"))
         aliceClientProxy.clearCachesReturnValue = .success(())
@@ -305,7 +299,6 @@ struct UserSessionManagerTests {
     
     @Test("Logging out tears down and removes only the given account")
     func logoutOneAccount() async throws {
-        appSettings.multiAccountEnabled = true
         let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org"])
         let aliceClientProxy = ClientProxyMock(.init(userID: "@alice:matrix.org"))
         let aliceNotificationService = NotificationServiceMock(.init())
@@ -501,7 +494,6 @@ struct UserSessionManagerTests {
     
     @Test("An auth error logs out only the account it belongs to, even when it isn't the active one")
     func authError() async throws {
-        appSettings.multiAccountEnabled = true
         let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org"])
         let aliceClientProxy = ClientProxyMock(.init(userID: "@alice:matrix.org"))
         let bobClientProxy = ClientProxyMock(.init(userID: "@bob:matrix.org"))
@@ -559,7 +551,6 @@ struct UserSessionManagerTests {
     
     @Test("Restoring loads the profiles of the other accounts, but leaves the active one's to the home screen")
     func profileLoading() async throws {
-        appSettings.multiAccountEnabled = true
         let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org"])
         let aliceClientProxy = ClientProxyMock(.init(userID: "@alice:matrix.org"))
         let bobClientProxy = ClientProxyMock(.init(userID: "@bob:matrix.org"))
@@ -583,6 +574,7 @@ struct UserSessionManagerTests {
     private func makeManager(userIDs: [String]) -> UserSessionManager {
         userSessionStore.userIDs = userIDs
         return UserSessionManager(userSessionStore: userSessionStore,
+                                  userIDsSubject: userIDsSubject,
                                   appSettings: appSettings,
                                   notificationManager: notificationManager,
                                   liveLocationManager: liveLocationManager,
