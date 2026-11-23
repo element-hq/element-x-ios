@@ -101,10 +101,6 @@ struct DeveloperOptionsScreen: View {
                     Text("Adds a button to jump to the read marker, plus a presence dot on the scroll-to-bottom button when new messages arrive while scrolled away.")
                 }
                 
-                Toggle(isOn: $context.reactionCelebrationsEnabled) {
-                    Text("Reaction celebrations")
-                }
-                
                 Toggle(isOn: $context.imageDrawingEnabled) {
                     Text("Draw on images")
                     Text("Adds a pencil next to crop when sending a picture.")

@@ -1221,8 +1221,6 @@ private extension TimelineViewModel {
     ]
     
     func prepareIncomingReactionEffects(in timelineItems: [RoomTimelineItemProtocol]) {
-        guard userSettings.app.reactionCelebrationsEnabled else { return }
-        
         for case let item as EventBasedTimelineItemProtocol in timelineItems {
             for reaction in item.properties.reactions where reactionEffectType(for: reaction.key) != nil {
                 for sender in reaction.senders where sender.id != roomProxy.ownUserID && sender.timestamp > reactionEffectsStartDate {
@@ -1235,8 +1233,7 @@ private extension TimelineViewModel {
     }
     
     func prepareReactionEffect(for key: String, on itemID: TimelineItemIdentifier) {
-        guard userSettings.app.reactionCelebrationsEnabled,
-              !UIAccessibility.isReduceMotionEnabled,
+        guard !UIAccessibility.isReduceMotionEnabled,
               !ProcessInfo.processInfo.isLowPowerModeEnabled,
               let type = reactionEffectType(for: key) else {
             return
