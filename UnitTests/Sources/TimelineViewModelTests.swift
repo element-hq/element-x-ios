@@ -942,21 +942,6 @@ final class TimelineViewModelTests {
     }
     
     @Test
-    func skipReactionEffectWhenDisabled() async throws {
-        let item = TextRoomTimelineItem(text: "Message", sender: "bob")
-        let userSettings = UserSettings.mock()
-        userSettings.app.reactionCelebrationsEnabled = false
-        let viewModel = makeViewModel(timelineController: TimelineControllerMock(.init(timelineItems: [item])), userSettings: userSettings)
-        
-        // When adding a tada reaction without the feature flag.
-        let deferred = deferFailure(viewModel.context.$viewState, timeout: .milliseconds(300)) { $0.pendingReactionEffect != nil }
-        viewModel.process(viewAction: .toggleReaction(key: "🎉", itemID: item.id))
-        
-        // Then no effect plays.
-        try await deferred.fulfill()
-    }
-    
-    @Test
     func playEffectOnlyForAddedTadaReactions() async throws {
         // Given a message the user has already sent a tada reaction to.
         let sender = "@bob:server.com"
@@ -1092,9 +1077,7 @@ final class TimelineViewModelTests {
     }
     
     private func makeReactionEffectsViewModel(item: RoomTimelineItemProtocol, timelineController: TimelineControllerMock? = nil) -> TimelineViewModel {
-        let userSettings = UserSettings.mock()
-        userSettings.app.reactionCelebrationsEnabled = true
-        return makeViewModel(timelineController: timelineController ?? TimelineControllerMock(.init(timelineItems: [item])), userSettings: userSettings)
+        makeViewModel(timelineController: timelineController ?? TimelineControllerMock(.init(timelineItems: [item])))
     }
     
     /// Starts a selection the way the app does, by choosing Forward on the item.
