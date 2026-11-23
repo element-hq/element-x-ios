@@ -50,7 +50,7 @@ private struct VisualListItemLabelStyle: LabelStyle {
             configuration.icon
             configuration.title
         }
-        .font(.compound.bodyMD)
+        .font(.compound.bodyMDSemibold)
         .foregroundColor(.compound.textPrimary)
     }
 }
