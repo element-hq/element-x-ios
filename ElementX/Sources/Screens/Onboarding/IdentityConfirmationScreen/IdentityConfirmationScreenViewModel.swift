@@ -23,7 +23,9 @@ class IdentityConfirmationScreenViewModel: IdentityConfirmationScreenViewModelTy
         self.userSession = userSession
         
         super.init(initialViewState: IdentityConfirmationScreenViewState(isUnverified: userSession.sessionSecurityStatePublisher.value.verificationState == .unverified,
-                                                                         learnMoreURL: userSettings.app.deviceVerificationURL))
+                                                                         learnMoreURL: userSettings.app.deviceVerificationURL,
+                                                                         userProfile: userSession.clientProxy.userProfilePublisher.value),
+                   mediaProvider: userSession.mediaProvider)
         
         Task { [weak self] in
             for await state in userSession.sessionSecurityStatePublisher.values {
@@ -32,6 +34,11 @@ class IdentityConfirmationScreenViewModel: IdentityConfirmationScreenViewModelTy
             }
         }
         .store(in: &cancellables)
+        
+        userSession.clientProxy.userProfilePublisher
+            .receive(on: DispatchQueue.main)
+            .weakAssign(to: \.state.userProfile, on: self)
+            .store(in: &cancellables)
     }
     
     // MARK: - Public

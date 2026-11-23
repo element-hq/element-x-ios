@@ -68,6 +68,7 @@ enum UserAvatarSizeOnScreen {
     case settings
     case settingsOtherAccount
     case settingsOtherAccountsStack
+    case accountInfoCard
     case roomDetails
     case roomMembersList
     case roomChangeRoles
@@ -86,7 +87,6 @@ enum UserAvatarSizeOnScreen {
     case knockingUserList
     case mediaPreviewDetails
     case sendInviteConfirmation
-    case sessionVerification
     case threadList
     case threadSummary
     case map
@@ -105,7 +105,7 @@ enum UserAvatarSizeOnScreen {
             24
         case .knockingUsersBannerStack:
             28
-        case .chatsCompact, .spacesCompact, .map,
+        case .chatsCompact, .spacesCompact, .accountInfoCard, .map,
              .timeline, .readReceiptSheet, .completionSuggestions,
              .blockedUsers, .roomMembersList, .knockingUserBanner, .settingsOtherAccount:
             32
@@ -115,8 +115,8 @@ enum UserAvatarSizeOnScreen {
             40
         case .roomDetails:
             44
-        case .inviteUsers, .knockingUserList, .sessionVerification,
-             .settings, .threadList, .mediaPreviewDetails, .search:
+        case .settings, .inviteUsers, .knockingUserList,
+             .threadList, .mediaPreviewDetails, .search:
             52
         case .roomChangeRoles:
             56

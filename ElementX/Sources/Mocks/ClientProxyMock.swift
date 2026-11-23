@@ -22,6 +22,7 @@ struct ClientProxyMockConfiguration {
     var roomPreviews: [RoomPreviewProxyProtocol]?
     var defaultRoomMembers: [RoomMemberProxyMock] = .allMembers
     var roomDirectorySearchProxy: RoomDirectorySearchProxyProtocol?
+    var homeserverReachability: HomeserverReachability = .reachable
     var overrides = Overrides()
     
     var recoveryState: SecureBackupRecoveryState = .enabled
@@ -74,7 +75,7 @@ extension ClientProxyMock {
         actionsPublisher = PassthroughSubject<ClientProxyAction, Never>().eraseToAnyPublisher()
         loadingStatePublisher = .init(.notLoading)
         verificationStatePublisher = .init(.unknown)
-        homeserverReachabilityPublisher = .init(.reachable)
+        homeserverReachabilityPublisher = .init(configuration.homeserverReachability)
         
         userProfilePublisher = .init(UserProfile(userID: configuration.userID,
                                                  displayName: configuration.displayName,
