@@ -46,8 +46,8 @@ final class EmoticonAttachmentViewProvider: NSTextAttachmentViewProvider {
             
             let hidesImage = provider.delegate?.timelineContext?.viewState.hideTimelineMedia ?? false
             let view = EmoticonView(mediaSource: mediaSource, mediaProvider: mediaProvider, hidesImage: hidesImage) { [weak provider] in
-                // TextKit only shows attachment views when drawing them, so this redraw
-                // stops an image that loads after the text was drawn from staying hidden.
+                // TextKit only shows attachment views when drawing them, so this redraw stops
+                // an image or placeholder that appears after the text was drawn from staying hidden.
                 provider?.delegate?.invalidateTextAttachmentsDisplay()
             }
             let controller = UIHostingController(rootView: view)
@@ -64,14 +64,14 @@ private struct EmoticonView: View {
     let mediaSource: MediaSourceProxy
     let mediaProvider: MediaProviderProtocol?
     let hidesImage: Bool
-    let onImageAppear: () -> Void
+    let onViewAppear: () -> Void
     
     @State private var isRevealed = false
     
     var body: some View {
         LoadableImage(mediaSource: mediaSource,
                       mediaProvider: mediaProvider,
-                      transformer: { $0.scaledToFit().onAppear(perform: onImageAppear) },
+                      transformer: { $0.scaledToFit().onAppear(perform: onViewAppear) },
                       placeholder: {
                           Group {
                               if hidesImage, !isRevealed {
@@ -82,6 +82,7 @@ private struct EmoticonView: View {
                                           .foregroundStyle(.compound.iconSecondary)
                                   }
                                   .buttonStyle(.plain)
+                                  .onAppear(perform: onViewAppear)
                               } else {
                                   Color.clear
                               }
