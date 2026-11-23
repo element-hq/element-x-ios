@@ -68,6 +68,7 @@ private struct UserProfileDetailsView: View {
                                 contentID: userProfile.id,
                                 avatarSize: .user(on: .accountInfoCard),
                                 mediaProvider: mediaProvider)
+                .accessibilityHidden(true)
             
             VStack(alignment: .leading, spacing: 2) {
                 Text(userProfile.displayName ?? userProfile.id)
