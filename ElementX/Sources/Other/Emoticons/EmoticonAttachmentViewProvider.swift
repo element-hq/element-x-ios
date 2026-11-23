@@ -44,20 +44,49 @@ final class EmoticonAttachmentViewProvider: NSTextAttachmentViewProvider {
                 provider.delegate?.timelineContext?.mediaProvider
             }
             
-            let view = LoadableImage(mediaSource: mediaSource,
-                                     mediaProvider: mediaProvider,
-                                     transformer: { [weak provider] in
-                                         $0
-                                             .scaledToFit()
-                                             // TextKit only shows attachment views when drawing them, so this redraw
-                                             // stops an image that loads after the text was drawn from staying hidden.
-                                             .onAppear { provider?.delegate?.invalidateTextAttachmentsDisplay() }
-                                     },
-                                     placeholder: { Color.clear })
+            let hidesImage = provider.delegate?.timelineContext?.viewState.hideTimelineMedia ?? false
+            let view = EmoticonView(mediaSource: mediaSource, mediaProvider: mediaProvider, hidesImage: hidesImage) { [weak provider] in
+                // TextKit only shows attachment views when drawing them, so this redraw
+                // stops an image that loads after the text was drawn from staying hidden.
+                provider?.delegate?.invalidateTextAttachmentsDisplay()
+            }
             let controller = UIHostingController(rootView: view)
             controller.view.backgroundColor = .clear
-            controller.view.isUserInteractionEnabled = false
+            // Only interactive while hidden, for the tap to reveal.
+            controller.view.isUserInteractionEnabled = hidesImage
             provider.view = controller.view
         }
+    }
+}
+
+/// An emoticon's image, hidden behind a tap to reveal when the timeline hides its media.
+private struct EmoticonView: View {
+    let mediaSource: MediaSourceProxy
+    let mediaProvider: MediaProviderProtocol?
+    let hidesImage: Bool
+    let onImageAppear: () -> Void
+    
+    @State private var isRevealed = false
+    
+    var body: some View {
+        LoadableImage(mediaSource: mediaSource,
+                      mediaProvider: mediaProvider,
+                      transformer: { $0.scaledToFit().onAppear(perform: onImageAppear) },
+                      placeholder: {
+                          Group {
+                              if hidesImage, !isRevealed {
+                                  Button { isRevealed = true } label: {
+                                      Image.compound.image
+                                          .resizable()
+                                          .scaledToFit()
+                                          .foregroundStyle(.compound.iconSecondary)
+                                  }
+                                  .buttonStyle(.plain)
+                              } else {
+                                  Color.clear
+                              }
+                          }
+                      })
+                      .environment(\.shouldAutomaticallyLoadImages, !hidesImage || isRevealed)
     }
 }
