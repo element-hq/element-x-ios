@@ -500,9 +500,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 switch action {
                 case .cancel:
                     navigationTabCoordinator.setSheetCoordinator(nil)
-                case .chatBackupSettings:
-                    navigationTabCoordinator.setSheetCoordinator(nil)
-                    handleAppRoute(.chatBackupSettings, animated: true)
                 case .logout:
                     actionsSubject.send(.logout)
                 }

@@ -65,8 +65,6 @@ class SecureBackupLogoutConfirmationScreenViewModel: SecureBackupLogoutConfirmat
             requestRecoveryKey { .checkRecoveryKey($0) }
         case .generateRecoveryKey:
             requestRecoveryKey { .generateRecoveryKey($0) }
-        case .chatBackupSettings:
-            actionsSubject.send(.chatBackupSettings)
         case .logout:
             attemptLogout()
         }
