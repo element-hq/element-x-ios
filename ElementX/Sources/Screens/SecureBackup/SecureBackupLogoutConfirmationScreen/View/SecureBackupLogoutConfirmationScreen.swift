@@ -90,7 +90,7 @@ struct SecureBackupLogoutConfirmationScreen: View {
     private var buttons: some View {
         VStack(spacing: 16) {
             switch mode {
-            case .otherVerifiedDevice:
+            case .confirmationOnly:
                 Button(L10n.actionRemove, role: .destructive) {
                     context.send(viewAction: .logout)
                 }
@@ -117,17 +117,6 @@ struct SecureBackupLogoutConfirmationScreen: View {
                     context.send(viewAction: .generateRecoveryKey)
                 }
                 .buttonStyle(.compound(.tertiary))
-            case .noBackup:
-                Button(L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) {
-                    context.send(viewAction: .logout)
-                }
-                .buttonStyle(.compound(.primary))
-                .accessibilityIdentifier(A11yIdentifiers.secureBackupLogoutConfirmationScreen.logout)
-                
-                Button(L10n.commonSettings) {
-                    context.send(viewAction: .chatBackupSettings)
-                }
-                .buttonStyle(.compound(.secondary))
             case .noRecovery:
                 Button {
                     context.send(viewAction: .generateRecoveryKey)
@@ -166,9 +155,8 @@ struct SecureBackupLogoutConfirmationScreen: View {
 
 @available(iOS 26.0, *)
 struct SecureBackupLogoutConfirmationScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = makeViewModel(mode: .otherVerifiedDevice)
+    static let viewModel = makeViewModel(mode: .confirmationOnly)
     static let saveRecoveryKeyViewModel = makeViewModel(mode: .saveRecoveryKey)
-    static let noBackupViewModel = makeViewModel(mode: .noBackup)
     static let noRecoveryViewModel = makeViewModel(mode: .noRecovery)
     static let waitingViewModel = makeViewModel(mode: .waitingToStart(hasStalled: false))
     static let ongoingViewModel = makeViewModel(mode: .backupOngoing(progress: 0.5))
@@ -184,11 +172,6 @@ struct SecureBackupLogoutConfirmationScreen_Previews: PreviewProvider, TestableP
             SecureBackupLogoutConfirmationScreen(context: saveRecoveryKeyViewModel.context)
         }
         .previewDisplayName("Save Recovery Key")
-        
-        ElementNavigationStack {
-            SecureBackupLogoutConfirmationScreen(context: noBackupViewModel.context)
-        }
-        .previewDisplayName("No Backup")
         
         ElementNavigationStack {
             SecureBackupLogoutConfirmationScreen(context: noRecoveryViewModel.context)

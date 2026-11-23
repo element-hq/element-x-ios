@@ -23,7 +23,6 @@ struct SecureBackupLogoutConfirmationScreenViewModelTests {
     
     init() {
         secureBackupController = SecureBackupControllerMock()
-        secureBackupController.keyBackupState = CurrentValueSubject<SecureBackupKeyBackupState, Never>(.enabled).asCurrentValuePublisher()
         
         reachabilitySubject = CurrentValueSubject<HomeserverReachability, Never>(.reachable)
         
@@ -42,19 +41,16 @@ struct SecureBackupLogoutConfirmationScreenViewModelTests {
     }
     
     @Test("The screen starts in the right mode based on the user's recovery options",
-          arguments: [(true, SecureBackupRecoveryState.enabled, SecureBackupKeyBackupState.enabled, SecureBackupLogoutConfirmationScreenViewMode.otherVerifiedDevice),
-                      (true, .disabled, .unknown, .otherVerifiedDevice),
-                      (false, .enabled, .enabled, .saveRecoveryKey),
-                      (false, .enabled, .unknown, .noBackup),
-                      (false, .incomplete, .enabled, .noRecovery),
-                      (false, .disabled, .unknown, .noRecovery)])
+          arguments: [(true, SecureBackupRecoveryState.enabled, SecureBackupLogoutConfirmationScreenViewMode.confirmationOnly),
+                      (true, .disabled, .confirmationOnly),
+                      (false, .enabled, .saveRecoveryKey),
+                      (false, .incomplete, .noRecovery),
+                      (false, .disabled, .noRecovery)])
     func modeFromRecoveryOptions(hasOtherVerifiedDevice: Bool,
                                  recoveryState: SecureBackupRecoveryState,
-                                 keyBackupState: SecureBackupKeyBackupState,
                                  expectedMode: SecureBackupLogoutConfirmationScreenViewMode) {
         let mode = SecureBackupLogoutConfirmationScreenViewMode(hasOtherVerifiedDevice: hasOtherVerifiedDevice,
-                                                                recoveryState: recoveryState,
-                                                                keyBackupState: keyBackupState)
+                                                                recoveryState: recoveryState)
         #expect(mode == expectedMode)
     }
     
@@ -111,7 +107,7 @@ struct SecureBackupLogoutConfirmationScreenViewModelTests {
     }
     
     @Test("Removing the device logs out straight away when there are no keys to back up",
-          arguments: [SecureBackupLogoutConfirmationScreenViewMode.otherVerifiedDevice, .noBackup, .noRecovery])
+          arguments: [SecureBackupLogoutConfirmationScreenViewMode.confirmationOnly, .noRecovery])
     func logoutWithNothingToBackUp(mode: SecureBackupLogoutConfirmationScreenViewMode) async throws {
         let viewModel = SecureBackupLogoutConfirmationScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                                       mode: mode)
@@ -130,16 +126,6 @@ struct SecureBackupLogoutConfirmationScreenViewModelTests {
     func cancel() async throws {
         let deferred = deferFulfillment(viewModel.actions) { $0.isCancel }
         context.send(viewAction: .cancel)
-        try await deferred.fulfill()
-    }
-    
-    @Test("Opening the chat backup settings is forwarded to the coordinator")
-    func chatBackupSettings() async throws {
-        let viewModel = SecureBackupLogoutConfirmationScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                                                      mode: .noBackup)
-        
-        let deferred = deferFulfillment(viewModel.actions) { $0.isChatBackupSettings }
-        viewModel.context.send(viewAction: .chatBackupSettings)
         try await deferred.fulfill()
     }
     
@@ -198,13 +184,6 @@ private extension SecureBackupLogoutConfirmationScreenViewModelAction {
     var isGenerateRecoveryKey: Bool {
         switch self {
         case .generateRecoveryKey: true
-        default: false
-        }
-    }
-    
-    var isChatBackupSettings: Bool {
-        switch self {
-        case .chatBackupSettings: true
         default: false
         }
     }

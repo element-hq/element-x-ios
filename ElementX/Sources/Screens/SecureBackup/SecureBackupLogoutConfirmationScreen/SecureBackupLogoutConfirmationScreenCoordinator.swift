@@ -18,7 +18,6 @@ enum SecureBackupLogoutConfirmationScreenCoordinatorAction {
     case cancel
     case checkRecoveryKey(SecureBackupLogoutConfirmationScreenRecoveryKeyContinuation)
     case generateRecoveryKey(SecureBackupLogoutConfirmationScreenRecoveryKeyContinuation)
-    case chatBackupSettings
     case logout
 }
 
@@ -48,8 +47,6 @@ final class SecureBackupLogoutConfirmationScreenCoordinator: CoordinatorProtocol
                 actionsSubject.send(.checkRecoveryKey(continuation))
             case .generateRecoveryKey(let continuation):
                 actionsSubject.send(.generateRecoveryKey(continuation))
-            case .chatBackupSettings:
-                actionsSubject.send(.chatBackupSettings)
             case .logout:
                 actionsSubject.send(.logout)
             }

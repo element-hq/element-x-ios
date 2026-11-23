@@ -11,8 +11,6 @@ import SwiftState
 enum SecureBackupLogoutFlowCoordinatorAction {
     /// The user changed their mind about removing the device.
     case cancel
-    /// Show the chat backup settings screen.
-    case chatBackupSettings
     /// The device can now be removed.
     case logout
 }
@@ -118,8 +116,7 @@ class SecureBackupLogoutFlowCoordinator: FlowCoordinatorProtocol {
     private func presentConfirmationScreen() {
         let secureBackupController = userSession.clientProxy.secureBackupController
         let mode = SecureBackupLogoutConfirmationScreenViewMode(hasOtherVerifiedDevice: hasOtherVerifiedDevice,
-                                                                recoveryState: secureBackupController.recoveryState.value,
-                                                                keyBackupState: secureBackupController.keyBackupState.value)
+                                                                recoveryState: secureBackupController.recoveryState.value)
         
         let parameters = SecureBackupLogoutConfirmationScreenCoordinatorParameters(userSession: userSession, mode: mode)
         let coordinator = SecureBackupLogoutConfirmationScreenCoordinator(parameters: parameters)
@@ -135,8 +132,6 @@ class SecureBackupLogoutFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.checkRecoveryKey, userInfo: continuation)
                 case .generateRecoveryKey(let continuation):
                     stateMachine.tryEvent(.generateRecoveryKey, userInfo: continuation)
-                case .chatBackupSettings:
-                    actionsSubject.send(.chatBackupSettings)
                 case .logout:
                     actionsSubject.send(.logout)
                 }
