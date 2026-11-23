@@ -260,8 +260,11 @@ class TimelineMediaPreviewController: QLPreviewController {
     
     private func updateOverlayPosition() {
         // The overlay follows the finger whilst the preview is being dismissed.
-        guard interactiveDismissal == nil else { return }
-        guard let pageScrollView, let overlayView = downloadIndicatorHostingController.view else { return }
+        guard interactiveDismissal == nil,
+              let pageScrollView,
+              let overlayView = downloadIndicatorHostingController.view else {
+            return
+        }
         
         let pageWidth = pageScrollView.bounds.width
         guard pageWidth > 0 else { return }
