@@ -519,6 +519,10 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "RedactedRoomTimelineView_Previews")
     }
 
+    func testRemoteLogoutScreen() async throws {
+        try await performAccessibilityAudit(named: "RemoteLogoutScreen_Previews")
+    }
+
     func testReportContentScreen() async throws {
         try await performAccessibilityAudit(named: "ReportContentScreen_Previews")
     }

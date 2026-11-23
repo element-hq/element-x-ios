@@ -908,6 +908,13 @@ extension PreviewTests {
     }
 
     @Test
+    func remoteLogoutScreen() async throws {
+        for (index, preview) in RemoteLogoutScreen_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    @Test
     func reportContentScreen() async throws {
         for (index, preview) in ReportContentScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
