@@ -64,7 +64,7 @@ jobs:
               failures.push("Please add a `pr-` label to categorise the changelog entry.");
             }
 
-            if (pr.author_association !== "MEMBER" && files.some(file =>
+            if (!["MEMBER", "COLLABORATOR"].includes(pr.author_association) && files.some(file =>
               /(^|\/)(?!en\.lproj\/)[^/]+\.lproj\/.*\.strings(dict)?$/i.test(file.filename)
             )) {
               failures.push("Changes to translated strings detected. Please make these through Localazy.");
