@@ -107,8 +107,12 @@ final class ParticleEmitterLayerView: UIView {
         guard emitterType != .fireworks else { return }
         
         // A single burst of particles, they keep animating until their lifetime runs out.
+        let burstDuration: Duration = switch emitterType {
+        case .snowfall, .rainfall, .fire, .hearts: .milliseconds(1000)
+        default: .milliseconds(250)
+        }
         burstTask = Task {
-            guard await (try? Task.sleep(for: .milliseconds([.snowfall, .rainfall, .fire].contains(emitterType) ? 1000 : 250))) != nil else { return }
+            guard await (try? Task.sleep(for: burstDuration)) != nil else { return }
             emitterLayers.forEach { $0.birthRate = 0 }
         }
     }

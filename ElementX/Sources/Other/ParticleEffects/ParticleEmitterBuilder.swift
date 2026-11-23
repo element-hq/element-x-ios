@@ -40,16 +40,36 @@ enum ParticleEmitterBuilder {
         }
     }
     
-    /// Confetti made of hearts in the given colours, swaying instead of spinning.
+    /// Hearts in the given colours, floating gently up while they grow and fade away.
     static func buildHeartCells(colors: [UIColor]) -> [CAEmitterCell] {
         let heart = makeSymbolImage(systemName: "heart.fill", pointSize: 16)
         
         return colors.map { color in
-            let cell = makeConfettiCell(shape: heart, color: color)
+            let cell = CAEmitterCell()
+            cell.setContents(heart)
+            
             // The same amount of hearts however many colours they come in.
-            cell.birthRate = 480 / Float(colors.count)
-            cell.spin = 0
-            cell.spinRange = 2
+            cell.birthRate = 24 / Float(colors.count)
+            // Gone before the effect is removed, see `TimelineViewModel.Constants.particleEffectDuration`.
+            cell.lifetime = 3.5
+            cell.lifetimeRange = 0.5
+            
+            // Slow and slightly slowing down as they rise, drifting a little to either side.
+            cell.velocity = 100
+            cell.velocityRange = 30
+            cell.yAcceleration = 10
+            cell.emissionLongitude = -.pi / 2
+            cell.emissionRange = .pi / 10
+            
+            cell.color = color.withAlphaComponent(0.85).cgColor
+            cell.alphaSpeed = -0.25
+            
+            cell.scale = 0.5
+            cell.scaleRange = 0.2
+            cell.scaleSpeed = 0.1
+            
+            // A slight tilt instead of spinning.
+            cell.spinRange = 0.5
             return cell
         }
     }
