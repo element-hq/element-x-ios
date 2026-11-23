@@ -842,7 +842,7 @@
 "screen_encryption_reset_bullet_3" = "Je moet al je bestaande apparaten en contacten opnieuw verifiëren";
 "screen_encryption_reset_bullet_4" = "Any devices you’re signed in to will need to be reconfirmed";
 "screen_encryption_reset_footer" = "Stel je identiteit alleen opnieuw in als je geen toegang hebt tot een ander aangemeld apparaat en je je herstelsleutel kwijt bent.";
-"screen_encryption_reset_no_chats_message" = "It looks like you don’t have any chats yet. If this is correct, you can safely proceed with resetting your digital identity";
+"screen_encryption_reset_no_chats_message" = "It looks like you don’t have any encrypted chats yet. If this is correct, you can safely proceed with resetting your digital identity.";
 "screen_encryption_reset_no_options_subtitle" = "You don’t have access to any other verified devices or a recovery key, so you’ll need to reset your digital identity to continue using the app.";
 "screen_encryption_reset_no_options_title" = "You need to reset your digital identity";
 "screen_encryption_reset_subtitle" = "If you don’t have access to any other verified devices and you don’t have your recovery key, then you’ll need to reset your digital identity to continue using the app.";
@@ -851,7 +851,6 @@
 "screen_home_tab_search" = "Search";
 "screen_home_tab_spaces" = "Spaces";
 "screen_identity_confirmation_cannot_confirm" = "Kan ik dit niet bevestigen?";
-"screen_identity_confirmation_create_new_recovery_key" = "Maak een nieuwe herstelsleutel";
 "screen_identity_confirmation_sign_out" = "Sign out";
 "screen_identity_confirmation_subtitle" = "Verifieer dit apparaat om beveiligde berichten in te stellen.";
 "screen_identity_confirmation_title" = "Bevestig dat jij het bent";
@@ -1198,7 +1197,6 @@
 "screen_recovery_key_check_subtitle" = "Enter the recovery key you’ve saved to make sure that it’s correct and active.";
 "screen_recovery_key_check_success_title" = "Your recovery key is active";
 "screen_recovery_key_check_title" = "Check your recovery key";
-"screen_recovery_key_confirm_create_new_recovery_key" = "Maak een nieuwe herstelsleutel";
 "screen_recovery_key_confirm_description" = "Zorg ervoor dat niemand dit scherm kan zien!";
 "screen_recovery_key_confirm_error_content" = "Probeer het opnieuw om toegang tot je sleutelopslag te bevestigen.";
 "screen_recovery_key_confirm_error_title" = "Onjuiste herstelsleutel";
@@ -1299,9 +1297,6 @@
 "screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
 "screen_room_confirm_removal_title" = "Remove message?";
 "screen_room_details_add_topic_title" = "Onderwerp toevoegen";
-"screen_room_details_audio_push_to_talk" = "Push to talk";
-"screen_room_details_audio_title" = "Room Audio";
-"screen_room_details_audio_video_calls" = "Video calls";
 "screen_room_details_badge_encrypted" = "Versleuteld";
 "screen_room_details_badge_not_encrypted" = "Niet versleuteld";
 "screen_room_details_badge_public" = "Openbare kamer";
@@ -1549,6 +1544,9 @@
 "screen_session_verification_waiting_subtitle" = "Once accepted you’ll be able to continue with the verification.";
 "screen_session_verification_waiting_to_accept_title" = "Wachten om verzoek te accepteren";
 "screen_settings_add_account" = "Add account";
+"screen_settings_message_text_size_adjust_size" = "Adjust size";
+"screen_settings_message_text_size_default_description" = "Default text size is %1$d.";
+"screen_settings_message_text_size_title" = "Message text size";
 "screen_settings_user_status_away" = "Away";
 "screen_settings_user_status_be_right_back" = "Be right back";
 "screen_settings_user_status_custom" = "Custom…";
@@ -1583,13 +1581,13 @@
 "screen_signout_key_backup_ongoing_subtitle" = "Wacht tot dit voltooid is voordat je uitlogt.";
 "screen_signout_key_backup_ongoing_title" = "De backup van je sleutels is nog bezig";
 "screen_signout_other_verified_device_dialog_content" = "Make sure you always have access to another verified device or your recovery key to avoid losing your encrypted chat history.";
-"screen_signout_other_verified_device_dialog_title" = "Are you sure you want to remove this device?";
+"screen_signout_other_verified_device_dialog_title" = "Remove this device from your account?";
 "screen_signout_preference_item" = "Uitloggen";
 "screen_signout_recovery_disabled_subtitle" = "Je staat op het punt uit te loggen bij je laatste sessie. Als je je nu uitlogt, verlies je de toegang tot je versleutelde berichten.";
 "screen_signout_recovery_disabled_title" = "Herstelmogelijkheid niet ingesteld";
 "screen_signout_save_recovery_key_action_check" = "Check your recovery key";
 "screen_signout_save_recovery_key_action_continue" = "Continue to remove this device";
-"screen_signout_save_recovery_key_action_generate" = "Generate new recovery key";
+"screen_signout_save_recovery_key_action_generate" = "Create new recovery key";
 "screen_signout_save_recovery_key_subtitle" = "Je staat op het punt uit te loggen bij je laatste sessie. Als je je nu uitlogt, kan het dat je de toegang tot je versleutelde berichten verliest.";
 "screen_signout_save_recovery_key_title" = "Heb je je herstelsleutel opgeslagen?";
 "screen_space_add_room_action" = "Room";
@@ -1618,6 +1616,10 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Bericht niet verzonden omdat %1$@'s geverifieerde identiteit is gewijzigd.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Bericht niet verzonden omdat %1$@ niet alle apparaten heeft geverifieerd.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Bericht is niet verzonden omdat je een of meerdere apparaten niet geverifieerd hebt";
+"screen_timeline_sample_answer" = "That’s because I ate one 🍪";
+"screen_timeline_sample_question" = "I baked a dozen cookies, but there are only 11 here 👀";
+"screen_timeline_sample_recipient" = "Sally";
+"screen_timeline_sample_sender" = "Bob";
 "screen_view_location_title" = "Locatie";
 "settings_rageshake" = "Schudden uit woede";
 "settings_rageshake_detection_threshold" = "Drempel voor detectie";

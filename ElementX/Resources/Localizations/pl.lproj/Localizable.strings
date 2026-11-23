@@ -206,7 +206,7 @@
 "banner_new_sound_message" = "Sygnał powiadomień został zaktualizowany — jest wyraźniejszy, szybszy i mniej uciążliwy.";
 "banner_new_sound_title" = "Odświeżyliśmy Twoje dźwięki";
 "banner_set_up_recovery_content" = "Twoje czaty są automatycznie archiwizowane za pomocą szyfrowania end-to-end. Aby przywrócić kopię zapasową i swoją tożsamość cyfrową, wymagany będzie klucz przywracania.";
-"banner_set_up_recovery_submit" = "Uzyskaj klucz przywracania";
+"banner_set_up_recovery_submit" = "Utwórz klucz przywracania";
 "banner_set_up_recovery_title" = "Utwórz kopię zapasową swoich czatów";
 "banner_swipe_avatar_content" = "Przesuwaj palcem w górę lub w dół po swoim awatarze, aby przełączać się między kontami bez konieczności przechodzenia do ustawień aplikacji.";
 "banner_swipe_avatar_title" = "Przesuń swój awatar, aby zmienić konto";
@@ -481,7 +481,7 @@
 "dialog_video_quality_selector_subtitle_file_size" = "Maksymalny dozwolony rozmiar pliku to: %1$@";
 "dialog_video_quality_selector_subtitle_no_file_size" = "Wybierz jakość filmu, który chcesz przesłać.";
 "dialog_video_quality_selector_title" = "Wybierz jakość przesyłania wideo";
-"emoji_picker_a11y_backspace" = "Delete the character before the cursor";
+"emoji_picker_a11y_backspace" = "Usuń znak przed kursorem";
 "emoji_picker_category_activity" = "Aktywności";
 "emoji_picker_category_flags" = "Flagi";
 "emoji_picker_category_foods" = "Jedzenie i napoje";
@@ -558,7 +558,7 @@
 "preference_rageshake" = "Wstrząśnij gniewnie, aby zgłosić błąd";
 "rageshake_detection_dialog_content" = "Wygląda na to, że potrząsasz telefonem z frustracji. Czy chcesz otworzyć ekran zgłaszania błędów?";
 "rich_text_editor_a11y_add_attachment" = "Dodaj załącznik";
-"rich_text_editor_a11y_add_emoji" = "Add emoji";
+"rich_text_editor_a11y_add_emoji" = "Dodaj emoji";
 "rich_text_editor_bullet_list" = "Przełącz listę punktową";
 "rich_text_editor_close_formatting_options" = "Anuluj i zamknij formatowanie tekstu";
 "rich_text_editor_code_block" = "Przełącz blok kodu";
@@ -729,7 +729,7 @@
 "screen_chat_backup_recovery_action_change_description" = "Twoje czaty są automatycznie archiwizowane za pomocą szyfrowania end-to-end. Aby przywrócić kopię zapasową i swoją tożsamość cyfrową, wymagany będzie klucz przywracania.";
 "screen_chat_backup_recovery_action_confirm" = "Wprowadź klucz przywracania";
 "screen_chat_backup_recovery_action_confirm_description" = "Magazyn kluczy nie jest zsynchronizowany.";
-"screen_chat_backup_recovery_action_setup" = "Uzyskaj klucz przywracania";
+"screen_chat_backup_recovery_action_setup" = "Utwórz klucz przywracania";
 "screen_chat_backup_recovery_action_setup_description" = "Twoje czaty są automatycznie archiwizowane za pomocą szyfrowania end-to-end. Aby przywrócić kopię zapasową i swoją tożsamość cyfrową, wymagany będzie klucz przywracania.";
 "screen_create_account_title" = "Utwórz konto";
 "screen_create_new_recovery_key_list_item_1" = "Otwórz %1$@ na urządzeniu stacjonarnym";
@@ -838,11 +838,11 @@
 "screen_edit_room_address_title" = "Edytuj adres";
 "screen_encryption_reset_action_continue_reset" = "Kontynuuj";
 "screen_encryption_reset_bullet_1" = "Szczegóły konta, kontakty, preferencje i lista czatów zostaną zachowane";
-"screen_encryption_reset_bullet_2" = "Utracisz istniejącą historię wiadomości";
+"screen_encryption_reset_bullet_2" = "Stracisz dostęp do całej historii wiadomości przechowywanej na serwerze";
 "screen_encryption_reset_bullet_3" = "Pozostali użytkownicy zobaczą, że Twoja tożsamość cyfrowa została zresetowana";
 "screen_encryption_reset_bullet_4" = "Wszystkie urządzenia, na których jesteś zalogowany, będą wymagały ponownego potwierdzenia";
 "screen_encryption_reset_footer" = "Zresetuj swoją tożsamość tylko wtedy, gdy nie posiadasz dostępu do żadnego innego zweryfikowanego urządzenia i straciłeś swój klucz przywracania.";
-"screen_encryption_reset_no_chats_message" = "Wygląda na to, że nie prowadzisz jeszcze żadnych czatów. Jeśli tak, możesz bezpiecznie zresetować swoją tożsamość cyfrową.";
+"screen_encryption_reset_no_chats_message" = "Wygląda na to, że nie prowadzisz jeszcze żadnych czatów szyfrowanych. Jeśli tak, możesz bezpiecznie zresetować swoją tożsamość cyfrową.";
 "screen_encryption_reset_no_options_subtitle" = "Nie masz dostępu do żadnych innych zweryfikowanych urządzeń ani klucza przywracania. Jeśli chcesz nadal korzystać z aplikacji, prosimy o zresetowanie swojej tożsamości cyfrowej.";
 "screen_encryption_reset_no_options_title" = "Musisz zresetować swoją tożsamość cyfrową";
 "screen_encryption_reset_subtitle" = "Jeśli nie masz dostępu do innych zweryfikowanych urządzeń, ani nie posiadasz klucza przywracania, musisz zresetować swoją tożsamość cyfrową, aby móc nadal korzystać z aplikacji.";
@@ -851,7 +851,6 @@
 "screen_home_tab_search" = "Szukaj";
 "screen_home_tab_spaces" = "Przestrzenie";
 "screen_identity_confirmation_cannot_confirm" = "Nie możesz potwierdzić?";
-"screen_identity_confirmation_create_new_recovery_key" = "Utwórz nowy klucz przywracania";
 "screen_identity_confirmation_sign_out" = "Wyloguj";
 "screen_identity_confirmation_subtitle" = "Wybierz sposób weryfikacji, aby skonfigurować bezpieczne wiadomości.";
 "screen_identity_confirmation_title" = "Potwierdź swoją tożsamość cyfrową";
@@ -1028,7 +1027,7 @@
 "screen_media_details_uploaded_by" = "Przesłane przez";
 "screen_media_details_uploaded_on" = "Przesłane w dniu";
 "screen_media_picker_error_failed_selection" = "Nie udało się wybrać multimediów. Spróbuj ponownie.";
-"screen_media_upload_preview_a11y_draw" = "Draw";
+"screen_media_upload_preview_a11y_draw" = "Rysuj";
 "screen_media_upload_preview_caption_warning" = "Opis może być niedostępny dla osób korzystających ze starszej wersji aplikacji.";
 "screen_media_upload_preview_change_video_quality_prompt" = "Dotknij, aby zmienić jakość przesyłania wideo.";
 "screen_media_upload_preview_error_could_not_be_uploaded" = "Nie udało się przesłać pliku.";
@@ -1198,7 +1197,6 @@
 "screen_recovery_key_check_subtitle" = "Wpisz zapisany klucz przywracania, aby upewnić się, że jest poprawny i aktywny.";
 "screen_recovery_key_check_success_title" = "Klucz przywracania jest aktywny";
 "screen_recovery_key_check_title" = "Sprawdź swój klucz przywracania";
-"screen_recovery_key_confirm_create_new_recovery_key" = "Utwórz nowy klucz przywracania";
 "screen_recovery_key_confirm_description" = "Upewnij się, że nikt nie widzi tego ekranu!";
 "screen_recovery_key_confirm_error_content" = "Spróbuj ponownie potwierdzić dostęp do magazynu kluczy.";
 "screen_recovery_key_confirm_error_title" = "Nieprawidłowy klucz przywracania";
@@ -1219,7 +1217,7 @@
 "screen_recovery_key_setup_generate_key" = "Wygeneruj klucz przywracania";
 "screen_recovery_key_setup_generate_key_description" = "Nie udostępniaj tego nikomu!";
 "screen_recovery_key_setup_success" = "Skonfigurowano przywracanie pomyślnie";
-"screen_recovery_key_setup_title" = "Uzyskaj klucz przywracania";
+"screen_recovery_key_setup_title" = "Utwórz klucz przywracania";
 "screen_recovery_key_success_title" = "Nowy klucz przywracania jest już aktywny";
 "screen_report_content_block_user" = "Zablokuj użytkownika";
 "screen_report_content_block_user_hint" = "Zaznacz, jeśli chcesz ukryć wszystkie bieżące i przyszłe wiadomości od tego użytkownika.";
@@ -1299,9 +1297,6 @@
 "screen_room_confirm_removal_reason_supporting_text" = "(Opcjonalne)";
 "screen_room_confirm_removal_title" = "Usunąć wiadomość?";
 "screen_room_details_add_topic_title" = "Dodaj temat";
-"screen_room_details_audio_push_to_talk" = "Naciśnij i mów";
-"screen_room_details_audio_title" = "Pokój audio";
-"screen_room_details_audio_video_calls" = "Rozmowy wideo";
 "screen_room_details_badge_encrypted" = "Szyfrowany";
 "screen_room_details_badge_not_encrypted" = "Nieszyfrowany";
 "screen_room_details_badge_public" = "Pokój publiczny";
@@ -1549,6 +1544,9 @@
 "screen_session_verification_waiting_subtitle" = "Po zaakceptowaniu będziesz mógł kontynuować weryfikację.";
 "screen_session_verification_waiting_to_accept_title" = "Oczekiwanie na zaakceptowanie prośby";
 "screen_settings_add_account" = "Dodaj konto";
+"screen_settings_message_text_size_adjust_size" = "Adjust size";
+"screen_settings_message_text_size_default_description" = "Default text size is %1$d.";
+"screen_settings_message_text_size_title" = "Message text size";
 "screen_settings_user_status_away" = "Z dala od urządzenia";
 "screen_settings_user_status_be_right_back" = "Zaraz wracam";
 "screen_settings_user_status_custom" = "Własny";
@@ -1589,7 +1587,7 @@
 "screen_signout_recovery_disabled_title" = "Zamierzasz utracić dostęp do swoich zaszyfrowanych czatów";
 "screen_signout_save_recovery_key_action_check" = "Sprawdź swój klucz przywracania";
 "screen_signout_save_recovery_key_action_continue" = "Kontynuuj usuwanie tego urządzenia";
-"screen_signout_save_recovery_key_action_generate" = "Wygeneruj nowy klucz przywracania";
+"screen_signout_save_recovery_key_action_generate" = "Utwórz nowy klucz przywracania";
 "screen_signout_save_recovery_key_subtitle" = "To jest twoje jedyne urządzenie. Jeśli je usuniesz, będziesz potrzebować klucza przywracania, aby potwierdzić swoją tożsamość cyfrową i przywrócić zaszyfrowane czaty przy następnym logowaniu.";
 "screen_signout_save_recovery_key_title" = "Upewnij się, że posiadasz dostęp do klucza przywracania przed usunięciem urządzenia";
 "screen_space_add_room_action" = "Pokój";
@@ -1618,6 +1616,10 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Wiadomość nie została wysłana, ponieważ tożsamość %1$@ została zresetowana.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Wiadomość nie została wysłana, ponieważ %1$@ nie zweryfikował wszystkich urządzeń.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Wiadomość nie została wysłana, ponieważ nie zweryfikowałeś jednego lub więcej swoich urządzeń.";
+"screen_timeline_sample_answer" = "That’s because I ate one 🍪";
+"screen_timeline_sample_question" = "I baked a dozen cookies, but there are only 11 here 👀";
+"screen_timeline_sample_recipient" = "Sally";
+"screen_timeline_sample_sender" = "Bob";
 "screen_view_location_title" = "Lokalizacja";
 "settings_rageshake" = "Gniewne wstrząsanie";
 "settings_rageshake_detection_threshold" = "Próg wykrywania";

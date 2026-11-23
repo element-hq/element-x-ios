@@ -851,7 +851,6 @@
 "screen_home_tab_search" = "検索";
 "screen_home_tab_spaces" = "スペース";
 "screen_identity_confirmation_cannot_confirm" = "認証できませんか？";
-"screen_identity_confirmation_create_new_recovery_key" = "回復鍵を新規作成します";
 "screen_identity_confirmation_sign_out" = "サインアウト";
 "screen_identity_confirmation_subtitle" = "安全なメッセージを設定するための検証方法を選択してください。";
 "screen_identity_confirmation_title" = "デジタルIDの認証";
@@ -1198,7 +1197,6 @@
 "screen_recovery_key_check_subtitle" = "Enter the recovery key you’ve saved to make sure that it’s correct and active.";
 "screen_recovery_key_check_success_title" = "Your recovery key is active";
 "screen_recovery_key_check_title" = "Check your recovery key";
-"screen_recovery_key_confirm_create_new_recovery_key" = "新しい回復鍵を生成";
 "screen_recovery_key_confirm_description" = "誰にもこの画面を見せないでください！";
 "screen_recovery_key_confirm_error_content" = "鍵の保管庫にアクセスするには、もう一度お試しください。";
 "screen_recovery_key_confirm_error_title" = "回復鍵が間違っています";
@@ -1299,9 +1297,6 @@
 "screen_room_confirm_removal_reason_supporting_text" = "(任意)";
 "screen_room_confirm_removal_title" = "メッセージを削除しますか？";
 "screen_room_details_add_topic_title" = "トピックを追加";
-"screen_room_details_audio_push_to_talk" = "プッシュ・トゥ・トーク";
-"screen_room_details_audio_title" = "ルーム音声";
-"screen_room_details_audio_video_calls" = "ビデオ通話";
 "screen_room_details_badge_encrypted" = "暗号化済み";
 "screen_room_details_badge_not_encrypted" = "暗号化されていません";
 "screen_room_details_badge_public" = "公開ルーム";
@@ -1549,6 +1544,9 @@
 "screen_session_verification_waiting_subtitle" = "検証を承認することで続行できます。";
 "screen_session_verification_waiting_to_accept_title" = "リクエストの承認を待機中";
 "screen_settings_add_account" = "アカウントを追加";
+"screen_settings_message_text_size_adjust_size" = "Adjust size";
+"screen_settings_message_text_size_default_description" = "Default text size is %1$d.";
+"screen_settings_message_text_size_title" = "Message text size";
 "screen_settings_user_status_away" = "離席中";
 "screen_settings_user_status_be_right_back" = "すぐに戻る";
 "screen_settings_user_status_custom" = "任意...";
@@ -1618,6 +1616,10 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "%1$@ の検証済みのデジタルIDがリセットされたため、メッセージは送信されませんでした。";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "%1$@ に未検証の端末が存在するため、メッセージは送信されませんでした。";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "未検証の端末が存在するため、メッセージは送信されませんでした。";
+"screen_timeline_sample_answer" = "That’s because I ate one 🍪";
+"screen_timeline_sample_question" = "I baked a dozen cookies, but there are only 11 here 👀";
+"screen_timeline_sample_recipient" = "Sally";
+"screen_timeline_sample_sender" = "Bob";
 "screen_view_location_title" = "位置情報";
 "settings_rageshake" = "怒り狂う";
 "settings_rageshake_detection_threshold" = "検出感度";

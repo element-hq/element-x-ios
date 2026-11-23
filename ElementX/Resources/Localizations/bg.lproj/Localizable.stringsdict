@@ -59,9 +59,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Прочетено от %1$@ и %2$d друг</string>
+			<string>Предишно съобщение прочетено от %1$@ и %2$d друг</string>
 			<key>other</key>
-			<string>Прочетено от %1$@ и %2$d други</string>
+			<string>Предишно съобщение прочетено от %1$@ и %2$d други</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

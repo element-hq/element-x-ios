@@ -841,7 +841,7 @@
 "screen_encryption_reset_bullet_3" = "ستحتاج إلى التحقق من جميع أجهزتك وجهات اتصالك الحالية مرة أخرى";
 "screen_encryption_reset_bullet_4" = "Any devices you’re signed in to will need to be reconfirmed";
 "screen_encryption_reset_footer" = "لا تُعد تعيين هويتك الرقمية إلا إذا لم يكن لديك وصول إلى جهاز آخر تم التحقق منه ولا تملك مفتاح الاسترداد.";
-"screen_encryption_reset_no_chats_message" = "It looks like you don’t have any chats yet. If this is correct, you can safely proceed with resetting your digital identity";
+"screen_encryption_reset_no_chats_message" = "It looks like you don’t have any encrypted chats yet. If this is correct, you can safely proceed with resetting your digital identity.";
 "screen_encryption_reset_no_options_subtitle" = "You don’t have access to any other verified devices or a recovery key, so you’ll need to reset your digital identity to continue using the app.";
 "screen_encryption_reset_no_options_title" = "You need to reset your digital identity";
 "screen_encryption_reset_subtitle" = "If you don’t have access to any other verified devices and you don’t have your recovery key, then you’ll need to reset your digital identity to continue using the app.";
@@ -850,7 +850,6 @@
 "screen_home_tab_search" = "Search";
 "screen_home_tab_spaces" = "المساحات";
 "screen_identity_confirmation_cannot_confirm" = "لا يمكنك التأكيد؟";
-"screen_identity_confirmation_create_new_recovery_key" = "إنشاء مفتاح استرداد جديد";
 "screen_identity_confirmation_sign_out" = "Sign out";
 "screen_identity_confirmation_subtitle" = "اختر طريقة التحقق لإعداد المراسلة الآمنة.";
 "screen_identity_confirmation_title" = "تأكيد هويتك الرقمية";
@@ -992,7 +991,7 @@
 "screen_live_location_sheet_nobody_sharing" = "لا يشارك أحد موقعه";
 "screen_live_location_sheet_sharing_live_location" = "مشاركة الموقع المباشر";
 "screen_live_location_sheet_title" = "على الخريطة";
-"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, %1$@ needs permission to reach devices on this network.";
+"screen_local_network_opt_in_subtitle" = "خادمك المنزلي موجود على شبكتك المحلية. للاتصال، يحتاج %1$@ إلى إذن للوصول إلى الأجهزة الموجودة على هذه الشبكة.";
 "screen_local_network_opt_in_title" = "السماح بالوصول إلى الشبكة المحلية";
 "screen_login_error_deactivated_account" = "هذا الحساب محذوف.";
 "screen_login_error_invalid_credentials" = "اسم المستخدم و/أو كلمة المرور غير صحيحة";
@@ -1197,7 +1196,6 @@
 "screen_recovery_key_check_subtitle" = "Enter the recovery key you’ve saved to make sure that it’s correct and active.";
 "screen_recovery_key_check_success_title" = "Your recovery key is active";
 "screen_recovery_key_check_title" = "Check your recovery key";
-"screen_recovery_key_confirm_create_new_recovery_key" = "إنشاء مفتاح استرداد جديد";
 "screen_recovery_key_confirm_description" = "تأكد من ألا يتمكن أحد من رؤية هذه الشاشة!";
 "screen_recovery_key_confirm_error_content" = "يُرجى المحاولة مرة أخرى لتأكيد الوصول إلى تخزين المفاتيح.";
 "screen_recovery_key_confirm_error_title" = "مفتاح الاسترداد غير صحيح";
@@ -1298,9 +1296,6 @@
 "screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
 "screen_room_confirm_removal_title" = "Remove message?";
 "screen_room_details_add_topic_title" = "إضافة موضوع";
-"screen_room_details_audio_push_to_talk" = "Push to talk";
-"screen_room_details_audio_title" = "Room Audio";
-"screen_room_details_audio_video_calls" = "Video calls";
 "screen_room_details_badge_encrypted" = "مشفّرة";
 "screen_room_details_badge_not_encrypted" = "غير مشفّرة";
 "screen_room_details_badge_public" = "غرفة عامة";
@@ -1548,6 +1543,9 @@
 "screen_session_verification_waiting_subtitle" = "بمجرد القبول، ستتمكن من متابعة التحقق.";
 "screen_session_verification_waiting_to_accept_title" = "بانتظار قبول الطلب";
 "screen_settings_add_account" = "Add account";
+"screen_settings_message_text_size_adjust_size" = "Adjust size";
+"screen_settings_message_text_size_default_description" = "Default text size is %1$d.";
+"screen_settings_message_text_size_title" = "Message text size";
 "screen_settings_user_status_away" = "بعيد";
 "screen_settings_user_status_be_right_back" = "سأعود حالاً";
 "screen_settings_user_status_custom" = "مخصص…";
@@ -1582,13 +1580,13 @@
 "screen_signout_key_backup_ongoing_subtitle" = "يُرجى الانتظار حتى تكتمل هذه العملية قبل إزالة هذا الجهاز.";
 "screen_signout_key_backup_ongoing_title" = "لا يزال النسخ الاحتياطي لمفاتيحك جاريًا";
 "screen_signout_other_verified_device_dialog_content" = "Make sure you always have access to another verified device or your recovery key to avoid losing your encrypted chat history.";
-"screen_signout_other_verified_device_dialog_title" = "Are you sure you want to remove this device?";
+"screen_signout_other_verified_device_dialog_title" = "Remove this device from your account?";
 "screen_signout_preference_item" = "إزالة هذا الجهاز";
 "screen_signout_recovery_disabled_subtitle" = "هذا هو جهازك الوحيد. إذا أزلته، فستحتاج إلى مفتاح استرداد لتأكيد هويتك الرقمية واستعادة محادثاتك المشفّرة في المرة التالية التي تسجّل فيها الدخول.";
 "screen_signout_recovery_disabled_title" = "أنت على وشك فقدان الوصول إلى محادثاتك المشفّرة";
 "screen_signout_save_recovery_key_action_check" = "Check your recovery key";
 "screen_signout_save_recovery_key_action_continue" = "Continue to remove this device";
-"screen_signout_save_recovery_key_action_generate" = "Generate new recovery key";
+"screen_signout_save_recovery_key_action_generate" = "Create new recovery key";
 "screen_signout_save_recovery_key_subtitle" = "هذا هو جهازك الوحيد. إذا أزلته، فستحتاج إلى مفتاح استرداد لتأكيد هويتك الرقمية واستعادة محادثاتك المشفّرة في المرة التالية التي تسجّل فيها الدخول.";
 "screen_signout_save_recovery_key_title" = "تأكد من أن لديك إمكانية الوصول إلى مفتاح الاسترداد الخاص بك قبل إزالة هذا الجهاز";
 "screen_space_add_room_action" = "غرفة";
@@ -1617,6 +1615,10 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "لم تُرسل الرسالة لأن الهوية الرقمية الموثّقة لـ %1$@ أُعيد تعيينها.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "لم تُرسل الرسالة لأن %1$@ لم يتحقق من جميع الأجهزة.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "لم تُرسل الرسالة لأنك لم تتحقق من جهاز واحد أو أكثر من أجهزتك.";
+"screen_timeline_sample_answer" = "That’s because I ate one 🍪";
+"screen_timeline_sample_question" = "I baked a dozen cookies, but there are only 11 here 👀";
+"screen_timeline_sample_recipient" = "Sally";
+"screen_timeline_sample_sender" = "Bob";
 "screen_view_location_title" = "الموقع";
 "settings_rageshake" = "رج الهاتف للإبلاغ عن خطأ";
 "settings_rageshake_detection_threshold" = "عتبة الكشف";

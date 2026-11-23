@@ -842,7 +842,7 @@
 "screen_encryption_reset_bullet_3" = "Bạn sẽ cần xác minh lại tất cả các thiết bị và danh bạ hiện có của mình.";
 "screen_encryption_reset_bullet_4" = "Any devices you’re signed in to will need to be reconfirmed";
 "screen_encryption_reset_footer" = "Chỉ nên đặt lại danh tính kỹ thuật số của bạn nếu bạn không có quyền truy cập vào thiết bị đã được xác minh khác và bạn không có khóa khôi phục.";
-"screen_encryption_reset_no_chats_message" = "It looks like you don’t have any chats yet. If this is correct, you can safely proceed with resetting your digital identity";
+"screen_encryption_reset_no_chats_message" = "It looks like you don’t have any encrypted chats yet. If this is correct, you can safely proceed with resetting your digital identity.";
 "screen_encryption_reset_no_options_subtitle" = "You don’t have access to any other verified devices or a recovery key, so you’ll need to reset your digital identity to continue using the app.";
 "screen_encryption_reset_no_options_title" = "You need to reset your digital identity";
 "screen_encryption_reset_subtitle" = "If you don’t have access to any other verified devices and you don’t have your recovery key, then you’ll need to reset your digital identity to continue using the app.";
@@ -851,7 +851,6 @@
 "screen_home_tab_search" = "Search";
 "screen_home_tab_spaces" = "Spaces";
 "screen_identity_confirmation_cannot_confirm" = "Không thể xác nhận?";
-"screen_identity_confirmation_create_new_recovery_key" = "Tạo khóa khôi phục mới";
 "screen_identity_confirmation_sign_out" = "Sign out";
 "screen_identity_confirmation_subtitle" = "Chọn phương thức xác minh để bật nhắn tin bảo mật.";
 "screen_identity_confirmation_title" = "Xác nhận danh tính kỹ thuật số của bạn";
@@ -1198,7 +1197,6 @@
 "screen_recovery_key_check_subtitle" = "Enter the recovery key you’ve saved to make sure that it’s correct and active.";
 "screen_recovery_key_check_success_title" = "Your recovery key is active";
 "screen_recovery_key_check_title" = "Check your recovery key";
-"screen_recovery_key_confirm_create_new_recovery_key" = "Create new recovery key";
 "screen_recovery_key_confirm_description" = "Đảm bảo không ai có thể nhìn thấy màn hình này!";
 "screen_recovery_key_confirm_error_content" = "Thử lại để xác nhận quyền truy cập lưu trữ khóa.";
 "screen_recovery_key_confirm_error_title" = "Khóa khôi phục không chính xác.";
@@ -1299,9 +1297,6 @@
 "screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
 "screen_room_confirm_removal_title" = "Remove message?";
 "screen_room_details_add_topic_title" = "Thêm chủ đề";
-"screen_room_details_audio_push_to_talk" = "Push to talk";
-"screen_room_details_audio_title" = "Room Audio";
-"screen_room_details_audio_video_calls" = "Video calls";
 "screen_room_details_badge_encrypted" = "Encrypted";
 "screen_room_details_badge_not_encrypted" = "Not encrypted";
 "screen_room_details_badge_public" = "Phòng công cộng";
@@ -1549,6 +1544,9 @@
 "screen_session_verification_waiting_subtitle" = "Once accepted you’ll be able to continue with the verification.";
 "screen_session_verification_waiting_to_accept_title" = "Đang chờ chấp nhận yêu cầu";
 "screen_settings_add_account" = "Add account";
+"screen_settings_message_text_size_adjust_size" = "Adjust size";
+"screen_settings_message_text_size_default_description" = "Default text size is %1$d.";
+"screen_settings_message_text_size_title" = "Message text size";
 "screen_settings_user_status_away" = "Away";
 "screen_settings_user_status_be_right_back" = "Be right back";
 "screen_settings_user_status_custom" = "Custom…";
@@ -1583,13 +1581,13 @@
 "screen_signout_key_backup_ongoing_subtitle" = "Đợi quá trình hoàn tất rồi hãy gỡ thiết bị.";
 "screen_signout_key_backup_ongoing_title" = "Khóa của bạn vẫn đang được sao lưu.";
 "screen_signout_other_verified_device_dialog_content" = "Make sure you always have access to another verified device or your recovery key to avoid losing your encrypted chat history.";
-"screen_signout_other_verified_device_dialog_title" = "Are you sure you want to remove this device?";
+"screen_signout_other_verified_device_dialog_title" = "Remove this device from your account?";
 "screen_signout_preference_item" = "Gỡ bỏ thiết bị này";
 "screen_signout_recovery_disabled_subtitle" = "Bạn sắp đăng xuất khỏi phiên làm việc cuối cùng. Nếu bạn đăng xuất ngay bây giờ, bạn sẽ mất quyền truy cập vào các tin nhắn đã mã hóa của mình.";
 "screen_signout_recovery_disabled_title" = "Bạn sắp mất quyền truy cập vào các cuộc trò chuyện được mã hóa";
 "screen_signout_save_recovery_key_action_check" = "Check your recovery key";
 "screen_signout_save_recovery_key_action_continue" = "Continue to remove this device";
-"screen_signout_save_recovery_key_action_generate" = "Generate new recovery key";
+"screen_signout_save_recovery_key_action_generate" = "Create new recovery key";
 "screen_signout_save_recovery_key_subtitle" = "Đây là thiết bị duy nhất của bạn. Nếu xóa nó, bạn sẽ cần khóa khôi phục để xác nhận danh tính kỹ thuật số và khôi phục các cuộc trò chuyện được mã hóa khi đăng nhập lần tới.";
 "screen_signout_save_recovery_key_title" = "Đảm bảo bạn có khóa khôi phục trước khi gỡ thiết bị này.";
 "screen_space_add_room_action" = "Room";
@@ -1618,6 +1616,10 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified digital identity was reset.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Message not sent because %1$@ has not verified all devices.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Message not sent because you have not verified one or more of your devices.";
+"screen_timeline_sample_answer" = "That’s because I ate one 🍪";
+"screen_timeline_sample_question" = "I baked a dozen cookies, but there are only 11 here 👀";
+"screen_timeline_sample_recipient" = "Sally";
+"screen_timeline_sample_sender" = "Bob";
 "screen_view_location_title" = "Vị trí";
 "settings_rageshake" = "Lắc điện thoại";
 "settings_rageshake_detection_threshold" = "Ngưỡng phát hiện";

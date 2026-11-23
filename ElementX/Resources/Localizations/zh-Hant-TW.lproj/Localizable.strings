@@ -851,7 +851,6 @@
 "screen_home_tab_search" = "搜尋";
 "screen_home_tab_spaces" = "空間";
 "screen_identity_confirmation_cannot_confirm" = "無法確認？";
-"screen_identity_confirmation_create_new_recovery_key" = "建立新的復原金鑰";
 "screen_identity_confirmation_sign_out" = "登出";
 "screen_identity_confirmation_subtitle" = "選擇驗證方式以設定安全訊息傳遞。";
 "screen_identity_confirmation_title" = "確認您的數位身份";
@@ -1198,7 +1197,6 @@
 "screen_recovery_key_check_subtitle" = "輸入您儲存的還原金鑰，以確保其正確且有效。";
 "screen_recovery_key_check_success_title" = "您的還原金鑰已啟用";
 "screen_recovery_key_check_title" = "檢查您的還原金鑰";
-"screen_recovery_key_confirm_create_new_recovery_key" = "建立新復原金鑰";
 "screen_recovery_key_confirm_description" = "確保沒有人可以看到此畫面！";
 "screen_recovery_key_confirm_error_content" = "請再試一次確認對您金鑰儲存空間的存取權。";
 "screen_recovery_key_confirm_error_title" = "復原金鑰不正確";
@@ -1299,9 +1297,6 @@
 "screen_room_confirm_removal_reason_supporting_text" = "（選擇性）";
 "screen_room_confirm_removal_title" = "移除訊息？";
 "screen_room_details_add_topic_title" = "新增主題";
-"screen_room_details_audio_push_to_talk" = "按住說話";
-"screen_room_details_audio_title" = "聊天室音訊";
-"screen_room_details_audio_video_calls" = "視訊通話";
 "screen_room_details_badge_encrypted" = "已加密";
 "screen_room_details_badge_not_encrypted" = "未加密";
 "screen_room_details_badge_public" = "公開的聊天室";
@@ -1549,6 +1544,9 @@
 "screen_session_verification_waiting_subtitle" = "接受後，您就可以繼續進行驗證。";
 "screen_session_verification_waiting_to_accept_title" = "等待接受請求";
 "screen_settings_add_account" = "新增帳號";
+"screen_settings_message_text_size_adjust_size" = "Adjust size";
+"screen_settings_message_text_size_default_description" = "Default text size is %1$d.";
+"screen_settings_message_text_size_title" = "Message text size";
 "screen_settings_user_status_away" = "離開";
 "screen_settings_user_status_be_right_back" = "稍後回來";
 "screen_settings_user_status_custom" = "自訂⋯⋯";
@@ -1618,6 +1616,10 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "因為 %1$@ 的驗證數位身份已重設，因此未傳送訊息。";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "訊息未傳送，因為 %1$@ 尚未驗證所有裝置。";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "因為您尚未驗證一個或多個裝置，因此未傳送訊息";
+"screen_timeline_sample_answer" = "That’s because I ate one 🍪";
+"screen_timeline_sample_question" = "I baked a dozen cookies, but there are only 11 here 👀";
+"screen_timeline_sample_recipient" = "Sally";
+"screen_timeline_sample_sender" = "Bob";
 "screen_view_location_title" = "位置";
 "settings_rageshake" = "憤怒搖晃";
 "settings_rageshake_detection_threshold" = "偵測閾值";

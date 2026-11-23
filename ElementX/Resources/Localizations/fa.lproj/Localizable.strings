@@ -842,7 +842,7 @@
 "screen_encryption_reset_bullet_3" = "لازم است دوباره همهٔ آشنایان و افزاره‌های موجودتان را تأیید کنید";
 "screen_encryption_reset_bullet_4" = "Any devices you’re signed in to will need to be reconfirmed";
 "screen_encryption_reset_footer" = "فقط در صورتی که به دستگاه تأیید شده دیگری دسترسی ندارید و کلید بازیابی خود را ندارید، هویت دیجیتال خود را بازنشانی کنید.";
-"screen_encryption_reset_no_chats_message" = "It looks like you don’t have any chats yet. If this is correct, you can safely proceed with resetting your digital identity";
+"screen_encryption_reset_no_chats_message" = "It looks like you don’t have any encrypted chats yet. If this is correct, you can safely proceed with resetting your digital identity.";
 "screen_encryption_reset_no_options_subtitle" = "You don’t have access to any other verified devices or a recovery key, so you’ll need to reset your digital identity to continue using the app.";
 "screen_encryption_reset_no_options_title" = "You need to reset your digital identity";
 "screen_encryption_reset_subtitle" = "If you don’t have access to any other verified devices and you don’t have your recovery key, then you’ll need to reset your digital identity to continue using the app.";
@@ -851,7 +851,6 @@
 "screen_home_tab_search" = "Search";
 "screen_home_tab_spaces" = "فضاها";
 "screen_identity_confirmation_cannot_confirm" = "نمی‌توانید تأیید کنید؟";
-"screen_identity_confirmation_create_new_recovery_key" = "ایجاد کلید بازیابی جدید";
 "screen_identity_confirmation_sign_out" = "Sign out";
 "screen_identity_confirmation_subtitle" = "گزینش چگونگی تأیید برای برپایی پیام‌رسانی امن.";
 "screen_identity_confirmation_title" = "تأیید هویت دیجیتالیتان";
@@ -1198,7 +1197,6 @@
 "screen_recovery_key_check_subtitle" = "Enter the recovery key you’ve saved to make sure that it’s correct and active.";
 "screen_recovery_key_check_success_title" = "Your recovery key is active";
 "screen_recovery_key_check_title" = "Check your recovery key";
-"screen_recovery_key_confirm_create_new_recovery_key" = "ایجاد کلید بازیابی جدید";
 "screen_recovery_key_confirm_description" = "اطمینان از این که کسی نمی‌تواند این صفحه را ببیند!";
 "screen_recovery_key_confirm_error_content" = "لطفاً برای دسترسی به ذخیره‌ساز کلیدتان دوباره تلاش کنید.";
 "screen_recovery_key_confirm_error_title" = "کلید بازیابی اشتباه";
@@ -1299,9 +1297,6 @@
 "screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
 "screen_room_confirm_removal_title" = "Remove message?";
 "screen_room_details_add_topic_title" = "افزودن موضوع";
-"screen_room_details_audio_push_to_talk" = "Push to talk";
-"screen_room_details_audio_title" = "Room Audio";
-"screen_room_details_audio_video_calls" = "Video calls";
 "screen_room_details_badge_encrypted" = "رمز شده";
 "screen_room_details_badge_not_encrypted" = "رمزنگاری نشده";
 "screen_room_details_badge_public" = "اتاق عمومی";
@@ -1549,6 +1544,9 @@
 "screen_session_verification_waiting_subtitle" = "پس از پذیرش، می‌توانید به تأیید ادامه دهید.";
 "screen_session_verification_waiting_to_accept_title" = "منظر پذیرش درخواست";
 "screen_settings_add_account" = "Add account";
+"screen_settings_message_text_size_adjust_size" = "Adjust size";
+"screen_settings_message_text_size_default_description" = "Default text size is %1$d.";
+"screen_settings_message_text_size_title" = "Message text size";
 "screen_settings_user_status_away" = "بعدا";
 "screen_settings_user_status_be_right_back" = "همین الان برگرد";
 "screen_settings_user_status_custom" = "سفارشی…";
@@ -1583,13 +1581,13 @@
 "screen_signout_key_backup_ongoing_subtitle" = "لطفاً قبل از خروج از این دستگاه، منتظر بمانید تا این مراحل تکمیل شود.";
 "screen_signout_key_backup_ongoing_title" = "کلیدهایتان هنوز در حال پشتیبان گیریند";
 "screen_signout_other_verified_device_dialog_content" = "Make sure you always have access to another verified device or your recovery key to avoid losing your encrypted chat history.";
-"screen_signout_other_verified_device_dialog_title" = "Are you sure you want to remove this device?";
+"screen_signout_other_verified_device_dialog_title" = "Remove this device from your account?";
 "screen_signout_preference_item" = "برداشتن این افزاره";
 "screen_signout_recovery_disabled_subtitle" = "این تنها دستگاه شماست. اگر آن را جدا کنید، برای تأیید هویت دیجیتال خود و بازیابی چت‌های رمزگذاری شده‌تان در دفعه بعد که وارد سیستم می‌شوید، به یک کلید بازیابی نیاز خواهید داشت.";
 "screen_signout_recovery_disabled_title" = "شما در حال از دست دادن دسترسی به چت‌های رمزگذاری‌شده‌تان هستید.";
 "screen_signout_save_recovery_key_action_check" = "Check your recovery key";
 "screen_signout_save_recovery_key_action_continue" = "Continue to remove this device";
-"screen_signout_save_recovery_key_action_generate" = "Generate new recovery key";
+"screen_signout_save_recovery_key_action_generate" = "Create new recovery key";
 "screen_signout_save_recovery_key_subtitle" = "این تنها دستگاه شماست. اگر آن را جدا کنید، برای تأیید هویت دیجیتال خود و بازیابی چت‌های رمزگذاری شده‌تان در دفعه بعد که وارد سیستم می‌شوید، به یک کلید بازیابی نیاز خواهید داشت.";
 "screen_signout_save_recovery_key_title" = "قبل از حذف این دستگاه، مطمئن شوید که به کلید بازیابی خود دسترسی دارید.";
 "screen_space_add_room_action" = "اتاق";
@@ -1618,6 +1616,10 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "پیام ارسال نشد زیرا هویت دیجیتال تأیید شده %1$@ بازنشانی شده است.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "پیام ارسال نشد زیرا %1$@ همه دستگاه‌ها را تأیید نکرده است.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "پیام ارسال نشد زیرا شما یک یا چند دستگاه خود را تأیید نکرده‌اید.";
+"screen_timeline_sample_answer" = "That’s because I ate one 🍪";
+"screen_timeline_sample_question" = "I baked a dozen cookies, but there are only 11 here 👀";
+"screen_timeline_sample_recipient" = "Sally";
+"screen_timeline_sample_sender" = "Bob";
 "screen_view_location_title" = "مکان";
 "settings_rageshake" = "تکان دادن";
 "settings_rageshake_detection_threshold" = "آستانهٔ تشخیص";

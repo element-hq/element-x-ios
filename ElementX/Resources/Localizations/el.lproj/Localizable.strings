@@ -842,7 +842,7 @@
 "screen_encryption_reset_bullet_3" = "Θα χρειαστεί να επαληθεύσεις ξανά όλες τις υπάρχουσες συσκευές και επαφές σου";
 "screen_encryption_reset_bullet_4" = "Any devices you’re signed in to will need to be reconfirmed";
 "screen_encryption_reset_footer" = "Επαναφέρετε την ψηφιακή σας ταυτότητα μόνο εάν δεν έχετε πρόσβαση σε άλλη επαληθευμένη συσκευή και δεν έχετε το κλειδί ανάκτησης.";
-"screen_encryption_reset_no_chats_message" = "It looks like you don’t have any chats yet. If this is correct, you can safely proceed with resetting your digital identity";
+"screen_encryption_reset_no_chats_message" = "It looks like you don’t have any encrypted chats yet. If this is correct, you can safely proceed with resetting your digital identity.";
 "screen_encryption_reset_no_options_subtitle" = "You don’t have access to any other verified devices or a recovery key, so you’ll need to reset your digital identity to continue using the app.";
 "screen_encryption_reset_no_options_title" = "You need to reset your digital identity";
 "screen_encryption_reset_subtitle" = "If you don’t have access to any other verified devices and you don’t have your recovery key, then you’ll need to reset your digital identity to continue using the app.";
@@ -851,7 +851,6 @@
 "screen_home_tab_search" = "Search";
 "screen_home_tab_spaces" = "Χώροι";
 "screen_identity_confirmation_cannot_confirm" = "Δεν μπορείς να επιβεβαιώσεις;";
-"screen_identity_confirmation_create_new_recovery_key" = "Δημιουργία νέου κλειδιού ανάκτησης";
 "screen_identity_confirmation_sign_out" = "Sign out";
 "screen_identity_confirmation_subtitle" = "Επιλέξτε τον τρόπο επαλήθευσης για να ρυθμίσετε την ασφαλή ανταλλαγή μηνυμάτων.";
 "screen_identity_confirmation_title" = "Επιβεβαιώστε την ψηφιακή σας ταυτότητα";
@@ -1198,7 +1197,6 @@
 "screen_recovery_key_check_subtitle" = "Enter the recovery key you’ve saved to make sure that it’s correct and active.";
 "screen_recovery_key_check_success_title" = "Your recovery key is active";
 "screen_recovery_key_check_title" = "Check your recovery key";
-"screen_recovery_key_confirm_create_new_recovery_key" = "Δημιουργία νέου κλειδιού ανάκτησης";
 "screen_recovery_key_confirm_description" = "Βεβαιώσου ότι κανείς δεν μπορεί να δει αυτήν την οθόνη!";
 "screen_recovery_key_confirm_error_content" = "Προσπάθησε ξανά για να επιβεβαιώσεις την πρόσβαση στον αποθηκευτικό χώρο κλειδιών σου.";
 "screen_recovery_key_confirm_error_title" = "Λανθασμένο κλειδί ανάκτησης";
@@ -1299,9 +1297,6 @@
 "screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
 "screen_room_confirm_removal_title" = "Remove message?";
 "screen_room_details_add_topic_title" = "Προσθήκη θέματος";
-"screen_room_details_audio_push_to_talk" = "Push to talk";
-"screen_room_details_audio_title" = "Room Audio";
-"screen_room_details_audio_video_calls" = "Video calls";
 "screen_room_details_badge_encrypted" = "Κρυπτογραφημένο";
 "screen_room_details_badge_not_encrypted" = "Μη κρυπτογραφημένο";
 "screen_room_details_badge_public" = "Δημόσια αίθουσα";
@@ -1549,6 +1544,9 @@
 "screen_session_verification_waiting_subtitle" = "Μόλις γίνει αποδεκτό, θα μπορείτε να συνεχίσετε με την επαλήθευση.";
 "screen_session_verification_waiting_to_accept_title" = "Αναμονή για αποδοχή αιτήματος";
 "screen_settings_add_account" = "Add account";
+"screen_settings_message_text_size_adjust_size" = "Adjust size";
+"screen_settings_message_text_size_default_description" = "Default text size is %1$d.";
+"screen_settings_message_text_size_title" = "Message text size";
 "screen_settings_user_status_away" = "Λείπει";
 "screen_settings_user_status_be_right_back" = "Επιστρέφω αμέσως";
 "screen_settings_user_status_custom" = "Προσαρμοσμένη…";
@@ -1583,13 +1581,13 @@
 "screen_signout_key_backup_ongoing_subtitle" = "Περιμένετε να ολοκληρωθεί αυτή η διαδικασία πριν αφαιρέσετε αυτήν τη συσκευή.";
 "screen_signout_key_backup_ongoing_title" = "Εξακολουθούν να δημιουργούνται αντίγραφα ασφαλείας των κλειδιών σου";
 "screen_signout_other_verified_device_dialog_content" = "Make sure you always have access to another verified device or your recovery key to avoid losing your encrypted chat history.";
-"screen_signout_other_verified_device_dialog_title" = "Are you sure you want to remove this device?";
+"screen_signout_other_verified_device_dialog_title" = "Remove this device from your account?";
 "screen_signout_preference_item" = "Κατάργηση αυτής της συσκευής";
 "screen_signout_recovery_disabled_subtitle" = "Αυτή είναι η μόνη σας συσκευή. Εάν την αφαιρέσετε, θα χρειαστείτε ένα κλειδί ανάκτησης για να επιβεβαιώσετε την ψηφιακή σας ταυτότητα και να επαναφέρετε τις κρυπτογραφημένες συνομιλίες σας την επόμενη φορά που θα συνδεθείτε.";
 "screen_signout_recovery_disabled_title" = "Πρόκειται να χάσετε την πρόσβαση στις κρυπτογραφημένες συνομιλίες σας";
 "screen_signout_save_recovery_key_action_check" = "Check your recovery key";
 "screen_signout_save_recovery_key_action_continue" = "Continue to remove this device";
-"screen_signout_save_recovery_key_action_generate" = "Generate new recovery key";
+"screen_signout_save_recovery_key_action_generate" = "Create new recovery key";
 "screen_signout_save_recovery_key_subtitle" = "Αυτή είναι η μόνη σας συσκευή. Εάν την αφαιρέσετε, θα χρειαστείτε ένα κλειδί ανάκτησης για να επιβεβαιώσετε την ψηφιακή σας ταυτότητα και να επαναφέρετε τις κρυπτογραφημένες συνομιλίες σας την επόμενη φορά που θα συνδεθείτε.";
 "screen_signout_save_recovery_key_title" = "Βεβαιωθείτε ότι έχετε πρόσβαση στο κλειδί ανάκτησης πριν καταργήσετε αυτήν τη συσκευή";
 "screen_space_add_room_action" = "Αίθουσα";
@@ -1618,6 +1616,10 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Το μήνυμα δεν αποστάλη επειδή η επαληθευμένη ψηφιακή ταυτότητα του %1$@ επαναφέρθηκε.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Το μήνυμα δεν στάλθηκε επειδή ο χρήστης %1$@ δεν έχει επαληθεύσει όλες τις συσκευές.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Το μήνυμα δεν στάλθηκε επειδή δεν έχεις επαληθεύσει τουλάχιστον μία από τις συσκευές σου.";
+"screen_timeline_sample_answer" = "That’s because I ate one 🍪";
+"screen_timeline_sample_question" = "I baked a dozen cookies, but there are only 11 here 👀";
+"screen_timeline_sample_recipient" = "Sally";
+"screen_timeline_sample_sender" = "Bob";
 "screen_view_location_title" = "Τοποθεσία";
 "settings_rageshake" = "Rageshake";
 "settings_rageshake_detection_threshold" = "Όριο ανίχνευσης";
