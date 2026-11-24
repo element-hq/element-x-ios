@@ -43,7 +43,7 @@ final class NativeCallStack {
          options: ElementCallOptions,
          style: ElementCallStyle,
          permissions: ElementCallMediaPermissionsProtocol,
-         analytics: (any ElementCallAnalyticsProtocol)?) {
+         analytics: ElementCallAnalyticsProtocol?) {
         self.system = system
         controller = ElementCallController(backend: backend,
                                            system: system,

@@ -23,7 +23,7 @@ final class ElementCallService: ElementCallServiceProtocol {
     private let mediaProvider: MediaProviderProtocol
     private let userSettings: UserSettings
     private let nativeCallPermissions: ElementCallMediaPermissionsProtocol
-    private let nativeCallAnalytics: (any ElementCallAnalyticsProtocol)?
+    private let nativeCallAnalytics: ElementCallAnalyticsProtocol?
     
     var userID: String {
         clientProxy.userID
@@ -72,7 +72,7 @@ final class ElementCallService: ElementCallServiceProtocol {
          mediaProvider: MediaProviderProtocol,
          userSettings: UserSettings,
          nativeCallPermissions: ElementCallMediaPermissionsProtocol,
-         nativeCallAnalytics: (any ElementCallAnalyticsProtocol)?) {
+         nativeCallAnalytics: ElementCallAnalyticsProtocol?) {
         self.clientProxy = clientProxy
         self.mediaProvider = mediaProvider
         self.userSettings = userSettings

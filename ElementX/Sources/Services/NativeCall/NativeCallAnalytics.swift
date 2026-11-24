@@ -16,11 +16,11 @@ import Synchronization
 /// One for the app, shared by every account's call stack: PostHog keeps one instance per project.
 /// The consent is pushed in by whoever observes it, through ``setConsent(_:)``.
 final nonisolated class NativeCallAnalytics: ElementCallAnalyticsProtocol {
-    private let makeClient: @MainActor () -> (any NativeCallAnalyticsClientProtocol)?
+    private let makeClient: @MainActor () -> NativeCallAnalyticsClientProtocol?
     /// Only while the user consents: an event without one is dropped, never kept for later.
-    private let client = Mutex<(any NativeCallAnalyticsClientProtocol)?>(nil)
+    private let client = Mutex<NativeCallAnalyticsClientProtocol?>(nil)
     
-    init(makeClient: @escaping @MainActor () -> (any NativeCallAnalyticsClientProtocol)?) {
+    init(makeClient: @escaping @MainActor () -> NativeCallAnalyticsClientProtocol?) {
         self.makeClient = makeClient
     }
     
