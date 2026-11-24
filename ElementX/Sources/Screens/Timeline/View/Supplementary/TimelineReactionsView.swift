@@ -176,6 +176,7 @@ struct TimelineReactionButton: View {
     @ScaledMetric(relativeTo: .subheadline) private var lineHeight = 20
     
     @Environment(\.shouldAutomaticallyLoadImages) private var shouldAutomaticallyLoadImages
+    // Tracked here rather than left to `LoadableImage` so that a tap anywhere on the button reveals the image.
     @State private var isImageRevealed = false
     
     /// A hidden custom image is revealed by the first tap instead of toggling the reaction.
@@ -244,8 +245,6 @@ struct ReactionKeyView: View {
     let mediaProvider: MediaProviderProtocol?
     let size: CGFloat
     
-    @Environment(\.shouldAutomaticallyLoadImages) private var shouldAutomaticallyLoadImages
-    
     var body: some View {
         // Reaction keys carry no mimetype, so always hint `image/gif` to take LoadableImage's animated path. Kingfisher sniffs the actual format, so static images still render (full size, no thumbnail).
         if let imageURL = reaction.imageURL, let mediaSource = try? MediaSourceProxy(url: imageURL, mimeType: "image/gif") {
@@ -253,19 +252,11 @@ struct ReactionKeyView: View {
                           size: CGSize(width: size, height: size),
                           mediaProvider: mediaProvider,
                           transformer: { $0.scaledToFit() },
-                          placeholder: {
-                              Group {
-                                  if shouldAutomaticallyLoadImages {
-                                      Color.clear
-                                  } else {
-                                      Image.compound.image
-                                          .resizable()
-                                          .scaledToFit()
-                                          .foregroundStyle(.compound.iconSecondary)
-                                  }
-                              }
-                          })
-                          .frame(width: size, height: size)
+                          placeholder: { Color.clear })
+                .frame(width: size, height: size)
+                .environment(\.showsIconForHiddenImages, true)
+                // Reactions are buttons, their taps reveal the image instead.
+                .allowsHitTesting(false)
         } else {
             Text(reaction.displayKey)
         }
