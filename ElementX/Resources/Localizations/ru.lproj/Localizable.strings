@@ -842,7 +842,7 @@
 "screen_encryption_reset_bullet_3" = "Вам нужно будет заново подтвердить все существующие устройства и контакты.";
 "screen_encryption_reset_bullet_4" = "Any devices you’re signed in to will need to be reconfirmed";
 "screen_encryption_reset_footer" = "Сбрасывайте ключ шифрования только в том случае, если у Вас нет доступа к другому устройству, на котором выполнен вход, и Вы потеряли ключ восстановления.";
-"screen_encryption_reset_no_chats_message" = "It looks like you don’t have any chats yet. If this is correct, you can safely proceed with resetting your digital identity";
+"screen_encryption_reset_no_chats_message" = "It looks like you don’t have any encrypted chats yet. If this is correct, you can safely proceed with resetting your digital identity.";
 "screen_encryption_reset_no_options_subtitle" = "You don’t have access to any other verified devices or a recovery key, so you’ll need to reset your digital identity to continue using the app.";
 "screen_encryption_reset_no_options_title" = "You need to reset your digital identity";
 "screen_encryption_reset_subtitle" = "If you don’t have access to any other verified devices and you don’t have your recovery key, then you’ll need to reset your digital identity to continue using the app.";
@@ -851,7 +851,6 @@
 "screen_home_tab_search" = "Search";
 "screen_home_tab_spaces" = "Пространства";
 "screen_identity_confirmation_cannot_confirm" = "Не можете подтвердить?";
-"screen_identity_confirmation_create_new_recovery_key" = "Создайте новый ключ восстановления";
 "screen_identity_confirmation_sign_out" = "Sign out";
 "screen_identity_confirmation_subtitle" = "Выберите способ подтверждения для настройки защищенного обмена сообщениями.";
 "screen_identity_confirmation_title" = "Подтвердите личность";
@@ -1198,7 +1197,6 @@
 "screen_recovery_key_check_subtitle" = "Enter the recovery key you’ve saved to make sure that it’s correct and active.";
 "screen_recovery_key_check_success_title" = "Your recovery key is active";
 "screen_recovery_key_check_title" = "Check your recovery key";
-"screen_recovery_key_confirm_create_new_recovery_key" = "Создать новый ключ восстановления";
 "screen_recovery_key_confirm_description" = "Убедитесь, что никто не подсматривает)";
 "screen_recovery_key_confirm_error_content" = "Пожалуйста, попробуйте ещё раз, чтобы подтвердить доступ к резервной копии чата.";
 "screen_recovery_key_confirm_error_title" = "Неверный ключ восстановления";
@@ -1299,9 +1297,6 @@
 "screen_room_confirm_removal_reason_supporting_text" = "(Необязательно)";
 "screen_room_confirm_removal_title" = "Удалить сообщение?";
 "screen_room_details_add_topic_title" = "Добавить тему";
-"screen_room_details_audio_push_to_talk" = "Push to talk";
-"screen_room_details_audio_title" = "Room Audio";
-"screen_room_details_audio_video_calls" = "Video calls";
 "screen_room_details_badge_encrypted" = "Зашифровано";
 "screen_room_details_badge_not_encrypted" = "Без шифрования";
 "screen_room_details_badge_public" = "Публичная комната";
@@ -1549,6 +1544,9 @@
 "screen_session_verification_waiting_subtitle" = "После принятия запроса вы сможете продолжить проверку.";
 "screen_session_verification_waiting_to_accept_title" = "Ожидание принятия запроса";
 "screen_settings_add_account" = "Add account";
+"screen_settings_message_text_size_adjust_size" = "Adjust size";
+"screen_settings_message_text_size_default_description" = "Default text size is %1$d.";
+"screen_settings_message_text_size_title" = "Message text size";
 "screen_settings_user_status_away" = "Отошёл(ла)";
 "screen_settings_user_status_be_right_back" = "Скоро вернусь";
 "screen_settings_user_status_custom" = "Пользовательский...";
@@ -1583,13 +1581,13 @@
 "screen_signout_key_backup_ongoing_subtitle" = "Пожалуйста, дождитесь завершения процесса, прежде чем выходить из системы.";
 "screen_signout_key_backup_ongoing_title" = "Резервное копирование ключей всё ещё продолжается";
 "screen_signout_other_verified_device_dialog_content" = "Make sure you always have access to another verified device or your recovery key to avoid losing your encrypted chat history.";
-"screen_signout_other_verified_device_dialog_title" = "Are you sure you want to remove this device?";
+"screen_signout_other_verified_device_dialog_title" = "Remove this device from your account?";
 "screen_signout_preference_item" = "Удалить это устройство";
 "screen_signout_recovery_disabled_subtitle" = "Это ваше единственное устройство. Если вы его удалите, вам потребуется ключ восстановления, чтобы подтвердить свою цифровую личность и восстановить зашифрованные чаты при следующем входе в систему.";
 "screen_signout_recovery_disabled_title" = "Вы потеряете доступ к своим зашифрованным чатам";
 "screen_signout_save_recovery_key_action_check" = "Check your recovery key";
 "screen_signout_save_recovery_key_action_continue" = "Continue to remove this device";
-"screen_signout_save_recovery_key_action_generate" = "Generate new recovery key";
+"screen_signout_save_recovery_key_action_generate" = "Create new recovery key";
 "screen_signout_save_recovery_key_subtitle" = "Это ваше единственное устройство. Если вы его удалите, вам потребуется ключ восстановления, чтобы подтвердить свою цифровую личность и восстановить зашифрованные чаты при следующем входе в систему.";
 "screen_signout_save_recovery_key_title" = "Перед тем как отключить это устройство, убедись, что у тебя есть доступ к ключу восстановления";
 "screen_space_add_room_action" = "Комната";
@@ -1618,6 +1616,10 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Сообщение не отправлено, так как подтвержденная цифровая идентичность %1$@ была сброшена.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Сообщение не отправлено, потому что %1$@ не подтвердил(а) все свои устройства.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Сообщение не отправлено, поскольку вы не подтвердили одно или несколько своих устройств.";
+"screen_timeline_sample_answer" = "That’s because I ate one 🍪";
+"screen_timeline_sample_question" = "I baked a dozen cookies, but there are only 11 here 👀";
+"screen_timeline_sample_recipient" = "Sally";
+"screen_timeline_sample_sender" = "Bob";
 "screen_view_location_title" = "Местоположение";
 "settings_rageshake" = "Встряхните";
 "settings_rageshake_detection_threshold" = "Порог обнаружения";

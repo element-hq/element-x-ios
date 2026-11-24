@@ -39,7 +39,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>総投票数うち%1$d% パーセント</string>
+			<string>総投票数うち%1$d%% パーセント</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

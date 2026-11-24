@@ -206,7 +206,7 @@
 "banner_new_sound_message" = "Your notification ping has been updated—clearer, quicker, and less disruptive.";
 "banner_new_sound_title" = "We’ve refreshed your sounds";
 "banner_set_up_recovery_content" = "Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.";
-"banner_set_up_recovery_submit" = "Get recovery key";
+"banner_set_up_recovery_submit" = "Create recovery key";
 "banner_set_up_recovery_title" = "Back up your chats";
 "banner_swipe_avatar_content" = "Swipe up or down on your avatar to switch between your accounts without going to the app settings.";
 "banner_swipe_avatar_title" = "Swipe your avatar to switch accounts";
@@ -729,7 +729,7 @@
 "screen_chat_backup_recovery_action_change_description" = "Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.";
 "screen_chat_backup_recovery_action_confirm" = "Enter recovery key";
 "screen_chat_backup_recovery_action_confirm_description" = "Your key storage is currently out of sync.";
-"screen_chat_backup_recovery_action_setup" = "Get recovery key";
+"screen_chat_backup_recovery_action_setup" = "Create recovery key";
 "screen_chat_backup_recovery_action_setup_description" = "Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.";
 "screen_create_account_title" = "Create account";
 "screen_create_new_recovery_key_list_item_1" = "Open %1$@ on a desktop device";
@@ -838,11 +838,11 @@
 "screen_edit_room_address_title" = "Edit address";
 "screen_encryption_reset_action_continue_reset" = "Continue";
 "screen_encryption_reset_bullet_1" = "Your account details, contacts, preferences, and chat list will be kept";
-"screen_encryption_reset_bullet_2" = "You will lose any message history that’s stored only on the server";
+"screen_encryption_reset_bullet_2" = "You'll lose any encrypted chat history that's stored only on the server";
 "screen_encryption_reset_bullet_3" = "Other users will see that your digital identity has been reset";
 "screen_encryption_reset_bullet_4" = "Any devices you’re signed in to will need to be reconfirmed";
 "screen_encryption_reset_footer" = "Only reset your digital identity if you don't have access to another verified device and you don't have your recovery key.";
-"screen_encryption_reset_no_chats_message" = "It looks like you don’t have any chats yet. If this is correct, you can safely proceed with resetting your digital identity";
+"screen_encryption_reset_no_chats_message" = "It looks like you don’t have any encrypted chats yet. If this is correct, you can safely proceed with resetting your digital identity.";
 "screen_encryption_reset_no_options_subtitle" = "You don’t have access to any other verified devices or a recovery key, so you’ll need to reset your digital identity to continue using the app.";
 "screen_encryption_reset_no_options_title" = "You need to reset your digital identity";
 "screen_encryption_reset_subtitle" = "If you don’t have access to any other verified devices and you don’t have your recovery key, then you’ll need to reset your digital identity to continue using the app.";
@@ -851,7 +851,6 @@
 "screen_home_tab_search" = "Search";
 "screen_home_tab_spaces" = "Spaces";
 "screen_identity_confirmation_cannot_confirm" = "Can't confirm?";
-"screen_identity_confirmation_create_new_recovery_key" = "Create a new recovery key";
 "screen_identity_confirmation_sign_out" = "Sign out";
 "screen_identity_confirmation_subtitle" = "Choose how to verify to set up secure messaging.";
 "screen_identity_confirmation_title" = "Confirm your digital identity";
@@ -1198,7 +1197,6 @@
 "screen_recovery_key_check_subtitle" = "Enter the recovery key you’ve saved to make sure that it’s correct and active.";
 "screen_recovery_key_check_success_title" = "Your recovery key is active";
 "screen_recovery_key_check_title" = "Check your recovery key";
-"screen_recovery_key_confirm_create_new_recovery_key" = "Create new recovery key";
 "screen_recovery_key_confirm_description" = "Make sure nobody can see this screen!";
 "screen_recovery_key_confirm_error_content" = "Please try again to confirm access to your key storage.";
 "screen_recovery_key_confirm_error_title" = "Incorrect recovery key";
@@ -1219,7 +1217,7 @@
 "screen_recovery_key_setup_generate_key" = "Generate your recovery key";
 "screen_recovery_key_setup_generate_key_description" = "Do not share this with anyone!";
 "screen_recovery_key_setup_success" = "Recovery setup successful";
-"screen_recovery_key_setup_title" = "Get recovery key";
+"screen_recovery_key_setup_title" = "Create recovery key";
 "screen_recovery_key_success_title" = "Your new recovery key is now active";
 "screen_report_content_block_user" = "Block user";
 "screen_report_content_block_user_hint" = "Check if you want to hide all current and future messages from this user";
@@ -1299,9 +1297,6 @@
 "screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
 "screen_room_confirm_removal_title" = "Remove message?";
 "screen_room_details_add_topic_title" = "Add topic";
-"screen_room_details_audio_push_to_talk" = "Push to talk";
-"screen_room_details_audio_title" = "Room Audio";
-"screen_room_details_audio_video_calls" = "Video calls";
 "screen_room_details_badge_encrypted" = "Encrypted";
 "screen_room_details_badge_not_encrypted" = "Not encrypted";
 "screen_room_details_badge_public" = "Public room";
@@ -1549,6 +1544,9 @@
 "screen_session_verification_waiting_subtitle" = "Once accepted you’ll be able to continue with the verification.";
 "screen_session_verification_waiting_to_accept_title" = "Waiting to accept request";
 "screen_settings_add_account" = "Add account";
+"screen_settings_message_text_size_adjust_size" = "Adjust size";
+"screen_settings_message_text_size_default_description" = "Default text size is %1$d.";
+"screen_settings_message_text_size_title" = "Message text size";
 "screen_settings_user_status_away" = "Away";
 "screen_settings_user_status_be_right_back" = "Be right back";
 "screen_settings_user_status_custom" = "Custom…";
@@ -1583,13 +1581,13 @@
 "screen_signout_key_backup_ongoing_subtitle" = "Please wait for this to complete before removing this device.";
 "screen_signout_key_backup_ongoing_title" = "Your keys are still being backed up";
 "screen_signout_other_verified_device_dialog_content" = "Make sure you always have access to another verified device or your recovery key to avoid losing your encrypted chat history.";
-"screen_signout_other_verified_device_dialog_title" = "Are you sure you want to remove this device?";
+"screen_signout_other_verified_device_dialog_title" = "Remove this device from your account?";
 "screen_signout_preference_item" = "Remove this device";
 "screen_signout_recovery_disabled_subtitle" = "This is your only device. If you remove it you’ll need a recovery key in order to confirm your digital identity and restore your encrypted chats the next time you sign in.";
 "screen_signout_recovery_disabled_title" = "You’re about to lose access to your encrypted chats";
 "screen_signout_save_recovery_key_action_check" = "Check your recovery key";
 "screen_signout_save_recovery_key_action_continue" = "Continue to remove this device";
-"screen_signout_save_recovery_key_action_generate" = "Generate new recovery key";
+"screen_signout_save_recovery_key_action_generate" = "Create new recovery key";
 "screen_signout_save_recovery_key_subtitle" = "This is your only device. If you remove it you’ll need a recovery key in order to confirm your digital identity and restore your encrypted chats the next time you sign in.";
 "screen_signout_save_recovery_key_title" = "Make sure you have access to your recovery key before removing this device";
 "screen_space_add_room_action" = "Room";
@@ -1618,6 +1616,10 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified digital identity was reset.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Message not sent because %1$@ has not verified all devices.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Message not sent because you have not verified one or more of your devices.";
+"screen_timeline_sample_answer" = "That’s because I ate one 🍪";
+"screen_timeline_sample_question" = "I baked a dozen cookies, but there are only 11 here 👀";
+"screen_timeline_sample_recipient" = "Sally";
+"screen_timeline_sample_sender" = "Bob";
 "screen_view_location_title" = "Location";
 "settings_rageshake" = "Rageshake";
 "settings_rageshake_detection_threshold" = "Detection threshold";

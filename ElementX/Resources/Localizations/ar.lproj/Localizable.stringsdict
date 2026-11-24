@@ -946,10 +946,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>%1$d انضموا</string>
+			<key>many</key>
+			<string>%1$d انضموا</string>
 			<key>one</key>
-			<string>%1$d joined</string>
+			<string>%1$d انضم</string>
 			<key>other</key>
-			<string>%1$d joined</string>
+			<string>%1$d انضموا</string>
+			<key>two</key>
+			<string>%1$d انضما</string>
+			<key>zero</key>
+			<string>لم ينضم احد</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

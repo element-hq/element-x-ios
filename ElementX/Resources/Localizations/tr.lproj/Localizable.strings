@@ -842,7 +842,7 @@
 "screen_encryption_reset_bullet_3" = "Mevcut tüm cihazlarınızı ve kişilerinizi tekrar doğrulamanız gerekecek";
 "screen_encryption_reset_bullet_4" = "Any devices you’re signed in to will need to be reconfirmed";
 "screen_encryption_reset_footer" = "Kimliğinizi yalnızca oturum açtığınız başka bir cihaza erişiminiz yoksa ve kurtarma anahtarınızı kaybettiyseniz sıfırlayın.";
-"screen_encryption_reset_no_chats_message" = "It looks like you don’t have any chats yet. If this is correct, you can safely proceed with resetting your digital identity";
+"screen_encryption_reset_no_chats_message" = "It looks like you don’t have any encrypted chats yet. If this is correct, you can safely proceed with resetting your digital identity.";
 "screen_encryption_reset_no_options_subtitle" = "You don’t have access to any other verified devices or a recovery key, so you’ll need to reset your digital identity to continue using the app.";
 "screen_encryption_reset_no_options_title" = "You need to reset your digital identity";
 "screen_encryption_reset_subtitle" = "If you don’t have access to any other verified devices and you don’t have your recovery key, then you’ll need to reset your digital identity to continue using the app.";
@@ -851,7 +851,6 @@
 "screen_home_tab_search" = "Search";
 "screen_home_tab_spaces" = "Alanlar";
 "screen_identity_confirmation_cannot_confirm" = "Onaylayamıyor musunuz?";
-"screen_identity_confirmation_create_new_recovery_key" = "Yeni bir kurtarma anahtarı oluştur";
 "screen_identity_confirmation_sign_out" = "Sign out";
 "screen_identity_confirmation_subtitle" = "Güvenli mesajlaşmayı ayarlamak için bu cihazı doğrulayın.";
 "screen_identity_confirmation_title" = "Kimliğinizi doğrulayın";
@@ -1198,7 +1197,6 @@
 "screen_recovery_key_check_subtitle" = "Enter the recovery key you’ve saved to make sure that it’s correct and active.";
 "screen_recovery_key_check_success_title" = "Your recovery key is active";
 "screen_recovery_key_check_title" = "Check your recovery key";
-"screen_recovery_key_confirm_create_new_recovery_key" = "Yeni kurtarma anahtarı oluştur";
 "screen_recovery_key_confirm_description" = "Bu ekranı kimsenin göremediğinden emin olun!";
 "screen_recovery_key_confirm_error_content" = "Anahtar depolama alanınıza erişimi onaylamak için lütfen tekrar deneyin.";
 "screen_recovery_key_confirm_error_title" = "Yanlış kurtarma anahtarı";
@@ -1299,9 +1297,6 @@
 "screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
 "screen_room_confirm_removal_title" = "Remove message?";
 "screen_room_details_add_topic_title" = "Konu ekle";
-"screen_room_details_audio_push_to_talk" = "Push to talk";
-"screen_room_details_audio_title" = "Room Audio";
-"screen_room_details_audio_video_calls" = "Video calls";
 "screen_room_details_badge_encrypted" = "Şifrelenmiş";
 "screen_room_details_badge_not_encrypted" = "Şifrelenmemiş";
 "screen_room_details_badge_public" = "Herkese açık oda";
@@ -1549,6 +1544,9 @@
 "screen_session_verification_waiting_subtitle" = "Kabul edildikten sonra doğrulama işlemine devam edebileceksiniz.";
 "screen_session_verification_waiting_to_accept_title" = "İsteğin kabul edilmesi bekleniyor";
 "screen_settings_add_account" = "Add account";
+"screen_settings_message_text_size_adjust_size" = "Adjust size";
+"screen_settings_message_text_size_default_description" = "Default text size is %1$d.";
+"screen_settings_message_text_size_title" = "Message text size";
 "screen_settings_user_status_away" = "Away";
 "screen_settings_user_status_be_right_back" = "Be right back";
 "screen_settings_user_status_custom" = "Custom…";
@@ -1583,13 +1581,13 @@
 "screen_signout_key_backup_ongoing_subtitle" = "Lütfen oturumu kapatmadan önce bunun tamamlanmasını bekleyin.";
 "screen_signout_key_backup_ongoing_title" = "Anahtarlarınız hala yedekleniyor";
 "screen_signout_other_verified_device_dialog_content" = "Make sure you always have access to another verified device or your recovery key to avoid losing your encrypted chat history.";
-"screen_signout_other_verified_device_dialog_title" = "Are you sure you want to remove this device?";
+"screen_signout_other_verified_device_dialog_title" = "Remove this device from your account?";
 "screen_signout_preference_item" = "Oturumu kapat";
 "screen_signout_recovery_disabled_subtitle" = "Son oturumunuzdan çıkmak üzeresiniz. Şimdi çıkış yaparsanız şifrelenmiş mesajlarınıza erişiminizi kaybedersiniz.";
 "screen_signout_recovery_disabled_title" = "Kurtarma ayarlanmadı";
 "screen_signout_save_recovery_key_action_check" = "Check your recovery key";
 "screen_signout_save_recovery_key_action_continue" = "Continue to remove this device";
-"screen_signout_save_recovery_key_action_generate" = "Generate new recovery key";
+"screen_signout_save_recovery_key_action_generate" = "Create new recovery key";
 "screen_signout_save_recovery_key_subtitle" = "Son oturumunuzdan çıkmak üzeresiniz. Şimdi oturumu kapatırsanız şifrelenmiş mesajlarınıza erişiminizi kaybedebilirsiniz.";
 "screen_signout_save_recovery_key_title" = "Make sure you have access to your recovery key before removing this device";
 "screen_space_add_room_action" = "Room";
@@ -1618,6 +1616,10 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "%1$@ kullanıcısının doğrulanmış kimliği değiştiği için ileti gönderilmedi.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "%1$@ tüm cihazları doğrulamadığı için mesaj gönderilmedi.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Bir veya daha fazla cihazınızı doğrulamadığınız için mesaj gönderilmedi.";
+"screen_timeline_sample_answer" = "That’s because I ate one 🍪";
+"screen_timeline_sample_question" = "I baked a dozen cookies, but there are only 11 here 👀";
+"screen_timeline_sample_recipient" = "Sally";
+"screen_timeline_sample_sender" = "Bob";
 "screen_view_location_title" = "Konum";
 "settings_rageshake" = "Rageshake";
 "settings_rageshake_detection_threshold" = "Algılama eşiği";

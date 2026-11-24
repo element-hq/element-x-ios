@@ -842,7 +842,7 @@
 "screen_encryption_reset_bullet_3" = "Du bliver nødt til at verificere alle dine eksisterende enheder og kontakter påny";
 "screen_encryption_reset_bullet_4" = "Any devices you’re signed in to will need to be reconfirmed";
 "screen_encryption_reset_footer" = "Nulstil kun din digitale identitet, hvis du ikke har adgang til en anden enhed, der er logget ind, og du har mistet din gendannelsesnøgle.";
-"screen_encryption_reset_no_chats_message" = "It looks like you don’t have any chats yet. If this is correct, you can safely proceed with resetting your digital identity";
+"screen_encryption_reset_no_chats_message" = "It looks like you don’t have any encrypted chats yet. If this is correct, you can safely proceed with resetting your digital identity.";
 "screen_encryption_reset_no_options_subtitle" = "You don’t have access to any other verified devices or a recovery key, so you’ll need to reset your digital identity to continue using the app.";
 "screen_encryption_reset_no_options_title" = "You need to reset your digital identity";
 "screen_encryption_reset_subtitle" = "If you don’t have access to any other verified devices and you don’t have your recovery key, then you’ll need to reset your digital identity to continue using the app.";
@@ -851,7 +851,6 @@
 "screen_home_tab_search" = "Search";
 "screen_home_tab_spaces" = "Klynger";
 "screen_identity_confirmation_cannot_confirm" = "Kan ikke bekræfte?";
-"screen_identity_confirmation_create_new_recovery_key" = "Opret en ny gendannelsesnøgle";
 "screen_identity_confirmation_sign_out" = "Sign out";
 "screen_identity_confirmation_subtitle" = "Vælg, hvordan du vil verificere dig for at konfigurere sikre beskeder.";
 "screen_identity_confirmation_title" = "Bekræft din digitale identitet";
@@ -1198,7 +1197,6 @@
 "screen_recovery_key_check_subtitle" = "Enter the recovery key you’ve saved to make sure that it’s correct and active.";
 "screen_recovery_key_check_success_title" = "Your recovery key is active";
 "screen_recovery_key_check_title" = "Check your recovery key";
-"screen_recovery_key_confirm_create_new_recovery_key" = "Opret ny gendannelsesnøgle";
 "screen_recovery_key_confirm_description" = "Sørg for, at ingen kan se denne skærm!";
 "screen_recovery_key_confirm_error_content" = "Prøv igen for at bekræfte adgangen til dit nøglelager.";
 "screen_recovery_key_confirm_error_title" = "Forkert gendannelsesnøgle";
@@ -1299,9 +1297,6 @@
 "screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
 "screen_room_confirm_removal_title" = "Remove message?";
 "screen_room_details_add_topic_title" = "Tilføj emne";
-"screen_room_details_audio_push_to_talk" = "Push to talk";
-"screen_room_details_audio_title" = "Room Audio";
-"screen_room_details_audio_video_calls" = "Video calls";
 "screen_room_details_badge_encrypted" = "Krypteret";
 "screen_room_details_badge_not_encrypted" = "Ikke krypteret";
 "screen_room_details_badge_public" = "Offentligt rum";
@@ -1549,6 +1544,9 @@
 "screen_session_verification_waiting_subtitle" = "Når du er blevet accepteret, kan du fortsætte med verifikationen.";
 "screen_session_verification_waiting_to_accept_title" = "Venter på at acceptere anmodningen";
 "screen_settings_add_account" = "Add account";
+"screen_settings_message_text_size_adjust_size" = "Adjust size";
+"screen_settings_message_text_size_default_description" = "Default text size is %1$d.";
+"screen_settings_message_text_size_title" = "Message text size";
 "screen_settings_user_status_away" = "Away";
 "screen_settings_user_status_be_right_back" = "Be right back";
 "screen_settings_user_status_custom" = "Custom…";
@@ -1583,13 +1581,13 @@
 "screen_signout_key_backup_ongoing_subtitle" = "Vent venligst, indtil dette er færdigt, før du fjerner denne enhed.";
 "screen_signout_key_backup_ongoing_title" = "Dine nøgler bliver stadig sikkerhedskopieret";
 "screen_signout_other_verified_device_dialog_content" = "Make sure you always have access to another verified device or your recovery key to avoid losing your encrypted chat history.";
-"screen_signout_other_verified_device_dialog_title" = "Are you sure you want to remove this device?";
+"screen_signout_other_verified_device_dialog_title" = "Remove this device from your account?";
 "screen_signout_preference_item" = "Fjern denne enhed";
 "screen_signout_recovery_disabled_subtitle" = "Dette er din eneste enhed. Hvis du fjerner den, skal du bruge en gendannelsesnøgle for at bekræfte din digitale identitet og gendanne dine krypterede chats, næste gang du logger ind.";
 "screen_signout_recovery_disabled_title" = "Du er ved at miste adgangen til dine krypterede chats";
 "screen_signout_save_recovery_key_action_check" = "Check your recovery key";
 "screen_signout_save_recovery_key_action_continue" = "Continue to remove this device";
-"screen_signout_save_recovery_key_action_generate" = "Generate new recovery key";
+"screen_signout_save_recovery_key_action_generate" = "Create new recovery key";
 "screen_signout_save_recovery_key_subtitle" = "Dette er din eneste enhed. Hvis du fjerner den, skal du bruge en gendannelsesnøgle for at bekræfte din digitale identitet og gendanne dine krypterede chats, næste gang du logger ind.";
 "screen_signout_save_recovery_key_title" = "Sørg for, at du har adgang til din gendannelsesnøgle, før du fjerner denne enhed.";
 "screen_space_add_room_action" = "Rum";
@@ -1618,6 +1616,10 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Beskeden blev ikke sendt fordi %1$@ s bekræftede digitale identitet blev nulstillet.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Meddelelsen er ikke sendt, fordi %1$@ ikke har bekræftet alle enheder.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Beskeden er ikke sendt, fordi du ikke har verificeret en eller flere af dine enheder.";
+"screen_timeline_sample_answer" = "That’s because I ate one 🍪";
+"screen_timeline_sample_question" = "I baked a dozen cookies, but there are only 11 here 👀";
+"screen_timeline_sample_recipient" = "Sally";
+"screen_timeline_sample_sender" = "Bob";
 "screen_view_location_title" = "Placering";
 "settings_rageshake" = "Ryst enheden i frustration";
 "settings_rageshake_detection_threshold" = "Tærskel for registrering";

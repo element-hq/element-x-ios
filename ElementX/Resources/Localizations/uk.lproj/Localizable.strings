@@ -851,7 +851,6 @@
 "screen_home_tab_search" = "Пошук";
 "screen_home_tab_spaces" = "Простори";
 "screen_identity_confirmation_cannot_confirm" = "Не можете підтвердити?";
-"screen_identity_confirmation_create_new_recovery_key" = "Створити новий ключ відновлення";
 "screen_identity_confirmation_sign_out" = "Вийти";
 "screen_identity_confirmation_subtitle" = "Виберіть спосіб звіряння, щоб налаштувати безпечний обмін повідомленнями.";
 "screen_identity_confirmation_title" = "Підтвердьте свою цифрову ідентичність";
@@ -1198,7 +1197,6 @@
 "screen_recovery_key_check_subtitle" = "Enter the recovery key you’ve saved to make sure that it’s correct and active.";
 "screen_recovery_key_check_success_title" = "Your recovery key is active";
 "screen_recovery_key_check_title" = "Check your recovery key";
-"screen_recovery_key_confirm_create_new_recovery_key" = "Створити новий ключ відновлення";
 "screen_recovery_key_confirm_description" = "Впевніться, що ніхто не дивиться!";
 "screen_recovery_key_confirm_error_content" = "Будь ласка, спробуйте ще раз, щоб підтвердити доступ до сховища ключів.";
 "screen_recovery_key_confirm_error_title" = "Неправильний ключ відновлення";
@@ -1299,9 +1297,6 @@
 "screen_room_confirm_removal_reason_supporting_text" = "(Необов'язково)";
 "screen_room_confirm_removal_title" = "Вилучити повідомлення?";
 "screen_room_details_add_topic_title" = "Додати тему";
-"screen_room_details_audio_push_to_talk" = "Натисніть, щоб говорити";
-"screen_room_details_audio_title" = "Аудіо в кімнаті";
-"screen_room_details_audio_video_calls" = "Відеовиклики";
 "screen_room_details_badge_encrypted" = "Зашифровано";
 "screen_room_details_badge_not_encrypted" = "Не зашифровано";
 "screen_room_details_badge_public" = "Загальнодоступна кімната";
@@ -1549,6 +1544,9 @@
 "screen_session_verification_waiting_subtitle" = "Після схвалення ви зможете продовжити звіряння.";
 "screen_session_verification_waiting_to_accept_title" = "Очікування на прийняття запиту";
 "screen_settings_add_account" = "Додати обліковий запис";
+"screen_settings_message_text_size_adjust_size" = "Adjust size";
+"screen_settings_message_text_size_default_description" = "Default text size is %1$d.";
+"screen_settings_message_text_size_title" = "Message text size";
 "screen_settings_user_status_away" = "Не на місці";
 "screen_settings_user_status_be_right_back" = "Зараз повернуся";
 "screen_settings_user_status_custom" = "Власний...";
@@ -1589,7 +1587,7 @@
 "screen_signout_recovery_disabled_title" = "Ви втратите доступ до своїх зашифрованих бесід";
 "screen_signout_save_recovery_key_action_check" = "Check your recovery key";
 "screen_signout_save_recovery_key_action_continue" = "Продовжити вилучення цього пристрою";
-"screen_signout_save_recovery_key_action_generate" = "Generate new recovery key";
+"screen_signout_save_recovery_key_action_generate" = "Create new recovery key";
 "screen_signout_save_recovery_key_subtitle" = "Це ваш єдиний пристрій. Якщо ви його вилучите, вам знадобиться ключ відновлення, щоб підтвердити свою цифрову ідентичність і відновити зашифровані бесіди під час наступного входу.";
 "screen_signout_save_recovery_key_title" = "Переконайтеся, що у вас є доступ до ключа відновлення, перш ніж вилучити цей пристрій";
 "screen_space_add_room_action" = "Кімната";
@@ -1618,6 +1616,10 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Повідомлення не надіслано, оскільки звірена цифрова ідентичність %1$@ була скинута.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Повідомлення не надіслано, оскільки %1$@ перевірив не всі пристрої.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Повідомлення не надіслано, оскільки ви не звірили один або кілька своїх пристроїв.";
+"screen_timeline_sample_answer" = "That’s because I ate one 🍪";
+"screen_timeline_sample_question" = "I baked a dozen cookies, but there are only 11 here 👀";
+"screen_timeline_sample_recipient" = "Sally";
+"screen_timeline_sample_sender" = "Bob";
 "screen_view_location_title" = "Розташування";
 "settings_rageshake" = "Лютострус";
 "settings_rageshake_detection_threshold" = "Поріг виявлення";
@@ -1659,7 +1661,7 @@
 "slash_command_error_discard_session_not_handled" = "Only supported in encrypted rooms";
 "slash_command_not_supported_in_threads" = "The command \"%1$@\" is recognized but not supported in threads.";
 "slash_command_parameters_error" = "The command \"%1$@\" needs more parameters, or some parameters are incorrect. The syntax is\n\n%2$@";
-"slash_command_unrecognized" = "Unrecognized command: %1$@";
+"slash_command_unrecognized" = "Невідома команда: %1$@\n";
 "state_event_avatar_changed_too" = "(аватар теж було змінено)";
 "state_event_avatar_url_changed" = "%1$@ змінює свій аватар";
 "state_event_avatar_url_changed_by_you" = "Ви змінили свій аватар";

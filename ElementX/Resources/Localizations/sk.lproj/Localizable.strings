@@ -842,7 +842,7 @@
 "screen_encryption_reset_bullet_3" = "Budete musieť znova overiť všetky existujúce zariadenia a kontakty";
 "screen_encryption_reset_bullet_4" = "Any devices you’re signed in to will need to be reconfirmed";
 "screen_encryption_reset_footer" = "Obnovte svoju totožnosť iba vtedy, ak nemáte prístup k inému prihlásenému zariadeniu a stratili ste kľúč na obnovenie.";
-"screen_encryption_reset_no_chats_message" = "It looks like you don’t have any chats yet. If this is correct, you can safely proceed with resetting your digital identity";
+"screen_encryption_reset_no_chats_message" = "It looks like you don’t have any encrypted chats yet. If this is correct, you can safely proceed with resetting your digital identity.";
 "screen_encryption_reset_no_options_subtitle" = "You don’t have access to any other verified devices or a recovery key, so you’ll need to reset your digital identity to continue using the app.";
 "screen_encryption_reset_no_options_title" = "You need to reset your digital identity";
 "screen_encryption_reset_subtitle" = "If you don’t have access to any other verified devices and you don’t have your recovery key, then you’ll need to reset your digital identity to continue using the app.";
@@ -851,7 +851,6 @@
 "screen_home_tab_search" = "Search";
 "screen_home_tab_spaces" = "Priestory";
 "screen_identity_confirmation_cannot_confirm" = "Nemôžete potvrdiť?";
-"screen_identity_confirmation_create_new_recovery_key" = "Vytvoriť nový kľúč na obnovenie";
 "screen_identity_confirmation_sign_out" = "Sign out";
 "screen_identity_confirmation_subtitle" = "Ak chcete nastaviť zabezpečené správy, overte toto zariadenie.";
 "screen_identity_confirmation_title" = "Potvrďte, že ste to vy";
@@ -1198,7 +1197,6 @@
 "screen_recovery_key_check_subtitle" = "Enter the recovery key you’ve saved to make sure that it’s correct and active.";
 "screen_recovery_key_check_success_title" = "Your recovery key is active";
 "screen_recovery_key_check_title" = "Check your recovery key";
-"screen_recovery_key_confirm_create_new_recovery_key" = "Vytvoriť nový kľúč na obnovenie";
 "screen_recovery_key_confirm_description" = "Uistite sa, že túto obrazovku nikto nevidí!";
 "screen_recovery_key_confirm_error_content" = "Skúste prosím znova potvrdiť prístup k úložisku kľúčov.";
 "screen_recovery_key_confirm_error_title" = "Nesprávny kľúč na obnovenie";
@@ -1299,9 +1297,6 @@
 "screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
 "screen_room_confirm_removal_title" = "Remove message?";
 "screen_room_details_add_topic_title" = "Pridať tému";
-"screen_room_details_audio_push_to_talk" = "Push to talk";
-"screen_room_details_audio_title" = "Room Audio";
-"screen_room_details_audio_video_calls" = "Video calls";
 "screen_room_details_badge_encrypted" = "Zašifrované";
 "screen_room_details_badge_not_encrypted" = "Nešifrované";
 "screen_room_details_badge_public" = "Verejná miestnosť";
@@ -1549,6 +1544,9 @@
 "screen_session_verification_waiting_subtitle" = "Po prijatí budete môcť pokračovať v overovaní.";
 "screen_session_verification_waiting_to_accept_title" = "Čaká sa na prijatie žiadosti";
 "screen_settings_add_account" = "Add account";
+"screen_settings_message_text_size_adjust_size" = "Adjust size";
+"screen_settings_message_text_size_default_description" = "Default text size is %1$d.";
+"screen_settings_message_text_size_title" = "Message text size";
 "screen_settings_user_status_away" = "Away";
 "screen_settings_user_status_be_right_back" = "Be right back";
 "screen_settings_user_status_custom" = "Custom…";
@@ -1583,13 +1581,13 @@
 "screen_signout_key_backup_ongoing_subtitle" = "Pred odhlásením počkajte, kým sa to dokončí.";
 "screen_signout_key_backup_ongoing_title" = "Vaše kľúče sa ešte stále zálohujú";
 "screen_signout_other_verified_device_dialog_content" = "Make sure you always have access to another verified device or your recovery key to avoid losing your encrypted chat history.";
-"screen_signout_other_verified_device_dialog_title" = "Are you sure you want to remove this device?";
+"screen_signout_other_verified_device_dialog_title" = "Remove this device from your account?";
 "screen_signout_preference_item" = "Odstrániť toto zariadenie";
 "screen_signout_recovery_disabled_subtitle" = "Chystáte sa odhlásiť z vašej poslednej relácie. Ak sa teraz odhlásite, stratíte prístup k svojim šifrovaným správam.";
 "screen_signout_recovery_disabled_title" = "Čoskoro stratíte prístup k svojim zašifrovaným konverzáciám";
 "screen_signout_save_recovery_key_action_check" = "Check your recovery key";
 "screen_signout_save_recovery_key_action_continue" = "Continue to remove this device";
-"screen_signout_save_recovery_key_action_generate" = "Generate new recovery key";
+"screen_signout_save_recovery_key_action_generate" = "Create new recovery key";
 "screen_signout_save_recovery_key_subtitle" = "Chystáte sa odhlásiť z vašej poslednej relácie. Ak sa teraz odhlásite, môžete stratiť prístup k svojim šifrovaným správam.";
 "screen_signout_save_recovery_key_title" = "Uložili ste si kľúč na obnovenie?";
 "screen_space_add_room_action" = "Miestnosť";
@@ -1618,6 +1616,10 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Správa nebola odoslaná, pretože sa zmenila overená totožnosť používateľa %1$@.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Správa nebola odoslaná, pretože %1$@ neoveril/a všetky zariadenia.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Správa nebola odoslaná, pretože ste neoverili jedno alebo viac svojich zariadení.";
+"screen_timeline_sample_answer" = "That’s because I ate one 🍪";
+"screen_timeline_sample_question" = "I baked a dozen cookies, but there are only 11 here 👀";
+"screen_timeline_sample_recipient" = "Sally";
+"screen_timeline_sample_sender" = "Bob";
 "screen_view_location_title" = "Poloha";
 "settings_rageshake" = "Zúrivé potrasenie";
 "settings_rageshake_detection_threshold" = "Prahová hodnota detekcie";
