@@ -66,28 +66,12 @@ private struct EmoticonView: View {
     let hidesImage: Bool
     let onViewAppear: () -> Void
     
-    @State private var isRevealed = false
-    
     var body: some View {
         LoadableImage(mediaSource: mediaSource,
                       mediaProvider: mediaProvider,
                       transformer: { $0.scaledToFit().onAppear(perform: onViewAppear) },
-                      placeholder: {
-                          Group {
-                              if hidesImage, !isRevealed {
-                                  Button { isRevealed = true } label: {
-                                      Image.compound.image
-                                          .resizable()
-                                          .scaledToFit()
-                                          .foregroundStyle(.compound.iconSecondary)
-                                  }
-                                  .buttonStyle(.plain)
-                                  .onAppear(perform: onViewAppear)
-                              } else {
-                                  Color.clear
-                              }
-                          }
-                      })
-                      .environment(\.shouldAutomaticallyLoadImages, !hidesImage || isRevealed)
+                      placeholder: { Color.clear.onAppear(perform: onViewAppear) })
+            .environment(\.shouldAutomaticallyLoadImages, !hidesImage)
+            .environment(\.showsIconForHiddenImages, true)
     }
 }

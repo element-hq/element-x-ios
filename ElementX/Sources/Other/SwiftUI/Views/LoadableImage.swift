@@ -100,6 +100,7 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View {
 
 private struct LoadableImageContent<TransformerView: View, PlaceholderView: View>: View, ImageDataProvider {
     @Environment(\.shouldAutomaticallyLoadImages) private var loadAutomatically
+    @Environment(\.showsIconForHiddenImages) private var showsIconForHiddenImages
     
     private let mediaSource: MediaSourceProxy
     private let mediaType: LoadableImageMediaType
@@ -185,7 +186,9 @@ private struct LoadableImageContent<TransformerView: View, PlaceholderView: View
     var placeholderOverlay: some View {
         switch mediaType {
         case .avatar, .generic:
-            EmptyView()
+            if !shouldRender, showsIconForHiddenImages {
+                hiddenImageIcon
+            }
         case .timelineItem:
             if shouldRender {
                 ProgressView(L10n.commonLoading)
@@ -226,6 +229,17 @@ private struct LoadableImageContent<TransformerView: View, PlaceholderView: View
                 }
                 .environment(\.colorScheme, .light)
         }
+    }
+    
+    var hiddenImageIcon: some View {
+        Image.compound.image
+            .resizable()
+            .scaledToFit()
+            .foregroundStyle(.compound.iconSecondary)
+            .contentShape(.rect)
+            .onTapGesture {
+                loadManually = true
+            }
     }
     
     // MARK: - ImageDataProvider
@@ -319,6 +333,8 @@ private class ContentLoader: ObservableObject {
 extension EnvironmentValues {
     /// Whether or not images should be loaded inside `LoadableImage` without a user interaction.
     @Entry var shouldAutomaticallyLoadImages = true
+    /// Whether or not `LoadableImage` shows an icon in place of an image that isn't loaded automatically, loading it when tapped.
+    @Entry var showsIconForHiddenImages = false
 }
 
 // MARK: - Previews
