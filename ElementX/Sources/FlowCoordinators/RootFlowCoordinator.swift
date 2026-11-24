@@ -101,6 +101,8 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
     private var callScreenPictureInPictureController: AVPictureInPictureController?
     private var callScreenCancellable: AnyCancellable?
     
+    private var remoteLogoutFlowCoordinator: RemoteLogoutFlowCoordinator?
+    
     private var cancellables = Set<AnyCancellable>()
     
     private let actionsSubject: PassthroughSubject<RootFlowCoordinatorAction, Never> = .init()
@@ -381,8 +383,8 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
         
         // Shown after the transition, as stopping a user session flow retracts every indicator.
         switch error {
-        case .remoteLogout:
-            break // Show the Device Removed Remotely screen.
+        case .remoteLogout(let userSessionDetails):
+            startRemoteLogoutFlow(userSessionDetails: userSessionDetails)
         case .failedRestoringSession:
             showLoginErrorToast()
         case .none:
@@ -554,6 +556,32 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
         
         // The account's restoration moves on to its flow again, or its removal to the next account or authentication.
         Task { await userSessionManager.clearCaches(userID: userID) }
+    }
+    
+    /// Shows the accounts that the server logged out in a fullscreen cover above every account's screens.
+    private func startRemoteLogoutFlow(userSessionDetails: UserSessionDetails) {
+        if let remoteLogoutFlowCoordinator {
+            remoteLogoutFlowCoordinator.appendAdditionalSession(userSessionDetails)
+            return
+        }
+        
+        let rootCoordinator = NavigationRootCoordinator()
+        let coordinator = RemoteLogoutFlowCoordinator(userSessionDetails: userSessionDetails, navigationRootCoordinator: rootCoordinator)
+        coordinator.actionsPublisher
+            .sink { [weak self] action in
+                switch action {
+                case .complete:
+                    self?.navigationRootCoordinator.setFullScreenCoverCoordinator(nil)
+                }
+            }
+            .store(in: &cancellables)
+        
+        remoteLogoutFlowCoordinator = coordinator
+        coordinator.start()
+        
+        navigationRootCoordinator.setFullScreenCoverCoordinator(rootCoordinator) { [weak self] in
+            self?.remoteLogoutFlowCoordinator = nil
+        }
     }
     
     // MARK: - Sharing

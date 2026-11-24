@@ -501,7 +501,8 @@ struct UserSessionManagerTests {
         manager.addNewSession(UserSessionMock(.init(clientProxy: aliceClientProxy)))
         manager.addNewSession(bob)
         
-        let deferred = deferFulfillment(manager.callbacksPublisher) { $0 == .didRemoveAccount(userID: "@bob:matrix.org", error: .remoteLogout) }
+        let bobDetails = await UserSessionDetails(remoteLogoutClientProxy: bobClientProxy)
+        let deferred = deferFulfillment(manager.callbacksPublisher) { $0 == .didRemoveAccount(userID: "@bob:matrix.org", error: .remoteLogout(bobDetails)) }
         bob.callbacks.send(.didReceiveAuthError)
         try await deferred.fulfill()
         

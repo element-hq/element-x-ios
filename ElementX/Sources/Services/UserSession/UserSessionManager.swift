@@ -107,19 +107,23 @@ final class UserSessionManager: UserSessionManagerProtocol {
         authErrorsCancellable = sessionsSubject
             .map { userSessions in
                 Publishers.MergeMany(userSessions.map { userSession in
-                    let userID = userSession.clientProxy.userID
-                    return userSession.callbacks.map { callback in
+                    userSession.callbacks.map { callback in
                         switch callback {
-                        case .didReceiveAuthError: userID
+                        case .didReceiveAuthError: userSession
                         }
                     }
                 })
             }
             .switchToLatest()
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] userID in
+            .sink { [weak self] userSession in
                 guard let self else { return }
-                Task { await self.logout(userID: userID, error: .remoteLogout) }
+                
+                Task {
+                    // Load the account details before deleting the cache.
+                    let details = await UserSessionDetails(remoteLogoutClientProxy: userSession.clientProxy)
+                    await self.logout(userID: userSession.clientProxy.userID, error: .remoteLogout(details))
+                }
             }
     }
     

@@ -31,6 +31,7 @@ struct RemoteLogoutScreen: View {
             
             AccountInfoCardView(userProfile: context.viewState.userProfile,
                                 mediaProvider: context.mediaProvider)
+                .accessibilityIdentifier(A11yIdentifiers.remoteLogoutScreen.account(context.viewState.userProfile.id))
             
             VStack(alignment: .leading, spacing: 2) {
                 reasonItem(title: L10n.screenSignedOutReason1, icon: \.userProfile, position: .top)
@@ -55,13 +56,14 @@ struct RemoteLogoutScreen: View {
             context.send(viewAction: .done)
         }
         .buttonStyle(.compound(.primary))
+        .accessibilityIdentifier(A11yIdentifiers.remoteLogoutScreen.done)
     }
 }
 
 // MARK: - Previews
 
 struct RemoteLogoutScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = RemoteLogoutScreenViewModel(userSession: UserSessionMock(.init()))
+    static let viewModel = RemoteLogoutScreenViewModel(userSessionDetails: .init(userProfile: .mockAlice, unreadCount: 0, mediaProvider: MediaProviderMock(.init())))
     
     static var previews: some View {
         RemoteLogoutScreen(context: viewModel.context)

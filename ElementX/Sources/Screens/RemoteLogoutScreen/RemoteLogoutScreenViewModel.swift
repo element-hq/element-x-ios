@@ -16,14 +16,9 @@ class RemoteLogoutScreenViewModel: RemoteLogoutScreenViewModelType, RemoteLogout
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(userSession: UserSessionProtocol) {
-        super.init(initialViewState: RemoteLogoutScreenViewState(userProfile: userSession.clientProxy.userProfilePublisher.value),
-                   mediaProvider: userSession.mediaProvider)
-        
-        userSession.clientProxy.userProfilePublisher
-            .receive(on: DispatchQueue.main)
-            .weakAssign(to: \.state.userProfile, on: self)
-            .store(in: &cancellables)
+    init(userSessionDetails: UserSessionDetails) {
+        super.init(initialViewState: RemoteLogoutScreenViewState(userProfile: userSessionDetails.userProfile),
+                   mediaProvider: userSessionDetails.mediaProvider)
     }
     
     // MARK: - Public

@@ -9029,6 +9029,52 @@ nonisolated class MediaLoaderMock: MediaLoaderProtocol, @unchecked Sendable {
             return loadMediaThumbnailForSourceWidthHeightReturnValue
         }
     }
+    //MARK: - loadCachedMediaThumbnailForSource
+
+    nonisolated(unsafe) var loadCachedMediaThumbnailForSourceWidthHeightThrowableError: Error?
+    private let loadCachedMediaThumbnailForSourceWidthHeightCallsCountLock = NSLock()
+    private nonisolated(unsafe) var loadCachedMediaThumbnailForSourceWidthHeightUnderlyingCallsCount = 0
+    var loadCachedMediaThumbnailForSourceWidthHeightCallsCount: Int {
+        get { loadCachedMediaThumbnailForSourceWidthHeightCallsCountLock.withLock { loadCachedMediaThumbnailForSourceWidthHeightUnderlyingCallsCount } }
+        set { loadCachedMediaThumbnailForSourceWidthHeightCallsCountLock.withLock { loadCachedMediaThumbnailForSourceWidthHeightUnderlyingCallsCount = newValue } }
+    }
+    var loadCachedMediaThumbnailForSourceWidthHeightCalled: Bool {
+        return loadCachedMediaThumbnailForSourceWidthHeightCallsCount > 0
+    }
+    private let loadCachedMediaThumbnailForSourceWidthHeightReceivedArgumentsLock = NSLock()
+    private nonisolated(unsafe) var loadCachedMediaThumbnailForSourceWidthHeightUnderlyingReceivedArguments: (source: MediaSourceProxy, width: UInt, height: UInt)?
+    var loadCachedMediaThumbnailForSourceWidthHeightReceivedArguments: (source: MediaSourceProxy, width: UInt, height: UInt)? {
+        get { loadCachedMediaThumbnailForSourceWidthHeightReceivedArgumentsLock.withLock { loadCachedMediaThumbnailForSourceWidthHeightUnderlyingReceivedArguments } }
+        set { loadCachedMediaThumbnailForSourceWidthHeightReceivedArgumentsLock.withLock { loadCachedMediaThumbnailForSourceWidthHeightUnderlyingReceivedArguments = newValue } }
+    }
+    private let loadCachedMediaThumbnailForSourceWidthHeightReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var loadCachedMediaThumbnailForSourceWidthHeightUnderlyingReceivedInvocations: [(source: MediaSourceProxy, width: UInt, height: UInt)] = []
+    var loadCachedMediaThumbnailForSourceWidthHeightReceivedInvocations: [(source: MediaSourceProxy, width: UInt, height: UInt)] {
+        get { loadCachedMediaThumbnailForSourceWidthHeightReceivedInvocationsLock.withLock { loadCachedMediaThumbnailForSourceWidthHeightUnderlyingReceivedInvocations } }
+        set { loadCachedMediaThumbnailForSourceWidthHeightReceivedInvocationsLock.withLock { loadCachedMediaThumbnailForSourceWidthHeightUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let loadCachedMediaThumbnailForSourceWidthHeightReturnValueLock = NSLock()
+    private nonisolated(unsafe) var loadCachedMediaThumbnailForSourceWidthHeightUnderlyingReturnValue: Data?
+    var loadCachedMediaThumbnailForSourceWidthHeightReturnValue: Data? {
+        get { loadCachedMediaThumbnailForSourceWidthHeightReturnValueLock.withLock { loadCachedMediaThumbnailForSourceWidthHeightUnderlyingReturnValue } }
+        set { loadCachedMediaThumbnailForSourceWidthHeightReturnValueLock.withLock { loadCachedMediaThumbnailForSourceWidthHeightUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var loadCachedMediaThumbnailForSourceWidthHeightClosure: ((MediaSourceProxy, UInt, UInt) async throws -> Data?)?
+
+    @concurrent func loadCachedMediaThumbnailForSource(_ source: MediaSourceProxy, width: UInt, height: UInt) async throws -> Data? {
+        if let error = loadCachedMediaThumbnailForSourceWidthHeightThrowableError {
+            throw error
+        }
+        loadCachedMediaThumbnailForSourceWidthHeightCallsCountLock.withLock { loadCachedMediaThumbnailForSourceWidthHeightUnderlyingCallsCount += 1 }
+        loadCachedMediaThumbnailForSourceWidthHeightReceivedArguments = (source: source, width: width, height: height)
+        loadCachedMediaThumbnailForSourceWidthHeightReceivedInvocationsLock.withLock { loadCachedMediaThumbnailForSourceWidthHeightUnderlyingReceivedInvocations.append((source: source, width: width, height: height)) }
+        if let loadCachedMediaThumbnailForSourceWidthHeightClosure = loadCachedMediaThumbnailForSourceWidthHeightClosure {
+            return try await loadCachedMediaThumbnailForSourceWidthHeightClosure(source, width, height)
+        } else {
+            return loadCachedMediaThumbnailForSourceWidthHeightReturnValue
+        }
+    }
     //MARK: - loadMediaFileForSource
 
     nonisolated(unsafe) var loadMediaFileForSourceFilenameThrowableError: Error?

@@ -25,6 +25,7 @@ enum A11yIdentifiers {
     static let authenticationStartScreen = AuthenticationStartScreen()
     static let reportContent = ReportContent()
     static let joinRoomScreen = JoinRoomScreen()
+    static let remoteLogoutScreen = RemoteLogoutScreen()
     static let roomScreen = RoomScreen()
     static let roomDetailsScreen = RoomDetailsScreen()
     static let roomNotificationSettingsScreen = RoomNotificationSettingsScreen()
@@ -211,6 +212,15 @@ enum A11yIdentifiers {
         let notifications = "room_details-notifications"
         let pollsHistory = "room_details-polls_history"
         let favourite = "room_details-favourite"
+    }
+    
+    struct RemoteLogoutScreen {
+        let done = "remote_logout-done"
+        
+        let accountPrefix = "remote_logout-account"
+        func account(_ userID: String) -> String {
+            "\(accountPrefix):\(userID)"
+        }
     }
     
     struct RoomMemberDetailsScreen {

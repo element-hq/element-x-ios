@@ -131,6 +131,8 @@ targets:
     - path: ../../ElementX/Sources/Services/Keychain/KeychainController.swift
     - path: ../../ElementX/Sources/Services/Keychain/KeychainControllerProtocol.swift
     - path: ../../ElementX/Sources/Services/Media/Provider
+      excludes:
+        - RemoteLogoutAvatarMediaProvider.swift
     - path: ../../ElementX/Sources/Services/Notification/NotificationConstants.swift
     - path: ../../ElementX/Sources/Services/Room/RoomSummary/RoomMessageEventStringBuilder.swift
     - path: ../../ElementX/Sources/Services/UserSession/RestorationToken.swift

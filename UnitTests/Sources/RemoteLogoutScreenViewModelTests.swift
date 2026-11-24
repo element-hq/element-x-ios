@@ -17,12 +17,12 @@ struct RemoteLogoutScreenViewModelTests {
     }
     
     init() {
-        viewModel = RemoteLogoutScreenViewModel(userSession: UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@alice:example.com")))))
+        viewModel = RemoteLogoutScreenViewModel(userSessionDetails: .init(userProfile: .mockAlice, unreadCount: 0, mediaProvider: MediaProviderMock(.init())))
     }
     
     @Test("The screen shows the profile of the user who was logged out")
     func initialState() {
-        #expect(context.viewState.userProfile.id == "@alice:example.com")
+        #expect(context.viewState.userProfile == .mockAlice)
         #expect(context.mediaProvider != nil)
     }
     

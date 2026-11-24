@@ -43,6 +43,11 @@ actor MediaLoader: MediaLoaderProtocol {
         }
     }
     
+    func loadCachedMediaThumbnailForSource(_ source: MediaSourceProxy, width: UInt, height: UInt) async throws -> Data? {
+        #warning("Use the cached loading from https://github.com/matrix-org/matrix-rust-sdk/pull/7546")
+        return try await loadMediaThumbnailForSource(source, width: width, height: height)
+    }
+    
     func loadMediaFileForSource(_ source: MediaSourceProxy, filename: String?) async throws -> MediaFileHandleProxy {
         guard let client else { throw MediaLoaderError.missingClient }
         let result = try await client.getMediaFile(mediaSource: source.underlyingSource,
