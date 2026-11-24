@@ -30,8 +30,6 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
     private let appHooks: AppHooks
     private let bugReportService: BugReportServiceProtocol
     private let elementCallManager: ElementCallManagerProtocol
-    /// The native call's analytics, shared by every account's call stack.
-    private let nativeCallAnalytics: NativeCallAnalytics
     
     /// Common background task to continue long-running tasks in the background.
     private var backgroundTask: UIBackgroundTaskIdentifier?
@@ -108,14 +106,14 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
         
         let posthogAnalyticsClient = PostHogAnalyticsClient()
         posthogAnalyticsClient.updateSuperProperties(AnalyticsEvent.SuperProperties(appPlatform: .EXI, cryptoSDK: .Rust, cryptoSDKVersion: sdkGitSha()))
-        analyticsService = AnalyticsService(client: posthogAnalyticsClient, appSettings: appSettings)
         
         // The same PostHog project as the embedded call.
         let callAnalyticsConfiguration = AnalyticsConfiguration(host: appSettings.elementCallPosthogAPIHost,
                                                                 apiKey: appSettings.elementCallPosthogAPIKey)
-        nativeCallAnalytics = NativeCallAnalytics {
+        let callAnalytics = NativeCallAnalytics {
             PostHogNativeCallAnalyticsClient(configuration: callAnalyticsConfiguration)
         }
+        analyticsService = AnalyticsService(client: posthogAnalyticsClient, appSettings: appSettings, callAnalytics: callAnalytics)
         
         userIndicatorController = UserIndicatorController()
         
@@ -130,7 +128,6 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
         let userSessionStore = UserSessionStore(keychainController: keychainController,
                                                 appSettings: appSettings,
                                                 analyticsService: analyticsService,
-                                                nativeCallAnalytics: nativeCallAnalytics,
                                                 appHooks: appHooks,
                                                 networkMonitor: networkMonitor,
                                                 targetContext: targetConfiguration.context)
@@ -194,14 +191,6 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
         
         registerBackgroundAppRefresh()
         registerSearchBackfill()
-        
-        appSettings.analyticsConsentStatePublisher
-            .map { $0 == .optedIn }
-            .removeDuplicates()
-            .sink { [nativeCallAnalytics] hasConsent in
-                nativeCallAnalytics.setConsent(hasConsent)
-            }
-            .store(in: &cancellables)
         
         appSettings.analyticsConsentStatePublisher
             .dropFirst() // Sentry is configured during init; only reconfigure when consent state actually changes

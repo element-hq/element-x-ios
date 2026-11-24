@@ -8,18 +8,25 @@
 
 import AnalyticsEvents
 import Combine
+import ElementCall
 import PostHog
 
 class AnalyticsService: AnalyticsServiceProtocol {
     /// The analytics client to send events with.
     private let client: AnalyticsClientProtocol
     private let appSettings: AppSettings
+    private let nativeCallAnalytics: NativeCallAnalytics?
     
     let signpost = Signposter()
     
-    init(client: AnalyticsClientProtocol, appSettings: AppSettings) {
+    var callAnalytics: ElementCallAnalyticsProtocol? {
+        nativeCallAnalytics
+    }
+    
+    init(client: AnalyticsClientProtocol, appSettings: AppSettings, callAnalytics: NativeCallAnalytics? = nil) {
         self.client = client
         self.appSettings = appSettings
+        nativeCallAnalytics = callAnalytics
     }
     
     var shouldShowAnalyticsPrompt: Bool {
@@ -42,12 +49,18 @@ class AnalyticsService: AnalyticsServiceProtocol {
         // The order is important here. PostHog ignores the reset if stopped.
         reset()
         client.stop()
+        nativeCallAnalytics?.setConsent(false)
         
         MXLog.info("Stopped.")
     }
     
     func startIfEnabled() {
-        guard isEnabled, !client.isRunning, let configuration = appSettings.analyticsConfiguration else { return }
+        guard isEnabled else { return }
+        
+        // Its own PostHog project, so independent of whether the app's client is running or configured.
+        nativeCallAnalytics?.setConsent(true)
+        
+        guard !client.isRunning, let configuration = appSettings.analyticsConfiguration else { return }
         
         client.start(analyticsConfiguration: configuration)
         

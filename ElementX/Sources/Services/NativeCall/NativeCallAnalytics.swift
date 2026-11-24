@@ -14,7 +14,7 @@ import Synchronization
 /// call reports to, and only while the user consents to analytics, as the embedded call does.
 ///
 /// One for the app, shared by every account's call stack: PostHog keeps one instance per project.
-/// The consent is pushed in by whoever observes it, through ``setConsent(_:)``.
+/// `AnalyticsService` pushes the consent in through ``setConsent(_:)``.
 final nonisolated class NativeCallAnalytics: ElementCallAnalyticsProtocol {
     private let makeClient: @MainActor () -> NativeCallAnalyticsClientProtocol?
     /// Only while the user consents: an event without one is dropped, never kept for later.

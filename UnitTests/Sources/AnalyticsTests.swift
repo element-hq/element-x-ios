@@ -16,6 +16,7 @@ final class AnalyticsTests {
     private let appSettings: AppSettings
     private let analytics: AnalyticsServiceProtocol
     private let analyticsClient: AnalyticsClientMock
+    private let madeCallClients = MadeNativeCallAnalyticsClients()
     private var posthogMock: PHGPostHogMock
     
     init() {
@@ -23,7 +24,9 @@ final class AnalyticsTests {
         
         analyticsClient = AnalyticsClientMock()
         analyticsClient.isRunning = false
-        analytics = AnalyticsService(client: analyticsClient, appSettings: appSettings)
+        analytics = AnalyticsService(client: analyticsClient,
+                                     appSettings: appSettings,
+                                     callAnalytics: madeCallClients.makeAnalytics())
         
         posthogMock = PHGPostHogMock()
         posthogMock.configureMockBehavior()
@@ -104,6 +107,7 @@ final class AnalyticsTests {
         #expect(!analytics.isEnabled)
         analytics.startIfEnabled()
         #expect(!analyticsClient.startAnalyticsConfigurationCalled)
+        #expect(madeCallClients.clients.isEmpty)
     }
     
     @Test
@@ -114,6 +118,23 @@ final class AnalyticsTests {
         #expect(analytics.isEnabled)
         analytics.startIfEnabled()
         #expect(analyticsClient.startAnalyticsConfigurationCalled)
+    }
+    
+    @Test("Opting in starts the call analytics, even when the app's client is already running")
+    func callAnalyticsOptIn() {
+        analyticsClient.isRunning = true
+        
+        analytics.optIn()
+        
+        #expect(madeCallClients.clients.map(\.isStopped) == [false])
+    }
+    
+    @Test("Opting out stops the call analytics")
+    func callAnalyticsOptOut() {
+        analytics.optIn()
+        analytics.optOut()
+        
+        #expect(madeCallClients.clients.map(\.isStopped) == [true])
     }
     
     @Test

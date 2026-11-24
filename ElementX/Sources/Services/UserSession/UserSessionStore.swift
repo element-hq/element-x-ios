@@ -15,7 +15,6 @@ class UserSessionStore: UserSessionStoreProtocol {
     private let clientFactory: ClientFactoryProtocol
     private let appSettings: AppSettings
     private let analyticsService: AnalyticsServiceProtocol
-    private let nativeCallAnalytics: (any ElementCallAnalyticsProtocol)?
     private let appHooks: AppHooks
     private let networkMonitor: NetworkMonitorProtocol
     private let targetContext: Target.Context
@@ -38,7 +37,6 @@ class UserSessionStore: UserSessionStoreProtocol {
          clientFactory: ClientFactoryProtocol = ClientFactory(),
          appSettings: AppSettings,
          analyticsService: AnalyticsServiceProtocol,
-         nativeCallAnalytics: (any ElementCallAnalyticsProtocol)?,
          appHooks: AppHooks,
          networkMonitor: NetworkMonitorProtocol,
          targetContext: Target.Context) {
@@ -46,7 +44,6 @@ class UserSessionStore: UserSessionStoreProtocol {
         self.clientFactory = clientFactory
         self.appSettings = appSettings
         self.analyticsService = analyticsService
-        self.nativeCallAnalytics = nativeCallAnalytics
         self.appHooks = appHooks
         self.networkMonitor = networkMonitor
         self.targetContext = targetContext
@@ -147,7 +144,7 @@ class UserSessionStore: UserSessionStoreProtocol {
                                                                   mediaProvider: mediaProvider,
                                                                   userSettings: userSettings,
                                                                   nativeCallPermissions: ElementCallSystemMediaPermissions(),
-                                                                  nativeCallAnalytics: nativeCallAnalytics))
+                                                                  nativeCallAnalytics: analyticsService.callAnalytics))
     }
     
     private func restorePreviousLogin(_ credentials: KeychainCredentials, userSettings: UserSettings) async -> Result<ClientProxyProtocol, UserSessionStoreError> {

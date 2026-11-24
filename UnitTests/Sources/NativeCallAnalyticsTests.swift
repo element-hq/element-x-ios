@@ -13,16 +13,11 @@ import Testing
 @MainActor
 final class NativeCallAnalyticsTests {
     private let event = ElementCallAnalyticsEvent.callJoinAttempted(attemptID: "attempt", callKind: .dm)
-    /// Every client the analytics made, in order.
-    private let made = MadeClients()
+    private let made = MadeNativeCallAnalyticsClients()
     private let analytics: NativeCallAnalytics
     
     init() {
-        analytics = NativeCallAnalytics { [made] in
-            let client = FakeClient()
-            made.clients.append(client)
-            return client
-        }
+        analytics = made.makeAnalytics()
     }
     
     @Test
@@ -69,12 +64,21 @@ final class NativeCallAnalyticsTests {
     }
 }
 
+/// Every client a ``NativeCallAnalytics`` made, in order.
 @MainActor
-private final class MadeClients {
-    var clients: [FakeClient] = []
+final class MadeNativeCallAnalyticsClients {
+    var clients: [FakeNativeCallAnalyticsClient] = []
+    
+    func makeAnalytics() -> NativeCallAnalytics {
+        NativeCallAnalytics { [self] in
+            let client = FakeNativeCallAnalyticsClient()
+            clients.append(client)
+            return client
+        }
+    }
 }
 
-private final nonisolated class FakeClient: NativeCallAnalyticsClientProtocol {
+final nonisolated class FakeNativeCallAnalyticsClient: NativeCallAnalyticsClientProtocol {
     private let state = Mutex<(events: [ElementCallAnalyticsEvent], isStopped: Bool)>(([], false))
     
     var events: [ElementCallAnalyticsEvent] {
