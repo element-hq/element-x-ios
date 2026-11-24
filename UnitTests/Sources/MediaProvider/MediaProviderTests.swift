@@ -207,11 +207,8 @@ struct MediaProviderTests {
     }
     
     private func loadTestImage() throws -> UIImage {
-        guard let path = Bundle(for: UnitTestsAppCoordinator.self).path(forResource: "test_image", ofType: "png"),
-              let image = UIImage(contentsOfFile: path) else {
-            throw MediaProviderTestsError.error
-        }
-        return image
+        let url = try #require(Bundle(for: UnitTestsAppCoordinator.self).url(forResource: "test_image", withExtension: "png"))
+        return try #require(UIImage(data: Data(contentsOf: url)))
     }
 }
 

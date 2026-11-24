@@ -157,28 +157,31 @@ struct RootFlowCoordinatorTests {
         
         #expect(navigationRootCoordinator.rootCoordinator is NavigationTabCoordinator<UserSessionFlowCoordinator.HomeTab>)
         #expect(navigationRootCoordinator.rootCoordinator !== aliceRootCoordinator)
+        #expect(remoteLogoutScreenCoordinator == nil)
     }
     
-    @Test("Removing the shown account waits while another account is still restoring")
-    func shownAccountRemovalWhileRestoring() {
+    @Test("The server logging out the shown account tells the user, while waiting for another account to restore")
+    func shownAccountRemoteLogoutWhileRestoring() {
         rootFlowCoordinator.handleAppRoute(.roomList, animated: false)
         let aliceRootCoordinator = navigationRootCoordinator.rootCoordinator
         
         userSessionManager.activeSession = nil
         userSessionManager.userIDs = ["@bob:matrix.org"]
-        userSessionManagerCallbacks.send(.didRemoveAccount(userID: "@alice:matrix.org", error: .remoteLogout))
+        userSessionManagerCallbacks.send(.didRemoveAccount(userID: "@alice:matrix.org", error: .remoteLogout(.init(userProfile: .mockAlice, unreadCount: 0, mediaProvider: MediaProviderMock(.init())))))
         
         #expect(navigationRootCoordinator.rootCoordinator === aliceRootCoordinator)
+        #expect(remoteLogoutScreenCoordinator != nil)
     }
     
-    @Test("Removing an account that isn't shown leaves the root untouched")
-    func backgroundAccountRemoval() {
+    @Test("The server logging out an account that isn't shown tells the user, leaving the shown account in place")
+    func backgroundAccountRemoteLogout() {
         rootFlowCoordinator.handleAppRoute(.roomList, animated: false)
         let rootCoordinator = navigationRootCoordinator.rootCoordinator
         
-        userSessionManagerCallbacks.send(.didRemoveAccount(userID: "@bob:matrix.org", error: .remoteLogout))
+        userSessionManagerCallbacks.send(.didRemoveAccount(userID: "@bob:matrix.org", error: .remoteLogout(.init(userProfile: .mockBob, unreadCount: 0, mediaProvider: MediaProviderMock(.init())))))
         
         #expect(navigationRootCoordinator.rootCoordinator === rootCoordinator)
+        #expect(remoteLogoutScreenCoordinator != nil)
     }
     
     // MARK: Authentication
@@ -394,6 +397,12 @@ struct RootFlowCoordinatorTests {
     
     private func presentWebCall(userID: String, roomID: String) {
         callManagerActions.send(.callScreen(.present(userID: userID, kind: .webView(.mock(roomID: roomID)))))
+    }
+    
+    /// The remote logout screen shown in the root's fullscreen cover, if any.
+    private var remoteLogoutScreenCoordinator: RemoteLogoutScreenCoordinator? {
+        let fullScreenCoverCoordinator = navigationRootCoordinator.fullScreenCoverCoordinator as? NavigationRootCoordinator
+        return fullScreenCoverCoordinator?.rootCoordinator as? RemoteLogoutScreenCoordinator
     }
     
     private var chatsSplitCoordinator: NavigationSplitCoordinator? {

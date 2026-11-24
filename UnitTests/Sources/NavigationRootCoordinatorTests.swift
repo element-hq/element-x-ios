@@ -67,6 +67,23 @@ struct NavigationRootCoordinatorTests {
         assertCoordinatorsEqual(overlayCoordinator, navigationRootCoordinator.overlayCoordinator)
     }
     
+    @Test("The fullscreen cover sits above the root until it's removed")
+    func fullScreenCover() {
+        let rootCoordinator = SomeTestCoordinator()
+        navigationRootCoordinator.setRootCoordinator(rootCoordinator)
+        
+        let fullScreenCoverCoordinator = SomeTestCoordinator()
+        navigationRootCoordinator.setFullScreenCoverCoordinator(fullScreenCoverCoordinator)
+        
+        assertCoordinatorsEqual(rootCoordinator, navigationRootCoordinator.rootCoordinator)
+        assertCoordinatorsEqual(fullScreenCoverCoordinator, navigationRootCoordinator.fullScreenCoverCoordinator)
+        
+        navigationRootCoordinator.setFullScreenCoverCoordinator(nil)
+        
+        assertCoordinatorsEqual(rootCoordinator, navigationRootCoordinator.rootCoordinator)
+        #expect(navigationRootCoordinator.fullScreenCoverCoordinator == nil)
+    }
+    
     // MARK: - Dismissal Callbacks
     
     @Test("Replacing the root runs its dismissal callback")
@@ -112,6 +129,41 @@ struct NavigationRootCoordinatorTests {
         }
     }
     
+    @Test("Removing the fullscreen cover runs its dismissal callback")
+    func fullScreenCoverDismissalCallback() async {
+        let fullScreenCoverCoordinator = SomeTestCoordinator()
+        
+        await confirmation("Wait for callback") { confirm in
+            navigationRootCoordinator.setFullScreenCoverCoordinator(fullScreenCoverCoordinator) {
+                confirm()
+            }
+            
+            navigationRootCoordinator.setFullScreenCoverCoordinator(nil)
+        }
+    }
+    
+    // MARK: - Stopping
+    
+    @Test("Stopping tears down the root and everything presented over it")
+    func stop() {
+        let rootCoordinator = StopTrackingCoordinator()
+        let sheetCoordinator = StopTrackingCoordinator()
+        let fullScreenCoverCoordinator = StopTrackingCoordinator()
+        let overlayCoordinator = StopTrackingCoordinator()
+        
+        navigationRootCoordinator.setRootCoordinator(rootCoordinator)
+        navigationRootCoordinator.setSheetCoordinator(sheetCoordinator)
+        navigationRootCoordinator.setFullScreenCoverCoordinator(fullScreenCoverCoordinator)
+        navigationRootCoordinator.setOverlayCoordinator(overlayCoordinator)
+        
+        navigationRootCoordinator.stop()
+        
+        #expect(rootCoordinator.didStop)
+        #expect(sheetCoordinator.didStop)
+        #expect(fullScreenCoverCoordinator.didStop)
+        #expect(overlayCoordinator.didStop)
+    }
+    
     // MARK: - Private
     
     private func assertCoordinatorsEqual(_ lhs: CoordinatorProtocol?, _ rhs: CoordinatorProtocol?) {
@@ -127,4 +179,12 @@ struct NavigationRootCoordinatorTests {
 
 private class SomeTestCoordinator: CoordinatorProtocol {
     let id = UUID()
+}
+
+private class StopTrackingCoordinator: CoordinatorProtocol {
+    private(set) var didStop = false
+    
+    func stop() {
+        didStop = true
+    }
 }

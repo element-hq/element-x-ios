@@ -48,6 +48,25 @@ import SwiftUI
         sheetModule?.coordinator
     }
     
+    fileprivate var fullScreenCoverModule: NavigationModule? {
+        didSet {
+            if let oldValue {
+                logPresentationChange("Remove fullscreen cover", oldValue)
+                oldValue.tearDown()
+            }
+            
+            if let fullScreenCoverModule {
+                logPresentationChange("Set fullscreen cover", fullScreenCoverModule)
+                fullScreenCoverModule.coordinator?.start()
+            }
+        }
+    }
+    
+    /// The currently presented fullscreen cover coordinator
+    var fullScreenCoverCoordinator: (any CoordinatorProtocol)? {
+        fullScreenCoverModule?.coordinator
+    }
+    
     fileprivate var overlayModule: NavigationModule? {
         didSet {
             if let oldValue {
@@ -89,7 +108,6 @@ import SwiftUI
         }
     }
     
-    ///   - dismissalCallback: called when the sheet has been dismissed, programatically or otherwise
     func setSheetCoordinator(_ coordinator: (any CoordinatorProtocol)?, animated: Bool = true, dismissalCallback: (() -> Void)? = nil) {
         guard let coordinator else {
             sheetModule = nil
@@ -105,6 +123,24 @@ import SwiftUI
         
         withTransaction(transaction) {
             sheetModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
+        }
+    }
+    
+    func setFullScreenCoverCoordinator(_ coordinator: (any CoordinatorProtocol)?, animated: Bool = true, dismissalCallback: (() -> Void)? = nil) {
+        guard let coordinator else {
+            fullScreenCoverModule = nil
+            return
+        }
+        
+        if fullScreenCoverModule?.coordinator === coordinator {
+            fatalError("Cannot use the same coordinator more than once")
+        }
+        
+        var transaction = Transaction()
+        transaction.disablesAnimations = !animated
+        
+        withTransaction(transaction) {
+            fullScreenCoverModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
         }
     }
     
@@ -151,6 +187,13 @@ import SwiftUI
     
     // MARK: - CoordinatorProtocol
     
+    func stop() {
+        rootModule?.tearDown()
+        sheetModule?.tearDown()
+        fullScreenCoverModule?.tearDown()
+        overlayModule?.tearDown()
+    }
+    
     func toPresentable() -> AnyView {
         AnyView(NavigationRootCoordinatorView(rootCoordinator: self))
     }
@@ -196,6 +239,9 @@ private struct NavigationRootCoordinatorView: View {
             .animation(.elementDefault, value: rootCoordinator.overlayModule)
         }
         .sheet(item: $rootCoordinator.sheetModule) { module in
+            module.coordinator?.toPresentable()
+        }
+        .fullScreenCover(item: $rootCoordinator.fullScreenCoverModule) { module in
             module.coordinator?.toPresentable()
         }
     }

@@ -9,7 +9,7 @@ import Combine
 import SwiftUI
 
 struct RemoteLogoutScreenCoordinatorParameters {
-    let userSession: UserSessionProtocol
+    let userSessionDetails: UserSessionDetails
 }
 
 enum RemoteLogoutScreenCoordinatorAction {
@@ -30,7 +30,7 @@ final class RemoteLogoutScreenCoordinator: CoordinatorProtocol {
     init(parameters: RemoteLogoutScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = RemoteLogoutScreenViewModel(userSession: parameters.userSession)
+        viewModel = RemoteLogoutScreenViewModel(userSessionDetails: parameters.userSessionDetails)
     }
     
     func start() {

@@ -20,7 +20,7 @@ enum UserSessionManagerCallback: Equatable {
 
 enum UserSessionManagerError: Error, Equatable {
     /// The server logged the account out.
-    case remoteLogout
+    case remoteLogout(UserSessionDetails)
     /// The account's session couldn't be restored.
     case failedRestoringSession
 }

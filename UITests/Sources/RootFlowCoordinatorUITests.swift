@@ -86,6 +86,23 @@ class RootFlowCoordinatorUITests: XCTestCase {
         XCTAssertFalse(app.buttons[A11yIdentifiers.settingsScreen.otherAccount("@bob:client.com")].exists)
     }
     
+    func testRemoteLogout() {
+        let app = Application.launch(.rootFlowRemoteLogout)
+        
+        let doneButton = app.buttons[A11yIdentifiers.remoteLogoutScreen.done]
+        XCTAssertTrue(doneButton.waitForExistence(timeout: 5.0))
+        XCTAssertTrue(app.staticTexts[A11yIdentifiers.remoteLogoutScreen.account("@mock:client.com")].exists)
+        doneButton.tap()
+        
+        XCTAssertTrue(app.staticTexts[A11yIdentifiers.remoteLogoutScreen.account("@bob:client.com")].waitForExistence(timeout: 2.0),
+                      "The next account logged out by the server should be shown once the first is done.")
+        doneButton.tap()
+        
+        XCTAssertTrue(app.buttons[A11yIdentifiers.authenticationStartScreen.signIn].waitForExistence(timeout: 5.0),
+                      "Authentication should be shown once every logged out account is done.")
+        XCTAssertFalse(doneButton.exists)
+    }
+    
     func testElementCall() {
         let app = Application.launch(.rootFlowSignedIn)
         

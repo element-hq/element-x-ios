@@ -631,7 +631,7 @@ class MockScreen: Identifiable {
             retainedState.append(flowCoordinator)
             
             return nil
-        case .rootFlow, .rootFlowSignedIn, .rootFlowShare:
+        case .rootFlow, .rootFlowSignedIn, .rootFlowShare, .rootFlowRemoteLogout:
             let userID = "@mock:client.com"
             let userSettings = appSettings.userSettings(for: userID)
             userSettings.account.hasRunIdentityConfirmationOnboarding = true
@@ -711,6 +711,18 @@ class MockScreen: Identifiable {
                                                       authenticationServiceFactory: AuthenticationServiceFactoryMock(.init()))
             
             flowCoordinator.handleAppRoute(id == .rootFlow ? .authentication : .roomList, animated: false)
+            
+            if id == .rootFlowRemoteLogout {
+                // Simulate a remote logout of both accounts.
+                Task { @MainActor in
+                    for session in userSessionManager.sessionsPublisher.value {
+                        let userID = session.clientProxy.userID
+                        let details = await UserSessionDetails(remoteLogoutClientProxy: session.clientProxy)
+                        setSessions(sessions(excluding: userID))
+                        userSessionManagerCallbacks.send(.didRemoveAccount(userID: userID, error: .remoteLogout(details)))
+                    }
+                }
+            }
             if id == .rootFlowShare {
                 flowCoordinator.handleAppRoute(.share(.text(roomID: nil, text: "Shared from another app")), animated: false)
             }

@@ -21,5 +21,8 @@ nonisolated protocol MediaLoaderProtocol: Sendable {
     
     func loadMediaThumbnailForSource(_ source: MediaSourceProxy, width: UInt, height: UInt) async throws -> Data
     
+    /// Loads a thumbnail from the cache only, returning `nil` when it isn't cached.
+    func loadCachedMediaThumbnailForSource(_ source: MediaSourceProxy, width: UInt, height: UInt) async throws -> Data?
+    
     func loadMediaFileForSource(_ source: MediaSourceProxy, filename: String?) async throws -> MediaFileHandleProxy
 }
