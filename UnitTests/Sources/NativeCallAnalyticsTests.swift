@@ -20,23 +20,23 @@ final class NativeCallAnalyticsTests {
         analytics = made.makeAnalytics()
     }
     
-    @Test
-    func withoutConsentNothingIsSent() {
+    @Test("Nothing is sent when tracking an event without consent")
+    func trackEventWithoutConsent() {
         analytics.track(event)
         
         #expect(made.clients.isEmpty)
     }
     
-    @Test
-    func withConsentEventsAreSent() {
+    @Test("Events are sent once the user consents")
+    func trackEventWithConsent() {
         analytics.setConsent(true)
         analytics.track(event)
         
         #expect(made.clients.map(\.events) == [[event]])
     }
     
-    @Test
-    func withdrawingConsentStopsTheClientAndDropsLaterEvents() {
+    @Test("Withdrawing consent stops the client and drops later events")
+    func withdrawConsent() {
         analytics.setConsent(true)
         analytics.setConsent(false)
         analytics.track(event)
@@ -45,8 +45,8 @@ final class NativeCallAnalyticsTests {
         #expect(made.clients.map(\.events) == [[]])
     }
     
-    @Test
-    func consentingAgainOpensANewClient() {
+    @Test("Consenting again opens a new client")
+    func consentAgain() {
         analytics.setConsent(true)
         analytics.setConsent(false)
         analytics.setConsent(true)
@@ -55,8 +55,8 @@ final class NativeCallAnalyticsTests {
         #expect(made.clients.map(\.events) == [[], [event]])
     }
     
-    @Test
-    func repeatedConsentKeepsTheSameClient() {
+    @Test("Consenting twice keeps the same client")
+    func repeatedConsent() {
         analytics.setConsent(true)
         analytics.setConsent(true)
         
