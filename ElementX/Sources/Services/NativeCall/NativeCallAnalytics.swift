@@ -24,8 +24,9 @@ final nonisolated class NativeCallAnalytics: ElementCallAnalyticsProtocol {
         self.makeClient = makeClient
     }
     
-    /// Opens the client on consent and closes it, sending what it still holds, when consent is
-    /// withdrawn. Only ever called from the main actor, so the check and the swap cannot interleave.
+    /// Opens the client on consent and stops it when consent is withdrawn, dropping its queued
+    /// events and identifiers. Only ever called from the main actor, so the check and the swap
+    /// cannot interleave.
     @MainActor
     func setConsent(_ hasConsent: Bool) {
         if hasConsent {
@@ -40,7 +41,7 @@ final nonisolated class NativeCallAnalytics: ElementCallAnalyticsProtocol {
                 defer { client = nil }
                 return client
             }
-            oldClient?.close()
+            oldClient?.stop()
         }
     }
     
@@ -52,8 +53,8 @@ final nonisolated class NativeCallAnalytics: ElementCallAnalyticsProtocol {
 /// Where ``NativeCallAnalytics`` sends the events it is allowed to.
 nonisolated protocol NativeCallAnalyticsClientProtocol: Sendable {
     func capture(_ event: ElementCallAnalyticsEvent)
-    /// Sends what is still queued and stops.
-    func close()
+    /// Clears the identifiers and queued events, then stops.
+    func stop()
 }
 
 /// A PostHog instance of its own, apart from the app's `PostHogSDK.shared`, with the app's privacy
@@ -79,7 +80,9 @@ final nonisolated class PostHogNativeCallAnalyticsClient: NativeCallAnalyticsCli
         postHog.capture(event.name, properties: properties)
     }
     
-    func close() {
+    func stop() {
+        // The order is important here. PostHog ignores the reset once closed.
+        postHog.reset()
         postHog.close()
     }
 }

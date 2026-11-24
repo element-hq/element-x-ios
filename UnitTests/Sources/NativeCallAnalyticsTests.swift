@@ -41,12 +41,12 @@ final class NativeCallAnalyticsTests {
     }
     
     @Test
-    func withdrawingConsentClosesTheClientAndDropsLaterEvents() {
+    func withdrawingConsentStopsTheClientAndDropsLaterEvents() {
         analytics.setConsent(true)
         analytics.setConsent(false)
         analytics.track(event)
         
-        #expect(made.clients.map(\.isClosed) == [true])
+        #expect(made.clients.map(\.isStopped) == [true])
         #expect(made.clients.map(\.events) == [[]])
     }
     
@@ -75,21 +75,21 @@ private final class MadeClients {
 }
 
 private final nonisolated class FakeClient: NativeCallAnalyticsClientProtocol {
-    private let state = Mutex<(events: [ElementCallAnalyticsEvent], isClosed: Bool)>(([], false))
+    private let state = Mutex<(events: [ElementCallAnalyticsEvent], isStopped: Bool)>(([], false))
     
     var events: [ElementCallAnalyticsEvent] {
         state.withLock(\.events)
     }
     
-    var isClosed: Bool {
-        state.withLock(\.isClosed)
+    var isStopped: Bool {
+        state.withLock(\.isStopped)
     }
     
     func capture(_ event: ElementCallAnalyticsEvent) {
         state.withLock { $0.events.append(event) }
     }
     
-    func close() {
-        state.withLock { $0.isClosed = true }
+    func stop() {
+        state.withLock { $0.isStopped = true }
     }
 }
