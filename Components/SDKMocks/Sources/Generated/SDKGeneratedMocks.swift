@@ -19767,6 +19767,35 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
         await fetchMembersClosure?()
     }
 
+    //MARK: - fullyReadEventId
+
+    private let fullyReadEventIdCallsCountLock = NSLock()
+    private var fullyReadEventIdUnderlyingCallsCount = 0
+    open var fullyReadEventIdCallsCount: Int {
+        get { fullyReadEventIdCallsCountLock.withLock { fullyReadEventIdUnderlyingCallsCount } }
+        set { fullyReadEventIdCallsCountLock.withLock { fullyReadEventIdUnderlyingCallsCount = newValue } }
+    }
+    open var fullyReadEventIdCalled: Bool {
+        return fullyReadEventIdCallsCount > 0
+    }
+
+    private let fullyReadEventIdReturnValueLock = NSLock()
+    open var fullyReadEventIdUnderlyingReturnValue: String?
+    open var fullyReadEventIdReturnValue: String? {
+        get { fullyReadEventIdReturnValueLock.withLock { fullyReadEventIdUnderlyingReturnValue } }
+        set { fullyReadEventIdReturnValueLock.withLock { fullyReadEventIdUnderlyingReturnValue = newValue } }
+    }
+    open var fullyReadEventIdClosure: (() -> String?)?
+
+    open override func fullyReadEventId() -> String? {
+        fullyReadEventIdCallsCountLock.withLock { fullyReadEventIdUnderlyingCallsCount += 1 }
+        if let fullyReadEventIdClosure = fullyReadEventIdClosure {
+            return fullyReadEventIdClosure()
+        } else {
+            return fullyReadEventIdReturnValue
+        }
+    }
+
     //MARK: - getEventTimelineItemByEventId
 
     open var getEventTimelineItemByEventIdEventIdThrowableError: Error?
@@ -20804,6 +20833,49 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
             return try await subscribeToBackPaginationStatusListenerClosure(listener)
         } else {
             return subscribeToBackPaginationStatusListenerReturnValue
+        }
+    }
+
+    //MARK: - subscribeToFullyReadEventId
+
+    private let subscribeToFullyReadEventIdListenerCallsCountLock = NSLock()
+    private var subscribeToFullyReadEventIdListenerUnderlyingCallsCount = 0
+    open var subscribeToFullyReadEventIdListenerCallsCount: Int {
+        get { subscribeToFullyReadEventIdListenerCallsCountLock.withLock { subscribeToFullyReadEventIdListenerUnderlyingCallsCount } }
+        set { subscribeToFullyReadEventIdListenerCallsCountLock.withLock { subscribeToFullyReadEventIdListenerUnderlyingCallsCount = newValue } }
+    }
+    open var subscribeToFullyReadEventIdListenerCalled: Bool {
+        return subscribeToFullyReadEventIdListenerCallsCount > 0
+    }
+    private let subscribeToFullyReadEventIdListenerReceivedListenerLock = NSLock()
+    private var subscribeToFullyReadEventIdListenerUnderlyingReceivedListener: FullyReadEventIdListener?
+    open var subscribeToFullyReadEventIdListenerReceivedListener: FullyReadEventIdListener? {
+        get { subscribeToFullyReadEventIdListenerReceivedListenerLock.withLock { subscribeToFullyReadEventIdListenerUnderlyingReceivedListener } }
+        set { subscribeToFullyReadEventIdListenerReceivedListenerLock.withLock { subscribeToFullyReadEventIdListenerUnderlyingReceivedListener = newValue } }
+    }
+    private let subscribeToFullyReadEventIdListenerReceivedInvocationsLock = NSLock()
+    private var subscribeToFullyReadEventIdListenerUnderlyingReceivedInvocations: [FullyReadEventIdListener] = []
+    open var subscribeToFullyReadEventIdListenerReceivedInvocations: [FullyReadEventIdListener] {
+        get { subscribeToFullyReadEventIdListenerReceivedInvocationsLock.withLock { subscribeToFullyReadEventIdListenerUnderlyingReceivedInvocations } }
+        set { subscribeToFullyReadEventIdListenerReceivedInvocationsLock.withLock { subscribeToFullyReadEventIdListenerUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let subscribeToFullyReadEventIdListenerReturnValueLock = NSLock()
+    open var subscribeToFullyReadEventIdListenerUnderlyingReturnValue: TaskHandle!
+    open var subscribeToFullyReadEventIdListenerReturnValue: TaskHandle! {
+        get { subscribeToFullyReadEventIdListenerReturnValueLock.withLock { subscribeToFullyReadEventIdListenerUnderlyingReturnValue } }
+        set { subscribeToFullyReadEventIdListenerReturnValueLock.withLock { subscribeToFullyReadEventIdListenerUnderlyingReturnValue = newValue } }
+    }
+    open var subscribeToFullyReadEventIdListenerClosure: ((FullyReadEventIdListener) -> TaskHandle)?
+
+    open override func subscribeToFullyReadEventId(listener: FullyReadEventIdListener) -> TaskHandle {
+        subscribeToFullyReadEventIdListenerCallsCountLock.withLock { subscribeToFullyReadEventIdListenerUnderlyingCallsCount += 1 }
+        subscribeToFullyReadEventIdListenerReceivedListener = listener
+        subscribeToFullyReadEventIdListenerReceivedInvocationsLock.withLock { subscribeToFullyReadEventIdListenerUnderlyingReceivedInvocations.append(listener) }
+        if let subscribeToFullyReadEventIdListenerClosure = subscribeToFullyReadEventIdListenerClosure {
+            return subscribeToFullyReadEventIdListenerClosure(listener)
+        } else {
+            return subscribeToFullyReadEventIdListenerReturnValue
         }
     }
 

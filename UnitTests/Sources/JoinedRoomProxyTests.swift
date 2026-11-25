@@ -187,7 +187,6 @@ private extension RoomInfo {
                  numUnreadMessages: 0,
                  numUnreadNotifications: 0,
                  numUnreadMentions: 0,
-                 fullyReadEventId: nil,
                  pinnedEventIds: [],
                  joinRule: nil,
                  historyVisibility: .shared,

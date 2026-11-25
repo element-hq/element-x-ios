@@ -18,7 +18,7 @@ struct ImagePackProviderTests {
         let room = RoomSDKMock()
         room.imagePacksSpaceServiceReturnValue = [
             MatrixRustSDK.ImagePack(roomId: "!room:example.org", stateKey: "emoticons", displayName: "Emoticons", avatarUrl: nil,
-                                    isEmoticonPack: true, isStickerPack: false, attribution: nil,
+                                    isEmoticonPack: true, isStickerPack: false, isEnabledGlobally: false, attribution: nil,
                                     images: [ImagePackImage(shortcode: "wave", url: "mxc://example.org/wave", body: "Waving hand", info: nil),
                                              ImagePackImage(shortcode: "broken", url: "", body: "broken", info: nil)])
         ]
