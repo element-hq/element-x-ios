@@ -76,14 +76,6 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
                 self?.updateState(members: members)
             }
             .store(in: &cancellables)
-        
-        roomProxy.infoPublisher
-            .map(\.powerLevels)
-            .removeDuplicates { $0?.userPowerLevels == $1?.userPowerLevels }
-            .sink { [weak self] _ in
-                Task { await self?.roomProxy.updateMembers() }
-            }
-            .store(in: &cancellables)
     }
     
     private func updateState(members: [RoomMemberProxyProtocol]) {

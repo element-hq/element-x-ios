@@ -226,9 +226,9 @@ nonisolated extension SDKListener: CallDeclineListener where T == String {
     }
 }
 
-nonisolated extension SDKListener: RoomStateEventsListener where T == [RoomStateEvent] {
-    func onUpdate(events: [RoomStateEvent]) {
-        onUpdateClosure(events)
+nonisolated extension SDKListener: RoomMembersChangesListener where T == Void {
+    func onChange() {
+        onUpdateClosure(())
     }
 }
 

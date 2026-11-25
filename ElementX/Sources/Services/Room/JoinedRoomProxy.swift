@@ -751,7 +751,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     // MARK: - Private
     
     private func subscribeToMemberChanges() {
-        memberChangesObservationToken = room.subscribeToStateEvents(eventType: .roomMember, listener: SDKListener.onMainActor { [weak self] _ in
+        memberChangesObservationToken = room.subscribeToMembersChanges(listener: SDKListener.onMainActor { [weak self] in
             guard let self else { return }
             
             MXLog.info("Received room member changes")
@@ -763,7 +763,8 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             reloadMembersTask = Task { [weak self] in
                 while let self, needsMembersReload {
                     needsMembersReload = false
-                    await updateMembers()
+                    // The changes are already in the store, no need to fetch the members from the server.
+                    await reloadMembersFromStore()
                 }
                 self?.reloadMembersTask = nil
             }

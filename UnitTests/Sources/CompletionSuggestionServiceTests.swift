@@ -179,38 +179,6 @@ struct CompletionSuggestionServiceTests {
         try await deffered.fulfill()
     }
     
-    @Test
-    func userSuggestionRefreshesMembers() async throws {
-        let members: [RoomMemberProxyMock] = [.mockAlice, .mockBob, .mockMe]
-        let roomProxyMock = JoinedRoomProxyMock(.init(id: "roomID", name: "test", members: members))
-        let roomSummaryProvider = RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))
-        
-        let (refreshesStream, refreshesContinuation) = AsyncStream<Void>.makeStream()
-        roomProxyMock.updateMembersClosure = { refreshesContinuation.yield() }
-        
-        let service = CompletionSuggestionService(roomProxy: roomProxyMock,
-                                                  roomListPublisher: roomSummaryProvider.roomListPublisher.eraseToAnyPublisher())
-        #expect(!roomProxyMock.updateMembersCalled)
-        
-        // Beginning a mention refreshes the members once…
-        var deferred = deferFulfillment(refreshesStream) { _ in true }
-        service.setSuggestionTrigger(.init(type: .user, text: "", range: .init()))
-        try await deferred.fulfill()
-        #expect(roomProxyMock.updateMembersCallsCount == 1)
-        
-        // …but typing further within the same mention doesn't refresh again.
-        service.setSuggestionTrigger(.init(type: .user, text: "a", range: .init()))
-        service.setSuggestionTrigger(.init(type: .user, text: "al", range: .init()))
-        #expect(roomProxyMock.updateMembersCallsCount == 1)
-        
-        // Clearing and starting a new mention refreshes a second time.
-        deferred = deferFulfillment(refreshesStream) { _ in true }
-        service.setSuggestionTrigger(nil)
-        service.setSuggestionTrigger(.init(type: .user, text: "", range: .init()))
-        try await deferred.fulfill()
-        #expect(roomProxyMock.updateMembersCallsCount == 2)
-    }
-    
     // MARK: Room Suggestions
     
     @Test

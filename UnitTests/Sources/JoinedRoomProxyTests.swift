@@ -18,7 +18,6 @@ struct JoinedRoomProxyTests {
     func memberRename() async throws {
         let subscribedRoom = try await makeSubscribedRoom(members: [.mock(userID: "@alice:matrix.org", displayName: "Alice")])
         let roomProxy = subscribedRoom.proxy
-        #expect(room.subscribeToStateEventsEventTypeListenerReceivedArguments?.eventType == .roomMember)
         
         let typingBeforeRename = deferFulfillment(roomProxy.typingMembersPublisher) { $0 == ["Alice"] }
         subscribedRoom.typingListener.call(typingUserIds: ["@alice:matrix.org"])
@@ -26,7 +25,7 @@ struct JoinedRoomProxyTests {
         
         setMembers([.mock(userID: "@alice:matrix.org", displayName: "Alicia")])
         let renamedMembers = deferFulfillment(roomProxy.membersPublisher.map { $0.map(\.displayName) }) { $0 == ["Alicia"] }
-        subscribedRoom.memberChangesListener.onUpdate(events: [])
+        subscribedRoom.memberChangesListener.onChange()
         try await renamedMembers.fulfill()
         
         let typingAfterRename = deferFulfillment(roomProxy.typingMembersPublisher) { $0 == ["Alicia"] }
@@ -37,7 +36,7 @@ struct JoinedRoomProxyTests {
         #expect(member.displayName == "Alicia")
     }
     
-    @Test("A member update that changes nothing isn't published again, but still asks for any missing members")
+    @Test("A member update that changes nothing isn't published again, and only reads the members from the store")
     func unchangedMembersNotRepublished() async throws {
         // Only the store read publishes, so nothing else can emit during the check below.
         room.membersFetchingGlobalProfilesClosure = { throw TestError.offline }
@@ -46,11 +45,11 @@ struct JoinedRoomProxyTests {
         let syncedReadsBefore = room.membersFetchingGlobalProfilesCallsCount
         
         let republished = deferFailure(subscribedRoom.proxy.membersPublisher.dropFirst().map { $0.map(\.userID) }, timeout: .seconds(1)) { _ in true }
-        subscribedRoom.memberChangesListener.onUpdate(events: [])
+        subscribedRoom.memberChangesListener.onChange()
         try await republished.fulfill()
         
         #expect(room.membersNoSyncCallsCount == storeReadsBefore + 1)
-        #expect(room.membersFetchingGlobalProfilesCallsCount == syncedReadsBefore + 1)
+        #expect(room.membersFetchingGlobalProfilesCallsCount == syncedReadsBefore)
     }
     
     @Test("A typing user without a display name, or who isn't a member, is shown by their user ID")
@@ -71,7 +70,7 @@ struct JoinedRoomProxyTests {
     
     private struct SubscribedRoom {
         let proxy: JoinedRoomProxy
-        let memberChangesListener: RoomStateEventsListener
+        let memberChangesListener: RoomMembersChangesListener
         let typingListener: TypingNotificationsListener
     }
     
@@ -96,7 +95,7 @@ struct JoinedRoomProxyTests {
         try await loadedMembers.fulfill()
         
         await waitForConfirmation("Subscribed to member changes and typing notifications", expectedCount: 2, timeout: .seconds(10)) { confirmation in
-            room.subscribeToStateEventsEventTypeListenerClosure = { _, _ in
+            room.subscribeToMembersChangesListenerClosure = { _ in
                 confirmation()
                 return TaskHandleSDKMock()
             }
@@ -108,7 +107,7 @@ struct JoinedRoomProxyTests {
         }
         
         return try SubscribedRoom(proxy: roomProxy,
-                                  memberChangesListener: #require(room.subscribeToStateEventsEventTypeListenerReceivedArguments?.listener),
+                                  memberChangesListener: #require(room.subscribeToMembersChangesListenerReceivedListener),
                                   typingListener: #require(room.subscribeToTypingNotificationsListenerReceivedListener))
     }
     
