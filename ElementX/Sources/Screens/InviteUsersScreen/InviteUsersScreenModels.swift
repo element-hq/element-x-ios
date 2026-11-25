@@ -13,7 +13,7 @@ enum InviteUsersScreenErrorType: Error {
     case unknown
 }
 
-enum InviteUsersScreenViewModelAction {
+enum InviteUsersScreenViewModelAction: Equatable {
     case dismiss
     case openRoom(roomID: String)
 }

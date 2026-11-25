@@ -322,6 +322,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             }
             .store(in: &cancellables)
         
+        // Not really necessary, but reload the members in case e.g. the initial load failed.
         await roomProxy.updateMembers()
     }
     

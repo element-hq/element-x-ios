@@ -64,6 +64,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
     private func setupMembers() {
         Task {
             showLoadingIndicator(Self.setupMembersLoadingIndicatorIdentifier)
+            // Technically not necessary, but let's force a reload given this *is* the members list screen.
             await roomProxy.updateMembers()
             hideLoadingIndicator(Self.setupMembersLoadingIndicatorIdentifier)
         }

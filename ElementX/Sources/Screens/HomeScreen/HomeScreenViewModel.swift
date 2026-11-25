@@ -455,6 +455,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             if !roomProxy.infoPublisher.value.isDM {
                 if case let .success(ownMember) = await roomProxy.getMember(userID: roomProxy.ownUserID),
                    ownMember.role.isOwner {
+                    // Manually check that the room's members are up to date before continuing.
                     await roomProxy.updateMembers()
                     var isLastOwner = true
                     for member in roomProxy.membersPublisher.value where member.userID != roomProxy.ownUserID && member.membership == .join {

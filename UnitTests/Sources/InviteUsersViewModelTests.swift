@@ -20,7 +20,7 @@ final class InviteUsersScreenViewModelTests {
         viewModel.context
     }
     
-    @Test
+    @Test("Toggling an unselected user selects them")
     func selectUser() {
         let roomProxy = JoinedRoomProxyMock(.init(name: "newroom", members: []))
         roomProxy.inviteUserIDReturnValue = .success(())
@@ -32,7 +32,7 @@ final class InviteUsersScreenViewModelTests {
         #expect(context.viewState.selectedUsers.first?.id == UserProfile.mockAlice.id)
     }
     
-    @Test
+    @Test("Toggling a user twice leaves them unselected")
     func reselectUser() {
         let roomProxy = JoinedRoomProxyMock(.init(name: "newroom", members: []))
         roomProxy.inviteUserIDReturnValue = .success(())
@@ -46,7 +46,7 @@ final class InviteUsersScreenViewModelTests {
         #expect(context.viewState.selectedUsers.isEmpty)
     }
     
-    @Test
+    @Test("Toggling a selected user deselects them")
     func deselectUser() {
         let roomProxy = JoinedRoomProxyMock(.init(name: "newroom", members: []))
         roomProxy.inviteUserIDReturnValue = .success(())
@@ -60,9 +60,9 @@ final class InviteUsersScreenViewModelTests {
         #expect(context.viewState.selectedUsers.isEmpty)
     }
     
-    @Test
-    func inviteButton() async throws {
-        let mockedMembers: [RoomMemberProxyMock] = [.mockAlice, .mockBob]
+    @Test("Proceeding invites the selected users and dismisses the screen")
+    func invite() async throws {
+        let mockedMembers: [RoomMemberProxyMock] = [.mockBob]
         let roomProxy = JoinedRoomProxyMock(.init(name: "test", members: mockedMembers))
         roomProxy.inviteUserIDReturnValue = .success(())
         setupViewModel(roomProxy: roomProxy, isSkippable: false)
@@ -90,11 +90,54 @@ final class InviteUsersScreenViewModelTests {
         #expect(roomProxy.inviteUserIDReceivedInvocations == [RoomMemberProxyMock.mockAlice.userID])
     }
     
+    @Test("Selected users who are already in the room aren't invited again")
+    func inviteExistingMembers() async throws {
+        let roomProxy = JoinedRoomProxyMock(.init(name: "test", members: [.mockAlice, .mockBob]))
+        setupViewModel(roomProxy: roomProxy, isSkippable: false)
+        
+        let deferredState = deferFulfillment(viewModel.context.$viewState) { state in
+            state.membershipState[RoomMemberProxyMock.mockAlice.userID] == .join
+                && state.isUserSelected(.mockAlice)
+                && state.isUserSelected(.mockCharlie)
+        }
+        
+        context.send(viewAction: .toggleUser(.mockAlice))
+        context.send(viewAction: .toggleUser(.mockCharlie))
+        
+        try await deferredState.fulfill()
+        
+        let deferredAction = deferFulfillment(viewModel.actions) { $0 == .dismiss }
+        context.send(viewAction: .proceed)
+        try await deferredAction.fulfill()
+        
+        #expect(roomProxy.inviteUserIDReceivedInvocations == [RoomMemberProxyMock.mockCharlie.userID])
+    }
+    
+    @Test("The membership state follows live changes to the room's members")
+    func membershipUpdates() async throws {
+        let roomProxy = JoinedRoomProxyMock(.init(name: "test"))
+        let membersSubject = CurrentValueSubject<[RoomMemberProxyProtocol], Never>([RoomMemberProxyMock.mockAlice])
+        roomProxy.membersPublisher = membersSubject.asCurrentValuePublisher()
+        setupViewModel(roomProxy: roomProxy, isSkippable: false)
+        
+        var deferredState = deferFulfillment(viewModel.context.$viewState) { state in
+            state.membershipState[RoomMemberProxyMock.mockAlice.userID] == .join
+        }
+        try await deferredState.fulfill()
+        #expect(context.viewState.membershipState[RoomMemberProxyMock.mockCharlie.userID] == nil)
+        
+        deferredState = deferFulfillment(viewModel.context.$viewState) { state in
+            state.membershipState[RoomMemberProxyMock.mockCharlie.userID] == .join
+        }
+        membersSubject.send([RoomMemberProxyMock.mockAlice, RoomMemberProxyMock.mockCharlie])
+        try await deferredState.fulfill()
+    }
+    
     // MARK: - History Sharing
     
-    @Test
-    func invitingUnknownUsersOpensConfirmationDialog() async throws {
-        let mockedMembers: [RoomMemberProxyMock] = [.mockAlice, .mockBob]
+    @Test("Inviting users without a known identity asks for confirmation first")
+    func inviteUnknownUsers() async throws {
+        let mockedMembers: [RoomMemberProxyMock] = [.mockBob]
         let roomProxy = JoinedRoomProxyMock(.init(name: "test", members: mockedMembers))
         roomProxy.inviteUserIDReturnValue = .success(())
         setupViewModel(roomProxy: roomProxy, isSkippable: false)
@@ -127,8 +170,8 @@ final class InviteUsersScreenViewModelTests {
         #expect(roomProxy.inviteUserIDReceivedInvocations == [RoomMemberProxyMock.mockAlice.userID])
     }
     
-    @Test
-    func removeButtonRemovesUnknownUsers() async throws {
+    @Test("Removing unknown users deselects them")
+    func removeUnknownUsers() async throws {
         let mockedMembers: [RoomMemberProxyMock] = [.mockAlice, .mockBob]
         let roomProxy = JoinedRoomProxyMock(.init(name: "test", members: mockedMembers))
         roomProxy.inviteUserIDReturnValue = .success(())
@@ -157,8 +200,8 @@ final class InviteUsersScreenViewModelTests {
     
     // MARK: - Draft (new room)
     
-    @Test
-    func createsNewRoomInDraftMode() async throws {
+    @Test("A draft room is created with the selected users when proceeding")
+    func createDraftRoom() async throws {
         userDiscoveryService = UserDiscoveryServiceMock()
         userDiscoveryService.searchProfilesWithReturnValue = .success([])
         

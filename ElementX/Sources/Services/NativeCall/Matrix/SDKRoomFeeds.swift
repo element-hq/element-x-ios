@@ -113,6 +113,9 @@ final nonisolated class SDKRoomInfoFeed: Sendable {
     /// Re-read on every room info update rather than when the joined count moves: one person leaving
     /// as another joins keeps the count while the membership differs, and the core would carry on
     /// encrypting media for whoever left.
+    ///
+    /// This could potentially use `Room.subscribeToMembersChanges` instead of room info updates,
+    /// but that to be evaluated by the VoIP team as this feed shares a single room info subscription.
     func deliverJoinedMembers(into sink: ElementCallRoomSink) async {
         var lastDelivered: [String]?
         func deliver() async {

@@ -1049,6 +1049,32 @@ final class TimelineViewModelTests {
         try await deferred.fulfill()
     }
     
+    // MARK: - Direct chats
+    
+    @Test("Inviting the other person back into a DM they left invites them")
+    func inviteOtherDMUserBack() async throws {
+        let otherPerson = RoomMemberProxyMock(with: .init(userID: "@bob:matrix.org", displayName: "Bob", membership: .leave))
+        let roomProxy = JoinedRoomProxyMock(.init(isDirect: true, members: [.mockMe, otherPerson]))
+        let invitedUserIDs = PassthroughSubject<String, Never>()
+        roomProxy.inviteUserIDClosure = { userID in
+            invitedUserIDs.send(userID)
+            return .success(())
+        }
+        let viewModel = makeViewModel(roomProxy: roomProxy, timelineController: TimelineControllerMock(.init()))
+        
+        // Given the invite again alert shown when focussing the composer.
+        viewModel.process(composerAction: .composerFocusedChanged(isFocused: true))
+        let alertInfo = try #require(viewModel.state.bindings.alertInfo)
+        #expect(alertInfo.id == .inviteAgain)
+        
+        // When accepting it.
+        let deferred = deferFulfillment(invitedUserIDs) { $0 == otherPerson.userID }
+        alertInfo.primaryButton.action?()
+        
+        // Then the other person is invited back.
+        try await deferred.fulfill()
+    }
+    
     // MARK: - Helpers
     
     private func makeViewModel(items: [RoomTimelineItemProtocol],

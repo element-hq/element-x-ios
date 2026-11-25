@@ -49,7 +49,6 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
                    mediaProvider: userSession.mediaProvider)
         
         setupSubscriptions()
-        fetchMembersIfNeeded()
         
         Task {
             suggestedUsers = await userSession.clientProxy.recentConversationCounterparts()
@@ -147,6 +146,9 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     private func inviteUsers(_ users: [String], roomProxy: JoinedRoomProxyProtocol) {
         showLoadingIndicator(title: L10n.screenRoomDetailsInvitePeoplePreparing, message: L10n.screenRoomDetailsInvitePeopleDontClose)
         
+        // Members load lazily and update live, so filter anyone who may have appeared a a member since being selected.
+        let users = users.filter { ![.join, .invite].contains(state.membershipState[$0]) }
+        
         Task {
             defer {
                 hideLoadingIndicator()
@@ -178,7 +180,10 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     }
     
     private func buildMembershipStateIfNeeded(members: [RoomMemberProxyProtocol]) {
-        showLoadingIndicator()
+        // Only block the screen for the initial build, later updates refresh silently.
+        if state.membershipState.isEmpty {
+            showLoadingIndicator()
+        }
         
         Task.detached { [members] in
             // accessing RoomMember's properties is very slow. We need to do it in a background thread.
@@ -205,25 +210,16 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
                 self?.fetchUsers()
             }
             .store(in: &cancellables)
-    }
-    
-    private func fetchMembersIfNeeded() {
-        guard case .existingRoom(let roomProxy) = roomType else { return }
         
-        Task {
-            showLoadingIndicator()
-            await roomProxy.updateMembers()
-            hideLoadingIndicator()
+        if case let .existingRoom(roomProxy) = roomType {
+            roomProxy.membersPublisher
+                .filter { !$0.isEmpty }
+                .receive(on: DispatchQueue.main)
+                .sink { [weak self] members in
+                    self?.buildMembershipStateIfNeeded(members: members)
+                }
+                .store(in: &cancellables)
         }
-        
-        roomProxy.membersPublisher
-            .filter { !$0.isEmpty }
-            .first()
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] members in
-                self?.buildMembershipStateIfNeeded(members: members)
-            }
-            .store(in: &cancellables)
     }
     
     private func fetchUsers() {

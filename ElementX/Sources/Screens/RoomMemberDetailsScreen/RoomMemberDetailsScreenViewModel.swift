@@ -134,7 +134,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
             details?.isIgnored = true
             state.memberDetails = details
             
-            updateMembers()
+            Task { await updateMembers() }
         case .failure:
             state.bindings.alertInfo = .init(id: .unknown)
         }
@@ -154,16 +154,15 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
             details?.isIgnored = false
             state.memberDetails = details
             
-            updateMembers()
+            Task { await updateMembers() }
         case .failure:
             state.bindings.alertInfo = .init(id: .unknown)
         }
     }
     
-    private func updateMembers() {
-        Task {
-            await self.roomProxy.updateMembers()
-        }
+    private func updateMembers() async {
+        // Manually update the room's members to recompute with the new ignored state.
+        await roomProxy.updateMembers()
     }
     
     private func displayFullScreenAvatar(_ url: URL) async {

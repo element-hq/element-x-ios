@@ -1016,15 +1016,11 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         
         Task {
             userIndicatorController.submitIndicator(.init(id: inviteLoadingIndicatorID, type: .toast, title: L10n.commonLoading))
-            defer {
-                userIndicatorController.retractIndicatorWithId(inviteLoadingIndicatorID)
-            }
+            defer { userIndicatorController.retractIndicatorWithId(inviteLoadingIndicatorID) }
             
-            guard
-                let members = await roomProxy.members(),
-                members.count == 2,
-                let otherPerson = members.first(where: { $0.userID != roomProxy.ownUserID && $0.membership == .leave })
-            else {
+            let members = roomProxy.membersPublisher.value
+            guard members.count == 2,
+                  let otherPerson = members.first(where: { $0.userID != roomProxy.ownUserID && $0.membership == .leave }) else {
                 displayAlert(.unknown)
                 return
             }
