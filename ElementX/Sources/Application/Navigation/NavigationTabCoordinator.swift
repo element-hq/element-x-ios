@@ -254,9 +254,12 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
     @State private var window: UIWindow?
     @State private var isFullScreen = true
     @State private var railBackgroundColor: Color = .compound.bgCanvasDefault
+    /// Whether the device is foldable, so we can keep the default tab bar on iPhone Duo.
+    @State private var isFoldable = false
     
     var body: some View {
         tabView
+            .onGeometryChange(for: Bool.self) { !$0.backportReservedRegionsDivision(includeInactive: true).isEmpty } action: { isFoldable = $0 }
             .environment(\.tabViewHorizontalSizeClass, horizontalSizeClass)
             .sheet(item: $navigationTabCoordinator.sheetModule) { module in
                 module.coordinator?.toPresentable()
@@ -270,7 +273,7 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
     
     @ViewBuilder
     var tabView: some View {
-        if horizontalSizeClass == .regular, #available(iOS 26, *) {
+        if horizontalSizeClass == .regular, !isFoldable, #available(iOS 26, *) {
             tabRailLayout
         } else {
             tabViewLayout

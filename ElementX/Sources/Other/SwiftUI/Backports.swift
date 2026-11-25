@@ -9,21 +9,12 @@
 import Compound
 import SwiftUI
 
+// MARK: iOS 26
+
 extension View {
-    // MARK: iOS 26
-    
     @ViewBuilder func backportTabBarMinimizeBehaviorOnScrollDown() -> some View {
         if #available(iOS 26.0, *) {
             tabBarMinimizeBehavior(.onScrollDown)
-        } else {
-            self
-        }
-    }
-    
-    /// iOS 27 only detaches the search tab and docks its field at the bottom when selecting the tab activates search.
-    @ViewBuilder func backportTabViewSearchActivationOnSearchTabSelection() -> some View {
-        if #available(iOS 27.0, *) {
-            tabViewSearchActivation(.searchTabSelection)
         } else {
             self
         }
@@ -78,6 +69,32 @@ extension ToolbarContent {
             sharedBackgroundVisibility(visibility)
         } else {
             self
+        }
+    }
+}
+
+// MARK: iOS 27
+
+extension View {
+    /// iOS 27 only detaches the search tab and docks its field at the bottom when selecting the tab activates search.
+    @ViewBuilder func backportTabViewSearchActivationOnSearchTabSelection() -> some View {
+        if #available(iOS 27.0, *) {
+            tabViewSearchActivation(.searchTabSelection)
+        } else {
+            self
+        }
+    }
+}
+
+// MARK: iOS 27.1
+
+extension GeometryProxy {
+    /// The frames of any `ReservedRegion.division`s within the geometry.
+    nonisolated func backportReservedRegionsDivision(includeInactive: Bool) -> [CGRect] {
+        if #available(iOS 27.1, *) {
+            reservedRegions(kind: .division, options: includeInactive ? .includeInactive : []).map(\.frame)
+        } else {
+            []
         }
     }
 }
