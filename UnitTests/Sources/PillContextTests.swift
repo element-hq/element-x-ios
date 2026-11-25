@@ -13,279 +13,155 @@ import Testing
 
 @MainActor
 struct PillContextTests {
-    @Test
-    func user() async {
-        let userIndicatorController = UserIndicatorControllerMock()
-        
+    var membersSubject: CurrentValueSubject<[RoomMemberProxyProtocol], Never>!
+    
+    var viewModel: TimelineViewModel!
+    
+    @Test("A user mention shows the member's display name once it loads")
+    mutating func user() async throws {
+        setupViewModel()
         let id = "@test:matrix.org"
-        let proxyMock = JoinedRoomProxyMock(.init(name: "Test"))
-        let subject = CurrentValueSubject<[RoomMemberProxyProtocol], Never>([])
-        proxyMock.membersPublisher = subject.asCurrentValuePublisher()
-        let mock = TimelineViewModel(roomProxy: proxyMock,
-                                     timelineController: TimelineControllerMock(.init()),
-                                     userSession: UserSessionMock(.init()),
-                                     mediaPlayerProvider: MediaPlayerProviderMock(),
-                                     userIndicatorController: userIndicatorController,
-                                     appMediator: AppMediatorMock(.init()),
-                                     analyticsService: AnalyticsServiceMock(.init()),
-                                     emojiProvider: EmojiProvider(userSettings: .mock()),
-                                     linkMetadataProvider: LinkMetadataProvider(),
-                                     timelineControllerFactory: TimelineControllerFactoryMock(.init()))
-        let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .user(userID: id), font: .preferredFont(forTextStyle: .body)))
+        let context = PillContext(timelineContext: viewModel.context, data: PillTextAttachmentData(type: .user(userID: id), font: .preferredFont(forTextStyle: .body)))
         
         #expect(!context.viewState.isOwnMention)
         #expect(context.viewState.displayText == id)
         
         let name = "Mr. Test"
         let avatarURL = URL(string: "https://test.jpg")
-        subject.send([RoomMemberProxyMock(with: .init(userID: id, displayName: name, avatarURL: avatarURL, membership: .join))])
-        await Task.yield()
+        let deferred = deferFulfillment(context.$viewState) { $0.displayText == "@\(name)" }
+        membersSubject.send([RoomMemberProxyMock(with: .init(userID: id, displayName: name, avatarURL: avatarURL, membership: .join))])
+        try await deferred.fulfill()
         
         #expect(!context.viewState.isOwnMention)
-        #expect(context.viewState.displayText == "@\(name)")
     }
     
-    @Test
-    func ownUser() {
-        let userIndicatorController = UserIndicatorControllerMock()
-        
+    @Test("A mention of the current user is marked as their own mention")
+    mutating func ownUser() {
         let id = "@test:matrix.org"
-        let proxyMock = JoinedRoomProxyMock(.init(name: "Test", ownUserID: id))
-        let subject = CurrentValueSubject<[RoomMemberProxyProtocol], Never>([])
-        proxyMock.membersPublisher = subject.asCurrentValuePublisher()
-        let mock = TimelineViewModel(roomProxy: proxyMock,
-                                     timelineController: TimelineControllerMock(.init()),
-                                     userSession: UserSessionMock(.init()),
-                                     mediaPlayerProvider: MediaPlayerProviderMock(),
-                                     userIndicatorController: userIndicatorController,
-                                     appMediator: AppMediatorMock(.init()),
-                                     analyticsService: AnalyticsServiceMock(.init()),
-                                     emojiProvider: EmojiProvider(userSettings: .mock()),
-                                     linkMetadataProvider: LinkMetadataProvider(),
-                                     timelineControllerFactory: TimelineControllerFactoryMock(.init()))
-        let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .user(userID: id), font: .preferredFont(forTextStyle: .body)))
+        setupViewModel(ownUserID: id)
+        let context = PillContext(timelineContext: viewModel.context, data: PillTextAttachmentData(type: .user(userID: id), font: .preferredFont(forTextStyle: .body)))
         
         #expect(context.viewState.isOwnMention)
     }
     
-    @Test
-    func allUsers() {
-        let userIndicatorController = UserIndicatorControllerMock()
-        
-        let avatarURL = URL(string: "https://matrix.jpg")
-        let id = "test_room"
-        let displayName = "Test"
-        let proxyMock = JoinedRoomProxyMock(.init(id: id, name: displayName, avatarURL: avatarURL))
-        let mockController = TimelineControllerMock(.init(roomProxy: proxyMock))
-        let mock = TimelineViewModel(roomProxy: proxyMock,
-                                     timelineController: mockController,
-                                     userSession: UserSessionMock(.init()),
-                                     mediaPlayerProvider: MediaPlayerProviderMock(),
-                                     userIndicatorController: userIndicatorController,
-                                     appMediator: AppMediatorMock(.init()),
-                                     analyticsService: AnalyticsServiceMock(.init()),
-                                     emojiProvider: EmojiProvider(userSettings: .mock()),
-                                     linkMetadataProvider: LinkMetadataProvider(),
-                                     timelineControllerFactory: TimelineControllerFactoryMock(.init()))
-        let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .allUsers, font: .preferredFont(forTextStyle: .body)))
+    @Test("An @room mention is shown as a mention of the current user")
+    mutating func allUsers() {
+        setupViewModel()
+        let context = PillContext(timelineContext: viewModel.context, data: PillTextAttachmentData(type: .allUsers, font: .preferredFont(forTextStyle: .body)))
         
         #expect(context.viewState.isOwnMention)
         #expect(context.viewState.displayText == PillUtilities.atRoom)
     }
     
-    @Test
-    func roomIDMention() {
-        let userIndicatorController = UserIndicatorControllerMock()
-        
-        let proxyMock = JoinedRoomProxyMock(.init())
-        let mockController = TimelineControllerMock(.init(roomProxy: proxyMock))
+    @Test("A room ID mention shows the room's name")
+    mutating func roomIDMention() {
         let clientMock = ClientProxyMock(.init())
         clientMock.roomSummaryForIdentifierReturnValue = .mock(id: "1", name: "Foundation 🔭🪐🌌")
-        let mock = TimelineViewModel(roomProxy: proxyMock,
-                                     timelineController: mockController,
-                                     userSession: UserSessionMock(.init(clientProxy: clientMock)),
-                                     mediaPlayerProvider: MediaPlayerProviderMock(),
-                                     userIndicatorController: userIndicatorController,
-                                     appMediator: AppMediatorMock(.init()),
-                                     analyticsService: AnalyticsServiceMock(.init()),
-                                     emojiProvider: EmojiProvider(userSettings: .mock()),
-                                     linkMetadataProvider: LinkMetadataProvider(),
-                                     timelineControllerFactory: TimelineControllerFactoryMock(.init()))
-        let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .roomID("1"), font: .preferredFont(forTextStyle: .body)))
+        setupViewModel(clientProxy: clientMock)
+        let context = PillContext(timelineContext: viewModel.context, data: PillTextAttachmentData(type: .roomID("1"), font: .preferredFont(forTextStyle: .body)))
         
         #expect(!context.viewState.isOwnMention)
         #expect(!context.viewState.isUndefined)
         #expect(context.viewState.displayText == "#Foundation 🔭🪐🌌")
     }
     
-    @Test
-    func roomIDMentionMissingRoom() {
-        let userIndicatorController = UserIndicatorControllerMock()
-        
-        let proxyMock = JoinedRoomProxyMock(.init())
-        let mockController = TimelineControllerMock(.init(roomProxy: proxyMock))
-        let mock = TimelineViewModel(roomProxy: proxyMock,
-                                     timelineController: mockController,
-                                     userSession: UserSessionMock(.init()),
-                                     mediaPlayerProvider: MediaPlayerProviderMock(),
-                                     userIndicatorController: userIndicatorController,
-                                     appMediator: AppMediatorMock(.init()),
-                                     analyticsService: AnalyticsServiceMock(.init()),
-                                     emojiProvider: EmojiProvider(userSettings: .mock()),
-                                     linkMetadataProvider: LinkMetadataProvider(),
-                                     timelineControllerFactory: TimelineControllerFactoryMock(.init()))
-        let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .roomID("1"), font: .preferredFont(forTextStyle: .body)))
+    @Test("A room ID mention shows the raw ID when the room is unknown")
+    mutating func roomIDMentionMissingRoom() {
+        setupViewModel()
+        let context = PillContext(timelineContext: viewModel.context, data: PillTextAttachmentData(type: .roomID("1"), font: .preferredFont(forTextStyle: .body)))
         
         #expect(!context.viewState.isOwnMention)
         #expect(!context.viewState.isUndefined)
         #expect(context.viewState.displayText == "1")
     }
     
-    @Test
-    func roomAliasMention() {
-        let userIndicatorController = UserIndicatorControllerMock()
-        
-        let proxyMock = JoinedRoomProxyMock(.init())
-        let mockController = TimelineControllerMock(.init(roomProxy: proxyMock))
+    @Test("A room alias mention shows the room's name")
+    mutating func roomAliasMention() {
         let clientMock = ClientProxyMock(.init())
         clientMock.roomSummaryForAliasReturnValue = .mock(id: "2",
                                                           name: "Foundation and Empire",
                                                           canonicalAlias: "#foundation-and-empire:matrix.org")
-        let mock = TimelineViewModel(roomProxy: proxyMock,
-                                     timelineController: mockController,
-                                     userSession: UserSessionMock(.init(clientProxy: clientMock)),
-                                     mediaPlayerProvider: MediaPlayerProviderMock(),
-                                     userIndicatorController: userIndicatorController,
-                                     appMediator: AppMediatorMock(.init()),
-                                     analyticsService: AnalyticsServiceMock(.init()),
-                                     emojiProvider: EmojiProvider(userSettings: .mock()),
-                                     linkMetadataProvider: LinkMetadataProvider(),
-                                     timelineControllerFactory: TimelineControllerFactoryMock(.init()))
-        let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .roomAlias("#foundation-and-empire:matrix.org"), font: .preferredFont(forTextStyle: .body)))
+        setupViewModel(clientProxy: clientMock)
+        let context = PillContext(timelineContext: viewModel.context, data: PillTextAttachmentData(type: .roomAlias("#foundation-and-empire:matrix.org"), font: .preferredFont(forTextStyle: .body)))
         
         #expect(!context.viewState.isOwnMention)
         #expect(!context.viewState.isUndefined)
         #expect(context.viewState.displayText == "#Foundation and Empire")
     }
     
-    @Test
-    func roomAliasMentionMissingRoom() {
-        let userIndicatorController = UserIndicatorControllerMock()
-        
-        let proxyMock = JoinedRoomProxyMock(.init())
-        let mockController = TimelineControllerMock(.init(roomProxy: proxyMock))
-        let mock = TimelineViewModel(roomProxy: proxyMock,
-                                     timelineController: mockController,
-                                     userSession: UserSessionMock(.init()),
-                                     mediaPlayerProvider: MediaPlayerProviderMock(),
-                                     userIndicatorController: userIndicatorController,
-                                     appMediator: AppMediatorMock(.init()),
-                                     analyticsService: AnalyticsServiceMock(.init()),
-                                     emojiProvider: EmojiProvider(userSettings: .mock()),
-                                     linkMetadataProvider: LinkMetadataProvider(),
-                                     timelineControllerFactory: TimelineControllerFactoryMock(.init()))
-        let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .roomAlias("#foundation-and-empire:matrix.org"), font: .preferredFont(forTextStyle: .body)))
+    @Test("A room alias mention shows the raw alias when the room is unknown")
+    mutating func roomAliasMentionMissingRoom() {
+        setupViewModel()
+        let context = PillContext(timelineContext: viewModel.context, data: PillTextAttachmentData(type: .roomAlias("#foundation-and-empire:matrix.org"), font: .preferredFont(forTextStyle: .body)))
         
         #expect(!context.viewState.isOwnMention)
         #expect(!context.viewState.isUndefined)
         #expect(context.viewState.displayText == "#foundation-and-empire:matrix.org")
     }
     
-    @Test
-    func eventOnRoomIDMention() {
-        let userIndicatorController = UserIndicatorControllerMock()
-        
-        let proxyMock = JoinedRoomProxyMock(.init())
-        let mockController = TimelineControllerMock(.init(roomProxy: proxyMock))
+    @Test("A link to an event in a room ID shows the room's name")
+    mutating func eventOnRoomIDMention() {
         let clientMock = ClientProxyMock(.init())
         clientMock.roomSummaryForIdentifierReturnValue = .mock(id: "1", name: "Foundation 🔭🪐🌌")
-        let mock = TimelineViewModel(roomProxy: proxyMock,
-                                     timelineController: mockController,
-                                     userSession: UserSessionMock(.init(clientProxy: clientMock)),
-                                     mediaPlayerProvider: MediaPlayerProviderMock(),
-                                     userIndicatorController: userIndicatorController,
-                                     appMediator: AppMediatorMock(.init()),
-                                     analyticsService: AnalyticsServiceMock(.init()),
-                                     emojiProvider: EmojiProvider(userSettings: .mock()),
-                                     linkMetadataProvider: LinkMetadataProvider(),
-                                     timelineControllerFactory: TimelineControllerFactoryMock(.init()))
-        let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .event(room: .roomID("1")), font: .preferredFont(forTextStyle: .body)))
+        setupViewModel(clientProxy: clientMock)
+        let context = PillContext(timelineContext: viewModel.context, data: PillTextAttachmentData(type: .event(room: .roomID("1")), font: .preferredFont(forTextStyle: .body)))
         
         #expect(!context.viewState.isOwnMention)
         #expect(!context.viewState.isUndefined)
         #expect(context.viewState.displayText == "💬 > #Foundation 🔭🪐🌌")
     }
     
-    @Test
-    func eventOnRoomIDMentionMissingRoom() {
-        let userIndicatorController = UserIndicatorControllerMock()
-        
-        let proxyMock = JoinedRoomProxyMock(.init())
-        let mockController = TimelineControllerMock(.init(roomProxy: proxyMock))
-        let mock = TimelineViewModel(roomProxy: proxyMock,
-                                     timelineController: mockController,
-                                     userSession: UserSessionMock(.init()),
-                                     mediaPlayerProvider: MediaPlayerProviderMock(),
-                                     userIndicatorController: userIndicatorController,
-                                     appMediator: AppMediatorMock(.init()),
-                                     analyticsService: AnalyticsServiceMock(.init()),
-                                     emojiProvider: EmojiProvider(userSettings: .mock()),
-                                     linkMetadataProvider: LinkMetadataProvider(),
-                                     timelineControllerFactory: TimelineControllerFactoryMock(.init()))
-        let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .event(room: .roomID("1")), font: .preferredFont(forTextStyle: .body)))
+    @Test("A link to an event in a room ID shows the raw ID when the room is unknown")
+    mutating func eventOnRoomIDMentionMissingRoom() {
+        setupViewModel()
+        let context = PillContext(timelineContext: viewModel.context, data: PillTextAttachmentData(type: .event(room: .roomID("1")), font: .preferredFont(forTextStyle: .body)))
         
         #expect(!context.viewState.isOwnMention)
         #expect(!context.viewState.isUndefined)
         #expect(context.viewState.displayText == "💬 > 1")
     }
     
-    @Test
-    func eventOnRoomAliasMention() {
-        let userIndicatorController = UserIndicatorControllerMock()
-        
-        let proxyMock = JoinedRoomProxyMock(.init())
-        let mockController = TimelineControllerMock(.init(roomProxy: proxyMock))
+    @Test("A link to an event in a room alias shows the room's name")
+    mutating func eventOnRoomAliasMention() {
         let clientMock = ClientProxyMock(.init())
         clientMock.roomSummaryForAliasReturnValue = .mock(id: "2",
                                                           name: "Foundation and Empire",
                                                           canonicalAlias: "#foundation-and-empire:matrix.org")
-        let mock = TimelineViewModel(roomProxy: proxyMock,
-                                     timelineController: mockController,
-                                     userSession: UserSessionMock(.init(clientProxy: clientMock)),
-                                     mediaPlayerProvider: MediaPlayerProviderMock(),
-                                     userIndicatorController: userIndicatorController,
-                                     appMediator: AppMediatorMock(.init()),
-                                     analyticsService: AnalyticsServiceMock(.init()),
-                                     emojiProvider: EmojiProvider(userSettings: .mock()),
-                                     linkMetadataProvider: LinkMetadataProvider(),
-                                     timelineControllerFactory: TimelineControllerFactoryMock(.init()))
-        let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .event(room: .roomAlias("#foundation-and-empire:matrix.org")), font: .preferredFont(forTextStyle: .body)))
+        setupViewModel(clientProxy: clientMock)
+        let context = PillContext(timelineContext: viewModel.context, data: PillTextAttachmentData(type: .event(room: .roomAlias("#foundation-and-empire:matrix.org")), font: .preferredFont(forTextStyle: .body)))
         
         #expect(!context.viewState.isOwnMention)
         #expect(!context.viewState.isUndefined)
         #expect(context.viewState.displayText == "💬 > #Foundation and Empire")
     }
     
-    @Test
-    func eventOnRoomAliasMentionMissingRoom() {
-        let userIndicatorController = UserIndicatorControllerMock()
-        
-        let proxyMock = JoinedRoomProxyMock(.init())
-        let mockController = TimelineControllerMock(.init(roomProxy: proxyMock))
-        let mock = TimelineViewModel(roomProxy: proxyMock,
-                                     timelineController: mockController,
-                                     userSession: UserSessionMock(.init()),
-                                     mediaPlayerProvider: MediaPlayerProviderMock(),
-                                     userIndicatorController: userIndicatorController,
-                                     appMediator: AppMediatorMock(.init()),
-                                     analyticsService: AnalyticsServiceMock(.init()),
-                                     emojiProvider: EmojiProvider(userSettings: .mock()),
-                                     linkMetadataProvider: LinkMetadataProvider(),
-                                     timelineControllerFactory: TimelineControllerFactoryMock(.init()))
-        let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .event(room: .roomAlias("#foundation-and-empire:matrix.org")), font: .preferredFont(forTextStyle: .body)))
+    @Test("A link to an event in a room alias shows the raw alias when the room is unknown")
+    mutating func eventOnRoomAliasMentionMissingRoom() {
+        setupViewModel()
+        let context = PillContext(timelineContext: viewModel.context, data: PillTextAttachmentData(type: .event(room: .roomAlias("#foundation-and-empire:matrix.org")), font: .preferredFont(forTextStyle: .body)))
         
         #expect(!context.viewState.isOwnMention)
         #expect(!context.viewState.isUndefined)
         #expect(context.viewState.displayText == "💬 > #foundation-and-empire:matrix.org")
+    }
+    
+    // MARK: - Helpers
+    
+    private mutating func setupViewModel(ownUserID: String = RoomMemberProxyMock.mockMe.userID, clientProxy: ClientProxyMock = ClientProxyMock(.init())) {
+        membersSubject = CurrentValueSubject([])
+        
+        let roomProxy = JoinedRoomProxyMock(.init(name: "Test", ownUserID: ownUserID))
+        roomProxy.membersPublisher = membersSubject.asCurrentValuePublisher()
+        
+        viewModel = TimelineViewModel(roomProxy: roomProxy,
+                                      timelineController: TimelineControllerMock(.init(roomProxy: roomProxy)),
+                                      userSession: UserSessionMock(.init(clientProxy: clientProxy)),
+                                      mediaPlayerProvider: MediaPlayerProviderMock(),
+                                      userIndicatorController: UserIndicatorControllerMock(),
+                                      appMediator: AppMediatorMock(.init()),
+                                      analyticsService: AnalyticsServiceMock(.init()),
+                                      emojiProvider: EmojiProvider(userSettings: .mock()),
+                                      linkMetadataProvider: LinkMetadataProvider(),
+                                      timelineControllerFactory: TimelineControllerFactoryMock(.init()))
     }
 }
