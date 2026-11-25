@@ -631,7 +631,7 @@ class MockScreen: Identifiable {
             retainedState.append(flowCoordinator)
             
             return nil
-        case .rootFlow, .rootFlowSignedIn:
+        case .rootFlow, .rootFlowSignedIn, .rootFlowShare:
             let userID = "@mock:client.com"
             let userSettings = appSettings.userSettings(for: userID)
             userSettings.account.hasRunIdentityConfirmationOnboarding = true
@@ -643,6 +643,7 @@ class MockScreen: Identifiable {
             let clientProxy = ClientProxyMock(.init(userID: userID,
                                                     deviceID: "MOCKCLIENT",
                                                     roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
+            clientProxy.alternateRoomSummaryProvider = RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))
             // Presents a room's call straight away, as the manager does without a native call stack.
             let callManagerActions = PassthroughSubject<ElementCallManagerAction, Never>()
             let elementCallManager = ElementCallManagerMock(.init(actionsPublisher: callManagerActions.eraseToAnyPublisher()))
@@ -674,7 +675,7 @@ class MockScreen: Identifiable {
                 userSessionManager.sessionsPublisher.value.filter { $0.clientProxy.userID != userID }
             }
             
-            setSessions(id == .rootFlowSignedIn ? [userSession, bobUserSession] : [])
+            setSessions(id == .rootFlow ? [] : [userSession, bobUserSession])
             userSessionManager.sessionForClosure = { userID in
                 userSessionManager.sessionsPublisher.value.first { $0.clientProxy.userID == userID }
             }
@@ -710,6 +711,9 @@ class MockScreen: Identifiable {
                                                       authenticationServiceFactory: AuthenticationServiceFactoryMock(.init()))
             
             flowCoordinator.handleAppRoute(id == .rootFlow ? .authentication : .roomList, animated: false)
+            if id == .rootFlowShare {
+                flowCoordinator.handleAppRoute(.share(.text(roomID: nil, text: "Shared from another app")), animated: false)
+            }
             
             retainedState.append(flowCoordinator)
             

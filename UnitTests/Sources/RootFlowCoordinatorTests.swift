@@ -348,18 +348,6 @@ struct RootFlowCoordinatorTests {
         #expect(stackCoordinator.rootCoordinator is RoomSelectionScreenCoordinator)
     }
     
-    @Test("Picking a room hands the share to the shown account's screens")
-    func sharePickedRoom() async throws {
-        rootFlowCoordinator.handleAppRoute(.roomList, animated: false)
-        rootFlowCoordinator.completeShare(.text(roomID: nil, text: "Important text"), roomID: roomID, animated: false)
-        
-        let splitCoordinator = try #require(chatsSplitCoordinator)
-        let deferred = deferFulfillment(splitCoordinator.observe(\.detailRootCoordinatorID)) { $0 != nil }
-        try await deferred.fulfill()
-        #expect((splitCoordinator.detailCoordinator as? NavigationStackCoordinator)?.rootCoordinator is RoomScreenCoordinator)
-        #expect(navigationRootCoordinator.sheetCoordinator == nil)
-    }
-    
     @Test("The share sheet closes when the shown account's screens are replaced")
     func shareSheetClosesWithFlow() {
         rootFlowCoordinator.handleAppRoute(.roomList, animated: false)

@@ -155,8 +155,7 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
             stateMachine.processEvent(.showUserProfileScreen(userID: userID), userInfo: .init(animated: animated))
         case .share(let payload):
             guard let roomID = payload.roomID else {
-                MXLog.error("Received a share without a room, the root flow picks the room.")
-                return
+                fatalError("Shares without a room are handled by the root flow.")
             }
             
             stateMachine.processEvent(.selectRoom(roomID: roomID,

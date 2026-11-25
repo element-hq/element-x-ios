@@ -102,6 +102,20 @@ class RootFlowCoordinatorUITests: XCTestCase {
         XCTAssert(joinButton.waitForExistence(timeout: 10))
     }
     
+    func testShare() {
+        let app = Application.launch(.rootFlowShare)
+        
+        let roomName = "Foundation 🔭🪐🌌"
+        let room = app.descendants(matching: .any).matching(identifier: A11yIdentifiers.roomSelectionScreen.roomName(roomName)).firstMatch
+        XCTAssertTrue(room.waitForExistence(timeout: 5.0), "Sharing without a room should show the share sheet.")
+        room.tap()
+        app.buttons["Share"].tap()
+        
+        XCTAssertTrue(app.buttons[roomName].waitForExistence(timeout: 5.0), "Picking a room should open it.")
+        let composer = app.textViews.matching(NSPredicate(format: "value CONTAINS 'Shared from another app'")).firstMatch
+        XCTAssertTrue(composer.waitForExistence(timeout: 5.0), "The shared text should be in the room's composer.")
+    }
+    
     // MARK: - Helpers
     
     /// Signs out of the account whose settings are shown.

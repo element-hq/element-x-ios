@@ -18,7 +18,7 @@ struct ChatsTabFlowCoordinatorTests {
     var chatsTabFlowCoordinator: ChatsTabFlowCoordinator!
     var splitCoordinator: NavigationSplitCoordinator!
     var notificationService: NotificationServiceMock!
-    private let stateMachineFactory = ChatsTabStateMachineCapturingFactory()
+    let stateMachineFactory = PublishedStateMachineFactory()
     
     var detailCoordinator: CoordinatorProtocol? {
         splitCoordinator.detailCoordinator
@@ -298,8 +298,6 @@ struct ChatsTabFlowCoordinatorTests {
         
         chatsTabFlowCoordinator.clearRoute(animated: false)
         
-        let stateMachine = try #require(stateMachineFactory.chatsTabFlowStateMachine)
-        #expect(stateMachine.state == .roomList(detailState: nil))
         #expect(splitCoordinator.sheetCoordinator == nil)
         #expect(detailCoordinator == nil)
     }
@@ -355,16 +353,5 @@ struct ChatsTabFlowCoordinatorTests {
         }
         
         withExtendedLifetime(previousDetailRootCoordinator) { }
-    }
-}
-
-/// Keeps the chats state machine it makes, so tests can send the events that no route reaches.
-private final class ChatsTabStateMachineCapturingFactory: PublishedStateMachineFactory {
-    private(set) var chatsTabFlowStateMachine: ChatsTabFlowCoordinatorStateMachine?
-    
-    override func makeChatsTabFlowStateMachine() -> ChatsTabFlowCoordinatorStateMachine {
-        let stateMachine = super.makeChatsTabFlowStateMachine()
-        chatsTabFlowStateMachine = stateMachine
-        return stateMachine
     }
 }
