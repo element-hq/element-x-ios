@@ -55,12 +55,13 @@ class AnalyticsService: AnalyticsServiceProtocol {
     }
     
     func startIfEnabled() {
-        guard isEnabled else { return }
+        // A nil configuration is how a fork disables analytics, so it disables the call's too.
+        guard isEnabled, let configuration = appSettings.analyticsConfiguration else { return }
         
-        // Its own PostHog project, so independent of whether the app's client is running or configured.
+        // Its own PostHog project, so independent of whether the app's client is already running.
         nativeCallAnalytics?.setConsent(true)
         
-        guard !client.isRunning, let configuration = appSettings.analyticsConfiguration else { return }
+        guard !client.isRunning else { return }
         
         client.start(analyticsConfiguration: configuration)
         
