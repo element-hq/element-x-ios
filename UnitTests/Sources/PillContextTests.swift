@@ -17,7 +17,7 @@ struct PillContextTests {
     
     var viewModel: TimelineViewModel!
     
-    @Test("A user mention shows the member's display name once it loads")
+    @Test("A user mention shows the member's display name once it loads, and follows it when it changes")
     mutating func user() async throws {
         setupViewModel()
         let id = "@test:matrix.org"
@@ -26,13 +26,55 @@ struct PillContextTests {
         #expect(!context.viewState.isOwnMention)
         #expect(context.viewState.displayText == id)
         
-        let name = "Mr. Test"
         let avatarURL = URL(string: "https://test.jpg")
-        let deferred = deferFulfillment(context.$viewState) { $0.displayText == "@\(name)" }
-        membersSubject.send([RoomMemberProxyMock(with: .init(userID: id, displayName: name, avatarURL: avatarURL, membership: .join))])
+        var deferred = deferFulfillment(context.$viewState) { $0.displayText == "@Mr. Test" }
+        membersSubject.send([RoomMemberProxyMock(with: .init(userID: id, displayName: "Mr. Test", avatarURL: avatarURL, membership: .join))])
         try await deferred.fulfill()
         
         #expect(!context.viewState.isOwnMention)
+        
+        deferred = deferFulfillment(context.$viewState) { $0.displayText == "@Dr. Test" }
+        membersSubject.send([RoomMemberProxyMock(with: .init(userID: id, displayName: "Dr. Test", avatarURL: avatarURL, membership: .join))])
+        try await deferred.fulfill()
+    }
+    
+    @Test("A user mention shows the member's status emoji as it's set, changed and cleared")
+    mutating func userStatus() async throws {
+        setupViewModel()
+        let id = "@test:matrix.org"
+        let context = PillContext(timelineContext: viewModel.context, data: PillTextAttachmentData(type: .user(userID: id), font: .preferredFont(forTextStyle: .body)))
+        
+        var deferred = deferFulfillment(context.$viewState) { $0.statusEmoji == "🏝️" }
+        membersSubject.send([RoomMemberProxyMock(with: .init(userID: id, displayName: "Mr. Test", status: .mockHoliday, membership: .join))])
+        try await deferred.fulfill()
+        
+        #expect(context.viewState.displayText == "@Mr. Test")
+        
+        deferred = deferFulfillment(context.$viewState) { $0.statusEmoji == "🧑‍💻" }
+        membersSubject.send([RoomMemberProxyMock(with: .init(userID: id, displayName: "Mr. Test", status: .mockFocussing, membership: .join))])
+        try await deferred.fulfill()
+        
+        deferred = deferFulfillment(context.$viewState) { $0.statusEmoji == nil }
+        membersSubject.send([RoomMemberProxyMock(with: .init(userID: id, displayName: "Mr. Test", membership: .join))])
+        try await deferred.fulfill()
+        
+        #expect(context.viewState.displayText == "@Mr. Test")
+    }
+    
+    @Test("A user mention isn't updated by changes to other members")
+    mutating func userUnaffectedByOtherMembers() async throws {
+        setupViewModel()
+        let id = "@test:matrix.org"
+        let member = RoomMemberProxyMock(with: .init(userID: id, displayName: "Mr. Test", membership: .join))
+        let context = PillContext(timelineContext: viewModel.context, data: PillTextAttachmentData(type: .user(userID: id), font: .preferredFont(forTextStyle: .body)))
+        
+        let deferred = deferFulfillment(context.$viewState) { $0.displayText == "@Mr. Test" }
+        membersSubject.send([member])
+        try await deferred.fulfill()
+        
+        let deferredFailure = deferFailure(context.$viewState.dropFirst(), timeout: .seconds(1)) { _ in true }
+        membersSubject.send([member, RoomMemberProxyMock(with: .init(userID: "@other:matrix.org", displayName: "Other", status: .mockHoliday, membership: .join))])
+        try await deferredFailure.fulfill()
     }
     
     @Test("A mention of the current user is marked as their own mention")
