@@ -11,8 +11,8 @@ import SwiftUI
 
 struct PillView: View {
     @ObservedObject var context: PillContext
-    /// callback triggerd by changes in the display text
-    let didChangeText: () -> Void
+    /// Callback triggered by changes in the displayed content, so the attachment can be resized.
+    let didChangeContent: () -> Void
     
     var textColor: Color {
         context.viewState.isOwnMention ? .compound.textBadgeAccent : .compound.textOnSolidPrimary
@@ -24,8 +24,8 @@ struct PillView: View {
     
     var body: some View {
         mainContent
-            .onChange(of: context.viewState.displayText) {
-                didChangeText()
+            .onChange(of: context.viewState) {
+                didChangeContent()
             }
     }
     
