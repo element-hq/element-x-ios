@@ -71,7 +71,11 @@ class ClientProxy: ClientProxyProtocol {
     
     private(set) var sessionVerificationController: SessionVerificationControllerProxyProtocol?
     
-    let spaceService: SpaceServiceProxyProtocol
+    private let spaceServiceProxy: SpaceServiceProxy
+    var spaceService: SpaceServiceProxyProtocol {
+        spaceServiceProxy
+    }
+    
     let searchService: SearchServiceProxyProtocol
     
     let capabilities: HomeserverCapabilitiesProxyProtocol
@@ -173,7 +177,7 @@ class ClientProxy: ClientProxyProtocol {
         
         secureBackupController = SecureBackupController(encryption: client.encryption())
         
-        spaceService = await SpaceServiceProxy(spaceService: client.spaceService())
+        spaceServiceProxy = await SpaceServiceProxy(spaceService: client.spaceService())
         
         let searchUserID = try client.userId()
         searchService = SearchServiceProxy(searchService: client.searchService(),
@@ -595,6 +599,11 @@ class ClientProxy: ClientProxyProtocol {
     
     func roomSummaryForIdentifier(_ identifier: String) -> RoomSummary? {
         staticRoomSummaryProvider.roomListPublisher.value.first { $0.id == identifier }
+    }
+    
+    func imagePackProvider(roomID: String) -> ImagePackProviderProtocol? {
+        guard let room = try? client.getRoom(roomId: roomID) else { return nil }
+        return ImagePackProvider(room: room, spaceService: spaceServiceProxy.spaceService)
     }
     
     func roomSummaryForAlias(_ alias: String) -> RoomSummary? {
