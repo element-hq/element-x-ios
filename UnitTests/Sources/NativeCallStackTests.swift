@@ -38,12 +38,12 @@ final class NativeCallStackTests {
     @Test("Starting a call asks for its screen and reports the attempt to the analytics")
     func startCall() {
         stack.handleCallRequest(roomProxy: roomProxy(id: "!room:example.com"), isVoiceCall: false, answeredFromCallKit: false)
-
+        
         #expect(presentations == [.present])
         #expect(stack.controller.room?.roomID == "!room:example.com")
         #expect(analytics.events.first?.name == "CallJoinAttempted")
     }
-
+    
     @Test("A call starts a room without one and joins a room with one")
     func startOrJoinCall() {
         stack.handleCallRequest(roomProxy: roomProxy(id: "!empty:example.com", hasOngoingCall: false), isVoiceCall: true, answeredFromCallKit: false)
