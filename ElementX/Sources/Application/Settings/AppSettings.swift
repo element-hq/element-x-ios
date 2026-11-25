@@ -389,7 +389,7 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: false)
     var imageDrawingEnabled: Bool
     
-    @UserPreference(defaultValue: false)
+    @UserPreference(defaultValue: AppBuildType.current != .release)
     var jumpToReadMarkerEnabled: Bool
     
     @UserPreference(defaultValue: false)
