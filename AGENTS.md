@@ -23,6 +23,7 @@ Before any task: walk `.gitmodules` recursive, read each submodule `CONTRIBUTING
 
 - **Code speak for itself** — no comments restating what clear code already says.
 - Doc comment (`///`) must open with *what* — summary line describe what symbol is/does. Discussion may follow, only if useful to callers.
+- Parameter docs: all or none. No lone `- Parameter`.
 - Rationale/implementation detail — trap, hard-to-follow code, choice needing justification → inline `//` comment at the spot, not doc.
 - Comments short — one line where possible. Exceed only when truly needed.
 
