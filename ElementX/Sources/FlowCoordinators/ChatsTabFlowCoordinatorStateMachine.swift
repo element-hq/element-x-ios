@@ -48,8 +48,6 @@ class ChatsTabFlowCoordinatorStateMachine {
         /// Showing the report room screen, for the given room identrifier
         case reportRoomScreen(detailState: DetailState?)
         
-        case shareExtensionRoomList(sharePayload: ShareExtensionPayload)
-        
         case declineAndBlockUserScreen(detailState: DetailState?)
         
         case transferOwnershipScreen(detailState: DetailState?)
@@ -57,7 +55,7 @@ class ChatsTabFlowCoordinatorStateMachine {
         /// The state of the currently selected room
         var detailState: DetailState? {
             switch self {
-            case .initial, .userProfileScreen, .shareExtensionRoomList:
+            case .initial, .userProfileScreen:
                 nil
             case .roomList(let detailState),
                  .feedbackScreen(let detailState),
@@ -129,9 +127,6 @@ class ChatsTabFlowCoordinatorStateMachine {
         /// The user profile screen has been dismissed.
         case dismissedUserProfileScreen
         
-        case showShareExtensionRoomList(sharePayload: ShareExtensionPayload)
-        case dismissedShareExtensionRoomList
-        
         case presentReportRoomScreen(roomID: String)
         case dismissedReportRoomScreen
         
@@ -197,11 +192,6 @@ class ChatsTabFlowCoordinatorStateMachine {
             case (_, .showUserProfileScreen):
                 return .userProfileScreen
             case (.userProfileScreen, .dismissedUserProfileScreen):
-                return .roomList(detailState: nil)
-                
-            case (.roomList, .showShareExtensionRoomList(let sharePayload)):
-                return .shareExtensionRoomList(sharePayload: sharePayload)
-            case (.shareExtensionRoomList, .dismissedShareExtensionRoomList):
                 return .roomList(detailState: nil)
                 
             case (.roomList(let detailState), .presentReportRoomScreen):

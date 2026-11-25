@@ -123,20 +123,6 @@ struct UserSessionFlowCoordinatorTests {
         #expect(detailNavigationStack.stackCoordinators.first is RoomScreenCoordinator)
     }
     
-    @Test("Sharing media without a room asks which room to share to")
-    mutating func shareMediaRouteWithoutRoom() async throws {
-        try await process(route: .settings, expectedUserSessionState: .settingsScreen)
-        #expect((tabCoordinator?.sheetCoordinator as? NavigationStackCoordinator)?.rootCoordinator is SettingsScreenCoordinator)
-        #expect(chatsSplitCoordinator?.sheetCoordinator == nil)
-        
-        let sharePayload: ShareExtensionPayload = .mediaFiles(roomID: nil, mediaFiles: [.init(url: .picturesDirectory, suggestedName: nil)])
-        try await process(route: .share(sharePayload),
-                          expectedUserSessionState: .tabBar,
-                          expectedChatsState: .shareExtensionRoomList(sharePayload: sharePayload))
-        #expect(tabCoordinator?.sheetCoordinator == nil)
-        #expect((chatsSplitCoordinator?.sheetCoordinator as? NavigationStackCoordinator)?.rootCoordinator is RoomSelectionScreenCoordinator)
-    }
-    
     @Test("Sharing media to a room opens the room with an upload preview")
     mutating func shareMediaRouteWithRoom() async throws {
         try await process(route: .event(eventID: "1", roomID: "1", via: []), expectedChatsState: .roomList(detailState: .room(roomID: "1")))
@@ -155,20 +141,6 @@ struct UserSessionFlowCoordinatorTests {
         #expect(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
         #expect(tabCoordinator?.sheetCoordinator == nil)
         #expect(splitCoordinator.sheetCoordinator is MediaUploadPreviewScreenCoordinator)
-    }
-    
-    @Test("Sharing text without a room asks which room to share to")
-    mutating func shareTextRouteWithoutRoom() async throws {
-        try await process(route: .settings, expectedUserSessionState: .settingsScreen)
-        #expect((tabCoordinator?.sheetCoordinator as? NavigationStackCoordinator)?.rootCoordinator is SettingsScreenCoordinator)
-        #expect(chatsSplitCoordinator?.sheetCoordinator == nil)
-        
-        let sharePayload: ShareExtensionPayload = .text(roomID: nil, text: "Important Text")
-        try await process(route: .share(sharePayload),
-                          expectedUserSessionState: .tabBar,
-                          expectedChatsState: .shareExtensionRoomList(sharePayload: sharePayload))
-        #expect(tabCoordinator?.sheetCoordinator == nil)
-        #expect((chatsSplitCoordinator?.sheetCoordinator as? NavigationStackCoordinator)?.rootCoordinator is RoomSelectionScreenCoordinator)
     }
     
     @Test("Sharing text to a room opens the room without an upload preview")
@@ -321,10 +293,6 @@ struct UserSessionFlowCoordinatorTests {
             let splitCoordinator = try #require(chatsSplitCoordinator)
             let deferredDetail = deferFulfillment(splitCoordinator.observe(\.detailRootCoordinatorID)) { $0 != nil && $0 != previousDetailRootCoordinatorID }
             try await deferredDetail.fulfill()
-        case .shareExtensionRoomList:
-            let splitCoordinator = try #require(chatsSplitCoordinator)
-            let deferredSheet = deferFulfillment(splitCoordinator.observe(\.sheetCoordinatorID)) { $0 != nil }
-            try await deferredSheet.fulfill()
         default:
             break
         }

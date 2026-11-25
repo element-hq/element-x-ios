@@ -98,6 +98,9 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
     /// A stored route that was received before the flow was ready.
     private var pendingAppRoute: PendingAppRoute?
     
+    /// The subscription to the shown share sheet's actions.
+    private var shareRoomSelectionCancellable: AnyCancellable?
+    
     private var callScreenPictureInPictureController: AVPictureInPictureController?
     private var callScreenCancellable: AnyCancellable?
     
@@ -523,12 +526,20 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
         }
         
         minimizeFullScreenCall()
+        
+        if case .share(let payload) = appRoute, payload.roomID == nil {
+            presentShareRoomSelection(for: payload, animated: animated)
+            return
+        }
+        
+        dismissShareRoomSelection()
         userSessionFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
     }
     
     private func stopUserSessionFlow() {
         actionsSubject.send(.closeSecondaryWindows)
         userIndicatorController.retractAllIndicators()
+        dismissShareRoomSelection()
         userSessionFlowCoordinator = nil
     }
     
@@ -546,6 +557,53 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
         
         // The account's restoration moves on to its flow again, or its removal to the next account or authentication.
         Task { await userSessionManager.clearCaches(userID: userID) }
+    }
+    
+    // MARK: - Sharing
+    
+    /// Shows the share sheet above the shown account's screens, to pick the room the payload is shared to.
+    private func presentShareRoomSelection(for payload: ShareExtensionPayload, animated: Bool) {
+        // A new share replaces the one still waiting for its room.
+        dismissShareRoomSelection()
+        
+        userSessionFlowCoordinator?.clearRoute(animated: animated)
+        
+        guard let userSession = userSessionManager.activeSession else {
+            MXLog.error("Cannot present the share sheet without an active session.")
+            return
+        }
+        
+        let coordinator = RoomSelectionScreenCoordinator(parameters: .init(userSession: userSession,
+                                                                           roomSummaryProvider: userSession.clientProxy.alternateRoomSummaryProvider))
+        shareRoomSelectionCancellable = coordinator.actionsPublisher
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .dismiss:
+                    dismissShareRoomSelection()
+                case .confirm(let roomID):
+                    completeShare(payload, roomID: roomID, animated: animated)
+                }
+            }
+        
+        let stackCoordinator = NavigationStackCoordinator()
+        stackCoordinator.setRootCoordinator(coordinator)
+        navigationRootCoordinator.setSheetCoordinator(stackCoordinator, animated: animated) { [weak self] in
+            self?.shareRoomSelectionCancellable = nil
+        }
+    }
+    
+    /// Finishes a share once its room is known, handing it to the shown account's screens.
+    func completeShare(_ payload: ShareExtensionPayload, roomID: String, animated: Bool) {
+        dismissShareRoomSelection()
+        userSessionFlowCoordinator?.handleAppRoute(.share(payload.withRoomID(roomID)), animated: animated)
+    }
+    
+    /// Closes the share sheet.
+    private func dismissShareRoomSelection() {
+        shareRoomSelectionCancellable = nil
+        navigationRootCoordinator.setSheetCoordinator(nil)
     }
     
     // MARK: - Calls
