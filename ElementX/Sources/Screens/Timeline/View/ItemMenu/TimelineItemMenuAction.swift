@@ -33,7 +33,8 @@ struct TimelineItemMenuActions {
             .init(key: "❤️", symbol: .heart)
         ]
         
-        frequentlyUsed.append(contentsOf: emojiProvider.frequentlyUsedSystemEmojis().map { TimelineItemMenuReaction(key: $0, symbol: .heart) })
+        // Custom images (`mxc://` keys) aren't supported here.
+        frequentlyUsed.append(contentsOf: emojiProvider.frequentlyUsedSystemEmojis().filter { !$0.hasPrefix("mxc://") }.map { TimelineItemMenuReaction(key: $0, symbol: .heart) })
         
         reactions = if isReactable {
             Array(frequentlyUsed.elements.prefix(10))

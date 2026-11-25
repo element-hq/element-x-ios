@@ -16,6 +16,7 @@ struct EmojiPickerScreen: View {
     @State private var isSearching = false
     
     @ScaledMetric(relativeTo: .title) var minimumWidth: Double = 64
+    @ScaledMetric(relativeTo: .compound.headingXL) private var imageSize: Double = 32
     
     private let feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
     
@@ -30,13 +31,23 @@ struct EmojiPickerScreen: View {
                                     feedbackGenerator.impactOccurred()
                                     context.send(viewAction: .emojiTapped(emoji: emoji))
                                 } label: {
-                                    Text(emoji.value)
-                                        .padding(9.0)
-                                        .font(.compound.headingXL)
-                                        .background(Circle()
-                                            .foregroundColor(emojiBackgroundColor(for: emoji.value)))
+                                    Group {
+                                        switch emoji.item {
+                                        case .emoji(let value):
+                                            Text(value)
+                                                .font(.compound.headingXL)
+                                        case .customImage(let image):
+                                            LoadableImage(mediaSource: image.mediaSource,
+                                                          mediaProvider: context.mediaProvider,
+                                                          transformer: { $0.scaledToFit() },
+                                                          placeholder: { Color.clear })
+                                                .frame(width: imageSize, height: imageSize)
+                                        }
+                                    }
+                                    .padding(9.0)
+                                    .background(emojiBackgroundColor(for: emoji.item.key), in: .circle)
                                 }
-                                .accessibilityLabel(accessibilityLabel(for: emoji.value))
+                                .accessibilityLabel(accessibilityLabel(for: emoji.item))
                             }
                         } header: {
                             EmojiPickerScreenHeaderView(title: category.name)
@@ -63,11 +74,16 @@ struct EmojiPickerScreen: View {
         }
     }
     
-    private func accessibilityLabel(for emoji: String) -> String {
-        if context.viewState.selectedEmojis.contains(emoji) {
-            return L10n.a11yRemoveReaction(emoji)
+    private func accessibilityLabel(for item: EmojiPickerItem) -> String {
+        let name = switch item {
+        case .emoji(let emoji): emoji
+        case .customImage(let image): image.body
+        }
+        
+        if context.viewState.selectedEmojis.contains(item.key) {
+            return L10n.a11yRemoveReaction(name)
         } else {
-            return L10n.a11yAddReaction(emoji)
+            return L10n.a11yAddReaction(name)
         }
     }
     
@@ -104,19 +120,35 @@ struct EmojiPickerScreen: View {
 struct EmojiPickerScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = EmojiPickerScreenViewModel(selectedEmojis: ["😀", "😄"],
                                                       emojiProvider: EmojiProvider(userSettings: .mock()),
-                                                      continuation: AsyncStream<String>.makeStream().continuation)
+                                                      continuation: AsyncStream<EmojiPickerItem>.makeStream().continuation)
+    
+    static let emoticonsViewModel = {
+        let emoticons = (1...5).map { ImagePack.Image(shortcode: "windmill\($0)", body: "Windmill \($0)", mediaSource: ImageInfoProxy.mockImage.source) }
+        let imagePackProvider = ImagePackProviderMock()
+        imagePackProvider.imagePacksReturnValue = .success([ImagePack(id: "windmills", displayName: "Windmills",
+                                                                      isEmoticonPack: true, isStickerPack: false, images: emoticons)])
+        return EmojiPickerScreenViewModel(selectedEmojis: [],
+                                          emojiProvider: EmojiProvider(userSettings: .mock()),
+                                          imagePackProvider: imagePackProvider,
+                                          mediaProvider: MediaProviderMock(.init()),
+                                          continuation: AsyncStream<EmojiPickerItem>.makeStream().continuation)
+    }()
     
     static var previews: some View {
         EmojiPickerScreen(context: viewModel.context)
             .previewDisplayName("Screen")
             .snapshotPreferences(expect: viewModel.context.observe(\.viewState.categories).map { !$0.isEmpty })
+        
+        EmojiPickerScreen(context: emoticonsViewModel.context)
+            .previewDisplayName("Emoticons")
+            .snapshotPreferences(expect: emoticonsViewModel.context.observe(\.viewState.categories).map { $0.first?.id == "windmills" })
     }
 }
 
 struct EmojiPickerScreenSheet_Previews: PreviewProvider {
     static let viewModel = EmojiPickerScreenViewModel(selectedEmojis: ["😀", "😄"],
                                                       emojiProvider: EmojiProvider(userSettings: .mock()),
-                                                      continuation: AsyncStream<String>.makeStream().continuation)
+                                                      continuation: AsyncStream<EmojiPickerItem>.makeStream().continuation)
     
     static var previews: some View {
         Text("Timeline view")

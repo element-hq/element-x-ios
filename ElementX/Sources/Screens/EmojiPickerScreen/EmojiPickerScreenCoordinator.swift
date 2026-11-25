@@ -14,6 +14,9 @@ struct EmojiPickerScreenCoordinatorParameters {
     /// Any emojis that should be displayed as already selected.
     let selectedEmojis: Set<String>
     let emojiProvider: EmojiProviderProtocol
+    /// Provides the custom images offered alongside the emojis, if any.
+    var imagePackProvider: ImagePackProviderProtocol?
+    var mediaProvider: MediaProviderProtocol?
     /// A continuation that yields the selected emoji.
     let continuation: EmojiPickerScreenContinuation
 }
@@ -36,6 +39,8 @@ final class EmojiPickerScreenCoordinator: CoordinatorProtocol {
         viewModel = EmojiPickerScreenViewModel(mode: parameters.mode,
                                                selectedEmojis: parameters.selectedEmojis,
                                                emojiProvider: parameters.emojiProvider,
+                                               imagePackProvider: parameters.imagePackProvider,
+                                               mediaProvider: parameters.mediaProvider,
                                                continuation: parameters.continuation)
     }
     

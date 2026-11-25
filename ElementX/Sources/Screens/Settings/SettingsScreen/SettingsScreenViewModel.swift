@@ -165,11 +165,11 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
     
     private var pickCustomEmojiCancellable: AnyCancellable?
     private func pickCustomEmoji() {
-        let (stream, continuation) = AsyncStream<String>.makeStream()
+        let (stream, continuation) = AsyncStream<EmojiPickerItem>.makeStream()
         actionsSubject.send(.userStatusEmojiPicker(continuation))
         
         pickCustomEmojiCancellable = Task { [weak self] in
-            for await emoji in stream {
+            for await case let .emoji(emoji) in stream {
                 self?.state.bindings.customStatusEmoji = Character(emoji)
             }
         }
