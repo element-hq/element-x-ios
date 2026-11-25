@@ -222,6 +222,9 @@ protocol ClientProxyProtocol: AnyObject {
     
     func roomSummaryForIdentifier(_ identifier: String) -> RoomSummary?
     
+    /// Provides the image packs (custom emoticons and stickers) that can be used in the given room.
+    func imagePackProvider(roomID: String) -> ImagePackProviderProtocol?
+    
     func roomSummaryForAlias(_ alias: String) -> RoomSummary?
     
     /// Will only work for rooms that are in our room list/local store

@@ -11,7 +11,7 @@ import Foundation
 import MatrixRustSDK
 
 class SpaceServiceProxy: SpaceServiceProxyProtocol {
-    private let spaceService: SpaceServiceProtocol
+    let spaceService: SpaceService
     
     // periphery:ignore - required for instance retention in the rust codebase
     private var topLevelSpacesHandle: TaskHandle?
@@ -38,7 +38,7 @@ class SpaceServiceProxy: SpaceServiceProxyProtocol {
         spaceFilterUpdatesContinuation.finish()
     }
     
-    init(spaceService: SpaceServiceProtocol) {
+    init(spaceService: SpaceService) {
         self.spaceService = spaceService
         
         let (spaceListUpdates, spaceListUpdatesContinuation) = AsyncStream<[SpaceListUpdate]>.makeStream()

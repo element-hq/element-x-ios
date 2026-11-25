@@ -3349,6 +3349,48 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return roomSummaryForIdentifierReturnValue
         }
     }
+    //MARK: - imagePackProvider
+
+    private let imagePackProviderRoomIDCallsCountLock = NSLock()
+    private nonisolated(unsafe) var imagePackProviderRoomIDUnderlyingCallsCount = 0
+    var imagePackProviderRoomIDCallsCount: Int {
+        get { imagePackProviderRoomIDCallsCountLock.withLock { imagePackProviderRoomIDUnderlyingCallsCount } }
+        set { imagePackProviderRoomIDCallsCountLock.withLock { imagePackProviderRoomIDUnderlyingCallsCount = newValue } }
+    }
+    var imagePackProviderRoomIDCalled: Bool {
+        return imagePackProviderRoomIDCallsCount > 0
+    }
+    private let imagePackProviderRoomIDReceivedRoomIDLock = NSLock()
+    private nonisolated(unsafe) var imagePackProviderRoomIDUnderlyingReceivedRoomID: String?
+    var imagePackProviderRoomIDReceivedRoomID: String? {
+        get { imagePackProviderRoomIDReceivedRoomIDLock.withLock { imagePackProviderRoomIDUnderlyingReceivedRoomID } }
+        set { imagePackProviderRoomIDReceivedRoomIDLock.withLock { imagePackProviderRoomIDUnderlyingReceivedRoomID = newValue } }
+    }
+    private let imagePackProviderRoomIDReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var imagePackProviderRoomIDUnderlyingReceivedInvocations: [String] = []
+    var imagePackProviderRoomIDReceivedInvocations: [String] {
+        get { imagePackProviderRoomIDReceivedInvocationsLock.withLock { imagePackProviderRoomIDUnderlyingReceivedInvocations } }
+        set { imagePackProviderRoomIDReceivedInvocationsLock.withLock { imagePackProviderRoomIDUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let imagePackProviderRoomIDReturnValueLock = NSLock()
+    private nonisolated(unsafe) var imagePackProviderRoomIDUnderlyingReturnValue: ImagePackProviderProtocol?
+    var imagePackProviderRoomIDReturnValue: ImagePackProviderProtocol? {
+        get { imagePackProviderRoomIDReturnValueLock.withLock { imagePackProviderRoomIDUnderlyingReturnValue } }
+        set { imagePackProviderRoomIDReturnValueLock.withLock { imagePackProviderRoomIDUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var imagePackProviderRoomIDClosure: ((String) -> ImagePackProviderProtocol?)?
+
+    func imagePackProvider(roomID: String) -> ImagePackProviderProtocol? {
+        imagePackProviderRoomIDCallsCountLock.withLock { imagePackProviderRoomIDUnderlyingCallsCount += 1 }
+        imagePackProviderRoomIDReceivedRoomID = roomID
+        imagePackProviderRoomIDReceivedInvocationsLock.withLock { imagePackProviderRoomIDUnderlyingReceivedInvocations.append(roomID) }
+        if let imagePackProviderRoomIDClosure = imagePackProviderRoomIDClosure {
+            return imagePackProviderRoomIDClosure(roomID)
+        } else {
+            return imagePackProviderRoomIDReturnValue
+        }
+    }
     //MARK: - roomSummaryForAlias
 
     private let roomSummaryForAliasCallsCountLock = NSLock()
@@ -5997,6 +6039,37 @@ nonisolated class HomeserverCapabilitiesProxyMock: HomeserverCapabilitiesProxyPr
             return await canChangeDisplayNameClosure()
         } else {
             return canChangeDisplayNameReturnValue
+        }
+    }
+}
+nonisolated class ImagePackProviderMock: ImagePackProviderProtocol, @unchecked Sendable {
+
+    //MARK: - imagePacks
+
+    private let imagePacksCallsCountLock = NSLock()
+    private nonisolated(unsafe) var imagePacksUnderlyingCallsCount = 0
+    var imagePacksCallsCount: Int {
+        get { imagePacksCallsCountLock.withLock { imagePacksUnderlyingCallsCount } }
+        set { imagePacksCallsCountLock.withLock { imagePacksUnderlyingCallsCount = newValue } }
+    }
+    var imagePacksCalled: Bool {
+        return imagePacksCallsCount > 0
+    }
+
+    private let imagePacksReturnValueLock = NSLock()
+    private nonisolated(unsafe) var imagePacksUnderlyingReturnValue: Result<[ImagePack], ImagePackProviderError>!
+    var imagePacksReturnValue: Result<[ImagePack], ImagePackProviderError>! {
+        get { imagePacksReturnValueLock.withLock { imagePacksUnderlyingReturnValue } }
+        set { imagePacksReturnValueLock.withLock { imagePacksUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var imagePacksClosure: (() async -> Result<[ImagePack], ImagePackProviderError>)?
+
+    @concurrent func imagePacks() async -> Result<[ImagePack], ImagePackProviderError> {
+        imagePacksCallsCountLock.withLock { imagePacksUnderlyingCallsCount += 1 }
+        if let imagePacksClosure = imagePacksClosure {
+            return await imagePacksClosure()
+        } else {
+            return imagePacksReturnValue
         }
     }
 }
