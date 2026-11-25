@@ -154,6 +154,9 @@ protocol ClientProxyProtocol: AnyObject {
     /// The filtering state when you are done with it. Only lists joined rooms.
     var alternateRoomSummaryProvider: RoomSummaryProviderProtocol { get }
     
+    /// Lists the rooms matching the global search query. Only lists joined rooms.
+    var globalSearchSummaryProvider: RoomSummaryProviderProtocol { get }
+    
     /// Used for listing rooms, can't be filtered nor its state observed
     var staticRoomSummaryProvider: StaticRoomSummaryProviderProtocol { get }
     
