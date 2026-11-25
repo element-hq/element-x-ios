@@ -104,7 +104,7 @@ struct RestorationTokenTests {
                                                               deviceId: "D3V1C3",
                                                               homeserverUrl: "https://matrix.example.com",
                                                               oauthData: "data-from-mas",
-                                                              slidingSyncVersion: .native),
+                                                              slidingSyncVersion: .unstable),
                                              sessionDirectories: .init(),
                                              passphrase: RestorationTokenFixtures.passphrase,
                                              pusherNotificationClientIdentifier: "pusher-identifier")

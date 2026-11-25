@@ -180,7 +180,7 @@ struct UserSessionStoreTests {
                               deviceId: "deviceID",
                               homeserverUrl: "https://matrix.org",
                               oauthData: nil,
-                              slidingSyncVersion: .native)
+                              slidingSyncVersion: .unstable)
         let restorationToken = RestorationToken(session: session,
                                                 sessionDirectories: sessionDirectories,
                                                 passphrase: RestorationTokenFixtures.passphrase,

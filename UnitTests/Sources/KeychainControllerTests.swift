@@ -304,6 +304,6 @@ private extension Session {
                 deviceId: deviceID,
                 homeserverUrl: homeserverURL,
                 oauthData: "oauthData",
-                slidingSyncVersion: .native)
+                slidingSyncVersion: .unstable)
     }
 }

@@ -31,7 +31,7 @@ struct MediaLoaderTests {
     @Test
     func mediaThumbnailRequestCoalescing() async throws {
         let mediaLoadingClient = ClientSDKMock()
-        mediaLoadingClient.getMediaThumbnailMediaSourceWidthHeightReturnValue = Data()
+        mediaLoadingClient.getMediaThumbnailMediaSourceWidthHeightAnimatedReturnValue = Data()
         let mediaLoader = MediaLoader(client: mediaLoadingClient)
         
         let mediaSource = try MediaSourceProxy(url: .mockMXCImage, mimeType: nil)
@@ -40,6 +40,6 @@ struct MediaLoaderTests {
             _ = try await mediaLoader.loadMediaThumbnailForSource(mediaSource, width: 100, height: 100)
         }
         
-        #expect(mediaLoadingClient.getMediaThumbnailMediaSourceWidthHeightCallsCount == 10)
+        #expect(mediaLoadingClient.getMediaThumbnailMediaSourceWidthHeightAnimatedCallsCount == 10)
     }
 }

@@ -16,7 +16,7 @@ nonisolated extension ClientSDKMock {
         
         var serverName = "matrix.org"
         var homeserverURL = "https://matrix-client.matrix.org"
-        var slidingSyncVersion = SlidingSyncVersion.native
+        var slidingSyncVersion = SlidingSyncVersion.unstable
         var oAuthLoginURL: String? = "https://account.matrix.org/authorize"
         var supportsOAuthCreatePrompt = true
         var supportsPasswordLogin = true
@@ -34,7 +34,7 @@ nonisolated extension ClientSDKMock {
                               deviceId: defaultDeviceID,
                               homeserverUrl: "https://matrix-client.matrix.org",
                               oauthData: nil,
-                              slidingSyncVersion: .native)
+                              slidingSyncVersion: .unstable)
     }
     
     enum MockError: Error { case generic }
@@ -64,7 +64,8 @@ nonisolated extension ClientSDKMock {
         totalUnreadNotificationsReturnValue = 0
         deviceIdReturnValue = configuration.deviceID
         sessionReturnValue = configuration.session
-        getUrlUrlClosure = { url in
+        let httpClient = HttpClientSDKMock()
+        httpClient.getUrlUrlClosure = { url in
             guard url.contains(".well-known/element/element.json") else { throw MockError.generic }
             if let elementWellKnownData = configuration.elementWellKnown?.data(using: .utf8) {
                 return elementWellKnownData
@@ -72,6 +73,7 @@ nonisolated extension ClientSDKMock {
                 throw MockError.generic
             }
         }
+        httpClientReturnValue = httpClient
         
         encryptionReturnValue = EncryptionSDKMock(.init())
         getNotificationSettingsReturnValue = NotificationSettingsSDKMock()

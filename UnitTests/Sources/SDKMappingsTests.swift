@@ -141,7 +141,7 @@ struct SDKMappingsTests {
     
     @Test("Transports are rebuilt as the MSC4143 array")
     func transportsJSON() throws {
-        let json = SDKMappings.transportsJSON([.liveKit(url: nil, serviceUrl: "https://sfu.example.org"),
+        let json = SDKMappings.transportsJSON([.legacyLiveKit(url: nil, serviceUrl: "https://sfu.example.org"),
                                                .custom(transportType: "other", data: #"{"url":"https://other.example.org"}"#)])
         
         let array = try #require(JSONSerialization.jsonObject(with: Data(json.utf8)) as? [[String: String]])
@@ -153,10 +153,10 @@ struct SDKMappingsTests {
     @Test("LiveKit URLs are only included when present")
     func liveKitURL() throws {
         let json = SDKMappings.transportsJSON([.liveKit(url: "wss://sfu.example.org", serviceUrl: "https://jwt.example.org"),
-                                               .liveKit(url: "wss://sfu.example.org", serviceUrl: nil)])
+                                               .legacyLiveKit(url: "wss://sfu.example.org", serviceUrl: nil)])
         
         let array = try #require(JSONSerialization.jsonObject(with: Data(json.utf8)) as? [[String: String]])
-        #expect(array == [["type": "livekit", "url": "wss://sfu.example.org", "livekit_service_url": "https://jwt.example.org"],
+        #expect(array == [["type": "m.livekit", "url": "wss://sfu.example.org", "livekit_service_url": "https://jwt.example.org"],
                           ["type": "livekit", "url": "wss://sfu.example.org"]])
     }
     
