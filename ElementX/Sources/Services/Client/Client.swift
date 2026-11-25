@@ -22,7 +22,7 @@ nonisolated extension ClientProtocol {
                 return .failure(.invalidServerName)
             }
             
-            let data = try await getUrl(url: url.absoluteString)
+            let data = try await httpClient().getUrl(url: url.absoluteString)
             
             return .success(data)
         } catch {

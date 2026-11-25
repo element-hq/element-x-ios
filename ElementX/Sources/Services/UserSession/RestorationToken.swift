@@ -83,7 +83,7 @@ extension MatrixRustSDK.Session: @retroactive Codable {
                          deviceId: container.decode(String.self, forKey: .deviceId),
                          homeserverUrl: container.decode(String.self, forKey: .homeserverUrl),
                          oauthData: container.decodeIfPresent(String.self, forKey: .oauthData),
-                         slidingSyncVersion: .native)
+                         slidingSyncVersion: .unstable)
     }
     
     public func encode(to encoder: Encoder) throws {

@@ -124,6 +124,10 @@ nonisolated enum SDKMappings {
         let objects: [[String: Any]] = transports.map { transport in
             switch transport {
             case .liveKit(let url, let serviceURL):
+                var fields: [String: Any] = ["type": "m.livekit", "url": url]
+                fields["livekit_service_url"] = serviceURL
+                return fields
+            case .legacyLiveKit(let url, let serviceURL):
                 // MSC4195 omits absent fields rather than sending null.
                 var fields: [String: Any] = ["type": "livekit"]
                 fields["url"] = url

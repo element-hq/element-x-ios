@@ -124,7 +124,7 @@ nonisolated struct ClientFactory: ClientFactoryProtocol {
         var builder = clientBuilderFactory.makeBuilder()
             .crossProcessLockConfig(crossProcessLockConfig: .multiProcess(holderName: InfoPlistReader.main.bundleIdentifier))
             .setSessionDelegate(sessionDelegate: sessionDelegate)
-            .userAgent(userAgent: UserAgentBuilder.makeASCIIUserAgent())
+            .httpSettings(settings: .init(proxy: httpProxy, userAgent: UserAgentBuilder.makeASCIIUserAgent()))
             .threadsEnabled(enabled: threadsEnabled, threadSubscriptions: threadsEnabled)
             .requestConfig(config: .init(retryLimit: 3, // Must be non-zero for the SDK to retry API calls when rate-limited.
                                          timeout: requestTimeout,
@@ -133,7 +133,7 @@ nonisolated struct ClientFactory: ClientFactoryProtocol {
             .dmRoomDefinition(dmRoomDefinition: .twoMembers)
         
         if discoverSlidingSync {
-            builder = builder.slidingSyncVersionBuilder(versionBuilder: .discoverNative)
+            builder = builder.slidingSyncVersionBuilder(versionBuilder: .discoverUnstable)
         }
         
         if setupEncryption {
@@ -155,10 +155,6 @@ nonisolated struct ClientFactory: ClientFactoryProtocol {
             builder = builder
                 .roomKeyRecipientStrategy(strategy: .errorOnVerifiedUserProblem)
                 .decryptionSettings(decryptionSettings: .init(senderDeviceTrustRequirement: .untrusted))
-        }
-        
-        if let httpProxy {
-            builder = builder.proxy(url: httpProxy)
         }
         
         return builder
