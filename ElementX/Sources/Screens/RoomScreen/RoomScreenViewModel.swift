@@ -130,7 +130,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             _ = await roomProxy.markAsRead(receiptType: userSettings.account.sharePresence ? .read : .readPrivate)
             _ = await roomProxy.markAsRead(receiptType: .fullyRead)
         }
-        // Work around QLPreviewController dismissal issues, see the InteractiveQuickLookModifier.
+        state.bindings.mediaPreviewViewModel?.dismissImmediately()
         state.bindings.mediaPreviewViewModel = nil
     }
     

@@ -46,7 +46,7 @@ class PinnedEventsTimelineScreenViewModel: PinnedEventsTimelineScreenViewModelTy
     }
     
     func stop() {
-        // Work around QLPreviewController dismissal issues, see the InteractiveQuickLookModifier.
+        state.bindings.mediaPreviewViewModel?.dismissImmediately()
         state.bindings.mediaPreviewViewModel = nil
     }
     

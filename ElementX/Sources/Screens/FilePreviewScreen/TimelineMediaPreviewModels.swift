@@ -34,6 +34,8 @@ enum TimelineMediaPreviewDriverAction {
     case exportFile(TimelineMediaPreviewFileExportPicker.File)
     case authorizationRequired(appMediator: AppMediatorProtocol)
     case dismissDetailsSheet
+    /// Closes the whole preview at once, without animation.
+    case dismissPreview
     
     var isItemLoaded: Bool {
         switch self {
