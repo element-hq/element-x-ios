@@ -16,18 +16,27 @@ Tests use **Swift Testing**. XCUI targets (UITests, AccessibilityTests, Integrat
 
 One scenario = one test. New test? Check suite first. Scenario already tested? Add asserts to that test, update display name — no second test same setup, different checks. Different scenario → new test.
 
+Assert start state before action, not just end — else test may pass without anything changing.
+
+Test worth it? No tests for code excluded from coverage (`codecov.yml`). No asserts on what's already guaranteed (e.g. state machine transition).
+
+Tests live in suite named for type they test.
+
 ## Shape
 
-Two helper kinds:
-- `setupX(…)` — `mutating`, build subject under test + its mocks, store on suite. Tests read `viewModel`/`context`/mocks from suite. Always name subject (`setupViewModel`, `setupService`), never bare `setup`/`setUp`.
-- `makeX(…)` — return standalone value (timeline item, session, fixture). Touch no suite state.
+Building subject under test (X), simplest first:
+- Inline init — few tests, no helper.
+- `makeX(…)` — build X, return it. Caller pass all deps in. No need for suite state.
+- `setupX(…)` — `mutating`, build X + its mocks, store on suite. Tests read `viewModel`/`context`/mocks from suite. Always name subject (`setupViewModel`, `setupService`), never bare `setup`/`setUp`.
 
-Helper read/write suite properties, return tuple, or build subject under test? `setupX` not `makeX`.
+`makeX` tests need more than helper return — mocks it built, suite state it touched? Change to `setupX`, store on suite. No tuple returns.
 
 Suite use `setupX` or `makeX`, not both. Has `setupX`, tempted add `makeX`? Instead:
 - `setupX` param.
 - Mock `Configuration` param.
-- Static mock on type extension (e.g. `RoomMemberProxyMock.mockAdmin`, `UserSettings.mock()`).
+- Static mock on type extension (e.g. `RoomMemberProxyMock.mockAdmin`, `UserSettings.mock()`). Test-only fixture? `private extension` at bottom of test file fine.
+
+Mock or fixture needed by 2+ tests? Share it (options above). One test only? Can stay inline.
 
 Suite properties = only what tests touch: subject under test, mocks asserted on or reconfigured mid-test. Dependency only passed to init? Build inline in `setupX`, no property.
 
@@ -46,7 +55,7 @@ Given/When/Then comments (`// Given…`, `// When…`, `// Then…`) — helpful
 | Type | Location | Purpose |
 |------|----------|---------|
 | Unit Tests | `UnitTests/Sources/` | VM logic, state machines, services |
-| UI Tests | `UITests/Sources/` | Flow coordinator integration (snapshots) |
+| UI Tests | `UITests/Sources/` | Flow coordinator integration |
 | Preview Tests | `PreviewTests/Sources/` | Auto-generated snapshots from previews |
 | Accessibility Tests | `AccessibilityTests/Sources/` | Auto-generated Xcode Accessibility Audits |
 
@@ -59,6 +68,7 @@ UnitTests + PreviewTests: `SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor` — no red
 Prefer UI tests over unit tests.
 - UI test tap through flow, trigger screen actions. Unit test can't.
 - Test flow only — what present, push, pop, dismiss. No screen state asserts — unit + preview tests cover that.
+- No screenshot needed if preview snapshot already cover screen. Moving away from flow snapshots.
 
 ## Running
 
@@ -100,7 +110,8 @@ try await deferred.fulfill()
 Same pattern for publishers.
 
 - Value expected → `deferFulfillment`. Nothing expected → `deferFailure`. Call expected → `waitForConfirmation`.
-- Never `Task.sleep` to wait. Wait on durable state.
+- Never `Task.sleep` or `Task.yield()` to wait — flaky on CI. Wait on durable state.
+- Matching non-equatable enum? Test-only `@retroactive Equatable` (`$0 == .presentRoom(…)`) or `isX` var via `switch` (`$0.isCancel`). No `if case … true else false` closures — bloat when formatted.
 - Every wait needs timeout. Helpers take `timeout:` on purpose. Hand-rolled wait (bare `for await`, continuation, stream loop) no timeout → failure hang full 60s default. Use helper.
 
 ## Previews & Snapshots
