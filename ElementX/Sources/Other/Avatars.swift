@@ -71,11 +71,10 @@ enum UserAvatarSizeOnScreen {
     case accountInfoCard
     case roomDetails
     case roomMembersList
-    case roomChangeRoles
     case dmDetails
     case startChat
     case memberDetails
-    case inviteUsers
+    case selectedItemsCarousel
     case readReceipt
     case readReceiptSheet
     case editUserDetails
@@ -115,11 +114,9 @@ enum UserAvatarSizeOnScreen {
             40
         case .roomDetails:
             44
-        case .settings, .inviteUsers, .knockingUserList,
+        case .settings, .selectedItemsCarousel, .knockingUserList,
              .threadList, .mediaPreviewDetails, .search:
             52
-        case .roomChangeRoles:
-            56
         case .sendInviteConfirmation:
             64
         case .dmDetails:
@@ -152,7 +149,7 @@ enum RoomAvatarSizeOnScreen {
     case spaceHeader
     case editSpaceDetails
     case spaceAddRooms
-    case spaceAddRoomsSelected
+    case selectedItemsCarousel
     case completionSuggestions
     case createRoomSelectSpace
     
@@ -166,7 +163,7 @@ enum RoomAvatarSizeOnScreen {
              .spaceAddRooms:
             36
         case .chats, .spaces, .spaceSettings,
-             .spaceAddRoomsSelected, .search:
+             .selectedItemsCarousel, .search:
             52
         case .joinRoom, .spaceHeader, .editSpaceDetails:
             64
