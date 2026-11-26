@@ -22,6 +22,7 @@ enum RoomDetailsScreenViewModelAction: Equatable {
     case leftRoom
     case requestEditDetailsPresentation
     case requestPollsHistoryPresentation
+    case requestImagePacksPresentation
     case requestRolesAndPermissionsPresentation
     case displayPinnedEventsTimeline
     case displayMediaEventsTimeline
@@ -70,6 +71,7 @@ struct RoomDetailsScreenViewState: BindableState {
     var knockRequestsCount = 0
     
     var reportRoomEnabled = false
+    var hasImagePacks = false
     
     var canSeeKnockingRequests: Bool {
         dmRecipientInfo == nil && isKnockableRoom && (canInviteUsers || canKickUsers || canBanUsers)
@@ -225,6 +227,7 @@ enum RoomDetailsScreenViewAction {
     case processToggleMuteNotifications
     case displayAvatar(URL)
     case processTapPolls
+    case processTapImagePacks
     case toggleFavourite(isFavourite: Bool)
     case processTapRolesAndPermissions
     case processTapSecurityAndPrivacy

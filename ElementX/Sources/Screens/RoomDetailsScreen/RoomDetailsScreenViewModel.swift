@@ -74,6 +74,12 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             state.reportRoomEnabled = await userSession.clientProxy.isReportRoomSupported
         }
         
+        Task {
+            if case let .success(packs) = await userSession.clientProxy.imagePackProvider(roomID: roomProxy.id)?.roomImagePacks() {
+                state.hasImagePacks = !packs.isEmpty
+            }
+        }
+        
         userSession.clientProxy.homeserverReachabilityPublisher
             .filter { $0 == .reachable }
             .receive(on: DispatchQueue.main)
@@ -140,6 +146,8 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             displayFullScreenAvatar(url)
         case .processTapPolls:
             actionsSubject.send(.requestPollsHistoryPresentation)
+        case .processTapImagePacks:
+            actionsSubject.send(.requestImagePacksPresentation)
         case .toggleFavourite(let isFavourite):
             Task { await toggleFavourite(isFavourite) }
         case .processTapRolesAndPermissions:

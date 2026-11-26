@@ -6077,6 +6077,34 @@ nonisolated class ImagePackProviderMock: ImagePackProviderProtocol, @unchecked S
             return imagePacksReturnValue
         }
     }
+    //MARK: - roomImagePacks
+
+    private let roomImagePacksCallsCountLock = NSLock()
+    private nonisolated(unsafe) var roomImagePacksUnderlyingCallsCount = 0
+    var roomImagePacksCallsCount: Int {
+        get { roomImagePacksCallsCountLock.withLock { roomImagePacksUnderlyingCallsCount } }
+        set { roomImagePacksCallsCountLock.withLock { roomImagePacksUnderlyingCallsCount = newValue } }
+    }
+    var roomImagePacksCalled: Bool {
+        return roomImagePacksCallsCount > 0
+    }
+
+    private let roomImagePacksReturnValueLock = NSLock()
+    private nonisolated(unsafe) var roomImagePacksUnderlyingReturnValue: Result<[ImagePack], ImagePackProviderError>!
+    var roomImagePacksReturnValue: Result<[ImagePack], ImagePackProviderError>! {
+        get { roomImagePacksReturnValueLock.withLock { roomImagePacksUnderlyingReturnValue } }
+        set { roomImagePacksReturnValueLock.withLock { roomImagePacksUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var roomImagePacksClosure: (() async -> Result<[ImagePack], ImagePackProviderError>)?
+
+    @concurrent func roomImagePacks() async -> Result<[ImagePack], ImagePackProviderError> {
+        roomImagePacksCallsCountLock.withLock { roomImagePacksUnderlyingCallsCount += 1 }
+        if let roomImagePacksClosure = roomImagePacksClosure {
+            return await roomImagePacksClosure()
+        } else {
+            return roomImagePacksReturnValue
+        }
+    }
 }
 nonisolated class InvitedRoomProxyMock: InvitedRoomProxyProtocol, @unchecked Sendable {
     var info: BaseRoomInfoProxyProtocol {

@@ -469,6 +469,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.roomDetails, .presentPollsHistory, .pollsHistory):
                 Task { await self.presentRoomPollsHistory(animated: animated) }
                 
+            case (.roomDetails, .presentImagePacks, .imagePacks):
+                Task { await self.presentRoomImagePacks() }
+            case (.imagePacks, .presentImagePack(let pack), .imagePack):
+                presentImagePack(pack)
+                
             case (.roomDetails, .presentPinnedEventsTimeline, .pinnedEventsTimeline):
                 startPinnedEventsTimelineFlow()
                 
@@ -953,6 +958,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.presentInviteUsersScreen(flow: .newRoom(mandatoryInvitee: mandatoryInvitee)))
             case .presentPollsHistory:
                 stateMachine.tryEvent(.presentPollsHistory)
+            case .presentImagePacks:
+                stateMachine.tryEvent(.presentImagePacks)
             case .presentRolesAndPermissionsScreen:
                 stateMachine.tryEvent(.presentRolesAndPermissionsScreen)
             case .presentPinnedEventsTimeline:
@@ -1242,6 +1249,34 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         navigationStackCoordinator.push(coordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissPollsHistory)
+        }
+    }
+    
+    private func presentRoomImagePacks() async {
+        let packs = switch await userSession.clientProxy.imagePackProvider(roomID: roomProxy.id)?.roomImagePacks() {
+        case .success(let packs): packs
+        case .failure, .none: [ImagePack]()
+        }
+        
+        let coordinator = RoomImagePacksScreenCoordinator(parameters: .init(packs: packs, mediaProvider: userSession.mediaProvider))
+        coordinator.actionsPublisher
+            .sink { [weak self] action in
+                switch action {
+                case .selectPack(let pack):
+                    self?.stateMachine.tryEvent(.presentImagePack(pack))
+                }
+            }
+            .store(in: &cancellables)
+        
+        navigationStackCoordinator.push(coordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissImagePacks)
+        }
+    }
+    
+    private func presentImagePack(_ pack: ImagePack) {
+        let coordinator = ImagePackScreenCoordinator(parameters: .init(pack: pack, mediaProvider: userSession.mediaProvider))
+        navigationStackCoordinator.push(coordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissImagePack)
         }
     }
     

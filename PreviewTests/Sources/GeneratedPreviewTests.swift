@@ -418,6 +418,13 @@ extension PreviewTests {
     }
 
     @Test
+    func imagePackScreen() async throws {
+        for (index, preview) in ImagePackScreen_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    @Test
     func imageRoomTimelineView() async throws {
         for (index, preview) in ImageRoomTimelineView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
@@ -1008,6 +1015,13 @@ extension PreviewTests {
     @Test
     func roomHeaderView() async throws {
         for (index, preview) in RoomHeaderView_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    @Test
+    func roomImagePacksScreen() async throws {
+        for (index, preview) in RoomImagePacksScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
