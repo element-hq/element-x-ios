@@ -16,7 +16,7 @@ import Testing
 
 @MainActor
 final class RoomScreenViewModelTests {
-    @Test
+    @Test("The pinned events banner loads, counts pins and follows timeline updates and scrolling")
     func pinnedEventsBanner() async throws {
         var configuration = JoinedRoomProxyMockConfiguration()
         let (stream, continuation) = AsyncStream.makeStream(of: TimelineProxyProtocol.self)
@@ -96,7 +96,7 @@ final class RoomScreenViewModelTests {
         #expect(viewModel.context.viewState.shouldShowPinnedEventsBanner)
     }
     
-    @Test
+    @Test("Tapping the pinned events banner focuses the shown pin and moves to the previous one")
     func pinnedEventsBannerSelection() async throws {
         let roomProxyMock = JoinedRoomProxyMock(.init())
         roomProxyMock.loadOrFetchEventDetailsForReturnValue = .success(TimelineEventSDKMock())
@@ -147,7 +147,7 @@ final class RoomScreenViewModelTests {
         try await deferred.fulfill()
     }
     
-    @Test
+    @Test("Tapping a pin from a thread focuses the thread root and opens the thread on that pin")
     func pinnedEventsBannerThreadedSelection() async throws {
         let userSettings = UserSettings.mock()
         userSettings.app.threadsEnabled = true
@@ -207,7 +207,7 @@ final class RoomScreenViewModelTests {
         try await deferredAction2.fulfill()
     }
     
-    @Test
+    @Test("The room title, avatar and call state follow room info updates")
     func roomInfoUpdate() async throws {
         var configuration = JoinedRoomProxyMockConfiguration(id: "TestID", name: "StartingName", avatarURL: nil, hasOngoingCall: false)
         let roomProxyMock = JoinedRoomProxyMock(configuration)
@@ -248,7 +248,7 @@ final class RoomScreenViewModelTests {
         try await deferred.fulfill()
     }
     
-    @Test
+    @Test("The call button hides only while a call is ongoing in this room")
     func callButtonVisibility() async throws {
         // Given a room screen with no ongoing call.
         let elementCallService = ElementCallServiceMock(.init())
@@ -285,7 +285,7 @@ final class RoomScreenViewModelTests {
         #expect(viewModel.state.shouldShowCallButton)
     }
     
-    @Test
+    @Test("Stopping the room marks it as read and fully read")
     func roomFullyRead() async {
         let expectedReceipts: [ReceiptType] = [.read, .fullyRead]
         let receivedReceipts = Mutex<[ReceiptType]>([])
@@ -308,9 +308,50 @@ final class RoomScreenViewModelTests {
         #expect(receivedReceipts.withLock { $0 } == expectedReceipts)
     }
     
+    @Test("Stopping the room closes its open media preview at once")
+    func stop() async throws {
+        let roomProxyMock = JoinedRoomProxyMock(.init(id: "MyRoomID"))
+        roomProxyMock.markAsReadReceiptTypeReturnValue = .success(())
+        let viewModel = RoomScreenViewModel(userSession: UserSessionMock(.init()),
+                                            roomProxy: roomProxyMock,
+                                            initialSelectedPinnedEventID: nil,
+                                            analyticsService: AnalyticsServiceMock(.init()),
+                                            userIndicatorController: UserIndicatorControllerMock())
+        
+        let item = FileRoomTimelineItem(id: .randomEvent,
+                                        timestamp: .mock,
+                                        isOutgoing: false,
+                                        isEditable: false,
+                                        canBeRepliedTo: true,
+                                        sender: .init(id: ""),
+                                        content: .init(filename: "Important file.pdf",
+                                                       source: try? .init(url: .mockMXCFile, mimeType: "document/pdf"),
+                                                       fileSize: 2453,
+                                                       thumbnailSource: nil,
+                                                       contentType: .pdf))
+        let timelineController = TimelineControllerMock(.init(timelineKind: .media(.mediaFilesScreen), timelineItems: [item]))
+        let mediaPreviewViewModel = TimelineMediaPreviewViewModel(initialItem: item,
+                                                                  timelineViewModel: TimelineViewModel.mock(timelineKind: timelineController.timelineKind,
+                                                                                                            timelineController: timelineController),
+                                                                  mediaProvider: MediaProviderMock(.init()),
+                                                                  photoLibraryManager: PhotoLibraryManagerMock(.init()),
+                                                                  userIndicatorController: UserIndicatorControllerMock(),
+                                                                  appMediator: AppMediatorMock())
+        viewModel.displayMediaPreview(mediaPreviewViewModel)
+        
+        let deferred = deferFulfillment(mediaPreviewViewModel.state.previewControllerDriver) { action in
+            guard case .dismissPreview = action else { return false }
+            return true
+        }
+        viewModel.stop()
+        try await deferred.fulfill()
+        
+        #expect(viewModel.context.mediaPreviewViewModel == nil)
+    }
+    
     // MARK: - Knock Requests
     
-    @Test
+    @Test("The knock requests banner shows unseen requests and hides once they are handled")
     func knockRequestBanner() async throws {
         let roomProxyMock = JoinedRoomProxyMock(.init(knockRequestsState: .loaded([KnockRequestProxyMock(.init(eventID: "1", userID: "@alice:matrix.org", displayName: "Alice", reason: "Hello World!")),
                                                                                    // This one should be filtered
@@ -340,7 +381,7 @@ final class RoomScreenViewModelTests {
         try await deferred.fulfill()
     }
     
-    @Test
+    @Test("Dismissing the knock requests banner marks all its requests as seen")
     func knockRequestBannerMarkAsSeen() async throws {
         let roomProxyMock = JoinedRoomProxyMock(.init(knockRequestsState: .loaded([KnockRequestProxyMock(.init(eventID: "1", userID: "@alice:matrix.org", displayName: "Alice", reason: "Hello World!")),
                                                                                    // This one should be filtered
@@ -367,7 +408,7 @@ final class RoomScreenViewModelTests {
         try await deferred.fulfill()
     }
     
-    @Test
+    @Test("The knock requests banner stays hidden while the requests are loading")
     func loadingKnockRequests() async throws {
         let roomProxyMock = JoinedRoomProxyMock(.init(knockRequestsState: .loading,
                                                       joinRule: .knock))
@@ -382,7 +423,7 @@ final class RoomScreenViewModelTests {
         try await deferred.fulfill()
     }
     
-    @Test
+    @Test("The knock requests banner stays hidden when the user can't invite")
     func knockRequestsBannerDoesNotAppearIfUserHasNoPermission() async throws {
         let roomProxyMock = JoinedRoomProxyMock(.init(knockRequestsState: .loaded([KnockRequestProxyMock(.init(eventID: "1", userID: "@alice:matrix.org", displayName: "Alice", reason: "Hello World!"))]),
                                                       joinRule: .knock,
@@ -400,7 +441,7 @@ final class RoomScreenViewModelTests {
         try await deferred.fulfill()
     }
     
-    @Test(arguments: [true, false])
+    @Test("The permission to send messages checks the encrypted event type in encrypted rooms", arguments: [true, false])
     func canSendMessageUsesEncryptedEventTypeInEncryptedRooms(isEncrypted: Bool) {
         let roomProxyMock = JoinedRoomProxyMock(.init(isEncrypted: isEncrypted))
         let powerLevelsMock = RoomPowerLevelsProxyMock(.init())
@@ -421,7 +462,7 @@ final class RoomScreenViewModelTests {
     
     // MARK: - History Sharing
     
-    @Test
+    @Test("The shared history badge shows only in encrypted rooms with shared or world readable history")
     func roomWithSharedHistoryDisplaysBadge() async throws {
         var configuration = JoinedRoomProxyMockConfiguration(isEncrypted: false, historyVisibility: .joined)
         let infoSubject = CurrentValueSubject<RoomInfoProxyProtocol, Never>(RoomInfoProxyMock(configuration))

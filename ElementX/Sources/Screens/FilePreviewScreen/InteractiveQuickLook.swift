@@ -63,7 +63,7 @@ private struct MediaPreviewViewController: UIViewControllerRepresentable {
         let onDismiss: () -> Void
         let sourceView = UIView()
         
-        private var dismissalObserver: AnyCancellable?
+        private var cancellables = Set<AnyCancellable>()
         
         var previewController: QLPreviewController?
         
@@ -80,7 +80,7 @@ private struct MediaPreviewViewController: UIViewControllerRepresentable {
             // The QLPreviewController will not automatically dismiss itself when the underlying view is removed
             // (e.g. switching rooms from a notification) and it continues to hold on to the whole hierarcy.
             // Manually tell it to dismiss itself here.
-            dismissalObserver = dismissalPublisher.sink { [weak self] _ in
+            dismissalPublisher.sink { [weak self] _ in
                 // Dispatching on main.async with weak self we avoid doing an extra dismiss if the view is presented on top of another modal
                 DispatchQueue.main.async { [weak self] in
                     // Only dismiss a preview we still have up, UIKit forwards dismiss() to an ancestor otherwise.
@@ -88,6 +88,12 @@ private struct MediaPreviewViewController: UIViewControllerRepresentable {
                     self?.dismiss(animated: true)
                 }
             }
+            .store(in: &cancellables)
+            
+            previewItem.immediateDismissalPublisher.sink { [weak self] _ in
+                self?.previewController?.presentingViewController?.dismiss(animated: false)
+            }
+            .store(in: &cancellables)
         }
         
         @available(*, unavailable)
@@ -161,9 +167,19 @@ class MediaPreviewItem: NSObject, QLPreviewItem {
     
     nonisolated let previewItemTitle: String? // nonisolated as QuickLook can call from any thread (macOS 26).
     
+    private let immediateDismissalSubject = PassthroughSubject<Void, Never>()
+    var immediateDismissalPublisher: AnyPublisher<Void, Never> {
+        immediateDismissalSubject.eraseToAnyPublisher()
+    }
+    
     init(file: MediaFileHandleProxy, title: String?) {
         self.file = file
         previewItemTitle = title
+    }
+    
+    /// Closes the preview at once, without animation, for when the screen showing it goes away.
+    func dismissImmediately() {
+        immediateDismissalSubject.send()
     }
     
     /// Loads the media at the given URL, guessing at a JPEG for callers such as avatars that don't know the real mime type.

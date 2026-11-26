@@ -135,6 +135,11 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         }
     }
     
+    /// Closes the preview at once, without animation, for when the screen showing it goes away.
+    func dismissImmediately() {
+        state.previewControllerDriver.send(.dismissPreview)
+    }
+    
     private func forwardItem(itemID: TimelineItemIdentifier) async {
         guard let forwardingPayload = await timelineViewModel.makeForwardingPayload(for: [itemID]) else { return }
         state.previewControllerDriver.send(.dismissDetailsSheet)

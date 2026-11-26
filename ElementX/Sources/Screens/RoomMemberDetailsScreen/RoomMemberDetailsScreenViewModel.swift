@@ -60,7 +60,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
     // MARK: - Public
     
     func stop() {
-        // Work around QLPreviewController dismissal issues, see the InteractiveQuickLookModifier.
+        state.bindings.mediaPreviewItem?.dismissImmediately()
         state.bindings.mediaPreviewItem = nil
         
         hideMemberLoadingIndicator()

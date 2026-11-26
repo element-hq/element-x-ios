@@ -56,7 +56,7 @@ class ThreadTimelineScreenViewModel: ThreadTimelineScreenViewModelType, ThreadTi
     override func process(viewAction: ThreadTimelineScreenViewAction) { }
     
     func stop() {
-        // Work around QLPreviewController dismissal issues, see the InteractiveQuickLookModifier.
+        state.bindings.mediaPreviewViewModel?.dismissImmediately()
         state.bindings.mediaPreviewViewModel = nil
     }
     

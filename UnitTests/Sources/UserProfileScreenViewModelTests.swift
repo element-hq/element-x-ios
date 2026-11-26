@@ -11,7 +11,7 @@ import Testing
 
 @MainActor
 struct UserProfileScreenViewModelTests {
-    @Test
+    @Test("Another user's profile loads with a permalink")
     func initialState() async throws {
         let userIndicatorController = UserIndicatorControllerMock()
         
@@ -34,7 +34,7 @@ struct UserProfileScreenViewModelTests {
         #expect(context.viewState.permalink != nil)
     }
     
-    @Test
+    @Test("The account owner's profile loads and is marked as their own")
     func initialStateAccountOwner() async throws {
         let userIndicatorController = UserIndicatorControllerMock()
         
@@ -57,8 +57,8 @@ struct UserProfileScreenViewModelTests {
         #expect(context.viewState.permalink != nil)
     }
     
-    @Test
-    func startingDmWithUnknownUserFetchesIdentity() async throws {
+    @Test("Starting a direct chat with a user without a known identity asks to confirm the invite")
+    func startingDMWithUnknownUser() async throws {
         let userIndicatorController = UserIndicatorControllerMock()
         
         let profile = UserProfile.mockAlice
@@ -82,5 +82,22 @@ struct UserProfileScreenViewModelTests {
         
         context.send(viewAction: .openDirectChat)
         try await deferred.fulfill()
+    }
+    
+    @Test("Stopping the screen closes its open avatar preview at once")
+    func stop() async throws {
+        let viewModel = UserProfileScreenViewModel(userID: UserProfile.mockAlice.id,
+                                                   isPresentedModally: false,
+                                                   userSession: UserSessionMock(.init()),
+                                                   analytics: AnalyticsServiceMock(.init()),
+                                                   userIndicatorController: UserIndicatorControllerMock())
+        let mediaPreviewItem = MediaPreviewItem(file: .unmanaged(url: .mockMXCAvatar), title: "Alice")
+        viewModel.context.mediaPreviewItem = mediaPreviewItem
+        
+        let deferred = deferFulfillment(mediaPreviewItem.immediateDismissalPublisher) { _ in true }
+        viewModel.stop()
+        try await deferred.fulfill()
+        
+        #expect(viewModel.context.mediaPreviewItem == nil)
     }
 }

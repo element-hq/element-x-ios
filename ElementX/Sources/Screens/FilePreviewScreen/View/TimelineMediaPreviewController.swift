@@ -141,6 +141,8 @@ class TimelineMediaPreviewController: QLPreviewController {
                     self?.presentAuthorizationRequiredAlert(appMediator: appMediator)
                 case .dismissDetailsSheet:
                     self?.dismiss(animated: true)
+                case .dismissPreview:
+                    self?.presentingViewController?.dismiss(animated: false)
                 }
             }
             .store(in: &cancellables)
