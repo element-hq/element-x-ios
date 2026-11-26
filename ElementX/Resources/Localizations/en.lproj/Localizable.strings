@@ -1408,6 +1408,7 @@
 "screen_room_roles_and_permissions_space_details" = "Space details";
 "screen_room_roles_and_permissions_title" = "Roles & permissions";
 "screen_room_select_error_cannot_load_rooms" = "The room list associated with this account cannot be loaded.";
+"screen_room_select_search_placeholder" = "Search chats…";
 "screen_room_single_knock_request_accept_button_title" = "Accept";
 "screen_room_single_knock_request_title" = "%1$@ wants to join this room";
 "screen_room_single_knock_request_view_button_title" = "View";

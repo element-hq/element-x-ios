@@ -18,6 +18,14 @@ struct RoomSelectionScreenViewState: BindableState {
     var rooms: [RoomSelectionRoom] = []
     var selectedRoomID: String?
     var bindings = RoomSelectionScreenViewStateBindings()
+    
+    var isSearching: Bool {
+        !bindings.searchQuery.isEmpty
+    }
+    
+    var showsNoResults: Bool {
+        isSearching && rooms.isEmpty
+    }
 }
 
 struct RoomSelectionScreenViewStateBindings {
