@@ -14,7 +14,7 @@ import SwiftUI
 enum ChatsTabFlowCoordinatorAction {
     case switchToChatsTab
     case showSettings
-    case sessionVerification(SessionVerificationScreenFlow)
+    case verifyUser(userID: String)
     case addAccount
 }
 
@@ -513,7 +513,7 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
             
             switch action {
             case .verifyUser(let userID):
-                actionsSubject.send(.sessionVerification(.userInitiator(userID: userID)))
+                actionsSubject.send(.verifyUser(userID: userID))
             case .continueWithSpaceFlow(let spaceRoomListProxy):
                 stateMachine.processEvent(.startSpaceFlow, userInfo: .init(animated: false, spaceRoomListProxy: spaceRoomListProxy))
             case .finished:
@@ -573,7 +573,7 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
                 guard let self else { return }
                 switch action {
                 case .verifyUser(let userID):
-                    actionsSubject.send(.sessionVerification(.userInitiator(userID: userID)))
+                    actionsSubject.send(.verifyUser(userID: userID))
                 case .finished:
                     stateMachine.processEvent(.finishedSpaceFlow)
                 }

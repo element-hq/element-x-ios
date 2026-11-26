@@ -20,6 +20,7 @@ final class UserSessionManager: UserSessionManagerProtocol {
     private let notificationManager: NotificationManagerProtocol
     private let liveLocationManager: LiveLocationManagerProtocol
     private let elementCallManager: ElementCallManagerProtocol
+    private let sessionVerificationManager: SessionVerificationManagerProtocol
     private let userSessionMigrator: UserSessionMigratorProtocol
     private let signposter: Signposter
     
@@ -78,6 +79,7 @@ final class UserSessionManager: UserSessionManagerProtocol {
          notificationManager: NotificationManagerProtocol,
          liveLocationManager: LiveLocationManagerProtocol,
          elementCallManager: ElementCallManagerProtocol,
+         sessionVerificationManager: SessionVerificationManagerProtocol,
          userSessionMigrator: UserSessionMigratorProtocol,
          signposter: Signposter) {
         self.userSessionStore = userSessionStore
@@ -86,6 +88,7 @@ final class UserSessionManager: UserSessionManagerProtocol {
         self.notificationManager = notificationManager
         self.liveLocationManager = liveLocationManager
         self.elementCallManager = elementCallManager
+        self.sessionVerificationManager = sessionVerificationManager
         self.userSessionMigrator = userSessionMigrator
         self.signposter = signposter
         
@@ -278,6 +281,7 @@ final class UserSessionManager: UserSessionManagerProtocol {
         notificationManager.remove(userID: userID)
         liveLocationManager.remove(userID: userID)
         elementCallManager.remove(userID: userID)
+        sessionVerificationManager.remove(userID: userID)
     }
     
     func reset() {
@@ -285,6 +289,7 @@ final class UserSessionManager: UserSessionManagerProtocol {
         for userID in removedUserIDs {
             notificationManager.remove(userID: userID)
             liveLocationManager.remove(userID: userID)
+            sessionVerificationManager.remove(userID: userID)
         }
         userSessionStore.reset()
         clearedUserIDs.removeAll()
@@ -368,6 +373,7 @@ final class UserSessionManager: UserSessionManagerProtocol {
             notificationManager.remove(userID: userID)
             liveLocationManager.remove(userID: userID)
             elementCallManager.remove(userID: userID)
+            sessionVerificationManager.remove(userID: userID)
             callbacksSubject.send(.didRemoveAccount(userID: userID, error: .failedRestoringSession))
             return nil
         }
@@ -390,6 +396,7 @@ final class UserSessionManager: UserSessionManagerProtocol {
         notificationManager.add(userSession.notificationService)
         liveLocationManager.add(userSession.liveLocationService)
         elementCallManager.add(userSession.elementCallService)
+        sessionVerificationManager.add(userSession)
         
         sessionChangeCancellables[userID] = userSession.clientProxy.userProfilePublisher.removeDuplicates()
             .combineLatest(userSession.notificationService.badgeCountPublisher.removeDuplicates())

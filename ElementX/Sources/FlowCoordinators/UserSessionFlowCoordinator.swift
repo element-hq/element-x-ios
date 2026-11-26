@@ -14,6 +14,7 @@ import SwiftUI
 enum UserSessionFlowCoordinatorAction {
     case addAccount
     case switchAccount(userID: String)
+    case verifyUser(userID: String)
     
     case logout
     case clearCache
@@ -251,8 +252,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     navigationTabCoordinator.selectedTab = .chats
                 case .showSettings:
                     handleAppRoute(.settings, animated: true)
-                case .sessionVerification(let flow):
-                    presentSessionVerificationScreen(flow: flow)
+                case .verifyUser(let userID):
+                    actionsSubject.send(.verifyUser(userID: userID))
                 case .addAccount:
                     actionsSubject.send(.addAccount)
                 }
@@ -264,7 +265,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 guard let self else { return }
                 switch action {
                 case .verifyUser(let userID):
-                    presentSessionVerificationScreen(flow: .userInitiator(userID: userID))
+                    actionsSubject.send(.verifyUser(userID: userID))
                 case .showSettings:
                     stateMachine.tryEvent(.showSettingsScreen)
                 }
@@ -279,7 +280,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 guard let self else { return }
                 
                 attemptStartingOnboarding()
-                setupSessionVerificationRequestsObserver()
             }
             .store(in: &cancellables)
         
@@ -427,54 +427,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 self?.stateMachine.tryEvent(.dismissedSettingsScreen)
             }
         }
-    }
-    
-    // MARK: - Session Verification
-    
-    private func setupSessionVerificationRequestsObserver() {
-        userSession.clientProxy.sessionVerificationController?.actions
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] action in
-                guard let self, case .receivedVerificationRequest(let details) = action else {
-                    return
-                }
-                
-                MXLog.info("Received session verification request")
-                
-                if details.senderProfile.id == userSession.clientProxy.userID {
-                    presentSessionVerificationScreen(flow: .deviceResponder(requestDetails: details))
-                } else {
-                    presentSessionVerificationScreen(flow: .userResponder(requestDetails: details))
-                }
-            }
-            .store(in: &cancellables)
-    }
-    
-    private func presentSessionVerificationScreen(flow: SessionVerificationScreenFlow) {
-        guard let sessionVerificationController = userSession.clientProxy.sessionVerificationController else {
-            fatalError("The sessionVerificationController should aways be valid at this point")
-        }
-        
-        let navigationStackCoordinator = NavigationStackCoordinator()
-        
-        let parameters = SessionVerificationScreenCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationController,
-                                                                        flow: flow,
-                                                                        userSession: userSession)
-        
-        let coordinator = SessionVerificationScreenCoordinator(parameters: parameters)
-        
-        coordinator.actions
-            .sink { [weak self] action in
-                switch action {
-                case .done:
-                    self?.navigationTabCoordinator.setSheetCoordinator(nil)
-                }
-            }
-            .store(in: &cancellables)
-        
-        navigationStackCoordinator.setRootCoordinator(coordinator)
-        
-        navigationTabCoordinator.setSheetCoordinator(navigationStackCoordinator)
     }
     
     private func setupUnreadNotificationsObserver() {

@@ -28,6 +28,12 @@ enum UITestsSignal: Codable, Equatable {
         case focusOnEvent(String)
     }
     
+    case sessionVerification(SessionVerification)
+    enum SessionVerification: Codable, Equatable {
+        /// Ask the app to simulate an incoming verification request.
+        case incomingRequest
+    }
+    
     /// Posts a notification.
     case notification(name: Notification.Name)
     

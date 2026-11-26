@@ -10,7 +10,6 @@ import Combine
 import SwiftUI
 import Testing
 
-@MainActor
 struct RootFlowCoordinatorTests {
     private let navigationRootCoordinator = NavigationRootCoordinator()
     private let userSessionManager: UserSessionManagerMock
@@ -20,6 +19,7 @@ struct RootFlowCoordinatorTests {
     private let clientProxy: ClientProxyMock
     private let elementCallManager: ElementCallManagerMock
     private let callManagerActions = PassthroughSubject<ElementCallManagerAction, Never>()
+    private let sessionVerificationActions = PassthroughSubject<SessionVerificationManagerAction, Never>()
     private let roomID = "1"
     private let inviteRoomID = "someAwesomeRoomId1"
     
@@ -43,6 +43,7 @@ struct RootFlowCoordinatorTests {
         rootFlowCoordinator = RootFlowCoordinator(navigationRootCoordinator: navigationRootCoordinator,
                                                   userSessionManager: userSessionManager,
                                                   elementCallManager: elementCallManager,
+                                                  sessionVerificationManager: SessionVerificationManagerMock(.init(actionsPublisher: sessionVerificationActions.eraseToAnyPublisher())),
                                                   appLockService: AppLockServiceMock(),
                                                   bugReportService: BugReportServiceMock(.init()),
                                                   appMediator: appMediator,
@@ -377,6 +378,34 @@ struct RootFlowCoordinatorTests {
         #expect((splitCoordinator.detailCoordinator as? NavigationStackCoordinator)?.rootCoordinator is RoomScreenCoordinator)
     }
     
+    // MARK: Session verification
+    
+    @Test("A route is dropped while a verification is in progress")
+    func routeDuringVerification() throws {
+        rootFlowCoordinator.handleAppRoute(.roomList, animated: false)
+        sessionVerificationActions.send(.mockDevice)
+        let verificationScreen = try #require(sessionVerificationScreenCoordinator)
+        
+        rootFlowCoordinator.handleAppRoute(.share(.text(roomID: nil, text: "Important text")), animated: false)
+        
+        #expect(sessionVerificationScreenCoordinator === verificationScreen)
+    }
+    
+    @Test("Routes are handled again once the verification sheet is gone")
+    func routeAfterVerification() throws {
+        rootFlowCoordinator.handleAppRoute(.roomList, animated: false)
+        sessionVerificationActions.send(.mockDevice)
+        #expect(sessionVerificationScreenCoordinator != nil)
+        
+        // Finishing the verification dismisses its sheet.
+        navigationRootCoordinator.setSheetCoordinator(nil)
+        
+        rootFlowCoordinator.handleAppRoute(.share(.text(roomID: nil, text: "Important text")), animated: false)
+        
+        let stackCoordinator = try #require(navigationRootCoordinator.sheetCoordinator as? NavigationStackCoordinator)
+        #expect(stackCoordinator.rootCoordinator is RoomSelectionScreenCoordinator)
+    }
+    
     // MARK: - Helpers
     
     /// Signs Bob in alongside Alice, returning his call service.
@@ -405,8 +434,30 @@ struct RootFlowCoordinatorTests {
         return fullScreenCoverCoordinator?.rootCoordinator as? RemoteLogoutScreenCoordinator
     }
     
+    /// The session verification screen shown in the root's sheet, if any.
+    private var sessionVerificationScreenCoordinator: SessionVerificationScreenCoordinator? {
+        let stackCoordinator = navigationRootCoordinator.sheetCoordinator as? NavigationStackCoordinator
+        return stackCoordinator?.rootCoordinator as? SessionVerificationScreenCoordinator
+    }
+    
     private var chatsSplitCoordinator: NavigationSplitCoordinator? {
         let tabCoordinator = navigationRootCoordinator.rootCoordinator as? NavigationTabCoordinator<UserSessionFlowCoordinator.HomeTab>
         return tabCoordinator?.tabCoordinators.first as? NavigationSplitCoordinator
+    }
+}
+
+private extension SessionVerificationManagerAction {
+    /// A verification request to Bob from his other device.
+    static var mockDevice: Self {
+        let bobClientProxy = ClientProxyMock(.init(userID: "@bob:matrix.org", deviceID: "bob-device-id"))
+        bobClientProxy.sessionVerificationController = SessionVerificationControllerProxyMock.configureMock()
+        let details = SessionVerificationRequestDetails(senderProfile: UserProfile(userID: "@bob:matrix.org"),
+                                                        flowID: "flow-id",
+                                                        deviceID: "device-id",
+                                                        deviceDisplayName: nil,
+                                                        firstSeenDate: .now)
+        return .receivedRequest(.init(userSession: UserSessionMock(.init(clientProxy: bobClientProxy)),
+                                      details: details,
+                                      sender: .ownDevice))
     }
 }

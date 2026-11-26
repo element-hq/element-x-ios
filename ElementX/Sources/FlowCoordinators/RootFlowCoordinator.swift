@@ -22,6 +22,7 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
     private let navigationRootCoordinator: NavigationRootCoordinator
     private let userSessionManager: UserSessionManagerProtocol
     private let elementCallManager: ElementCallManagerProtocol
+    private let sessionVerificationManager: SessionVerificationManagerProtocol
     private let appLockService: AppLockServiceProtocol
     private let bugReportService: BugReportServiceProtocol
     private let appMediator: AppMediatorProtocol
@@ -103,6 +104,9 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
     
     private var remoteLogoutFlowCoordinator: RemoteLogoutFlowCoordinator?
     
+    /// The account whose session verification sheet is shown, which takes priority over any user session route.
+    private var presentedSessionVerificationUserID: String? // TODO: Encode this into the state machine.
+    
     private var cancellables = Set<AnyCancellable>()
     
     private let actionsSubject: PassthroughSubject<RootFlowCoordinatorAction, Never> = .init()
@@ -113,6 +117,7 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
     init(navigationRootCoordinator: NavigationRootCoordinator,
          userSessionManager: UserSessionManagerProtocol,
          elementCallManager: ElementCallManagerProtocol,
+         sessionVerificationManager: SessionVerificationManagerProtocol,
          appLockService: AppLockServiceProtocol,
          bugReportService: BugReportServiceProtocol,
          appMediator: AppMediatorProtocol,
@@ -125,6 +130,7 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
         self.navigationRootCoordinator = navigationRootCoordinator
         self.userSessionManager = userSessionManager
         self.elementCallManager = elementCallManager
+        self.sessionVerificationManager = sessionVerificationManager
         self.appLockService = appLockService
         self.bugReportService = bugReportService
         self.appMediator = appMediator
@@ -336,6 +342,15 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
                 handleCallScreen(presentation)
             }
             .store(in: &cancellables)
+        
+        sessionVerificationManager.actionsPublisher
+            .sink { [weak self] action in
+                switch action {
+                case .receivedRequest(let request):
+                    self?.presentSessionVerificationScreen(flow: request.screenFlow, userSession: request.userSession, clearingRoute: true)
+                }
+            }
+            .store(in: &cancellables)
     }
     
     private func handleRestoredSession(userID: String) {
@@ -358,6 +373,11 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
     
     private func handleRemovedAccount(userID: String, error: UserSessionManagerError?) {
         targetContext.update()
+        
+        // Will be handled elsewhere when the manager is fleshed out.
+        if presentedSessionVerificationUserID == userID {
+            navigationRootCoordinator.setSheetCoordinator(nil)
+        }
         
         switch stateMachine.state {
         case .initial:
@@ -485,6 +505,8 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.startAuthentication(isAddingAccount: true))
                 case .switchAccount(let userID):
                     userSessionManager.selectAccount(userID: userID)
+                case .verifyUser(let userID):
+                    presentSessionVerificationScreen(flow: .userInitiator(userID: userID), userSession: userSession, clearingRoute: false)
                 case .logout, .accountDeactivated:
                     stateMachine.tryEvent(.logout)
                 case .clearCache:
@@ -510,6 +532,11 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func handleUserSessionRoute(_ appRoute: AppRoute, userID: String?, awaitsRoom: Bool, animated: Bool) {
+        guard presentedSessionVerificationUserID == nil else {
+            MXLog.info("Ignoring an app route while session verification is in progress.")
+            return
+        }
+        
         guard let userSession = userSessionManager.activeSession else {
             fatalError("User session not setup")
         }
@@ -581,6 +608,47 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
         
         navigationRootCoordinator.setFullScreenCoverCoordinator(rootCoordinator) { [weak self] in
             self?.remoteLogoutFlowCoordinator = nil
+        }
+    }
+    
+    // MARK: - Session Verification
+    
+    /// Shows the session verification screen above every account's screens, with the session of the account being verified.
+    private func presentSessionVerificationScreen(flow: SessionVerificationScreenFlow,
+                                                  userSession: UserSessionProtocol,
+                                                  clearingRoute: Bool) { // The route can be handled elsewhere once there's a state machine.
+        guard presentedSessionVerificationUserID == nil else {
+            MXLog.info("Ignoring the session verification, another verification is in progress.")
+            return
+        }
+        
+        if clearingRoute {
+            // Any sheet from the shown account's screens would block this one.
+            userSessionFlowCoordinator?.clearRoute(animated: true)
+        }
+        
+        guard let sessionVerificationController = userSession.clientProxy.sessionVerificationController else {
+            fatalError("The sessionVerificationController should aways be valid at this point")
+        }
+        
+        let stackCoordinator = NavigationStackCoordinator()
+        let coordinator = SessionVerificationScreenCoordinator(parameters: .init(sessionVerificationControllerProxy: sessionVerificationController,
+                                                                                 flow: flow,
+                                                                                 userSession: userSession))
+        coordinator.actions
+            .sink { [weak self] action in
+                switch action {
+                case .done:
+                    self?.navigationRootCoordinator.setSheetCoordinator(nil)
+                }
+            }
+            .store(in: &cancellables)
+        
+        stackCoordinator.setRootCoordinator(coordinator)
+        
+        presentedSessionVerificationUserID = userSession.clientProxy.userID
+        navigationRootCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
+            self?.presentedSessionVerificationUserID = nil
         }
     }
     
@@ -844,5 +912,14 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
     
     private func showLoginErrorToast() {
         userIndicatorController.submitIndicator(UserIndicator(title: "Failed logging in"))
+    }
+}
+
+private extension SessionVerificationRequest {
+    var screenFlow: SessionVerificationScreenFlow {
+        switch sender {
+        case .ownDevice: .deviceResponder(requestDetails: details)
+        case .otherUser: .userResponder(requestDetails: details)
+        }
     }
 }
