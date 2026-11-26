@@ -165,6 +165,7 @@ enum A11yIdentifiers {
         let attachmentPickerCamera = "room-attachment_picker_camera"
         let attachmentPickerLocation = "room-attachment_picker_location"
         let attachmentPickerPoll = "room-attachment_picker_poll"
+        let attachmentPickerSticker = "room-attachment_picker_sticker"
         let attachmentPickerTextFormatting = "room-attachment_picker_text_formatting"
         let timelineItemActionMenu = "room-timeline_item_action_menu"
         let joinCall = "room-join_call"

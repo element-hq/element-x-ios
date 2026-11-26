@@ -67,7 +67,8 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
          mentionDisplayHelper: MentionDisplayHelper,
          userSettings: UserSettings,
          analyticsService: AnalyticsServiceProtocol,
-         composerDraftService: ComposerDraftServiceProtocol) {
+         composerDraftService: ComposerDraftServiceProtocol,
+         imagePackProvider: ImagePackProviderProtocol? = nil) {
         self.initialText = initialText
         self.wysiwygViewModel = wysiwygViewModel
         self.completionSuggestionService = completionSuggestionService
@@ -89,6 +90,13 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                 self?.process(viewAction: .sendMessage)
             }
         ]
+        
+        if let imagePackProvider {
+            Task { [weak self] in
+                guard case let .success(packs) = await imagePackProvider.imagePacks() else { return }
+                self?.state.hasStickerPacks = packs.contains { $0.isStickerPack && !$0.images.isEmpty }
+            }
+        }
         
         roomProxy.infoPublisher
             .map(\.isEncrypted)

@@ -17,13 +17,20 @@ struct EmojiPickerScreen: View {
     
     @ScaledMetric(relativeTo: .title) var minimumWidth: Double = 64
     @ScaledMetric(relativeTo: .compound.headingXL) private var imageSize: Double = 32
+    // Stickers are meant to be seen large, unlike emojis.
+    @ScaledMetric(relativeTo: .title) private var stickerMinimumWidth: Double = 82
+    @ScaledMetric(relativeTo: .compound.headingXL) private var stickerSize: Double = 64
+    
+    private var isStickerPicker: Bool {
+        context.viewState.mode == .sticker
+    }
     
     private let feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
     
     var body: some View {
         ElementNavigationStack {
             ScrollView {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: minimumWidth))], spacing: 16) {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: isStickerPicker ? stickerMinimumWidth : minimumWidth))], spacing: 16) {
                     ForEach(context.viewState.categories) { category in
                         Section {
                             ForEach(category.emojis) { emoji in
@@ -41,7 +48,8 @@ struct EmojiPickerScreen: View {
                                                           mediaProvider: context.mediaProvider,
                                                           transformer: { $0.scaledToFit() },
                                                           placeholder: { Color.clear })
-                                                .frame(width: imageSize, height: imageSize)
+                                                .frame(width: isStickerPicker ? stickerSize : imageSize,
+                                                       height: isStickerPicker ? stickerSize : imageSize)
                                         }
                                     }
                                     .padding(9.0)
@@ -50,7 +58,7 @@ struct EmojiPickerScreen: View {
                                 .accessibilityLabel(accessibilityLabel(for: emoji.item))
                             }
                         } header: {
-                            EmojiPickerScreenHeaderView(title: category.name)
+                            EmojiPickerScreenHeaderView(title: category.name, subtitle: category.subtitle)
                                 .padding(.horizontal, 13)
                                 .padding(.top, 10)
                         }
@@ -134,6 +142,19 @@ struct EmojiPickerScreen_Previews: PreviewProvider, TestablePreview {
                                           continuation: AsyncStream<EmojiPickerItem>.makeStream().continuation)
     }()
     
+    static let stickersViewModel = {
+        let stickers = (1...5).map { ImagePack.Image(shortcode: "windmill\($0)", body: "Windmill \($0)", mediaSource: ImageInfoProxy.mockImage.source) }
+        let imagePackProvider = ImagePackProviderMock()
+        imagePackProvider.imagePacksReturnValue = .success([ImagePack(id: "windmills", displayName: "Windmills", attribution: "Photos by the Element team",
+                                                                      isEmoticonPack: false, isStickerPack: true, images: stickers)])
+        return EmojiPickerScreenViewModel(mode: .sticker,
+                                          selectedEmojis: [],
+                                          emojiProvider: EmojiProvider(userSettings: .mock()),
+                                          imagePackProvider: imagePackProvider,
+                                          mediaProvider: MediaProviderMock(.init()),
+                                          continuation: AsyncStream<EmojiPickerItem>.makeStream().continuation)
+    }()
+    
     static var previews: some View {
         EmojiPickerScreen(context: viewModel.context)
             .previewDisplayName("Screen")
@@ -142,6 +163,10 @@ struct EmojiPickerScreen_Previews: PreviewProvider, TestablePreview {
         EmojiPickerScreen(context: emoticonsViewModel.context)
             .previewDisplayName("Emoticons")
             .snapshotPreferences(expect: emoticonsViewModel.context.observe(\.viewState.categories).map { $0.first?.id == "windmills" })
+        
+        EmojiPickerScreen(context: stickersViewModel.context)
+            .previewDisplayName("Stickers")
+            .snapshotPreferences(expect: stickersViewModel.context.observe(\.viewState.categories).map { !$0.isEmpty })
     }
 }
 

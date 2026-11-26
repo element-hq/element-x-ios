@@ -20,10 +20,25 @@ struct ImagePack: Identifiable {
         /// A description of the image, falling back to its shortcode.
         let body: String
         let mediaSource: MediaSourceProxy
+        /// Metadata about the image, sent along with it as a sticker.
+        var info: ImageInfo?
+        
+        // `ImageInfo` isn't `Hashable`, and only describes the media anyway.
+        static func == (lhs: Image, rhs: Image) -> Bool {
+            lhs.shortcode == rhs.shortcode && lhs.body == rhs.body && lhs.mediaSource == rhs.mediaSource
+        }
+        
+        func hash(into hasher: inout Hasher) {
+            hasher.combine(shortcode)
+            hasher.combine(body)
+            hasher.combine(mediaSource)
+        }
     }
     
     let id: String
     let displayName: String?
+    /// Credits the original author or source of the pack.
+    var attribution: String?
     let isEmoticonPack: Bool
     let isStickerPack: Bool
     let images: [Image]
@@ -33,6 +48,7 @@ extension ImagePack {
     init(rustValue: MatrixRustSDK.ImagePack) {
         id = "\(rustValue.roomId)-\(rustValue.stateKey)"
         displayName = rustValue.displayName
+        attribution = rustValue.attribution
         isEmoticonPack = rustValue.isEmoticonPack
         isStickerPack = rustValue.isStickerPack
         images = rustValue.images.compactMap { image in
@@ -40,7 +56,7 @@ extension ImagePack {
                   let mediaSource = try? MediaSourceProxy(url: url, mimeType: image.info?.mimetype) else {
                 return nil
             }
-            return Image(shortcode: image.shortcode, body: image.body, mediaSource: mediaSource)
+            return Image(shortcode: image.shortcode, body: image.body, mediaSource: mediaSource, info: image.info)
         }
     }
 }

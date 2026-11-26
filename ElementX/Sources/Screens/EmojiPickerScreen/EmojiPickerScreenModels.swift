@@ -9,7 +9,7 @@
 import Foundation
 
 typealias EmojiPickerScreenContinuation = AsyncStream<EmojiPickerItem>.Continuation
-enum EmojiPickerScreenMode { case reaction, userStatus }
+enum EmojiPickerScreenMode { case reaction, userStatus, sticker }
 
 enum EmojiPickerScreenViewModelAction {
     case dismiss
@@ -24,6 +24,7 @@ struct EmojiPickerScreenViewState: BindableState {
         switch mode {
         case .reaction: L10n.commonReactions
         case .userStatus: L10n.a11yCustomEmoji
+        case .sticker: L10n.commonSticker
         }
     }
 }
@@ -39,6 +40,8 @@ struct EmojiPickerEmojiCategoryViewData: Identifiable {
     let emojis: [EmojiPickerEmojiViewData]
     /// The name of the category when it isn't one of the built-in ones (e.g. a custom image pack).
     var customName: String?
+    /// Shown below the name, e.g. the attribution of a custom image pack.
+    var subtitle: String?
     
     var name: String {
         if let customName {

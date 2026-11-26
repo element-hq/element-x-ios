@@ -10,12 +10,21 @@ import SwiftUI
 
 struct EmojiPickerScreenHeaderView: View {
     let title: String
+    var subtitle: String?
     
     var body: some View {
-        Text(title)
-            .font(.compound.bodyMD.bold())
-            .foregroundColor(.compound.textPrimary)
-            .frame(maxWidth: .infinity, alignment: .leading)
+        VStack(alignment: .leading, spacing: 2) {
+            Text(title)
+                .font(.compound.bodyMD.bold())
+                .foregroundColor(.compound.textPrimary)
+            
+            if let subtitle {
+                Text(subtitle)
+                    .font(.compound.bodySM)
+                    .foregroundColor(.compound.textSecondary)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 

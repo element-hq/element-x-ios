@@ -390,6 +390,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             actionsSubject.send(.displayLocationPicker)
         case .poll:
             actionsSubject.send(.displayNewPollForm)
+        case .sticker:
+            displayStickerPicker()
         }
     }
     
@@ -534,7 +536,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                 case .displayErrorToast(let title):
                     displayErrorToast(title)
                 case .displayEmojiPicker(let selectedEmojis, let continuation):
-                    actionsSubject.send(.displayEmojiPicker(selectedEmojis: selectedEmojis, continuation: continuation))
+                    actionsSubject.send(.displayEmojiPicker(mode: .reaction, selectedEmojis: selectedEmojis, continuation: continuation))
                 case .willAddReaction(let key, let itemID):
                     prepareReactionEffect(for: key, on: itemID)
                 case .displayMessageForwarding(let itemID):
@@ -1198,6 +1200,25 @@ extension TimelineViewModel {
     private func forwardMessage(itemID: TimelineItemIdentifier) async {
         guard let forwardingPayload = await makeForwardingPayload(for: [itemID]) else { return }
         actionsSubject.send(.displayMessageForwarding(forwardingPayload: forwardingPayload))
+    }
+}
+
+// MARK: - Stickers
+
+private extension TimelineViewModel {
+    func displayStickerPicker() {
+        let (stream, continuation) = AsyncStream<EmojiPickerItem>.makeStream()
+        actionsSubject.send(.displayEmojiPicker(mode: .sticker, selectedEmojis: [], continuation: continuation))
+        
+        Task { [weak self, timelineController] in
+            for await item in stream {
+                guard case let .customImage(image) = item else { continue }
+                
+                if case .failure = await timelineController.sendSticker(image) {
+                    self?.displayErrorToast(L10n.errorUnknown)
+                }
+            }
+        }
     }
 }
 

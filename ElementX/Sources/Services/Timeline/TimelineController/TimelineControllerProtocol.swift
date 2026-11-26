@@ -151,6 +151,8 @@ protocol TimelineControllerProtocol: Sendable {
     
     // MARK: - Poll
     
+    func sendSticker(_ image: ImagePack.Image) async -> Result<Void, TimelineControllerError>
+    
     func createPoll(question: String, answers: [String], maxSelections: Int, pollKind: Poll.Kind) async -> Result<Void, TimelineControllerError>
     
     func editPoll(original eventID: String,

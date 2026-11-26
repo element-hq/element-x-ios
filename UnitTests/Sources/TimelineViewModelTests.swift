@@ -910,6 +910,30 @@ final class TimelineViewModelTests {
         #expect(userIndicatorController.submitIndicatorDelayReceivedArguments?.indicator.title == L10n.errorCameraUnavailable)
     }
     
+    @Test("A sticker picked from the sticker picker is sent to the timeline")
+    func sendSticker() async throws {
+        let sticker = try ImagePack.Image(shortcode: "cat", body: "A cat",
+                                          mediaSource: MediaSourceProxy(url: #require(URL(string: "mxc://example.org/cat")), mimeType: nil))
+        let timelineController = TimelineControllerMock(.init())
+        let viewModel = makeViewModel(timelineController: timelineController)
+        
+        let deferred = deferFulfillment(viewModel.actions) { action in
+            guard case .displayEmojiPicker(mode: .sticker, _, _) = action else { return false }
+            return true
+        }
+        viewModel.process(composerAction: .attach(.sticker))
+        guard case let .displayEmojiPicker(_, _, continuation) = try await deferred.fulfill() else { return }
+        
+        await waitForConfirmation("The sticker is sent") { confirmation in
+            timelineController.sendStickerClosure = { image in
+                #expect(image == sticker)
+                confirmation()
+                return .success(())
+            }
+            continuation.yield(.customImage(sticker))
+        }
+    }
+    
     // MARK: - Reaction effects
     
     @Test("Adding a celebration reaction plays its effect from the reaction",

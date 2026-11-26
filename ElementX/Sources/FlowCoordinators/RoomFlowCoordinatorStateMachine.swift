@@ -91,6 +91,7 @@ extension RoomFlowCoordinator {
         var spaceRoomListProxy: SpaceRoomListProxyProtocol?
         var authorizedSpacesSelection: AuthorizedSpacesSelection?
         var emojiPickerContinuation: EmojiPickerScreenContinuation?
+        var emojiPickerMode: EmojiPickerScreenMode?
     }
     
     enum Event: EventType {

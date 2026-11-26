@@ -469,6 +469,16 @@ class TimelineController: TimelineControllerProtocol {
     
     // MARK: - Polls
     
+    func sendSticker(_ image: ImagePack.Image) async -> Result<Void, TimelineControllerError> {
+        switch await activeTimeline.sendSticker(image).mapError(TimelineControllerError.timelineProxyError) {
+        case .success:
+            callbacks.send(.messageSentOrEdited)
+            return .success(())
+        case .failure(let error):
+            return .failure(error)
+        }
+    }
+    
     func createPoll(question: String, answers: [String], maxSelections: Int, pollKind: Poll.Kind) async -> Result<Void, TimelineControllerError> {
         switch await activeTimeline.createPoll(question: question, answers: answers, maxSelections: maxSelections, pollKind: pollKind).mapError(TimelineControllerError.timelineProxyError) {
         case .success:

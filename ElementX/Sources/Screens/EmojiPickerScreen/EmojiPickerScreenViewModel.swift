@@ -60,8 +60,14 @@ class EmojiPickerScreenViewModel: EmojiPickerScreenViewModelType, EmojiPickerScr
     // MARK: - Private
     
     /// Shows the frequently used emojis and images first, then the image packs, then the emoji categories.
+    /// Stickers only show their packs.
     private func updateCategories() async {
         let searchString = searchString
+        guard state.mode != .sticker else {
+            state.categories = filter(imagePacks: imagePacks, searchString: searchString)
+            return
+        }
+        
         let emojiCategories = await emojiProvider.categories(searchString: searchString)
             .filter { $0.id != EmojiCategory.frequentlyUsedCategoryIdentifier }
         let categories = filter(imagePacks: imagePacks, searchString: searchString) + convert(emojiCategories: emojiCategories)
@@ -81,9 +87,10 @@ class EmojiPickerScreenViewModel: EmojiPickerScreenViewModelType, EmojiPickerScr
     private func loadImagePacks() async {
         guard let imagePackProvider, case let .success(packs) = await imagePackProvider.imagePacks() else { return }
         
-        imagePacks = packs.filter(\.isEmoticonPack).map { pack in
+        let isSticker = state.mode == .sticker
+        imagePacks = packs.filter { isSticker ? $0.isStickerPack : $0.isEmoticonPack }.map { pack in
             let images = pack.images.map { EmojiPickerEmojiViewData(id: "\(pack.id)-\($0.shortcode)", item: .customImage($0)) }
-            return EmojiPickerEmojiCategoryViewData(id: pack.id, emojis: images, customName: pack.displayName ?? L10n.a11yCustomEmoji)
+            return EmojiPickerEmojiCategoryViewData(id: pack.id, emojis: images, customName: pack.displayName ?? L10n.a11yCustomEmoji, subtitle: pack.attribution)
         }
         await updateCategories()
     }
@@ -96,7 +103,7 @@ class EmojiPickerScreenViewModel: EmojiPickerScreenViewModelType, EmojiPickerScr
                 guard case let .customImage(image) = emoji.item else { return false }
                 return image.shortcode.localizedCaseInsensitiveContains(searchString)
             }
-            return images.isEmpty ? nil : EmojiPickerEmojiCategoryViewData(id: pack.id, emojis: images, customName: pack.customName)
+            return images.isEmpty ? nil : EmojiPickerEmojiCategoryViewData(id: pack.id, emojis: images, customName: pack.customName, subtitle: pack.subtitle)
         }
     }
     
@@ -111,7 +118,9 @@ class EmojiPickerScreenViewModel: EmojiPickerScreenViewModelType, EmojiPickerScr
     }
     
     private func selectEmoji(_ emoji: EmojiPickerEmojiViewData) {
-        emojiProvider.markEmojiAsFrequentlyUsed(emoji.item.key)
+        if state.mode != .sticker {
+            emojiProvider.markEmojiAsFrequentlyUsed(emoji.item.key)
+        }
         
         continuation.yield(emoji.item)
         continuation.finish()
