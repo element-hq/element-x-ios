@@ -309,7 +309,7 @@ final class RoomScreenViewModelTests {
     }
     
     @Test("Stopping the room closes its open media preview at once")
-    func stopDismissesMediaPreview() async throws {
+    func stop() async throws {
         let roomProxyMock = JoinedRoomProxyMock(.init(id: "MyRoomID"))
         roomProxyMock.markAsReadReceiptTypeReturnValue = .success(())
         let viewModel = RoomScreenViewModel(userSession: UserSessionMock(.init()),

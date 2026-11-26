@@ -58,7 +58,7 @@ struct UserProfileScreenViewModelTests {
     }
     
     @Test("Starting a direct chat with a user without a known identity asks to confirm the invite")
-    func startingDmWithUnknownUserFetchesIdentity() async throws {
+    func startingDMWithUnknownUser() async throws {
         let userIndicatorController = UserIndicatorControllerMock()
         
         let profile = UserProfile.mockAlice
@@ -85,7 +85,7 @@ struct UserProfileScreenViewModelTests {
     }
     
     @Test("Stopping the screen closes its open avatar preview at once")
-    func stopDismissesMediaPreview() async throws {
+    func stop() async throws {
         let viewModel = UserProfileScreenViewModel(userID: UserProfile.mockAlice.id,
                                                    isPresentedModally: false,
                                                    userSession: UserSessionMock(.init()),
