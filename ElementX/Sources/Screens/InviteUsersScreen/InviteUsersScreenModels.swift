@@ -68,7 +68,6 @@ struct InviteUsersScreenViewState: BindableState {
 
 struct InviteUsersScreenViewStateBindings {
     var searchQuery = ""
-    var selectedUsersPosition: String?
     
     /// Whether we are showing the confirmation dialog.
     var presentConfirmationDialog = false

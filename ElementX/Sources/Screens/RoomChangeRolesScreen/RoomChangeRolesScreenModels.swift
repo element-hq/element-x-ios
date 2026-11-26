@@ -34,9 +34,6 @@ struct RoomChangeRolesScreenViewState: BindableState {
     /// The member selected for demotion back to a regular user.
     var membersToDemote: Set<RoomMemberDetails> = []
     
-    /// The last member added to the carousel at the top of the screen.
-    var lastPromotedMember: RoomMemberDetails?
-    
     /// The screen's title.
     var title: String {
         switch mode {

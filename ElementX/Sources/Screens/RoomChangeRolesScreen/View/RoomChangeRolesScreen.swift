@@ -65,29 +65,11 @@ struct RoomChangeRolesScreen: View {
         }
     }
     
-    @ScaledMetric private var cellWidth: CGFloat = 72
     private var membersWithRoleSection: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            ScrollViewReader { scrollView in
-                HStack(spacing: 16) {
-                    ForEach(context.viewState.membersWithRole, id: \.id) { member in
-                        let dismissAction = context.viewState.isMemberDisabled(member) ? nil : {
-                            context.send(viewAction: .demoteMember(member))
-                        }
-                        RoomChangeRolesScreenSelectedItem(member: member, mediaProvider: context.mediaProvider,
-                                                          dismissAction: dismissAction)
-                            .frame(width: cellWidth)
-                    }
-                }
-                .onChange(of: context.viewState.lastPromotedMember) { _, newValue in
-                    guard let member = newValue else { return }
-                    withElementAnimation(.easeInOut) {
-                        scrollView.scrollTo(member.id)
-                    }
-                }
-                .padding(.horizontal, 14)
-            }
-        }
+        SelectedItemsCarousel(members: context.viewState.membersWithRole,
+                              mediaProvider: context.mediaProvider,
+                              isRemovable: { !context.viewState.isMemberDisabled($0) },
+                              removeAction: { context.send(viewAction: .demoteMember($0)) })
     }
     
     @ToolbarContentBuilder

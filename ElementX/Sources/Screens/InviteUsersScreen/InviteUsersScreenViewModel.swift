@@ -105,7 +105,6 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
             state.selectedUsers.removeAll { $0.id == user.id }
         } else {
             state.selectedUsers.append(user)
-            withElementAnimation(.easeInOut) { state.bindings.selectedUsersPosition = user.id }
             Task {
                 let identityUnknown = if case .success(let identity) = await self.clientProxy.userIdentity(for: user.id, fallBackToServer: false) {
                     identity == nil
