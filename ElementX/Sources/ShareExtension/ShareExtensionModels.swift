@@ -24,6 +24,16 @@ enum ShareExtensionPayload: Hashable, Codable {
         }
     }
     
+    /// The same payload aimed at the given room.
+    func withRoomID(_ roomID: String) -> ShareExtensionPayload {
+        switch self {
+        case .mediaFiles(_, let mediaFiles):
+            .mediaFiles(roomID: roomID, mediaFiles: mediaFiles)
+        case .text(_, let text):
+            .text(roomID: roomID, text: text)
+        }
+    }
+    
     /// Moves any files in the payload from our `appGroupTemporaryDirectory` to the
     /// system's `temporaryDirectory` returning a modified payload with updated file URLs.
     func withDefaultTemporaryDirectory() throws -> Self {

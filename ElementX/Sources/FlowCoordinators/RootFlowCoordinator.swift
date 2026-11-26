@@ -523,12 +523,20 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
         }
         
         minimizeFullScreenCall()
+        
+        if case .share(let payload) = appRoute, payload.roomID == nil {
+            presentShareRoomSelection(for: payload, animated: animated)
+            return
+        }
+        
+        navigationRootCoordinator.setSheetCoordinator(nil)
         userSessionFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
     }
     
     private func stopUserSessionFlow() {
         actionsSubject.send(.closeSecondaryWindows)
         userIndicatorController.retractAllIndicators()
+        navigationRootCoordinator.setSheetCoordinator(nil)
         userSessionFlowCoordinator = nil
     }
     
@@ -546,6 +554,43 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
         
         // The account's restoration moves on to its flow again, or its removal to the next account or authentication.
         Task { await userSessionManager.clearCaches(userID: userID) }
+    }
+    
+    // MARK: - Sharing
+    
+    /// Shows the share sheet above the shown account's screens, to pick the room the payload is shared to.
+    private func presentShareRoomSelection(for payload: ShareExtensionPayload, animated: Bool) {
+        userSessionFlowCoordinator?.clearRoute(animated: animated)
+        
+        guard let userSession = userSessionManager.activeSession else {
+            MXLog.error("Cannot present the share sheet without an active session.")
+            return
+        }
+        
+        let coordinator = RoomSelectionScreenCoordinator(parameters: .init(userSession: userSession,
+                                                                           roomSummaryProvider: userSession.clientProxy.alternateRoomSummaryProvider))
+        coordinator.actionsPublisher
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .dismiss:
+                    navigationRootCoordinator.setSheetCoordinator(nil)
+                case .confirm(let roomID):
+                    completeShare(payload, roomID: roomID, animated: animated)
+                }
+            }
+            .store(in: &cancellables)
+        
+        let stackCoordinator = NavigationStackCoordinator()
+        stackCoordinator.setRootCoordinator(coordinator)
+        navigationRootCoordinator.setSheetCoordinator(stackCoordinator, animated: animated)
+    }
+    
+    /// Finishes a share once its room is known, handing it to the shown account's screens.
+    private func completeShare(_ payload: ShareExtensionPayload, roomID: String, animated: Bool) {
+        navigationRootCoordinator.setSheetCoordinator(nil)
+        userSessionFlowCoordinator?.handleAppRoute(.share(payload.withRoomID(roomID)), animated: animated)
     }
     
     // MARK: - Calls

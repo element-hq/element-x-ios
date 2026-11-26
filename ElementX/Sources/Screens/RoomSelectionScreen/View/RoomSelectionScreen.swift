@@ -76,6 +76,7 @@ private struct RoomSelectionListRow: View {
                 kind: .selection(isSelected: isSelected) {
                     context.send(viewAction: .selectRoom(roomID: room.id))
                 })
+                .accessibilityIdentifier(A11yIdentifiers.roomSelectionScreen.roomName(room.title))
     }
     
     @ViewBuilder

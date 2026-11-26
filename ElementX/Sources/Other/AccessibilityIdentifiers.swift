@@ -29,6 +29,7 @@ enum A11yIdentifiers {
     static let roomDetailsScreen = RoomDetailsScreen()
     static let roomNotificationSettingsScreen = RoomNotificationSettingsScreen()
     static let roomRolesAndPermissionsScreen = RoomRolesAndPermissionsScreen()
+    static let roomSelectionScreen = RoomSelectionScreen()
     static let secureBackupScreen = SecureBackupScreen()
     static let secureBackupKeyBackupScreen = SecureBackupKeyBackupScreen()
     static let secureBackupLogoutConfirmationScreen = SecureBackupLogoutConfirmationScreen()
@@ -226,6 +227,13 @@ enum A11yIdentifiers {
         let administrators = "room_roles_and_permissions-administrators"
         let moderators = "room_roles_and_permissions-moderators"
         let permissions = "room_roles_and_permissions-permissions"
+    }
+    
+    struct RoomSelectionScreen {
+        let roomNamePrefix = "room_selection_screen-room_name"
+        func roomName(_ name: String) -> String {
+            "\(roomNamePrefix):\(name)"
+        }
     }
     
     struct SecureBackupScreen {

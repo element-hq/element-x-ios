@@ -45,6 +45,7 @@ enum UITestsScreenIdentifier: String {
     case roomWithUndisclosedPolls
     case rootFlow
     case rootFlowSignedIn
+    case rootFlowShare
     case serverSelection
     case sessionVerification
     case startChatFlow

@@ -2547,6 +2547,11 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         set(value) { underlyingAlternateRoomSummaryProvider = value }
     }
     nonisolated(unsafe) var underlyingAlternateRoomSummaryProvider: RoomSummaryProviderProtocol!
+    var globalSearchSummaryProvider: RoomSummaryProviderProtocol {
+        get { return underlyingGlobalSearchSummaryProvider }
+        set(value) { underlyingGlobalSearchSummaryProvider = value }
+    }
+    nonisolated(unsafe) var underlyingGlobalSearchSummaryProvider: RoomSummaryProviderProtocol!
     var staticRoomSummaryProvider: StaticRoomSummaryProviderProtocol {
         get { return underlyingStaticRoomSummaryProvider }
         set(value) { underlyingStaticRoomSummaryProvider = value }

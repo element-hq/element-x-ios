@@ -48,10 +48,13 @@ class PublishedStateMachineFactory: StateMachineFactoryProtocol {
     // MARK: ChatsTabFlowCoordinator
     
     let chatsTabFlowStatePublisher = PassthroughSubject<ChatsTabFlowCoordinatorStateMachine.State, Never>()
+    /// The last chats state machine made, so tests can send the events that no route reaches.
+    private(set) var chatsTabFlowStateMachine: ChatsTabFlowCoordinatorStateMachine?
     
     func makeChatsTabFlowStateMachine() -> ChatsTabFlowCoordinatorStateMachine {
         let stateMachine = baseFactory.makeChatsTabFlowStateMachine()
         stateMachine.addTransitionHandler { [weak self] in self?.chatsTabFlowStatePublisher.send($0.toState) }
+        chatsTabFlowStateMachine = stateMachine
         return stateMachine
     }
     

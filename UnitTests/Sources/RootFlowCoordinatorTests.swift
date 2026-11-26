@@ -306,6 +306,74 @@ struct RootFlowCoordinatorTests {
         #expect(aliceCallService.minimizeCallCalled)
     }
     
+    // MARK: Sharing
+    
+    @Test("Sharing without a room asks which room to share to, above the shown account's screens")
+    func shareWithoutRoom() throws {
+        rootFlowCoordinator.handleAppRoute(.roomList, animated: false)
+        rootFlowCoordinator.handleAppRoute(.share(.text(roomID: nil, text: "Important text")), animated: false)
+        
+        let stackCoordinator = try #require(navigationRootCoordinator.sheetCoordinator as? NavigationStackCoordinator)
+        #expect(stackCoordinator.rootCoordinator is RoomSelectionScreenCoordinator)
+        #expect(chatsSplitCoordinator?.sheetCoordinator == nil)
+    }
+    
+    @Test("Sharing while Settings is open closes Settings and shows the share sheet")
+    func shareWhileSettingsOpen() throws {
+        rootFlowCoordinator.handleAppRoute(.roomList, animated: false)
+        rootFlowCoordinator.handleAppRoute(.settings, animated: false)
+        let tabCoordinator = try #require(navigationRootCoordinator.rootCoordinator as? NavigationTabCoordinator<UserSessionFlowCoordinator.HomeTab>)
+        #expect((tabCoordinator.sheetCoordinator as? NavigationStackCoordinator)?.rootCoordinator is SettingsScreenCoordinator)
+        
+        rootFlowCoordinator.handleAppRoute(.share(.text(roomID: nil, text: "Important text")), animated: false)
+        
+        #expect(tabCoordinator.sheetCoordinator == nil)
+        let stackCoordinator = try #require(navigationRootCoordinator.sheetCoordinator as? NavigationStackCoordinator)
+        #expect(stackCoordinator.rootCoordinator is RoomSelectionScreenCoordinator)
+    }
+    
+    @Test("Sharing with a room open closes the room and shows the share sheet")
+    func shareWithRoomOpen() async throws {
+        rootFlowCoordinator.handleAppRoute(.roomList, animated: false)
+        rootFlowCoordinator.handleAppRoute(.room(roomID: roomID, via: []), userID: "@alice:matrix.org", awaitsRoom: false, animated: false)
+        let splitCoordinator = try #require(chatsSplitCoordinator)
+        let deferred = deferFulfillment(splitCoordinator.observe(\.detailRootCoordinatorID)) { $0 != nil }
+        try await deferred.fulfill()
+        #expect((splitCoordinator.detailCoordinator as? NavigationStackCoordinator)?.rootCoordinator is RoomScreenCoordinator)
+        
+        rootFlowCoordinator.handleAppRoute(.share(.text(roomID: nil, text: "Important text")), animated: false)
+        
+        #expect(splitCoordinator.detailCoordinator == nil)
+        let stackCoordinator = try #require(navigationRootCoordinator.sheetCoordinator as? NavigationStackCoordinator)
+        #expect(stackCoordinator.rootCoordinator is RoomSelectionScreenCoordinator)
+    }
+    
+    @Test("The share sheet closes when the shown account's screens are replaced")
+    func shareSheetClosesWithFlow() {
+        rootFlowCoordinator.handleAppRoute(.roomList, animated: false)
+        rootFlowCoordinator.handleAppRoute(.share(.text(roomID: nil, text: "Important text")), animated: false)
+        #expect(navigationRootCoordinator.sheetCoordinator != nil)
+        
+        userSessionManagerCallbacks.send(.didSelectAccount(userID: "@alice:matrix.org"))
+        
+        #expect(navigationRootCoordinator.sheetCoordinator == nil)
+    }
+    
+    @Test("A route handed to the shown account's screens closes the share sheet")
+    func routeClosesShareSheet() async throws {
+        rootFlowCoordinator.handleAppRoute(.roomList, animated: false)
+        rootFlowCoordinator.handleAppRoute(.share(.text(roomID: nil, text: "Important text")), animated: false)
+        #expect(navigationRootCoordinator.sheetCoordinator != nil)
+        
+        rootFlowCoordinator.handleAppRoute(.room(roomID: roomID, via: []), userID: "@alice:matrix.org", awaitsRoom: false, animated: false)
+        #expect(navigationRootCoordinator.sheetCoordinator == nil)
+        
+        let splitCoordinator = try #require(chatsSplitCoordinator)
+        let deferredRoom = deferFulfillment(splitCoordinator.observe(\.detailRootCoordinatorID)) { $0 != nil }
+        try await deferredRoom.fulfill()
+        #expect((splitCoordinator.detailCoordinator as? NavigationStackCoordinator)?.rootCoordinator is RoomScreenCoordinator)
+    }
+    
     // MARK: - Helpers
     
     /// Signs Bob in alongside Alice, returning his call service.

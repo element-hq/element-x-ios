@@ -63,6 +63,7 @@ extension ClientProxyMock {
         
         roomSummaryProvider = configuration.roomSummaryProvider
         alternateRoomSummaryProvider = RoomSummaryProviderMock(.init())
+        globalSearchSummaryProvider = RoomSummaryProviderMock(.init())
         staticRoomSummaryProvider = RoomSummaryProviderMock(.init())
         
         let searchService = SearchServiceProxyMock()

@@ -55,7 +55,7 @@ struct ChatsTabFlowCoordinatorTests {
         try await deferred.fulfill()
     }
     
-    @Test
+    @Test("The room route presents the room, and the room list route closes it")
     mutating func roomPresentation() async throws {
         try await process(route: .room(roomID: "1", via: []), expectedState: .roomList(detailState: .room(roomID: "1")))
         #expect(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
@@ -80,7 +80,7 @@ struct ChatsTabFlowCoordinatorTests {
         #expect(notificationService.removeDeliveredMessageNotificationsForReceivedInvocations == ["1", "1", "2"])
     }
     
-    @Test
+    @Test("The room alias route presents the room the alias resolves to")
     mutating func roomAliasPresentation() async throws {
         clientProxy.resolveRoomAliasReturnValue = .success(.init(roomId: "1", servers: []))
         
@@ -109,7 +109,7 @@ struct ChatsTabFlowCoordinatorTests {
         #expect(notificationService.removeDeliveredMessageNotificationsForReceivedInvocations == ["1", "1", "2"])
     }
     
-    @Test
+    @Test("The room details route presents the room's details, and the room list route closes them")
     mutating func roomDetailsPresentation() async throws {
         try await process(route: .roomDetails(roomID: "1"), expectedState: .roomList(detailState: .room(roomID: "1")))
         #expect(detailNavigationStack?.rootCoordinator is RoomDetailsScreenCoordinator)
@@ -120,7 +120,7 @@ struct ChatsTabFlowCoordinatorTests {
         #expect(detailCoordinator == nil)
     }
     
-    @Test
+    @Test("Presenting another room replaces the details of the previous one")
     mutating func stackUnwinding() async throws {
         try await process(route: .roomDetails(roomID: "1"), expectedState: .roomList(detailState: .room(roomID: "1")))
         #expect(detailNavigationStack?.rootCoordinator is RoomDetailsScreenCoordinator)
@@ -131,7 +131,7 @@ struct ChatsTabFlowCoordinatorTests {
         #expect(detailCoordinator != nil)
     }
     
-    @Test
+    @Test("The room details route for the details already shown changes nothing")
     mutating func noOp() async throws {
         try await process(route: .roomDetails(roomID: "1"), expectedState: .roomList(detailState: .room(roomID: "1")))
         #expect(detailNavigationStack?.rootCoordinator is RoomDetailsScreenCoordinator)
@@ -145,7 +145,7 @@ struct ChatsTabFlowCoordinatorTests {
         #expect(detailCoordinator != nil)
     }
     
-    @Test
+    @Test("The room details route for another room replaces the details shown")
     mutating func switchToDifferentDetails() async throws {
         try await process(route: .roomDetails(roomID: "1"), expectedState: .roomList(detailState: .room(roomID: "1")))
         #expect(detailNavigationStack?.rootCoordinator is RoomDetailsScreenCoordinator)
@@ -156,7 +156,7 @@ struct ChatsTabFlowCoordinatorTests {
         #expect(detailCoordinator != nil)
     }
     
-    @Test
+    @Test("The room details route for the room shown pushes its details above it")
     mutating func pushDetails() async throws {
         try await process(route: .room(roomID: "1", via: []), expectedState: .roomList(detailState: .room(roomID: "1")))
         #expect(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
@@ -174,7 +174,7 @@ struct ChatsTabFlowCoordinatorTests {
         #expect(detailStack.stackCoordinators.first is RoomDetailsScreenCoordinator)
     }
     
-    @Test
+    @Test("The room route for the room whose details are shown replaces them with the room")
     mutating func replaceDetailsWithTimeline() async throws {
         try await process(route: .roomDetails(roomID: "1"), expectedState: .roomList(detailState: .room(roomID: "1")))
         #expect(detailNavigationStack?.rootCoordinator is RoomDetailsScreenCoordinator)
@@ -185,7 +185,7 @@ struct ChatsTabFlowCoordinatorTests {
         #expect(detailCoordinator != nil)
     }
     
-    @Test
+    @Test("The user profile route closes the room and presents the profile as a sheet")
     mutating func userProfileClearsStack() async throws {
         try await process(route: .roomDetails(roomID: "1"), expectedState: .roomList(detailState: .room(roomID: "1")))
         #expect(detailNavigationStack?.rootCoordinator is RoomDetailsScreenCoordinator)
@@ -198,7 +198,7 @@ struct ChatsTabFlowCoordinatorTests {
         #expect(sheetStackCoordinator.rootCoordinator is UserProfileScreenCoordinator)
     }
     
-    @Test
+    @Test("The room route replaces the whole room stack, including pushed child rooms")
     mutating func roomClearsStack() async throws {
         try await process(route: .room(roomID: "1", via: []), expectedState: .roomList(detailState: .room(roomID: "1")))
         #expect(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
@@ -219,7 +219,7 @@ struct ChatsTabFlowCoordinatorTests {
         #expect(detailCoordinator != nil)
     }
     
-    @Test
+    @Test("Event routes focus their event, pushing child events and replacing the room for other events")
     mutating func eventRoutes() async throws {
         // A regular event route should set its room as the root of the stack and focus on the event.
         try await process(route: .event(eventID: "1", roomID: "1", via: []), expectedState: .roomList(detailState: .room(roomID: "1")))
@@ -259,7 +259,7 @@ struct ChatsTabFlowCoordinatorTests {
                 "A new timeline should be created for the same room ID, so that the screen isn't stale while loading.")
     }
     
-    @Test
+    @Test("Sharing media to a room opens the room with an upload preview")
     mutating func shareMediaRouteWithRoom() async throws {
         try await process(route: .event(eventID: "1", roomID: "1", via: []), expectedState: .roomList(detailState: .room(roomID: "1")))
         #expect(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
@@ -275,7 +275,7 @@ struct ChatsTabFlowCoordinatorTests {
         #expect(splitCoordinator.sheetCoordinator is MediaUploadPreviewScreenCoordinator)
     }
     
-    @Test
+    @Test("Sharing text to a room opens the room without an upload preview")
     mutating func shareTextRouteWithRoom() async throws {
         try await process(route: .event(eventID: "1", roomID: "1", via: []), expectedState: .roomList(detailState: .room(roomID: "1")))
         #expect(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
@@ -286,6 +286,39 @@ struct ChatsTabFlowCoordinatorTests {
         
         #expect(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
         #expect(splitCoordinator.sheetCoordinator == nil, "The media upload sheet shouldn't be shown when sharing text.")
+    }
+    
+    @Test("Clearing the route closes the flow's sheet and the open room")
+    mutating func clearRoute() async throws {
+        try await process(route: .room(roomID: "1", via: []), expectedState: .roomList(detailState: .room(roomID: "1")))
+        try await process(route: .transferOwnership(roomID: "2"), expectedState: .transferOwnershipScreen(detailState: .room(roomID: "1")))
+        let deferredSheet = deferFulfillment(splitCoordinator.observe(\.sheetCoordinatorID)) { $0 != nil }
+        try await deferredSheet.fulfill()
+        #expect(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
+        
+        chatsTabFlowCoordinator.clearRoute(animated: false)
+        
+        #expect(splitCoordinator.sheetCoordinator == nil)
+        #expect(detailCoordinator == nil)
+    }
+    
+    @Test("Clearing the route with the room directory open closes it, and the room can be opened again")
+    mutating func clearRouteFromRoomDirectory() async throws {
+        clientProxy.roomDirectorySearchProxyReturnValue = RoomDirectorySearchProxyMock(.init(results: []))
+        try await process(route: .room(roomID: "1", via: []), expectedState: .roomList(detailState: .room(roomID: "1")))
+        let stateMachine = try #require(stateMachineFactory.chatsTabFlowStateMachine)
+        stateMachine.processEvent(.showRoomDirectorySearchScreen)
+        #expect(stateMachine.state == .roomDirectorySearchScreen(detailState: .room(roomID: "1")))
+        #expect(splitCoordinator.fullScreenCoverCoordinator is RoomDirectorySearchScreenCoordinator)
+        
+        chatsTabFlowCoordinator.clearRoute(animated: false)
+        
+        #expect(stateMachine.state == .roomList(detailState: nil))
+        #expect(splitCoordinator.fullScreenCoverCoordinator == nil)
+        #expect(detailCoordinator == nil)
+        
+        try await process(route: .room(roomID: "1", via: []), expectedState: .roomList(detailState: .room(roomID: "1")))
+        #expect(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
     }
     
     // MARK: - Private

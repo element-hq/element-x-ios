@@ -62,6 +62,7 @@ class ClientProxy: ClientProxyProtocol {
     // can apply their own filtering and pagination
     private(set) var roomSummaryProvider: RoomSummaryProviderProtocol
     private(set) var alternateRoomSummaryProvider: RoomSummaryProviderProtocol
+    private(set) var globalSearchSummaryProvider: RoomSummaryProviderProtocol
     
     private(set) var staticRoomSummaryProvider: StaticRoomSummaryProviderProtocol
     
@@ -196,6 +197,7 @@ class ClientProxy: ClientProxyProtocol {
         roomListService = configuredAppService.roomListService
         roomSummaryProvider = configuredAppService.roomSummaryProvider
         alternateRoomSummaryProvider = configuredAppService.alternateRoomSummaryProvider
+        globalSearchSummaryProvider = configuredAppService.globalSearchSummaryProvider
         staticRoomSummaryProvider = configuredAppService.staticRoomSummaryProvider
         eventStringBuilder = configuredAppService.eventStringBuilder
         
@@ -1450,6 +1452,7 @@ private struct ClientProxyServices {
     let roomListService: RoomListService
     let roomSummaryProvider: RoomSummaryProviderProtocol
     let alternateRoomSummaryProvider: RoomSummaryProviderProtocol
+    let globalSearchSummaryProvider: RoomSummaryProviderProtocol
     let staticRoomSummaryProvider: StaticRoomSummaryProviderProtocol
     let eventStringBuilder: RoomEventStringBuilder
     
@@ -1487,6 +1490,14 @@ private struct ClientProxyServices {
                                                            notificationSettings: notificationSettings,
                                                            userSettings: userSettings)
         
+        // Separate from the alternate provider: global search holds its filter all session and would override the pickers' filters.
+        globalSearchSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
+                                                          eventStringBuilder: eventStringBuilder,
+                                                          name: "GlobalSearchAllRooms",
+                                                          includesOnlyJoinedRooms: true,
+                                                          notificationSettings: notificationSettings,
+                                                          userSettings: userSettings)
+        
         staticRoomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
                                                         eventStringBuilder: eventStringBuilder,
                                                         name: "StaticAllRooms",
@@ -1495,8 +1506,8 @@ private struct ClientProxyServices {
                                                         userSettings: userSettings)
         
         // Setting a provider's room list will create summaries for every room so
-        // wait until the app is fully running for the alternate and static providers.
-        Task { [roomSummaryProvider, alternateRoomSummaryProvider, staticRoomSummaryProvider] in
+        // wait until the app is fully running for the alternate, search and static providers.
+        Task { [roomSummaryProvider, alternateRoomSummaryProvider, globalSearchSummaryProvider, staticRoomSummaryProvider] in
             // Wait for actual content (or a loaded-but-empty account) as the loading state
             // doesn't take into account the app having build and published any summaries.
             for await rooms in roomSummaryProvider.roomListPublisher.values {
@@ -1511,6 +1522,7 @@ private struct ClientProxyServices {
             
             do {
                 try await alternateRoomSummaryProvider.setRoomList(roomListService.allRooms())
+                try await globalSearchSummaryProvider.setRoomList(roomListService.allRooms())
                 try await staticRoomSummaryProvider.setRoomList(roomListService.allRooms())
             } catch {
                 fatalError("Failed setting up the deferred room summary providers: \(error)")

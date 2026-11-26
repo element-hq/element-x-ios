@@ -81,6 +81,13 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     func clearRoute(animated: Bool) {
+        navigationSplitCoordinator.setSheetCoordinator(nil, animated: animated)
+        
+        if case .roomDirectorySearchScreen = stateMachine.state {
+            stateMachine.processEvent(.dismissedRoomDirectorySearchScreen)
+        }
+        
+        // Last, as the room can only be closed once the state machine is back on the room list.
         roomFlowCoordinator?.clearRoute(animated: animated)
     }
     
@@ -147,14 +154,14 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
         case .userProfile(let userID):
             stateMachine.processEvent(.showUserProfileScreen(userID: userID), userInfo: .init(animated: animated))
         case .share(let payload):
-            if let roomID = payload.roomID {
-                stateMachine.processEvent(.selectRoom(roomID: roomID,
-                                                      via: [],
-                                                      entryPoint: .share(payload)),
-                                          userInfo: .init(animated: animated))
-            } else {
-                stateMachine.processEvent(.showShareExtensionRoomList(sharePayload: payload), userInfo: .init(animated: animated))
+            guard let roomID = payload.roomID else {
+                fatalError("Shares without a room are handled by the root flow.")
             }
+            
+            stateMachine.processEvent(.selectRoom(roomID: roomID,
+                                                  via: [],
+                                                  entryPoint: .share(payload)),
+                                      userInfo: .init(animated: animated))
         case .transferOwnership(let roomID):
             if case .room(roomID) = stateMachine.state.detailState {
                 roomFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
@@ -255,18 +262,6 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
                 Task { await self.presentTransferOwnershipScreen(roomID: roomID) }
             case (.transferOwnershipScreen, .dismissedTransferOwnershipScreen, .roomList):
                 break
-                
-            case (.roomList(let roomListSelectedRoomID), .showShareExtensionRoomList, .shareExtensionRoomList(let sharePayload)):
-                Task {
-                    if roomListSelectedRoomID != nil {
-                        self.clearRoute(animated: animated)
-                        try? await Task.sleep(for: .seconds(1.5))
-                    }
-                    
-                    self.presentRoomSelectionScreen(sharePayload: sharePayload, animated: animated)
-                }
-            case (.shareExtensionRoomList, .dismissedShareExtensionRoomList, .roomList):
-                dismissRoomSelectionScreen()
                 
             default:
                 fatalError("Unknown transition: \(context)")
@@ -753,51 +748,6 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
         navigationSplitCoordinator.setSheetCoordinator(navigationStackCoordinator, animated: animated) { [weak self] in
             self?.stateMachine.processEvent(.dismissedUserProfileScreen)
         }
-    }
-    
-    // MARK: Sharing
-    
-    private func presentRoomSelectionScreen(sharePayload: ShareExtensionPayload, animated: Bool) {
-        let roomSummaryProvider = userSession.clientProxy.alternateRoomSummaryProvider
-        
-        let stackCoordinator = NavigationStackCoordinator()
-        
-        let coordinator = RoomSelectionScreenCoordinator(parameters: .init(userSession: userSession,
-                                                                           roomSummaryProvider: roomSummaryProvider))
-        
-        coordinator.actionsPublisher.sink { [weak self] action in
-            guard let self else { return }
-            
-            switch action {
-            case .dismiss:
-                navigationSplitCoordinator.setSheetCoordinator(nil)
-            case .confirm(let roomID):
-                let sharePayload = switch sharePayload {
-                case .mediaFiles(_, let mediaFiles):
-                    ShareExtensionPayload.mediaFiles(roomID: roomID, mediaFiles: mediaFiles)
-                case .text(_, let text):
-                    ShareExtensionPayload.text(roomID: roomID, text: text)
-                }
-                
-                navigationSplitCoordinator.setSheetCoordinator(nil)
-                
-                stateMachine.processEvent(.selectRoom(roomID: roomID,
-                                                      via: [],
-                                                      entryPoint: .share(sharePayload)),
-                                          userInfo: .init(animated: animated))
-            }
-        }
-        .store(in: &cancellables)
-        
-        stackCoordinator.setRootCoordinator(coordinator)
-        
-        navigationSplitCoordinator.setSheetCoordinator(stackCoordinator, animated: animated) { [weak self] in
-            self?.stateMachine.processEvent(.dismissedShareExtensionRoomList)
-        }
-    }
-    
-    private func dismissRoomSelectionScreen() {
-        navigationSplitCoordinator.setSheetCoordinator(nil)
     }
     
     // MARK: Toasts and loading indicators

@@ -114,7 +114,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         spacesTabDetails.navigationSplitCoordinator = spacesSplitCoordinator
         
         if flowParameters.userSession.userSettings.app.globalSearchEnabled {
-            let searchCoordinator = SearchScreenCoordinator(parameters: .init(roomSummaryProvider: flowParameters.userSession.clientProxy.alternateRoomSummaryProvider,
+            let searchCoordinator = SearchScreenCoordinator(parameters: .init(roomSummaryProvider: flowParameters.userSession.clientProxy.globalSearchSummaryProvider,
                                                                               userSession: flowParameters.userSession,
                                                                               userIndicatorController: flowParameters.userIndicatorController))
             let searchStackCoordinator = NavigationStackCoordinator()
