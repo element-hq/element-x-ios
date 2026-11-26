@@ -44,8 +44,9 @@ actor MediaLoader: MediaLoaderProtocol {
     }
     
     func loadCachedMediaThumbnailForSource(_ source: MediaSourceProxy, width: UInt, height: UInt) async throws -> Data? {
-        #warning("Use the cached loading from https://github.com/matrix-org/matrix-rust-sdk/pull/7546")
-        return try await loadMediaThumbnailForSource(source, width: width, height: height)
+        // Requires https://github.com/matrix-org/matrix-rust-sdk/pull/7546
+        // return try await client.getCachedMediaThumbnail(mediaSource: source.underlyingSource, width: UInt64(width), height: UInt64(height), animated: false)
+        nil
     }
     
     func loadMediaFileForSource(_ source: MediaSourceProxy, filename: String?) async throws -> MediaFileHandleProxy {
