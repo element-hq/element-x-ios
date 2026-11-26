@@ -26,10 +26,9 @@ struct SelectedItemsCarousel: View {
     }
     
     private let items: [Item]
-    private let style: Style
     private let mediaProvider: MediaProviderProtocol?
     
-    @ScaledMetric private var cellWidth: CGFloat
+    @ScaledMetric private var cellWidth: CGFloat = 80
     @State private var scrollPosition: String?
     
     init(users: [UserProfile],
@@ -42,7 +41,7 @@ struct SelectedItemsCarousel: View {
                  avatar: .user(url: user.avatarURL, name: user.displayName, contentID: user.id),
                  removeAction: isRemovable(user) ? { removeAction(user) } : nil)
         }
-        self.init(items: items, style: .users, mediaProvider: mediaProvider)
+        self.init(items: items, mediaProvider: mediaProvider)
     }
     
     init(members: [RoomMemberDetails],
@@ -55,7 +54,7 @@ struct SelectedItemsCarousel: View {
                  avatar: .user(url: member.avatarURL, name: member.name, contentID: member.id),
                  removeAction: isRemovable(member) ? { removeAction(member) } : nil)
         }
-        self.init(items: items, style: .members, mediaProvider: mediaProvider)
+        self.init(items: items, mediaProvider: mediaProvider)
     }
     
     init(rooms: [SpaceAddRoomsScreenRoom],
@@ -66,74 +65,28 @@ struct SelectedItemsCarousel: View {
                 removeAction(room)
             }
         }
-        self.init(items: items, style: .rooms, mediaProvider: mediaProvider)
+        self.init(items: items, mediaProvider: mediaProvider)
     }
     
-    private init(items: [Item], style: Style, mediaProvider: MediaProviderProtocol?) {
+    private init(items: [Item], mediaProvider: MediaProviderProtocol?) {
         self.items = items
-        self.style = style
         self.mediaProvider = mediaProvider
-        _cellWidth = ScaledMetric(wrappedValue: style.cellWidth)
     }
     
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: style.itemSpacing) {
+            HStack(spacing: 16) {
                 ForEach(items) { item in
-                    cell(for: item)
+                    SelectedItemsCarouselCell(item: item, mediaProvider: mediaProvider)
                         .frame(width: cellWidth)
                 }
             }
-            .padding(.horizontal, style.horizontalPadding)
+            .padding(.horizontal, 16)
             .scrollTargetLayout()
         }
         .scrollPosition(id: $scrollPosition, anchor: .trailing)
         .onChange(of: items.map(\.id)) { oldIDs, newIDs in
             scrollToAddedItem(oldIDs: oldIDs, newIDs: newIDs)
-        }
-    }
-    
-    private func cell(for item: Item) -> some View {
-        VStack(spacing: style.labelSpacing) {
-            avatar(for: item)
-                .accessibilityHidden(true)
-            
-            Text(item.title)
-                .font(style.labelFont)
-                .foregroundStyle(style.labelColor)
-                .lineLimit(1)
-        }
-        .accessibilityElement(children: .combine)
-        .accessibilityActions {
-            if let removeAction = item.removeAction {
-                Button(style.removeActionTitle, action: removeAction)
-            }
-        }
-    }
-    
-    @ViewBuilder
-    private func avatar(for item: Item) -> some View {
-        if let removeAction = item.removeAction {
-            avatarImage(item.avatar)
-                .overlayRemoveItemButton(action: removeAction)
-        } else {
-            avatarImage(item.avatar)
-        }
-    }
-    
-    @ViewBuilder
-    private func avatarImage(_ avatar: Item.Avatar) -> some View {
-        switch avatar {
-        case .user(let url, let name, let contentID):
-            LoadableAvatarImage(url: url,
-                                name: name,
-                                contentID: contentID,
-                                avatarSize: style.avatarSize,
-                                mediaProvider: mediaProvider)
-        case .room(let roomAvatar):
-            RoomAvatarImage(avatar: roomAvatar,
-                            avatarSize: style.avatarSize,
-                            mediaProvider: mediaProvider)
         }
     }
     
@@ -147,49 +100,52 @@ struct SelectedItemsCarousel: View {
     }
 }
 
-private extension SelectedItemsCarousel {
-    /// The look of the carousel for each kind of item it shows.
-    struct Style {
-        let avatarSize: Avatars.Size
-        let labelFont: Font
-        let labelColor: Color
-        let labelSpacing: CGFloat
-        let cellWidth: CGFloat
-        let itemSpacing: CGFloat
-        let horizontalPadding: CGFloat
-        let removeActionTitle: String
-        
-        static var users: Style {
-            Style(avatarSize: .user(on: .inviteUsers),
-                  labelFont: .compound.bodySM,
-                  labelColor: .compound.textSecondary,
-                  labelSpacing: 10,
-                  cellWidth: 80,
-                  itemSpacing: 8,
-                  horizontalPadding: 16,
-                  removeActionTitle: L10n.actionRemove)
+/// A picked item in the carousel: its avatar with a remove button, above its title.
+private struct SelectedItemsCarouselCell: View {
+    let item: SelectedItemsCarousel.Item
+    let mediaProvider: MediaProviderProtocol?
+    
+    var body: some View {
+        VStack(spacing: 10) {
+            avatar
+                .accessibilityHidden(true)
+            
+            Text(item.title)
+                .font(.compound.bodySM)
+                .foregroundStyle(.compound.textSecondary)
+                .lineLimit(1)
         }
-        
-        static var members: Style {
-            Style(avatarSize: .user(on: .roomChangeRoles),
-                  labelFont: .compound.bodyMD,
-                  labelColor: .compound.textPrimary,
-                  labelSpacing: 4,
-                  cellWidth: 72,
-                  itemSpacing: 16,
-                  horizontalPadding: 14,
-                  removeActionTitle: L10n.actionDismiss)
+        .accessibilityElement(children: .combine)
+        .accessibilityActions {
+            if let removeAction = item.removeAction {
+                Button(L10n.actionRemove, action: removeAction)
+            }
         }
-        
-        static var rooms: Style {
-            Style(avatarSize: .room(on: .spaceAddRoomsSelected),
-                  labelFont: .compound.bodySM,
-                  labelColor: .compound.textSecondary,
-                  labelSpacing: 10,
-                  cellWidth: 80,
-                  itemSpacing: 8,
-                  horizontalPadding: 16,
-                  removeActionTitle: L10n.actionRemove)
+    }
+    
+    @ViewBuilder
+    private var avatar: some View {
+        if let removeAction = item.removeAction {
+            avatarImage
+                .overlayRemoveItemButton(action: removeAction)
+        } else {
+            avatarImage
+        }
+    }
+    
+    @ViewBuilder
+    private var avatarImage: some View {
+        switch item.avatar {
+        case .user(let url, let name, let contentID):
+            LoadableAvatarImage(url: url,
+                                name: name,
+                                contentID: contentID,
+                                avatarSize: .user(on: .selectedItemsCarousel),
+                                mediaProvider: mediaProvider)
+        case .room(let roomAvatar):
+            RoomAvatarImage(avatar: roomAvatar,
+                            avatarSize: .room(on: .selectedItemsCarousel),
+                            mediaProvider: mediaProvider)
         }
     }
 }
