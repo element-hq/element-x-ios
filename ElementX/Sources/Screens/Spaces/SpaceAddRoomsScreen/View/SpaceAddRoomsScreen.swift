@@ -51,22 +51,10 @@ struct SpaceAddRoomsScreen: View {
         .onChange(of: context.searchQuery) { context.send(viewAction: .searchQueryChanged) }
     }
     
-    @ScaledMetric private var selectedRoomCellWidth: CGFloat = 80
-    
     private var selectedRoomsSection: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 8) {
-                ForEach(context.viewState.selectedRooms, id: \.id) { room in
-                    SpaceAddRoomsScreenSelectedItem(room: room, mediaProvider: context.mediaProvider) {
-                        context.send(viewAction: .toggleRoom(room))
-                    }
-                    .frame(width: selectedRoomCellWidth)
-                }
-            }
-            .padding(.horizontal, 16)
-            .scrollTargetLayout()
+        SelectedItemsCarousel(rooms: context.viewState.selectedRooms, mediaProvider: context.mediaProvider) { room in
+            context.send(viewAction: .toggleRoom(room))
         }
-        .scrollPosition(id: $context.selectedRoomsPosition, anchor: .trailing)
     }
     
     private var roomsSection: some View {

@@ -134,7 +134,6 @@ class SpaceAddRoomsScreenViewModel: SpaceAddRoomsScreenViewModelType, SpaceAddRo
             state.selectedRooms.removeAll { $0.id == room.id }
         } else {
             state.selectedRooms.append(room)
-            withElementAnimation(.easeInOut) { state.bindings.selectedRoomsPosition = room.id }
         }
     }
     

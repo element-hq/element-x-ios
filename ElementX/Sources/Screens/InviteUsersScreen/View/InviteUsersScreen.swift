@@ -101,24 +101,11 @@ struct InviteUsersScreen: View {
         }
     }
     
-    @ScaledMetric private var selectedUserCellWidth: CGFloat = 80
-    
     private var selectedUsersSection: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 8) {
-                ForEach(context.viewState.selectedUsers, id: \.id) { user in
-                    InviteUsersScreenSelectedItem(user: user,
-                                                  mediaProvider: context.mediaProvider,
-                                                  isLocked: context.viewState.isInviteeMandatory(user)) {
-                        deselect(user)
-                    }
-                    .frame(width: selectedUserCellWidth)
-                }
-            }
-            .padding(.horizontal, 16)
-            .scrollTargetLayout()
-        }
-        .scrollPosition(id: $context.selectedUsersPosition, anchor: .trailing)
+        SelectedItemsCarousel(users: context.viewState.selectedUsers,
+                              mediaProvider: context.mediaProvider,
+                              isRemovable: { !context.viewState.isInviteeMandatory($0) },
+                              removeAction: deselect)
     }
     
     @ToolbarContentBuilder

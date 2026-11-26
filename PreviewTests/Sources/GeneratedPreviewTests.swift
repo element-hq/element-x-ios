@@ -432,13 +432,6 @@ extension PreviewTests {
     }
 
     @Test
-    func inviteUsersScreenSelectedItem() async throws {
-        for (index, preview) in InviteUsersScreenSelectedItem_Previews._allPreviews.enumerated() {
-            try await assertSnapshots(matching: preview, step: index)
-        }
-    }
-
-    @Test
     func inviteUsersScreen() async throws {
         for (index, preview) in InviteUsersScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
@@ -964,13 +957,6 @@ extension PreviewTests {
     }
 
     @Test
-    func roomChangeRolesScreenSelectedItem() async throws {
-        for (index, preview) in RoomChangeRolesScreenSelectedItem_Previews._allPreviews.enumerated() {
-            try await assertSnapshots(matching: preview, step: index)
-        }
-    }
-
-    @Test
     func roomChangeRolesScreen() async throws {
         for (index, preview) in RoomChangeRolesScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
@@ -1195,6 +1181,13 @@ extension PreviewTests {
     }
 
     @Test
+    func selectedItemsCarousel() async throws {
+        for (index, preview) in SelectedItemsCarousel_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    @Test
     func sendInviteConfirmationView() async throws {
         for (index, preview) in SendInviteConfirmationView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
@@ -1260,13 +1253,6 @@ extension PreviewTests {
     @Test
     func shimmerOverlay() async throws {
         for (index, preview) in ShimmerOverlay_Previews._allPreviews.enumerated() {
-            try await assertSnapshots(matching: preview, step: index)
-        }
-    }
-
-    @Test
-    func spaceAddRoomsScreenSelectedItem() async throws {
-        for (index, preview) in SpaceAddRoomsScreenSelectedItem_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }

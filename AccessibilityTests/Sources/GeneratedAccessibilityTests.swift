@@ -247,10 +247,6 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "InviteUsersConfirmationSheetView_Previews")
     }
 
-    func testInviteUsersScreenSelectedItem() async throws {
-        try await performAccessibilityAudit(named: "InviteUsersScreenSelectedItem_Previews")
-    }
-
     func testInviteUsersScreen() async throws {
         try await performAccessibilityAudit(named: "InviteUsersScreen_Previews")
     }
@@ -551,10 +547,6 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "RoomChangeRolesScreenRow_Previews")
     }
 
-    func testRoomChangeRolesScreenSelectedItem() async throws {
-        try await performAccessibilityAudit(named: "RoomChangeRolesScreenSelectedItem_Previews")
-    }
-
     func testRoomChangeRolesScreen() async throws {
         try await performAccessibilityAudit(named: "RoomChangeRolesScreen_Previews")
     }
@@ -683,6 +675,10 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "SecurityAndPrivacyScreen_Previews")
     }
 
+    func testSelectedItemsCarousel() async throws {
+        try await performAccessibilityAudit(named: "SelectedItemsCarousel_Previews")
+    }
+
     func testSendInviteConfirmationView() async throws {
         try await performAccessibilityAudit(named: "SendInviteConfirmationView_Previews")
     }
@@ -721,10 +717,6 @@ extension AccessibilityTests {
 
     func testShimmerOverlay() async throws {
         try await performAccessibilityAudit(named: "ShimmerOverlay_Previews")
-    }
-
-    func testSpaceAddRoomsScreenSelectedItem() async throws {
-        try await performAccessibilityAudit(named: "SpaceAddRoomsScreenSelectedItem_Previews")
     }
 
     func testSpaceAddRoomsScreen() async throws {

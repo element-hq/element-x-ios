@@ -37,7 +37,6 @@ struct SpaceAddRoomsScreenViewState: BindableState {
 
 struct SpaceAddRoomsScreenViewStateBindings {
     var searchQuery = ""
-    var selectedRoomsPosition: String?
 }
 
 enum SpaceAddRoomsScreenViewAction {

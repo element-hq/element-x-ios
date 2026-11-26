@@ -111,12 +111,10 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
             state.membersToPromote.remove(member)
         } else if state.membersToDemote.contains(member) {
             state.membersToDemote.remove(member)
-            state.lastPromotedMember = member
         } else if member.role >= state.mode, member.role <= state.maxDemotableRole {
             state.membersToDemote.insert(member)
         } else if member.role < state.mode {
             state.membersToPromote.insert(member)
-            state.lastPromotedMember = member
         }
     }
     
