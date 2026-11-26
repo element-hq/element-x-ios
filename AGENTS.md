@@ -112,6 +112,8 @@ ElementX/Sources/
 
 Mocks, test helpers, generated files live next to sources in `Generated/` directories. Test suites in dedicated targets.
 
+Xcode scheme + simulator not linked. Switch scheme → switch simulator too.
+
 ### Swift Packages
 
 1. **`compound-ios/`** — Compound design system (local package, all UI styling).
