@@ -457,7 +457,6 @@ private extension SessionVerificationManagerAction {
                                                         deviceDisplayName: nil,
                                                         firstSeenDate: .now)
         return .receivedRequest(.init(userSession: UserSessionMock(.init(clientProxy: bobClientProxy)),
-                                      details: details,
-                                      sender: .ownDevice))
+                                      kind: .fromOwnDevice(details)))
     }
 }

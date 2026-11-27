@@ -700,7 +700,7 @@ class MockScreen: Identifiable {
                                                                           deviceID: "CHARLIEDEVICE",
                                                                           deviceDisplayName: "Charlie's iPhone",
                                                                           firstSeenDate: .now)
-            let signalledRequest = id == .rootFlowSessionVerification ? SessionVerificationRequest(userSession: bobUserSession, details: charlieRequestDetails, sender: .otherUser) : nil
+            let signalledRequest = id == .rootFlowSessionVerification ? SessionVerificationRequest(userSession: bobUserSession, kind: .fromOtherUser(charlieRequestDetails)) : nil
             
             let appMediator = AppMediatorMock(.init())
             appMediator.windowManager = windowManager

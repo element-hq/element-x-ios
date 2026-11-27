@@ -32,8 +32,8 @@ final class SessionVerificationManager: SessionVerificationManagerProtocol {
                 guard case .receivedVerificationRequest(let details) = action else { return }
                 MXLog.info("Received session verification request for \(userID)")
                 
-                let sender: SessionVerificationRequest.Sender = details.senderProfile.id == userID ? .ownDevice : .otherUser
-                self?.actionsSubject.send(.receivedRequest(.init(userSession: userSession, details: details, sender: sender)))
+                let kind: SessionVerificationRequest.Kind = details.senderProfile.id == userID ? .fromOwnDevice(details) : .fromOtherUser(details)
+                self?.actionsSubject.send(.receivedRequest(.init(userSession: userSession, kind: kind)))
             }
     }
     

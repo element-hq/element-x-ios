@@ -12,13 +12,19 @@ enum SessionVerificationManagerAction {
     case receivedRequest(SessionVerificationRequest)
 }
 
-/// An incoming verification request, along with the session of the account that received it.
+/// A session verification for an account, along with the session of the account that's verifying.
 struct SessionVerificationRequest {
-    enum Sender { case ownDevice, otherUser }
+    enum Kind {
+        /// Another of the account's own devices asked to verify.
+        case fromOwnDevice(SessionVerificationRequestDetails)
+        /// Another user asked to verify.
+        case fromOtherUser(SessionVerificationRequestDetails)
+        /// The user asked to verify another user.
+        case toUser(userID: String)
+    }
     
     let userSession: UserSessionProtocol
-    let details: SessionVerificationRequestDetails
-    let sender: Sender
+    let kind: Kind
 }
 
 // sourcery: AutoMockable
