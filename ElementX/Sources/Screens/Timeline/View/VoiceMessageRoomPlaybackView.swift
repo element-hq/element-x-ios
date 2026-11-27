@@ -14,11 +14,13 @@ struct VoiceMessageRoomPlaybackView: View {
     @ObservedObject var playerState: AudioPlayerState
     @ScaledMetric private var waveformLineWidth = 2.0
     @ScaledMetric private var waveformLinePadding = 2.0
-    @GestureState var isDragging = false
+    @State private var isDragging = false
     
     /// Whether the voice message is being scanned by the content scanner, in which case
     /// the play button shows a spinner and playback isn't available (which prevents the audio file from being downloaded).
     var isScanning = false
+    /// Checked whenever a drag starts on the waveform, so that scrubbing can be prevented (e.g. whilst selecting messages).
+    var shouldStartScrubbing: () -> Bool = { true }
     
     let onPlayPause: () -> Void
     let onSeek: (Double) -> Void
@@ -45,6 +47,7 @@ struct VoiceMessageRoomPlaybackView: View {
                 .waveformInteraction(isDragging: $isDragging,
                                      progress: playerState.progress,
                                      showCursor: playerState.showProgressIndicator,
+                                     shouldStartScrubbing: { !isScanning && shouldStartScrubbing() },
                                      onSeek: onSeek)
         }
         .padding(.leading, 2)

@@ -22,6 +22,10 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     /// the critical styling. Reported by the item's `ContentScanningView` through the preference key.
     @State private var contentScanningFailure: ContentScanningFailure?
     
+    /// Whether the item's content is handling a drag of its own (e.g. scrubbing a voice message),
+    /// reported through the preference key, in which case the bubble's long press is disabled.
+    @State private var isScrubbingContent = false
+    
     private var hasContentScanningFailure: Bool {
         contentScanningFailure != nil
     }
@@ -78,6 +82,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         .overlay { selectionOverlay }
         .animation(.elementDefault.disabledDuringTests(), value: isMessageSelectionActive)
         .onPreferenceChange(ContentScanningFailurePreferenceKey.self) { contentScanningFailure = $0 }
+        .onPreferenceChange(WaveformScrubbingPreferenceKey.self) { isScrubbingContent = $0 }
     }
     
     private var selectionIndicator: some View {
@@ -217,7 +222,8 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 // specific taps within the timeline views themselves.
             }
             // The UIKit recogniser would still receive touches through the selection overlay.
-            .longPressWithFeedback(isEnabled: !isMessageSelectionActive) {
+            // Disabling it also cancels a long press that began just before the content started scrubbing.
+            .longPressWithFeedback(isEnabled: !isMessageSelectionActive && !isScrubbingContent) {
                 context.send(viewAction: .displayTimelineItemMenu(itemID: timelineItem.id))
             }
             .swipeRightAction {

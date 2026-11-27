@@ -17,7 +17,7 @@ struct VoiceMessagePreviewComposer: View {
     let waveform: WaveformSource
     @ScaledMetric private var waveformLineWidth = 2.0
     @ScaledMetric private var waveformLinePadding = 2.0
-    @GestureState var isDragging = false
+    @State private var isDragging = false
     
     let onPlay: () -> Void
     let onPause: () -> Void
