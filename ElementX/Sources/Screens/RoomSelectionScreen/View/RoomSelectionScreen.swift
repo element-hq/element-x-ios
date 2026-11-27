@@ -118,7 +118,7 @@ private struct RoomSelectionListRow: View {
     
     var body: some View {
         ListRow(label: .avatar(title: room.title,
-                               description: room.description.isEmpty ? nil : room.description,
+                               description: room.description,
                                icon: avatar),
                 kind: .multiSelection(isSelected: isSelected, action: action))
             .accessibilityIdentifier(A11yIdentifiers.roomSelectionScreen.roomName(room.title))
