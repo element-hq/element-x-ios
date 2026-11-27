@@ -10,3 +10,5 @@ import Foundation
 struct ImagePackScreenViewState: BindableState {
     let pack: ImagePack
 }
+
+enum ImagePackScreenViewAction { }

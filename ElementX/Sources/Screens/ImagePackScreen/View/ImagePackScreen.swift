@@ -27,9 +27,9 @@ struct ImagePackScreen: View {
                         .foregroundStyle(.compound.textSecondary)
                 }
                 
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: minimumWidth), alignment: .top)], spacing: 16) {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: minimumWidth))], spacing: 16) {
                     ForEach(pack.images, id: \.self) { image in
-                        imageCell(image)
+                        ImagePackScreenCell(image: image, imageSize: imageSize, mediaProvider: context.mediaProvider)
                     }
                 }
             }
@@ -39,16 +39,22 @@ struct ImagePackScreen: View {
         .navigationTitle(pack.displayName ?? L10n.a11yCustomEmoji)
         .navigationBarTitleDisplayMode(.inline)
     }
+}
+
+private struct ImagePackScreenCell: View {
+    let image: ImagePack.Image
+    let imageSize: Double
+    let mediaProvider: MediaProviderProtocol?
     
-    private func imageCell(_ image: ImagePack.Image) -> some View {
+    var body: some View {
         VStack(spacing: 4) {
             LoadableImage(mediaSource: image.mediaSource,
-                          mediaProvider: context.mediaProvider,
+                          mediaProvider: mediaProvider,
                           transformer: { $0.scaledToFit() },
                           placeholder: { Color.clear })
                 .frame(width: imageSize, height: imageSize)
                 .accessibilityHidden(true)
-            Text(verbatim: ":\(image.shortcode):")
+            Text(":\(image.shortcode):")
                 .font(.compound.bodyXS)
                 .foregroundStyle(.compound.textSecondary)
                 .lineLimit(1)

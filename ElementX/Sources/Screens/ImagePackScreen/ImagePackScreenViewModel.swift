@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-typealias ImagePackScreenViewModelType = StateStoreViewModelV2<ImagePackScreenViewState, Never>
+typealias ImagePackScreenViewModelType = StateStoreViewModelV2<ImagePackScreenViewState, ImagePackScreenViewAction>
 
 class ImagePackScreenViewModel: ImagePackScreenViewModelType, ImagePackScreenViewModelProtocol {
     init(pack: ImagePack, mediaProvider: MediaProviderProtocol) {

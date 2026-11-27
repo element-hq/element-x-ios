@@ -11,17 +11,13 @@ import SwiftUI
 struct RoomImagePacksScreen: View {
     let context: RoomImagePacksScreenViewModel.Context
     
-    @ScaledMetric private var avatarSize: Double = 32
-    
     var body: some View {
         Form {
             Section {
                 ForEach(context.viewState.packs) { pack in
-                    ListRow(label: .avatar(title: pack.displayName ?? L10n.a11yCustomEmoji,
-                                           description: usageDescription(for: pack),
-                                           icon: avatar(for: pack)),
-                            details: .title(String(pack.images.count)),
-                            kind: .navigationLink { context.send(viewAction: .selectPack(pack)) })
+                    RoomImagePacksScreenListRow(pack: pack, mediaProvider: context.mediaProvider) {
+                        context.send(viewAction: .selectPack(pack))
+                    }
                 }
             }
         }
@@ -29,23 +25,16 @@ struct RoomImagePacksScreen: View {
         .navigationTitle(UntranslatedL10n.screenRoomImagePacksTitle)
         .navigationBarTitleDisplayMode(.inline)
     }
+}
+
+private struct RoomImagePacksScreenListRow: View {
+    let pack: ImagePack
+    let mediaProvider: MediaProviderProtocol?
+    let action: () -> Void
     
-    private func avatar(for pack: ImagePack) -> some View {
-        Group {
-            if let avatar = pack.avatar ?? pack.images.first?.mediaSource {
-                LoadableImage(mediaSource: avatar,
-                              mediaProvider: context.mediaProvider,
-                              transformer: { $0.scaledToFit() },
-                              placeholder: { Color.clear })
-            } else {
-                CompoundIcon(\.reaction)
-            }
-        }
-        .frame(width: avatarSize, height: avatarSize)
-        .accessibilityHidden(true)
-    }
+    @ScaledMetric private var avatarSize: Double = 32
     
-    private func usageDescription(for pack: ImagePack) -> String {
+    private var usageDescription: String {
         var usages = [String]()
         if pack.isEmoticonPack {
             usages.append(UntranslatedL10n.screenRoomImagePacksUsageEmoji)
@@ -54,6 +43,29 @@ struct RoomImagePacksScreen: View {
             usages.append(UntranslatedL10n.screenRoomImagePacksUsageStickers)
         }
         return usages.joined(separator: " · ")
+    }
+    
+    var body: some View {
+        ListRow(label: .avatar(title: pack.displayName ?? L10n.a11yCustomEmoji,
+                               description: usageDescription,
+                               icon: avatar),
+                details: .title(String(pack.images.count)),
+                kind: .navigationLink(action: action))
+    }
+    
+    private var avatar: some View {
+        Group {
+            if let avatar = pack.avatar ?? pack.images.first?.mediaSource {
+                LoadableImage(mediaSource: avatar,
+                              mediaProvider: mediaProvider,
+                              transformer: { $0.scaledToFit() },
+                              placeholder: { Color.clear })
+            } else {
+                CompoundIcon(\.reaction)
+            }
+        }
+        .frame(width: avatarSize, height: avatarSize)
+        .accessibilityHidden(true)
     }
 }
 
