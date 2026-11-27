@@ -3084,6 +3084,12 @@ internal nonisolated enum L10n {
   internal static var screenRoomGroupedStateEventsExpand: String { return L10n.tr("Localizable", "screen_room_grouped_state_events_expand") }
   /// Reduce
   internal static var screenRoomGroupedStateEventsReduce: String { return L10n.tr("Localizable", "screen_room_grouped_state_events_reduce") }
+  /// Emoji and stickers
+  internal static var screenRoomImagePacksTitle: String { return L10n.tr("Localizable", "screen_room_image_packs_title") }
+  /// Emoji
+  internal static var screenRoomImagePacksUsageEmoji: String { return L10n.tr("Localizable", "screen_room_image_packs_usage_emoji") }
+  /// Stickers
+  internal static var screenRoomImagePacksUsageStickers: String { return L10n.tr("Localizable", "screen_room_image_packs_usage_stickers") }
   /// Would you like to invite them back?
   internal static var screenRoomInviteAgainAlertMessage: String { return L10n.tr("Localizable", "screen_room_invite_again_alert_message") }
   /// You are alone in this chat

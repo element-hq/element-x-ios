@@ -22,7 +22,7 @@ struct RoomImagePacksScreen: View {
             }
         }
         .compoundList()
-        .navigationTitle(UntranslatedL10n.screenRoomImagePacksTitle)
+        .navigationTitle(L10n.screenRoomImagePacksTitle)
         .navigationBarTitleDisplayMode(.inline)
     }
 }
@@ -37,10 +37,10 @@ private struct RoomImagePacksScreenListRow: View {
     private var usageDescription: String {
         var usages = [String]()
         if pack.isEmoticonPack {
-            usages.append(UntranslatedL10n.screenRoomImagePacksUsageEmoji)
+            usages.append(L10n.screenRoomImagePacksUsageEmoji)
         }
         if pack.isStickerPack {
-            usages.append(UntranslatedL10n.screenRoomImagePacksUsageStickers)
+            usages.append(L10n.screenRoomImagePacksUsageStickers)
         }
         return usages.joined(separator: " · ")
     }

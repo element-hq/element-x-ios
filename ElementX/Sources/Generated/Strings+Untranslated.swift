@@ -10,12 +10,6 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 internal nonisolated enum UntranslatedL10n {
-  /// Emoji and stickers
-  internal static var screenRoomImagePacksTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_room_image_packs_title") }
-  /// Emoji
-  internal static var screenRoomImagePacksUsageEmoji: String { return UntranslatedL10n.tr("Untranslated", "screen_room_image_packs_usage_emoji") }
-  /// Stickers
-  internal static var screenRoomImagePacksUsageStickers: String { return UntranslatedL10n.tr("Untranslated", "screen_room_image_packs_usage_stickers") }
   /// Untranslated
   internal static var untranslated: String { return UntranslatedL10n.tr("Untranslated", "untranslated") }
   /// Plural format key: "%#@VARIABLE@"

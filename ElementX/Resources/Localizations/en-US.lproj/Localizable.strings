@@ -1337,6 +1337,9 @@
 "screen_room_error_failed_retrieving_user_details" = "Could not retrieve user details";
 "screen_room_grouped_state_events_expand" = "Expand";
 "screen_room_grouped_state_events_reduce" = "Reduce";
+"screen_room_image_packs_title" = "Emoji and stickers";
+"screen_room_image_packs_usage_emoji" = "Emoji";
+"screen_room_image_packs_usage_stickers" = "Stickers";
 "screen_room_invite_again_alert_message" = "Would you like to invite them back?";
 "screen_room_invite_again_alert_title" = "You are alone in this chat";
 "screen_room_live_location_banner" = "Sharing live location";
