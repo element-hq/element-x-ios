@@ -70,6 +70,10 @@ import SwiftUI
     enum OverlayPresentationMode { case fullScreen, minimized }
     fileprivate var overlayPresentationMode: OverlayPresentationMode = .minimized
     
+    fileprivate var isOverlayFullScreen: Bool {
+        overlayModule?.coordinator != nil && overlayPresentationMode == .fullScreen
+    }
+    
     /// The lowest-level `AlertInfo`, directly available to the root of the app.
     var alertInfo: AlertInfo<UUID>?
     
@@ -130,10 +134,6 @@ import SwiftUI
         var transaction = Transaction()
         transaction.disablesAnimations = !animated
         
-        if presentationMode == .fullScreen {
-            endEditingBelowOverlay()
-        }
-        
         withTransaction(transaction) {
             overlayPresentationMode = presentationMode
             overlayModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
@@ -147,10 +147,6 @@ import SwiftUI
     func setOverlayPresentationMode(_ mode: OverlayPresentationMode, animated: Bool = true) {
         var transaction = Transaction()
         transaction.disablesAnimations = !animated
-        
-        if mode == .fullScreen {
-            endEditingBelowOverlay()
-        }
         
         withTransaction(transaction) {
             overlayPresentationMode = mode
@@ -175,13 +171,6 @@ import SwiftUI
     
     // MARK: - Private
     
-    /// The overlay is drawn over the root in the same window rather than presented, so a text field
-    /// underneath (e.g. the room's composer) keeps first responder and its keyboard stays on top of
-    /// the overlay, which has nothing to dismiss it with.
-    private func endEditingBelowOverlay() {
-        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-    }
-    
     private func logPresentationChange(_ change: String, _ module: NavigationModule) {
         if let coordinator = module.coordinator {
             MXLog.info("\(self) \(change): \(coordinator)")
@@ -192,13 +181,26 @@ import SwiftUI
 private struct NavigationRootCoordinatorView: View {
     @Bindable var rootCoordinator: NavigationRootCoordinator
     
+    @State private var window: UIWindow?
+    
     var body: some View {
         ZStack {
             rootCoordinator.rootModule?.coordinator?.toPresentable()
         }
         .alert(item: $rootCoordinator.alertInfo)
         .animation(.elementDefault, value: rootCoordinator.rootModule)
-        .accessibilityHidden(rootCoordinator.overlayModule?.coordinator != nil && rootCoordinator.overlayPresentationMode == .fullScreen)
+        .accessibilityHidden(rootCoordinator.isOverlayFullScreen)
+        .introspect(.window, on: .supportedVersions) { window in
+            guard self.window !== window else { return }
+            DispatchQueue.main.async { self.window = window }
+        }
+        // The overlay is drawn over the root rather than presented, so a text field underneath
+        // (e.g. the composer) would keep first responder and its keyboard would cover the overlay.
+        .onChange(of: rootCoordinator.isOverlayFullScreen) { _, isFullScreen in
+            if isFullScreen {
+                window?.endEditing(true)
+            }
+        }
         .overlay {
             Group {
                 if let coordinator = rootCoordinator.overlayModule?.coordinator {
