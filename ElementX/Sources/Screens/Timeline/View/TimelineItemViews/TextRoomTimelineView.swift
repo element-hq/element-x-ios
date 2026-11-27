@@ -36,7 +36,7 @@ struct TextRoomTimelineView: View, TextBasedRoomTimelineViewProtocol {
                                       boostFontSize: timelineItem.shouldBoost)
                 }
                 
-                if context?.viewState.linkPreviewsEnabled ?? false, !linkMetadata.keys.isEmpty {
+                if (context?.viewState.linkPreviewsMode ?? .off) != .off, !linkMetadata.keys.isEmpty {
                     VStack(spacing: 8) {
                         ForEach(linkMetadata.keys, id: \.absoluteString) { url in
                             let metadata = linkMetadata[url]?.metadata ?? context?.viewState.linkMetadataProvider?.metadataItems[url]?.metadata
@@ -49,11 +49,12 @@ struct TextRoomTimelineView: View, TextBasedRoomTimelineViewProtocol {
                 }
             }
         }
-        .task { await fetchLinkPreviews() }
+        // Fetches again once the room's encryption state is known and its mode changes.
+        .task(id: context?.viewState.linkPreviewsMode) { await fetchLinkPreviews() }
     }
     
     private func fetchLinkPreviews() async {
-        guard context?.viewState.linkPreviewsEnabled ?? false else {
+        guard let mode = context?.viewState.linkPreviewsMode, mode != .off else {
             return
         }
         
@@ -63,16 +64,22 @@ struct TextRoomTimelineView: View, TextBasedRoomTimelineViewProtocol {
         await withTaskGroup { taskGroup in
             for url in timelineItem.links.prefix(Self.maxLinkPreviewsToRender) {
                 taskGroup.addTask {
-                    await fetchLinkPreview(for: url)
+                    await fetchLinkPreview(for: url, mode: mode)
                 }
             }
         }
     }
     
     @MainActor
-    private func fetchLinkPreview(for url: URL) async {
-        if case let .success(metadata) = await context?.viewState.linkMetadataProvider?.fetchMetadataFor(url: url) {
+    private func fetchLinkPreview(for url: URL, mode: LinkPreviewMode) async {
+        switch await context?.viewState.linkMetadataProvider?.fetchMetadataFor(url: url, mode: mode) {
+        case .success(let metadata):
             linkMetadata[url] = metadata
+        case .failure:
+            // Drops the loading placeholder, which would otherwise spin forever.
+            linkMetadata[url] = nil
+        case nil:
+            break
         }
     }
 }

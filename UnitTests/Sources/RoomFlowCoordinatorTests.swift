@@ -528,7 +528,7 @@ final class RoomFlowCoordinatorTests {
                                                   bugReportService: BugReportServiceMock(.init()),
                                                   timelineControllerFactory: timelineControllerFactory,
                                                   emojiProvider: EmojiProvider(userSettings: userSettings),
-                                                  linkMetadataProvider: LinkMetadataProvider(),
+                                                  linkMetadataProvider: LinkMetadataProvider(userSession: UserSessionMock(.init())),
                                                   appMediator: AppMediatorMock(.init()),
                                                   analytics: AnalyticsServiceMock(.init()),
                                                   userIndicatorController: UserIndicatorControllerMock(),

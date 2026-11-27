@@ -37,6 +37,7 @@ nonisolated protocol RoomInfoProxyProtocol: BaseRoomInfoProxyProtocol {
     var avatarURL: URL? { get }
     
     var isEncrypted: Bool { get }
+    var isKnownUnencrypted: Bool { get }
     var isDirect: Bool { get }
     var isDM: Bool { get }
     var isSpace: Bool { get }

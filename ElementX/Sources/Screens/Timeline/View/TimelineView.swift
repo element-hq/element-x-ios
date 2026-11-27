@@ -163,7 +163,7 @@ struct TimelineView_Previews: PreviewProvider { // Not testable as this preview 
                                                      appMediator: AppMediatorMock(.init()),
                                                      analyticsService: AnalyticsServiceMock(.init()),
                                                      emojiProvider: EmojiProvider(userSettings: .mock()),
-                                                     linkMetadataProvider: LinkMetadataProvider(),
+                                                     linkMetadataProvider: LinkMetadataProvider(userSession: UserSessionMock(.init())),
                                                      timelineControllerFactory: TimelineControllerFactoryMock(.init()))
     
     static var previews: some View {

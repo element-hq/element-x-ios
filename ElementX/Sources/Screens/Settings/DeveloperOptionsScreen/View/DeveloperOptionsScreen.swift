@@ -89,10 +89,19 @@ struct DeveloperOptionsScreen: View {
                     Text("Adds an option to view the event source in the message menu.")
                 }
                 
-                Toggle(isOn: $context.linkPreviewsEnabled) {
-                    Text("Link previews")
+                Toggle(isOn: $context.unencryptedRoomsLinkPreviewsEnabled) {
+                    Text("Link previews in unencrypted rooms")
+                    Text("Fetched by the homeserver. Follows the timeline media visibility settings.")
+                }
+                
+                Picker(selection: $context.encryptedRoomsLinkPreviewsMode) {
+                    Text("Off").tag(LinkPreviewMode.off)
+                    Text("Homeserver").tag(LinkPreviewMode.homeserver)
+                    Text("Apple").tag(LinkPreviewMode.apple)
+                } label: {
+                    Text("Link previews in encrypted rooms")
                     Text("Follows the timeline media visibility settings.")
-                    Text("Can leak the device IP address when loading link metadata.")
+                    Text("The homeserver sees the links, Apple exposes the device IP address to the linked sites.")
                         .foregroundStyle(.compound.textCriticalPrimary)
                 }
                 

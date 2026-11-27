@@ -803,6 +803,19 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func urlPreview(for url: URL) async -> Result<URLPreview, ClientProxyError> {
+        do {
+            guard let json = try await client.getUrlPreview(url: url.absoluteString, ts: nil) else {
+                return .failure(.urlPreviewUnavailable)
+            }
+            return try .success(JSONDecoder().decode(URLPreview.self, from: Data(json.utf8)))
+        } catch {
+            // The error isn't logged as it can contain the link, which may come from an encrypted room.
+            MXLog.info("Failed fetching URL preview")
+            return .failure(.sdkError(error))
+        }
+    }
+    
     func clearCaches() async -> Result<Void, ClientProxyError> {
         do {
             return try await .success(client.clearCaches(syncService: syncService))

@@ -134,7 +134,7 @@ struct TimelineViewState: BindableState {
     
     var isViewSourceEnabled: Bool
     var areThreadsEnabled: Bool
-    var linkPreviewsEnabled: Bool
+    var linkPreviewsMode: LinkPreviewMode
     var jumpToReadMarkerEnabled: Bool
     
     var messageSelection = TimelineMessageSelectionState()

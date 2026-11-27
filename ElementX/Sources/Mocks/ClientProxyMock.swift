@@ -128,6 +128,7 @@ extension ClientProxyMock {
         
         spaceService = SpaceServiceProxyMock(configuration.spaceServiceConfiguration)
         linkNewDeviceServiceReturnValue = LinkNewDeviceServiceMock(.init())
+        urlPreviewForReturnValue = .success(.init(title: "Element", description: "Secure collaboration and messaging", imageURL: nil))
         
         let capabilities = HomeserverCapabilitiesProxyMock()
         capabilities.canChangeAvatarReturnValue = configuration.canChangeAvatar

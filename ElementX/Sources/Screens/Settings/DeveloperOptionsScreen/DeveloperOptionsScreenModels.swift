@@ -65,7 +65,8 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var prominentInvitesFilterEnabled: Bool { get set }
     
     var viewSourceEnabled: Bool { get set }
-    var linkPreviewsEnabled: Bool { get set }
+    var unencryptedRoomsLinkPreviewsEnabled: Bool { get set }
+    var encryptedRoomsLinkPreviewsMode: LinkPreviewMode { get set }
     var jumpToReadMarkerEnabled: Bool { get set }
     var imageDrawingEnabled: Bool { get set }
     

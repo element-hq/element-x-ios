@@ -87,6 +87,9 @@ struct RoomTimelineItemView: View {
         for url in item.links.prefix(TextRoomTimelineView.maxLinkPreviewsToRender) {
             if let item = context?.viewState.linkMetadataProvider?.metadataItems[url] {
                 linkMetadata[url] = item
+            } else if context?.viewState.linkMetadataProvider?.failedURLs.contains(url) == true {
+                // Make sure we don't show the loading state for a link that won't be fetched again.
+                continue
             } else {
                 linkMetadata[url] = LinkMetadataProviderItem(metadata: nil)
             }

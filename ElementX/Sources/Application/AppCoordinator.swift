@@ -455,6 +455,11 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
                 }
             }
         }
+        
+        if oldVersion < Version(26, 11, 3) {
+            MXLog.info("Migrating to version 26.11.3, carrying the link previews setting over.")
+            appSettings.migrateLinkPreviewsSetting()
+        }
     }
     
     /// Clears the keychain, app support directory etc ready for a fresh use.

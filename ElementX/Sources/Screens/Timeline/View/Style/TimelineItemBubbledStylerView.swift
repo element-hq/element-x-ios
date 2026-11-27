@@ -440,7 +440,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                  appMediator: AppMediatorMock(.init()),
                                  analyticsService: AnalyticsServiceMock(.init()),
                                  emojiProvider: EmojiProvider(userSettings: userSettings),
-                                 linkMetadataProvider: LinkMetadataProvider(),
+                                 linkMetadataProvider: LinkMetadataProvider(userSession: UserSessionMock(.init())),
                                  timelineControllerFactory: TimelineControllerFactoryMock(.init()))
     }()
     
@@ -459,7 +459,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                  appMediator: AppMediatorMock(.init()),
                                  analyticsService: AnalyticsServiceMock(.init()),
                                  emojiProvider: EmojiProvider(userSettings: userSettings),
-                                 linkMetadataProvider: LinkMetadataProvider(),
+                                 linkMetadataProvider: LinkMetadataProvider(userSession: UserSessionMock(.init())),
                                  timelineControllerFactory: TimelineControllerFactoryMock(.init()))
     }()
     
@@ -475,7 +475,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                           appMediator: AppMediatorMock(.init()),
                                           analyticsService: AnalyticsServiceMock(.init()),
                                           emojiProvider: EmojiProvider(userSettings: .mock()),
-                                          linkMetadataProvider: LinkMetadataProvider(),
+                                          linkMetadataProvider: LinkMetadataProvider(userSession: UserSessionMock(.init())),
                                           timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         viewModel.state.messageSelection.isActive = true
         viewModel.state.messageSelection.selectedEventIDs = ["selected"]
