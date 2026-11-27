@@ -26,9 +26,10 @@ extension SessionVerificationManagerMock {
             let client = try UITestsSignalling.Client(mode: .app)
             actionsPublisher = client.signals
                 .filter { $0 == .sessionVerification(.incomingRequest) }
-                .map { _ in .receivedRequest(request) }
-                // Capturing the client also keeps it listening.
-                .handleEvents(receiveOutput: { [client] _ in try? client.send(.success) })
+                .map { [client] _ in // Capturing the client also keeps it listening.
+                    Task { try? client.send(.success) } // Sent *after* the request has been handled.
+                    return .receivedRequest(request)
+                }
                 .eraseToAnyPublisher()
         } catch {
             fatalError("Failure setting up signalling: \(error)")
