@@ -61,7 +61,7 @@ Given/When/Then comments (`// Given…`, `// When…`, `// Then…`) — helpful
 
 No `.serialized` suite traits needed — tests not run in parallel.
 
-UnitTests + PreviewTests: `SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor` — no redundant `@MainActor`. Touch file? Remove it.
+UnitTests + PreviewTests: `SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor` — no redundant `@MainActor`. Touch file? Remove `@MainActor`.
 
 ## Flow Coordinators
 
@@ -76,13 +76,13 @@ Prefer UI tests over unit tests.
 
 Scheme + simulator not linked. Switch scheme → switch simulator too. Snapshot schemes need CI device, wrong device → snapshot mismatch:
 - UITests → iPhone 17 (`iPhone-<os>`) or iPad A16 (`iPad-<os>`).
-- PreviewTests → iPhone SE (3rd generation), sometimes named `📸 Snapshots`.
+- PreviewTests → iPhone SE (3rd generation).
 
 Note device before switch to snapshot scheme. Back to other scheme → restore it.
 
 ### Xcode MCP Missing
 
-User declined add? CLI:
+Ask user add Xcode MCP. Declined? CLI:
 - Unit tests: `swift run tools ci unit-tests`
 - CI help: `swift run tools ci --help`
 
