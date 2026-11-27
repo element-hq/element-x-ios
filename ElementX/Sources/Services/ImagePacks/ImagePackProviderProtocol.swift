@@ -13,7 +13,7 @@ enum ImagePackProviderError: Error {
 }
 
 /// A pack of custom images (emoticons and/or stickers) that can be used in a room.
-struct ImagePack: Identifiable {
+struct ImagePack: Identifiable, Hashable {
     /// A custom emoticon or sticker from an image pack.
     struct Image: Hashable {
         let shortcode: String
@@ -24,6 +24,9 @@ struct ImagePack: Identifiable {
     
     let id: String
     let displayName: String?
+    var attribution: String?
+    /// The pack's own avatar, if it has one.
+    var avatar: MediaSourceProxy?
     let isEmoticonPack: Bool
     let isStickerPack: Bool
     let images: [Image]
@@ -33,6 +36,7 @@ extension ImagePack {
     init(rustValue: MatrixRustSDK.ImagePack) {
         id = "\(rustValue.roomId)-\(rustValue.stateKey)"
         displayName = rustValue.displayName
+        attribution = rustValue.attribution
         isEmoticonPack = rustValue.isEmoticonPack
         isStickerPack = rustValue.isStickerPack
         images = rustValue.images.compactMap { image in
@@ -42,6 +46,7 @@ extension ImagePack {
             }
             return Image(shortcode: image.shortcode, body: image.body, mediaSource: mediaSource)
         }
+        avatar = rustValue.avatarUrl.flatMap { URL(string: $0) }.flatMap { try? MediaSourceProxy(url: $0, mimeType: nil) }
     }
 }
 
@@ -49,4 +54,6 @@ extension ImagePack {
 protocol ImagePackProviderProtocol {
     /// The image packs that can be used in the room.
     func imagePacks() async -> Result<[ImagePack], ImagePackProviderError>
+    /// The image packs defined in the room itself.
+    func roomImagePacks() async -> Result<[ImagePack], ImagePackProviderError>
 }

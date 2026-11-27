@@ -239,6 +239,10 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "ImageMediaEventsTimelineView_Previews")
     }
 
+    func testImagePackScreen() async throws {
+        try await performAccessibilityAudit(named: "ImagePackScreen_Previews")
+    }
+
     func testImageRoomTimelineView() async throws {
         try await performAccessibilityAudit(named: "ImageRoomTimelineView_Previews")
     }
@@ -569,6 +573,10 @@ extension AccessibilityTests {
 
     func testRoomHeaderView() async throws {
         try await performAccessibilityAudit(named: "RoomHeaderView_Previews")
+    }
+
+    func testRoomImagePacksScreen() async throws {
+        try await performAccessibilityAudit(named: "RoomImagePacksScreen_Previews")
     }
 
     func testRoomInviterLabel() async throws {

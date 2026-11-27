@@ -170,6 +170,13 @@ struct RoomDetailsScreen: View {
                         context.send(viewAction: .processTapPolls)
                     })
                     .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.pollsHistory)
+            
+            if context.viewState.hasImagePacks {
+                ListRow(label: .default(title: L10n.screenRoomImagePacksTitle, icon: \.reaction),
+                        kind: .navigationLink {
+                            context.send(viewAction: .processTapImagePacks)
+                        })
+            }
         }
     }
     

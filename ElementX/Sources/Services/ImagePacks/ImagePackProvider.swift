@@ -25,4 +25,14 @@ class ImagePackProvider: ImagePackProviderProtocol {
             return .failure(.sdkError(error))
         }
     }
+    
+    func roomImagePacks() async -> Result<[ImagePack], ImagePackProviderError> {
+        do {
+            let roomID = room.id()
+            return try await .success(room.imagePacks(spaceService: spaceService).filter { $0.roomId == roomID }.map(ImagePack.init))
+        } catch {
+            MXLog.error("Failed loading the room's image packs with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
 }

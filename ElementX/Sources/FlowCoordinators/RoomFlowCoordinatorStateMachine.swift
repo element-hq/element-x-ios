@@ -63,6 +63,8 @@ extension RoomFlowCoordinator {
         case pollForm(previousState: State)
         case pollsHistory
         case pollsHistoryForm
+        case imagePacks
+        case imagePackDetails
         case rolesAndPermissions
         case pinnedEventsTimeline(previousState: State)
         case resolveSendFailure(previousState: State)
@@ -148,6 +150,11 @@ extension RoomFlowCoordinator {
         
         case presentPollsHistory
         case dismissPollsHistory
+        
+        case presentImagePacks
+        case dismissImagePacks
+        case presentImagePackDetails(ImagePack)
+        case dismissImagePackDetails
         
         case presentRolesAndPermissionsScreen
         case dismissRolesAndPermissionsScreen
@@ -315,6 +322,15 @@ extension RoomFlowCoordinator {
                 return .pollsHistory
             case (.pollsHistory, .dismissPollsHistory):
                 return .roomDetails(isRoot: false)
+                
+            case (.roomDetails, .presentImagePacks):
+                return .imagePacks
+            case (.imagePacks, .dismissImagePacks):
+                return .roomDetails(isRoot: false)
+            case (.imagePacks, .presentImagePackDetails):
+                return .imagePackDetails
+            case (.imagePackDetails, .dismissImagePackDetails):
+                return .imagePacks
                 
             case (.roomDetails, .presentRolesAndPermissionsScreen):
                 return .rolesAndPermissions

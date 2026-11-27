@@ -764,4 +764,29 @@ struct RoomDetailsScreenViewModelTests {
         }
         try await deferredShared.fulfill()
     }
+    
+    // MARK: - Image Packs
+    
+    @Test("The emoji and stickers row is only shown when the room has image packs")
+    mutating func imagePacks() async throws {
+        #expect(!context.viewState.hasImagePacks)
+        
+        let imagePackProvider = ImagePackProviderMock()
+        imagePackProvider.roomImagePacksReturnValue = .success([ImagePack(id: "pack", displayName: "Pack", isEmoticonPack: true, isStickerPack: false, images: [])])
+        let clientProxy = ClientProxyMock(.init())
+        clientProxy.imagePackProviderRoomIDReturnValue = imagePackProvider
+        viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
+                                               userSession: UserSessionMock(.init(clientProxy: clientProxy)),
+                                               analyticsService: AnalyticsServiceMock(.init()),
+                                               userIndicatorController: UserIndicatorControllerMock(),
+                                               notificationSettingsProxy: notificationSettingsProxyMock,
+                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()))
+        
+        let deferred = deferFulfillment(context.observe(\.viewState.hasImagePacks)) { $0 }
+        try await deferred.fulfill()
+        
+        let deferredAction = deferFulfillment(viewModel.actions) { $0 == .requestImagePacksPresentation }
+        context.send(viewAction: .processTapImagePacks)
+        try await deferredAction.fulfill()
+    }
 }
