@@ -6,6 +6,7 @@
 //
 
 import AnalyticsEvents
+import ElementCall
 
 /// A service responsible for managing analytics clients and sending events through them.
 ///
@@ -21,6 +22,10 @@ protocol AnalyticsServiceProtocol: AnyObject {
     /// A signpost client for performance testing the app. This client doesn't respect the
     /// `isRunning` state or behave any differently when `start`/`reset` are called.
     var signpost: Signposter { get }
+    
+    /// The native call's analytics, shared by every account's call stack. Follows the user's
+    /// consent through ``optIn()``, ``optOut()`` and ``startIfEnabled()``.
+    var callAnalytics: ElementCallAnalyticsProtocol? { get }
     
     /// Whether to show the user the analytics opt in prompt.
     var shouldShowAnalyticsPrompt: Bool { get }

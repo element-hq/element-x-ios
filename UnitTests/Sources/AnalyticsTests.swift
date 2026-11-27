@@ -16,6 +16,7 @@ final class AnalyticsTests {
     private let appSettings: AppSettings
     private let analytics: AnalyticsServiceProtocol
     private let analyticsClient: AnalyticsClientMock
+    private let madeCallClients = MadeNativeCallAnalyticsClients()
     private var posthogMock: PHGPostHogMock
     
     init() {
@@ -23,13 +24,15 @@ final class AnalyticsTests {
         
         analyticsClient = AnalyticsClientMock()
         analyticsClient.isRunning = false
-        analytics = AnalyticsService(client: analyticsClient, appSettings: appSettings)
+        analytics = AnalyticsService(client: analyticsClient,
+                                     appSettings: appSettings,
+                                     callAnalytics: madeCallClients.makeAnalytics())
         
         posthogMock = PHGPostHogMock()
         posthogMock.configureMockBehavior()
     }
     
-    @Test
+    @Test("The prompt is shown to a new user")
     func analyticsPromptNewUser() {
         // Given a fresh install of the app (without PostHog analytics having been set).
         // When the user is prompted for analytics.
@@ -39,7 +42,7 @@ final class AnalyticsTests {
         #expect(showPrompt, "A prompt should be shown for a new user.")
     }
     
-    @Test
+    @Test("The prompt isn't shown again once the user declined")
     func analyticsPromptUserDeclinedPostHog() {
         // Given an existing install of the app where the user previously declined PostHog
         appSettings.analyticsConsentState = .optedOut
@@ -51,7 +54,7 @@ final class AnalyticsTests {
         #expect(!showPrompt, "A prompt should not be shown any more.")
     }
     
-    @Test
+    @Test("The prompt isn't shown again once the user accepted")
     func analyticsPromptUserAcceptedPostHog() {
         // Given an existing install of the app where the user previously accepted PostHog
         appSettings.analyticsConsentState = .optedIn
@@ -63,7 +66,7 @@ final class AnalyticsTests {
         #expect(!showPrompt, "A prompt should not be shown any more.")
     }
     
-    @Test
+    @Test("Analytics are disabled on a fresh install")
     func analyticsPromptNotDisplayed() {
         // Given a fresh install of the app Analytics should be disabled
         #expect(appSettings.analyticsConsentState == .unknown)
@@ -71,7 +74,7 @@ final class AnalyticsTests {
         #expect(!analyticsClient.startAnalyticsConfigurationCalled)
     }
     
-    @Test
+    @Test("Opting out disables analytics and stops the client")
     func analyticsOptOut() {
         // Given a fresh install of the app (without PostHog analytics having been set).
         // When analytics is opt-out
@@ -84,7 +87,7 @@ final class AnalyticsTests {
         #expect(analyticsClient.stopCalled)
     }
     
-    @Test
+    @Test("Opting in enables analytics and starts the client")
     func analyticsOptIn() {
         // Given a fresh install of the app (without PostHog analytics having been set).
         // When analytics is opt-in
@@ -96,7 +99,7 @@ final class AnalyticsTests {
         #expect(analyticsClient.startAnalyticsConfigurationCalled)
     }
     
-    @Test
+    @Test("Starting does nothing when the user declined")
     func analyticsStartIfNotEnabled() {
         // Given an existing install of the app where the user previously declined the tracking
         appSettings.analyticsConsentState = .optedOut
@@ -104,9 +107,10 @@ final class AnalyticsTests {
         #expect(!analytics.isEnabled)
         analytics.startIfEnabled()
         #expect(!analyticsClient.startAnalyticsConfigurationCalled)
+        #expect(madeCallClients.clients.isEmpty)
     }
     
-    @Test
+    @Test("Starting starts the client when the user accepted")
     func analyticsStartIfEnabled() {
         // Given an existing install of the app where the user previously accepted the tracking
         appSettings.analyticsConsentState = .optedIn
@@ -116,7 +120,24 @@ final class AnalyticsTests {
         #expect(analyticsClient.startAnalyticsConfigurationCalled)
     }
     
-    @Test
+    @Test("Opting in starts the call analytics, even when the app's client is already running")
+    func callAnalyticsOptIn() {
+        analyticsClient.isRunning = true
+        
+        analytics.optIn()
+        
+        #expect(madeCallClients.clients.map(\.isStopped) == [false])
+    }
+    
+    @Test("Opting out stops the call analytics")
+    func callAnalyticsOptOut() {
+        analytics.optIn()
+        analytics.optOut()
+        
+        #expect(madeCallClients.clients.map(\.isStopped) == [true])
+    }
+    
+    @Test("Adding user properties caches them until the next event")
     func addingUserProperties() {
         // Given a client with no user properties set
         let client = PostHogAnalyticsClient()
@@ -138,7 +159,7 @@ final class AnalyticsTests {
         #expect(client.pendingUserProperties?.recoveryState == AnalyticsEvent.UserProperties.RecoveryState.Disabled, "The recovery state should match.")
     }
     
-    @Test
+    @Test("Updating user properties keeps the ones already cached")
     func mergingUserProperties() {
         // Given a client with a cached use case user properties
         let client = PostHogAnalyticsClient()
@@ -167,7 +188,7 @@ final class AnalyticsTests {
         #expect(client.pendingUserProperties?.numSpaces == 5, "The number of spaces should have been updated.")
     }
     
-    @Test
+    @Test("User properties are sent with the next event, then cleared")
     func sendingUserProperties() throws {
         // Given a client with user properties set
         
@@ -206,7 +227,7 @@ final class AnalyticsTests {
         #expect(client.pendingUserProperties == nil, "The user properties should be cleared.")
     }
     
-    @Test
+    @Test("Resetting the consent shows the prompt again")
     func resetConsentState() {
         // Given an existing install of the app where the user previously accpeted the tracking
         appSettings.analyticsConsentState = .optedIn
@@ -220,7 +241,7 @@ final class AnalyticsTests {
         #expect(analytics.shouldShowAnalyticsPrompt)
     }
     
-    @Test
+    @Test("Super properties are sent with every event and screen, and can be updated")
     func sendingAndUpdatingSuperProperties() throws {
         // Given a client with user properties set
         let client = PostHogAnalyticsClient(posthogFactory: MockPostHogFactory(mock: posthogMock))
@@ -277,7 +298,7 @@ final class AnalyticsTests {
         #expect(capturedEvent2?.properties?["cryptoSDKVersion"] as? String == "001")
     }
     
-    @Test
+    @Test("Nothing is reported until the client is started")
     func shouldNotReportIfNotStarted() throws {
         // Given a client with user properties set
         let client = PostHogAnalyticsClient(posthogFactory: MockPostHogFactory(mock: posthogMock))

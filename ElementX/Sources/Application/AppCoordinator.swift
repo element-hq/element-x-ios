@@ -106,7 +106,14 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
         
         let posthogAnalyticsClient = PostHogAnalyticsClient()
         posthogAnalyticsClient.updateSuperProperties(AnalyticsEvent.SuperProperties(appPlatform: .EXI, cryptoSDK: .Rust, cryptoSDKVersion: sdkGitSha()))
-        analyticsService = AnalyticsService(client: posthogAnalyticsClient, appSettings: appSettings)
+        
+        // The same PostHog project as the embedded call.
+        let callAnalyticsConfiguration = AnalyticsConfiguration(host: appSettings.elementCallPosthogAPIHost,
+                                                                apiKey: appSettings.elementCallPosthogAPIKey)
+        let callAnalytics = NativeCallAnalytics {
+            PostHogNativeCallAnalyticsClient(configuration: callAnalyticsConfiguration)
+        }
+        analyticsService = AnalyticsService(client: posthogAnalyticsClient, appSettings: appSettings, callAnalytics: callAnalytics)
         
         userIndicatorController = UserIndicatorController()
         

@@ -187,6 +187,7 @@ nonisolated class AnalyticsServiceMock: AnalyticsServiceProtocol, @unchecked Sen
         set(value) { underlyingSignpost = value }
     }
     nonisolated(unsafe) var underlyingSignpost: Signposter!
+    nonisolated(unsafe) var callAnalytics: ElementCallAnalyticsProtocol?
     var shouldShowAnalyticsPrompt: Bool {
         get { return underlyingShouldShowAnalyticsPrompt }
         set(value) { underlyingShouldShowAnalyticsPrompt = value }

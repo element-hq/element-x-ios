@@ -28,7 +28,8 @@ final class ElementCallServiceTests {
         service = ElementCallService(clientProxy: clientProxy,
                                      mediaProvider: MediaProviderMock(.init()),
                                      userSettings: appSettings.userSettings(for: clientProxy.userID),
-                                     nativeCallPermissions: ElementCallFakeMediaPermissions())
+                                     nativeCallPermissions: ElementCallFakeMediaPermissions(),
+                                     nativeCallAnalytics: nil)
     }
     
     // MARK: - Ringing call
@@ -253,7 +254,8 @@ final class ElementCallServiceTests {
         return ElementCallService(clientProxy: clientProxy,
                                   mediaProvider: MediaProviderMock(.init()),
                                   userSettings: appSettings.userSettings(for: clientProxy.userID),
-                                  nativeCallPermissions: ElementCallFakeMediaPermissions())
+                                  nativeCallPermissions: ElementCallFakeMediaPermissions(),
+                                  nativeCallAnalytics: nil)
     }
     
     /// What a native call stack built after these system events hears, as the replay arrives during `sink`.
