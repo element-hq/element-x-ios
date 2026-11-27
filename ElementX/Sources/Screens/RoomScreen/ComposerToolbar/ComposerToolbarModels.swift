@@ -65,6 +65,7 @@ enum ComposerAttachmentType {
     case file
     case location
     case poll
+    case sticker
 }
 
 struct ComposerToolbarViewState: BindableState {
@@ -80,6 +81,8 @@ struct ComposerToolbarViewState: BindableState {
     
     var isRoomEncrypted: Bool
     var isLocationSharingEnabled: Bool
+    /// Whether the room has sticker packs to send stickers from.
+    var hasStickerPacks = false
     
     var keyCommands: [WysiwygKeyCommand] = []
     

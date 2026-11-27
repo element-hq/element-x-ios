@@ -14000,6 +14000,48 @@ nonisolated class TimelineControllerMock: TimelineControllerProtocol, @unchecked
             return sendGalleryItemInfosCaptionInReplyToEventIDReturnValue
         }
     }
+    //MARK: - sendSticker
+
+    private let sendStickerCallsCountLock = NSLock()
+    private nonisolated(unsafe) var sendStickerUnderlyingCallsCount = 0
+    var sendStickerCallsCount: Int {
+        get { sendStickerCallsCountLock.withLock { sendStickerUnderlyingCallsCount } }
+        set { sendStickerCallsCountLock.withLock { sendStickerUnderlyingCallsCount = newValue } }
+    }
+    var sendStickerCalled: Bool {
+        return sendStickerCallsCount > 0
+    }
+    private let sendStickerReceivedImageLock = NSLock()
+    private nonisolated(unsafe) var sendStickerUnderlyingReceivedImage: ImagePack.Image?
+    var sendStickerReceivedImage: ImagePack.Image? {
+        get { sendStickerReceivedImageLock.withLock { sendStickerUnderlyingReceivedImage } }
+        set { sendStickerReceivedImageLock.withLock { sendStickerUnderlyingReceivedImage = newValue } }
+    }
+    private let sendStickerReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var sendStickerUnderlyingReceivedInvocations: [ImagePack.Image] = []
+    var sendStickerReceivedInvocations: [ImagePack.Image] {
+        get { sendStickerReceivedInvocationsLock.withLock { sendStickerUnderlyingReceivedInvocations } }
+        set { sendStickerReceivedInvocationsLock.withLock { sendStickerUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let sendStickerReturnValueLock = NSLock()
+    private nonisolated(unsafe) var sendStickerUnderlyingReturnValue: Result<Void, TimelineControllerError>!
+    var sendStickerReturnValue: Result<Void, TimelineControllerError>! {
+        get { sendStickerReturnValueLock.withLock { sendStickerUnderlyingReturnValue } }
+        set { sendStickerReturnValueLock.withLock { sendStickerUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var sendStickerClosure: ((ImagePack.Image) async -> Result<Void, TimelineControllerError>)?
+
+    @concurrent func sendSticker(_ image: ImagePack.Image) async -> Result<Void, TimelineControllerError> {
+        sendStickerCallsCountLock.withLock { sendStickerUnderlyingCallsCount += 1 }
+        sendStickerReceivedImage = image
+        sendStickerReceivedInvocationsLock.withLock { sendStickerUnderlyingReceivedInvocations.append(image) }
+        if let sendStickerClosure = sendStickerClosure {
+            return await sendStickerClosure(image)
+        } else {
+            return sendStickerReturnValue
+        }
+    }
     //MARK: - createPoll
 
     private let createPollQuestionAnswersMaxSelectionsPollKindCallsCountLock = NSLock()
@@ -15084,6 +15126,48 @@ nonisolated class TimelineProxyMock: TimelineProxyProtocol, @unchecked Sendable 
             return await toggleReactionToClosure(reaction, eventID)
         } else {
             return toggleReactionToReturnValue
+        }
+    }
+    //MARK: - sendSticker
+
+    private let sendStickerCallsCountLock = NSLock()
+    private nonisolated(unsafe) var sendStickerUnderlyingCallsCount = 0
+    var sendStickerCallsCount: Int {
+        get { sendStickerCallsCountLock.withLock { sendStickerUnderlyingCallsCount } }
+        set { sendStickerCallsCountLock.withLock { sendStickerUnderlyingCallsCount = newValue } }
+    }
+    var sendStickerCalled: Bool {
+        return sendStickerCallsCount > 0
+    }
+    private let sendStickerReceivedImageLock = NSLock()
+    private nonisolated(unsafe) var sendStickerUnderlyingReceivedImage: ImagePack.Image?
+    var sendStickerReceivedImage: ImagePack.Image? {
+        get { sendStickerReceivedImageLock.withLock { sendStickerUnderlyingReceivedImage } }
+        set { sendStickerReceivedImageLock.withLock { sendStickerUnderlyingReceivedImage = newValue } }
+    }
+    private let sendStickerReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var sendStickerUnderlyingReceivedInvocations: [ImagePack.Image] = []
+    var sendStickerReceivedInvocations: [ImagePack.Image] {
+        get { sendStickerReceivedInvocationsLock.withLock { sendStickerUnderlyingReceivedInvocations } }
+        set { sendStickerReceivedInvocationsLock.withLock { sendStickerUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let sendStickerReturnValueLock = NSLock()
+    private nonisolated(unsafe) var sendStickerUnderlyingReturnValue: Result<Void, TimelineProxyError>!
+    var sendStickerReturnValue: Result<Void, TimelineProxyError>! {
+        get { sendStickerReturnValueLock.withLock { sendStickerUnderlyingReturnValue } }
+        set { sendStickerReturnValueLock.withLock { sendStickerUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var sendStickerClosure: ((ImagePack.Image) async -> Result<Void, TimelineProxyError>)?
+
+    @concurrent func sendSticker(_ image: ImagePack.Image) async -> Result<Void, TimelineProxyError> {
+        sendStickerCallsCountLock.withLock { sendStickerUnderlyingCallsCount += 1 }
+        sendStickerReceivedImage = image
+        sendStickerReceivedInvocationsLock.withLock { sendStickerUnderlyingReceivedInvocations.append(image) }
+        if let sendStickerClosure = sendStickerClosure {
+            return await sendStickerClosure(image)
+        } else {
+            return sendStickerReturnValue
         }
     }
     //MARK: - createPoll

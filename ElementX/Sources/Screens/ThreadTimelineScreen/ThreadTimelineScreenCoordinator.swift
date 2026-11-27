@@ -35,7 +35,7 @@ enum ThreadTimelineScreenCoordinatorAction {
     case presentLocationViewer(StaticLocationData)
     case presentLiveLocationViewer(sender: TimelineItemSender, initialLiveLocationShare: LiveLocationShare)
     case presentPollForm(mode: PollFormMode)
-    case presentEmojiPicker(selectedEmojis: Set<String>, continuation: EmojiPickerScreenContinuation)
+    case presentEmojiPicker(mode: EmojiPickerScreenMode, selectedEmojis: Set<String>, continuation: EmojiPickerScreenContinuation)
     case presentRoomMemberDetails(userID: String)
     case presentMessageForwarding(forwardingPayload: MessageForwardingPayload)
     case presentResolveSendFailure(failure: TimelineItemSendFailure.VerifiedUser, sendHandle: SendHandleProxy)
@@ -84,7 +84,8 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
                                                      mentionDisplayHelper: ComposerMentionDisplayHelper(timelineContext: timelineViewModel.context),
                                                      userSettings: parameters.userSession.userSettings,
                                                      analyticsService: parameters.analytics,
-                                                     composerDraftService: parameters.composerDraftService)
+                                                     composerDraftService: parameters.composerDraftService,
+                                                     imagePackProvider: parameters.userSession.clientProxy.imagePackProvider(roomID: parameters.roomProxy.id))
     }
     
     func start() {
@@ -103,8 +104,8 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
                 guard let self else { return }
                 
                 switch action {
-                case .displayEmojiPicker(let selectedEmojis, let continuation):
-                    actionsSubject.send(.presentEmojiPicker(selectedEmojis: selectedEmojis, continuation: continuation))
+                case .displayEmojiPicker(let mode, let selectedEmojis, let continuation):
+                    actionsSubject.send(.presentEmojiPicker(mode: mode, selectedEmojis: selectedEmojis, continuation: continuation))
                 case .displayReportContent(let itemID, let senderID):
                     actionsSubject.send(.presentReportContent(itemID: itemID, senderID: senderID))
                 case .displayCameraPicker:

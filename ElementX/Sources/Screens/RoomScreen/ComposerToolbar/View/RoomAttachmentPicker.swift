@@ -44,6 +44,15 @@ struct RoomAttachmentPicker: View {
             }
             .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerPoll)
             
+            if context.viewState.hasStickerPacks {
+                Button {
+                    context.send(viewAction: .attach(.sticker))
+                } label: {
+                    Label(L10n.commonSticker, icon: \.sticker)
+                }
+                .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerSticker)
+            }
+            
             if context.viewState.isLocationSharingEnabled {
                 Button {
                     context.send(viewAction: .attach(.location))

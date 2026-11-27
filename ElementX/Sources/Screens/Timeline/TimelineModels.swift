@@ -12,7 +12,7 @@ import OrderedCollections
 import SwiftUI
 
 enum TimelineViewModelAction {
-    case displayEmojiPicker(selectedEmojis: Set<String>, continuation: EmojiPickerScreenContinuation)
+    case displayEmojiPicker(mode: EmojiPickerScreenMode, selectedEmojis: Set<String>, continuation: EmojiPickerScreenContinuation)
     case displayReportContent(itemID: TimelineItemIdentifier, senderID: String)
     case displayCameraPicker
     case displayMediaPicker

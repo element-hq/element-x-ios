@@ -428,10 +428,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 presentMediaUploadPickerWithMode(mode, caption: caption, timelineController: timelineController, animated: animated)
                 
             case (_, .presentEmojiPicker, .emojiPicker(let selectedEmojis, _)):
-                guard let continuation = (context.userInfo as? EventUserInfo)?.emojiPickerContinuation else {
+                guard let userInfo = context.userInfo as? EventUserInfo,
+                      let continuation = userInfo.emojiPickerContinuation else {
                     fatalError("Missing required emoji continuation")
                 }
-                presentEmojiPicker(selectedEmojis: selectedEmojis,
+                presentEmojiPicker(mode: userInfo.emojiPickerMode ?? .reaction,
+                                   selectedEmojis: selectedEmojis,
                                    emojiPickerContinuation: continuation,
                                    animated: animated)
                 
@@ -699,9 +701,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 case .presentMediaUploadPreviewScreen(let url, let caption):
                     stateMachine.tryEvent(.presentMediaUploadPreview(mediaURLs: url, caption: caption),
                                           userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
-                case .presentEmojiPicker(let selectedEmojis, let continuation):
+                case .presentEmojiPicker(let mode, let selectedEmojis, let continuation):
                     stateMachine.tryEvent(.presentEmojiPicker(selectedEmojis: selectedEmojis),
-                                          userInfo: EventUserInfo(animated: animated, emojiPickerContinuation: continuation))
+                                          userInfo: EventUserInfo(animated: animated, emojiPickerContinuation: continuation, emojiPickerMode: mode))
                 case .presentLocationPicker:
                     stateMachine.tryEvent(.presentMapNavigator(interactionMode: .picker(shouldShowLiveLocationOption: true)),
                                           userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
@@ -821,9 +823,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.presentMapNavigator(interactionMode: .viewStatic(location)),
                                       userInfo: EventUserInfo(animated: animated,
                                                               timelineController: timelineController))
-            case .presentEmojiPicker(let selectedEmojis, let continuation):
+            case .presentEmojiPicker(let mode, let selectedEmojis, let continuation):
                 stateMachine.tryEvent(.presentEmojiPicker(selectedEmojis: selectedEmojis),
-                                      userInfo: EventUserInfo(animated: animated, emojiPickerContinuation: continuation))
+                                      userInfo: EventUserInfo(animated: animated, emojiPickerContinuation: continuation, emojiPickerMode: mode))
             case .presentRoomMemberDetails(let userID):
                 stateMachine.tryEvent(.startMembersFlow(entryPoint: .roomMember(userID: userID)))
             case .presentMessageForwarding(let forwardingPayload):
@@ -1130,10 +1132,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func presentEmojiPicker(selectedEmojis: Set<String>,
+    private func presentEmojiPicker(mode: EmojiPickerScreenMode,
+                                    selectedEmojis: Set<String>,
                                     emojiPickerContinuation: EmojiPickerScreenContinuation,
                                     animated: Bool) {
-        let params = EmojiPickerScreenCoordinatorParameters(mode: .reaction,
+        let params = EmojiPickerScreenCoordinatorParameters(mode: mode,
                                                             selectedEmojis: selectedEmojis,
                                                             emojiProvider: flowParameters.emojiProvider,
                                                             imagePackProvider: userSession.clientProxy.imagePackProvider(roomID: roomProxy.id),

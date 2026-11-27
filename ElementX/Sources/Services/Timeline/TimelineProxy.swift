@@ -546,6 +546,19 @@ final class TimelineProxy: TimelineProxyProtocol {
     
     // MARK: - Polls
     
+    func sendSticker(_ image: ImagePack.Image) async -> Result<Void, TimelineProxyError> {
+        MXLog.info("Sending sticker")
+        
+        do {
+            _ = try await timeline.sendSticker(body: image.body, url: image.mediaSource.url.absoluteString, info: image.info)
+            MXLog.info("Finished sending sticker")
+            return .success(())
+        } catch {
+            MXLog.error("Failed sending sticker with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
     func createPoll(question: String, answers: [String], maxSelections: Int,
                     pollKind: Poll.Kind) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Creating poll")

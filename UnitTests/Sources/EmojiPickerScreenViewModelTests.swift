@@ -95,13 +95,45 @@ struct EmojiPickerScreenViewModelTests {
         #expect(context.viewState.categories.first?.customImages == [blobcat])
     }
     
+    @Test("The sticker picker only offers the sticker packs and yields the picked sticker")
+    mutating func selectSticker() async throws {
+        // Given a sticker picker for a room with an emoticon pack and a sticker pack.
+        let wave = try makeCustomImage("wave")
+        let sticker = try makeCustomImage("sticker")
+        let imagePackProvider = ImagePackProviderMock()
+        imagePackProvider.imagePacksReturnValue = .success([
+            ImagePack(id: "emoticons", displayName: "Emoticons", isEmoticonPack: true, isStickerPack: false, images: [wave]),
+            ImagePack(id: "stickers", displayName: "Stickers", attribution: "By Alice", isEmoticonPack: false, isStickerPack: true, images: [sticker])
+        ])
+        let userSettings = UserSettings.mock()
+        setupViewModel(mode: .sticker, imagePackProvider: imagePackProvider, userSettings: userSettings)
+        let deferredCategories = deferFulfillment(context.observe(\.viewState.categories)) { !$0.isEmpty }
+        try await deferredCategories.fulfill()
+        
+        // Then only the sticker pack should be offered, credited to its author, without any emojis.
+        #expect(context.viewState.categories.map(\.name) == ["Stickers"])
+        #expect(context.viewState.categories.first?.subtitle == "By Alice")
+        
+        // When the user taps the sticker.
+        let item = try #require(context.viewState.categories.first?.emojis.first)
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .dismiss }
+        context.send(viewAction: .emojiTapped(emoji: item))
+        
+        // Then the sticker should be yielded, without becoming a frequently used reaction.
+        try await deferred.fulfill()
+        var iterator = emojiPickerStream.makeAsyncIterator()
+        #expect(await iterator.next() == .customImage(sticker))
+        #expect(EmojiProvider(userSettings: userSettings).frequentlyUsedSystemEmojis().isEmpty)
+    }
+    
     // MARK: - Helpers
     
-    private mutating func setupViewModel(selectedEmojis: Set<String> = [], imagePackProvider: ImagePackProviderProtocol? = nil, userSettings: UserSettings = .mock()) {
+    private mutating func setupViewModel(mode: EmojiPickerScreenMode = .reaction, selectedEmojis: Set<String> = [], imagePackProvider: ImagePackProviderProtocol? = nil, userSettings: UserSettings = .mock()) {
         let (stream, continuation) = AsyncStream<EmojiPickerItem>.makeStream()
         emojiPickerStream = stream
         
-        viewModel = EmojiPickerScreenViewModel(selectedEmojis: selectedEmojis,
+        viewModel = EmojiPickerScreenViewModel(mode: mode,
+                                               selectedEmojis: selectedEmojis,
                                                emojiProvider: EmojiProvider(userSettings: userSettings),
                                                imagePackProvider: imagePackProvider,
                                                continuation: continuation)

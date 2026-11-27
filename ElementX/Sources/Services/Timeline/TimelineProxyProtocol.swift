@@ -161,6 +161,8 @@ protocol TimelineProxyProtocol: Sendable {
     
     func toggleReaction(_ reaction: String, to eventID: TimelineItemIdentifier.EventOrTransactionID) async -> Result<Void, TimelineProxyError>
     
+    func sendSticker(_ image: ImagePack.Image) async -> Result<Void, TimelineProxyError>
+    
     func createPoll(question: String, answers: [String], maxSelections: Int, pollKind: Poll.Kind) async -> Result<Void, TimelineProxyError>
     
     func editPoll(original eventID: String,
