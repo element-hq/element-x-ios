@@ -58,13 +58,14 @@ private struct RoomImagePacksScreenListRow: View {
             if let avatar = pack.avatar ?? pack.images.first?.mediaSource {
                 LoadableImage(mediaSource: avatar,
                               mediaProvider: mediaProvider,
-                              transformer: { $0.scaledToFit() },
+                              transformer: { $0.scaledToFill() },
                               placeholder: { Color.clear })
             } else {
                 CompoundIcon(\.reaction)
             }
         }
         .frame(width: avatarSize, height: avatarSize)
+        .clipped()
         .accessibilityHidden(true)
     }
 }
