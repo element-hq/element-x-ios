@@ -34,6 +34,10 @@ class TimelineMediaPreviewController: QLPreviewController {
     /// The content offset that the page scroll view rests at when showing the current item.
     private var pageScrollViewRestingOffset: CGFloat = 0
     
+    private let dismissGestureRecognizer = UIPanGestureRecognizer()
+    // A separate object so that QuickLook's own gesture recognizer delegate methods aren't overridden.
+    private let dismissGestureDelegate = EmptyItemDismissGestureDelegate()
+    
     private var cancellables: Set<AnyCancellable> = []
     
     private var navigationBar: UINavigationBar? {
@@ -113,6 +117,12 @@ class TimelineMediaPreviewController: QLPreviewController {
             downloadIndicatorHostingController.view.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             downloadIndicatorHostingController.view.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
+        
+        dismissGestureDelegate.previewController = self
+        dismissGestureDelegate.captionView = captionView
+        dismissGestureRecognizer.delegate = dismissGestureDelegate
+        dismissGestureRecognizer.addTarget(self, action: #selector(handleDismissGesture))
+        view.addGestureRecognizer(dismissGestureRecognizer)
         
         // Observation of currentPreviewItem doesn't work, so use the index instead.
         publisher(for: \.currentPreviewItemIndex)
@@ -335,6 +345,29 @@ class TimelineMediaPreviewController: QLPreviewController {
         }
     }
     
+    // MARK: Dismiss gesture
+    
+    @objc private func handleDismissGesture(_ gestureRecognizer: UIPanGestureRecognizer) {
+        guard gestureRecognizer.state == .ended else { return }
+        
+        let translation = gestureRecognizer.translation(in: view).y
+        let velocity = gestureRecognizer.velocity(in: view).y
+        // As with a loaded item, moving the finger back up before letting go cancels the dismissal.
+        guard velocity >= 0, translation > 100 || velocity > 800 else { return }
+        
+        dismissPreview()
+    }
+    
+    /// Dismisses the preview and tells the delegate, which QuickLook only does for its own dismissals.
+    private func dismissPreview() {
+        // Captured up front as the delegate is no longer set once the dismissal has finished.
+        let delegate = delegate
+        dismiss(animated: true) { [weak self] in
+            guard let self else { return }
+            delegate?.previewControllerDidDismiss?(self)
+        }
+    }
+    
     // MARK: - Actions
     
     private func presentMediaDetails(for mediaItem: TimelineMediaPreviewItem.Media) {
@@ -553,6 +586,36 @@ private struct DownloadIndicatorView: View {
 }
 
 // MARK: - Helpers
+
+/// Lets a downward swipe dismiss the preview while the current item has nothing to show (still downloading,
+/// failed or loading more), as QuickLook only provides that gesture once an item's file has loaded.
+private final class EmptyItemDismissGestureDelegate: NSObject, UIGestureRecognizerDelegate {
+    weak var previewController: QLPreviewController?
+    /// The caption scrolls by itself, so drags that start on it are left alone.
+    weak var captionView: UIView?
+    
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        guard let previewController,
+              previewController.currentPreviewItem?.previewItemURL == nil,
+              let panGestureRecognizer = gestureRecognizer as? UIPanGestureRecognizer else {
+            return false
+        }
+        
+        // Only a downward swipe, matching QuickLook's own gesture for a loaded item.
+        let velocity = panGestureRecognizer.velocity(in: previewController.view)
+        return velocity.y > abs(velocity.x)
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        guard let captionView, !captionView.isHidden else { return true }
+        return !captionView.bounds.contains(touch.location(in: captionView))
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        // Recognise alongside the page scroll view, which receives the touch first.
+        otherGestureRecognizer === previewController?.view.firstScrollView()?.panGestureRecognizer
+    }
+}
 
 /// An invisible view that reports when it is added to or removed from a window.
 private struct WindowTrackingView: UIViewRepresentable {
