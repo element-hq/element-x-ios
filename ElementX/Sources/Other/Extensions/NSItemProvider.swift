@@ -91,15 +91,15 @@ extension NSItemProvider {
         }
         
         let sourceFilename = await loadSourceFilename() as NSString?
-        let filename = if let sourceFilename,
-                          sourceFilename.hasPathExtension,
-                          UTType(filenameExtension: sourceFilename.pathExtension)?.conforms(to: contentType.type) == true {
-            sourceFilename as String
-        } else if let sourceFilename, sourceFilename.hasPathExtension {
-            // The loaded representation can differ from the source file (e.g. JPEG data for a HEIC photo).
-            "\(sourceFilename.deletingPathExtension).\(contentType.fileExtension)"
-        } else if let sourceFilename {
-            "\(sourceFilename).\(contentType.fileExtension)"
+        let filename = if let sourceFilename {
+            if !sourceFilename.hasPathExtension {
+                "\(sourceFilename).\(contentType.fileExtension)"
+            } else if UTType(filenameExtension: sourceFilename.pathExtension)?.conforms(to: contentType.type) == true {
+                sourceFilename as String
+            } else {
+                // The loaded representation can differ from the source file (e.g. JPEG data for a HEIC photo).
+                "\(sourceFilename.deletingPathExtension).\(contentType.fileExtension)"
+            }
         } else {
             "\(UUID().uuidString).\(contentType.fileExtension)"
         }
@@ -143,17 +143,14 @@ extension NSItemProvider {
                                providerDescription: providerDescription)
     }
     
-    /// Writes the data into a new unique folder, so it never clashes with a file of the same name that is waiting to be cleaned up.
     @concurrent private static func writeData(_ data: Data,
                                               filename: String,
                                               withinAppGroupContainer: Bool,
                                               providerDescription: String) async -> URL? {
         do {
-            // A slash would turn the name into a path that leaves the unique folder.
-            let newURL = try FileManager.default.createUniqueTemporaryDirectory(withinAppGroupContainer: withinAppGroupContainer)
-                .appending(component: filename.replacing("/", with: "-"))
-            try data.write(to: newURL)
-            return newURL
+            return try FileManager.default.writeDataToTemporaryDirectory(data: data,
+                                                                         fileName: filename.replacing("/", with: "-"),
+                                                                         withinAppGroupContainer: withinAppGroupContainer)
         } catch {
             MXLog.error("Failed storing NSItemProvider data \(providerDescription) with error: \(error)")
             return nil

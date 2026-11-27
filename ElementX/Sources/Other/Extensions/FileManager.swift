@@ -47,14 +47,6 @@ nonisolated extension FileManager {
         return newURL
     }
     
-    /// Creates a new uniquely named folder inside the temporary directory, so files stored in it never clash with older ones.
-    func createUniqueTemporaryDirectory(withinAppGroupContainer: Bool = false) throws -> URL {
-        let baseURL: URL = withinAppGroupContainer ? .appGroupTemporaryDirectory : .temporaryDirectory
-        let url = baseURL.appending(component: UUID().uuidString, directoryHint: .isDirectory)
-        try createDirectory(at: url, withIntermediateDirectories: true)
-        return url
-    }
-    
     /// Retrieve a file's disk size
     /// - Parameter url: the file URL
     /// - Returns: the size in bytes

@@ -72,19 +72,6 @@ struct NSItemProviderTests {
         #expect(storedURL.lastPathComponent == "test_image.png")
     }
     
-    @Test("Each stored file gets its own folder so files with the same name don't clash")
-    func uniqueFolders() async throws {
-        let provider = try makeImageProvider()
-        
-        let firstURL = try #require(await provider.storeData())
-        let secondURL = try #require(await provider.storeData())
-        
-        #expect(firstURL.lastPathComponent == secondURL.lastPathComponent)
-        #expect(firstURL.deletingLastPathComponent() != secondURL.deletingLastPathComponent())
-        #expect(FileManager.default.fileExists(atPath: firstURL.path(percentEncoded: false)))
-        #expect(FileManager.default.fileExists(atPath: secondURL.path(percentEncoded: false)))
-    }
-    
     @Test("Data-only providers without a name fall back to a generated one with the content type's extension")
     func dataOnlyProvider() async throws {
         let data = Data("%PDF-1.4".utf8)
@@ -116,7 +103,7 @@ struct NSItemProviderTests {
         #expect(storedURL.lastPathComponent == "IMG_0001.png")
     }
     
-    @Test("Slashes in a name are replaced so the file stays in its own folder")
+    @Test("Slashes in a name are replaced so it stays a single file name")
     func slashInName() async throws {
         let provider = try makeImageProvider()
         provider.suggestedName = "Element / Matrix.png"
