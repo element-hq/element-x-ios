@@ -471,8 +471,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 
             case (.roomDetails, .presentImagePacks, .imagePacks):
                 Task { await self.presentRoomImagePacks() }
-            case (.imagePacks, .presentImagePack(let pack), .imagePack):
-                presentImagePack(pack)
+            case (.imagePacks, .presentImagePackDetails(let pack), .imagePackDetails):
+                presentImagePackDetails(pack)
                 
             case (.roomDetails, .presentPinnedEventsTimeline, .pinnedEventsTimeline):
                 startPinnedEventsTimelineFlow()
@@ -1263,7 +1263,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             .sink { [weak self] action in
                 switch action {
                 case .selectPack(let pack):
-                    self?.stateMachine.tryEvent(.presentImagePack(pack))
+                    self?.stateMachine.tryEvent(.presentImagePackDetails(pack))
                 }
             }
             .store(in: &cancellables)
@@ -1273,10 +1273,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func presentImagePack(_ pack: ImagePack) {
+    private func presentImagePackDetails(_ pack: ImagePack) {
         let coordinator = ImagePackScreenCoordinator(parameters: .init(pack: pack, mediaProvider: userSession.mediaProvider))
         navigationStackCoordinator.push(coordinator) { [weak self] in
-            self?.stateMachine.tryEvent(.dismissImagePack)
+            self?.stateMachine.tryEvent(.dismissImagePackDetails)
         }
     }
     
