@@ -706,16 +706,16 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         // (RoomFlowCoordinator.handleChildEventRoute lines 223-258): pre-fetch the
         // event first to prime the SDK's event cache, then focus on it via the
         // same focusOnEvent path permalinks use.
-        guard let fullyReadEventID = state.timelineState.fullyReadEventID else { return }
+        guard let markerEventID = state.timelineState.fullyReadEventID else { return }
         
-        switch await roomProxy.loadOrFetchEventDetails(for: fullyReadEventID) {
+        switch await roomProxy.loadOrFetchEventDetails(for: markerEventID) {
         case .success:
-            await focusOnEvent(eventID: fullyReadEventID)
+            await focusOnEvent(eventID: markerEventID)
             
             // The marker may point to an event that isn't rendered (e.g. a reaction), so scroll
             // to the closest visible event before it in the focused timeline instead.
-            if let visibleEventID = timelineController.fullyReadEventID, visibleEventID != fullyReadEventID {
-                state.timelineState.focussedEvent = .init(eventID: visibleEventID, appearance: .immediate)
+            if let closestVisibleEventID = timelineController.fullyReadEventID, closestVisibleEventID != markerEventID {
+                state.timelineState.focussedEvent = .init(eventID: closestVisibleEventID, appearance: .immediate)
             }
         case .failure:
             displayErrorToast(L10n.errorMessageNotFound)
