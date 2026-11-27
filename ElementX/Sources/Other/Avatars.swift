@@ -157,10 +157,9 @@ enum RoomAvatarSizeOnScreen {
         switch self {
         case .timeline, .leaveSpace, .notificationSettings, .roomDirectorySearch,
              .completionSuggestions, .authorizedSpaces, .createRoomSelectSpace,
-             .spaceFilters, .searchHistory:
+             .spaceFilters, .searchHistory, .roomSelection:
             32
-        case .messageForwarding, .roomSelection,
-             .spaceAddRooms:
+        case .messageForwarding, .spaceAddRooms:
             36
         case .chats, .spaces, .spaceSettings,
              .selectedItemsCarousel, .search:

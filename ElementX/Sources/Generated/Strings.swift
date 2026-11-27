@@ -3264,6 +3264,8 @@ internal nonisolated enum L10n {
   internal static var screenRoomRolesAndPermissionsTitle: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_title") }
   /// The room list associated with this account cannot be loaded.
   internal static var screenRoomSelectErrorCannotLoadRooms: String { return L10n.tr("Localizable", "screen_room_select_error_cannot_load_rooms") }
+  /// Search chats…
+  internal static var screenRoomSelectSearchPlaceholder: String { return L10n.tr("Localizable", "screen_room_select_search_placeholder") }
   /// Plural format key: "%#@COUNT@"
   internal static func screenRoomSelectionCount(_ p1: Int) -> String {
     return L10n.tr("Localizable", "screen_room_selection_count", p1)
