@@ -948,6 +948,100 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         }
     }
 
+    //MARK: - getCachedMediaContent
+
+    open var getCachedMediaContentMediaSourceThrowableError: Error?
+    private let getCachedMediaContentMediaSourceCallsCountLock = NSLock()
+    private var getCachedMediaContentMediaSourceUnderlyingCallsCount = 0
+    open var getCachedMediaContentMediaSourceCallsCount: Int {
+        get { getCachedMediaContentMediaSourceCallsCountLock.withLock { getCachedMediaContentMediaSourceUnderlyingCallsCount } }
+        set { getCachedMediaContentMediaSourceCallsCountLock.withLock { getCachedMediaContentMediaSourceUnderlyingCallsCount = newValue } }
+    }
+    open var getCachedMediaContentMediaSourceCalled: Bool {
+        return getCachedMediaContentMediaSourceCallsCount > 0
+    }
+    private let getCachedMediaContentMediaSourceReceivedMediaSourceLock = NSLock()
+    private var getCachedMediaContentMediaSourceUnderlyingReceivedMediaSource: MediaSource?
+    open var getCachedMediaContentMediaSourceReceivedMediaSource: MediaSource? {
+        get { getCachedMediaContentMediaSourceReceivedMediaSourceLock.withLock { getCachedMediaContentMediaSourceUnderlyingReceivedMediaSource } }
+        set { getCachedMediaContentMediaSourceReceivedMediaSourceLock.withLock { getCachedMediaContentMediaSourceUnderlyingReceivedMediaSource = newValue } }
+    }
+    private let getCachedMediaContentMediaSourceReceivedInvocationsLock = NSLock()
+    private var getCachedMediaContentMediaSourceUnderlyingReceivedInvocations: [MediaSource] = []
+    open var getCachedMediaContentMediaSourceReceivedInvocations: [MediaSource] {
+        get { getCachedMediaContentMediaSourceReceivedInvocationsLock.withLock { getCachedMediaContentMediaSourceUnderlyingReceivedInvocations } }
+        set { getCachedMediaContentMediaSourceReceivedInvocationsLock.withLock { getCachedMediaContentMediaSourceUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let getCachedMediaContentMediaSourceReturnValueLock = NSLock()
+    open var getCachedMediaContentMediaSourceUnderlyingReturnValue: Data?
+    open var getCachedMediaContentMediaSourceReturnValue: Data? {
+        get { getCachedMediaContentMediaSourceReturnValueLock.withLock { getCachedMediaContentMediaSourceUnderlyingReturnValue } }
+        set { getCachedMediaContentMediaSourceReturnValueLock.withLock { getCachedMediaContentMediaSourceUnderlyingReturnValue = newValue } }
+    }
+    open var getCachedMediaContentMediaSourceClosure: ((MediaSource) async throws -> Data?)?
+
+    open override func getCachedMediaContent(mediaSource: MediaSource) async throws -> Data? {
+        if let error = getCachedMediaContentMediaSourceThrowableError {
+            throw error
+        }
+        getCachedMediaContentMediaSourceCallsCountLock.withLock { getCachedMediaContentMediaSourceUnderlyingCallsCount += 1 }
+        getCachedMediaContentMediaSourceReceivedMediaSource = mediaSource
+        getCachedMediaContentMediaSourceReceivedInvocationsLock.withLock { getCachedMediaContentMediaSourceUnderlyingReceivedInvocations.append(mediaSource) }
+        if let getCachedMediaContentMediaSourceClosure = getCachedMediaContentMediaSourceClosure {
+            return try await getCachedMediaContentMediaSourceClosure(mediaSource)
+        } else {
+            return getCachedMediaContentMediaSourceReturnValue
+        }
+    }
+
+    //MARK: - getCachedMediaThumbnail
+
+    open var getCachedMediaThumbnailMediaSourceWidthHeightAnimatedThrowableError: Error?
+    private let getCachedMediaThumbnailMediaSourceWidthHeightAnimatedCallsCountLock = NSLock()
+    private var getCachedMediaThumbnailMediaSourceWidthHeightAnimatedUnderlyingCallsCount = 0
+    open var getCachedMediaThumbnailMediaSourceWidthHeightAnimatedCallsCount: Int {
+        get { getCachedMediaThumbnailMediaSourceWidthHeightAnimatedCallsCountLock.withLock { getCachedMediaThumbnailMediaSourceWidthHeightAnimatedUnderlyingCallsCount } }
+        set { getCachedMediaThumbnailMediaSourceWidthHeightAnimatedCallsCountLock.withLock { getCachedMediaThumbnailMediaSourceWidthHeightAnimatedUnderlyingCallsCount = newValue } }
+    }
+    open var getCachedMediaThumbnailMediaSourceWidthHeightAnimatedCalled: Bool {
+        return getCachedMediaThumbnailMediaSourceWidthHeightAnimatedCallsCount > 0
+    }
+    private let getCachedMediaThumbnailMediaSourceWidthHeightAnimatedReceivedArgumentsLock = NSLock()
+    private var getCachedMediaThumbnailMediaSourceWidthHeightAnimatedUnderlyingReceivedArguments: (mediaSource: MediaSource, width: UInt64, height: UInt64, animated: Bool)?
+    open var getCachedMediaThumbnailMediaSourceWidthHeightAnimatedReceivedArguments: (mediaSource: MediaSource, width: UInt64, height: UInt64, animated: Bool)? {
+        get { getCachedMediaThumbnailMediaSourceWidthHeightAnimatedReceivedArgumentsLock.withLock { getCachedMediaThumbnailMediaSourceWidthHeightAnimatedUnderlyingReceivedArguments } }
+        set { getCachedMediaThumbnailMediaSourceWidthHeightAnimatedReceivedArgumentsLock.withLock { getCachedMediaThumbnailMediaSourceWidthHeightAnimatedUnderlyingReceivedArguments = newValue } }
+    }
+    private let getCachedMediaThumbnailMediaSourceWidthHeightAnimatedReceivedInvocationsLock = NSLock()
+    private var getCachedMediaThumbnailMediaSourceWidthHeightAnimatedUnderlyingReceivedInvocations: [(mediaSource: MediaSource, width: UInt64, height: UInt64, animated: Bool)] = []
+    open var getCachedMediaThumbnailMediaSourceWidthHeightAnimatedReceivedInvocations: [(mediaSource: MediaSource, width: UInt64, height: UInt64, animated: Bool)] {
+        get { getCachedMediaThumbnailMediaSourceWidthHeightAnimatedReceivedInvocationsLock.withLock { getCachedMediaThumbnailMediaSourceWidthHeightAnimatedUnderlyingReceivedInvocations } }
+        set { getCachedMediaThumbnailMediaSourceWidthHeightAnimatedReceivedInvocationsLock.withLock { getCachedMediaThumbnailMediaSourceWidthHeightAnimatedUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let getCachedMediaThumbnailMediaSourceWidthHeightAnimatedReturnValueLock = NSLock()
+    open var getCachedMediaThumbnailMediaSourceWidthHeightAnimatedUnderlyingReturnValue: Data?
+    open var getCachedMediaThumbnailMediaSourceWidthHeightAnimatedReturnValue: Data? {
+        get { getCachedMediaThumbnailMediaSourceWidthHeightAnimatedReturnValueLock.withLock { getCachedMediaThumbnailMediaSourceWidthHeightAnimatedUnderlyingReturnValue } }
+        set { getCachedMediaThumbnailMediaSourceWidthHeightAnimatedReturnValueLock.withLock { getCachedMediaThumbnailMediaSourceWidthHeightAnimatedUnderlyingReturnValue = newValue } }
+    }
+    open var getCachedMediaThumbnailMediaSourceWidthHeightAnimatedClosure: ((MediaSource, UInt64, UInt64, Bool) async throws -> Data?)?
+
+    open override func getCachedMediaThumbnail(mediaSource: MediaSource, width: UInt64, height: UInt64, animated: Bool = false) async throws -> Data? {
+        if let error = getCachedMediaThumbnailMediaSourceWidthHeightAnimatedThrowableError {
+            throw error
+        }
+        getCachedMediaThumbnailMediaSourceWidthHeightAnimatedCallsCountLock.withLock { getCachedMediaThumbnailMediaSourceWidthHeightAnimatedUnderlyingCallsCount += 1 }
+        getCachedMediaThumbnailMediaSourceWidthHeightAnimatedReceivedArguments = (mediaSource: mediaSource, width: width, height: height, animated: animated)
+        getCachedMediaThumbnailMediaSourceWidthHeightAnimatedReceivedInvocationsLock.withLock { getCachedMediaThumbnailMediaSourceWidthHeightAnimatedUnderlyingReceivedInvocations.append((mediaSource: mediaSource, width: width, height: height, animated: animated)) }
+        if let getCachedMediaThumbnailMediaSourceWidthHeightAnimatedClosure = getCachedMediaThumbnailMediaSourceWidthHeightAnimatedClosure {
+            return try await getCachedMediaThumbnailMediaSourceWidthHeightAnimatedClosure(mediaSource, width, height, animated)
+        } else {
+            return getCachedMediaThumbnailMediaSourceWidthHeightAnimatedReturnValue
+        }
+    }
+
     //MARK: - getDmRoom
 
     open var getDmRoomUserIdThrowableError: Error?

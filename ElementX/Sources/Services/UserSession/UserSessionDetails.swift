@@ -27,6 +27,8 @@ extension UserSessionDetails {
     }
     
     /// The details for a `ClientProxy` that was remotely logged out by the server.
+    ///
+    /// **Note:** For this to work it requires the server to support MSC4262 so that the SDK has the user's global profile cached.
     init(remoteLogoutClientProxy clientProxy: ClientProxyProtocol) async {
         userProfile = clientProxy.userProfilePublisher.value
         unreadCount = 0
