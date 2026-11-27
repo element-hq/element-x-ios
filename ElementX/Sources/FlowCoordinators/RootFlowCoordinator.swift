@@ -38,15 +38,31 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
     
     enum State: StateType {
         /// The state machine hasn't started.
-        case initial
+        case initial(presented: PresentedState?)
         /// The authentication flow is the root.
-        case authenticationFlow(isAddingAccount: Bool)
+        case authenticationFlow(isAddingAccount: Bool, presented: PresentedState?)
         /// A user session flow is the root.
-        case userSessionFlow(userID: String)
+        case userSessionFlow(userID: String, presented: PresentedState?)
         /// A placeholder is being shown while clearing caches.
-        case clearingCache(userID: String)
+        case clearingCache(userID: String, presented: PresentedState?)
         /// A placeholder is being shown while the active account logs out.
-        case loggingOut(userID: String)
+        case loggingOut(userID: String, presented: PresentedState?)
+    }
+    
+    /// Something presented above the root, along with whatever was presented before it.
+    indirect enum PresentedState: Hashable {
+        /// The share sheet is picking the room that a share without one is sent to.
+        case shareRoomSelection(previousState: PresentedState?)
+        /// The session verification sheet is verifying the given account, which may not be the shown one.
+        case sessionVerification(userID: String, previousState: PresentedState?)
+        /// The permalink sheet is shown. Not built yet.
+        case permalink(previousState: PresentedState?)
+        /// The full screen cover is telling the user that the server logged out one or more accounts.
+        case remoteLogout(previousState: PresentedState?)
+        
+        /// The call screen covers every account's screens, or when minimized stays on the
+        /// overlay but is hidden, in picture in picture or the system's call window.
+        case callScreen(PresentedCallScreen, isMinimized: Bool, previousState: PresentedState?)
     }
     
     enum Event: EventType {
@@ -60,6 +76,21 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
         case clearCache
         /// Request logging out the active account.
         case logout
+        
+        case presentShareRoomSelection
+        case dismissedShareRoomSelection
+        case presentSessionVerification(userID: String)
+        case dismissedSessionVerification
+        case presentPermalink
+        case dismissedPermalink
+        case presentRemoteLogout
+        case dismissedRemoteLogout
+        
+        /// Show a call screen full screen, replacing any other.
+        case presentCallScreen(PresentedCallScreen)
+        case minimizeCallScreen
+        case restoreCallScreen
+        case dismissCallScreen
     }
     
     private let stateMachine: StateMachine<State, Event>
@@ -232,37 +263,77 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
     
     private func configureStateMachine() {
         stateMachine.addRouteMapping { event, fromState, _ in
-            switch (fromState, event) {
-            case (.initial, .startAuthentication(isAddingAccount: false)):
-                .authenticationFlow(isAddingAccount: false)
-            case (.initial, .startUserSession(let userID)):
-                .userSessionFlow(userID: userID)
+            guard let event else { return nil }
+            
+            return switch (fromState, event) {
+            case (.initial(let presented), .startAuthentication(isAddingAccount: false)):
+                .authenticationFlow(isAddingAccount: false, presented: presented)
+            case (.initial(let presented), .startUserSession(let userID)):
+                .userSessionFlow(userID: userID, presented: presented)
                 
-            case (.authenticationFlow, .startUserSession(let userID)):
-                .userSessionFlow(userID: userID)
-            case (.authenticationFlow(isAddingAccount: true), .cancelAddingAccount(let userID)):
-                .userSessionFlow(userID: userID)
-            case (.authenticationFlow(isAddingAccount: true), .startAuthentication(isAddingAccount: false)):
-                .authenticationFlow(isAddingAccount: false)
+            case (.authenticationFlow(_, let presented), .startUserSession(let userID)):
+                .userSessionFlow(userID: userID, presented: presented)
+            case (.authenticationFlow(isAddingAccount: true, let presented), .cancelAddingAccount(let userID)):
+                .userSessionFlow(userID: userID, presented: presented)
+            case (.authenticationFlow(isAddingAccount: true, let presented), .startAuthentication(isAddingAccount: false)):
+                .authenticationFlow(isAddingAccount: false, presented: presented)
                 
-            case (.userSessionFlow, .startAuthentication(let isAddingAccount)):
-                .authenticationFlow(isAddingAccount: isAddingAccount)
-            case (.userSessionFlow(let userID), .clearCache):
-                .clearingCache(userID: userID)
-            case (.userSessionFlow(let userID), .logout):
-                .loggingOut(userID: userID)
-            case (.userSessionFlow, .startUserSession(let userID)):
-                .userSessionFlow(userID: userID)
+            case (.userSessionFlow(_, let presented), .startAuthentication(let isAddingAccount)):
+                .authenticationFlow(isAddingAccount: isAddingAccount, presented: presented)
+            case (.userSessionFlow(let userID, let presented), .clearCache):
+                .clearingCache(userID: userID, presented: presented)
+            case (.userSessionFlow(let userID, let presented), .logout):
+                .loggingOut(userID: userID, presented: presented)
+            case (.userSessionFlow(_, let presented), .startUserSession(let userID)):
+                .userSessionFlow(userID: userID, presented: presented)
                 
-            case (.clearingCache, .startAuthentication(isAddingAccount: false)):
-                .authenticationFlow(isAddingAccount: false)
-            case (.clearingCache, .startUserSession(let userID)):
-                .userSessionFlow(userID: userID)
+            case (.clearingCache(_, let presented), .startAuthentication(isAddingAccount: false)):
+                .authenticationFlow(isAddingAccount: false, presented: presented)
+            case (.clearingCache(_, let presented), .startUserSession(let userID)):
+                .userSessionFlow(userID: userID, presented: presented)
                 
-            case (.loggingOut, .startAuthentication(isAddingAccount: false)):
-                .authenticationFlow(isAddingAccount: false)
-            case (.loggingOut, .startUserSession(let userID)):
-                .userSessionFlow(userID: userID)
+            case (.loggingOut(_, let presented), .startAuthentication(isAddingAccount: false)):
+                .authenticationFlow(isAddingAccount: false, presented: presented)
+            case (.loggingOut(_, let presented), .startUserSession(let userID)):
+                .userSessionFlow(userID: userID, presented: presented)
+                
+            // Not while a verification is shown, which takes priority over any share,
+            // or while another share is shown, which must be dismissed first.
+            case (.userSessionFlow(let userID, let presented), .presentShareRoomSelection)
+                where !fromState.isPresenting(.sessionVerification) && !fromState.isPresenting(.shareRoomSelection):
+                .userSessionFlow(userID: userID, presented: .shareRoomSelection(previousState: presented))
+            case (_, .dismissedShareRoomSelection) where fromState.isPresenting(.shareRoomSelection):
+                fromState.removingPresented(.shareRoomSelection)
+                
+            // A second request would cut off the verification in progress.
+            case (_, .presentSessionVerification(let userID)) where !fromState.isPresenting(.sessionVerification):
+                fromState.presenting(.sessionVerification(userID: userID, previousState: fromState.presented))
+            case (_, .dismissedSessionVerification) where fromState.isPresenting(.sessionVerification):
+                fromState.removingPresented(.sessionVerification)
+                
+            case (.userSessionFlow(let userID, let presented), .presentPermalink)
+                where !fromState.isPresenting(.sessionVerification) && !fromState.isPresenting(.permalink):
+                .userSessionFlow(userID: userID, presented: .permalink(previousState: presented))
+            case (_, .dismissedPermalink) where fromState.isPresenting(.permalink):
+                fromState.removingPresented(.permalink)
+                
+            // Further logged out accounts are appended to the cover that's already shown.
+            case (_, .presentRemoteLogout) where !fromState.isPresenting(.remoteLogout):
+                fromState.presenting(.remoteLogout(previousState: fromState.presented))
+            case (_, .dismissedRemoteLogout) where fromState.isPresenting(.remoteLogout):
+                fromState.removingPresented(.remoteLogout)
+                
+            // Another call is replaced where it is, otherwise the call goes on top.
+            case (_, .presentCallScreen(let callScreen)) where fromState.isPresenting(.callScreen):
+                fromState.replacingCallScreen(with: callScreen, isMinimized: false)
+            case (_, .presentCallScreen(let callScreen)):
+                fromState.presenting(.callScreen(callScreen, isMinimized: false, previousState: fromState.presented))
+            case (_, .minimizeCallScreen) where fromState.presented?.isCallScreenMinimized == false:
+                fromState.replacingCallScreen(isMinimized: true)
+            case (_, .restoreCallScreen) where fromState.presented?.isCallScreenMinimized == true:
+                fromState.replacingCallScreen(isMinimized: false)
+            case (_, .dismissCallScreen) where fromState.isPresenting(.callScreen):
+                fromState.removingPresented(.callScreen)
                 
             default:
                 nil
@@ -912,6 +983,119 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
     
     private func showLoginErrorToast() {
         userIndicatorController.submitIndicator(UserIndicator(title: "Failed logging in"))
+    }
+}
+
+private extension RootFlowCoordinator.State {
+    /// Everything presented above the root.
+    var presented: RootFlowCoordinator.PresentedState? {
+        switch self {
+        case .initial(let presented),
+             .authenticationFlow(_, let presented),
+             .userSessionFlow(_, let presented),
+             .clearingCache(_, let presented),
+             .loggingOut(_, let presented):
+            presented
+        }
+    }
+    
+    /// Whether anything of the given kind is presented above the root.
+    func isPresenting(_ kind: RootFlowCoordinator.PresentedState.Kind) -> Bool {
+        presented?.contains(kind) ?? false
+    }
+    
+    /// This state with the same root, but something else presented above it.
+    func presenting(_ presented: RootFlowCoordinator.PresentedState?) -> Self {
+        switch self {
+        case .initial:
+            .initial(presented: presented)
+        case .authenticationFlow(let isAddingAccount, _):
+            .authenticationFlow(isAddingAccount: isAddingAccount, presented: presented)
+        case .userSessionFlow(let userID, _):
+            .userSessionFlow(userID: userID, presented: presented)
+        case .clearingCache(let userID, _):
+            .clearingCache(userID: userID, presented: presented)
+        case .loggingOut(let userID, _):
+            .loggingOut(userID: userID, presented: presented)
+        }
+    }
+    
+    /// This state with the topmost presentation of the given kind taken out, keeping everything presented after it.
+    func removingPresented(_ kind: RootFlowCoordinator.PresentedState.Kind) -> Self {
+        presenting(presented?.transforming(kind) { $0.previousState })
+    }
+    
+    /// This state with its call screen updated where it is, and optionally replaced by another call screen.
+    func replacingCallScreen(with callScreen: RootFlowCoordinator.PresentedCallScreen? = nil, isMinimized: Bool) -> Self {
+        presenting(presented?.transforming(.callScreen) { presented in
+            guard case .callScreen(let currentCallScreen, _, let previousState) = presented else { return presented }
+            return .callScreen(callScreen ?? currentCallScreen, isMinimized: isMinimized, previousState: previousState)
+        })
+    }
+}
+
+private extension RootFlowCoordinator.PresentedState {
+    enum Kind { case shareRoomSelection, sessionVerification, permalink, remoteLogout, callScreen }
+    
+    var kind: Kind {
+        switch self {
+        case .shareRoomSelection: .shareRoomSelection
+        case .sessionVerification: .sessionVerification
+        case .permalink: .permalink
+        case .remoteLogout: .remoteLogout
+        case .callScreen: .callScreen
+        }
+    }
+    
+    /// Whether the call screen is minimized, or `nil` when there isn't one.
+    var isCallScreenMinimized: Bool? {
+        switch self {
+        case .callScreen(_, let isMinimized, _): isMinimized
+        default: previousState?.isCallScreenMinimized
+        }
+    }
+    
+    /// Whether this or anything presented before it is of the given kind.
+    func contains(_ kind: Kind) -> Bool {
+        self.kind == kind || previousState?.contains(kind) == true
+    }
+    
+    /// What was presented before this.
+    var previousState: Self? {
+        switch self {
+        case .shareRoomSelection(let previousState),
+             .sessionVerification(_, let previousState),
+             .permalink(let previousState),
+             .remoteLogout(let previousState),
+             .callScreen(_, _, let previousState):
+            previousState
+        }
+    }
+    
+    /// This presented after something else instead.
+    func replacingPreviousState(with previousState: Self?) -> Self {
+        switch self {
+        case .shareRoomSelection:
+            .shareRoomSelection(previousState: previousState)
+        case .sessionVerification(let userID, _):
+            .sessionVerification(userID: userID, previousState: previousState)
+        case .permalink:
+            .permalink(previousState: previousState)
+        case .remoteLogout:
+            .remoteLogout(previousState: previousState)
+        case .callScreen(let callScreen, let isMinimized, _):
+            .callScreen(callScreen, isMinimized: isMinimized, previousState: previousState)
+        }
+    }
+    
+    /// This with the topmost presentation of the given kind transformed, keeping everything presented after it.
+    /// Unchanged when there's nothing of that kind.
+    func transforming(_ kind: Kind, _ transform: (Self) -> Self?) -> Self? {
+        if self.kind == kind {
+            return transform(self)
+        }
+        
+        return replacingPreviousState(with: previousState?.transforming(kind, transform))
     }
 }
 
