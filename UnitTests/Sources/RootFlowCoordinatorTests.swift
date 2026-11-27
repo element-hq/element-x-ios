@@ -352,15 +352,29 @@ struct RootFlowCoordinatorTests {
         #expect(stackCoordinator.rootCoordinator is RoomSelectionScreenCoordinator)
     }
     
-    @Test("The share sheet closes when the shown account's screens are replaced")
-    func shareSheetClosesWithFlow() {
+    @Test("The share sheet stays open as long as there are accounts to select rooms from")
+    func selectAccountWithShareSheet() throws {
+        rootFlowCoordinator.handleAppRoute(.roomList, animated: false)
+        rootFlowCoordinator.handleAppRoute(.share(.text(roomID: nil, text: "Important text")), animated: false)
+        let shareSheet = try #require(navigationRootCoordinator.sheetCoordinator)
+        
+        userSessionManagerCallbacks.send(.didSelectAccount(userID: "@alice:matrix.org"))
+        
+        #expect(navigationRootCoordinator.sheetCoordinator === shareSheet)
+    }
+    
+    @Test("The share sheet closes once there are no accounts left")
+    func removeAccountWithShareSheet() {
         rootFlowCoordinator.handleAppRoute(.roomList, animated: false)
         rootFlowCoordinator.handleAppRoute(.share(.text(roomID: nil, text: "Important text")), animated: false)
         #expect(navigationRootCoordinator.sheetCoordinator != nil)
         
-        userSessionManagerCallbacks.send(.didSelectAccount(userID: "@alice:matrix.org"))
+        userSessionManager.activeSession = nil
+        userSessionManager.userIDs = []
+        userSessionManagerCallbacks.send(.didRemoveAccount(userID: "@alice:matrix.org", error: nil))
         
         #expect(navigationRootCoordinator.sheetCoordinator == nil)
+        #expect(navigationRootCoordinator.rootCoordinator is NavigationStackCoordinator)
     }
     
     @Test("A route handed to the shown account's screens closes the share sheet")

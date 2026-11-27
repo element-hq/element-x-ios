@@ -507,6 +507,15 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
             if let activeUserID = userSessionManager.activeSession?.clientProxy.userID {
                 stateMachine.tryEvent(.startUserSession(userID: activeUserID))
             } else if userSessionManager.userIDs.isEmpty {
+                for presentedState in stateMachine.state.presentedStates {
+                    switch presentedState {
+                    case .shareRoomSelection, .permalink:
+                        navigationRootCoordinator.setSheetCoordinator(nil) // There's no accounts to select!
+                    case .sessionVerification, .remoteLogout, .callScreen:
+                        break // These are dismissed by their session's removal.
+                    }
+                }
+                
                 stateMachine.tryEvent(.startAuthentication(isAddingAccount: false))
             } else {
                 // Continue waiting while other accounts are restoring.
@@ -699,18 +708,6 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
     private func stopUserSessionFlow() {
         actionsSubject.send(.closeSecondaryWindows)
         userIndicatorController.retractAllIndicators()
-        
-        for presentedState in stateMachine.state.presentedStates {
-            switch presentedState {
-            case .shareRoomSelection, .permalink:
-                navigationRootCoordinator.setSheetCoordinator(nil)
-            case .callScreen:
-                break // To replace the call state machine
-            case .sessionVerification, .remoteLogout:
-                break
-            }
-        }
-        
         userSessionFlowCoordinator = nil
     }
     
