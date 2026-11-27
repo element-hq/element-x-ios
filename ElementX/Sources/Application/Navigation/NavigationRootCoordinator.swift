@@ -89,6 +89,10 @@ import SwiftUI
     enum OverlayPresentationMode { case fullScreen, minimized }
     fileprivate var overlayPresentationMode: OverlayPresentationMode = .minimized
     
+    fileprivate var isOverlayFullScreen: Bool {
+        overlayModule?.coordinator != nil && overlayPresentationMode == .fullScreen
+    }
+    
     /// The lowest-level `AlertInfo`, directly available to the root of the app.
     var alertInfo: AlertInfo<UUID>?
     
@@ -220,13 +224,26 @@ import SwiftUI
 private struct NavigationRootCoordinatorView: View {
     @Bindable var rootCoordinator: NavigationRootCoordinator
     
+    @State private var window: UIWindow?
+    
     var body: some View {
         ZStack {
             rootCoordinator.rootModule?.coordinator?.toPresentable()
         }
         .alert(item: $rootCoordinator.alertInfo)
         .animation(.elementDefault, value: rootCoordinator.rootModule)
-        .accessibilityHidden(rootCoordinator.overlayModule?.coordinator != nil && rootCoordinator.overlayPresentationMode == .fullScreen)
+        .accessibilityHidden(rootCoordinator.isOverlayFullScreen)
+        .introspect(.window, on: .supportedVersions) { window in
+            guard self.window !== window else { return }
+            DispatchQueue.main.async { self.window = window }
+        }
+        // The overlay is drawn over the root rather than presented, so a text field underneath
+        // (e.g. the composer) would keep first responder and its keyboard would cover the overlay.
+        .onChange(of: rootCoordinator.isOverlayFullScreen) { _, isFullScreen in
+            if isFullScreen {
+                window?.endEditing(true)
+            }
+        }
         .overlay {
             Group {
                 if let coordinator = rootCoordinator.overlayModule?.coordinator {
