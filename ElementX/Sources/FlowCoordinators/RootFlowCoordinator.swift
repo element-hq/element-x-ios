@@ -38,15 +38,31 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
     
     enum State: StateType {
         /// The state machine hasn't started.
-        case initial
+        case initial(presented: PresentedState?)
         /// The authentication flow is the root.
-        case authenticationFlow(isAddingAccount: Bool)
+        case authenticationFlow(isAddingAccount: Bool, presented: PresentedState?)
         /// A user session flow is the root.
-        case userSessionFlow(userID: String)
+        case userSessionFlow(userID: String, presented: PresentedState?)
         /// A placeholder is being shown while clearing caches.
-        case clearingCache(userID: String)
+        case clearingCache(userID: String, presented: PresentedState?)
         /// A placeholder is being shown while the active account logs out.
-        case loggingOut(userID: String)
+        case loggingOut(userID: String, presented: PresentedState?)
+    }
+    
+    /// Something presented above the root, along with whatever was presented before it.
+    indirect enum PresentedState: Hashable {
+        /// The share sheet is picking the room that a share without one is sent to.
+        case shareRoomSelection(previousState: PresentedState?)
+        /// The session verification sheet is verifying the given account, which may not be the shown one.
+        case sessionVerification(userID: String, previousState: PresentedState?)
+        /// The permalink sheet is shown. Not built yet.
+        case permalink(previousState: PresentedState?)
+        /// The full screen cover is telling the user that the server logged out one or more accounts.
+        case remoteLogout(previousState: PresentedState?)
+        
+        /// The call screen covers every account's screens, or when minimized stays on the
+        /// overlay but is hidden, in picture in picture or the system's call window.
+        case callScreen(PresentedCallScreen, isMinimized: Bool, previousState: PresentedState?)
     }
     
     enum Event: EventType {
@@ -60,6 +76,28 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
         case clearCache
         /// Request logging out the active account.
         case logout
+        
+        case presentShareRoomSelection
+        case dismissedShareRoomSelection
+        case presentSessionVerification(userID: String)
+        case dismissedSessionVerification
+        case presentPermalink
+        case dismissedPermalink
+        case startRemoteLogoutFlow
+        case stopRemoteLogoutFlow
+        
+        /// Show a call screen full screen, replacing any other.
+        case presentCallScreen(PresentedCallScreen)
+        case minimizeCallScreen
+        case restoreCallScreen
+        case dismissCallScreen
+    }
+    
+    struct EventUserInfo {
+        let animated: Bool
+        var sharePayload: ShareExtensionPayload?
+        var sessionVerificationRequest: SessionVerificationRequest?
+        var userSessionDetails: UserSessionDetails?
     }
     
     private let stateMachine: StateMachine<State, Event>
@@ -104,9 +142,6 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
     
     private var remoteLogoutFlowCoordinator: RemoteLogoutFlowCoordinator?
     
-    /// The account whose session verification sheet is shown, which takes priority over any user session route.
-    private var presentedSessionVerificationUserID: String? // TODO: Encode this into the state machine.
-    
     private var cancellables = Set<AnyCancellable>()
     
     private let actionsSubject: PassthroughSubject<RootFlowCoordinatorAction, Never> = .init()
@@ -141,7 +176,7 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
         self.targetContext = targetContext
         self.authenticationServiceFactory = authenticationServiceFactory
         
-        stateMachine = .init(state: .initial)
+        stateMachine = .init(state: .initial(presented: nil))
         callScreenStateMachine = .init(state: .notPresented)
         configureStateMachine()
         configureCallScreenStateMachine()
@@ -230,39 +265,80 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
     
     // MARK: - Private
     
+    // swiftlint:disable:next function_body_length
     private func configureStateMachine() {
         stateMachine.addRouteMapping { event, fromState, _ in
-            switch (fromState, event) {
-            case (.initial, .startAuthentication(isAddingAccount: false)):
-                .authenticationFlow(isAddingAccount: false)
-            case (.initial, .startUserSession(let userID)):
-                .userSessionFlow(userID: userID)
+            guard let event else { return nil }
+            
+            return switch (fromState, event) {
+            case (.initial(let presented), .startAuthentication(isAddingAccount: false)):
+                .authenticationFlow(isAddingAccount: false, presented: presented)
+            case (.initial(let presented), .startUserSession(let userID)):
+                .userSessionFlow(userID: userID, presented: presented)
                 
-            case (.authenticationFlow, .startUserSession(let userID)):
-                .userSessionFlow(userID: userID)
-            case (.authenticationFlow(isAddingAccount: true), .cancelAddingAccount(let userID)):
-                .userSessionFlow(userID: userID)
-            case (.authenticationFlow(isAddingAccount: true), .startAuthentication(isAddingAccount: false)):
-                .authenticationFlow(isAddingAccount: false)
+            case (.authenticationFlow(_, let presented), .startUserSession(let userID)):
+                .userSessionFlow(userID: userID, presented: presented)
+            case (.authenticationFlow(isAddingAccount: true, let presented), .cancelAddingAccount(let userID)):
+                .userSessionFlow(userID: userID, presented: presented)
+            case (.authenticationFlow(isAddingAccount: true, let presented), .startAuthentication(isAddingAccount: false)):
+                .authenticationFlow(isAddingAccount: false, presented: presented)
                 
-            case (.userSessionFlow, .startAuthentication(let isAddingAccount)):
-                .authenticationFlow(isAddingAccount: isAddingAccount)
-            case (.userSessionFlow(let userID), .clearCache):
-                .clearingCache(userID: userID)
-            case (.userSessionFlow(let userID), .logout):
-                .loggingOut(userID: userID)
-            case (.userSessionFlow, .startUserSession(let userID)):
-                .userSessionFlow(userID: userID)
+            case (.userSessionFlow(_, let presented), .startAuthentication(let isAddingAccount)):
+                .authenticationFlow(isAddingAccount: isAddingAccount, presented: presented)
+            case (.userSessionFlow(let userID, let presented), .clearCache):
+                .clearingCache(userID: userID, presented: presented)
+            case (.userSessionFlow(let userID, let presented), .logout):
+                .loggingOut(userID: userID, presented: presented)
+            case (.userSessionFlow(_, let presented), .startUserSession(let userID)):
+                .userSessionFlow(userID: userID, presented: presented)
                 
-            case (.clearingCache, .startAuthentication(isAddingAccount: false)):
-                .authenticationFlow(isAddingAccount: false)
-            case (.clearingCache, .startUserSession(let userID)):
-                .userSessionFlow(userID: userID)
+            case (.clearingCache(_, let presented), .startAuthentication(isAddingAccount: false)):
+                .authenticationFlow(isAddingAccount: false, presented: presented)
+            case (.clearingCache(_, let presented), .startUserSession(let userID)):
+                .userSessionFlow(userID: userID, presented: presented)
                 
-            case (.loggingOut, .startAuthentication(isAddingAccount: false)):
-                .authenticationFlow(isAddingAccount: false)
-            case (.loggingOut, .startUserSession(let userID)):
-                .userSessionFlow(userID: userID)
+            case (.loggingOut(_, let presented), .startAuthentication(isAddingAccount: false)):
+                .authenticationFlow(isAddingAccount: false, presented: presented)
+            case (.loggingOut(_, let presented), .startUserSession(let userID)):
+                .userSessionFlow(userID: userID, presented: presented)
+                
+            // Not while a verification is shown, which takes priority over any share,
+            // or while another share is shown, which must be dismissed first.
+            case (.userSessionFlow(let userID, let presented), .presentShareRoomSelection)
+                where !fromState.isPresenting(.sessionVerification) && !fromState.isPresenting(.shareRoomSelection):
+                .userSessionFlow(userID: userID, presented: .shareRoomSelection(previousState: presented))
+            case (_, .dismissedShareRoomSelection) where fromState.isPresenting(.shareRoomSelection):
+                fromState.removingPresented(.shareRoomSelection)
+                
+            // A second request would cut off the verification in progress.
+            case (_, .presentSessionVerification(let userID)) where !fromState.isPresenting(.sessionVerification):
+                fromState.presenting(.sessionVerification(userID: userID, previousState: fromState.presented))
+            case (_, .dismissedSessionVerification) where fromState.isPresenting(.sessionVerification):
+                fromState.removingPresented(.sessionVerification)
+                
+            case (.userSessionFlow(let userID, let presented), .presentPermalink)
+                where !fromState.isPresenting(.sessionVerification) && !fromState.isPresenting(.permalink):
+                .userSessionFlow(userID: userID, presented: .permalink(previousState: presented))
+            case (_, .dismissedPermalink) where fromState.isPresenting(.permalink):
+                fromState.removingPresented(.permalink)
+                
+            // Further logged out accounts are appended to the cover that's already shown.
+            case (_, .startRemoteLogoutFlow) where !fromState.isPresenting(.remoteLogout):
+                fromState.presenting(.remoteLogout(previousState: fromState.presented))
+            case (_, .stopRemoteLogoutFlow) where fromState.isPresenting(.remoteLogout):
+                fromState.removingPresented(.remoteLogout)
+                
+            // Another call is replaced where it is, otherwise the call goes on top.
+            case (_, .presentCallScreen(let callScreen)) where fromState.isPresenting(.callScreen):
+                fromState.replacingCallScreen(with: callScreen, isMinimized: false)
+            case (_, .presentCallScreen(let callScreen)):
+                fromState.presenting(.callScreen(callScreen, isMinimized: false, previousState: fromState.presented))
+            case (_, .minimizeCallScreen) where fromState.presented?.isCallScreenMinimized == false:
+                fromState.replacingCallScreen(isMinimized: true)
+            case (_, .restoreCallScreen) where fromState.presented?.isCallScreenMinimized == true:
+                fromState.replacingCallScreen(isMinimized: false)
+            case (_, .dismissCallScreen) where fromState.isPresenting(.callScreen):
+                fromState.removingPresented(.callScreen)
                 
             default:
                 nil
@@ -293,10 +369,10 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
             case (.authenticationFlow, .startAuthentication(isAddingAccount: false), .authenticationFlow):
                 authenticationFlowCoordinator = nil
                 startAuthenticationFlow(isAddingAccount: false)
-            case (.userSessionFlow, .clearCache, .clearingCache(let userID)):
+            case (.userSessionFlow, .clearCache, .clearingCache(let userID, _)):
                 stopUserSessionFlow()
                 clearCache(userID: userID)
-            case (.userSessionFlow, .logout, .loggingOut(let userID)):
+            case (.userSessionFlow, .logout, .loggingOut(let userID, _)):
                 stopUserSessionFlow()
                 logout(userID: userID)
             case (.userSessionFlow, .startUserSession, .userSessionFlow):
@@ -310,6 +386,39 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
                  (.loggingOut, .startUserSession, .userSessionFlow):
                 hideLoadingIndicator()
                 startUserSessionFlow(isNewLogin: false)
+                
+            case (_, .presentShareRoomSelection, _):
+                guard let userInfo = context.userInfo as? EventUserInfo, let payload = userInfo.sharePayload else {
+                    fatalError("The share payload is missing.")
+                }
+                presentShareRoomSelection(for: payload, animated: userInfo.animated)
+            case (_, .dismissedShareRoomSelection, _):
+                break
+                
+            case (_, .presentSessionVerification, _):
+                guard let userInfo = context.userInfo as? EventUserInfo, let request = userInfo.sessionVerificationRequest else {
+                    fatalError("The session verification request is missing.")
+                }
+                presentSessionVerificationScreen(for: request, animated: userInfo.animated)
+            case (_, .dismissedSessionVerification, _):
+                break
+                
+            case (_, .presentPermalink, _):
+                break // Not built yet.
+            case (_, .dismissedPermalink, _):
+                break
+                
+            case (_, .startRemoteLogoutFlow, _):
+                guard let userInfo = context.userInfo as? EventUserInfo, let userSessionDetails = userInfo.userSessionDetails else {
+                    fatalError("The logged out session is missing.")
+                }
+                startRemoteLogoutFlow(userSessionDetails: userSessionDetails, animated: userInfo.animated)
+            case (_, .stopRemoteLogoutFlow, _):
+                navigationRootCoordinator.setFullScreenCoverCoordinator(nil)
+                
+            case (_, .presentCallScreen, _), (_, .minimizeCallScreen, _), (_, .restoreCallScreen, _), (_, .dismissCallScreen, _):
+                break // To replace the call state machine
+                
             default:
                 fatalError("Unhandled transition: \(context)")
             }
@@ -345,9 +454,16 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
         
         sessionVerificationManager.actionsPublisher
             .sink { [weak self] action in
+                guard let self else { return }
+                
                 switch action {
                 case .receivedRequest(let request):
-                    self?.presentSessionVerificationScreen(flow: request.screenFlow, userSession: request.userSession, clearingRoute: true)
+                    guard !stateMachine.state.isPresenting(.sessionVerification) else {
+                        MXLog.info("Ignoring the session verification, another verification is in progress.")
+                        return
+                    }
+                    stateMachine.tryEvent(.presentSessionVerification(userID: request.userSession.clientProxy.userID),
+                                          userInfo: EventUserInfo(animated: true, sessionVerificationRequest: request))
                 }
             }
             .store(in: &cancellables)
@@ -356,7 +472,7 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
     private func handleRestoredSession(userID: String) {
         switch stateMachine.state {
         case .initial where userID == userSessionManager.activeSession?.clientProxy.userID,
-             .clearingCache(userID):
+             .clearingCache(userID, _):
             stateMachine.tryEvent(.startUserSession(userID: userID))
         default:
             break
@@ -375,7 +491,7 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
         targetContext.update()
         
         // Will be handled elsewhere when the manager is fleshed out.
-        if presentedSessionVerificationUserID == userID {
+        if stateMachine.state.presented?.sessionVerificationUserID == userID {
             navigationRootCoordinator.setSheetCoordinator(nil)
         }
         
@@ -386,11 +502,20 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
             } else {
                 // Continue waiting while other accounts are restoring.
             }
-        case .userSessionFlow(userID), .clearingCache(userID), .loggingOut(userID):
+        case .userSessionFlow(userID, _), .clearingCache(userID, _), .loggingOut(userID, _):
             actionsSubject.send(.closeSecondaryWindows)
             if let activeUserID = userSessionManager.activeSession?.clientProxy.userID {
                 stateMachine.tryEvent(.startUserSession(userID: activeUserID))
             } else if userSessionManager.userIDs.isEmpty {
+                for presentedState in stateMachine.state.presentedStates {
+                    switch presentedState {
+                    case .shareRoomSelection, .permalink:
+                        navigationRootCoordinator.setSheetCoordinator(nil) // There's no accounts to select!
+                    case .sessionVerification, .remoteLogout, .callScreen:
+                        break // These are dismissed by their session's removal.
+                    }
+                }
+                
                 stateMachine.tryEvent(.startAuthentication(isAddingAccount: false))
             } else {
                 // Continue waiting while other accounts are restoring.
@@ -404,7 +529,11 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
         // Shown after the transition, as stopping a user session flow retracts every indicator.
         switch error {
         case .remoteLogout(let userSessionDetails):
-            startRemoteLogoutFlow(userSessionDetails: userSessionDetails)
+            if let remoteLogoutFlowCoordinator {
+                remoteLogoutFlowCoordinator.appendAdditionalSession(userSessionDetails)
+            } else {
+                stateMachine.tryEvent(.startRemoteLogoutFlow, userInfo: EventUserInfo(animated: true, userSessionDetails: userSessionDetails))
+            }
         case .failedRestoringSession:
             showLoginErrorToast()
         case .none:
@@ -506,7 +635,13 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
                 case .switchAccount(let userID):
                     userSessionManager.selectAccount(userID: userID)
                 case .verifyUser(let userID):
-                    presentSessionVerificationScreen(flow: .userInitiator(userID: userID), userSession: userSession, clearingRoute: false)
+                    guard !stateMachine.state.isPresenting(.sessionVerification) else {
+                        MXLog.info("Ignoring the session verification, another verification is in progress.")
+                        return
+                    }
+                    stateMachine.tryEvent(.presentSessionVerification(userID: userSession.clientProxy.userID),
+                                          userInfo: EventUserInfo(animated: true, sessionVerificationRequest: .init(userSession: userSession,
+                                                                                                                    kind: .toUser(userID: userID))))
                 case .logout, .accountDeactivated:
                     stateMachine.tryEvent(.logout)
                 case .clearCache:
@@ -532,11 +667,6 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func handleUserSessionRoute(_ appRoute: AppRoute, userID: String?, awaitsRoom: Bool, animated: Bool) {
-        guard presentedSessionVerificationUserID == nil else {
-            MXLog.info("Ignoring an app route while session verification is in progress.")
-            return
-        }
-        
         guard let userSession = userSessionManager.activeSession else {
             fatalError("User session not setup")
         }
@@ -547,6 +677,20 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
             return
         }
         
+        for presentedState in stateMachine.state.presentedStates {
+            switch presentedState {
+            case .sessionVerification:
+                MXLog.info("Ignoring an app route while session verification is in progress.")
+                return
+            case .shareRoomSelection, .permalink:
+                navigationRootCoordinator.setSheetCoordinator(nil) // The route replaces it.
+            case .callScreen:
+                break // To replace the call state machine
+            case .remoteLogout:
+                break
+            }
+        }
+        
         if awaitsRoom, case .room(let roomID, _) = appRoute {
             userSession.clientProxy.roomsToAwait.insert(roomID)
         }
@@ -554,18 +698,16 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
         minimizeFullScreenCall()
         
         if case .share(let payload) = appRoute, payload.roomID == nil {
-            presentShareRoomSelection(for: payload, animated: animated)
+            stateMachine.tryEvent(.presentShareRoomSelection, userInfo: EventUserInfo(animated: animated, sharePayload: payload))
             return
         }
         
-        navigationRootCoordinator.setSheetCoordinator(nil)
         userSessionFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
     }
     
     private func stopUserSessionFlow() {
         actionsSubject.send(.closeSecondaryWindows)
         userIndicatorController.retractAllIndicators()
-        navigationRootCoordinator.setSheetCoordinator(nil)
         userSessionFlowCoordinator = nil
     }
     
@@ -586,19 +728,14 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     /// Shows the accounts that the server logged out in a fullscreen cover above every account's screens.
-    private func startRemoteLogoutFlow(userSessionDetails: UserSessionDetails) {
-        if let remoteLogoutFlowCoordinator {
-            remoteLogoutFlowCoordinator.appendAdditionalSession(userSessionDetails)
-            return
-        }
-        
+    private func startRemoteLogoutFlow(userSessionDetails: UserSessionDetails, animated: Bool) {
         let rootCoordinator = NavigationRootCoordinator()
         let coordinator = RemoteLogoutFlowCoordinator(userSessionDetails: userSessionDetails, navigationRootCoordinator: rootCoordinator)
         coordinator.actionsPublisher
             .sink { [weak self] action in
                 switch action {
                 case .complete:
-                    self?.navigationRootCoordinator.setFullScreenCoverCoordinator(nil)
+                    self?.stateMachine.tryEvent(.stopRemoteLogoutFlow)
                 }
             }
             .store(in: &cancellables)
@@ -606,7 +743,7 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
         remoteLogoutFlowCoordinator = coordinator
         coordinator.start()
         
-        navigationRootCoordinator.setFullScreenCoverCoordinator(rootCoordinator) { [weak self] in
+        navigationRootCoordinator.setFullScreenCoverCoordinator(rootCoordinator, animated: animated) { [weak self] in
             self?.remoteLogoutFlowCoordinator = nil
         }
     }
@@ -614,27 +751,22 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: - Session Verification
     
     /// Shows the session verification screen above every account's screens, with the session of the account being verified.
-    private func presentSessionVerificationScreen(flow: SessionVerificationScreenFlow,
-                                                  userSession: UserSessionProtocol,
-                                                  clearingRoute: Bool) { // The route can be handled elsewhere once there's a state machine.
-        guard presentedSessionVerificationUserID == nil else {
-            MXLog.info("Ignoring the session verification, another verification is in progress.")
-            return
-        }
+    private func presentSessionVerificationScreen(for request: SessionVerificationRequest, animated: Bool) {
+        let flow = request.screenFlow
         
-        if clearingRoute {
+        if flow.isResponder {
             // Any sheet from the shown account's screens would block this one.
-            userSessionFlowCoordinator?.clearRoute(animated: true)
+            userSessionFlowCoordinator?.clearRoute(animated: animated)
         }
         
-        guard let sessionVerificationController = userSession.clientProxy.sessionVerificationController else {
+        guard let sessionVerificationController = request.userSession.clientProxy.sessionVerificationController else {
             fatalError("The sessionVerificationController should aways be valid at this point")
         }
         
         let stackCoordinator = NavigationStackCoordinator()
         let coordinator = SessionVerificationScreenCoordinator(parameters: .init(sessionVerificationControllerProxy: sessionVerificationController,
                                                                                  flow: flow,
-                                                                                 userSession: userSession))
+                                                                                 userSession: request.userSession))
         coordinator.actions
             .sink { [weak self] action in
                 switch action {
@@ -646,9 +778,8 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
         
         stackCoordinator.setRootCoordinator(coordinator)
         
-        presentedSessionVerificationUserID = userSession.clientProxy.userID
-        navigationRootCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
-            self?.presentedSessionVerificationUserID = nil
+        navigationRootCoordinator.setSheetCoordinator(stackCoordinator, animated: animated) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissedSessionVerification)
         }
     }
     
@@ -680,7 +811,10 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
         
         let stackCoordinator = NavigationStackCoordinator()
         stackCoordinator.setRootCoordinator(coordinator)
-        navigationRootCoordinator.setSheetCoordinator(stackCoordinator, animated: animated)
+        
+        navigationRootCoordinator.setSheetCoordinator(stackCoordinator, animated: animated) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissedShareRoomSelection)
+        }
     }
     
     /// Finishes a share once its room is known, handing it to the shown account's screens.
@@ -915,11 +1049,139 @@ class RootFlowCoordinator: FlowCoordinatorProtocol {
     }
 }
 
+private extension RootFlowCoordinator.State {
+    /// Everything presented above the root.
+    var presented: RootFlowCoordinator.PresentedState? {
+        switch self {
+        case .initial(let presented),
+             .authenticationFlow(_, let presented),
+             .userSessionFlow(_, let presented),
+             .clearingCache(_, let presented),
+             .loggingOut(_, let presented):
+            presented
+        }
+    }
+    
+    /// Whether anything of the given kind is presented above the root.
+    func isPresenting(_ kind: RootFlowCoordinator.PresentedState.Kind) -> Bool {
+        presented?.contains(kind) ?? false
+    }
+    
+    /// Everything presented above the root, from the top down.
+    var presentedStates: [RootFlowCoordinator.PresentedState] {
+        guard let presented else { return [] }
+        return Array(sequence(first: presented) { $0.previousState })
+    }
+    
+    /// This state with the same root, but something else presented above it.
+    func presenting(_ presented: RootFlowCoordinator.PresentedState?) -> Self {
+        switch self {
+        case .initial:
+            .initial(presented: presented)
+        case .authenticationFlow(let isAddingAccount, _):
+            .authenticationFlow(isAddingAccount: isAddingAccount, presented: presented)
+        case .userSessionFlow(let userID, _):
+            .userSessionFlow(userID: userID, presented: presented)
+        case .clearingCache(let userID, _):
+            .clearingCache(userID: userID, presented: presented)
+        case .loggingOut(let userID, _):
+            .loggingOut(userID: userID, presented: presented)
+        }
+    }
+    
+    /// This state with the topmost presentation of the given kind taken out, keeping everything presented after it.
+    func removingPresented(_ kind: RootFlowCoordinator.PresentedState.Kind) -> Self {
+        presenting(presented?.transforming(kind) { $0.previousState })
+    }
+    
+    /// This state with its call screen updated where it is, and optionally replaced by another call screen.
+    func replacingCallScreen(with callScreen: RootFlowCoordinator.PresentedCallScreen? = nil, isMinimized: Bool) -> Self {
+        presenting(presented?.transforming(.callScreen) { presented in
+            guard case .callScreen(let currentCallScreen, _, let previousState) = presented else { return presented }
+            return .callScreen(callScreen ?? currentCallScreen, isMinimized: isMinimized, previousState: previousState)
+        })
+    }
+}
+
+private extension RootFlowCoordinator.PresentedState {
+    enum Kind { case shareRoomSelection, sessionVerification, permalink, remoteLogout, callScreen }
+    
+    var kind: Kind {
+        switch self {
+        case .shareRoomSelection: .shareRoomSelection
+        case .sessionVerification: .sessionVerification
+        case .permalink: .permalink
+        case .remoteLogout: .remoteLogout
+        case .callScreen: .callScreen
+        }
+    }
+    
+    /// The account being verified, or `nil` when there's no session verification.
+    var sessionVerificationUserID: String? {
+        switch self {
+        case .sessionVerification(let userID, _): userID
+        default: previousState?.sessionVerificationUserID
+        }
+    }
+    
+    /// Whether the call screen is minimized, or `nil` when there isn't one.
+    var isCallScreenMinimized: Bool? {
+        switch self {
+        case .callScreen(_, let isMinimized, _): isMinimized
+        default: previousState?.isCallScreenMinimized
+        }
+    }
+    
+    /// Whether this or anything presented before it is of the given kind.
+    func contains(_ kind: Kind) -> Bool {
+        self.kind == kind || previousState?.contains(kind) == true
+    }
+    
+    /// What was presented before this.
+    var previousState: Self? {
+        switch self {
+        case .shareRoomSelection(let previousState),
+             .sessionVerification(_, let previousState),
+             .permalink(let previousState),
+             .remoteLogout(let previousState),
+             .callScreen(_, _, let previousState):
+            previousState
+        }
+    }
+    
+    /// This presented after something else instead.
+    func replacingPreviousState(with previousState: Self?) -> Self {
+        switch self {
+        case .shareRoomSelection:
+            .shareRoomSelection(previousState: previousState)
+        case .sessionVerification(let userID, _):
+            .sessionVerification(userID: userID, previousState: previousState)
+        case .permalink:
+            .permalink(previousState: previousState)
+        case .remoteLogout:
+            .remoteLogout(previousState: previousState)
+        case .callScreen(let callScreen, let isMinimized, _):
+            .callScreen(callScreen, isMinimized: isMinimized, previousState: previousState)
+        }
+    }
+    
+    /// This with the topmost presentation of the given kind transformed, keeping everything presented after it.
+    /// Unchanged when there's nothing of that kind.
+    func transforming(_ kind: Kind, _ transform: (Self) -> Self?) -> Self? {
+        if self.kind == kind {
+            return transform(self)
+        }
+        
+        return replacingPreviousState(with: previousState?.transforming(kind, transform))
+    }
+}
+
 private extension SessionVerificationRequest {
     var screenFlow: SessionVerificationScreenFlow {
-        switch sender {
-        case .ownDevice: .deviceResponder(requestDetails: details)
-        case .otherUser: .userResponder(requestDetails: details)
+        switch kind {
+        case .fromOwnDevice(let details): .deviceResponder(requestDetails: details)
+        case .fromOtherUser(let details): .userResponder(requestDetails: details)
+        case .toUser(let userID): .userInitiator(userID: userID)
         }
     }
 }

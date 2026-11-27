@@ -23,14 +23,18 @@ struct SessionVerificationManagerTests {
     }
     
     @Test("An account's incoming request is forwarded with the account's session and who sent it",
-          arguments: [("@alice:matrix.org", SessionVerificationRequest.Sender.ownDevice),
-                      ("@bob:matrix.org", SessionVerificationRequest.Sender.otherUser)])
-    func requestForwarding(senderID: String, sender: SessionVerificationRequest.Sender) async throws {
+          arguments: [("@alice:matrix.org", true), ("@bob:matrix.org", false)])
+    func requestForwarding(senderID: String, isFromOwnDevice: Bool) async throws {
         sessionVerificationManager.add(userSession)
         
         let deferred = deferFulfillment(sessionVerificationManager.actionsPublisher) { action in
-            guard case .receivedRequest(let request) = action else { return false }
-            return (request.userSession as? UserSessionMock) === userSession && request.sender == sender && request.details.flowID == "flow-id"
+            guard case .receivedRequest(let request) = action, (request.userSession as? UserSessionMock) === userSession else { return false }
+            
+            switch request.kind {
+            case .fromOwnDevice(let details): return isFromOwnDevice && details.flowID == "flow-id"
+            case .fromOtherUser(let details): return !isFromOwnDevice && details.flowID == "flow-id"
+            case .toUser: return false
+            }
         }
         sessionVerificationControllerActions.send(.receivedVerificationRequest(details: details(from: senderID)))
         try await deferred.fulfill()

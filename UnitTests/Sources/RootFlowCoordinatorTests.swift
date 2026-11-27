@@ -352,15 +352,29 @@ struct RootFlowCoordinatorTests {
         #expect(stackCoordinator.rootCoordinator is RoomSelectionScreenCoordinator)
     }
     
-    @Test("The share sheet closes when the shown account's screens are replaced")
-    func shareSheetClosesWithFlow() {
+    @Test("The share sheet stays open as long as there are accounts to select rooms from")
+    func selectAccountWithShareSheet() throws {
+        rootFlowCoordinator.handleAppRoute(.roomList, animated: false)
+        rootFlowCoordinator.handleAppRoute(.share(.text(roomID: nil, text: "Important text")), animated: false)
+        let shareSheet = try #require(navigationRootCoordinator.sheetCoordinator)
+        
+        userSessionManagerCallbacks.send(.didSelectAccount(userID: "@alice:matrix.org"))
+        
+        #expect(navigationRootCoordinator.sheetCoordinator === shareSheet)
+    }
+    
+    @Test("The share sheet closes once there are no accounts left")
+    func removeAccountWithShareSheet() {
         rootFlowCoordinator.handleAppRoute(.roomList, animated: false)
         rootFlowCoordinator.handleAppRoute(.share(.text(roomID: nil, text: "Important text")), animated: false)
         #expect(navigationRootCoordinator.sheetCoordinator != nil)
         
-        userSessionManagerCallbacks.send(.didSelectAccount(userID: "@alice:matrix.org"))
+        userSessionManager.activeSession = nil
+        userSessionManager.userIDs = []
+        userSessionManagerCallbacks.send(.didRemoveAccount(userID: "@alice:matrix.org", error: nil))
         
         #expect(navigationRootCoordinator.sheetCoordinator == nil)
+        #expect(navigationRootCoordinator.rootCoordinator is NavigationStackCoordinator)
     }
     
     @Test("A route handed to the shown account's screens closes the share sheet")
@@ -376,6 +390,21 @@ struct RootFlowCoordinatorTests {
         let deferredRoom = deferFulfillment(splitCoordinator.observe(\.detailRootCoordinatorID)) { $0 != nil }
         try await deferredRoom.fulfill()
         #expect((splitCoordinator.detailCoordinator as? NavigationStackCoordinator)?.rootCoordinator is RoomScreenCoordinator)
+    }
+    
+    @Test("Sharing again beneath a remote logout replaces the share sheet")
+    func shareAgainBeneathRemoteLogout() throws {
+        rootFlowCoordinator.handleAppRoute(.roomList, animated: false)
+        rootFlowCoordinator.handleAppRoute(.share(.text(roomID: nil, text: "Important text")), animated: false)
+        let shareSheet = try #require(navigationRootCoordinator.sheetCoordinator)
+        userSessionManagerCallbacks.send(.didRemoveAccount(userID: "@bob:matrix.org", error: .remoteLogout(.init(userProfile: .mockBob, unreadCount: 0, mediaProvider: MediaProviderMock(.init())))))
+        #expect(remoteLogoutScreenCoordinator != nil)
+        
+        rootFlowCoordinator.handleAppRoute(.share(.text(roomID: nil, text: "More text")), animated: false)
+        
+        let stackCoordinator = try #require(navigationRootCoordinator.sheetCoordinator as? NavigationStackCoordinator)
+        #expect(stackCoordinator !== shareSheet)
+        #expect(stackCoordinator.rootCoordinator is RoomSelectionScreenCoordinator)
     }
     
     // MARK: Session verification
@@ -404,6 +433,46 @@ struct RootFlowCoordinatorTests {
         
         let stackCoordinator = try #require(navigationRootCoordinator.sheetCoordinator as? NavigationStackCoordinator)
         #expect(stackCoordinator.rootCoordinator is RoomSelectionScreenCoordinator)
+    }
+    
+    @Test("Removing the account being verified closes its verification")
+    func removeVerifyingAccount() {
+        rootFlowCoordinator.handleAppRoute(.roomList, animated: false)
+        let rootCoordinator = navigationRootCoordinator.rootCoordinator
+        sessionVerificationActions.send(.mockDevice)
+        #expect(sessionVerificationScreenCoordinator != nil)
+        
+        userSessionManagerCallbacks.send(.didRemoveAccount(userID: "@bob:matrix.org", error: nil))
+        
+        #expect(navigationRootCoordinator.sheetCoordinator == nil)
+        #expect(navigationRootCoordinator.rootCoordinator === rootCoordinator)
+    }
+    
+    @Test("Removing the shown account keeps another account's verification open")
+    func removeShownAccountDuringVerification() throws {
+        rootFlowCoordinator.handleAppRoute(.roomList, animated: false)
+        sessionVerificationActions.send(.mockDevice)
+        let verificationScreen = try #require(sessionVerificationScreenCoordinator)
+        
+        let bob = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@bob:matrix.org"))))
+        userSessionManager.activeSession = bob
+        userSessionManager.sessionsPublisher = .init([bob])
+        userSessionManagerCallbacks.send(.didRemoveAccount(userID: "@alice:matrix.org", error: nil))
+        
+        #expect(sessionVerificationScreenCoordinator === verificationScreen)
+    }
+    
+    @Test("A route is dropped while a verification is in progress beneath a remote logout")
+    func routeDuringVerificationBeneathRemoteLogout() throws {
+        rootFlowCoordinator.handleAppRoute(.roomList, animated: false)
+        sessionVerificationActions.send(.mockDevice)
+        let verificationScreen = try #require(sessionVerificationScreenCoordinator)
+        userSessionManagerCallbacks.send(.didRemoveAccount(userID: "@charlie:matrix.org", error: .remoteLogout(.init(userProfile: .mockCharlie, unreadCount: 0, mediaProvider: MediaProviderMock(.init())))))
+        #expect(remoteLogoutScreenCoordinator != nil)
+        
+        rootFlowCoordinator.handleAppRoute(.share(.text(roomID: nil, text: "Important text")), animated: false)
+        
+        #expect(sessionVerificationScreenCoordinator === verificationScreen)
     }
     
     // MARK: - Helpers
@@ -457,7 +526,6 @@ private extension SessionVerificationManagerAction {
                                                         deviceDisplayName: nil,
                                                         firstSeenDate: .now)
         return .receivedRequest(.init(userSession: UserSessionMock(.init(clientProxy: bobClientProxy)),
-                                      details: details,
-                                      sender: .ownDevice))
+                                      kind: .fromOwnDevice(details)))
     }
 }

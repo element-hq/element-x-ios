@@ -50,9 +50,9 @@ struct IdentityConfirmationScreen: View {
                          subtitle: L10n.screenIdentityConfirmationSubtitle,
                          icon: \.lockSolid,
                          iconStyle: .defaultSolid,
-                         button: .init(title: L10n.actionLearnMore, action: {
+                         button: .init(title: L10n.actionLearnMore) {
                              UIApplication.shared.open(context.viewState.learnMoreURL)
-                         }))
+                         })
                          .padding(.horizontal, 8)
                          .padding(.bottom, 24)
             
