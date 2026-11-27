@@ -9,7 +9,6 @@ import Combine
 @testable import ElementX
 import Testing
 
-@MainActor
 struct UserSessionManagerTests {
     let userSessionStore = UserSessionStoreMock()
     let userSessionMigrator = UserSessionMigratorMock(.init())
@@ -17,6 +16,7 @@ struct UserSessionManagerTests {
     let notificationManager = NotificationManagerMock()
     let liveLocationManager = LiveLocationManagerMock()
     let elementCallManager = ElementCallManagerMock()
+    let sessionVerificationManager = SessionVerificationManagerMock()
     let userIDsSubject = CurrentValueSubject<[String], Never>([])
     
     @Test("Accounts are ordered by when they were last selected")
@@ -435,6 +435,7 @@ struct UserSessionManagerTests {
         #expect(notificationManager.addReceivedService === alice.notificationService)
         #expect(liveLocationManager.addReceivedService === alice.liveLocationService)
         #expect(elementCallManager.addReceivedService === alice.elementCallService)
+        #expect(sessionVerificationManager.addReceivedUserSession as? UserSessionMock === alice)
     }
     
     @Test("Removing an account disconnects its services")
@@ -447,6 +448,7 @@ struct UserSessionManagerTests {
         #expect(notificationManager.removeUserIDReceivedInvocations == ["@alice:matrix.org"])
         #expect(liveLocationManager.removeUserIDReceivedInvocations == ["@alice:matrix.org"])
         #expect(elementCallManager.removeUserIDReceivedInvocations == ["@alice:matrix.org"])
+        #expect(sessionVerificationManager.removeUserIDReceivedInvocations == ["@alice:matrix.org"])
     }
     
     @Test("Resetting disconnects every account's services")
@@ -459,6 +461,7 @@ struct UserSessionManagerTests {
         #expect(Set(notificationManager.removeUserIDReceivedInvocations) == ["@alice:matrix.org", "@bob:matrix.org"])
         #expect(Set(liveLocationManager.removeUserIDReceivedInvocations) == ["@alice:matrix.org", "@bob:matrix.org"])
         #expect(Set(elementCallManager.removeUserIDReceivedInvocations) == ["@alice:matrix.org", "@bob:matrix.org"])
+        #expect(Set(sessionVerificationManager.removeUserIDReceivedInvocations) == ["@alice:matrix.org", "@bob:matrix.org"])
     }
     
     @Test("A failed restore disconnects the account's services and reports its removal")
@@ -473,6 +476,7 @@ struct UserSessionManagerTests {
         #expect(notificationManager.removeUserIDReceivedInvocations == ["@alice:matrix.org"])
         #expect(liveLocationManager.removeUserIDReceivedInvocations == ["@alice:matrix.org"])
         #expect(elementCallManager.removeUserIDReceivedInvocations == ["@alice:matrix.org"])
+        #expect(sessionVerificationManager.removeUserIDReceivedInvocations == ["@alice:matrix.org"])
     }
     
     @Test("Resuming and pausing the services reach every session")
@@ -580,6 +584,7 @@ struct UserSessionManagerTests {
                                   notificationManager: notificationManager,
                                   liveLocationManager: liveLocationManager,
                                   elementCallManager: elementCallManager,
+                                  sessionVerificationManager: sessionVerificationManager,
                                   userSessionMigrator: userSessionMigrator,
                                   signposter: Signposter())
     }

@@ -135,12 +135,14 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
         notificationManager = NotificationManager(notificationCenter: UNUserNotificationCenter.current(),
                                                   userIDsPublisher: userIDsSubject.asCurrentValuePublisher(),
                                                   appSettings: appSettings)
+        let sessionVerificationManager = SessionVerificationManager()
         userSessionManager = UserSessionManager(userSessionStore: userSessionStore,
                                                 userIDsSubject: userIDsSubject,
                                                 appSettings: appSettings,
                                                 notificationManager: notificationManager,
                                                 liveLocationManager: LiveLocationManager(appSettings: appSettings),
                                                 elementCallManager: elementCallManager,
+                                                sessionVerificationManager: sessionVerificationManager,
                                                 userSessionMigrator: UserSessionMigrator(newVersion: currentVersion, oldAppVersion: previousVersion, appSettings: appSettings, appMediator: appMediator),
                                                 signposter: analyticsService.signpost)
         
@@ -157,6 +159,7 @@ class AppCoordinator: AppCoordinatorProtocol, NotificationManagerDelegate, Secur
         rootFlowCoordinator = RootFlowCoordinator(navigationRootCoordinator: navigationRootCoordinator,
                                                   userSessionManager: userSessionManager,
                                                   elementCallManager: elementCallManager,
+                                                  sessionVerificationManager: sessionVerificationManager,
                                                   appLockService: appLockService,
                                                   bugReportService: bugReportService,
                                                   appMediator: appMediator,

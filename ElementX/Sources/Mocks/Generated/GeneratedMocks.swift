@@ -12437,6 +12437,76 @@ nonisolated class SessionVerificationControllerProxyMock: SessionVerificationCon
         }
     }
 }
+nonisolated class SessionVerificationManagerMock: SessionVerificationManagerProtocol, @unchecked Sendable {
+    var actionsPublisher: AnyPublisher<SessionVerificationManagerAction, Never> {
+        get { return underlyingActionsPublisher }
+        set(value) { underlyingActionsPublisher = value }
+    }
+    nonisolated(unsafe) var underlyingActionsPublisher: AnyPublisher<SessionVerificationManagerAction, Never>!
+
+    //MARK: - add
+
+    private let addCallsCountLock = NSLock()
+    private nonisolated(unsafe) var addUnderlyingCallsCount = 0
+    var addCallsCount: Int {
+        get { addCallsCountLock.withLock { addUnderlyingCallsCount } }
+        set { addCallsCountLock.withLock { addUnderlyingCallsCount = newValue } }
+    }
+    var addCalled: Bool {
+        return addCallsCount > 0
+    }
+    private let addReceivedUserSessionLock = NSLock()
+    private nonisolated(unsafe) var addUnderlyingReceivedUserSession: UserSessionProtocol?
+    var addReceivedUserSession: UserSessionProtocol? {
+        get { addReceivedUserSessionLock.withLock { addUnderlyingReceivedUserSession } }
+        set { addReceivedUserSessionLock.withLock { addUnderlyingReceivedUserSession = newValue } }
+    }
+    private let addReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var addUnderlyingReceivedInvocations: [UserSessionProtocol] = []
+    var addReceivedInvocations: [UserSessionProtocol] {
+        get { addReceivedInvocationsLock.withLock { addUnderlyingReceivedInvocations } }
+        set { addReceivedInvocationsLock.withLock { addUnderlyingReceivedInvocations = newValue } }
+    }
+    nonisolated(unsafe) var addClosure: ((UserSessionProtocol) -> Void)?
+
+    func add(_ userSession: UserSessionProtocol) {
+        addCallsCountLock.withLock { addUnderlyingCallsCount += 1 }
+        addReceivedUserSession = userSession
+        addReceivedInvocationsLock.withLock { addUnderlyingReceivedInvocations.append(userSession) }
+        addClosure?(userSession)
+    }
+    //MARK: - remove
+
+    private let removeUserIDCallsCountLock = NSLock()
+    private nonisolated(unsafe) var removeUserIDUnderlyingCallsCount = 0
+    var removeUserIDCallsCount: Int {
+        get { removeUserIDCallsCountLock.withLock { removeUserIDUnderlyingCallsCount } }
+        set { removeUserIDCallsCountLock.withLock { removeUserIDUnderlyingCallsCount = newValue } }
+    }
+    var removeUserIDCalled: Bool {
+        return removeUserIDCallsCount > 0
+    }
+    private let removeUserIDReceivedUserIDLock = NSLock()
+    private nonisolated(unsafe) var removeUserIDUnderlyingReceivedUserID: String?
+    var removeUserIDReceivedUserID: String? {
+        get { removeUserIDReceivedUserIDLock.withLock { removeUserIDUnderlyingReceivedUserID } }
+        set { removeUserIDReceivedUserIDLock.withLock { removeUserIDUnderlyingReceivedUserID = newValue } }
+    }
+    private let removeUserIDReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var removeUserIDUnderlyingReceivedInvocations: [String] = []
+    var removeUserIDReceivedInvocations: [String] {
+        get { removeUserIDReceivedInvocationsLock.withLock { removeUserIDUnderlyingReceivedInvocations } }
+        set { removeUserIDReceivedInvocationsLock.withLock { removeUserIDUnderlyingReceivedInvocations = newValue } }
+    }
+    nonisolated(unsafe) var removeUserIDClosure: ((String) -> Void)?
+
+    func remove(userID: String) {
+        removeUserIDCallsCountLock.withLock { removeUserIDUnderlyingCallsCount += 1 }
+        removeUserIDReceivedUserID = userID
+        removeUserIDReceivedInvocationsLock.withLock { removeUserIDUnderlyingReceivedInvocations.append(userID) }
+        removeUserIDClosure?(userID)
+    }
+}
 nonisolated class SpaceRoomListProxyMock: SpaceRoomListProxyProtocol, @unchecked Sendable {
     var id: String {
         get { return underlyingId }

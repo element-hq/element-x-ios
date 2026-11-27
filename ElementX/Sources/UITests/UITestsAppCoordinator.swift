@@ -631,7 +631,7 @@ class MockScreen: Identifiable {
             retainedState.append(flowCoordinator)
             
             return nil
-        case .rootFlow, .rootFlowSignedIn, .rootFlowShare, .rootFlowRemoteLogout:
+        case .rootFlow, .rootFlowSignedIn, .rootFlowShare, .rootFlowRemoteLogout, .rootFlowSessionVerification:
             let userID = "@mock:client.com"
             let userSettings = appSettings.userSettings(for: userID)
             userSettings.account.hasRunIdentityConfirmationOnboarding = true
@@ -661,6 +661,7 @@ class MockScreen: Identifiable {
                                                        deviceID: "MOCKCLIENT",
                                                        displayName: "Bob",
                                                        roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
+            bobClientProxy.sessionVerificationController = SessionVerificationControllerProxyMock.configureMock()
             let bobUserSession = UserSessionMock(.init(clientProxy: bobClientProxy, userSettings: bobUserSettings))
             
             let userSessionManagerCallbacks = PassthroughSubject<UserSessionManagerCallback, Never>()
@@ -693,12 +694,21 @@ class MockScreen: Identifiable {
                 setSessions([userSession] + sessions(excluding: userID))
             }
             
+            // Charlie requests to verify Bob when the UI tests signal it.
+            let charlieRequestDetails = SessionVerificationRequestDetails(senderProfile: UserProfile(userID: "@charlie:client.com", displayName: "Charlie"),
+                                                                          flowID: "flow-id",
+                                                                          deviceID: "CHARLIEDEVICE",
+                                                                          deviceDisplayName: "Charlie's iPhone",
+                                                                          firstSeenDate: .now)
+            let signalledRequest = id == .rootFlowSessionVerification ? SessionVerificationRequest(userSession: bobUserSession, details: charlieRequestDetails, sender: .otherUser) : nil
+            
             let appMediator = AppMediatorMock(.init())
             appMediator.windowManager = windowManager
             
             let flowCoordinator = RootFlowCoordinator(navigationRootCoordinator: navigationRootCoordinator,
                                                       userSessionManager: userSessionManager,
                                                       elementCallManager: elementCallManager,
+                                                      sessionVerificationManager: SessionVerificationManagerMock(.init(signalledRequest: signalledRequest)),
                                                       appLockService: AppLockService(keychainController: KeychainControllerMock(),
                                                                                      appSettings: appSettings),
                                                       bugReportService: BugReportServiceMock(.init()),
@@ -712,7 +722,12 @@ class MockScreen: Identifiable {
             
             flowCoordinator.handleAppRoute(id == .rootFlow ? .authentication : .roomList, animated: false)
             
-            if id == .rootFlowRemoteLogout {
+            if id == .rootFlowShare {
+                flowCoordinator.handleAppRoute(.share(.text(roomID: nil, text: "Shared from another app")), animated: false)
+            } else if id == .rootFlowSessionVerification {
+                // The test signals to show the verification on top of the settings screen.
+                flowCoordinator.handleAppRoute(.settings, animated: false)
+            } else if id == .rootFlowRemoteLogout {
                 // Simulate a remote logout of both accounts.
                 Task { @MainActor in
                     for session in userSessionManager.sessionsPublisher.value {
@@ -722,9 +737,6 @@ class MockScreen: Identifiable {
                         userSessionManagerCallbacks.send(.didRemoveAccount(userID: userID, error: .remoteLogout(details)))
                     }
                 }
-            }
-            if id == .rootFlowShare {
-                flowCoordinator.handleAppRoute(.share(.text(roomID: nil, text: "Shared from another app")), animated: false)
             }
             
             retainedState.append(flowCoordinator)

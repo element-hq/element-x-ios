@@ -133,6 +133,28 @@ class RootFlowCoordinatorUITests: XCTestCase {
         XCTAssertTrue(composer.waitForExistence(timeout: 5.0), "The shared text should be in the room's composer.")
     }
     
+    func testSessionVerificationRequestFromAnotherAccount() async throws {
+        let client = try UITestsSignalling.Client(mode: .tests)
+        let app = Application.launch(.rootFlowSessionVerification)
+        await client.waitForApp()
+        defer { try? client.stop() }
+        
+        XCTAssertTrue(app.buttons[A11yIdentifiers.settingsScreen.addAccount].waitForExistence(timeout: 5.0))
+        try client.send(.sessionVerification(.incomingRequest))
+        var signals = client.signals.values.makeAsyncIterator()
+        while let signal = await signals.next(isolation: #isolation), signal != .success { }
+        
+        let ignoreButton = app.buttons[A11yIdentifiers.sessionVerificationScreen.ignoreVerificationRequest]
+        XCTAssertTrue(ignoreButton.waitForExistence(timeout: 5.0),
+                      "Another account's verification request should show, even with Settings open.")
+        XCTAssertFalse(app.buttons[A11yIdentifiers.settingsScreen.addAccount].exists, "Settings should be closed for the request.")
+        ignoreButton.tap()
+        
+        XCTAssertTrue(app.buttons[A11yIdentifiers.homeScreen.userAvatar].waitForExistence(timeout: 5.0),
+                      "Ignoring the request should return to the shown account's screens.")
+        XCTAssertFalse(ignoreButton.exists)
+    }
+    
     // MARK: - Helpers
     
     /// Signs out of the account whose settings are shown.
