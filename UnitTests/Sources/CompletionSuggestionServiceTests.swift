@@ -13,7 +13,7 @@ import Testing
 struct CompletionSuggestionServiceTests {
     // MARK: User Suggestions
     
-    @Test
+    @Test("User suggestions match members but not the own user or the room without permission")
     func userSuggestions() async throws {
         let alice: RoomMemberProxyMock = .mockAlice
         let members: [RoomMemberProxyMock] = [alice, .mockBob, .mockCharlie, .mockMe]
@@ -53,7 +53,60 @@ struct CompletionSuggestionServiceTests {
         try await deferred.fulfill()
     }
     
-    @Test
+    @Test("User suggestions match a display name typed without its whitespace")
+    func userSuggestionsMatchDisplayNameWithoutWhitespace() async throws {
+        let jane = RoomMemberProxyMock(with: .init(userID: "@jdoe:matrix.org", displayName: "Jane Q Doe", membership: .join))
+        let members: [RoomMemberProxyMock] = [jane, .mockAlice, .mockMe]
+        let roomProxyMock = JoinedRoomProxyMock(.init(id: "roomID", name: "test", members: members))
+        let roomSummaryProvider = RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))
+        let service = CompletionSuggestionService(roomProxy: roomProxyMock,
+                                                  roomListPublisher: roomSummaryProvider.roomListPublisher.eraseToAnyPublisher())
+        
+        var deferred = deferFulfillment(service.suggestionsPublisher) { suggestions in
+            suggestions == []
+        }
+        
+        try await deferred.fulfill()
+        
+        deferred = deferFulfillment(service.suggestionsPublisher) { suggestions in
+            suggestions == [.init(suggestionType: .user(.init(id: jane.userID, displayName: jane.displayName, avatarURL: jane.avatarURL)), range: .init(), rawSuggestionText: "janeqdoe")]
+        }
+        service.setSuggestionTrigger(.init(type: .user, text: "janeqdoe", range: .init()))
+        try await deferred.fulfill()
+        
+        deferred = deferFulfillment(service.suggestionsPublisher) { suggestions in
+            suggestions == [.init(suggestionType: .user(.init(id: jane.userID, displayName: jane.displayName, avatarURL: jane.avatarURL)), range: .init(), rawSuggestionText: "doe")]
+        }
+        service.setSuggestionTrigger(.init(type: .user, text: "doe", range: .init()))
+        try await deferred.fulfill()
+    }
+    
+    @Test("User suggestions rank members by where the text matches, like Element Web")
+    func userSuggestionsRankedByMatchPosition() async throws {
+        let leeDawson = RoomMemberProxyMock(with: .init(userID: "@lee:matrix.org", displayName: "Lee Dawson", membership: .join))
+        let edward = RoomMemberProxyMock(with: .init(userID: "@edward:matrix.org", displayName: "Edward", membership: .join))
+        let members: [RoomMemberProxyMock] = [leeDawson, edward, .mockMe]
+        let roomProxyMock = JoinedRoomProxyMock(.init(id: "roomID", name: "test", members: members))
+        let roomSummaryProvider = RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))
+        let service = CompletionSuggestionService(roomProxy: roomProxyMock,
+                                                  roomListPublisher: roomSummaryProvider.roomListPublisher.eraseToAnyPublisher())
+        
+        var deferred = deferFulfillment(service.suggestionsPublisher) { suggestions in
+            suggestions == []
+        }
+        
+        try await deferred.fulfill()
+        
+        // "Edward" starts with the text, "Lee Dawson" only matches across words, so it comes second.
+        deferred = deferFulfillment(service.suggestionsPublisher) { suggestions in
+            suggestions == [.init(suggestionType: .user(.init(id: edward.userID, displayName: edward.displayName, avatarURL: edward.avatarURL)), range: .init(), rawSuggestionText: "ed"),
+                            .init(suggestionType: .user(.init(id: leeDawson.userID, displayName: leeDawson.displayName, avatarURL: leeDawson.avatarURL)), range: .init(), rawSuggestionText: "ed")]
+        }
+        service.setSuggestionTrigger(.init(type: .user, text: "ed", range: .init()))
+        try await deferred.fulfill()
+    }
+    
+    @Test("User suggestions include everyone when the user can notify the room")
     func userSuggestionsIncludingAllUsers() async throws {
         let alice: RoomMemberProxyMock = .mockAlice
         let members: [RoomMemberProxyMock] = [alice, .mockBob, .mockCharlie, .mockMe]
@@ -85,7 +138,7 @@ struct CompletionSuggestionServiceTests {
         try await deferred.fulfill()
     }
     
-    @Test
+    @Test("An empty user trigger suggests everyone and all members")
     func userSuggestionsWithEmptyText() async throws {
         let alice: RoomMemberProxyMock = .mockAlice
         let bob: RoomMemberProxyMock = .mockBob
@@ -122,7 +175,7 @@ struct CompletionSuggestionServiceTests {
         try await deferred.fulfill()
     }
     
-    @Test
+    @Test("User suggestions work anywhere in the message")
     func userSuggestionInDifferentMessagePositions() async throws {
         let alice: RoomMemberProxyMock = .mockAlice
         let members: [RoomMemberProxyMock] = [alice, .mockBob, .mockCharlie, .mockMe]
@@ -150,7 +203,7 @@ struct CompletionSuggestionServiceTests {
         try await deferred.fulfill()
     }
     
-    @Test
+    @Test("User suggestions follow the mention under the cursor")
     func userSuggestionWithMultipleMentionSymbol() async throws {
         let alice: RoomMemberProxyMock = .mockAlice
         let bob: RoomMemberProxyMock = .mockBob
@@ -179,7 +232,7 @@ struct CompletionSuggestionServiceTests {
         try await deffered.fulfill()
     }
     
-    @Test
+    @Test("Starting a new mention refreshes the room members once")
     func userSuggestionRefreshesMembers() async throws {
         let members: [RoomMemberProxyMock] = [.mockAlice, .mockBob, .mockMe]
         let roomProxyMock = JoinedRoomProxyMock(.init(id: "roomID", name: "test", members: members))
@@ -213,7 +266,7 @@ struct CompletionSuggestionServiceTests {
     
     // MARK: Room Suggestions
     
-    @Test
+    @Test("Room suggestions list all rooms then filter by the typed text")
     func roomSuggestions() async throws {
         let alice: RoomMemberProxyMock = .mockAlice
         // We keep the users in the tests since they should not appear in the suggestions when using the room trigger
@@ -287,7 +340,34 @@ struct CompletionSuggestionServiceTests {
         try await deferred.fulfill()
     }
     
-    @Test
+    @Test("Room suggestions match a room name typed without its whitespace")
+    func roomSuggestionsMatchNameWithoutWhitespace() async throws {
+        let roomProxyMock = JoinedRoomProxyMock(.init(id: "roomID", name: "test", members: [.mockMe]))
+        let roomSummaryProvider = RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))
+        let service = CompletionSuggestionService(roomProxy: roomProxyMock,
+                                                  roomListPublisher: roomSummaryProvider.roomListPublisher.eraseToAnyPublisher())
+        
+        var deferred = deferFulfillment(service.suggestionsPublisher) { suggestions in
+            suggestions == []
+        }
+        
+        try await deferred.fulfill()
+        
+        deferred = deferFulfillment(service.suggestionsPublisher) { suggestions in
+            suggestions == [.init(suggestionType: .room(.init(id: "6",
+                                                              canonicalAlias: "#prelude-foundation:matrix.org",
+                                                              name: "Prelude to Foundation",
+                                                              avatar: .room(id: "6",
+                                                                            name: "Prelude to Foundation",
+                                                                            avatarURL: nil))),
+                                  range: .init(),
+                                  rawSuggestionText: "preludeto")]
+        }
+        service.setSuggestionTrigger(.init(type: .room, text: "preludeto", range: .init()))
+        try await deferred.fulfill()
+    }
+    
+    @Test("Room suggestions work anywhere in the message")
     func roomSuggestionInDifferentMessagePositions() async throws {
         let alice: RoomMemberProxyMock = .mockAlice
         // We keep the users in the tests since they should not appear in the suggestions when using the room trigger
@@ -337,7 +417,7 @@ struct CompletionSuggestionServiceTests {
         try await deferred.fulfill()
     }
     
-    @Test
+    @Test("Room suggestions follow the trigger under the cursor")
     func roomSuggestionWithMultipleMentionSymbol() async throws {
         let alice: RoomMemberProxyMock = .mockAlice
         // We keep the users in the tests since they should not appear in the suggestions when using the room trigger
@@ -390,7 +470,7 @@ struct CompletionSuggestionServiceTests {
     
     // MARK: Common
     
-    @Test
+    @Test("User and room triggers in one message are handled separately")
     func suggestionsWithMultipleDifferentTriggers() async throws {
         let alice: RoomMemberProxyMock = .mockAlice
         // We keep the users in the tests since they should not appear in the suggestions when using the room trigger
@@ -420,7 +500,7 @@ struct CompletionSuggestionServiceTests {
         try await deffered.fulfill()
     }
     
-    @Test
+    @Test("Suggestions match text containing non-alphanumeric characters")
     func suggestionsContainingNonAlphanumericCharacters() async throws {
         let alice: RoomMemberProxyMock = .mockAlice
         // We keep the users in the tests since they should not appear in the suggestions when using the room trigger
