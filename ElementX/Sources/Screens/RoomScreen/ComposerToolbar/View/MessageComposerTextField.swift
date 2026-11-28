@@ -304,9 +304,9 @@ private class ElementTextView: UITextView, TextAttachmentViewProviderDelegate {
         attributedText.enumerateAttribute(.attachment,
                                           in: NSRange(location: 0, length: attributedText.length),
                                           options: []) { value, range, _ in
-            guard value != nil else {
-                return
-            }
+            guard value != nil else { return }
+            
+            self.layoutManager.invalidateLayout(forCharacterRange: range, actualCharacterRange: nil)
             self.layoutManager.invalidateDisplay(forCharacterRange: range)
         }
     }

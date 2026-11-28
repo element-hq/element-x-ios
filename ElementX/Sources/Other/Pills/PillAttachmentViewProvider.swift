@@ -107,5 +107,14 @@ extension WysiwygTextView: TextAttachmentViewProviderDelegate {
         (mentionDisplayHelper as? ComposerMentionDisplayHelper)?.timelineContext
     }
     
-    func invalidateTextAttachmentsDisplay() { }
+    func invalidateTextAttachmentsDisplay() {
+        attributedText.enumerateAttribute(.attachment,
+                                          in: NSRange(location: 0, length: attributedText.length),
+                                          options: []) { value, range, _ in
+            guard value != nil else { return }
+            
+            self.layoutManager.invalidateLayout(forCharacterRange: range, actualCharacterRange: nil) // The width may have changed.
+            self.layoutManager.invalidateDisplay(forCharacterRange: range)
+        }
+    }
 }

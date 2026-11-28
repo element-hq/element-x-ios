@@ -108,7 +108,6 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
         switch await roomProxy.updatePowerLevelsForUsers([(userID: roomProxy.ownUserID, powerLevel: role.powerLevelValue)]) {
         case .success:
             _ = await infoTask.value
-            await roomProxy.updateMembers()
             
             analytics.trackRoomModeration(action: .ChangeMemberRole, role: role)
             

@@ -64,6 +64,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
     private func setupMembers() {
         Task {
             showLoadingIndicator(Self.setupMembersLoadingIndicatorIdentifier)
+            // Technically not necessary, but let's force a reload given this *is* the members list screen.
             await roomProxy.updateMembers()
             hideLoadingIndicator(Self.setupMembersLoadingIndicatorIdentifier)
         }
@@ -74,14 +75,6 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
             .receive(on: DispatchQueue.main)
             .sink { [weak self] members, _ in
                 self?.updateState(members: members)
-            }
-            .store(in: &cancellables)
-        
-        roomProxy.infoPublisher
-            .map(\.powerLevels)
-            .removeDuplicates { $0?.userPowerLevels == $1?.userPowerLevels }
-            .sink { [weak self] _ in
-                Task { await self?.roomProxy.updateMembers() }
             }
             .store(in: &cancellables)
     }

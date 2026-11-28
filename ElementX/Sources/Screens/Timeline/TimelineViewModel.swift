@@ -1022,15 +1022,11 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         
         Task {
             userIndicatorController.submitIndicator(.init(id: inviteLoadingIndicatorID, type: .toast, title: L10n.commonLoading))
-            defer {
-                userIndicatorController.retractIndicatorWithId(inviteLoadingIndicatorID)
-            }
+            defer { userIndicatorController.retractIndicatorWithId(inviteLoadingIndicatorID) }
             
-            guard
-                let members = await roomProxy.members(),
-                members.count == 2,
-                let otherPerson = members.first(where: { $0.userID != roomProxy.ownUserID && $0.membership == .leave })
-            else {
+            let members = roomProxy.membersPublisher.value
+            guard members.count == 2,
+                  let otherPerson = members.first(where: { $0.userID != roomProxy.ownUserID && $0.membership == .leave }) else {
                 displayAlert(.unknown)
                 return
             }
@@ -1072,24 +1068,22 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         switch pillContext.data.type {
         case let .user(id):
             let isOwnMention = id == state.ownUserID
-            if let profile = state.members[id] {
-                pillContext.viewState = .mention(isOwnMention: isOwnMention,
-                                                 displayText: PillUtilities.userPillDisplayText(username: profile.displayName, userID: id),
-                                                 statusEmoji: profile.status.displayed?.emoji)
-            } else {
-                pillContext.viewState = .mention(isOwnMention: isOwnMention, displayText: id, statusEmoji: nil)
-                pillContext.cancellable = context.$viewState
-                    .compactMap { $0.members[id] }
-                    .sink { [weak pillContext] profile in
-                        guard let pillContext else {
-                            return
-                        }
-                        pillContext.viewState = .mention(isOwnMention: isOwnMention,
-                                                         displayText: PillUtilities.userPillDisplayText(username: profile.displayName, userID: id),
-                                                         statusEmoji: profile.status.displayed?.emoji)
-                        pillContext.cancellable = nil
+            
+            // Keep the mention updated as the room member changes (publishes the current value straight away).
+            pillContext.cancellable = context.$viewState
+                .map { viewState -> PillViewState in
+                    if let profile = viewState.members[id] {
+                        .mention(isOwnMention: isOwnMention,
+                                 displayText: PillUtilities.userPillDisplayText(username: profile.displayName, userID: id),
+                                 statusEmoji: profile.status.displayed?.emoji)
+                    } else {
+                        .mention(isOwnMention: isOwnMention, displayText: id, statusEmoji: nil)
                     }
-            }
+                }
+                .removeDuplicates()
+                .sink { [weak pillContext] pillViewState in
+                    pillContext?.viewState = pillViewState
+                }
         case .allUsers:
             pillContext.viewState = .mention(isOwnMention: true, displayText: PillUtilities.atRoom, statusEmoji: nil)
         case .event(let room):

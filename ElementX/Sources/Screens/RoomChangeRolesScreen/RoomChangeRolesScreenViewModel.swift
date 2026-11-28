@@ -168,9 +168,7 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
         case .success:
             MXLog.info("Success")
             
-            // Call updateMembers so the count is correct on the root screen.
             _ = await infoTask.value
-            await roomProxy.updateMembers()
             
             trackChanges(promotionCount: promotingUpdates.count,
                          demotionCount: demotingUpdates.count)

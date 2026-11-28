@@ -930,6 +930,7 @@ class ClientProxy: ClientProxyProtocol {
         for roomID in roomIdentifiers {
             guard case let .joined(roomProxy) = await roomForIdentifier(roomID),
                   roomProxy.infoPublisher.value.isDirect,
+                  // Wait for the members to load given its a fresh room proxy.
                   let members = await roomProxy.members() else {
                 continue
             }

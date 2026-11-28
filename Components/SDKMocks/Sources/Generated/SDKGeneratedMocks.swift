@@ -13540,6 +13540,49 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         }
     }
 
+    //MARK: - subscribeToMembersChanges
+
+    private let subscribeToMembersChangesListenerCallsCountLock = NSLock()
+    private var subscribeToMembersChangesListenerUnderlyingCallsCount = 0
+    open var subscribeToMembersChangesListenerCallsCount: Int {
+        get { subscribeToMembersChangesListenerCallsCountLock.withLock { subscribeToMembersChangesListenerUnderlyingCallsCount } }
+        set { subscribeToMembersChangesListenerCallsCountLock.withLock { subscribeToMembersChangesListenerUnderlyingCallsCount = newValue } }
+    }
+    open var subscribeToMembersChangesListenerCalled: Bool {
+        return subscribeToMembersChangesListenerCallsCount > 0
+    }
+    private let subscribeToMembersChangesListenerReceivedListenerLock = NSLock()
+    private var subscribeToMembersChangesListenerUnderlyingReceivedListener: RoomMembersChangesListener?
+    open var subscribeToMembersChangesListenerReceivedListener: RoomMembersChangesListener? {
+        get { subscribeToMembersChangesListenerReceivedListenerLock.withLock { subscribeToMembersChangesListenerUnderlyingReceivedListener } }
+        set { subscribeToMembersChangesListenerReceivedListenerLock.withLock { subscribeToMembersChangesListenerUnderlyingReceivedListener = newValue } }
+    }
+    private let subscribeToMembersChangesListenerReceivedInvocationsLock = NSLock()
+    private var subscribeToMembersChangesListenerUnderlyingReceivedInvocations: [RoomMembersChangesListener] = []
+    open var subscribeToMembersChangesListenerReceivedInvocations: [RoomMembersChangesListener] {
+        get { subscribeToMembersChangesListenerReceivedInvocationsLock.withLock { subscribeToMembersChangesListenerUnderlyingReceivedInvocations } }
+        set { subscribeToMembersChangesListenerReceivedInvocationsLock.withLock { subscribeToMembersChangesListenerUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let subscribeToMembersChangesListenerReturnValueLock = NSLock()
+    open var subscribeToMembersChangesListenerUnderlyingReturnValue: TaskHandle!
+    open var subscribeToMembersChangesListenerReturnValue: TaskHandle! {
+        get { subscribeToMembersChangesListenerReturnValueLock.withLock { subscribeToMembersChangesListenerUnderlyingReturnValue } }
+        set { subscribeToMembersChangesListenerReturnValueLock.withLock { subscribeToMembersChangesListenerUnderlyingReturnValue = newValue } }
+    }
+    open var subscribeToMembersChangesListenerClosure: ((RoomMembersChangesListener) -> TaskHandle)?
+
+    open override func subscribeToMembersChanges(listener: RoomMembersChangesListener) -> TaskHandle {
+        subscribeToMembersChangesListenerCallsCountLock.withLock { subscribeToMembersChangesListenerUnderlyingCallsCount += 1 }
+        subscribeToMembersChangesListenerReceivedListener = listener
+        subscribeToMembersChangesListenerReceivedInvocationsLock.withLock { subscribeToMembersChangesListenerUnderlyingReceivedInvocations.append(listener) }
+        if let subscribeToMembersChangesListenerClosure = subscribeToMembersChangesListenerClosure {
+            return subscribeToMembersChangesListenerClosure(listener)
+        } else {
+            return subscribeToMembersChangesListenerReturnValue
+        }
+    }
+
     //MARK: - subscribeToRoomInfoUpdates
 
     private let subscribeToRoomInfoUpdatesListenerCallsCountLock = NSLock()
